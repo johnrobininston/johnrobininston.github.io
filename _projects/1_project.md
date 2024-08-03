@@ -1,12 +1,14 @@
 ---
 layout: page
-title: project 1
+title: Testing Project
 description: with background image
 img: assets/img/12.jpg
 importance: 1
 category: work
 related_publications: true
 ---
+
+This is a test to see if I can change the name of the project!
 
 Every project has a beautiful feature showcase page.
 It's easy to include images in a flexible 3-column grid format.
