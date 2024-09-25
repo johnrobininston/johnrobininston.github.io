@@ -6,7 +6,7 @@ subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
 
 profile:
   align: right
-  image: new_prof_pic.jpg
+  image: new_prof_pic.png
   image_circular: false # crops the image to make it circular
   more_info: >
     <p>Department of Statistics and Applied Probability</p>
