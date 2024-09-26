@@ -2,16 +2,16 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations:</a> University of California Santa Barbara.
+subtitle: PhD Student, <a href='https://www.pstat.ucsb.edu'>Dept. of Statstics and Applied Probability, UC Santa Barbara</a>.
 
 profile:
   align: right
   image: new_prof_pic.png
   image_circular: false # crops the image to make it circular
-  more_info: >
-    <p>Department of Statistics and Applied Probability</p>
-    <p>University of California Santa Barbara</p>
-    <p>Santa Barbara, CA 93117</p>
+  more_info: # >
+    # <p>Department of Statistics and Applied Probability</p>
+    # <p>University of California Santa Barbara</p>
+    # <p>Santa Barbara, CA 93117</p>
 
 news: true # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"

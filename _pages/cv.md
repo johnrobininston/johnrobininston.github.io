@@ -5,7 +5,7 @@ title: cv
 nav: true
 nav_order: 5
 cv_pdf: academic_resume.pdf
-description: This is a description of the page. You can modify it in '_pages/cv.md'. You can also change or remove the top pdf download button.
+description: Please see below for a digital copy of my academic CV or click the icon above to download the pdf version.
 toc:
   sidebar: left
 ---
