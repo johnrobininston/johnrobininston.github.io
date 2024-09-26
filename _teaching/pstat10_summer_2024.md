@@ -1,7 +1,7 @@
 ---
 layout: page
-title: PSTAT10 Data Science Principles
-description: with background image
+title: PSTAT10
+description: Data Science Principles
 img: assets/img/12.jpg
 importance: 1
 category: work
