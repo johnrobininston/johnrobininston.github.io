@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Testing Project
+title: PSTAT10
 description: with background image
 img: assets/img/12.jpg
 importance: 1
