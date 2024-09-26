@@ -18,6 +18,6 @@ You can find all lecture material, section worksheets and homework assignment do
 
 ## Important Documents
 
-1. [Syllabus](assets/classes/pstat10_summer_2024/pstat10_syllabus.pdf)
+1. Syllabus
 
 2. 
