@@ -14,10 +14,10 @@ Welcome to PSTAT 10 Data Science Principles!  This is the online resource for th
 
 You can find all lecture material, section worksheets and homework assignment documents linked below as well as some worked solutions.
 
-**Disclaimer:**  The material for this course has been prepared with the authors permission based on past material produced by Isaiah Katz and [Robin Lui](https://roobnloo.github.io).  
+**Disclaimer:**  The material for this course has been prepared with the authors permission based on past material produced by Isaiah Katz and Robin Lui.  
 
 ## Important Documents
 
 1. [Syllabus](assets/classes/pstat10_summer_2024/pstat10_syllabus.pdf)
 
-2. []
+2. 
