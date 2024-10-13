@@ -2,7 +2,7 @@
 layout: page
 title: PSTAT174
 description: Time Series Analysis
-img: pstat174_fall_2024/stock_time_series.png
+img: assets/img/12.jpg
 importance: 1
 category: work
 related_publications: true
