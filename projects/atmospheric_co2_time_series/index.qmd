@@ -4,12 +4,126 @@ author: "John Robin Inston"
 date: "2023-06-17"
 categories: [Atmospheric Modelling, Time Series, Statistics, R, SARIMA]
 toc: true
+execute: 
+  echo: false
+  warning: false
+  message: false
 ---
 
 **Abstract:**
 
 In this report we aim to select and fit an appropriate Seasonal Autoregressive Integrated Moving Average (SARIMA) model in order to produce accuruate five year ahead forecasts of atmospheric CO2 levels above Mauna Loa, Hawaii. We investigate the underlying properties of the time series data, the suitability of SARIMA models, and whether the forecasts they produce accurately capture future observations. Throughout the project we implement various univariate time series analysis techniques including exploratory analysis, model selection procedures based on the adjusted Akaike Information Criteria, diagnostic checking, residual analysis and spectral analysis. Our first choice $\text{SARIMA}(0,1,3)(0,1,1)_{12}$ model performed well, producing approximately Gaussian WN residuals and accurate forecasts with confidence intervals capturing the true observed future values of the time series.
 
+```{r}
+# load libraries
+library(tsdl) # source for data
+library(zoo) # rollmean
+library(tidyverse)
+library(gridExtra) # multiple ggplots
+library(forecast) # seasonal plot
+library(tseries) # adf test function
+library(kableExtra) # tables
+library(astsa) # acf2,
+library(LSTS) 
+#library(MASS) # box-cox (potentially remove)
+library(TSA)
+library(ggpubr) # qqplot
+library(lmtest)
+# time series decomposition
+devtools::install_github("brisneve/ggplottimeseries")
+library(ggplottimeseries)
+# set plot information
+theme_set(theme_minimal())
+# set seed
+set.seed(8467)
+```
+
 ## Introduction
 
+Several geophysical time series contain seasonal variation with one key example being carbon dioxide (CO$_2$) atmospheric concentration which typically is known to have annual seasonality - largely due to plant photosynthesis and respiration - superimposed upon an increasing trend caused primarily by human CO$_2$ production. In this project we examine a data set consisting of monthly measurements of atmospheric CO$_2$ above Mauna Lao, Hawaii in the 32 year period from between 1959 and 1990 with the aim of producing accurate forecasts - in our case a 5 year ahead forecast - by fitting a suitable model from the SARIMA model family. We use a variety of time series analysis including exploratory analysis (time series decomposition, stationarity transformations, inspecting series autocorrelations and partial autocorrelations, tests for normality, stationarity and autocorrelation), SARIMA fitting and model selection (checking for stationarity and invertibility, coefficient significance testing, performance criteria) and residual analysis (portmanteau tests, residual WN tests, model spectral decomposition). We find that the $\text{SARIMA}(0,1,3)(0,1,1)_{12}$ model is our optimal model candidate and our subsequent residual analysis, forecasting and spectral decomposition indicates that our model produces accurate forecasts which captured the future true observations of the time
+series. Our analysis was performed using the programming language R and a full breakdown of our code can be found in the corresponding GitHub repository.
+
+## Data
+
+```{r}
+# load data
+tsdl_met <- subset(tsdl, 12, "Meteorology")
+rawdata <- tsdl_met[[2]]
+# select training data
+data <- head(rawdata, n=length(rawdata)-(12*5))
+```
+
+### Data Description
+
+Our data set contains monthly measurements of atmospheric carbon dioxide above Mauna Loa, Hawaii from January 1959 to December 1990, measured in parts per million (ppm). The data was originally collected from the Scripps Institute of Oceanography, La Jolla, California and made readily available through the `tsdlpackage` developed by Rob Hyndman, Professor of Statistics at Monash University, Australia. The data set initially contained missing values which were subsequently filled in by linear interpolation. Our raw data series, labelled by $x_t$, $t = 1, ..., 384$ contains 384 observations.
+
+### Exploratory Analysis
+
+We split our data into disjoint training and testing sets, with the latter containing the last 5 years of observed CO$_2$ levels to be used to analyse the performance of the foreacsts produced by our chosen final model. Our training data set contains 324 observations whilst our testing data set contains 60. Using the training data
+we produce a time series plot, shown below in @fig-edatsplot.
+
+```{r}
+#| fig-height: 5
+#| fig-width: 10
+#| fig-cap: "Atmospheric carbon dioxide above Mauna Loa, Hawaii."
+#| label: fig-edatsplot
+## plot of training data (with trend line)
+# trend line
+maline <- rollmean(data, k=12, fill=NA, align='right')
+# produce time series plot
+plotdata <- data.frame(
+    "Time" = seq(as.Date("1959/1/1"), as.Date("1985/12/1"), "months"),
+    "data" = data,
+    "trend" = maline
+)
+plotdata |>
+    tidyr::gather("id", "value", 2:3) |>
+    ggplot(aes(Time, value, col=id, linetype=id)) +
+    geom_line() +
+    theme_light() +
+    labs(
+        x = "Time", 
+        y = "CO2 (ppm)", 
+        color="Legend", 
+        linetype="Legend"
+        ) +
+    theme(legend.position = "bottom")
+```
+
+We see clear evidence of both an increasing polynomial trend and a seasonal component (with a 12 month period) implying that our raw data is non-stationary. The variance of our data appears constant and there is no evidence of sharp changes in behaviour indicating that a SARIMA model will likely suit our data well. We decompose the time series in @fig-decomposition below to provide a clearer picture of the seasonal and trend components and since we observe no evidence of heteroscedastic behaviour in the residuals we opt not to transform our data.
+
+```{r}
+#| fig-height: 10
+#| fig-width: 10
+#| fig-cap: "Time Series Decomposition"
+#| label: fig-decomposition
+
+## time series decomposition
+ts_decomp <- ggdecompose(
+    dts2(data, type ="additive")) +
+    labs(
+        x = "Date",
+        y = "Atmospheric Concentration of CO2",
+        title = "Time Series Decomposition Plots"
+    )
+# seasonal plot
+seasplot <- ggseasonplot(
+    data, 
+    year.labels=TRUE, 
+    year.labels.left=TRUE
+    ) +
+    labs(
+        y = "CO2 (ppm)",
+        title = "Seasonal plot"
+    )
+trendplot <- autoplot(
+    maline, 
+    ts.color="red", 
+    main="Trend plot")
+grid.arrange(
+    ts_decomp, seasplot, trendplot,
+    layout_matrix = rbind(c(1, 1),
+    c(2, 3))
+    )
+```
 

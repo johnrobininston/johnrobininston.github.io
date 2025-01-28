@@ -182,6 +182,11 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <ul class="collapse">
+  <li><a href="#data-description" id="toc-data-description" class="nav-link" data-scroll-target="#data-description">Data Description</a></li>
+  <li><a href="#exploratory-analysis" id="toc-exploratory-analysis" class="nav-link" data-scroll-target="#exploratory-analysis">Exploratory Analysis</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -230,8 +235,49 @@ window.Quarto = {
 <p>In this report we aim to select and fit an appropriate Seasonal Autoregressive Integrated Moving Average (SARIMA) model in order to produce accuruate five year ahead forecasts of atmospheric CO2 levels above Mauna Loa, Hawaii. We investigate the underlying properties of the time series data, the suitability of SARIMA models, and whether the forecasts they produce accurately capture future observations. Throughout the project we implement various univariate time series analysis techniques including exploratory analysis, model selection procedures based on the adjusted Akaike Information Criteria, diagnostic checking, residual analysis and spectral analysis. Our first choice <span class="math inline">\(\text{SARIMA}(0,1,3)(0,1,1)_{12}\)</span> model performed well, producing approximately Gaussian WN residuals and accurate forecasts with confidence intervals capturing the true observed future values of the time series.</p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Several geophysical time series contain seasonal variation with one key example being carbon dioxide (CO<span class="math inline">\(_2\)</span>) atmospheric concentration which typically is known to have annual seasonality - largely due to plant photosynthesis and respiration - superimposed upon an increasing trend caused primarily by human CO<span class="math inline">\(_2\)</span> production. In this project we examine a data set consisting of monthly measurements of atmospheric CO<span class="math inline">\(_2\)</span> above Mauna Lao, Hawaii in the 32 year period from between 1959 and 1990 with the aim of producing accurate forecasts - in our case a 5 year ahead forecast - by fitting a suitable model from the SARIMA model family. We use a variety of time series analysis including exploratory analysis (time series decomposition, stationarity transformations, inspecting series autocorrelations and partial autocorrelations, tests for normality, stationarity and autocorrelation), SARIMA fitting and model selection (checking for stationarity and invertibility, coefficient significance testing, performance criteria) and residual analysis (portmanteau tests, residual WN tests, model spectral decomposition). We find that the <span class="math inline">\(\text{SARIMA}(0,1,3)(0,1,1)_{12}\)</span> model is our optimal model candidate and our subsequent residual analysis, forecasting and spectral decomposition indicates that our model produces accurate forecasts which captured the future true observations of the time series. Our analysis was performed using the programming language R and a full breakdown of our code can be found in the corresponding GitHub repository.</p>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<section id="data-description" class="level3">
+<h3 class="anchored" data-anchor-id="data-description">Data Description</h3>
+<p>Our data set contains monthly measurements of atmospheric carbon dioxide above Mauna Loa, Hawaii from January 1959 to December 1990, measured in parts per million (ppm). The data was originally collected from the Scripps Institute of Oceanography, La Jolla, California and made readily available through the <code>tsdlpackage</code> developed by Rob Hyndman, Professor of Statistics at Monash University, Australia. The data set initially contained missing values which were subsequently filled in by linear interpolation. Our raw data series, labelled by <span class="math inline">\(x_t\)</span>, <span class="math inline">\(t = 1, ..., 384\)</span> contains 384 observations.</p>
+</section>
+<section id="exploratory-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-analysis">Exploratory Analysis</h3>
+<p>We split our data into disjoint training and testing sets, with the latter containing the last 5 years of observed CO<span class="math inline">\(_2\)</span> levels to be used to analyse the performance of the foreacsts produced by our chosen final model. Our training data set contains 324 observations whilst our testing data set contains 60. Using the training data we produce a time series plot, shown below in <a href="#fig-edatsplot" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-edatsplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-edatsplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-edatsplot-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-edatsplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Atmospheric carbon dioxide above Mauna Loa, Hawaii.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We see clear evidence of both an increasing polynomial trend and a seasonal component (with a 12 month period) implying that our raw data is non-stationary. The variance of our data appears constant and there is no evidence of sharp changes in behaviour indicating that a SARIMA model will likely suit our data well. We decompose the time series in <a href="#fig-decomposition" class="quarto-xref">Figure&nbsp;2</a> below to provide a clearer picture of the seasonal and trend components and since we observe no evidence of heteroscedastic behaviour in the residuals we opt not to transform our data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-decomposition" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-decomposition-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decomposition-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Time Series Decomposition
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
