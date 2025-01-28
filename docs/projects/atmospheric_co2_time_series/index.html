@@ -275,6 +275,45 @@ Figure&nbsp;2: Time Series Decomposition
 </div>
 </div>
 </div>
+<p>We produce a plot of the autocorrelation function (ACF) of the data, shown below in <a href="#fig-acfundiff" class="quarto-xref">Figure&nbsp;3</a>, from which we see highly significant autocorrelations for all lags up to 40 which slowly decay and show seasonality.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-acfundiff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acfundiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-acfundiff-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acfundiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: ACF and PACF of raw data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We attempt to obtain stationarity by differencing, first with lag 12 to remove the seasonal trend. Mathematically this transformation is denoted:</p>
+<p><span class="math display">\[\begin{equation}\tag{1}
+y_t = x_t−x_{t−12} = (1−B^{12})x_t = ∇_{12}x_t,
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(y_t\)</span> is our seasonally differenced data series and B is the back-shift operator whereby <span class="math inline">\(B^kx_t = x_{t−k}\)</span>. A time series plot of our differenced data is shown below in <a href="#fig-acfseasonaldiff" class="quarto-xref">Figure&nbsp;4</a> along with a trend line, from which we can see that all evidence of a seasonal trend has been removed but the data appears to still be non-stationary as a linear trend is still present. Alongside we include the ACF plot of our seasonally differenced data from which we see the decaying autocorrelation typical of data with a polynomial trend.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-acfseasonaldiff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acfseasonaldiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-acfseasonaldiff-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acfseasonaldiff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Time series plot, ACF and PACF of seasonally differenced data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We therefore difference again with lag 1 to remove the linear trend from in the data, denoted mathematically by:</p>
+<p><span class="math display">\[\begin{equation}\tag{2}
+u_t = y_t−y_{t−1} = (1−B)y_t = (1−B)(1−B^{12})x_t = ∇_1∇_{12}x_t.
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(u_t\)</span> is our twice differenced data. We produce another time series plot of our twice differenced data below in Figure 6.</p>
 
 
 </section>
