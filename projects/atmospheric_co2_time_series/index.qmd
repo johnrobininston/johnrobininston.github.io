@@ -143,11 +143,7 @@ We attempt to obtain stationarity by differencing, first with lag 12 to remove t
 y_t = x_t−x_{t−12} = (1−B^{12})x_t = ∇_{12}x_t,
 \end{equation}
 
-where $y_t$ is our seasonally differenced data series and B is the back-shift operator whereby $B^kx_t = x_{t−k}$.
-A time series plot of our differenced data is shown below in @fig-acfseasonaldiff along with a trend line, from
-which we can see that all evidence of a seasonal trend has been removed but the data appears to still
-be non-stationary as a linear trend is still present. Alongside we include the ACF plot of our seasonally
-differenced data from which we see the decaying autocorrelation typical of data with a polynomial trend.
+where $y_t$ is our seasonally differenced data series and B is the back-shift operator whereby $B^kx_t = x_{t−k}$. A time series plot of our differenced data is shown below in @fig-acfseasonaldiff along with a trend line, from which we can see that all evidence of a seasonal trend has been removed but the data appears to still be non-stationary as a linear trend is still present. Alongside we include the ACF plot of our seasonally differenced data from which we see the decaying autocorrelation typical of data with a polynomial trend.
 
 ```{r}
 #| fig-height: 6
@@ -187,5 +183,195 @@ We therefore difference again with lag 1 to remove the linear trend from in the 
 u_t = y_t−y_{t−1} = (1−B)y_t = (1−B)(1−B^{12})x_t = ∇_1∇_{12}x_t,
 \end{equation}
 
-where $u_t$ is our twice differenced data. We produce another time series plot of our twice differenced data
-below in Figure 6.
+where $u_t$ is our twice differenced data. We produce another time series plot of our twice differenced data below in @fig-tsdiff.
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| label: fig-tsdiff
+
+# difference again with lag 1
+data_dd <- diff(data_d, 1)
+# plot of transformed data
+# time series plot of differenced data
+plot_data_dd <- data.frame(
+"Time" = seq(as.Date("1960/2/1"), as.Date("1985/12/1"), "months"),
+"yt" = data_dd
+)
+plot_data_dd %>%
+tidyr::gather("id", "value", 2:2) %>%
+ggplot(., aes(Time, value))+
+geom_line() +
+theme_minimal() +
+labs(x = "Time", y = "Transformed Data (zt)")
+```
+
+Our twice differenced data now appears stationary with no evidence of seasonality or polynomial trends with a stable variance in time. In @tbl-variance below we see that each transformation lowered the variance of our data.
+
+```{r}
+#| label: tbl-variance
+#| tbl-cap: "Transformed data variance stationarity test result."
+
+# table of variance of differenced data
+data.frame(
+"Transformation" = c("None", "Differenced lag 12", "Differenced lag 12 and lag 1"),
+"Variance" = c(var(data), var(data_d), var(data_dd))
+) |>
+    kable()
+ 
+```
+
+In @fig-histdiff we see that the ACF of our twice differenced data shows no evidence of polynomial or seasonal trends. Further both the histogram and Q-Q plot shows that the empirical distribution of our data is symmetric and approximately Gaussian.
+
+```{r}
+#| fig-height: 6
+#| fig-weight: 10
+#| label: fig-histdiff
+#| fig-cap: "ACF, PACF, histogram and Q-Q plot of twice differenced data."
+
+# acf of differenced data
+acf_data_dd <- autoplot(acf(data_dd, lag=40, plot = FALSE)) + labs(title = "")
+pacf_data_dd <- autoplot(pacf(data_dd, lag = 40, plot = FALSE)) + labs(title = "")
+# histogram of differenced data
+hist_data_dd <- ggplot(data.frame("data"=data_dd), aes(x=data)) +
+geom_histogram(color="darkblue", fill="lightblue") +
+ggtitle("Histogram")
+# q-q plot of differenced data
+qqplot_data_dd <- ggqqplot(data_dd, color="darkblue") + ggtitle("Q-Q plot")
+grid.arrange(acf_data_dd, pacf_data_dd, hist_data_dd, qqplot_data_dd,ncol=2, nrow=2)
+# stationarity tests (adf and kpss)
+adf_test <- adf.test(data_dd)
+kpss_test <- kpss.test(data_dd, null="Trend")
+table_data <- data.frame(
+Test = c("ADF Test", "KPSS Test"),
+Null = c("Process has a unit root and therefore a trend.",
+"Process is stationary"),
+pValue = c("<0.01", ">0.1"),
+Conclusion = c("Data is stationary", "Data is stationary")
+) 
+```
+
+Finally, in @tbl-adftest we see the p-values for both the Augmented Dickey–Fuller (ADF) t-statistic test (which
+examines whether the series has a unit root where a series with a trend line will have a unit root and result
+in a large p-value); and the Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test (which tests the null hypothesis
+of trend stationarity where a low p-value will indicate a signal that is not trend stationary, has a unit root),
+both of which concluded that the twice differenced data is trend stationary.
+
+```{r}
+#| label: tbl-adftest
+#| tbl-cap: "ADF and KPSS test result."
+
+adf_test <- adf.test(data_dd)
+kpss_test <- kpss.test(data_dd, null="Trend")
+data.frame(
+Test = c("ADF Test", "KPSS Test"),
+Null = c("Process has a unit root and therefore a trend.",
+"Process is stationary"),
+pValue = c("<0.01", ">0.1"),
+Conclusion = c("Data is stationary", "Data is stationary")
+) |>
+    kable()
+```
+
+
+## Model Fitting
+
+### Parameter Selection
+
+When considering a potential SARIMA model we are required to select possible values for the 7 parameters
+$p$, $d$, $q$, $P$, $D$, $Q$ and $s$. Since we differenced our data with lag 1 once and with lag 12 once to obtain stationarity we have the parameters $d=1$, $D=1$ and $s = 12$. To determine a potential range of values of the remaining parameters (AR parameters $p$, $P$ and MA parameters $q$, $Q$) we examine both the ACF and PACF plots of the differenced data, shown above in @fig-histdiff.
+
+To determine an upper bound for the AR term $p$ range we look at the PACF and see that we have significant partial-autocorrelation spikes at lags 1 and 3 indicating we may require up to $p= 3$. We also note there are significant spikes at lags 9 and 11 although these are likely interactions with seasonal components to be considered later. To determine an upper bound for the MA term $q$ range we look at the ACF and see that we have significant autocorrelation spikes at lags 1 and 3, indicating we may require up to $q= 3$. Similarly, we also see significant spikes at lags 9 and 11, likely due to interactions with seasonal components.
+
+Now considering seasonal AR terms we again turn to the PACF, this time noting that we have significant partial-autocorrelation at lags 12,24 and 36 indicating that we may require a seasonal AR parameter up to $P= 3$. Finally, to determine an upper bound for the seasonal MA term Q range we note from the ACF plot that we have significant autocorrelation at lag 12 only, indicating the we likely require a seasonal MA parameter of $Q= 1$.
+
+We proceed to select the two models using a procedure whereby we systematically fit, evaluate and compare models using the Akaike information criterion (adjusted for small sample sizes) - denoted AICc. Earlier we determined that at most our model with have up to $p= 3$, $q= 3$, $P= 3$ and $Q= 1$ however, since the AICc punishes models with large numbers of parameters our approach to selecting an optimal model will be to start with the simplest models and add parameters with the aim of minimizing the AICc.
+
+```{r}
+#| label: tbl-modelsummary
+#| tbl-cap: "Model comparison summary (Significance codes: 0 $\\text{***}$, 0.001 $\\text{**}$, 0.01 $\\text{*}$, 0.05 .)."
+
+data.frame(
+    Model = c(
+        "SARIMA(0,1,1)(0,1,0)12",
+        "SARIMA(0,1,0)(0,1,1)12",
+        "SARIMA(0,1,2)(0,1,0)12",
+        "SARIMA(0,1,1)(0,1,1)12",
+        "SARIMA(0,1,3)(0,1,0)12",
+        "SARIMA(0,1,2)(0,1,1)12",
+        "SARIMA(0,1,3)(0,1,1)12",
+        "SARIMA(0,1,3)(0,1,0)12 (MA2=0)",
+        "SARIMA(0,1,3)(0,1,1)12 (MA2=0)",
+        ##
+        "SARIMA(1,1,1)(0,1,1)12",
+        "SARIMA(0,1,1)(1,1,1)12",
+        "SARIMA(1,1,3)(0,1,1)12 (MA2=0)",
+        "SARIMA(3,1,3)(0,1,1)12 (MA2=0)",
+        "SARIMA(3,1,1)(0,1,1)12",
+        "SARIMA(3,1,1)(0,1,1)12 (AR1=AR2=0)"
+        ),
+    ar1 = c(
+        " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        "0.345*", " ", "0.026", "0.660", "0.371*", "0"
+            ),
+    ar2 = c(
+        " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", "0.235", "0.139.", "0"
+    ),
+    ar3 = c(
+        " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", "-0.269", "-0.103", "-0.139*"
+    ),
+    ma1 = c(
+        "-0.344***", " ", "-0.346***", "-0.353***",
+        "-0.325***", "-0.354***", "-0.356***",
+        "-0.322***", "-0.355***", "-0.675***",
+        "-0.357***", "-0.377**", "-1.007*", 
+        "-0.722***", "-0.347***"
+    ),
+    ma2 = c(
+        " ", " ", "-0.047", " ", "0.013", "-0.046",
+        "0.004", "0", "0", " ", " ", "0", "0", " ", " "
+    ),
+    ma3 = c(
+        " ", " ", " ", " ", "-0.217***", " ",
+        "-0.157**", "-0.214***", "-0.156**", 
+        " ", " ", "-0.152**", "0.193", " ", " "
+    ),
+    sar1 = c(
+        " ", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", "-0.031", " ", " ", " ", " "
+    ),
+    sma1 = c(
+        " ", "-0.890***", " ", "-0.841***", " ",
+        "-0.839***", "-0.838***", " ", "-0.838***",
+        "-0.839***", "-0.831***", "-0.839***",
+        "-0.846***", "-0.841***", "-1.196***"
+    ),
+    AICc = c(
+        "279.55", "154.53", "280.87", "123.84", "270.05", 
+        "125.30", "119.57", "268.05", "117.51", "123.37",
+        "125.69", "119.55", "123.1", "121.15", "119.96"
+    )
+) |> kable()
+```
+
+
+
+### Pure Moving Average Models
+
+We begin by fixing our AR parameters $p= 0$ and $P= 0$ and determine the optimal pure Moving Average (MA) model. From our ACF and PACF plots we determined that our model should include up to $q= 3$ MA terms and $Q= 1$ seasonal MA terms. We proceed to fit various models with the results of the fitting procedure for our top performing models, shown below in Tables 3 and 4.
+
+```{r}
+#| label: tbl-maperformance
+#| tbl-cap: "MA model performance criteria."
+
+data.frame(
+    Model = c("SARIMA(0,1,3)(0,1,1)12", "SARIMA(0,1,3)(0,1,1)12 (MA2=0)"),
+    AIC = c(119.38, 117.38),
+    AICc = c(119.57, 117.51),
+    BIC = c(138.08, 132.34)
+) |>
+    kable()
+```
+
