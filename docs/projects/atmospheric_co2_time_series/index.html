@@ -108,7 +108,7 @@ window.Quarto = {
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -173,7 +173,42 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Forecasting historical atmospheric carbon dioxide levels above Mauna Loa, Hawaii using the SARIMA model family.</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Atmospheric Modelling</div>
+                <div class="quarto-category">Time Series</div>
+                <div class="quarto-category">Statistics</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">SARIMA</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 17, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -191,49 +226,17 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#parameter-selection" id="toc-parameter-selection" class="nav-link" data-scroll-target="#parameter-selection">Parameter Selection</a></li>
   <li><a href="#pure-moving-average-models" id="toc-pure-moving-average-models" class="nav-link" data-scroll-target="#pure-moving-average-models">Pure Moving Average Models</a></li>
+  <li><a href="#considering-autoregressive-terms" id="toc-considering-autoregressive-terms" class="nav-link" data-scroll-target="#considering-autoregressive-terms">Considering Autoregressive Terms</a></li>
+  <li><a href="#final-model" id="toc-final-model" class="nav-link" data-scroll-target="#final-model">Final Model</a></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Forecasting historical atmospheric carbon dioxide levels above Mauna Loa, Hawaii using the SARIMA model family.</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Atmospheric Modelling</div>
-    <div class="quarto-category">Time Series</div>
-    <div class="quarto-category">Statistics</div>
-    <div class="quarto-category">R</div>
-    <div class="quarto-category">SARIMA</div>
-  </div>
-  </div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>John Robin Inston </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 17, 2023</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <p><strong>Abstract:</strong></p>
@@ -663,7 +666,7 @@ Table&nbsp;3: Model comparison summary (Significance codes: 0 <span class="math 
 </section>
 <section id="pure-moving-average-models" class="level3">
 <h3 class="anchored" data-anchor-id="pure-moving-average-models">Pure Moving Average Models</h3>
-<p>We begin by fixing our AR parameters <span class="math inline">\(p= 0\)</span> and <span class="math inline">\(P= 0\)</span> and determine the optimal pure Moving Average (MA) model. From our ACF and PACF plots we determined that our model should include up to <span class="math inline">\(q= 3\)</span> MA terms and <span class="math inline">\(Q= 1\)</span> seasonal MA terms. We proceed to fit various models with the results of the fitting procedure for our top performing models, shown below in Tables 3 and 4.</p>
+<p>We begin by fixing our AR parameters <span class="math inline">\(p= 0\)</span> and <span class="math inline">\(P= 0\)</span> and determine the optimal pure Moving Average (MA) model. From our ACF and PACF plots we determined that our model should include up to <span class="math inline">\(q= 3\)</span> MA terms and <span class="math inline">\(Q= 1\)</span> seasonal MA terms. We proceed to fit various models with the results of the fitting procedure for our top performing models, shown below in <a href="#tbl-maperformance" class="quarto-xref">Table&nbsp;4</a>.</p>
 <div class="cell">
 <div id="tbl-maperformance" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -701,6 +704,59 @@ Table&nbsp;4: MA model performance criteria.
 </figure>
 </div>
 </div>
+<p>From <a href="#tbl-maperformance" class="quarto-xref">Table&nbsp;4</a> we see that the SARIMA(0,1,3)(0,1,1)12 model obtained an AICc of 119.57 and that of our 4 fitted coefficients, the MA(2) parameter is insignificant - since the confidence interval contains 0. Therefore, we fix this term to 0 and refit our model. Our adjustment was successful with our new model achieving a lower AICc score of 117.51 and significant coefficients making this as our top performing pure MA model.</p>
+</section>
+<section id="considering-autoregressive-terms" class="level3">
+<h3 class="anchored" data-anchor-id="considering-autoregressive-terms">Considering Autoregressive Terms</h3>
+<p>We consider whether the introduction of autoregressive terms improves model performance per the AICc - namely whether the introduction of additional autoregressive terms improve performance enough that it outweighs the penalty from the AICc. We again consider a selection of models containing AR terms and show the fitting procedure results of our top two candidates in <a href="#tbl-arperformance" class="quarto-xref">Table&nbsp;5</a> below.</p>
+<div class="cell">
+<div id="tbl-arperformance" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-arperformance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: AR model performance criteria.
+</figcaption>
+<div aria-describedby="tbl-arperformance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">AICc</th>
+<th style="text-align: right;">BIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(1,1,1)(0,1,1)12</td>
+<td style="text-align: right;">123.24</td>
+<td style="text-align: right;">123.37</td>
+<td style="text-align: right;">138.20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(3,1,1)(0,1,1)12 (AR1=AR2=0)</td>
+<td style="text-align: right;">119.83</td>
+<td style="text-align: right;">119.96</td>
+<td style="text-align: right;">134.79</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>We found that the addition of seasonal AR terms typically decreased our models AICc and rarely had significant coefficients. From <a href="#tbl-arperformance" class="quarto-xref">Table&nbsp;5</a> we see that the SARIMA(1,1,1)(0,1,1)12 model performed reasonably well, with all fitted coefficients being significant and achieving an AICc of 123.37. Furthermore, from <a href="#tbl-arperformance" class="quarto-xref">Table&nbsp;5</a> we also see that a potential candidate is the SARIMA(3,1,1)(0,1,1)12 model with fixed zero AR(1) and AR(2) coefficients. This model again has all significant coefficients with an AICc of 119.96, making it the second best performing model overall per the AICc, however this model is not a viable candidate as the absolute value of the seasonal MA coefficient is greater than 1. Hence select the SARIMA(1,1,1)(0,1,1)12 model as our second candidate and proceed to confirming stationarity and invertibility.</p>
+</section>
+<section id="final-model" class="level3">
+<h3 class="anchored" data-anchor-id="final-model">Final Model</h3>
+<p>The equations for our selected models are therefore:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\nabla_{1}\nabla_{12}X_t = (1-0.354998_{(0.053140)}B-0.155974_{(0.052126)}B^3)(1-0.838438_{(0.035989)}B^{12})Z_t,\)</span></p></li>
+<li><p><span class="math inline">\(\nabla_1\nabla_{12}(1-0.344624_{(0.151353)}B)X_t=(1-0.675336_{(0.123186)}B)(1-0.839105_{(0.035565)}B^{12})Z_t\)</span></p></li>
+</ol>
+<p>where <span class="math inline">\(Z_t\)</span> is White Noise (WN) with <span class="math inline">\(\mathbb{E}Z_t=0\)</span> with <span class="math inline">\(\text{Var}(Z_t)=\hat{\sigma}_Z^2 =0.08431\)</span> and <span class="math inline">\(\hat{\sigma}_Z^2=0.08583\)</span> respectively.</p>
+<p>Model (1) is pure moving average so it is always stationary. Furthermore, from plot 1 in Figure 8 below we see that all MA roots lie outside the unit circle and since <span class="math inline">\(|\Theta_1|&lt; 1\)</span> we have that the model is invertible. Model (B) is invertible since <span class="math inline">\(|\theta_1|&lt; 1\)</span> and <span class="math inline">\(|\Theta_1|&lt; 1\)</span> and the model is stationary since <span class="math inline">\(|\phi_1|&lt; 1\)</span>.</p>
 
 
 </section>
