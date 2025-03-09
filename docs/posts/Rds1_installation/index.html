@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -188,6 +222,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#rstudio-layout" id="toc-rstudio-layout" class="nav-link" data-scroll-target="#rstudio-layout">RStudio Layout</a></li>
   <li><a href="#system-vs-working-memory" id="toc-system-vs-working-memory" class="nav-link" data-scroll-target="#system-vs-working-memory">System vs Working Memory</a></li>
   <li><a href="#creating-r-scripts" id="toc-creating-r-scripts" class="nav-link" data-scroll-target="#creating-r-scripts">Creating R Scripts</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#help-function" id="toc-help-function" class="nav-link" data-scroll-target="#help-function">Help Function</a></li>
   <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
   </ul>
 </nav>
@@ -315,6 +351,72 @@ Exercise 2
 </div>
 </div>
 </section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>R comes preloaded with a variety of functions, called <strong>base functions</strong> however there are many tasks for which they are insufficient (advanced plotting, statistical modelling etc.). CRAN Packages are collections of functions written in <code>R</code> by other users that are available for download. A comprehensive list of the available packages are detailed on the <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN website</a>.</p>
+<p>Throughout this course we will use a variety of packages (such as <code>tidyverse</code>) and so it is important we know how to load and use the in-built package management in RStudio. navigating to the packages tab we will see a list of pre-installed packages with empty check marks next to them. These packages are installed (downloaded from the internet) but not loaded (not available for use in our R session).</p>
+<p>To install a package (e.g.&nbsp;<code>tidyverse</code>) we can use the <code>install.packages()</code> function where the input to the function is the name of the package enclosed in quotation marks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'tidyverse'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You will see the package appear with no check mark in the packages manager. Note that once a package is installed it will not need to be installed in future unless you reinstall RStudio (which is why we often omit this code in scripts).</p>
+<p>Next, to load a package we can use the <code>library()</code>function where this time the input is the name of the package with no quotation marks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Your console output will often provide relevant information about the version of the package and its compatibility with your downloaded version of R and other loaded packages. Running this function will check the box next to <code>tidyverse</code> in the package tab.</p>
+<p><em>I recommend including all your package loading functions at the top of your script so you can quickly check what packages you have loaded in your session.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="packages.png" class="img-fluid figure-img"></p>
+<figcaption>Package tab with loaded <code>tidyverse</code> package.</figcaption>
+</figure>
+</div>
+<p>Occasionally you might have loaded multiple packages which have conflicting package names. In this case, you may want to unload a package which you can do using the <code>detach()</code> function. The syntax for the input is a little more complicated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">"package:tidyverse"</span>, <span class="at">unload =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By writing code in your console install the packages: (1) <code>tidyverse</code>; (2) <code>astsa</code> and (3) <code>zoo</code>, using the <code>install.packages()</code> function. Now in your script use the <code>library()</code> function to load all three packages.</p>
+</div>
+</div>
+</section>
+<section id="help-function" class="level2">
+<h2 class="anchored" data-anchor-id="help-function">Help Function</h2>
+<p>One of my most used functions in <code>R</code> is <code>?</code> which quickly loads to documentation for the specified function in the Help tab. An example of using this function to return information about the base <code>mean()</code> function is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>?<span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you run this code you will see the documentation for the <code>mean()</code> function displayed in the Help tab.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="help.png" class="img-fluid figure-img"></p>
+<figcaption>Help function output for <code>mean()</code> function.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 4
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the <code>tidyverse</code> function you have just loaded there is a function <code>ggplot()</code>. Use the help <code>?</code> syntax to load and read the documentation.</p>
+</div>
+</div>
+</section>
 <section id="review" class="level2">
 <h2 class="anchored" data-anchor-id="review">Review</h2>
 <p>At the end of this short lesson we should now be able to:</p>
@@ -322,6 +424,8 @@ Exercise 2
 <li><p>Download and install both R and RStudio.</p></li>
 <li><p>Set our working directory.</p></li>
 <li><p>Create new R scripts and save them.</p></li>
+<li><p>Install and load packages.</p></li>
+<li><p>Use the help function to search for documentation.</p></li>
 </ol>
 <div style="display: flex; justify-content: space-between; padding: 20px 0;">
 <p><!-- Back Button --> <a href="../../courses/intro_to_data_science/index.html" style="text-decoration: none; font-size: 18px;"> ← Course Homepage </a></p>
