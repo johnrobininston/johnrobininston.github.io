@@ -9,7 +9,7 @@
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2025-03-08">
 
-<title>R Basics (Operations, Objects and Functions) – John Robin Inston</title>
+<title>R Basics I (Operators, Logic, Data Types and Functions) – John Robin Inston</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -72,6 +106,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -147,7 +210,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">R Basics (Operations, Objects and Functions)</h1>
+      <h1 class="title">R Basics I (Operators, Logic, Data Types and Functions)</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Data Science with R</div>
               </div>
@@ -183,7 +246,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#operators" id="toc-operators" class="nav-link active" data-scroll-target="#operators">Operators</a></li>
+  <li><a href="#calculations" id="toc-calculations" class="nav-link active" data-scroll-target="#calculations">Calculations</a>
+  <ul class="collapse">
+  <li><a href="#addition-subtraction-multiplication-and-division" id="toc-addition-subtraction-multiplication-and-division" class="nav-link" data-scroll-target="#addition-subtraction-multiplication-and-division">Addition, Subtraction, Multiplication and Division</a></li>
+  <li><a href="#powers-and-square-roots" id="toc-powers-and-square-roots" class="nav-link" data-scroll-target="#powers-and-square-roots">Powers and Square Roots</a></li>
+  <li><a href="#logarithms-and-exponentials" id="toc-logarithms-and-exponentials" class="nav-link" data-scroll-target="#logarithms-and-exponentials">Logarithms and Exponentials</a></li>
+  </ul></li>
+  <li><a href="#logic" id="toc-logic" class="nav-link" data-scroll-target="#logic">Logic</a></li>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types">Data Types</a></li>
+  <li><a href="#assignment-operator" id="toc-assignment-operator" class="nav-link" data-scroll-target="#assignment-operator">Assignment Operator</a></li>
   </ul>
 </nav>
     </div>
@@ -195,8 +266,164 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This post contains notes for Chapter 2 of my course series <a href="../../courses/intro_to_data_science/index.html">Data Science with R</a> covering the basic use of R as a calculator including operations, defining objects and functions.</p>
-<section id="operators" class="level2">
-<h2 class="anchored" data-anchor-id="operators">Operators</h2>
+<section id="calculations" class="level2">
+<h2 class="anchored" data-anchor-id="calculations">Calculations</h2>
+<p>We can perform a wide variety of mathematical calculations using <code>R</code> including:</p>
+<ul>
+<li>Multiplication, addition, division, subtraction;</li>
+<li>Raising to powers and square rooting;</li>
+<li>Trigonometric functions;</li>
+<li>Exponential and logarithmic functions.</li>
+</ul>
+<p>The syntax to apply these operations is often very intuitive but slightly different to the mathematical notation.</p>
+<section id="addition-subtraction-multiplication-and-division" class="level3">
+<h3 class="anchored" data-anchor-id="addition-subtraction-multiplication-and-division">Addition, Subtraction, Multiplication and Division</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Addition</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dv">21</span> <span class="sc">+</span> <span class="dv">47</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 68</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subtraction</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="dv">456</span> <span class="sc">-</span> <span class="dv">564</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -108</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiplication</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span><span class="sc">*</span><span class="dv">23</span>      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 161</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Division</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dv">45</span><span class="sc">/</span><span class="dv">23</span>     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.956522</code></pre>
+</div>
+</div>
+</section>
+<section id="powers-and-square-roots" class="level3">
+<h3 class="anchored" data-anchor-id="powers-and-square-roots">Powers and Square Roots</h3>
+<p>To raise numbers to powers we can use the <code>^</code> symbol. Note that if we wish to raise numbers to fractional powers we must ensure to enclose our fraction in parentheses <code>()</code>. Further, there is a specifically defined function for computing the square root of a number <code>sqrt()</code>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Parentheses <code>()</code>, brackets <code>[]</code> and braces <code>{}</code> all have different uses in R and care should be taken to apply them correctly.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Powers </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span><span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 81</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fractional Powers</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">225</span><span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Square Root Function</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">225</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15</code></pre>
+</div>
+</div>
+</section>
+<section id="logarithms-and-exponentials" class="level3">
+<h3 class="anchored" data-anchor-id="logarithms-and-exponentials">Logarithms and Exponentials</h3>
+<p>As a quick reminder in mathematics we define the irrational number <span class="math inline">\(e\)</span> by <span class="math display">\[
+e = 2.71828...
+\]</span></p>
+<p>The <strong>exponential function</strong> <span class="math inline">\(\exp(\cdot)\)</span> is defined as <span class="math display">\[
+\exp(x) = e^x.
+\]</span></p>
+<p>The inverse of this function is known as the <strong>natural logarithm</strong> <span class="math inline">\(\log(\cdot)=\ln(\cdot)\)</span> and is defined as the power of which <span class="math inline">\(e\)</span> will have to be raised to in order to give <span class="math inline">\(x\)</span>. It is therefore the inverse of the exponential function and satisfies <span class="math display">\[
+\exp(\log(x)) = e^{\log(x)} = x.
+\]</span></p>
+<p>For a more indepth look at these functions and the results we use to perform calculations with them see my note on Log Laws. To apply these functions in <code>R</code> we use the <code>exp()</code> and <code>log()</code> functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exponential function</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.718282</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="dv">17</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 24154953</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&nbsp;Log function</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="dv">47</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.850148</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inverse example</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">exp</span>(<span class="dv">47</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 47</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify the following mathematical computations in <code>R</code> using the operations above:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\left(\frac{\log(49^2)}{\exp(4)}\right)^{1/3}=0.5223981\)</span>;</p></li>
+<li><p><span class="math inline">\(\left(67+\left(\frac{12}{5} \times \frac{3}{12}\right)\right)^e+\left(\log(21) - \sqrt{14}\right)=94255.7\)</span></p></li>
+</ol>
+</div>
+</div>
+</section>
+</section>
+<section id="logic" class="level2">
+<h2 class="anchored" data-anchor-id="logic">Logic</h2>
+<p><code>R</code> can also handle logical inputs including:</p>
+<ul>
+<li><code>&lt;</code> less than;</li>
+<li><code>&lt;=</code> less than or equal to;</li>
+<li><code>&gt;</code> greater than;</li>
+<li><code>&gt;=</code> greater than or equal to;</li>
+<li><code>==</code> equal to;</li>
+<li><code>!=</code> not equal to;</li>
+<li><code>&amp;</code> AND (<span class="math inline">\(\cap\)</span> written mathematically);</li>
+<li><code>|</code> OR (<span class="math inline">\(\cup\)</span> written mathematically).</li>
+</ul>
+</section>
+<section id="data-types" class="level2">
+<h2 class="anchored" data-anchor-id="data-types">Data Types</h2>
+</section>
+<section id="assignment-operator" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-operator">Assignment Operator</h2>
+<p>The assignment operator <code>-&gt;</code> is used to define <strong>objects</strong> in <code>R</code>. Objects can take many different forms from basic numbers to <strong>vectors</strong>, <strong>matrices</strong> or even <strong>functions</strong>, all of which we will cover in future sections. For now, suppose we wish to store the results of some of the above computations for future use. We can do so by applying the assignment oeprator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define object a</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> (<span class="fu">log</span>(<span class="dv">49</span><span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">exp</span>(<span class="dv">4</span>))<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Running this code you should see the object <code>a</code> appear in your <code>environment</code> tab and you might have noticed no result was printed in the console. To print the value of <code>a</code> in your console you can either use the <code>print()</code> function or just call the object in your console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print function</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5223981</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&nbsp;Call Object</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>a</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5223981</code></pre>
+</div>
+</div>
 <div style="display: flex; justify-content: space-between; padding: 20px 0;">
 <p><!-- Back Button --> <a href="../../posts/Rds1_installation/index.html" style="text-decoration: none; font-size: 18px;"> ← Previous Chapter </a></p>
 <p><!-- Forward Button --> <a href="../../posts/Rds2_rbasics/index.html" style="text-decoration: none; font-size: 18px;"> Next Chapter → </a></p>
@@ -205,7 +432,7 @@ ul.task-list li input[type="checkbox"] {
 
 </section>
 
-</main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
