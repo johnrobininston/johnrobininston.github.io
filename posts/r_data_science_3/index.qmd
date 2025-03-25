@@ -1,0 +1,280 @@
+---
+title: R Basics II (Vectors, Matrices, Dataframes and Lists)
+author: John Robin Inston
+date: "2025-03-23"
+categories: [Data Science with R]
+toc: true
+---
+
+This post contains notes for Chapter 3 of my course series [Data Science with R](/courses/intro_to_data_science/index.qmd) covering atomic data structures.
+
+## Scalars
+
+A **scalar** data form is an object holding one value.  For example:
+
+```{r}
+x <- 16
+y <- "scalar"
+z <- FALSE
+```
+
+We often need to use different data structures that contain multiple values of different dimensions of different data types.  `R` can handle data types including: (1) **Vectors**; (2) **Matrices**; (3) **Dataframes**; and (4) **Lists**.  In this note we will cover the atomic data types of vectors and matrices, specifically how we define them and how we perform computations with them.
+
+## Vectors
+
+A **vector** data form is an object holding multiple values of the **same datatype**, i.e. all numeric or all strings.  We call objects with this property **atomic**.
+
+There are multiple functions for constructing vectors in `R` including `c()`, `seq()`, `:`, and `rep()`.
+
+### `c()` Function
+
+The simplest way to define a vector in `R` is using the `c()` function where you can specify each element of the vector within the parenthesis:
+
+```{r}
+#| output-location: fragment
+# Numeric vector
+num_vec <- c(4,1,6,8,4,2,5)
+num_vec
+# Character string vector
+char_vec <- c("dog", "cat", "goose", "monkey", "elephant")
+char_vec
+# Boolean vector
+bool_vec <- c("TRUE", "FALSE", "FALSE", "FALSE", "TRUE")
+bool_vec
+```
+
+### `rep()` Function
+
+The `rep()` function is a simple way to construct vectors where a single value is repeated.  The arguments for the function `rep(x, times)` where `x` specifies the scalar / vector you with to repeat and `times` specifies the number of times you want it repeated:
+
+```{r}
+# rep() function
+rep(x = 7, times = 14)
+```
+
+### `seq()` Function
+
+The `seq()` function is used specifically to construct numeric sequences.  The syntax for `seq(from, to, by, length.out)` has arguments: (1) `from` specifying the starting values; (2) `to` specifying the final value; (3) `by` specifying the step size; and (4) `length.out` specifying the length of the resulting vector.  Note that we cannot include arguments (3) and (4) at the same time!
+
+```{r}
+# seq() function with by
+seq(from = 1, to = 10, by = 2)
+# seq() function with length.out
+seq(from = 1, to = 10, length.out = 9)
+```
+
+A quick alternative if we wish to make a vector of increasing integers is simply to use the `:` syntax:
+
+```{r}
+# integers from -3 to 4
+-3:4
+```
+
+### Combining Methods
+
+Any of these functions can be nested within one another to produce more complicated vectors.  
+
+```{r}
+# c() with seq() and rep()
+c(
+    rep(4, 5),
+    seq(0, 10, by = 1)
+)
+```
+
+
+```{r}
+#| echo: false
+
+s <- c(seq(1, 2, 0.25), rep(c(1,9), 3))
+t <- c(1:3, rep(4, 2), 3:1, rep(0,2))
+```
+
+::: {.callout-tip}
+
+## Exercise 1
+
+Use any combinations of the above functions to reproduce the following vectors and save them to the corresponding objects.
+
+```{r}
+s
+t
+```
+
+:::
+
+
+## Matrices
+
+Matrices are essentially 2 dimensional vectors and so again the mathematics of matrix computations is given by Linear Algebra. For example, we define a matrix $A$ with $4$ columns and $3$ rows  by
+
+$$
+A := \begin{bmatrix}
+a_{1,1} & a_{1,2} & a_{1,3} \\
+a_{2,1} & a_{2,2} & a_{2,3} \\
+a_{3,1} & a_{3,2} & a_{3,3} \\
+a_{4,1} & a_{4,2} & a_{4,3} 
+\end{bmatrix},
+$$
+
+where $a_{i,j}\in\mathbb{R}$ for all $i,j$.  We can see that vectors are simply a specific kind of matrix, i.e. a matrix with only one column.  
+
+There are three functions we use to construct matrices:
+
+- `matrix()`;
+- `rbind()`;
+- `cbind()`.
+
+### `matrix()`
+
+The simplest syntax for the `matrix()` function is:
+
+```{r}
+#| eval: false
+
+# matrix() syntax
+matrix(data = NA, nrow = n, ncol = m, byrow = FALSE)
+```
+
+where:
+
+- `data` - is a vector of the matrix elements;
+- `nrow` - specifies the number of rows of the matrix;
+- `ncol` - specifies the number of columns of the matrix;
+- `byrow` - is a boolean specifying if the matrix should be built row-wise.
+
+For an example, suppose we wish to construct a 4x4 matrix consisting of the integers from 1 to 16 constructed row-wise.  Written mathematically, we wish to construct
+$$
+A := \begin{bmatrix}
+1 & 2 & 3 & 4 \\
+5 & 6 & 7 & 8 \\
+9 & 10 & 11 & 12 \\
+13 & 14 & 15 & 16
+\end{bmatrix}.
+$$
+
+To construct this matrix in `R` we can write:
+
+```{r}
+# matrix() function
+A <- matrix(1:16, nrow = 4, ncol = 4, byrow = TRUE)
+A
+```
+
+### `rbind()` and `cbind()`
+
+Sometimes we might have several vectors that we with to combine into a matrix.  To combine vectors row-wise we use `rbind()` and to combine vectors column-wise we use `cbind()`.
+
+```{r}
+# rbind() function
+rbind(1:4, 5:8, 9:12, 13:16)
+cbind(1:4, 5:8, 9:12, 13:16)
+```
+
+## Matrix Computations
+
+Atomic data structures are not flexible but this rigid structure allows them to be easily manipulated.  The mathematical background for arithmetic with matrices is studied in Linear Algebra.  
+
+We can add to matrices together if they have the same number of columns and rows (just rows for vectors) in which case we say the matrices have the same **dimension**.  In this case, the sum of two matrices is simply computed element-wise.
+
+```{r}
+B <- matrix(
+    seq(from=2, length.out=16, by=2), 
+    nrow = 4, ncol = 4, byrow = TRUE
+    )
+B
+A + B
+```
+
+Similarly, scalar multiplication is computed element-wise.
+
+```{r}
+7 * A
+```
+
+When computing the cross-product of matrices $A\times B$ we require that the number of rows of $A$ is equal to the number of columns of $B$.  
+
+```{r}
+#| error: true
+A * B
+B * c(1,2,3)
+B * c(1,2,3,4)
+```
+
+
+## Matrix Indexing and Filtering
+
+### Indexing
+
+When we wish to retrieve a specific element or elements of a data structure we need to perform indexing which in `R`.  Considering the matrix $A$ we defined earlier.  If we wished to select the 5th element of the matrix we can use the brace `[]` syntax and write:
+
+```{r}
+A[5]
+```
+
+Now, supposing we wished to select from the 2nd to the 8th element of the matrix, we can use the same syntax but this time specifying a vector of the index values in the braces:
+
+```{r}
+A[2:8]
+```
+
+Often we might be more interested in selecting specific rows or columns of the matrix.  To select a column we use the same syntax but this time with a comma `A[i,j]` where `i` specifies the row number of `j` specifies the column number.  If we with to select the entire row we simply leave the value of `j` blank and vice versa:
+
+```{r}
+# 1st row
+A[1,]
+# 4th column
+A[,4]
+```
+
+We can select multiple rows / columns by using the same syntax as before and including a vector of the row / column index values you with to select:
+
+```{r}
+# 2nd and 3rd rows
+B[2:3, ]
+# 2nd and 3rd rows + 1st and 4th columns
+A[2:3, c(1,4)]
+```
+
+We can also chain index whereby we immediately index the output of our indexing:
+
+```{r}
+A[2:3, c(1,4)][2:3]
+```
+
+### Filtering
+
+Now suppose we wish to only select elements of a matrix that specify a certain logical condition.  We can again index but this time instead of specifying the index numbers we specify the condition we wish to be satisfied:
+
+```{r}
+A[A > 10]
+```
+
+This is particularly helpful when we wish to edit our original matrix.  For example, if we wish to change $A$ such that all elements $\leq 10$ are set to zero we could write:
+
+```{r}
+A[A < 10] <- 0
+A
+```
+
+## Matrix Functions
+
+There are also a collection of preloaded functions for performing computations and handling vectors and matrices such as:
+
+- `length()` - returns the number of elements in a vector;
+- `typeof()` - returns the type of vector (numeric, boolean, character);
+- `dim()` - returns the dimensions of a matrix;
+- `det()` - computes the determinant of a matrix;
+- `solve()` - computes the inverse of a matrix;
+
+<div style="display: flex; justify-content: space-between; padding: 20px 0;">
+  <!-- Back Button -->
+  <a href="/posts/r_data_science_2/index.qmd" style="text-decoration: none; font-size: 18px;">
+    &#8592; Previous Chapter
+  </a>
+  
+  <!-- Forward Button -->
+  <a href="/posts/r_data_science_4/index.qmd" style="text-decoration: none; font-size: 18px;">
+    Next Chapter &#8594;
+  </a>
+</div>
