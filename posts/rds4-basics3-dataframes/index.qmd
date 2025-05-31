@@ -1,0 +1,106 @@
+---
+title: R Basics III (Dataframes and Lists)
+author: John Robin Inston
+date: "2025-03-24"
+date-modified: "2025-06-01"
+categories: [Data Science with R]
+toc: true
+---
+
+This post contains notes for Chapter 4 of my course series [Data Science with R](/courses/intro_to_data_science/index.qmd) covering dataframes and lists.  Specifically we will look at `R`'s base functionality for dataframes and lists including how to construct and manipulate these objects.  We note that although it is preferable to manipulate dataframes using the `tidyverse` package (something we cover in a future lesson) this note focusses first on detailing the base functionality.
+
+```{r}
+#| echo: false
+# Libraries
+library(kableExtra)
+```
+
+## Non-Atomic Data Structures
+
+So far we have introduced a variety of atomic data structures (e.g. scalars, vectors, matrices and arrays) each of which are designed for ease of computation and interaction by being restricted to containing only one datatype.  However, as any scientist who has ever collected data will tell you, we often need to define objects that contain multiple datatypes, namely:
+
+1. **Dataframes**; and
+2. **Lists**.
+
+By containing multiple datatypes you sacrifice computationally tractability but gain immense flexibility for data storage.
+
+## Dataframes
+
+In `R` a dataframe can be intuitively pictured as a table of data where each column is of the same datatype.  For example here is a table showing the first 6 rows of the pre-loaded dataframe `iris` which contains 4 numeric columns and one factor column:
+
+```{r}
+#| echo: false
+head(iris) |>
+    kable()
+```
+
+### Constructing Dataframes
+
+To construct a dataframe in `R` we can use the `dataframe()` function:
+
+```{r}
+#| eval: false
+data.frame(..., row.names = NULL, check.rows = FALSE,
+           check.names = TRUE, fix.empty.names = TRUE,
+           stringsAsFactors = FALSE)
+```
+
+This function has multiple arguments but the most important are `...`, `row.names` and `stringsAsFactors`.  Lets go through a few examples of constructing data frames to build up our understanding. 
+
+Lets start by building a dataframe with three columns, the first containing numbers, the second containing boolean objects and the third containing character strings.  To do so we specify each columns values in a vector ensuring all three vectors are of the same length to avoid an `error` message:
+
+```{r}
+data <- data.frame(
+    c(1,2,3),
+    c(TRUE, TRUE, FALSE),
+    c("alpha", "beta", "gamma")
+)
+data
+```
+
+Looking at our print out we note othat we have successfully created a dataframe with: 
+
+- Numbered rows from 1 to 3; and
+- Generated column names based on the vector inputs.
+
+We can specify the names of the columns of the dataframe by slightly tweaking our code:
+
+```{r}
+data <- data.frame(
+    numbers = c(1,2,3),
+    booleans = c(TRUE, TRUE, FALSE),
+    strings = c("alpha", "beta", "gamma")
+)
+data
+```
+
+What if we want to name the rows?  In this case we can use the `row.names` argument as
+
+```{r}
+data <- data.frame(
+    numbers = c(1,2,3),
+    booleans = c(TRUE, TRUE, FALSE),
+    strings = c("alpha", "beta", "gamma"),
+    row.names = c("first", "second", "third")
+)
+data
+```
+
+Finally, we can use the `stringsAsFactors` argument to specify that we wish to convert the `strings` column into a `factor` column:
+
+```{r}
+data <- data.frame(
+    numbers = c(1,2,3),
+    booleans = c(TRUE, TRUE, FALSE),
+    strings = c("alpha", "beta", "gamma"),
+    row.names = c("first", "second", "third"),
+    stringsAsFactors = TRUE
+)
+data
+```
+
+This does not change the dataframe visually but if we will see in the following section that it has changed the datatype of the `strings` column.
+
+### Indexing Dataframes
+
+Dataframe indexing behaves a lot like matrix indexing as discussed in [R Basics II (Atomic Data Structures)](/posts/rds3-basics2-atomicdata/index.qmd).

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
-<meta name="dcterms.date" content="2025-01-21">
+<meta name="dcterms.date" content="2025-03-08">
 
-<title>Data Science with R – John Robin Inston</title>
+<title>Installing and using R and RStudio – John Robin Inston</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -147,10 +181,9 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Data Science with R</h1>
+      <h1 class="title">Installing and using R and RStudio</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">Data Science</div>
-                <div class="quarto-category">R</div>
+                <div class="quarto-category">Data Science with R</div>
               </div>
                   </div>
   </div>
@@ -168,16 +201,10 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 21, 2025</p>
+        <p class="date">March 8, 2025</p>
       </div>
     </div>
     
-      <div>
-      <div class="quarto-title-meta-heading">Modified</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date-modified">May 30, 2025</p>
-      </div>
-    </div>
       
     </div>
     
@@ -190,9 +217,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#course-information" id="toc-course-information" class="nav-link active" data-scroll-target="#course-information">Course Information</a></li>
-  <li><a href="#course-structure" id="toc-course-structure" class="nav-link" data-scroll-target="#course-structure">Course Structure</a></li>
-  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course Materials</a></li>
+  <li><a href="#background-information" id="toc-background-information" class="nav-link active" data-scroll-target="#background-information">Background Information</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#rstudio-layout" id="toc-rstudio-layout" class="nav-link" data-scroll-target="#rstudio-layout">RStudio Layout</a></li>
+  <li><a href="#system-vs-working-memory" id="toc-system-vs-working-memory" class="nav-link" data-scroll-target="#system-vs-working-memory">System vs Working Memory</a></li>
+  <li><a href="#creating-r-scripts" id="toc-creating-r-scripts" class="nav-link" data-scroll-target="#creating-r-scripts">Creating R Scripts</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#help-function" id="toc-help-function" class="nav-link" data-scroll-target="#help-function">Help Function</a></li>
+  <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
   </ul>
 </nav>
     </div>
@@ -203,50 +235,202 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="cell">
-<div class="cell-output-display">
-<div>
+<p>This post contains notes for Chapter 1 of my course series <a href="../../courses/intro_to_data_science/index.html">Data Science with R</a> covering how to install both the language R and the IDE RStudio, and the basics of using the IDE for data analysis.</p>
+<section id="background-information" class="level2">
+<h2 class="anchored" data-anchor-id="background-information">Background Information</h2>
+<p><code>R</code> is a programming language (like python or C++) whilst <strong>RStudio</strong> is a software that facilitates writing R scripts known as an <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">Intergrated Development Enviroment (IDE)</a>. In this course we will learn how to write in the <code>R</code> language using the IDE RStudio.</p>
+<p><code>R</code> can be used to perform and automate computations, generate plots, simulate from random variables and perform statistical analysis. RStudio is primarily an R focussed IDE but it also has the capability of producing technical documents in a variety of formats using Quarto markdown. You can find some fabulous online documentation about the capabilities of Quarto markdown documents <a href="https://quarto.org/docs/guide/">here</a>.</p>
+</section>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p><code>R</code> is not natively loaded on your computer and so to begin with we need to install both the language and the IDE onto our computers, the downloads for which can be found on the <a href="https://posit.co/download/rstudio-desktop/">posit website</a>. You will need to check that you download versions of both R and RStudio that match your operating system.</p>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="1152"></p>
+<p><img src="posit_download.png" class="img-fluid figure-img"></p>
+<figcaption>Posit website R and RStudio download screen.</figcaption>
 </figure>
 </div>
-</div>
-</div>
-<section id="course-information" class="level2">
-<h2 class="anchored" data-anchor-id="course-information">Course Information</h2>
-<p>Welcome to <strong>Data Science with R</strong>, a course providing an introduction on how to use the programming language <code>R</code> for data science and statistical modelling.</p>
-<p>The aim of this course is to provide a thorough introduction to programming in R for individuals who may have never written or utilized a programming language before. First we outline how to install <code>R</code> on our operating system, how to download and use an Interactive Development Environment (IDE) such as <code>RStudio</code>, <code>Positron</code> or <code>VSCode</code>, and how to install packages on our system. We will then explore various ways to explore, manage and analyze data using both the in-built functionality in <code>R</code> as well as available libraries such as <code>tidyverse</code>.</p>
+<p>R will be loaded onto your local drive and can mostly be forgotten about. RStudio will be downloaded into your applications folder and once the download is complete you can open the application to get started.</p>
 </section>
-<section id="course-structure" class="level2">
-<h2 class="anchored" data-anchor-id="course-structure">Course Structure</h2>
-<p>This course is based fundamentally on the PSTAT10 Data Science Principles class I have taught in the past at UCSB. The course is split into the following topics:</p>
+<section id="rstudio-layout" class="level2">
+<h2 class="anchored" data-anchor-id="rstudio-layout">RStudio Layout</h2>
+<p>When you first open RStudio the application will be split into several sections called <strong>panes</strong>, each with a selection of <strong>tabs</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="rstudio_layout.png" class="img-fluid figure-img"></p>
+<figcaption>RStudio Layout.</figcaption>
+</figure>
+</div>
+<p>We will first go through the most important tabs and what they are used for:</p>
 <ol type="1">
-<li><p><a href="../../posts/rds1-installation/index.html">Installing and using R and RStudio</a>.</p></li>
-<li><p><a href="../../posts/rds2-basics1-operators/index.html">R Basics I (Operators, Logic &amp; Data Types)</a>.</p></li>
-<li><p><a href="../../posts/rds3-basics2-atomicdata/index.html">R Basics II (Atomic Data Structures)</a>.</p></li>
-<li><p><a href="../../posts/rds4-basics3-dataframes/index.html">R Basics III (Dataframes and Lists)</a></p></li>
-<li><p>Probability Fundamentals.</p></li>
-<li><p>Basic Simulation with R.</p></li>
-<li><p>Data Handling with the <code>tidyverse</code> package.</p></li>
-<li><p>Plotting with <code>ggplot2</code>.</p></li>
-<li><p>SQL Basics.</p></li>
-<li><p>SQL Aggregation and Joins.</p></li>
+<li><p><strong>Left Pane:</strong></p>
+<ol type="a">
+<li><p><em>Console Tab</em> - Where R code can be read and executed by your computer.</p></li>
+<li><p><em>Terminal Tab</em> - Providing command line access to the computer’s operating system (this is rarely used by beginners).</p></li>
+</ol></li>
+<li><p><strong>Upper Right Pane:</strong></p>
+<ol type="a">
+<li><em>Environment Tab</em> - A breakdown of items saved in the working memory.</li>
+</ol></li>
+<li><p><strong>Lower Right Pane:</strong></p>
+<ol type="a">
+<li><p><em>Files Tab</em> - A view of your system files.</p></li>
+<li><p><em>Plots Tab</em> - A space displaying any plot you generate.</p></li>
+<li><p><em>Packages Tab</em> - A manager to load functions defined by other users known as <strong>packages</strong>.</p></li>
+<li><p><em>Help Tab</em> - A space to search for and view code documentation.</p></li>
+</ol></li>
 </ol>
 </section>
-<section id="course-materials" class="level2">
-<h2 class="anchored" data-anchor-id="course-materials">Course Materials</h2>
-<p>Each topic links to a website post with the relevant material. A pdf copy of the combined course notes can be downloaded here. Furthermore, each wesite post links to the corresponding youtube video going through the material.</p>
-<p>For this course you will need to download the language R, your chosen IDE and Quarto using the following links:</p>
-<ul>
-<li><p><a href="https://posit.co/download/rstudio-desktop/">Link to download R &amp; RStudio</a></p></li>
-<li><p><a href="https://quarto.org/docs/get-started/">Link to download Quarto</a></p></li>
-</ul>
-<p>Some helpful resources and additional guides and linked below:</p>
-<ul>
-<li><p><a href="https://quarto.org/docs/output-formats/pdf-basics.html">Documentation: Quarto for PDF documents</a></p></li>
-<li><p><a href="https://en.wikibooks.org/wiki/LaTeX/Mathematics">Documentation: Writing maths using LaTeX</a></p></li>
-<li><p><a href="https://ggplot2-book.org/">Documentation: Plotting with <code>ggplot</code></a></p></li>
-</ul>
+<section id="system-vs-working-memory" class="level2">
+<h2 class="anchored" data-anchor-id="system-vs-working-memory">System vs Working Memory</h2>
+<p>Anytime you define something in R (discussed in a later chapter) it will be saved to RStudios <strong>working (short-term) memory</strong>, shown in the environment tab. The available memory is limited and it is important to remember that anything stored here will be deleted once you close RStudio.</p>
+<p>For long term storage you will need to save objects to your <strong>system memory</strong> (your computers filing system), shown in the files tab. You will then be able to load anything you have saved for later use. In this course we will typically only use our system memory for saving our R scripts (text documents in which we write our code), accessing data files or for generating and saving .pdf documents.</p>
+<p>RStudios <strong>working environment</strong> is the file on your system that RStudio is currently looking within (i.e.&nbsp;what it can pull files from and save files too). The default working directory location is the file that is shown within the files tab. You can set a new working directory at anytime by either:</p>
+<ol type="1">
+<li><p>Navigating to the desired folder in the files tab, clicking on the more settings cog and selecting Set as Working Directory.</p></li>
+<li><p>Typing <code>setwd("desired_file_path")</code> into the R console.</p></li>
+</ol>
+<p>In the image below you can see that I have created a folder titled <code>Data Science with R</code> in my system <code>Documents</code> folder and set this as my working directory.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="working_directory.png" class="img-fluid figure-img"></p>
+<figcaption>Set working directory,</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lets prepare to create our first R script. First navigate to your desired course folder (or create on) and set it as your working directory.</p>
+</div>
+</div>
+</section>
+<section id="creating-r-scripts" class="level2">
+<h2 class="anchored" data-anchor-id="creating-r-scripts">Creating R Scripts</h2>
+<p>Now we are ready to create our first R script by using any of the following methods:</p>
+<ol type="1">
+<li><p>Navigate to file &gt; New File &gt; R Script;</p></li>
+<li><p>Use the shortcut shift + cmd + N on mac;</p></li>
+<li><p>Click the small + button at the top left of the application window and select R Script.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="new_script.png" class="img-fluid figure-img"></p>
+<figcaption>Creating a new R Script.</figcaption>
+</figure>
+</div>
+<p>After this a new pane will appear in the top left position showing an unititled document with the suffix <code>.R</code>. We can save this file using either:</p>
+<ol type="1">
+<li><p>The shortcut CMD + S;</p></li>
+<li><p>Clicking File &gt; Save,</p></li>
+</ol>
+<p>and the document should then appear in our working directory, therefore in our system storage.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="saved_script.png" class="img-fluid figure-img"></p>
+<figcaption>Saved script appearing in our working directory.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create and save your first R script (choose whatever name you like) to your working directory.</p>
+</div>
+</div>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>R comes preloaded with a variety of functions, called <strong>base functions</strong> however there are many tasks for which they are insufficient (advanced plotting, statistical modelling etc.). <strong>CRAN Packages</strong> are collections of functions written in <code>R</code> by other users that are available for download. A comprehensive list of the available packages are detailed on the <a href="https://cran.r-project.org/web/packages/available_packages_by_name.html">CRAN website</a>.</p>
+<p>Throughout this course we will use a variety of packages (such as <code>tidyverse</code>) and so it is important we know how to load and use the in-built package management in RStudio. navigating to the packages tab we will see a list of pre-installed packages with empty check marks next to them. These packages are installed (downloaded from the internet) but not loaded (not available for use in our R session).</p>
+<p>To install a package (e.g.&nbsp;<code>tidyverse</code>) we can use the <code>install.packages()</code> function where the input to the function is the name of the package enclosed in quotation marks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">'tidyverse'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You will see the package appear with no check mark in the packages manager. <em>Note that once a package is installed it will not need to be installed in future unless you reinstall RStudio (which is why we often omit this code in scripts).</em></p>
+<p>Next, to load a package we can use the <code>library()</code>function where this time the input is the name of the package with no quotation marks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Your console output will often provide relevant information about the version of the package and its compatibility with your downloaded version of R and other loaded packages. Running this function will check the box next to <code>tidyverse</code> in the package tab.</p>
+<p><em>I recommend including all your package loading functions at the top of your script so you can quickly check what packages you have loaded in your session.</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="packages.png" class="img-fluid figure-img"></p>
+<figcaption>Package tab with loaded <code>tidyverse</code> package.</figcaption>
+</figure>
+</div>
+<p>Occasionally you might have loaded multiple packages which have conflicting package names. In this case, you may want to unload a package which you can do using the <code>detach()</code> function. The syntax for the input is a little more complicated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">"package:tidyverse"</span>, <span class="at">unload =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>By writing code in your console install the packages: (1) <code>tidyverse</code>; (2) <code>astsa</code> and (3) <code>zoo</code>, using the <code>install.packages()</code> function. Now in your script use the <code>library()</code> function to load all three packages.</p>
+</div>
+</div>
+</section>
+<section id="help-function" class="level2">
+<h2 class="anchored" data-anchor-id="help-function">Help Function</h2>
+<p>One of my most used functions in <code>R</code> is <code>?</code> which quickly loads to documentation for the specified function in the Help tab. An example of using this function to return information about the base <code>mean()</code> function is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>?<span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you run this code you will see the documentation for the <code>mean()</code> function displayed in the Help tab.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="help.png" class="img-fluid figure-img"></p>
+<figcaption>Help function output for <code>mean()</code> function.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 4
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the <code>tidyverse</code> function you have just loaded there is a function <code>ggplot()</code>. Use the help <code>?</code> syntax to load and read the documentation.</p>
+</div>
+</div>
+</section>
+<section id="review" class="level2">
+<h2 class="anchored" data-anchor-id="review">Review</h2>
+<p>At the end of this short lesson we should now be able to:</p>
+<ol type="1">
+<li><p>Download and install both R and RStudio.</p></li>
+<li><p>Set our working directory.</p></li>
+<li><p>Create new R scripts and save them.</p></li>
+<li><p>Install and load packages.</p></li>
+<li><p>Use the help function to search for documentation.</p></li>
+</ol>
+<div style="display: flex; justify-content: space-between; padding: 20px 0;">
+<p><!-- Back Button --> <a href="../../courses/intro_to_data_science/index.html" style="text-decoration: none; font-size: 18px;"> ← Course Homepage </a></p>
+<p><!-- Forward Button --> <a href="../../posts/rds2-basics1-operators/index.html" style="text-decoration: none; font-size: 18px;"> Next Chapter → </a></p>
+</div>
 
 
 </section>
