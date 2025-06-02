@@ -1,5 +1,5 @@
 ---
-title: R Basics III (Dataframes and Lists)
+title: R Basics III - Dataframes and Lists
 author: John Robin Inston
 date: "2025-03-24"
 date-modified: "2025-06-01"
@@ -103,4 +103,85 @@ This does not change the dataframe visually but if we will see in the following 
 
 ### Indexing Dataframes
 
-Dataframe indexing behaves a lot like matrix indexing as discussed in [R Basics II (Atomic Data Structures)](/posts/rds3-basics2-atomicdata/index.qmd).
+Dataframe indexing behaves a lot like matrix indexing as discussed in [R Basics II (Atomic Data Structures)](/posts/rds3-basics2-atomicdata/index.qmd).  We can use **numerical indexing** with dataframes by specifying the row $i$ and column number $j$ of the elements we wish to return inside braces `[]`:
+
+```{r}
+# return the element in the 2nd row and 3rd column
+data[2,3]
+# return column 2
+data[,2]
+# return the second and third row for both columns 1 and 3
+data[2:3, c(1,3)]
+```
+
+Alternatively, we can specify the name of the column and rows using quotation marks `' '`:
+
+```{r}
+# return the numbers column
+data["numbers"]
+# return the numbers column for the second row
+data["second", "numbers"]
+```
+
+A quick syntax for returning a specific column is `$`:
+
+```{r}
+# select the boolean column
+data$booleans
+```
+
+As with atomic data structures we can also filter values using logical statements but it is important to consider the datatypes being considered:
+
+```{r}
+# return the rows that have numbers == 2
+data[data$numbers == 2,]
+# return the rows that have numbers == 1 or boolean == TRUE
+data[data$numbers == 2 | data$booleans == TRUE,]
+```
+
+## Lists
+
+Lists are the most flexible data storage tool, allowing us to store scalars, matrices, arrays, dataframes or even other lists by some indexing or naming convention.  We have already created a dataframe object `data` and in previous posts we used the following code to create scalars, vectors and matrices:
+
+```{r}
+y <- "scalar"
+char_vec <- c("dog", "cat", "goose", "monkey", "elephant")
+B <- matrix(
+    seq(from=2, length.out=16, by=2), 
+    nrow = 4, ncol = 4, byrow = TRUE
+    )
+```
+
+To create a list of these objects called `object_list` we naturally use the `list()` function:
+
+```{r}
+object_list <- list(
+    scalar = y,
+    vector = char_vec,
+    matrix = B,
+    dataframe = data
+)
+```
+
+This creates a list with 4 elements which we can access using **double braces** `[[]]`, either using the specified name or the corresponding numerical index:
+
+```{r}
+# return the vector from the list
+object_list[["vector"]]
+# return the third element from the list (the matrix)
+object_list[[3]]
+```
+
+We typically only use lists for convenient data storage due to their restrictive structure making any computations impossible.  
+
+<div style="display: flex; justify-content: space-between; padding: 20px 0;">
+  <!-- Back Button -->
+  <a href="/posts/rds3-basics2-atomicdata/index.qmd" style="text-decoration: none; font-size: 18px;">
+    &#8592; Previous Chapter
+  </a>
+  
+  <!-- Forward Button -->
+  <a href="/posts/rds5-probability-basics/index.qmd" style="text-decoration: none; font-size: 18px;">
+    Next Chapter &#8594;
+  </a>
+</div>
