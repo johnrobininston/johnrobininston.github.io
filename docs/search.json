@@ -4,7 +4,7 @@
     "href": "blog.html",
     "title": "Blog",
     "section": "",
-    "text": "Random Walks\n\n\nGambling Games, Hitting Times and The Reflection Principle.\n\n\n\nStochastic Processes\n\n\n\n\n\n\n\n\n\nFeb 18, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\n\n\n\n\n\n\n\nMarkov Chains\n\n\nMarkov property, transition probabilities, state distributions, chain classification, Chapman-Kolmogorov equations and limiting distributions.\n\n\n\nStochastic Processes\n\n\n\n\n\n\n\n\n\nFeb 12, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Steps\n\n\n\n\n\n\nBlog\n\n\n\n\n\n\n\n\n\nJan 28, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Hidden Markov Precipitation Model\n\n\n\n\n\n\nGroundwater\n\nHidden Markov Model\n\nPrecipitation\n\n\n\n\n\n\n\n\n\nMar 8, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\n\n\n\n\n\n\n\nMarkov Chains\n\n\nMarkov property, transition probabilities, state distributions, chain classification, Chapman-Kolmogorov equations and limiting distributions.\n\n\n\nStochastic Processes\n\n\n\n\n\n\n\n\n\nFeb 12, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\n\n\n\n\n\n\n\nFirst Steps\n\n\n\n\n\n\nBlog\n\n\n\n\n\n\n\n\n\nJan 28, 2026\n\n\nJohn Robin Inston\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "topics/stochastic-processes/index.html",
@@ -67,7 +67,7 @@
     "href": "projects/groundwater-markets/index.html#related-blog-posts",
     "title": "Groundwater Markets",
     "section": "📝 Related Blog Posts",
-    "text": "📝 Related Blog Posts"
+    "text": "📝 Related Blog Posts\nSee all →"
   },
   {
     "objectID": "posts/markov-chains/index.html",
@@ -103,6 +103,13 @@
     "title": "Markov Chains",
     "section": "Limiting Distributions",
     "text": "Limiting Distributions\n\nLimiting Distribution\nConsider the long-term behavior of a MC \\(\\{ X_{n} \\}_{n=0}^\\infty\\) when \\(n \\to \\infty\\). It is possible for the chain to converge to a particular state (e.g. a Galton-Watson-Bienaymé (GWB) Branching Process can converge to 0). Additionally, it is possible for a MC to converge to some random variable \\(X~a.s.\\) as \\(n\\to \\infty\\). Intuitively, if a Markov chain runs for a long time it generally doesn’t converge because it is always jumping around but its distribution can settle down.\n\nDefinition: (Limiting Distribution) The limiting distribution of a homogenous MC with initial distribution \\(\\boldsymbol{\\mu}\\) and TP matrix \\(P\\) is the distribution vector \\[\\lambda:=\\lim_{n\\to\\infty}\\mu\\cdot P^n.\\]\n\nThis is often a challenging limit to find analytically and even numerically often requires Monte-Carlo simulations.\n Example: Reconsider our last MC example with transition diagram given in the figure below.\n\n\n\nComplicated transition diagram.\n\n\nWe know that the \\(S_2:=\\{1,2,3,4\\}\\) is transient and so given enough time to run, the chain will either end on in \\(S_1=\\{5\\}\\) or \\(S_3=\\{6,7\\}\\). We therefore need to ask the following questions:\n\nHow do we know what proportion of the time the chain ends in each class.\nIf the chain ends up in closed irreducible \\(S_3\\), what is the behavior of the state distribution in the limit? \\(\\rightarrow\\) Stationary Distributions\n\n\n\n\nStationary Distribution\nA process is strictly stationary if its distribution does not change under translations, i.e. over time. More formally we give the following definition.\n\nDefinition: (Strictly Stationary Process)\nA process \\(\\{ X_{n},~n\\geq 0 \\}\\) is strictly stationary if for any integers \\(m\\geq 0\\) and \\(k&gt;0\\), we have \\[(Y_{0}, Y_{1}, \\dots Y_{m})\\stackrel{\\mathcal{D}}{=}(Y_{k}, Y_{k+1}, \\dots, Y_{k+m})\\] that is, the distribution does not change under translations.\n\nThis is often a challenging condition to show and so we also define a weak stationarity of the mean and covariance being invariant to changes in time. See oour discussion of Time Series Anaysis for more detailed noted on stationarity.\n\nDefinition: (Stationary Distribution)\nThe vector \\(\\pi=(\\pi_{j},~j \\in S)\\) is called a stationary distribution of a Markov chain if:\n\n\\(\\pi_{j}\\geq 0\\).\n\\(\\sum_{j\\in S}\\pi_{j}=1\\).\n\\(\\pi=\\pi P\\).\n\n\nNote that (3) can equivalently be written as \\[\n\\pi_{j}=\\sum_{i \\in S}\\pi_{i}p_{i,j}\\text{ for all }j \\in S.\n\\]\nAlso note that \\(\\pi P^2=\\pi P\\cdot P=\\pi P=\\pi\\) and similarly, for all \\(n&gt;1\\), \\(\\pi P^n=\\pi\\), that is \\(\\pi_{j}=\\sum_{i\\in S}\\pi_{i}p_{i,j}(n)\\) for all \\(j \\in S\\).\n\nTheorem: (Stationary Distribution) For any irreducible MC \\(\\{X\\}\\) with a finite state space \\(\\mathcal{X}\\) there exists a stationary distribiton \\(\\pi\\).\n\nProof:\nLet \\(P\\) be the transition matrix on a finite state space \\(\\mathcal{X}\\), and assume the chain is irreducible. In a finite Markov chain, at least one state is recurrent (otherwise all states would be transient, which is impossible in a finite state space because probability mass would have to “escape” forever without accumulating anywhere). Since the chain is irreducible, all states communicate with that recurrent state, hence every state is recurrent.\nBecause the chain is finite and irreducible, starting from any state \\(i\\), every other state \\(j\\) is hit with positive probability in at most \\(|S|-1\\) steps along some path. In particular, there exists an \\(m\\ge 1\\) with \\[\np^{(m)}_{ii} &gt; 0.\n\\]\nLet \\(\\tau_i^+ = \\inf\\{n\\ge1: X_n=i\\}\\) be the first return time to \\(i\\). Then each block of \\(m\\) steps has probability at least \\(p^{(m)}_{ii}\\) of containing a return to \\(i\\) at its endpoint, so \\[\n\\mathbb{P}_i(\\tau_i^+ &gt; km) \\le (1-p^{(m)}_{ii})^k.\n\\]\nHence the tail of \\(\\tau_i^+\\) is geometrically bounded, implying \\[\n\\mathbb{E}_i[\\tau_i^+] &lt; \\infty.\n\\]\nSo the chain is positive recurrent. Define, for each \\(j\\in S\\), \\[\n\\pi_j := \\frac{\\mathbb{E}_i\\!\\left[\\sum_{n=0}^{\\tau_i^+-1}\\mathbf{1}\\{X_n=j\\}\\right]}{\\mathbb{E}_i[\\tau_i^+]}.\n\\]\nThis is the expected fraction of time spent in state \\(j\\) during an \\(i\\to i\\) regeneration cycle. Clearly \\(\\pi_j\\ge 0\\) and \\[\n\\sum_{j\\in S}\\pi_j\n= \\frac{\\mathbb{E}_i\\!\\left[\\sum_{n=0}^{\\tau_i^+-1}\\sum_{j\\in S}\\mathbf{1}\\{X_n=j\\}\\right]}{\\mathbb{E}_i[\\tau_i^+]}\n= \\frac{\\mathbb{E}_i[\\tau_i^+]}{\\mathbb{E}_i[\\tau_i^+]}=1,\n\\]\nso \\(\\pi\\) is a probability distribution. To show \\(\\pi P=\\pi\\), note that the expected number of visits to \\(j\\) during a cycle equals the expected number of transitions into \\(j\\) during the cycle (up to the regeneration boundary, which contributes no net imbalance because the cycle starts and ends at \\(i\\)). Formally, by the Markov property and counting transitions within the cycle, \\[\n\\mathbb{E}_i\\!\\left[\\sum_{n=0}^{\\tau_i^+-1}\\mathbf{1}\\{X_{n+1}=j\\}\\right]\n= \\sum_{k\\in S}\\mathbb{E}_i\\!\\left[\\sum_{n=0}^{\\tau_i^+-1}\\mathbf{1}\\{X_n=k\\}\\right]p_{kj}.\n\\]\nDivide both sides by \\(\\mathbb{E}_i[\\tau_i^+]\\) to get \\[\n\\pi_j = \\sum_{k\\in S}\\pi_k p_{kj},\n\\]\nwhich is exactly \\(\\pi P=\\pi\\). Thus a stationary distribution exists.\n\\(\\square\\)\nExample: Consider a Markov chain describing the meals served by a restaurant with transition graph shown below in Figure 1 provided by helpful video on Markov chains by Normalized Nerd.\n\n\n\nExample transition diagram for a MC describing meals served at a restaurant.\n\n\nTaking state 1 to be hamburger, state 2 to be pizza and state 3 to be hotdog, the transition matrix \\(P\\) can be written as \\[\nP=\\begin{bmatrix}\n0.2 & 0.6 & 0.2  \\\\\n0.3 & 0 & 0.7  \\\\\n0.5 & 0 & 0.5\n\\end{bmatrix}.\n\\]\nGiven the restaurant first serves pizza we can define the initial distribution \\(\\pi_{0}=\\begin{bmatrix}0 & 1 & 0\\end{bmatrix}\\). Applying the transition matrix \\(P\\) we get \\[\n\\pi_{0}P=\\begin{bmatrix}\n0 & 1 & 0\n\\end{bmatrix}\\cdot \\begin{bmatrix}\n0.2 & 0.6 & 0.2  \\\\\n0.3 & 0 & 0.7  \\\\\n0.5 & 0 & 0.5\n\\end{bmatrix}=\\begin{bmatrix}\n0.3 & 0 & 0.7\n\\end{bmatrix}=\\pi_{1},\n\\]\nthe second state future transition probabilities. Repeating this step for \\(\\pi_{1}\\) we have \\[\n\\pi_{0}P=\\begin{bmatrix}\n0.3 & 0 & 0.7\n\\end{bmatrix}\\cdot \\begin{bmatrix}\n0.2 & 0.6 & 0.2  \\\\\n0.3 & 0 & 0.7  \\\\\n0.5 & 0 & 0.5\n\\end{bmatrix}=\\begin{bmatrix}\n0.41 & 0.18 & 0.41\n\\end{bmatrix}=\\pi_{2},\n\\]\nIf a stationary distribution \\(\\pi\\) exists it would mean that as \\(\\pi_{0}, \\pi_{1}, \\dots\\) continues, eventually it will reach a point where it doesn’t change when \\(P\\) is applied, hence using linear algebra we can write the expression \\[\n\\pi P=\\pi,\n\\]\nsee Definition 2 above. Additionally, since \\(\\pi\\) is a vector of probabilities we have that \\(\\pi(1)+\\pi(2)+\\pi(3)=1\\) and solving this system gives the stationary distribution \\[\n\\pi=\\begin{bmatrix}\n\\frac{25}{71} & \\frac{15}{71} & \\frac{31}{71}\n\\end{bmatrix}.\n\\]\nWe can numerically confirm our result by iteratively applying the transition probability matrix: \n\nP = np.array([\n    [.2, .6, .2],\n    [.3, 0, .7],\n    [.5, 0, .5]\n])\npi = np.array([\n    0, 1, 0\n])\npi_list = []\npi_list.append(pi)\n\nn = 50\n\nfor _ in range(n):\n    pi = pi @ P\n    pi_list.append(pi) \n\npi_list = np.array(pi_list).squeeze()\nfig, ax = plt.subplots()\nax.plot(range(n+1), pi_list[:,0], color=\"red\", label=\"Hamburger\")\nax.plot(range(n+1), pi_list[:,1], color=\"green\", label=\"Pizza\")\nax.plot(range(n+1), pi_list[:,2], color=\"blue\", label=\"Hotdog\")\n\n\n\n\nTransition probability convergence plot.\n\n\n\n\nDefinition: (Doubly Stochastic Matrices)\nA matrix \\(P:=(p_{i,j})_{i,j\\in\\mathcal{S}}\\) is said to be doubly stochastic when both rows and columns sum to 1, that is \\[\n\\sum_{j\\in\\mathcal{X}}p_{i,j} = \\sum_{i\\in\\mathcal{X}}p_{i,j}=1.\n\\]\nTheorem: (Uniform Stationary Distributions for Doubly Stochastic MCs)\nA finite state homogenous MC with doubly stochastic transition probability matrix has a uniform stationary distribution.\nProof\nAssume \\(\\mathcal{X}\\) has \\(n\\) elements and define \\(\\pi = (\\pi_i)_{i\\in\\mathcal{X}}\\) where \\(\\pi_i=1/n\\). Then clearly\n\\[\n\\sum_{i\\in\\mathcal{X}} \\pi_i p_{i,j} = \\frac{1}{n}\\sum_{i\\in\\mathcal{X}}p_{i,j} = \\frac{1}{n} = \\pi_j,\n\\]\nholds for all \\(j\\in\\mathcal{X}\\). Since by definition \\(\\pi\\) is normalized we obtain the result.\n\\(\\square\\)"
+  },
+  {
+    "objectID": "topics.html",
+    "href": "topics.html",
+    "title": "Topics",
+    "section": "",
+    "text": "Data Science with R\n\n\n\nR\n\nData Science\n\n\n\n\n\n\n\nJohn Robin Inston\n\n\nFeb 12, 2026\n\n\n\n\n\n\n\n\n\n\n\nStochastic Processes\n\n\n\nStochastic Processes\n\n\n\n\n\n\n\nJohn Robin Inston\n\n\nDec 14, 2025\n\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "resume.html",
@@ -152,34 +159,6 @@
     "title": "Resume",
     "section": "Awards",
     "text": "Awards\n\nAward for Best Academic Performance 2020/21\nAwarded in recognition of exceptional academic performance in obtaining the highest GPA on the MSc Quantitative Finance programme at Lancaster University in the 2020/21 academic year.\nAward for Best Dissertation Results 2020/21\nAwarded in recognition of obtaining the highest dissertation results on the MSc Quantitative Finance programme at Lancaster University in the 2020/21 academic year.\nLancaster Gold Award\nAwarded in recognition of skills obtained in activities outside of academia whilst at university. These include: (1) Digital Skills Certificate, (2) Charity Work, (3) Work Experience, and (4) Student Academic Representative.\n\nFor details of my project work please see my projects page. To download a pdf copy of my full academic resume please click here."
-  },
-  {
-    "objectID": "topics.html",
-    "href": "topics.html",
-    "title": "Topics",
-    "section": "",
-    "text": "Data Science with R\n\n\n\nR\n\nData Science\n\n\n\n\n\n\n\nJohn Robin Inston\n\n\nFeb 12, 2026\n\n\n\n\n\n\n\n\n\n\n\nStochastic Processes\n\n\n\nStochastic Processes\n\n\n\n\n\n\n\nJohn Robin Inston\n\n\nDec 14, 2025\n\n\n\n\n\n\nNo matching items\n Back to top"
-  },
-  {
-    "objectID": "posts/random-walks/index.html",
-    "href": "posts/random-walks/index.html",
-    "title": "Random Walks",
-    "section": "",
-    "text": "Code\n# Packages\nimport numpy as np\nimport matplotlib.pyplot as plt"
-  },
-  {
-    "objectID": "posts/random-walks/index.html#random-walks",
-    "href": "posts/random-walks/index.html#random-walks",
-    "title": "Random Walks",
-    "section": "Random Walks",
-    "text": "Random Walks\nLet \\(\\{\\xi_n\\}_{n\\in\\mathbb{N}}\\) where \\(\\xi_n:=(\\xi_n^{(1)}, ..., \\xi_n^{(m)})\\) be a sequence of independent and identically distributed random vectors taking values in \\(\\mathbb{R}^m\\). An \\(m\\)-dimensional random walk (RW) \\(\\{S_n\\}_{n\\in\\mathbb{N}_0}\\) is defined by the recursive expression\n\\[\n\\begin{cases}\nS_n = S_{n-1} + \\xi_{n} & n\\in\\mathbb{N}\\\\\nS_0 = s_0\\in\\mathbb{R}^m.\n\\end{cases}\n\\]\nThrough repeated substitution we quickly obtain the closed form expression\n\\[\nS_n = S_0 + \\sum_{i=1}^n\\xi_i.\n\\]\nIf \\(\\mathbb{P}(\\xi_n^{(j)}=1)=p=1-\\mathbb{P}(\\xi_n^{(j)}=-1)\\) for all \\(n,j\\) then the RW is said to be simple. Furthermore, if \\(p=\\frac{1}{2}\\) then the RW is said to be symmetric.\n\nUnless otherwise stated in this note we assume that \\(m=1\\).\n\nExample: We specify that \\(\\xi_i\\stackrel{\\text{i.i.d.}}{\\sim}\\text{Normal}(0,1)\\) and \\(S_0=0\\). We can simulate a realization \\(\\{S_j\\}_{j=1}^{n}\\) of length \\(n=1000\\) using the python code below:\n\n\nCode\ndef normal_RW(mu=0, sigma=1, s0= 0, n=1000):\n    xi = np.random.normal(loc=0, scale=1, size=n)\n    s = np.concatenate([[s0], s0 + np.cumsum(xi)])\n    return s\nnp.random.seed(42)\nS1 = normal_RW()\nplt.figure(figsize=(8, 4))\nplt.plot(S1)\nplt.xlabel(r\"$n$\")\nplt.ylabel(r\"$S_n$\")\nplt.title(r\"Gaussian random walk $\\{S_n\\}$ of length $n=1000$.\")\nplt.show()\n\n\n\n\n\nGaussian random walk."
-  },
-  {
-    "objectID": "posts/random-walks/index.html#simple-random-walk-results",
-    "href": "posts/random-walks/index.html#simple-random-walk-results",
-    "title": "Random Walks",
-    "section": "Simple Random Walk Results",
-    "text": "Simple Random Walk Results\n\n\n\n\n\n\nImportantProposition: State Probability\n\n\n\nFor a simple RW \\(\\{S_n\\}\\)\n\\[\n\\mathbb{P}(S_n-S_0=k) = \\begin{cases}\n    {n \\choose \\frac{n+k}{2}}p^{\\frac{n+k}{2}}(1-p)^{\\frac{n-k}{2}} & n+k\\text{ is even} \\\\\n    0 & \\text{otherwise}.\\end{cases}\n\\]\n\n\n Proof:\nWithout loss of generality assume that \\(k&gt;0\\) and denote the number of upwards steps by \\(u\\). To reach state \\(k\\) in \\(n\\) steps we must therefore have that\n\\[\nu + (n-)\n\\]"
   },
   {
     "objectID": "posts/welcome-post/index.html",
@@ -271,5 +250,61 @@
     "title": "Data Science with R",
     "section": "🙏 Thanks",
     "text": "🙏 Thanks\nIf you found any of this material helpful consider buying me a coffee but only if you can afford to! Thank you for visiting this course page. 😊"
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html",
+    "href": "posts/hmm-precipitation/index.html",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "",
+    "text": "The groundwater market model described by Cialenco and Ludkovski (2025) is stochastically driven by groundwater recharge process \\(\\{R_t\\}_{t\\in\\mathbb{N}_0}\\) for year \\(t\\). In order for this model to be a useful tool for groundwater conservation and planning we need to be able to efficiently simulate this process whilst ensuring the result is\n\n\n\n1️⃣ Markovian\n\n\n2️⃣ Exogenous\n\n\n3️⃣ Low-cost\n\n\n4️⃣ Controllable\n\n\n\nAssuming that precipitation is the primary driver of recharge we model annual precipitation using a Hidden Markov Model (HMM) before mapping to groundwater recharge using functional estimates. In this note we outline our procedure and provide a summary of our results."
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html#introduction",
+    "href": "posts/hmm-precipitation/index.html#introduction",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "",
+    "text": "The groundwater market model described by Cialenco and Ludkovski (2025) is stochastically driven by groundwater recharge process \\(\\{R_t\\}_{t\\in\\mathbb{N}_0}\\) for year \\(t\\). In order for this model to be a useful tool for groundwater conservation and planning we need to be able to efficiently simulate this process whilst ensuring the result is\n\n\n\n1️⃣ Markovian\n\n\n2️⃣ Exogenous\n\n\n3️⃣ Low-cost\n\n\n4️⃣ Controllable\n\n\n\nAssuming that precipitation is the primary driver of recharge we model annual precipitation using a Hidden Markov Model (HMM) before mapping to groundwater recharge using functional estimates. In this note we outline our procedure and provide a summary of our results."
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html#background",
+    "href": "posts/hmm-precipitation/index.html#background",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "Background",
+    "text": "Background\nHMMs consist of a pair of stochastic processes \\((S(t), P(t))\\) known as the (unobserved) latent process and the (observed) emission process respectively.\n\n\n\nHMM Connected Graph.\n\n\nThe latent state process \\(\\{S(t)\\}\\) is a Markov chain (MC) taking values in finite state space \\(\\mathcal{S}:=\\{1, ..., S\\}\\). The number of states is specified a priori and the interpretation of these states can only be intferred post-fitting.\nThe MC \\(\\{S_t\\}\\) is described by its transition probability matrix\n\\[\n\\begin{aligned}\n\\Gamma & := (\\gamma_{i,j})_{i,j\\in\\mathcal{S}} \\\\\n    & = ((\\mathbb{P}(S(t+1)=j|S(t)=i)))_{i,j\\in\\mathcal{S}},\n\\end{aligned}\n\\]\nwith initial state distribution vector\n\\[\n\\boldsymbol{\\pi}:=(\\pi_i)_{i\\in\\mathcal{S}} = (\\mathbb{P}(S(1)=i))_{i\\in\\mathcal{S}}.\n\\]\nThe precipitation process \\(\\boldsymbol{P}(t)\\in\\mathbb{R}_+^M\\)are realizations of precipitation densities that are conditionally dependent only on the current state of the process \\(S(t)\\)\n\\[\n\\mathbb{P}(\\boldsymbol{P}(t)|\\boldsymbol{P}(1:t-1),S(1:t)=s(1:t)) = \\mathbb{P}(\\boldsymbol{P}(t)|S(t)=s(t)).\n\\]\nThe precipitation density vector is given by\n\\[\n\\begin{aligned}\n\\boldsymbol{\\eta}(t|S(t)) & = (\\eta^{(m)}(t|S(t)))_{m\\in\\mathcal{M}} \\\\\n    & = (\\mathbb{P}(\\boldsymbol{P}^{(m)}(t)|S(t)=j))_{m\\in\\mathcal{M}}.\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html#model",
+    "href": "posts/hmm-precipitation/index.html#model",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "Model",
+    "text": "Model\nFor our implementation we focus on the Central valley (CV) aquifer in California which is split into multiple water regions which we index by \\(m\\in\\mathcal{M}\\). We assume that total annual groundwater recharge \\(R(t)\\) is given by\n\\[\n\\begin{aligned}\nR(t) & = \\sum_{m\\in\\mathcal{M}} R^{(m)}(t) \\\\\n    & = \\sum_{m\\in\\mathcal{M}} f_m(P^{(m)}(t)),\n\\end{aligned}\n\\]\nwhere:\n\n\\(f_m\\) are region specific (possibly non-linear) percolation functions; and\n\\(P^m(t)\\) are the regional average precipitation time series.\n\nThe precipitation time series processes \\(P^{(m)}(t)\\) are given by a common state HMM and the percolation functions are given by local polynomial regression."
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html#data",
+    "href": "posts/hmm-precipitation/index.html#data",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "Data",
+    "text": "Data\nOur precipitation data is computed from the gridded 100-year historic daily weather data (Product_100yr) provided by the California Department of Water Resources (DWR) Open Data Portal.\nOur percolation data is computed using data from California Central Valley Fine-Grid Groundwater-Surface Water Simulation Model (C2VSimFG) created and made available by the California Department of Water Resources (DWR).\n\nRainfall dataPercollation data\n\n\n\n\n\nCalifornia CV annual rainfall time series grouped by hydrological region.\n\n\n\n\n\n\n\nCalifornia CV annual percolation time series grouped by hydrological region."
+  },
+  {
+    "objectID": "posts/hmm-precipitation/index.html#results",
+    "href": "posts/hmm-precipitation/index.html#results",
+    "title": "Hidden Markov Precipitation Model",
+    "section": "Results",
+    "text": "Results\n\nModel Parameters\nThrough exploratory data analysis we determine that 3 latent states are optimal and that the log-normal density with regional parameters \\(\\mu_m\\) and \\(\\sigma_m\\) best fit the data characteristics. The fitted emission distribution parameters are summarized in Table 1 and Table 2 below.\n\nLog-normal parametersLog-normal mean/SD\n\n\n\n\n\nTable 1: Log-normal distribution parameters.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRegion\n\\(\\mu_1\\)\n\\(\\sigma_1\\)\n\\(\\mu_2\\)\n\\(\\sigma_2\\)\n\\(\\mu_3\\)\n\\(\\sigma_3\\)\n\n\n\n\nSR\n7.162\n0.117\n6.855\n0.148\n6.519\n0.217\n\n\nSJ\n6.930\n0.102\n6.636\n0.081\n6.216\n0.181\n\n\nTL\n6.470\n0.149\n6.152\n0.141\n5.717\n0.180\n\n\n\n\n\n\n\n\n\n\n\nTable 2: Log-normal mean and standard deviation.\n\n\n\n\n\nRegion\n\\(m_1\\)\n\\(s_1\\)\n\\(m_2\\)\n\\(s_2\\)\n\\(m_3\\)\n\\(s_3\\)\n\n\n\n\nSR\n1298.34\n152.43\n959.06\n142.72\n694.05\n152.40\n\n\nSJ\n1027.83\n105.11\n764.54\n62.03\n508.97\n92.88\n\n\nTL\n652.69\n97.79\n474.35\n67.22\n309.12\n57.05\n\n\n\n\n\n\n\n\n\nRetrospectively we interpret the states as follows:\n\nState 3 low precipitation\nState 2 medium precipitation\nState 1 high precipitation\n\nThe fitted transition probabilities are\n\\[\n\\Gamma := \\begin{bmatrix}\n0.110 & 0.131 & 0.759 \\\\\n0.207 & 0.359 & 0.435 \\\\\n0.196 & 0.282 & 0.522\n\\end{bmatrix}.\n\\]\nThe corresponding stationary distribution of the chain is\n\\[\n\\mu\\cdot \\Gamma = \\mu \\implies \\mu = \\begin{bmatrix}0.183 & 0.276 & 0.541\\end{bmatrix}.\n\\]\n\n\n\nLatent state process transition probabilty diagram.\n\n\nProducing a plot of the precipitation distributions we see that our model seems to avoid redundancy with clear distinction between latent state distributions.\n\n\n\nPrecipitation distribution plots.\n\n\nNext. we produce plots for our fitted local polynomial regression.\n\n\n\nLoess polynomial regression plots.\n\n\nFrom these results we observe that recharge is crudely linear in precipitation in all regions which indicates reasonable extrapolation. We also note that there is much higher recharge in San Joaquin and Tulare despite arid conditions due to river runoff, induced recharge and geological factors.\n\n\nSimulations\nWe conclude by applying our entire simulation engine to produce 1000 year simulations of groundwater recharge.\n\nGroundwater SimulationPrecipitation Densities\n\n\n\n\n\n1000-year simulation of groundwater recharge\n\n\n\n\n\n\n\nComparison of kernel density estimates of HMM and product_1000yr simulations for annual precipitation."
+  },
+  {
+    "objectID": "projects/groundwater-markets/index.html#related-posts",
+    "href": "projects/groundwater-markets/index.html#related-posts",
+    "title": "Groundwater Markets",
+    "section": "📝 Related Posts",
+    "text": "📝 Related Posts\n\n\n\n\n\n\n\n\n\n\nHidden Markov Precipitation Model\n\n\n\n\n\nMar 8, 2026\n\n\n\n\n\nNo matching items\n\nSee all →"
+  },
+  {
+    "objectID": "projects/groundwater-markets/index.html#publications",
+    "href": "projects/groundwater-markets/index.html#publications",
+    "title": "Groundwater Markets",
+    "section": "🔬 Publications",
+    "text": "🔬 Publications"
   }
 ]
