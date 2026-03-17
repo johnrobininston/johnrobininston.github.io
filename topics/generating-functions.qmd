@@ -1,0 +1,252 @@
+---
+title: "Generating Functions"
+author: "John Robin Inston"
+date: "2025-12-14"
+date-modified: "2026-02-08"
+toc: true
+title-block-banner: false
+sidebar: math-notes
+page-navigation: true
+---
+
+## Generating Functions
+
+A **generating function** is simply a representation of an infinite sequence of numbers as the coefficients of a **power series**.  The main idea is that we are able to recover the $n$-th value of the sequence by taking the $n$-th derivative of the generating function.
+
+::: {.callout-important}
+
+## Definition: Generating Function
+
+The **generating function** for a sequence $\{ a_{n} \}_{n=0}^\infty$ is the power series 
+$$
+G_{a}(s)=\sum_{n=0}^\infty a_{n} s^n.
+$$
+
+:::
+
+### Convolutions
+
+Generally speaking, a **convolution** is a mathematical operation on two functions that produces a third function that represents how the shape of one function is modified by the other.
+
+::: {.callout-important}
+
+## Definition: Convolution
+
+For discrete functions $f$ and $g$ the convolution $f*g$ is defined as $$(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).$$Similarly, for continuous functions $f$ and $g$ the convolution $f*g$ is defined as 
+$$
+(f*g)(x)=\int_{-\infty}^\infty f(s)g(x-s)ds.
+$$
+
+:::
+
+Let $a=\{ a_{n} \}$ and $b=\{  b_{n} \}$ be two infinite real sequences which can be thought of as discrete functions mapping from $\mathbb{N}$.  The convolution of $a$ and $b$ is the sequence $c=\{ c_{n} \}$ where $c=a*b$ such that 
+$$
+c_{n}=a_{0}b_{n}+a_{1}b_{n-1}+\dots+a_{n}b_{0}.
+$$
+
+::: {.callout-note}
+
+## Theorem: Convolutions and Generating Functions
+
+For convolution $c=a*b$ we can write the generating function 
+$$
+G_{c}(s)=G_{a}(s)\cdot G_{b}(s).
+$$
+
+:::
+
+*Proof:*
+We can manipulate the product of sums to write
+$$
+\begin{align}
+G_{c}(s) & = \sum_{n=0}^\infty c_{n}s^n \\
+ & = \sum_{n=0}^\infty \left( \sum_{i=0}^n a_{i}b_{n-i} \right)s^n  \\
+ & = \sum_{i=0}^\infty \left( \sum_{n=i}^\infty b_{n-i}s^{n-i} \right)s^i \\
+ & =\sum_{i=0}^\infty a_{i}s^i \left( \sum_{j=0}^\infty b_{j}s^j \right) \\
+ & =G_{a}(s)\cdot G_{b}(s).
+\end{align}
+$$
+$\square$
+
+## Generating Functions and Random Variables
+
+Generating functions **encode the distribution of a random variable** into an analytic object.  They transform probabilistic questions into algebraic or analytic ones, allowing us to:
+
+- Turn convolution into multiplication,
+- Provide direct access to moments,
+- Simplify limit theorems (e.g. via characteristic functions),
+- Bridge probability with analysis and complex function theory.
+
+Two main types are used in probability:
+
+1. **Probability Generating Functions (PGFs).** Used for *discrete, nonnegative integer-valued* random variables.
+
+2. **Moment Generating Functions (MGFs).** Used for *general* real-valued random variables.
+
+Closely related is the **characteristic function**, which always exists and plays a central theoretical role.
+
+### Probability Generating Functions (PGFs)
+
+Let $X$ be a random variable taking values in $\{0,1,2,\dots\}$ with mass function
+$$
+\mathbb{P}(X = k) = p_k.
+$$
+
+::: {.callout-important}
+
+## Probability Generating Function (PGF)
+
+The **probability generating function (PGF)** of $X$ is 
+$$
+G_X(s) = \mathbb{E}[s^X]= \sum_{k=0}^\infty p_k s^k,\qquad |s| \le 1.
+$$
+
+:::
+
+This is exactly the ordinary power series whose coefficients are the probabilities. To recover the probability from the generating function we compute
+$$
+p_{k} = \frac{G^{(k)}(0)}{k!}.
+$$
+
+Below we work our way through some of the basic properties of PGFs used frequently in computations with discrete random variables.
+
+::: {.callout-note}
+
+## Theorem: PGF Normalization
+$$
+G_X(1) = 1.
+$$
+
+:::
+
+*Proof:*
+This follows immediately by definition
+$$
+G_{X}(1) = \sum_{k=0}^\infty p_k = 1.
+$$
+$\square$
+
+::: {.callout-note}
+
+## Theorem: PGF Moments
+
+Derivatives at $s=1$ recover moments: 
+$$
+\begin{aligned}G_X'(1) & = \mathbb{E}[X] \\ G_X''(1) & = \mathbb{E}[X(X-1)] \\ \operatorname{Var}(X) & = G_X''(1) + G_X'(1) - \bigl(G_X'(1)\bigr)^2.\end{aligned}
+$$
+
+:::
+
+*Proof:*
+First, we compute
+$$
+\begin{align}
+G_{X}'(1) & = \frac{d}{ds} \sum_{k=0}^\infty p_{k}s^k\Big|_{s=1} \\
+ & = \sum_{k=0}^\infty p_{k}\frac{d}{ds} s^k\Big|_{s=1} \\
+ & = \sum_{k=0}^\infty p_{k}ks^{k-1} \Big |_{s=1}  \\
+ & =\sum_{k=0}^\infty p_{k}k  \\
+ & =\mathbb{E}X.
+\end{align}
+$$
+
+Next, we compute
+$$
+\begin{align}
+G_{X}''(1) & = \sum_{k=0}^\infty p_{k}k \frac{d}{ds} s^{k-1} \Big |_{s=1}  \\
+ & = \sum_{k=0}^\infty p_{k} k (k-1)s^{k-2}\Big|_{s=1}  \\
+ & = \sum_{k=0}^\infty p_{k}k(k-1)  \\
+ & = \mathbb{E}[X(X-1)].
+\end{align}
+$$
+
+Combining these results we have that
+$$
+\begin{align}
+G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  & = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
+ & = \mathbb{E}[X^2] - \mathbb{E}[X] + \mathbb{E}[X] - (\mathbb{E}[X])^2 \\
+ & = \text{Var}(X).
+\end{align}
+$$
+$\square$
+
+::: {.callout-note}
+
+## Theorem: PGFs of Sums of Independent RVs
+If $X$ and $Y$ are independent and integer-valued, 
+$$
+G_{X+Y}(s) = G_X(s)\,G_Y(s).
+$$
+
+:::
+
+*Proof:*
+We can write that
+$$
+\begin{align}
+G_{X+Y}(s) & = \sum_{n=0}^\infty \mathbb{P}(X+Y=n)s^n  \\
+ & = \sum_{n=0}^\infty \left( \sum_{j=0}^\infty \mathbb{P}(X=j)\mathbb{P}(Y=n-j) \right) s^n  \\
+ & = \left(  \sum_{j=0}^\infty \mathbb{P}(X=j) s^j \right) \left( \sum_{k=0}^\infty \mathbb{P}(Y=k)s^k \right)  \\
+ & =G_{X}(s) G_{Y}(s),
+\end{align}
+$$
+
+since this is the Cauchy product of two power series.
+$\square$
+
+This mirrors **convolution of distributions** and is one of the main reasons PGFs are powerful.
+
+#### PGF Examples
+
+1. $X\sim \text{Bernoulli}(p)$ then we have that $$\mathbb{P}(X=1)=p, \quad \mathbb{P}(X=0)=1-p.$$Then $$G_X(s) = (1-p) + ps.$$
+2. $X\sim \text{Binomial}(n,p)$ is a sum of $n$ independent Bernoulli variables which immediately gives $$G_X(s) = \bigl((1-p)+ps\bigr)^n.$$
+3. $X\sim \text{Poisson}(\lambda)$ with $p_k = e^{-\lambda}\frac{\lambda^k}{k!}$ gives $$G_X(s) = \sum_{k=0}^\infty e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.$$From this we can compute immediately that $$ \mathbb{E}[X] = G_X'(1) = \lambda, \qquad \operatorname{Var}(X) = \lambda. $$
+
+### Moment Generating Functions (MGFs)
+
+::: {.callout-important}
+
+## Definition: Moment Generating Function (MGF)
+
+For a real-valued random variable $X$, the **moment generating function** is $$M_X(t) = \mathbb{E}[e^{tX}],$$defined for all $t$ in an open interval containing $0$ where the expectation is finite.
+
+:::
+
+As the name would suggest, the derivatives at $t=0$ generate moments:
+$$
+M_X^{(n)}(0) = \mathbb{E}[X^n].
+$$
+Thus,
+$$
+M_X'(0) = \mathbb{E}[X], \qquad
+M_X''(0) = \mathbb{E}[X^2].
+$$
+
+As with PGFs, independence implies factorization:
+$$
+M_{X+Y}(t) = M_X(t)\,M_Y(t)
+\quad \text{if } X \perp Y.
+$$
+
+#### MGF Examples
+
+1. $X \sim \mathcal{N}(\mu,\sigma^2)$, then $$M_X(t) = \exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).$$
+2. $X \sim \text{Exp}(\lambda)$, $$ M_X(t) = \frac{\lambda}{\lambda - t}, \qquad t < \lambda.$$
+
+### Characteristic Functions (CFs)
+
+::: {.callout-important}
+
+## Definition: Characteristic Function
+
+The **characteristic function** is $$\varphi_X(t) = \mathbb{E}[e^{itX}],$$ which always exists for any random variable.
+
+:::
+
+Properties:
+
+- $\varphi_X(0) = 1$,
+- $\varphi_{X+Y}(t) = \varphi_X(t)\varphi_Y(t)$ for independent $X,Y$,
+- $(\star)$ The distribution of $X$ is **uniquely determined** by $\varphi_X$.
+
+MGFs may fail to exist (e.g. for heavy-tailed distributions), but characteristic functions never do.
+
