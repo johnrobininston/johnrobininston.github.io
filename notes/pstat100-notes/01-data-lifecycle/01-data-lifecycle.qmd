@@ -1,6 +1,5 @@
 ---
-title: "PSTAT100 Data Science and Analysis"
-subtitle: "Lecture Notes"
+title: "Data Lifecycle"
 author: "John Robin Inston"
 date: "2026-03-16"
 date-modified: "2026-03-16"
@@ -8,7 +7,7 @@ toc: true
 title-block-banner: false
 sidebar: pstat100-notes
 page-navigation: true
-bibliography: ../../assets/references/PSTAT100.bib
+bibliography: references.bib
 ---
 
 ```{python}
@@ -23,11 +22,7 @@ while not (root / "_quarto.yml").exists():
 os.chdir(root)
 ```
 
-## Introduction
-
-These are my online lecture notes for the PSTAT100 Data Science and Analysis course taught at UC Santa Barbara. In these lecture notes we study fundamental topics in data science and the tools we use for data retrieval, analysis, visualization, and reproducible research in preparation for advanced data science courses.
-
-Throughout these notes we will conduct our data analysis using `python`.  For information on how to install python as well as a suitable IDE please see my note here.  In this section we shall be using the `pandas` package for data management and the `matplotlib` package for plotting.  Don't worry if you do not yet understand the code, we shall cover how to perform the analysis in later sections.
+In this section we shall be using the `pandas` package for data management and the `matplotlib` package for plotting.  Don't worry if you do not yet understand the code, we shall cover how to perform the analysis in later sections.
 
 ```{python}
 import pandas as pd
@@ -48,7 +43,9 @@ Data science involves proceeding through a life cycle.  Although the specific st
 6. **Analyze:** seek to understand.
 7. **Interpret:** explain the meaning of your analysis.
 
-![Data Science Life Cycle (Figure produced by [Claude](https://claude.ai/chat/1b08c997-7cb8-4d74-8e55-3e4dedb2bd53).)](../../assets/data-science-cycle.svg){width="60%"}
+![Data Science Life Cycle (Figure produced by [Claude](https://claude.ai/chat/1b08c997-7cb8-4d74-8e55-3e4dedb2bd53).)](../../assets/images/data-science-cycle.svg){width="60%"}
+
+### Example 1 - Starting off simple
 
 Let's walk through a simple example to gain an intuition for this cycle by considering the following question:
 
@@ -90,7 +87,7 @@ print("Missingness analysis: ", "\n", bb_weights.isna().sum(axis = 0))
 
 #### 5. Explore
 
-Visualization is usually a good starting point.  We start by making a simple scatter plot.
+Visualization is usually a good starting point.  We start by making a simple scatter plot with log scale axes.
 
 ```{python}
 fig, ax = plt.subplots()
@@ -102,7 +99,40 @@ ax.scatter(bb_weights['body_weight'], bb_weights['brain_weight'],
 ax.set_xlabel('Body weight (kg)')
 ax.set_ylabel('Brain weight (g)')
 ax.spines[['top', 'right']].set_visible(False)
+ax.set_xscale('log')
+ax.set_yscale('log')
 
 plt.tight_layout()
 plt.show()
 ```
+
+#### 6. Analyze
+
+This plot demonstrates that there is a roughly linear relationship on the log scale
+$$
+\log(\text{brain}) = \alpha\log(\text{body})+c.
+$$
+
+#### 7. Interpret
+
+After some algebraic manipulation we obtain 
+$$
+\text{brain} = \text{body}^\alpha,
+$$
+
+which is a power-law relationship.  This leads us to draw the following conclusion:
+
+> For these 62 mammals, brain weight changes in proportion to a power of body weight.
+
+### Example 2 - Deeper Hypotheses
+
+#### 1. Hypothesize
+
+We can now engage in question refinement. Do other classes of animal exhibit the same power law relationship? Is it the same or different from animal to animal?
+
+To investigate, we need richer data.
+
+#### 2. Collect
+
+A number of authors have compiled and published 'meta-analysis' datasets by combining the results of multiple studies.  Below we'll import a few of these for three different animal classes.
+

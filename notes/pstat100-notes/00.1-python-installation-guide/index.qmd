@@ -1,0 +1,333 @@
+---
+title: "Getting Started with Python"
+description: "Learn what Python is, how it differs from an IDE, and how to install everything you need to start coding."
+date: "2026-03-16"
+date-modified: "2026-03-26"
+toc: true
+title-block-banner: false
+sidebar: pstat100-notes
+page-navigation: true
+---
+
+::: {.callout-important}
+
+## Aims
+
+- Introduction to the `python` programming language.
+- Interactive Development Enviroment (IDE) and language installation.
+- Package management.
+
+:::
+
+## What is Python?
+
+Python is a general-purpose **programming language** — a formal set of instructions that tells a computer what to do. First released in 1991 by Guido van Rossum, Python was designed with one guiding philosophy: code should be easy to read and write. That philosophy has made it one of the most popular languages in the world today.
+
+Python is used across an enormous range of fields, including:
+
+- **Data science & analytics** — cleaning, exploring, and visualizing datasets
+- **Machine learning & AI** — building predictive models and neural networks (libraries like `scikit-learn`, `PyTorch`, and `TensorFlow`)
+- **Web development** — powering the back end of websites (frameworks like Django and FastAPI)
+- **Automation & scripting** — automating repetitive tasks like renaming files, scraping websites, or sending emails
+- **Scientific computing** — simulations, numerical methods, and research workflows
+- **Finance** — quantitative modeling, algorithmic trading, and risk analysis
+
+If you are coming from a field like biology, economics, or social science, Python is particularly valuable because it bridges the gap between domain expertise and data analysis in a way that feels approachable even without a computer science background.
+
+## Programming Languages vs. IDEs
+
+Before installing anything, it helps to understand the difference between two things you will hear about constantly: the **programming language** and the **IDE**.
+
+### The Programming Language
+
+A programming language (such as `python`) is the set of rules and syntax you use to write instructions for your computer. Python itself is just a specification; the thing you actually install is the **Python interpreter**, a program that reads your `.py` files and executes them line by line.
+
+Think of Python as the *language* — like English or Spanish.
+
+### The IDE (Integrated Development Environment)
+
+An IDE is a piece of software that gives you a comfortable place to *write* that language. It typically provides:
+
+- A text editor with syntax highlighting and autocomplete
+- A file explorer to navigate your project
+- A terminal to run your code
+- Debugging tools to step through errors
+
+Think of an IDE as the *word processor* — like Microsoft Word, but for code.
+
+::: {.callout-note}
+You do not strictly need an IDE to write Python. You could write code in Notepad and run it from the command line. But a good IDE makes things much easier when you are first starting out.
+:::
+
+### Which IDE Should You Use?
+
+There are several excellent options:
+
+| IDE | Best For |
+|---|---|
+| [**VS Code**](https://code.visualstudio.com/) | Most beginners; highly extensible; enormous community |
+| [**Positron**](https://github.com/posit-dev/positron) | Data scientists coming from R/RStudio; built by Posit |
+| [**Cursor**](https://www.cursor.com/) | AI-assisted coding; built on VS Code |
+| [**PyCharm**](https://www.jetbrains.com/pycharm/) | Full-featured Python development; heavier install |
+
+**This guide recommends VS Code.** It is free, lightweight, works on all platforms, and has a rich ecosystem of extensions for Python, Quarto, Git, and more. Positron and Cursor are both built on the same foundation as VS Code, so the experience is very similar — if either appeals to you, the instructions below transfer almost directly.
+
+## Installing VS Code
+
+### Step 1: Download the Installer
+
+Go to [**https://code.visualstudio.com**](https://code.visualstudio.com) and click the large download button. The website will automatically detect your operating system (Windows, macOS, or Linux) and offer the correct installer.
+
+### Step 2: Run the Installer
+
+::: {.panel-tabset}
+
+#### Windows
+
+1. Open the downloaded `.exe` file.
+2. Accept the license agreement.
+3. On the *Select Additional Tasks* screen, check **"Add to PATH"** — this is important.
+4. Click through the remaining prompts and click **Install**.
+
+#### macOS
+
+1. Open the downloaded `.zip` file — this extracts the `Visual Studio Code.app` bundle.
+2. Drag `Visual Studio Code.app` into your **Applications** folder.
+3. On first launch, macOS may warn you about opening an app from the internet — click **Open**.
+4. To use VS Code from the terminal, open the Command Palette (`Cmd+Shift+P`), type `shell command`, and select **"Install 'code' command in PATH"**.
+
+#### Linux
+
+For Debian/Ubuntu-based systems:
+
+```bash
+sudo apt update
+sudo apt install wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+sudo apt update
+sudo apt install code
+```
+
+:::
+
+### Step 3: Install the Python Extension
+
+Once VS Code is open:
+
+1. Click the **Extensions** icon in the left sidebar (it looks like four squares).
+2. Search for **"Python"**.
+3. Install the extension published by **Microsoft** (it will be the top result).
+
+This extension gives VS Code Python syntax highlighting, IntelliSense (autocomplete), linting, and the ability to run Python files directly.
+
+## Installing Python
+
+### Step 1: Download Python
+
+Go to [**https://www.python.org/downloads**](https://www.python.org/downloads) and download the latest stable release. As of this writing, Python 3.12 is the recommended version for most users.
+
+::: {.callout-warning}
+Avoid Python 2. It reached end-of-life in 2020 and is no longer maintained. Always install Python **3.x**.
+:::
+
+### Step 2: Run the Installer
+
+::: {.panel-tabset}
+
+#### Windows
+
+1. Open the downloaded `.exe` file.
+2. **Before clicking Install Now**, check the box at the bottom that says **"Add Python to PATH"**. This is the most common mistake beginners make — do not skip it.
+3. Click **Install Now** and let the installer finish.
+
+#### macOS
+
+1. Open the downloaded `.pkg` file and follow the prompts.
+2. Python will be installed to `/Library/Frameworks/Python.framework/`.
+3. Alternatively, if you use [Homebrew](https://brew.sh), you can install Python with:
+
+```bash
+brew install python
+```
+
+#### Linux
+
+Python is often pre-installed on Linux. Check your version first:
+
+```bash
+python3 --version
+```
+
+If you need to install or update:
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip
+```
+
+:::
+
+### Step 3: Verify the Installation
+
+Open a terminal (or the integrated terminal in VS Code with `` Ctrl+` ``) and run:
+
+```bash
+python --version
+```
+
+You should see output like:
+
+```
+Python 3.12.3
+```
+
+If you see an error on macOS or Linux, try `python3 --version` instead.
+
+### Step 4: Write Your First Program
+
+In VS Code, create a new file called `hello.py` and type:
+
+```python
+print("Hello, world!")
+```
+
+Click the **Run** button (▶) in the top-right corner, or run it from the terminal:
+
+```bash
+python hello.py
+```
+
+You should see `Hello, world!` printed in the terminal. You're up and running.
+
+## What are Packages?
+
+Out of the box, Python comes with a useful set of built-in tools called the **standard library** — things like file reading, math operations, and date handling. But Python's real power comes from its vast ecosystem of **third-party packages**.
+
+A **package** is a collection of Python code written by someone else that you can import and use in your own programs. Instead of writing complex algorithms from scratch, you install a package and use its functions directly.
+
+For example:
+
+- `pandas` — work with tabular data (think: Excel, but in Python)
+- `matplotlib` / `seaborn` — create charts and visualizations
+- `numpy` — fast numerical computing
+- `requests` — make HTTP requests and interact with web APIs
+- `scikit-learn` — machine learning
+
+### pip: Python's Package Manager
+
+Python comes with a tool called **pip** (short for *Pip Installs Packages*) that downloads and installs packages from the internet. You use it from the terminal.
+
+**Install a package:**
+
+```bash
+pip install pandas
+```
+
+**Install a specific version:**
+
+```bash
+pip install pandas==2.1.0
+```
+
+**Install multiple packages at once:**
+
+```bash
+pip install pandas matplotlib seaborn
+```
+
+**Uninstall a package:**
+
+```bash
+pip uninstall pandas
+```
+
+**List all installed packages:**
+
+```bash
+pip list
+```
+
+**Upgrade a package to the latest version:**
+
+```bash
+pip install --upgrade pandas
+```
+
+### Managing Dependencies with `requirements.txt`
+
+When working on a project, it is good practice to record which packages your project depends on. The conventional way to do this is a `requirements.txt` file.
+
+**Generate one from your current environment:**
+
+```bash
+pip freeze > requirements.txt
+```
+
+**Install all packages from a `requirements.txt`:**
+
+```bash
+pip install -r requirements.txt
+```
+
+This makes it easy for collaborators (or your future self) to recreate your exact environment.
+
+### Virtual Environments
+
+One important concept for managing packages is the **virtual environment**. By default, `pip install` adds packages to your global Python installation — which can cause conflicts when different projects need different versions of the same package.
+
+A virtual environment creates an isolated, self-contained Python installation for a single project.
+
+**Create a virtual environment:**
+
+```bash
+python -m venv venv
+```
+
+**Activate it:**
+
+::: {.panel-tabset}
+
+#### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+#### macOS / Linux
+
+```bash
+source venv/bin/activate
+```
+
+:::
+
+Once activated, your terminal prompt will show `(venv)`. Any packages you install now go only into this environment and do not affect the rest of your system.
+
+**Deactivate when you're done:**
+
+```bash
+deactivate
+```
+
+::: {.callout-tip}
+It is good practice to create a new virtual environment for every project. Many developers add `venv/` to their `.gitignore` file so it is not committed to version control.
+:::
+
+## Summary
+
+Here's everything covered in this guide at a glance:
+
+| Step | Tool | What It Does |
+|---|---|---|
+| 1 | **VS Code** | Your editor — where you write code |
+| 2 | **Python** | The language interpreter — runs your code |
+| 3 | **pip** | Installs third-party packages |
+| 4 | **venv** | Isolates packages per project |
+
+With these four pieces in place, you have a complete, professional Python development environment. From here, the best next step is to pick a project that genuinely interests you — whether that's analysing a dataset, automating a task, or building a small tool — and start writing code.
+
+Happy coding! 🐍
+
+
