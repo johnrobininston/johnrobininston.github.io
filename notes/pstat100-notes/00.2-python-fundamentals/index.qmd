@@ -1,0 +1,677 @@
+---
+title: "Python Fundamentals"
+description: "Learn the fundamentals of the `python` programming language including variables, data types, and basic operations."
+author: John Inston
+date: "2026-04-02"
+date-modified: "2026-04-03"
+toc: true
+title-block-banner: false
+sidebar: pstat100-notes
+page-navigation: true
+---
+
+::: {.callout-important}
+
+## Aims
+
+- Understand basic `python` syntax and programming concepts.
+- Python variables and data types.
+- Branching and iteration.
+- `numpy` arrays.
+
+:::
+
+## Python Fundamentals
+
+Now that we have finished our set up we are ready to begin coding in `python`.  We will start with the basics including variable assignment, data types and basic operations.  
+
+### `print()` Function
+
+As with every introduction to `python` programming, we first introduce the `print()` function which displays the output:
+
+```{python}
+print("Hello" + " " + "world!")
+```
+
+### Variables and Assignment
+
+A **variable** is a named container for storing a value.  In Python, we create one by assigning a value with `=`.  Here we create three variables called `name`, `age` and `height`:
+
+```{python}
+name = "Alice"
+age = 25
+height = 5.6
+
+print(name, "is", age, "years old and", height, "feet tall.")
+```
+
+Variable names should be lowercase with underscores for spaces (e.g. `my_variable`) and cannot start with a number (same as `R`).  
+
+### Python Data Types
+
+Python has several built-in data types.  The most common are:
+
+| Type | Example | Description |
+|------|---------|------------|
+|`int` | `42`    | Whole numbers |
+|`float` | `3.14` | Decimal numbers |
+|`str` | `"hello"` | Text (string) |
+|`bool` | `True/False` | Boolean (true/false) |
+
+```{python}
+x = 42           # int
+pi = 3.14159     # float
+greeting = "Hi"  # str
+is_fun = True    # bool
+
+# Check the type of any variable with type()
+print(type(x))
+print(type(pi))
+print(type(greeting))
+print(type(is_fun))
+```
+
+You can convert between types (explored further in our lab on data preparation):
+
+```{python}
+number = 7
+as_float = float(number)
+as_string = str(number)
+
+print(as_float)   # 7.0
+print(as_string)  # "7"
+```
+
+#### Strings
+
+Strings are sequences of characters.  Python (unlike `R`) has a lot of built-in functionality for handling strings:
+
+```{python}
+s = "Hello, Python!"
+
+print(len(s))          # Length of the string
+print(s.upper())       # All uppercase
+print(s.lower())       # All lowercase
+print(s.replace("Python", "World"))  # Replace a word
+print(s[0])            # First character: "H"
+print(s[0:5])          # Slice: "Hello"
+```
+
+Note that in python some functions are attached directly to a value or variable and called using **dot notation**: `variable.method()`.  These are called **methods** - functions for a specific data type.  For example `upper()` is the method on the string `s`.  This is our first-look at **object-oriented programming**, something that we will explore as we advance in python.
+
+The cleanest way to embed variables inside strings are **f-strings** (formatted-strings):
+
+```{python}
+name = "Alice"
+age = 25
+
+message = f"My name is {name} and I am {age} years old."
+print(message)
+```
+
+This is particularly helpful when combined with looping, for example to efficiently generate labels for multiple plots.
+
+#### Lists
+
+A **list** is an ordered, changeable collection of items.  Lists can hold any data type, even mixed types (in this way they differ to vectors) and as such are very flexible for data storage.  They are created using **square brackets** `[...]` with items separated by commas:
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+print(fruits[0])    # First item: "apple"
+print(fruits[-1])   # Last item: "cherry"
+print(len(fruits))  # Number of items: 3
+
+# Modifying a list
+fruits.append("mango")      # Add to end
+fruits.insert(1, "grape")   # Insert at index 1
+fruits.remove("banana")     # Remove by value
+
+print(fruits)
+```
+
+To index items from a list numerically we again use **square brackets** (not curly braces `{ }`).  Note that (unlike `R`) python indexes start from 0.  We can index from the end of the list using the minus signs:
+
+```{python}
+print(fruits[0])
+print(fruits[-1])
+```
+
+We can **slice** a list, which means returning all elements before/after a certain point by using `:`:
+
+```{python}
+numbers = [0, 1, 2, 3, 4, 5]
+
+print(numbers[1:4])   # [1, 2, 3]
+print(numbers[:3])    # [0, 1, 2]
+print(numbers[3:])    # [3, 4, 5]
+print(numbers[::2])   # Every other item: [0, 2, 4]
+```
+
+#### Dictionaries
+
+A **dictionary** stores data as key-value pairs, like a real dictionary where you look up a work (key) to find its definition (value).  These are defined with brackets ${...}$ where key values are strings:
+
+```{python}
+person = {
+    "name": "Alice",
+    "age": 25,
+    "city": "New York"
+}
+
+print(person["name"])   # Access by key
+print(person["age"])
+
+# Add or update a key
+person["email"] = "alice@example.com"
+person["age"] = 26
+
+print(person)
+
+# Check if a key exists
+print("city" in person)   # True
+```
+
+### Basic Math
+
+Python supports all standard arithmetic operations:
+
+```{python}
+a = 10
+b = 3
+
+print(a + b)   # Addition:       13
+print(a - b)   # Subtraction:    7
+print(a * b)   # Multiplication: 30
+print(a / b)   # Division:       3.333...
+print(a // b)  # Floor division: 3  (rounds down)
+print(a % b)   # Modulo:         1  (remainder)
+print(a ** b)  # Exponent:       1000
+```
+
+### Branching
+
+Branching is a fundamental concept in programming that allows you to control the flow of your program based on certain conditions. In Python, you can use `if`, `elif`, and `else` statements to create conditional logic:
+
+```{python}
+temperature = 72
+
+if temperature > 90:
+    print("It's very hot outside!")
+elif temperature > 65:
+    print("It's a nice day.")
+elif temperature > 40:
+    print("It's a bit chilly.")
+else:
+    print("It's cold outside!")
+```
+
+Note here that unlike `R` branching statements have no parentheses or brackets, it has a much cleaner and more intuitive syntax.  These The branching conditions are logical statements with a single `True/False` output.  Python uses the standard programming syntax for logical operators:
+
+| Operator | Meaning |
+|----------|---------|
+| `==`     | Equal to |
+| `!=`     | Not equal to |
+| `>`      | Greater than |
+| `<`      | Less than |
+| `>=`     | Greater than or equal to |
+| `<=`     | Less than or equal to |
+
+```{python}
+x = 10
+print(x == 10)  # True
+print(x != 5)   # True
+print(x > 20)   # False
+```
+
+We note here another divergence from `R` in the existence of `not`, `and` and `or` rather than mathematical symbols.  Python typically reads more like plain English.
+
+```{python}
+is_raining = False
+
+# Preferred
+if not is_raining:
+    print("No umbrella needed!")
+
+# Also common: checking if a list is empty
+items = []
+
+if not items:
+    print("The list is empty.")
+
+# Combining with and / or
+logged_in = True
+is_admin = False
+
+if logged_in and not is_admin:
+    print("Welcome, regular user!")
+```
+
+Here are a few rules of thumb for when to use `not`:
+
+* Use `not x` instead of `x == False`.
+* Use `not items` instead of `len(items) == 0` to check for empty objects.
+* Use `not x in my_list` - or better `x not in my_list` - to check for absence.
+
+### Iteration
+
+A `for` loop iterates over a sequence.  Similar to branching, we see that python looping syntax has no parentheses or braces:
+
+```{python}
+fruits = ["apple", "banana", "cherry"]
+
+for fruit in fruits:
+    print(fruit)
+```
+
+Use range() to loop a specific number of times:
+
+```{python}
+for i in range(5):
+    print(f"Step {i}")
+```
+
+A while loop repeats as long as a condition is true:
+
+```{python}
+count = 0
+
+while count < 5:
+    print(f"Count is {count}")
+    count += 1
+
+print("Done!")
+```
+
+**Example:** Write a `for loop` that runs through all of the integers from 1 to 100 and appends them to two lists:
+1. `nine_multiples` if the number is divisible by 9.
+2. `sevens_list` if the number contains a 7.
+
+```{python}
+# Solution
+```
+
+### Functions
+
+A function is a reusable block of code. You define it once and call it as many times as you like.  The syntax is very simple:
+
+```{python}
+def greet(name):
+    print(f"Hello, {name}!")
+
+greet("Alice")
+greet("Bob")
+```
+
+Functions can send a value back using **return**:
+
+```{python}
+def add(a, b):
+    return a + b
+
+result = add(3, 7)
+print(result)  # 10
+```
+
+You can set default values for parameters:
+
+```{python}
+def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+
+greet("Alice")              # Uses default: "Hello, Alice!"
+greet("Bob", "Good morning")  # Overrides default
+```
+
+**Example:** Define a function called `compute_radius()` that computes the **radius** `r` of a sphere for some specified volume `V`. Recall that the volume $V$ of a sphere of radius $r$ is given by
+$$
+V = \frac{4}{3}\pi r^3.
+$$
+
+```{python}
+# Solution
+```
+
+**Example:** Write a function `summation` that evaluates the following summation for $n \geq 1$:
+$$\sum_{i=1}^{n} \left(i^3 + 5i\right)$$
+
+```{python}
+# Solution
+```
+
+### Importing Libraries and Magic Commands
+
+In this course, we will be using common Python libraries to help us process data. By convention, we import all libraries at the very top of the notebook. There are also a set of standard aliases that are used to shorten the library names. Below are some of the libraries that you may encounter throughout the course, along with their respective aliases.
+
+```{python}
+#| deletable: false
+#| editable: false
+#| tags: []
+import pandas as pd
+import numpy as np
+```
+
+A useful magic command is `%%time`, which times the execution of that cell. You can use this by writing it as the first line of a cell. (Note that `%%` is used for *cell magic commands* that apply to the entire cell, whereas `%` is used for *line magic commands* that only apply to a single line. If you are interested, you can read more about the magic commands in this [Tutorials Point article](https://www.tutorialspoint.com/jupyter/ipython_magic_commands.htm)).
+
+```{python}
+%%time
+
+lst = []
+for i in range(100):
+    lst.append(i)
+```
+
+**Example:** Complete `summation(n)` in the next cell (same formula as above), then use it for the values of `n` below.
+
+```{python}
+def summation(n):
+    """Compute sum of (i**3 + 5*i) for i from 1 to n (inclusive)."""
+    ...
+```
+
+Use your function to compute the sum for...
+
+```{python}
+# n = 2
+...
+```
+
+```{python}
+# n = 20
+...
+```
+
+### List comprehension
+
+In Python, normally you can fill a list with elements using a for loop as seen in the example below.
+
+```{python}
+#| deletable: false
+#| tags: []
+squares = []
+# Add square numbers from 1 to 100 inclusive to the list "squares" if they end in the digit "4"
+for i in range(1,101):
+    if (i**2)%10 == 4:
+        squares.append(i**2)
+print(squares)
+```
+
+Alternatively, you can create this same list in a single line of code by moving the for-loop and if-statement inside the loop's creation. This is called a **list comprehension**.
+
+The syntax for a list comprehension is this: \[**value** **for-loop** **condition**\]
+* **value** is the value you want to put into the list
+* **for-loop** is the for-loop that iterates through a list or a range
+* **condition** is the if-statement that determines if the **value** is allowed to be inserted into the list
+
+For more information, you can read [this beginner's tutorial](https://www.pythonforbeginners.com/basics/list-comprehensions-in-python) on list comprehensions
+
+```{python}
+#| deletable: false
+#| tags: []
+# value: i**2
+# for-loop: for i in range(1,101)
+# condition: if (i**2)%10 == 4
+squares_list_comprehension = [i**2 for i in range(1,101) if (i**2)%10 == 4]
+```
+
+### Aligning lists with `zip()`
+
+If you need to line up 2 or more lists, Python has a built-in function called **zip()**. This allows you to loop through more than one list at a time such that you get values in each list that have the same index in the other lists. This can also be used within for-loops to make them even more powerful.
+
+```{python}
+#| deletable: false
+#| tags: []
+a = [1,2,3,4]
+b = [2,3,4,5]
+# Print a[0]*b[0], a[1]*b[1],...
+for x, y in zip(a,b):
+    print(x*y)
+```
+
+**Example:**  Write a function `list_sum` that computes **the square** of _each_ value in `list_1`, **the cube** of _each_ value in `list_2`, and returns a list containing the element-wise sum of these results. Assume that `list_1` and `list_2` have the same number of elements. Try to use a list comprehension to write it all on one line.  I have started the function for you below:
+
+```{python}
+# SOLUTION
+
+def list_sum(list_1, list_2):
+    """Compute x^2 + y^3 for each x, y in list_1, list_2. 
+    
+    Assume list_1 and list_2 have the same length.
+    """
+    assert len(list_1) == len(list_2), "both args must have the same number of elements"
+    ...
+
+    return [x**2 + y**3 for x, y in zip(list_1, list_2)]
+```
+
+To test this function we define two lists and call the function:
+
+```{python}
+list_1 = [1, 2, 3, 4, 5]
+list_2 = [6, 7, 8, 9, 10]
+print(list_sum(list_1, list_2))
+```
+
+## `numpy` Package
+
+NumPy (pronounced "NUM-pie") is the numerical computing module, which we will be using a lot in this course. Here's a quick recap of NumPy. For more review, read the following materials.
+
+- **[NumPy Quick Start Tutorial](https://docs.scipy.org/doc/numpy-1.15.4/user/quickstart.html)**
+- **[Stanford CS231n NumPy Tutorial](https://cs231n.github.io/python-numpy-tutorial/#numpy)**
+
+### Arrays
+
+The core of NumPy is the **array**. Like Python lists, arrays store data; however, they store data in a more efficient manner. In many cases, this allows for faster computation and data manipulation.
+
+Let's use `np.array` to create an array. It takes a sequence, such as a list or range (remember that list elements are included between the square brackets `[` and `]`). 
+
+**Example:** Create an array `arr` containing the values 1, 2, 3, 4, and 5 (in that order).
+
+```{python}
+arr = np.array([1, 2, 3, 4, 5])
+```
+
+In addition to values in the array, we can access attributes such as array's shape and data type. A full list of attributes can be found [here](https://docs.scipy.org/doc/numpy-1.15.0/reference/arrays.ndarray.html#array-attributes).
+
+### Indexing
+
+NumPy arrays are integer-indexed by position, with the first element indexed as position 0. Elements can be retrieved by enclosing the desired positions in brackets `[]`. 
+
+```{python}
+arr[3]
+```
+
+To retrieve consecutive positions, specify the starting index and the ending index separated by `:` -- *e.g.*, `arr[from:to]`. This syntax is non-inclusive of the left endpoint; notice below that the starting index is *not* included in the output.
+
+```{python}
+arr[2:4]
+```
+
+### Attributes
+
+NumPy arrays have several attributes that can be retrieved by name using syntax of the form `arr.attr`. Some useful attributes are:
+
+* `.shape`, a tuple with the length of each array dimension
+* `.size`, the length of the first array dimension
+* `.dtype`, the data type of the entries (float, integer, etc.)
+
+```{python}
+arr.shape
+```
+
+```{python}
+arr.size
+```
+
+```{python}
+arr.dtype
+```
+
+Arrays, unlike Python lists, **cannot store items of different data types**.
+
+```{python}
+# A regular Python list can store items of different data types
+[1, '3']
+```
+
+```{python}
+# Arrays will convert everything to the same data type
+np.array([1, '3'])
+```
+
+```{python}
+# Another example of array type conversion
+np.array([5, 8.3])
+```
+
+### Operations on arrays
+
+Arrays are also useful in performing *vectorized operations*. Given two or more arrays of equal length, arithmetic will perform **element-wise computations** across the arrays. 
+
+For example, observe the following:
+
+```{python}
+# Python list addition will concatenate the two lists
+[1, 2, 3] + [4, 5, 6]
+```
+
+```{python}
+# NumPy array addition will add them element-wise
+np.array([1, 2, 3]) + np.array([4, 5, 6])
+```
+
+**Example:** Given the array `random_arr`, assign `valid_values` to an array containing all values $x$ of `random_arr` such that $2x^4 > 1$.
+
+```{python}
+#| eval: false
+# for reproducibility - setting the seed will result in the same random draw each time
+np.random.seed(67)
+
+# draw uniformly random integers between 1 and 60
+random_arr = np.random.rand(60)
+
+# solution
+valid_values = random_arr[2*random_arr**4 > 1]
+```
+
+**Example:** Recreate the `list_sum` function using `numpy` arrays, calling your new function `array_sum`.
+
+```{python}
+def array_sum(array_1, array_2):
+    return np.array([x**2 + y**3 for x, y in zip(array_1, array_2)])
+```
+
+You might have been told that Python is slow, but array arithmetic is carried out very fast, even for large arrays.
+
+For ten numbers, `list_sum` and `array_sum` both take a similar amount of time.
+
+```{python}
+sample_list_1 = list(range(10))
+sample_array_1 = np.arange(10)
+```
+
+```{python}
+%%time
+list_sum(sample_list_1, sample_list_1)
+```
+
+```{python}
+%%time
+array_sum(sample_array_1, sample_array_1)
+```
+
+The time difference seems negligible for a list/array of size 10; depending on your setup, you may even observe that `list_sum` executes faster than `array_sum`! However, we will commonly be working with much larger datasets:
+
+```{python}
+sample_list_2 = list(range(100000))
+sample_array_2 = np.arange(100000)
+```
+
+```{python}
+%%time
+list_sum(sample_list_2, sample_list_2)
+; # The semicolon hides the output
+```
+
+```{python}
+%%time
+array_sum(sample_array_2, sample_array_2)
+;
+```
+
+With the larger dataset, we see that using NumPy results in code that executes over 50 times faster! Throughout this course (and in the real world), you will find that writing efficient code will be important; arrays and vectorized operations are the most common way of making Python programs run quickly.
+
+#### A note on `np.arange` and `np.linspace`
+
+Usually we use `np.arange` to return an array that steps from `a` to `b` with a fixed step size `s`. While this is fine in some cases, we sometimes prefer to use `np.linspace(a, b, N)`, which divides the interval `[a, b]` into N equally spaced points.
+
+`np.arange(start, stop, step)` produces an array with all the numbers starting at `start`, incremented up by `step`, stopping **before** `stop` is reached. For example, the value of `np.arange(1, 6, 2)` is an array with elements 1, 3, and 5 -- it starts at 1 and counts up by 2, then stops before 6. `np.arange(4, 9, 1)` is an array with elements 4, 5, 6, 7, and 8. (It doesn't contain 9 because `np.arange` stops _before_ the stop value is reached.)
+
+ `np.linspace` always includes **both end points** while `np.arange` will **not** include the second end point `b`. For this reason, especially when we are plotting ranges of values we tend to prefer `np.linspace`.
+
+Notice how the following two statements have different parameters but return the same result.
+
+```{python}
+np.arange(-5, 6, 1.0)
+```
+
+```{python}
+np.linspace(-5, 5, 11)
+```
+
+### Matrices
+
+Arrays are not limited to one dimension (i.e. vectors) but can also be used to define **matrices**. For example, we define a $3\times 3$ matrix `A` and a $3\times 1$ vector `b` (the right-hand side of a linear system). 
+
+```{python}
+A = np.array([[2, 1, 3],
+              [4, 3, 2],
+              [1, 2, 2]], dtype=float)
+              
+b = np.array([34, 46, 26], dtype=float)
+```
+
+Elementwise multiplication can be performed with `*` as normal and matrix multiplication by `@`:
+
+```{python}
+# Computations with matrices
+print(A*A)  
+print(A@A)
+print(A@b)
+```
+
+As one final example of just some of the functionality of `numpy` we demonstrate its ability to solve linear systems.  Consider the following system of linear equations:
+
+$$
+\begin{aligned}
+2x + y + 3z & = 34 \\
+4x + 3y + 3z & = 46 \\
+x + 2y + 2z & = 26.
+\end{aligned}
+$$
+
+To find solutions $x$, $y$ and $z$ we can use the `np.linalg.solve` function:
+
+```{python}
+A = np.array([[2, 1, 3],
+              [4, 3, 2],
+              [1, 2, 2]], dtype=float)
+
+b = np.array([34, 46, 26], dtype=float)
+
+# Task 2
+x = np.linalg.solve(A, b)
+print(f"x: {x[0]:.1f}, y: {x[1]:.1f}, z: {x[2]:.1f}")
+
+# Task 3
+print(f"Verification passed: {np.allclose(A @ x, b)}")
+
+# Bonus
+x_inv = np.linalg.inv(A) @ b
+print(f"Via inverse — x: {x_inv[0]:.1f}, y: {x_inv[1]:.1f}, z: {x_inv[2]:.1f}")
+```
+
+## Parting Message
+
+This note is only scratching the surface of what we can do with python but thankfully, you never need to remember everything!  Part of being a data scientist is becoming efficient at reading and understanding new code quickly.  Never prioritize memorizing code, prioritize writing code and, more importantly, using code to solve problems.  Programming is a tool you sharpen through application! 
+
