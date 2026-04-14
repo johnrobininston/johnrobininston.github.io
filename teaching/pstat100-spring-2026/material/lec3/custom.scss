@@ -1,0 +1,496 @@
+/*-- scss:defaults --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Carlito:wght@300;400;600&display=swap");
+
+// Typography
+$font-family-sans-serif: Calibri, Carlito, "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$presentation-heading-font: "Alegreya", "Palatino Linotype", "Book Antiqua", Palatino, serif !default;
+$presentation-font-size-root: 25px !default;
+$presentation-line-height: 1.28 !default;
+
+// Color system
+$body-bg: #f7f9fc !default;
+$body-color: #1e2430 !default;
+$link-color: #2f5aa8 !default;
+$selection-bg: #dce9ff !default;
+
+$presentation-heading-color: #5d6778 !default;
+$presentation-h1-font-size: 2.05em !default;
+$presentation-h2-font-size: 1.38em !default;
+$presentation-h3-font-size: 1.1em !default;
+$presentation-title-slide-text-align: left !default;
+
+/*-- scss:rules --*/
+
+:root {
+  --r-main-font: Calibri, Carlito, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --accent: #2f5aa8;
+  --accent-2: #a43d7a;
+  --accent-soft: #e8f0ff;
+  --border-subtle: #d5deec;
+  --text-muted: #5d6778;
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-weight: 300;
+
+  .slides section {
+    text-align: left;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--text-muted);
+    letter-spacing: 0.015em;
+    text-wrap: balance;
+    margin-bottom: 0.35em;
+  }
+
+  // Add breathing room before in-slide headings (not the first heading on slide).
+  .slides section h1:not(:first-child),
+  .slides section h2:not(:first-child),
+  .slides section h3:not(:first-child) {
+    margin-top: 0.9em;
+  }
+
+  p,
+  li {
+    max-width: 44em;
+  }
+
+  // Keep list text the same size as body text.
+  p,
+  ul,
+  ol,
+  li {
+    font-size: 1em;
+  }
+
+  // More readable list spacing for lecture bullets.
+  ul,
+  ol {
+    margin-top: 0.3em;
+  }
+
+  // Tighten spacing when a list follows body text.
+  p + ul,
+  p + ol {
+    margin-top: 0.05em;
+  }
+
+  // Use open circles for second-level unordered bullets.
+  ul {
+    list-style-type: disc;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  li {
+    margin: 0.2em 0;
+    padding-left: 0.1em;
+  }
+
+  // Pandas DataFrame HTML: light polish only (borders, header, spacing).
+  table.dataframe {
+    margin: 0.4em 0;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    line-height: 1.35;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.25em;
+    background: #fff;
+  }
+
+  table.dataframe caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 0 0 0.35em;
+    font-size: 0.95em;
+  }
+
+  table.dataframe thead th {
+    background: #f1f4f9;
+    font-weight: 600;
+    padding: 0.32em 0.45em;
+    border-bottom: 1px solid #c8d4e8;
+    text-align: right;
+  }
+
+  table.dataframe tbody th {
+    background: #fafbfc;
+    font-weight: 500;
+    padding: 0.28em 0.4em;
+    border-right: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  table.dataframe tbody td {
+    padding: 0.28em 0.45em;
+    border-bottom: 1px solid #eceff5;
+    text-align: right;
+    vertical-align: middle;
+  }
+
+  table.dataframe tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .cell.df-table-sm table.dataframe {
+    font-size: 0.72em;
+  }
+
+  p {
+    margin: 0.35em 0 0.55em;
+  }
+
+  a {
+    line-height: 1.25em;
+    text-decoration-color: rgba(47, 90, 168, 0.35);
+    text-underline-offset: 0.12em;
+  }
+
+  strong {
+    color: #1f3f75;
+    font-weight: 600;
+  }
+
+  blockquote {
+    border-left: 0.18em solid var(--accent);
+    background: #eef4ff;
+    color: #2a3550;
+    padding: 0.55em 0.8em;
+    border-radius: 0.2em;
+    box-shadow: 0 0 0 1px rgba(47, 90, 168, 0.08);
+  }
+
+  code:not(.sourceCode code) {
+    background: #eef2f7;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.25em;
+    padding: 0.08em 0.35em;
+    color: #274a84;
+    font-size: 0.88em;
+  }
+
+  pre code {
+    background: #f2f5fa;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.35em;
+    box-shadow: none;
+  }
+
+  // Optional semantic emphasis in slide markdown: [text]{.accent}
+  .accent {
+    color: var(--accent-2);
+    font-weight: 600;
+  }
+
+  // Optional muted text helper: [text]{.muted}
+  .muted {
+    color: var(--text-muted);
+  }
+
+  // --- Academic components -------------------------------------------------
+  // Usage examples in QMD:
+  // ::: definition
+  // Definition content
+  // :::
+  //
+  // ::: theorem
+  // ::: example
+  // ::: question
+
+  .definition,
+  .theorem,
+  .example,
+  .question {
+    border-radius: 0.3em;
+    border: 1px solid var(--border-subtle);
+    padding: 0.55em 0.75em;
+    margin: 0.6em 0;
+    background: #f5f7fb;
+    font-size: 0.96em;
+  }
+
+  .definition::before,
+  .theorem::before,
+  .example::before,
+  .question::before {
+    display: block;
+    font-family: $presentation-heading-font;
+    font-size: 0.8em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.2em;
+    color: var(--text-muted);
+  }
+
+  .definition::before {
+    content: "Definition";
+  }
+
+  .theorem::before {
+    content: "Theorem";
+  }
+
+  .example::before {
+    content: "Example";
+  }
+
+  .question::before {
+    content: "Question";
+  }
+}
+
+// Centered figure on a slide (sections default to text-align: left).
+// Constrain size so images stay on-slide (width + height), preserving aspect ratio.
+.reveal .slide-img-center {
+  text-align: center;
+  margin: 0.4em 0;
+  max-width: 100%;
+
+  p {
+    text-align: center;
+    margin: 0.35em 0;
+  }
+
+  img {
+    display: inline-block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    // Leave room for headings / body text above; cap for large viewports.
+    max-height: min(52vh, 480px);
+    object-fit: contain;
+    object-position: center;
+    vertical-align: middle;
+  }
+}
+
+// Profile pictures
+.reveal .profile-hex {
+  width: min(78%, 280px);
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: center;
+
+  // Rounded hexagon shape.
+  clip-path: polygon(
+    25% 6.5%,
+    75% 6.5%,
+    96% 50%,
+    75% 93.5%,
+    25% 93.5%,
+    4% 50%
+  );
+  border-radius: 18px;
+  border: 2px solid rgba(47, 90, 168, 0.25);
+  box-shadow: 0 7px 24px rgba(28, 44, 75, 0.12);
+  background: #e9edf5;
+}
+
+// Teaching staff slide: top-align text + photo column.
+.reveal #teaching-staff .columns {
+  align-items: flex-start;
+}
+
+// Teaching staff slide: three hex portraits, zigzag (left / right / left).
+.reveal #teaching-staff .staff-photo-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.45em;
+  width: 100%;
+  padding: 0.15em 0;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex {
+  width: min(58%, 168px);
+  max-width: 100%;
+  margin: 0;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(1) {
+  align-self: flex-start;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(2) {
+  align-self: flex-end;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(3) {
+  align-self: flex-start;
+}
+
+// Column layout
+.columns {
+  align-items: center;
+  column-gap: 1.2rem;
+}
+
+// Center content in a single column (e.g. slide logos).
+.reveal .column.column-center {
+  text-align: center;
+}
+
+.reveal .column.column-center img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// Title slide accents
+#title-slide {
+  h1 {
+    color: #142d57;
+    line-height: 1.1;
+    margin-bottom: 0.2em;
+  }
+
+  .subtitle,
+  .quarto-title-author-name,
+  .date {
+    color: var(--text-muted);
+  }
+
+  .quarto-title-author-name {
+    font-weight: 600;
+  }
+
+  // Decorative rule under title for visual identity.
+  h1::after {
+    content: "";
+    display: block;
+    width: 3.2em;
+    height: 0.09em;
+    background: linear-gradient(90deg, var(--accent), #7aa2e5);
+    margin-top: 0.28em;
+    border-radius: 99px;
+  }
+}
+
+// Progress bar + slide number polish
+.reveal .progress {
+  color: var(--accent);
+  height: 0.28rem;
+}
+
+.reveal .slide-number {
+  color: #31445f;
+  background: rgba(232, 240, 255, 0.84);
+  border: 1px solid #c7d8f6;
+  border-radius: 0.28em;
+  padding: 0.08em 0.35em;
+  bottom: 0.42em;
+  right: 0.8em;
+  font-size: 0.54em;
+}
+
+// Fixed course footer (left + center text). Slide number remains on the right.
+.reveal .footer {
+  position: fixed;
+  left: 0.8em;
+  right: 0.8em;
+  bottom: 0.42em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  pointer-events: none;
+  z-index: 15;
+  color: #5d6778;
+  font-size: 0.54em;
+  line-height: 1;
+}
+
+// Emphasize block.
+.reveal .emphasize {
+  border-left: 0.18em solid var(--accent);
+  background: linear-gradient(90deg, rgba(47, 90, 168, 0.1), rgba(47, 90, 168, 0.03));
+  color: #1f3458;
+  padding: 0.34em 0.62em;
+  border-radius: 0.22em;
+  margin: 0.1em 0 0.55em;
+  font-weight: 400;
+}
+
+// Important callout: body matches slide body (--r-main-font-size); title slightly larger.
+.reveal .slides section .callout.callout-important {
+  font-size: var(--r-main-font-size, 25px);
+
+  .callout-body {
+    font-size: inherit;
+  }
+
+  .callout-content {
+    font-size: 1em;
+    line-height: inherit;
+  }
+
+  .callout-content p {
+    font-size: inherit;
+  }
+
+  .callout-title {
+    font-size: 1.12em;
+    line-height: 1.28;
+  }
+
+  .callout-title p {
+    font-size: inherit;
+    margin: 0;
+  }
+}
+
+// Intro slide two-column profile styling.
+.reveal section.intro-two-col {
+  .welcome-lead {
+    border-left: 0.18em solid var(--accent);
+    background: linear-gradient(90deg, rgba(47, 90, 168, 0.1), rgba(47, 90, 168, 0.03));
+    color: #1f3458;
+    padding: 0.34em 0.62em;
+    border-radius: 0.22em;
+    margin: 0.1em 0 0.55em;
+    font-weight: 400;
+  }
+
+  .spacer-sm {
+    height: 0.4em;
+  }
+
+  .columns {
+    align-items: center;
+    column-gap: 1.2rem;
+  }
+
+  .profile-hex {
+    width: min(78%, 280px);
+    aspect-ratio: 1 / 1;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    object-position: center;
+
+    // Rounded hexagon shape.
+    clip-path: polygon(
+      25% 6.5%,
+      75% 6.5%,
+      96% 50%,
+      75% 93.5%,
+      25% 93.5%,
+      4% 50%
+    );
+    border-radius: 18px;
+    border: 2px solid rgba(47, 90, 168, 0.25);
+    box-shadow: 0 7px 24px rgba(28, 44, 75, 0.12);
+    background: #e9edf5;
+  }
+}

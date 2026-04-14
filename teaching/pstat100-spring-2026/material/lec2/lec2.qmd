@@ -1,0 +1,690 @@
+---
+title: "Lecture 2: Data Structure"
+subtitle: "PSTAT100: Data Science - Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+bibliography: references.bib
+format: 
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        include-after-body: assets/welcome-confetti.js
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Introduce data handling in Python.
+    - `numpy` arrays.
+    - `pandas` DataFrames.
+- [Data Structures]{.accent}.
+    - Wide vs Long.
+    - Converting between long and wide data structures.
+    - `pd.melt` and `pd.pivot`.
+- Tidy Data.
+    - Tidy Data Principles.
+
+:::
+
+:::{.column width="50%" .fragment}
+![Are ya ready kids! 🏴‍☠️](assets/ready.gif)
+:::
+:::
+
+# Data in Python
+
+## 🐍 Python Basics
+
+### Python Variables
+
+- Python is a general purpose [programming language]{.accent}.
+
+- Python natively stores data in [variables]{.accent} of different types:
+    - [Strings]{.accent} (`str`) - text data.
+    - [Integers]{.accent} (`int`) - whole numbers.
+    - [Floating point numbers]{.accent} (`float`) - decimal numbers.
+    - [Booleans]{.accent} (`bool`) - true/false values.
+    - [Lists]{.accent} (`list`) - ordered collections of data.
+    - [Dictionaries]{.accent} (`dict`) - key-value pairs.
+    - [Tuples]{.accent} (`tuple`) - ordered, immutable collections of data.
+    - [Sets]{.accent} (`set`) - unordered collections of unique data.
+
+- [Packages]{.accent} such as `pandas` and `numpy` provide additional data types and functions for working with data such as:
+    - Pandas [DataFrames]{.accent} (`.DataFrame`) - tabular data.
+    - Numpy [arrays]{.accent} (`.array`) - numerical data.
+
+## Python Syntax
+
+### Built-in Data Types
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column
+
+my_string = "Hello, World!"
+my_integer = 10
+my_float = 3.14
+my_boolean = True
+my_list = [1, 2, 3, 4, 5]
+my_tuple = (1, 2, 3, 4, 5)
+my_set = {1, 2, 3, 4, 5}
+my_dict = {"name": "John", "age": 30}
+
+item_list = [my_string, my_integer, my_float, my_boolean,
+             my_list, my_tuple, my_set, my_dict]
+
+for item in item_list:
+    print(type(item), ":", item)
+```
+
+- Built-in data types have [limitations]{.accent}:
+    - [Scalability]{.accent} (inefficient memory usage). 
+    - [Functionality]{.accent} (e.g. vector operations, manipulation). 
+:::
+:::{.fragment}
+```{python}
+#| echo: true
+#| output-location: column
+#| error: true
+my_list + 2
+```
+
+:::
+
+## NumPy
+
+### NumPy Arrays
+
+- Numpy [arrays]{.accent} are $n$-dimensional arrays of homogeneous data.
+    - Vectorized operations.
+    - Efficient memory usage.
+
+- Make sure you are familiar with the basics of NumPy arrays:
+    - Construction: `array`, `linspace`, `full`, etc.
+    - Indexing / Slicing.
+    - Broadcasting.
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+
+import numpy as np
+
+list_array = np.array([1, 2, 3, 4, 5])
+linspace_array = np.linspace(0, 1, 5)
+
+print(list_array)
+print(linspace_array)
+
+list_array[:3]
+linspace_array[list_array > 2]
+```
+
+:::
+
+## Pandas DataFrames
+
+### 🐼 What is Pandas?
+
+- [Pandas]{.accent} is a library for data manipulation and analysis.
+    - Provides data structures and functions for working with tabular data.
+    - Built on top of [NumPy]{.accent}.
+
+:::{.fragment}
+
+### Pandas DataFrames
+
+- Pandas DataFrames are 2-dimensional tabular data structures with labeled rows and columns.
+    - They are similar to NumPy arrays but with labeled axes.
+    - They are similar to dictionaries but with labeled columns.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+
+import pandas as pd
+
+# Constructing a dataframe
+data = pd.DataFrame({
+    "name": ["John", "Jane", "Jim", "Jill"],
+    "age": [20, 21, 22, 23],
+    "city": ["New York", "Los Angeles", 
+        "Chicago", "Houston"]
+})
+
+print(data)
+```
+
+:::
+
+## 📂 Loading Data Files
+
+### Data Formats
+
+- In this course we will primarily use [tabular data]{.accent} stored in the following [file formats]{.accent}:
+    - [Text files]{.accent} (`.txt`) - simplest format but with loading challenges
+    - [Comma Separated Values files]{.accent} (`.csv`) - most common format.
+    - [Tab Separated Values files]{.accent} (`.tsv`) - similar to CSV but uses tabs instead of commas.
+    - [Excel files]{.accent} (`.xlsx`) - spreadsheets with complex formulas and formatting.
+
+:::{.fragment}
+
+![Example of a CSV file](assets/csv-example.png){width="60%"}
+
+:::
+
+## Loading `.csv` files and `.xlsx` files
+
+### `.csv` files
+
+- `.csv` files are comma separated values files and are commonly used to store tabular data.
+- To load a `.csv` file we can use the `pd.read_csv` function.
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+
+cats_data = pd.read_csv("data/cats.csv")
+print(cats_data.head())
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### `.xlsx` files
+
+- `.xlsx` files are Excel files and are commonly used to store tabular data.
+- To load a `.xlsx` file we can use the `pd.read_excel` function.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+
+sales_data = pd.read_excel(
+    "data/office_sales.xlsx", 
+    sheet_name="SalesOrders")
+print(sales_data.head())
+```
+
+:::
+
+## ⋙ Dataframe Basics
+
+### Manipulation and Indexing
+
+- There are many ways we can [manipulate]{.accent} dataframes including:
+    - Finding dataframe [information]{.accent} with functions like `columns`, `index`, `shape`, `head`, `tail`, etc.
+    - [Indexing / Slicing / Filtering]{.accent}. (`.loc`, `.iloc`)
+    - [Adding / Removing columns and rows]{.accent}. (`.drop`, `.dropna`, `.insert`, `.concat`)
+    - [Sorting]{.accent}. (`.sort_values`, `.sort_index`)
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+
+# Properties
+print(cats_data.columns)
+print(cats_data.index)
+print(cats_data.shape)
+```
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+# Indexing 
+print(cats_data[["Breed", "Color"]].head())
+print(cats_data.iloc[3:5])
+```
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+# Adding / Removing columns and rows
+cats_data_dropped = cats_data.drop(columns=["Color"])
+print(cats_data_dropped.columns)
+```
+
+:::
+
+## 🏢 Data Structure
+
+### 🏗️ Different Data Structures
+
+- Often two data sets can have the same semantics but [different data structures]{.accent}.
+
+- Data structures can be broadly categorized into two types:
+
+:::{.columns}
+:::{.column width="50%"}
+- [Wide data structure]{.accent}:
+    - One row per subject.
+    - Repeated measurements are in separate columns.
+:::
+:::{.column width="50%"}
+- [Long data structure]{.accent}:
+    - One row per measurement.
+    - There is a column identifying which variable was measured
+:::
+:::
+
+:::{.fragment}
+
+![Long vs Wide Data Structures](assets/long-vs-wide.png){width="40%"}
+
+:::
+
+## ↔️ Wide Data Structure
+
+### Let's build some intuition...
+
+- To build our intuition let's create a copy of the data set used by [Luke Bennett](https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/).
+    - The data set contains the points, assists and rebounds of 4 basketball teams.
+    - ❓ Have a go at making this dataframe in python using `pd.DataFrame`.
+
+:::{.fragment}
+
+```{python}
+#| echo: false
+#| tbl-cap: "Basketball Data Set"
+
+basketball_data = pd.DataFrame({
+    "team": ["A", "B", "C", "D"],
+    "points": [88, 91, 99, 94],
+    "assists": [12, 17, 24, 28],
+    "rebounds": [22, 28, 30, 31]
+})
+basketball_data.set_index("team")
+```
+
+- Each observation (team) is on its own row.
+- Each observation has multiple variables in separate columns.
+
+:::
+
+## ↕️ Long Data Structure
+
+### What is a long data structure?
+
+- What would this data look like in a long data structure?
+
+:::{.fragment}
+
+```{python}
+#| echo: false
+
+basketball_data_long = basketball_data.melt(id_vars=["team"], var_name="statistic", value_name="value")
+basketball_data_long.sort_values(by="team").iloc[0:6,:].set_index("team")
+```
+
+- We observe now that:
+    - Each measurement has its own row (`value`)
+    - There is a column identifying which variable was measured (`statistic`)
+
+:::
+
+## Long vs Wide Data Structure
+
+### 🤔 Which is better?
+
+- Wide data is more [human-readable]{.accent}:
+    - Common in spreadsheets
+- Long data is more [computer-readable]{.accent}:
+    - Required by most plotting libraries (`seaborn`, `ggplot` in `R`)
+    - Easier to [filter]{.accent}, [group]{.accent}, and [aggregate]{.accent} in `pandas`.
+- It is therefore important to be able to [convert between the two data structures]{.accent}.
+
+:::{.fragment}
+
+### Code to build the basketball data set
+
+```{python}
+#| echo: true
+#| eval: false
+basketball_data = pd.DataFrame({
+    "team": ["A", "B", "C", "D"],
+    "points": [88, 91, 99, 94],
+    "assists": [12, 17, 24, 28],
+    "rebounds": [22, 28, 30, 31]
+})
+```
+
+:::
+
+## `pd.melt`
+
+### `pd.melt` - Wide → Long
+
+- `pd.melt` is a function that converts a wide data structure to a long data structure.
+- It takes the following arguments:
+    - `id_vars` are the columns that identify the subject.
+    - `var_name` is the name of the column that will contain the variable names.
+    - `value_name` is the name of the column that will contain the variable values.
+
+<br>
+
+:::{.fragment}
+
+```{python} 
+#| echo: true
+#| eval: true
+#| output-location: column-fragment
+
+# Wide → Long
+basketball_data_long = basketball_data.melt(
+    id_vars=["team"], 
+    var_name="statistic", 
+    value_name="value"
+    )
+print(basketball_data_long)
+```
+
+:::
+
+## `pd.pivot`
+
+### `pd.pivot` - Long → Wide
+
+- `pd.pivot` is a function that converts a long data structure to a wide data structure.
+- It takes the following arguments:
+    - `index` is the column that will contain the subject identifiers.
+    - `columns` is the column that will contain the variable names.
+    - `values` is the column that will contain the variable values.
+
+<br>
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| eval: true
+#| output-location: column-fragment
+
+# Long → Wide
+basketball_data_wide = basketball_data_long.pivot(
+    index="team", 
+    columns="statistic", 
+    values="value")
+print(basketball_data_wide)
+```
+
+:::
+
+## Lack of Standard Format
+
+### Which do you prefer?
+
+- Difficult to say why one layout might be preferable.
+    - Most data is stored in a layout that made [intuitive sense to the creator]{.accent}.
+    - 🙂‍↔️ [Idiosyncratic]{.accent} and [unprincipled]{.accent}.
+    - Few widely used conventions
+    - Lots of variability 'in the wild'
+
+:::{.fragment}
+
+### Consequences for Data Scientists
+
+- Data scientists must determine how best to [reorganize datasets]{.accent}.
+- Broadly, this involves two [interdependent choices]{.accent}:
+
+:::{.columns}
+:::{.column width="50%"}
+- Choice of [representation]{.accent}: how to encode information.
+    - Dates as one or three variables?
+    - Use values 1, 2, 3 or 'low', 'med', 'high'?
+:::
+:::{.column width="50%"}
+- Choice of [form]{.accent}: how to display information
+    - Wide table or long table?
+    - One table or many?
+:::
+:::
+
+:::
+
+## What's the solution?
+
+:::{.columns}
+:::{.column width="50%"}
+
+:::{.spacer-sm}
+:::
+
+### 🧹Tidy Data Standard
+
+- Data scientists introduced the [tidy data standard]{.accent} to help solve the problem of inconsistent data structures.
+
+- It has two main advantages:
+    - Facilitates workflow by establishing a consistent dataset structure.
+    - Principles are designed to make transformation, exploration, visualization, and modeling easy.
+
+:::
+
+:::{.column width="50%"}
+
+<br>
+
+![Tidy Data Standard](assets/cleaning.gif)
+
+:::
+:::
+
+# Tidy Data
+
+## Tidy Data Principles
+
+### What is tidy data?
+
+:::{.fragment}
+
+:::{.emphasize}
+"Tidying your data means storing it in a consistent form that matches the semantics of the dataset with the way it is stored. In brief, when your data is tidy, each column is a variable, and each row is an observation. Tidy data is important because the consistent structure lets you focus your struggle on questions about the data, not fighting to get the data into the right form for different functions." - Wickham and Grolemund, R for Data Science, 2017.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Tidy = Semantics and Structure
+
+- A dataset is a collection of values which is said to have:
+    - [Semantics:]{.accent} Meaning of each value
+    - [Structure:]{.accent} How values are arranged
+- The [tidy standard]{.accent}: data semantics $\leftrightarrow$ data structure
+
+:::
+## 🧹 Tidy Data Standard
+
+### Tidy Data Definition
+
+:::{.fragment}
+
+:::{.callout-important title="Tidy Data Standard"}
+For data to be tidy, it must satisfy the following three rules:
+
+1. Each variable is a column.
+2. Each observation is a row.
+3. Each type of observational unit forms a table.
+:::
+
+:::
+
+:::{.fragment}
+
+![Tidy Data](assets/tidy-data.png)
+
+:::
+
+## Tidy or Not - Example 1
+
+:::{.fragment}
+
+### Is this tidy?
+
+- For our first example let's look at World Bank data on annual GDP growth.
+    - We load this data from a `.csv` file using `pd.read_csv`.
+    - We look at the dimensions of the dataframe using `shape`.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+#| tbl-cap: "Tidy or Not? Example 1"
+
+gdp = pd.read_csv('data/annual_growth.csv', encoding = 'latin1')
+print(gdp.shape)
+gdp.head()
+```
+
+:::
+
+## Compare Semantics and Structure
+
+:::{.fragment}
+
+```{python}
+#| echo: false
+#| tbl-cap: "Tidy or Not? Example 1"
+
+gdp = pd.read_csv('data/annual_growth.csv', encoding = 'latin1')
+gdp.head()
+```
+
+:::
+
+:::{.fragment}
+
+| Semantics |	|	Structure	|   |
+|-----------|-----------|-----------|-----------|
+| [Observations:]{.accent} <br> [Variables:]{.accent} <br> [Observational units:]{.accent} | Annual records <br> GDP growth and year <br> Countries | [Rows:]{.accent} <br> [Columns:]{.accent} <br> [Tables:]{.accent} | Countries <br> Value of year <br> Just one |
+
+:::
+
+- ❌ Rules 1 and 2 are violated since column names are values, not variables.  
+    - Conclusion: No, this is not tidy. 👎
+
+## Tidy or Not - Example 1
+
+### Let's see if we can make it tidy...
+
+- The things we wish to change are:
+    - Set the [index column]{.accent} to be country name using `set_index`.
+    - [Drop]{.accent} the country code column (personal preference but superfluous) using `drop`.
+    - [Melt]{.accent} the data so that year and growth rate are variables (columns), with one row per country per year, using `melt`.
+    - [Sort]{.accent} the data by year and country name using `sort_values`.
+
+:::{.fragment}
+
+```{python}
+#| echo: true
+
+gdp_tidy = gdp.set_index(
+    'Country Name'
+).drop(
+    columns = 'Country Code'
+).melt(
+    var_name = 'year',
+    value_name = 'growth_pct',
+    ignore_index = False
+).reset_index(
+).sort_values(
+    ['year', 'Country Name']
+).set_index('Country Name')
+```
+
+:::
+
+## Were we successful?
+
+:::{.fragment}
+```{python}
+#| echo: false
+#| tbl-cap: "Tidy or Not? Example 1"
+gdp_tidy.head()
+```
+
+:::
+
+:::{.fragment}
+
+| Semantics |	|	Structure	|   |
+|-----------|-----------|-----------|-----------|
+| [Observations:]{.accent} <br> [Variables:]{.accent} <br> [Observational units:]{.accent} | Annual records <br> GDP growth and year <br> Countries | [Rows:]{.accent} <br> [Columns:]{.accent} <br> [Tables:]{.accent} | Annual records <br> GDP growth and year <br> Just one |
+:::
+
+- ✅ All three rules are [satisfied]{.accent}. Rows are observations, columns are variables, and there is one unit type and one table.
+    - Conclusion: Yes, we were successful! 🎉
+
+## Conclusion
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ What we covered
+
+- Python data types, NumPy, and pandas.
+- `numpy` and `pandas`
+- Data Structure
+- Wide vs Long
+- Tidy Data
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 What's next?
+
+- Detailed data preparation!
+
+:::
+
+## References
