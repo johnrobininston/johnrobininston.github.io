@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<link href="../../../../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.25">
+
+  <meta name="author" content="John Inston">
+  <meta name="dcterms.date" content="2026-05-06">
+  <title>John Robin Inston – Lecture 4: Data Preparation</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-faa9d22f9c1b5b4b7bb7e42edfa9b105.css">
+  <link href="../../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Lecture 4: Data Preparation</h1>
+  <p class="subtitle">PSTAT100: Data Science - Concepts and Analysis</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:johninston@ucsb.edu">johninston@ucsb.edu</a>
+</div>
+        <p class="quarto-title-affiliation">
+            University of California, Santa Barbara
+          </p>
+    </div>
+</div>
+
+  <p class="date">May 6, 2026</p>
+</section>
+<section id="overview" class="slide level2">
+<h2>🚁 Overview</h2>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<div class="spacer-sm">
+
+</div>
+<h3 id="aims-of-the-lecture">Aims of the lecture</h3>
+<ul>
+<li class="fragment">Study common data problems.</li>
+<li class="fragment">Handling missing data.</li>
+<li class="fragment">Searching for duplicate data.</li>
+<li class="fragment">Fixing inconsistent data types.</li>
+<li class="fragment">Labelling issues.</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<div class="spacer-sm">
+
+</div>
+<h3 id="required-libraries">📚 Required Libraries</h3>
+<p>In this lecture we will be using the following libraries:</p>
+<div id="de526a06" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a></a><span class="im">import</span> random <span class="im">as</span> rd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div></div>
+</section>
+<section id="tidy-data-review" class="slide level2">
+<h2>🧹 Tidy Data Review</h2>
+<h3 id="tidy-data-standard">Tidy Data Standard</h3>
+<div class="fragment">
+<div title="Tidy Data Standard">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tidy Data Standard</strong></p>
+</div>
+<div class="callout-content">
+<p>For data to be tidy, it must satisfy the following three rules:</p>
+<ol type="1">
+<li class="fragment">Each variable is a column.</li>
+<li class="fragment">Each observation is a row.</li>
+<li class="fragment">Each type of observational unit forms a table.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">If only it were so easy…</li>
+</ul>
+<div class="fragment">
+<h3 id="other-commondata-problems">Other CommonData Problems</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment">Missing values.</li>
+<li class="fragment">Duplicate records.</li>
+<li class="fragment">Inconsistent or incorrect data types.
+<ul>
+<li class="fragment">Dates, numbers as strings etc.</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment">Invalid values / outliers.</li>
+<li class="fragment">Labelling issues.</li>
+</ul>
+</div></div>
+</div>
+</section>
+<section>
+<section id="data-preparation" class="title-slide slide level1 center">
+<h1>Data Preparation</h1>
+
+</section>
+<section id="data-preparation-1" class="slide level2">
+<h2>Data Preparation</h2>
+<h3 id="what-is-data-preparation">What is data preparation?</h3>
+<div class="fragment">
+<div title="Data Preparation">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Data Preparation</strong></p>
+</div>
+<div class="callout-content">
+<p>Data preparation is the process of cleaning and transforming data to make it suitable for analysis.</p>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">When we load data from a file we take steps to fascilitate analysis.</li>
+<li class="fragment">Typically this process involes:
+<ul>
+<li class="fragment">🔍 <span class="accent">Identifying</span> what is wrong with the data.</li>
+<li class="fragment">🤔 <span class="accent">Determining</span> how to “fix” the problem.</li>
+<li class="fragment">🛠️ <span class="accent">Updating</span> and <span class="accent">checking</span> the result.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="missing-data" class="slide level2">
+<h2>Missing Data</h2>
+<div class="fragment">
+<h3 id="what-causes-missing-data">What causes missing data?</h3>
+<ul>
+<li class="fragment">Missing data can arise for a variety of reasons.
+<ul>
+<li class="fragment">Field was <span class="accent">never collected</span>.</li>
+<li class="fragment">Data was collected but <span class="accent">lost</span> or <span class="accent">destroyed</span>.</li>
+<li class="fragment">Data was collected but <span class="accent">recorded incorrectly</span>.</li>
+</ul></li>
+<li class="fragment">Understanding the <span class="accent">cause</span> of missing data can be challenging. 🥲
+<ul>
+<li class="fragment">But it can help us make good decisions! 👍</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="how-do-we-handle-missing-data">How do we handle missing data?</h3>
+<ul>
+<li class="fragment">Two approaches:
+<ul>
+<li class="fragment"><span class="accent">Deletion:</span> Removing the missing data from the dataset.</li>
+<li class="fragment"><span class="accent">Imputation:</span> Filling in the missing data with replacement values.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="missing-data-treatments" class="slide level2">
+<h2>Missing Data Treatments</h2>
+<h3 id="treatment-dependencies">Treatment Dependencies</h3>
+
+<img data-src="assets/missing-data.png" class="r-stretch quarto-figure-center"><p class="caption">Missing Data</p></section>
+<section id="libraries-and-practice-data" class="slide level2">
+<h2>Libraries and Practice Data</h2>
+<div class="fragment">
+<h3 id="library">Library</h3>
+<p>To graphically analyze the missingness of data we can use the <a href="https://github.com/ResidentMario/missingno">Missingno Library</a>, which provides a suite of tools for visualizing missing data.</p>
+<div id="0fec6942" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">import</span> missingno <span class="im">as</span> msno</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="fragment">
+<p><br></p>
+<h3 id="practice-data">Practice Data</h3>
+<p>For our example we consider a simple example of a dataset with missing data. We load the <code>nfl.csv</code> dataset which contains detailed NFL play-by-play data from 2009.</p>
+<div id="4de322e2" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>nfl_data <span class="op">=</span> pd.read_csv(<span class="st">'data/nfl.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+<section id="inspecting-the-data" class="slide level2">
+<h2>Inspecting the Data</h2>
+<p>Let’s take a first look at the first few rows and the shape.</p>
+<div class="cell" data-tbl-cap="NFL Play-by-Play Data" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>nfl_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<caption>NFL Play-by-Play Data</caption>
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th">GameID</th>
+<th data-quarto-table-cell-role="th">Drive</th>
+<th data-quarto-table-cell-role="th">qtr</th>
+<th data-quarto-table-cell-role="th">down</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">TimeUnder</th>
+<th data-quarto-table-cell-role="th">TimeSecs</th>
+<th data-quarto-table-cell-role="th">PlayTimeDiff</th>
+<th data-quarto-table-cell-role="th">SideofField</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">yacEPA</th>
+<th data-quarto-table-cell-role="th">Home_WP_pre</th>
+<th data-quarto-table-cell-role="th">Away_WP_pre</th>
+<th data-quarto-table-cell-role="th">Home_WP_post</th>
+<th data-quarto-table-cell-role="th">Away_WP_post</th>
+<th data-quarto-table-cell-role="th">Win_Prob</th>
+<th data-quarto-table-cell-role="th">WPA</th>
+<th data-quarto-table-cell-role="th">airWPA</th>
+<th data-quarto-table-cell-role="th">yacWPA</th>
+<th data-quarto-table-cell-role="th">Season</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>NaN</td>
+<td>15:00</td>
+<td>15</td>
+<td>3600.0</td>
+<td>0.0</td>
+<td>TEN</td>
+<td>...</td>
+<td>NaN</td>
+<td>0.485675</td>
+<td>0.514325</td>
+<td>0.546433</td>
+<td>0.453567</td>
+<td>0.485675</td>
+<td>0.060758</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>1.0</td>
+<td>14:53</td>
+<td>15</td>
+<td>3593.0</td>
+<td>7.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>1.146076</td>
+<td>0.546433</td>
+<td>0.453567</td>
+<td>0.551088</td>
+<td>0.448912</td>
+<td>0.546433</td>
+<td>0.004655</td>
+<td>-0.032244</td>
+<td>0.036899</td>
+<td>2009</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>2.0</td>
+<td>14:16</td>
+<td>15</td>
+<td>3556.0</td>
+<td>37.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>NaN</td>
+<td>0.551088</td>
+<td>0.448912</td>
+<td>0.510793</td>
+<td>0.489207</td>
+<td>0.551088</td>
+<td>-0.040295</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>3.0</td>
+<td>13:35</td>
+<td>14</td>
+<td>3515.0</td>
+<td>41.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>-5.031425</td>
+<td>0.510793</td>
+<td>0.489207</td>
+<td>0.461217</td>
+<td>0.538783</td>
+<td>0.510793</td>
+<td>-0.049576</td>
+<td>0.106663</td>
+<td>-0.156239</td>
+<td>2009</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>4.0</td>
+<td>13:27</td>
+<td>14</td>
+<td>3507.0</td>
+<td>8.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>NaN</td>
+<td>0.461217</td>
+<td>0.538783</td>
+<td>0.558929</td>
+<td>0.441071</td>
+<td>0.461217</td>
+<td>0.097712</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2009</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 102 columns</p>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">We can see that the dataset contains some missing data - i.e.&nbsp;<code>NaN</code> values.</li>
+</ul>
+<div class="fragment">
+<div id="cf8adc30" class="cell columns column-output-location" data-execution_count="5">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>nfl_data.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>(362447, 102)</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">We have 102 columns and ~360,000 rows!</li>
+</ul>
+</div>
+</section>
+<section id="quantifying-missingness" class="slide level2">
+<h2>Quantifying Missingness</h2>
+<div class="fragment">
+<h3 id="counting-missing-values">Counting Missing Values</h3>
+<ul>
+<li class="fragment">We start by counting the number of missing values in each column.
+<ul>
+<li class="fragment"><code>isnull</code> identifies missing values and <code>sum</code> counts them.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="a3aa4ba0" class="cell columns column-output-location" data-execution_count="6">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>missing_values_count <span class="op">=</span> nfl_data.isnull().<span class="bu">sum</span>()</span>
+<span id="cb7-2"><a></a>missing_values_count.sort_values(</span>
+<span id="cb7-3"><a></a>    ascending<span class="op">=</span><span class="va">False</span></span>
+<span id="cb7-4"><a></a>    ).head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>DefTwoPoint          362433
+BlockingPlayer       362341
+TwoPointConv         361919
+ChalReplayResult     359476
+RecFumbPlayer        358513
+RecFumbTeam          358513
+Interceptor          358387
+FieldGoalDistance    354528
+FieldGoalResult      354431
+ExPointResult        353399
+dtype: int64</code></pre>
+</div>
+</div></div>
+</div>
+<div class="fragment">
+<h3 id="percentage-missingness">Percentage Missingness</h3>
+<div id="d771ab6b" class="cell columns column-output-location" data-execution_count="7">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># how many total missing values do we have?</span></span>
+<span id="cb9-2"><a></a>total_cells <span class="op">=</span> np.prod(nfl_data.shape)</span>
+<span id="cb9-3"><a></a>total_missing <span class="op">=</span> missing_values_count.<span class="bu">sum</span>()</span>
+<span id="cb9-4"><a></a></span>
+<span id="cb9-5"><a></a><span class="co"># percent of data that is missing</span></span>
+<span id="cb9-6"><a></a>percent_missing <span class="op">=</span> (total_missing<span class="op">/</span>total_cells) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb9-7"><a></a><span class="bu">print</span>(percent_missing)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>27.652267428200588</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">There are many nearly empty columns.</li>
+</ul>
+</div>
+</section>
+<section id="missing-data-bar-chart" class="slide level2">
+<h2>Missing Data Bar Chart</h2>
+<ul>
+<li class="fragment">We can use <code>msno.bar</code> to visualize the missing data counts (for the first few columns to make it easier to see).</li>
+</ul>
+<div class="fragment">
+<div id="96a9e6f0" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>msno.bar(nfl_data.iloc[:, <span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="fl">2.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="lec4_files/figure-revealjs/cell-9-output-1.png" width="1269" height="425"></p>
+<figcaption>Missing Data Bar Chart</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="missing-data-matrix" class="slide level2">
+<h2>Missing Data Matrix</h2>
+<ul>
+<li class="fragment"><code>msno.matrix</code> visualizes the missing data (white = missingness) for 500 random rows.</li>
+</ul>
+<div class="fragment">
+<div id="d88c0049" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>np.random.seed(<span class="dv">42</span>) <span class="co"># set seed for reproducible sample</span></span>
+<span id="cb12-2"><a></a>nfl_data_sample <span class="op">=</span> nfl_data.sample(<span class="dv">500</span>)</span>
+<span id="cb12-3"><a></a>msno.matrix(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="lec4_files/figure-revealjs/cell-10-output-1.png" width="1219" height="396"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">We see that the missing data patterns among columns are quite similar.
+<ul>
+<li class="fragment">This indicates underlying relationships between the variables.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="missing-data-heatmap" class="slide level2">
+<h2>Missing Data Heatmap</h2>
+<ul>
+<li class="fragment"><code>msno.heatmap</code> visualizes these relationships.</li>
+</ul>
+<div class="fragment">
+<div id="c55dc372" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>msno.heatmap(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="lec4_files/figure-revealjs/cell-11-output-1.png" width="885" height="385"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">Positive correlation indicates variables are often missing together.</li>
+<li class="fragment">Negative correlation indicates variables are often missing opposite each other.</li>
+</ul>
+</div>
+</section>
+<section id="missing-data-dendogram" class="slide level2">
+<h2>Missing Data Dendogram</h2>
+<ul>
+<li class="fragment">We can use <code>msno.dendrogram</code> to visualize the hierarchical relationships between missing data.</li>
+</ul>
+<div class="fragment">
+<div id="ef7823c0" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>msno.dendrogram(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="lec4_files/figure-revealjs/cell-12-output-1.png" width="864" height="380"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">Cluster leaves linked at a distance of 0 fully predict one anothers presence.</li>
+<li class="fragment">It is clear then that this data set’s missingness is not <span class="accent">completely random</span>.</li>
+</ul>
+</div>
+</section>
+<section id="understanding-the-plots" class="slide level2">
+<h2>Understanding the Plots</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="lots-of-helpful-information-for-analysis">Lots of helpful information for analysis</h3>
+<ul>
+<li class="fragment">Variables with missing data can cause problems for analysis.</li>
+<li class="fragment">How are the variables related to each other in terms of missingness.
+<ul>
+<li class="fragment">Which variables are missing together.</li>
+<li class="fragment">Which variables are candidates for deletion / imputation.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="missingness-is-itself-information">Missingness is itself information</h3>
+<ul>
+<li class="fragment">In real data missingness often carries signal.
+<ul>
+<li class="fragment"><strong>Example 1:</strong> Income left blank because the person doesn’t want to disclose it.</li>
+<li class="fragment"><strong>Example 2:</strong> Missing follow up appointments in drug trial because patients became too ill.</li>
+</ul></li>
+<li class="fragment">By understanding missingness we help to avoid bias in our analysis.
+<ul>
+<li class="fragment"><strong>Example 1:</strong> Sample will be mostly low and middle income earners.</li>
+<li class="fragment"><strong>Example 2:</strong> Sample will be mostly patients who responded well to the treatment.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="why-is-the-data-missing" class="slide level2">
+<h2>Why is the Data Missing?</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="ask-the-right-questions">Ask the right questions!</h3>
+<ul>
+<li class="fragment">Is this data missing because it was never collected or because it doesn’t exist?
+<ul>
+<li class="fragment">If the data is missing because it doesn’t exists (e.g.&nbsp;the age of pet for someone who doesn’t have a pet) then we shouldn’t impute the data.</li>
+<li class="fragment">If the data is missing because it was never collected then we should try imputation.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="missing-data-classifications">Missing Data Classifications</h3>
+<ol type="1">
+<li class="fragment"><span class="accent">Missing Completely at Random (MCAR)</span> - missingness is completely random and independent of the observed data.</li>
+<li class="fragment"><span class="accent">Missing at Random (MAR)</span> - missingness is not random, but can be fully accounted for by variables where there is complete information.</li>
+<li class="fragment"><span class="accent">Missing Not at Random (MNAR)</span> - missingness depends on unobserved data or the value of the missing data itself.</li>
+</ol>
+</div>
+</section>
+<section id="deleting-missing-data" class="slide level2">
+<h2>Deleting Missing Data</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="what-is-deletion">What is deletion?</h3>
+<ul>
+<li class="fragment">When data is MCAR we can consider <span class="accent">deletion</span>, the removing missing data from the dataset.
+<ul>
+<li class="fragment"><strong>Pro:</strong> This is a quick and effective way to handle missing data.</li>
+<li class="fragment"><strong>Con:</strong> It loses information.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="deleting-rows-with-missing-data">Deleting Rows with Missing Data</h3>
+<div id="81a3c476" class="cell columns column-output-location" data-execution_count="12">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>nfl_data_delete_rows <span class="op">=</span> nfl_data.dropna()</span>
+<span id="cb15-2"><a></a><span class="co"># just how much data did we lose?</span></span>
+<span id="cb15-3"><a></a><span class="bu">print</span>(<span class="st">"Rows in original dataset: </span><span class="sc">%d</span><span class="st"> </span><span class="ch">\n</span><span class="st">"</span> <span class="op">%</span> nfl_data.shape[<span class="dv">0</span>])</span>
+<span id="cb15-4"><a></a><span class="bu">print</span>(<span class="st">"Rows with na's dropped: </span><span class="sc">%d</span><span class="st">"</span> <span class="op">%</span> nfl_data_delete_rows.shape[<span class="dv">0</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows in original dataset: 362447 
+
+Rows with na's dropped: 0</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">We have deleted every row!</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="deleting-columns-with-missing-data">Deleting Columns with Missing Data</h3>
+<div id="40ece4b0" class="cell columns column-output-location" data-execution_count="13">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>nfl_data_delete_columns <span class="op">=</span> nfl_data.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb17-2"><a></a><span class="co"># just how much data did we lose?</span></span>
+<span id="cb17-3"><a></a><span class="bu">print</span>(<span class="st">"Columns in original dataset: </span><span class="sc">%d</span><span class="st"> </span><span class="ch">\n</span><span class="st">"</span> <span class="op">%</span> nfl_data.shape[<span class="dv">1</span>])</span>
+<span id="cb17-4"><a></a><span class="bu">print</span>(<span class="st">"Columns with na's dropped: </span><span class="sc">%d</span><span class="st">"</span> <span class="op">%</span> nfl_data_delete_columns.shape[<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>Columns in original dataset: 102 
+
+Columns with na's dropped: 37</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">We have deleted 37 out of 102 columns (approximately 36% of the data).</li>
+</ul>
+</div>
+</section>
+<section id="imputation" class="slide level2">
+<h2>Imputation</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="what-is-imputation">What is imputation?</h3>
+<ul>
+<li class="fragment">Imputation is the process of replacing missing data.
+<ul>
+<li class="fragment">Methods depend on data characteristics.</li>
+<li class="fragment">What might be a good candidate value for missing data?</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="when-to-use-imputation">When to use imputation?</h3>
+<ul>
+<li class="fragment">Looking at our example data we see that <code>TimeSecs</code> is a column that is missing a large number of values.
+<ul>
+<li class="fragment">Looking at the <a href="https://www.kaggle.com/maxhorowitz/nflplaybyplay2009to2016">documentation</a> we see that this column is the number of seconds left in the game when the play occurred.</li>
+<li class="fragment">It is likely that this data was not recorded therefore we can use imputation.</li>
+</ul></li>
+<li class="fragment">However, <code>PenalizedTeam</code> is also missing values.
+<ul>
+<li class="fragment">This column is the team that was penalized.</li>
+<li class="fragment">This data is missing because there was no penalty therefore we should not impute the data.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="simple-imputation-methods" class="slide level2">
+<h2>Simple Imputation Methods</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="fillna-method"><code>fillna</code> method</h3>
+<ul>
+<li class="fragment">In pandas we can use the <code>fillna</code> method to impute missing data.
+<ul>
+<li class="fragment">We can specify a value to replace missing data with.
+<ul>
+<li class="fragment">Some <span class="accent">constant value</span>.</li>
+<li class="fragment"><span class="accent">Statistics</span> such as the mean, median, or mode.</li>
+</ul></li>
+<li class="fragment">Alternatively we can specify:
+<ul>
+<li class="fragment"><code>method</code> to specify:
+<ul>
+<li class="fragment"><code>ffill</code> - forward fill (use the previous value).</li>
+<li class="fragment"><code>bfill</code> - backward fill (use the next value).</li>
+</ul></li>
+<li class="fragment"><code>axis</code> to specify the axis to impute along (i.e.&nbsp;rows or columns).</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="emphasize">
+<p>Imputation is a powerful tool and a topic in it’s own right. We will not cover it in depth in this course but recommend you explore it further if your project data has missing values.</p>
+</div>
+</div>
+</section>
+<section id="imputation-example" class="slide level2">
+<h2>Imputation Example</h2>
+<div id="61ac2296" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>nfl_data_imputed <span class="op">=</span> nfl_data.bfill(axis<span class="op">=</span><span class="dv">0</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb19-2"><a></a>nfl_data_imputed.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th">GameID</th>
+<th data-quarto-table-cell-role="th">Drive</th>
+<th data-quarto-table-cell-role="th">qtr</th>
+<th data-quarto-table-cell-role="th">down</th>
+<th data-quarto-table-cell-role="th">time</th>
+<th data-quarto-table-cell-role="th">TimeUnder</th>
+<th data-quarto-table-cell-role="th">TimeSecs</th>
+<th data-quarto-table-cell-role="th">PlayTimeDiff</th>
+<th data-quarto-table-cell-role="th">SideofField</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">yacEPA</th>
+<th data-quarto-table-cell-role="th">Home_WP_pre</th>
+<th data-quarto-table-cell-role="th">Away_WP_pre</th>
+<th data-quarto-table-cell-role="th">Home_WP_post</th>
+<th data-quarto-table-cell-role="th">Away_WP_post</th>
+<th data-quarto-table-cell-role="th">Win_Prob</th>
+<th data-quarto-table-cell-role="th">WPA</th>
+<th data-quarto-table-cell-role="th">airWPA</th>
+<th data-quarto-table-cell-role="th">yacWPA</th>
+<th data-quarto-table-cell-role="th">Season</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>1.0</td>
+<td>15:00</td>
+<td>15</td>
+<td>3600.0</td>
+<td>0.0</td>
+<td>TEN</td>
+<td>...</td>
+<td>1.146076</td>
+<td>0.485675</td>
+<td>0.514325</td>
+<td>0.546433</td>
+<td>0.453567</td>
+<td>0.485675</td>
+<td>0.060758</td>
+<td>-0.032244</td>
+<td>0.036899</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>1.0</td>
+<td>14:53</td>
+<td>15</td>
+<td>3593.0</td>
+<td>7.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>1.146076</td>
+<td>0.546433</td>
+<td>0.453567</td>
+<td>0.551088</td>
+<td>0.448912</td>
+<td>0.546433</td>
+<td>0.004655</td>
+<td>-0.032244</td>
+<td>0.036899</td>
+<td>2009</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>2.0</td>
+<td>14:16</td>
+<td>15</td>
+<td>3556.0</td>
+<td>37.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>-5.031425</td>
+<td>0.551088</td>
+<td>0.448912</td>
+<td>0.510793</td>
+<td>0.489207</td>
+<td>0.551088</td>
+<td>-0.040295</td>
+<td>0.106663</td>
+<td>-0.156239</td>
+<td>2009</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>3.0</td>
+<td>13:35</td>
+<td>14</td>
+<td>3515.0</td>
+<td>41.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>-5.031425</td>
+<td>0.510793</td>
+<td>0.489207</td>
+<td>0.461217</td>
+<td>0.538783</td>
+<td>0.510793</td>
+<td>-0.049576</td>
+<td>0.106663</td>
+<td>-0.156239</td>
+<td>2009</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2009-09-10</td>
+<td>2009091000</td>
+<td>1</td>
+<td>1</td>
+<td>4.0</td>
+<td>13:27</td>
+<td>14</td>
+<td>3507.0</td>
+<td>8.0</td>
+<td>PIT</td>
+<td>...</td>
+<td>0.163935</td>
+<td>0.461217</td>
+<td>0.538783</td>
+<td>0.558929</td>
+<td>0.441071</td>
+<td>0.461217</td>
+<td>0.097712</td>
+<td>-0.010456</td>
+<td>0.006029</td>
+<td>2009</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 102 columns</p>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">We have specified <code>bfill</code> to replace the missing values with the next value.</li>
+<li class="fragment">We specified <code>axis=0</code> to impute along the columns.</li>
+<li class="fragment">We replaced all remaining missing values with 0.</li>
+</ul>
+</section>
+<section id="duplicate-values" class="slide level2">
+<h2>Duplicate Values</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="identifying-duplicate-values">Identifying Duplicate Values</h3>
+<ul>
+<li class="fragment">Well structured data should not have <span class="accent">duplicate values</span>.
+<ul>
+<li class="fragment">Typically observations have a <span class="accent">unique identifier</span>.</li>
+<li class="fragment">If there are duplicate values, we need to identify them and decide how to handle them.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="example-data">Example Data</h3>
+<p>For our example we consider synthetic customer data <code>customer.csv</code>.</p>
+</div>
+</section>
+<section id="duplicate-data-example" class="slide level2">
+<h2>Duplicate Data Example</h2>
+<div class="cell" data-tbl-cap="Customer Data" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a></a>customer_data <span class="op">=</span> pd.read_csv(<span class="st">'data/customer.csv'</span>)</span>
+<span id="cb20-2"><a></a>customer_data.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+
+<table class="dataframe caption-top" data-border="1">
+<caption>Customer Data</caption>
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">spend</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>101</td>
+<td>Alice Johnson</td>
+<td>alice@email.com</td>
+<td>34</td>
+<td>New York</td>
+<td>250.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>102</td>
+<td>Bob Smith</td>
+<td>bob@email.com</td>
+<td>28</td>
+<td>Chicago</td>
+<td>180.50</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>103</td>
+<td>Carol White</td>
+<td>carol@email.com</td>
+<td>45</td>
+<td>Houston</td>
+<td>320.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>101</td>
+<td>Alice Johnson</td>
+<td>alice@email.com</td>
+<td>34</td>
+<td>New York</td>
+<td>250.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>104</td>
+<td>David Brown</td>
+<td>david@email.com</td>
+<td>52</td>
+<td>Phoenix</td>
+<td>410.75</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">We can see that the dataset contains some duplicate values, lets count them using <code>duplicated()</code>:</li>
+</ul>
+<div class="fragment">
+<div id="97fa8653" class="cell columns column-output-location" data-execution_count="16">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>dup_total <span class="op">=</span> customer_data.duplicated().<span class="bu">sum</span>()</span>
+<span id="cb21-2"><a></a>dup_index <span class="op">=</span> customer_data.loc[customer_data.duplicated()].index</span>
+<span id="cb21-3"><a></a><span class="bu">print</span>(<span class="ss">f"Total duplicate values: </span><span class="sc">{</span>dup_total<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-4"><a></a><span class="bu">print</span>(<span class="ss">f"Duplicate index values: </span><span class="sc">{</span>dup_index<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>Total duplicate values: 6
+Duplicate index values: Index([3, 5, 10, 12, 14, 16], dtype='int64')</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">Is this the whole story? Lets see..</li>
+</ul>
+</div>
+</section>
+<section id="near-duplicates" class="slide level2">
+<h2>Near Duplicates</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="near-duplicates-1">Near Duplicates</h3>
+<ul>
+<li class="fragment">We have identified 6 exact duplicates but have we missed any near duplicates?</li>
+<li class="fragment">A common source of near duplicates is string formatting inconsistency - <code>Carol White</code> vs <code>carol white</code>.</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="make-formatting-consistent">Make Formatting Consistent</h3>
+<ul>
+<li class="fragment">Let’s make the formatting across all columns containing strings by:
+<ul>
+<li class="fragment">Converting first letters of names to uppercase with <code>str.title()</code>.</li>
+<li class="fragment">Removing leading and trailing whitespace with <code>str.strip()</code>.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="a938436b" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>customer_data[<span class="st">'name'</span>]  <span class="op">=</span> customer_data[<span class="st">'name'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
+<span id="cb23-2"><a></a>customer_data[<span class="st">'email'</span>] <span class="op">=</span> customer_data[<span class="st">'email'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb23-3"><a></a>customer_data[<span class="st">'city'</span>]  <span class="op">=</span> customer_data[<span class="st">'city'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li class="fragment">Now if we once again count the duplicates we find that:</li>
+</ul>
+</div>
+<div class="fragment">
+<div id="9853ed53" class="cell columns column-output-location" data-execution_count="18">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>dup_total <span class="op">=</span> customer_data.duplicated().<span class="bu">sum</span>()</span>
+<span id="cb24-2"><a></a>dup_index <span class="op">=</span> customer_data.loc[customer_data.duplicated()].index</span>
+<span id="cb24-3"><a></a><span class="bu">print</span>(<span class="ss">f"Total duplicate values: </span><span class="sc">{</span>dup_total<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-4"><a></a><span class="bu">print</span>(<span class="ss">f"Duplicate index values: </span><span class="sc">{</span>dup_index<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-stdout">
+<pre><code>Total duplicate values: 7
+Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></pre>
+</div>
+</div></div>
+</div>
+</section>
+<section id="dealing-with-duplicate-values" class="slide level2">
+<h2>Dealing with Duplicate Values</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="deleting-duplicate-values">Deleting Duplicate Values</h3>
+<ul>
+<li class="fragment">Most often we will simply <span class="accent">delete</span> duplicate values.
+<ul>
+<li class="fragment">We can use <code>drop_duplicates</code>.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="27138374" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>customer_data_no_dup <span class="op">=</span> customer_data.drop_duplicates()</span>
+<span id="cb26-2"><a></a>customer_data_no_dup.duplicated().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>np.int64(0)</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="aggregating-duplicate-values">Aggregating Duplicate Values</h3>
+<ul>
+<li class="fragment">Sometimes we may want to <span class="accent">aggregate</span> duplicate values (to maximize information retention).
+<ul>
+<li class="fragment">We can use <code>groupby</code> to aggregate duplicate values.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="13f4391e" class="cell columns column-output-location" data-execution_count="20">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>customer_data_agg <span class="op">=</span> customer_data.groupby(</span>
+<span id="cb28-2"><a></a>    <span class="st">'customer_id'</span></span>
+<span id="cb28-3"><a></a>    ).agg({</span>
+<span id="cb28-4"><a></a>    <span class="st">'name'</span>: <span class="st">'first'</span>,</span>
+<span id="cb28-5"><a></a>    <span class="st">'email'</span>: <span class="st">'first'</span>,</span>
+<span id="cb28-6"><a></a>    <span class="st">'age'</span>: <span class="st">'mean'</span>,</span>
+<span id="cb28-7"><a></a>    <span class="st">'city'</span>: <span class="st">'first'</span>,</span>
+<span id="cb28-8"><a></a>    <span class="st">'spend'</span>: <span class="st">'sum'</span></span>
+<span id="cb28-9"><a></a>})</span>
+<span id="cb28-10"><a></a>customer_data_agg.duplicated().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>np.int64(0)</code></pre>
+</div>
+</div></div>
+</div>
+</section>
+<section id="inconsistent-data-types" class="slide level2">
+<h2>Inconsistent Data Types</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="why-types-matter">Why types matter</h3>
+<ul>
+<li class="fragment">Pandas <span class="accent">infers</span> types when you load a file
+<ul>
+<li class="fragment">This inference is not always correct.</li>
+<li class="fragment">Wrong types break operations:
+<ul>
+<li class="fragment"><span class="accent">Averaging strings</span>.</li>
+<li class="fragment"><span class="accent">Comparing dates stored as text</span>.</li>
+</ul></li>
+</ul></li>
+<li class="fragment"><span class="accent">Goal:</span> each column should have a type that matches its <span class="accent">meaning</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="spotting-and-fixing">Spotting and fixing</h3>
+<ul>
+<li class="fragment">Use available <span class="accent">data dictionaries</span> or domain knowledge to help identify the correct type for each column.</li>
+<li class="fragment"><span class="accent">Inspect</span> with <code>dtypes</code>, <code>info()</code> and <span class="accent">spot-check</span> values with <code>head()</code>, <code>unique()</code>.</li>
+<li class="fragment"><span class="accent">Coerce</span> into correct types (<code>pd.to_numeric</code>, <code>pd.to_datetime</code>)</li>
+<li class="fragment">When reading CSVs, you can steer types with <code>dtype={...}</code> or parse dates with <code>parse_dates=[...]</code>.</li>
+</ul>
+</div>
+</section>
+<section id="examples-of-inconsistent-data-types" class="slide level2">
+<h2>Examples of Inconsistent Data Types</h2>
+<div id="b58c856c" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>example_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb30-2"><a></a>    <span class="st">"Dates"</span>:[<span class="st">"2024-01-01"</span>, <span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span>],</span>
+<span id="cb30-3"><a></a>    <span class="st">"Floats"</span>:[<span class="st">"1.1"</span>, <span class="st">"2.2"</span>, <span class="st">"3.3"</span>],</span>
+<span id="cb30-4"><a></a>    <span class="st">"Booleans"</span>:[<span class="st">"True"</span>, <span class="st">"False"</span>, <span class="st">"True"</span>],</span>
+<span id="cb30-5"><a></a>    })</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<h3 id="dates-as-strings">Dates as strings</h3>
+<div id="20844412" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a><span class="bu">print</span>(<span class="ss">f"Date column original type: </span><span class="sc">{</span>example_df[<span class="st">'Dates'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-2"><a></a>example_df[<span class="st">'Dates'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'Dates'</span>])</span>
+<span id="cb31-3"><a></a><span class="bu">print</span>(<span class="ss">f"Date column new type: </span><span class="sc">{</span>example_df[<span class="st">'Dates'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="22">
+<div class="cell-output cell-output-stdout">
+<pre><code>Date column original type: str
+Date column new type: datetime64[us]</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<h3 id="numbers-are-strings">Numbers are strings</h3>
+<div id="65b2961f" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a><span class="bu">print</span>(<span class="ss">f"Floats column original type: </span><span class="sc">{</span>example_df[<span class="st">'Floats'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb33-2"><a></a>example_df[<span class="st">"Floats"</span>] <span class="op">=</span> pd.to_numeric(example_df[<span class="st">"Floats"</span>])</span>
+<span id="cb33-3"><a></a><span class="bu">print</span>(<span class="ss">f"Floats column new type: </span><span class="sc">{</span>example_df[<span class="st">'Floats'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="23">
+<div class="cell-output cell-output-stdout">
+<pre><code>Floats column original type: str
+Floats column new type: float64</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<h3 id="booleans-are-strings">Booleans are strings</h3>
+<div id="d5bad44d" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a><span class="bu">print</span>(<span class="ss">f"Booleans column original type: </span><span class="sc">{</span>example_df[<span class="st">'Booleans'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb35-2"><a></a>example_df[<span class="st">"Booleans"</span>] <span class="op">=</span> (</span>
+<span id="cb35-3"><a></a>    example_df[<span class="st">"Booleans"</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower().<span class="bu">map</span>({<span class="st">"true"</span>: <span class="va">True</span>, <span class="st">"false"</span>: <span class="va">False</span>}).astype(<span class="st">"boolean"</span>)</span>
+<span id="cb35-4"><a></a>)</span>
+<span id="cb35-5"><a></a><span class="bu">print</span>(<span class="ss">f"Booleans column new type: </span><span class="sc">{</span>example_df[<span class="st">'Booleans'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="24">
+<div class="cell-output cell-output-stdout">
+<pre><code>Booleans column original type: str
+Booleans column new type: boolean</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="mixed-data-formats" class="slide level2">
+<h2>Mixed Data Formats</h2>
+<h3 id="extra-problems">Extra Problems</h3>
+<ul>
+<li class="fragment">Hand prepared data often contains mixed data formats.
+<ul>
+<li class="fragment">Dates written as strings in different formats.</li>
+<li class="fragment">Names with titles, middle initials etc.</li>
+<li class="fragment">The options are endless…</li>
+</ul></li>
+<li class="fragment">We will not cover this in depth in this course but recommend you explore it further if your project data has mixed data formats.</li>
+</ul>
+<h3 id="harder-example">Harder Example</h3>
+<div id="dff1c6b0" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>example_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb37-2"><a></a>    <span class="st">"Dates"</span>:[<span class="st">"2024-01-01"</span>, <span class="st">"21-12-2001"</span>, <span class="st">"December 21, 2001"</span>, <span class="st">"01/02/2024"</span>, <span class="st">"2018-03-04"</span>],</span>
+<span id="cb37-3"><a></a>    <span class="st">"Booleans"</span>:[<span class="st">"True"</span>, <span class="st">"false"</span>, <span class="st">"true"</span>, <span class="st">"no"</span>, <span class="st">"yes"</span>],</span>
+<span id="cb37-4"><a></a>    })</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="25">
+
+</div>
+</section>
+<section id="examples-of-mixed-data-formats" class="slide level2">
+<h2>Examples of Mixed Data Formats</h2>
+<h3 id="date-formats">Date Formats</h3>
+<div id="8e50ef1f" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>example_df[<span class="st">'Dates'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'Dates'</span>], <span class="bu">format</span><span class="op">=</span><span class="st">"mixed"</span>)</span>
+<span id="cb38-2"><a></a><span class="bu">print</span>(example_df[<span class="st">'Dates'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="26">
+<div class="cell-output cell-output-stdout">
+<pre><code>0   2024-01-01
+1   2001-12-21
+2   2001-12-21
+3   2024-01-02
+4   2018-03-04
+Name: Dates, dtype: datetime64[us]</code></pre>
+</div>
+</div>
+<h3 id="boolean-formats">Boolean Formats</h3>
+<div id="b4691907" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a></a>example_df[<span class="st">'Booleans'</span>] <span class="op">=</span> example_df[<span class="st">'Booleans'</span>].<span class="bu">str</span>.strip(</span>
+<span id="cb40-2"><a></a>).<span class="bu">str</span>.lower(</span>
+<span id="cb40-3"><a></a>).<span class="bu">map</span>({</span>
+<span id="cb40-4"><a></a>    <span class="st">"true"</span>: <span class="va">True</span>, <span class="st">"false"</span>: <span class="va">False</span>, <span class="st">"yes"</span>: <span class="va">True</span>, <span class="st">"no"</span>: <span class="va">False</span>, </span>
+<span id="cb40-5"><a></a>    }).astype(<span class="st">"boolean"</span>)</span>
+<span id="cb40-6"><a></a><span class="bu">print</span>(example_df[<span class="st">'Booleans'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell fragment" data-execution_count="27">
+<div class="cell-output cell-output-stdout">
+<pre><code>0     True
+1    False
+2     True
+3    False
+4     True
+Name: Booleans, dtype: boolean</code></pre>
+</div>
+</div>
+<ul>
+<li class="fragment">Pandas is very capable but often requires looking up syntax!</li>
+</ul>
+</section>
+<section id="invalid-values" class="slide level2">
+<h2>Invalid Values</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="wrong-but-present">Wrong but present</h3>
+<ul>
+<li class="fragment"><span class="accent">Invalid values</span> are not missing: they appear as real entries but lie outside allowed rules:
+<ul>
+<li class="fragment">Impossible ages.</li>
+<li class="fragment">Negative counts.</li>
+</ul></li>
+<li class="fragment">They differ from <span class="accent">outliers</span>: outliers can be legitimate extremes; invalid values break domain logic.</li>
+<li class="fragment">Can be hard to spot since they will typically not produce errors.</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="what-to-do">What to do</h3>
+<ul>
+<li class="fragment">Define <span class="accent">rules</span> from the data dictionary or domain (ranges, allowed categories, regex for IDs).</li>
+<li class="fragment">Use boolean masks: <span class="accent"><code>Series.between</code></span>, or <code>isin</code> to flag rows</li>
+<li class="fragment">Drop, replace, or set to <code>NaN</code> and treat as missing.</li>
+<li class="fragment">Document every rule: “why is this invalid?” matters as much as the code.</li>
+</ul>
+</div>
+<div class="fragment">
+<div id="e6219741" class="cell columns column-output-location" data-execution_count="28">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a></a>ages <span class="op">=</span> pd.Series([<span class="dv">34</span>, <span class="dv">200</span>, <span class="dv">28</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">45</span>])</span>
+<span id="cb42-2"><a></a>ages[(ages <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">|</span> (ages <span class="op">&gt;</span> <span class="dv">120</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>1    200
+3     -1
+dtype: int64</code></pre>
+</div>
+</div></div>
+</div>
+</section>
+<section id="labelling-issues" class="slide level2">
+<h2>Labelling Issues</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="same-concept-different-labels">Same concept, different labels</h3>
+<ul>
+<li class="fragment">Categories may be spelled differently, use different casing, or mix codes (<code>"NYC"</code> vs <code>"nyc"</code> vs <code>"New York"</code>).</li>
+<li class="fragment">Column names can be inconsistent across files (<code>customerID</code> vs <code>customer_id</code>), which blocks merges.</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="cleaning-labels">Cleaning labels</h3>
+<ul>
+<li class="fragment">Normalize text: <span class="accent"><code>str.strip</code></span>, <span class="accent"><code>str.lower</code></span> / <span class="accent"><code>str.title</code></span>, remove extra spaces.</li>
+<li class="fragment">Build a <span class="accent">mapping dictionary</span> from raw labels to canonical ones and use <span class="accent"><code>map</code></span> or <span class="accent"><code>replace</code></span>.</li>
+<li class="fragment">For analysis, prefer a single <span class="accent">canonical vocabulary</span> per variable; keep a small “codebook” you can reuse.</li>
+</ul>
+<div id="5a2b7859" class="cell columns column-output-location" data-execution_count="29">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>city_raw <span class="op">=</span> pd.Series([<span class="st">"  nyc "</span>, <span class="st">"NYC"</span>, <span class="st">"New York"</span>, <span class="st">"new york"</span>])</span>
+<span id="cb44-2"><a></a>city_raw.<span class="bu">str</span>.strip().<span class="bu">str</span>.title().replace({<span class="st">"Nyc"</span>: <span class="st">"New York"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>0    New York
+1    New York
+2    New York
+3    New York
+dtype: str</code></pre>
+</div>
+</div></div>
+</div>
+</section>
+<section id="parsing-dates" class="slide level2">
+<h2>Parsing Dates</h2>
+<div class="fragment">
+<h3 id="dates-are-easy-to-get-wrong">Dates are easy to get wrong</h3>
+<ul>
+<li class="fragment">Stored as strings with ambiguous order (<code>01/02/2024</code>), mixed formats, or Excel serial numbers.</li>
+<li class="fragment">Wrong parsing silently shifts days or produces <code>NaT</code> only where you are not looking.</li>
+</ul>
+</div>
+<div class="fragment">
+<h3 id="tools-in-pandas">Tools in pandas</h3>
+<ul>
+<li class="fragment">At load time: <code>pd.read_csv(..., parse_dates=["date_col"])</code> when the column is consistently formatted.</li>
+<li class="fragment">After load: <span class="accent"><code>pd.to_datetime</code></span>; use <code>format='...'</code> when you know the pattern, and <code>errors='coerce'</code> to isolate bad strings.</li>
+<li class="fragment">Use <code>dayfirst=True</code> or <code>yearfirst=True</code> when the data is not ISO-8601 and locale order matters.</li>
+</ul>
+<div id="b1ad1085" class="cell columns column-output-location" data-execution_count="30">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a><span class="co"># Day-first strings (common outside the US); invalid entries become NaT.</span></span>
+<span id="cb46-2"><a></a>pd.to_datetime(</span>
+<span id="cb46-3"><a></a>    pd.Series([<span class="st">"15/03/2024"</span>, <span class="st">"02/04/2024"</span>, <span class="st">"not a date"</span>]),</span>
+<span id="cb46-4"><a></a>    errors<span class="op">=</span><span class="st">"coerce"</span>,</span>
+<span id="cb46-5"><a></a>    dayfirst<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb46-6"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column fragment">
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>0   2024-03-15
+1   2024-04-02
+2          NaT
+dtype: datetime64[us]</code></pre>
+</div>
+</div></div>
+</div>
+</section>
+<section id="data-preparation-summary" class="slide level2">
+<h2>Data Preparation Summary</h2>
+<h3 id="things-to-remember">Things to remember</h3>
+<ul>
+<li class="fragment">Make sure you thoroughly understand the data you are working with.
+<ul>
+<li class="fragment">Read the documentation / dictionaries.</li>
+<li class="fragment">Check for the common problems.</li>
+<li class="fragment">Be prepared to go back and fix things you have missed.</li>
+</ul></li>
+<li class="fragment">Document your data preparation process.
+<ul>
+<li class="fragment">Highlight the issues you have found.</li>
+<li class="fragment">Justify your decisions.</li>
+</ul></li>
+<li class="fragment">Being thorough initially will save you time in the long run!</li>
+</ul>
+</section>
+<section id="data-preparation-procedural-guide" class="slide level2">
+<h2>Data Preparation Procedural Guide</h2>
+<h3 id="how-to-clean-a-general-guide">How to clean, a general guide!</h3>
+<div class="columns fragment">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li class="fragment">Inspection.</li>
+<li class="fragment">Variable labeling.</li>
+<li class="fragment">Remove redundant / unused variables.</li>
+<li class="fragment">Fix data types and mixed formats.</li>
+<li class="fragment">Handle duplicates.</li>
+<li class="fragment">Handle missing values.</li>
+<li class="fragment">Clean strings / encode categorical variables.</li>
+<li class="fragment">Handle outliers / invalid values.</li>
+<li class="fragment">Final validation and documentation.</li>
+</ol>
+<div class="fragment">
+<div class="emphasize">
+<p>This is a good guide to follow but it is not a strict recipe (as always)!</p>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="assets/clean.gif"></p>
+<figcaption>Nice and clean!</figcaption>
+</figure>
+</div>
+</div></div>
+</section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="what-we-covered">✅ What we covered</h3>
+<ul>
+<li class="fragment">Data preparation:
+<ul>
+<li class="fragment">Missing data.</li>
+<li class="fragment">Duplicates.</li>
+<li class="fragment">Inconsistent data types.</li>
+<li class="fragment">Mixed data formats.</li>
+<li class="fragment">Invalid values.</li>
+<li class="fragment">Labelling issues.</li>
+<li class="fragment">Parsing dates.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<h3 id="whats-next">📅 What’s next?</h3>
+<ul>
+<li class="fragment">Visualizations in python.
+<ul>
+<li class="fragment">Matplotlib.</li>
+<li class="fragment">Seaborn.</li>
+<li class="fragment">Plotly.</li>
+<li class="fragment">Altair.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
