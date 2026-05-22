@@ -1,0 +1,65 @@
+---
+title: "Simple Linear Regression"
+description: "An introduction to simple linear regression including the theoretical definition, the derivation of the OLS estimators and their statistical properties, as well as the `python` implementation with residual diagnostics."
+author: "John Robin Inston"
+date: "2026-05-13"
+date-modified: "2026-05-13"
+toc: true
+title-block-banner: false
+sidebar: pstat100-notes
+page-navigation: true
+execute:
+    echo: true
+---
+
+::: {.callout-important title="Learning Objectives"}
+- Understand the theoretical definition of simple linear regression.
+- Derive the ordinary least squares (OLS) estimators analytically.
+- Understand the statistical properties of the OLS estimators.
+- Implement simple linear regression in `python` with residual diagnostics.
+:::
+
+```{python}
+# Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.formula.api as smf
+
+# Figure styling
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+## Regression
+
+### What is Regression?
+
+Suppose we are given $i=1,...,n$ observations $(y_i, x_{1i}, ..., x_{pi})$.  We define the **conditional expectation function**:
+$$
+\mu(x) = \mathbb{E}[Y \mid X = x].
+$$
+
+We wish to construct an estimate for the conditional expectation function from the observed data.  Since this function can take any shape we are not able to estimate it without first making some assumptions.  For example, we may assume that the conditional expectation function is a linear function of the predictor variables:
+$$
+\mu(x) = \beta_0 + \beta_1 x_1 + ... + \beta_p x_p.
+$$
+
+By assuming this function structure we are able to derive closed-form parameter estimates using methods such as **ordinary least squares (OLS)**.
+
+## Simple Linear Regression
+
+To keep things simple, we first consider **simple linear regression** where we assume that $p=1$.  For $(x_i, y_i)$ observations we have the following model:
+$$
+y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \qquad i = 1, \ldots, n,
+$$
+
+where:
+
+- $Y_i$ is the response variable.
+- $x_i$ is the predictor variable.
+- $\beta_0$ is the intercept.
+- $\beta_1$ is the slope.
+- $\varepsilon_i$ is the error term.
+

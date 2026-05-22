@@ -1,0 +1,369 @@
+---
+title: "Poisson Regression"
+description: "Poisson regression in python."
+author: "John Robin Inston"
+date: "2026-05-13"
+date-modified: "2026-05-13"
+toc: true
+title-block-banner: false
+sidebar: pstat100-notes
+page-navigation: true
+execute:
+    echo: true
+---
+
+::: {.callout-important title="Learning Objectives"}
+- Define the Poisson regression model.
+- Implement Poisson regression in python.
+:::
+
+```{python}
+#| code-fold: true
+#| code-summary: "Libraries and Styling"
+# Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import norm, binom
+from scipy.special import expit          # the logistic (sigmoid) function
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+from statsmodels.stats.anova import anova_lm
+from sklearn.metrics import (
+    confusion_matrix, ConfusionMatrixDisplay,
+    roc_curve, roc_auc_score
+)
+
+# Figure styling
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+## Poisson Regression
+
+Poisson regression is the GLM for **count data**: responses $Y_i \in \{0, 1, 2, \ldots\}$. A natural model is $Y_i \sim \text{Poisson}(\lambda_i)$, with $\mathbb{E}[Y_i] = \lambda_i > 0$ and — crucially — $\text{Var}(Y_i) = \lambda_i$ (variance equals mean).
+
+We use the **log link** to ensure $\lambda_i > 0$:
+
+$$\log \lambda_i = \mathbf{x}_i^\top\boldsymbol{\beta}, \quad \text{so} \quad \lambda_i = e^{\mathbf{x}_i^\top\boldsymbol{\beta}}.$$
+
+Coefficients are interpreted multiplicatively via the **incidence rate ratio (IRR)** $e^{\hat{\beta}_j}$, the Poisson analogue of the odds ratio:
+
+| Coefficient | Interpretation |
+|---|---|
+| $\beta_j$ | A one-unit increase in $X_j$ **adds** $\beta_j$ to $\log\lambda$ |
+| $e^{\beta_j}$ | A one-unit increase in $X_j$ **multiplies** $\lambda$ by $e^{\beta_j}$ |
+| $e^{\beta_j} > 1$ | The expected count **increases** |
+| $e^{\beta_j} < 1$ | The expected count **decreases** |
+
+### Application: Police Frisk Data
+
+```{python}
+frisk = pd.read_csv("data/frisk.txt", sep=r"\s+", skiprows=6)
+frisk.head()
+```
+
+```{python}
+X = (frisk
+    .groupby(['eth', 'precinct'])[["stops", "past.arrests"]]
+    .sum()
+    .reset_index()
+    .pipe(pd.get_dummies, columns=['eth', 'precinct'], dtype=int)
+    .assign(intercept=1)  # Adds a column called 'intercept' with all values equal to 1.
+    .sort_values(by='stops')
+    .reset_index(drop=True)
+)
+
+y = X.pop("stops")
+```
+
+```{python}
+model_no_indicators = sm.GLM(
+    y,
+    X["intercept"],
+    offset=np.log(X["past.arrests"]),
+    family=sm.families.Poisson(),
+)
+result_no_indicators = model_no_indicators.fit()
+print(result_no_indicators.summary())
+```
+
+```{python}
+plt.plot(y, result_no_indicators.fittedvalues, 'o')
+plt.plot(y, y, '--', label='y = x')
+plt.ylabel("fitted value")
+plt.xlabel("observed value")
+plt.legend()
+plt.show()
+```
+
+```{python}
+model_with_ethnicity = sm.GLM(
+    y,
+    X[['intercept', 'eth_2', 'eth_3']],
+    offset=np.log(X["past.arrests"]),
+    family=sm.families.Poisson(),
+)
+result_with_ethnicity = model_with_ethnicity.fit()
+print(result_with_ethnicity.summary())
+```
+
+```{python}
+model_with_ethnicity_and_precinct = sm.GLM(
+    y,
+    X.drop(columns=["eth_1", "precinct_1", "past.arrests"]),
+    offset=np.log(X["past.arrests"]),
+    family=sm.families.Poisson(),
+)
+
+result_with_ethnicity_and_precinct = model_with_ethnicity_and_precinct.fit()
+print(result_with_ethnicity_and_precinct.summary())
+```
+
+```{python}
+precinct_coefs = result_with_ethnicity_and_precinct.params.iloc[2:-1] # Only intersted in precinct
+precinct_interval = result_with_ethnicity_and_precinct.conf_int().reindex(precinct_coefs.index)
+
+plt.figure(figsize=(15, 6))
+plt.plot(precinct_coefs, '.')
+for precinct, interval in precinct_interval.iterrows():
+    plt.plot([precinct, precinct], interval, color='C0')
+plt.axhline(y=0, linestyle=':', color='black')
+plt.xticks(
+    precinct_coefs.index[::3],
+    [int(x[1]) for x in precinct_coefs.index.str.split("_",)][::3]
+)
+plt.ylabel("Estimated coefficient")
+plt.xlabel("Precinct")
+plt.show()
+```
+
+```{python}
+plt.figure(figsize=(15,6))
+plt.scatter(
+    y, result_with_ethnicity.fittedvalues, 
+    marker='o', color='#fc8d62', edgecolors='white', 
+    linewidths=0.4, s=60, label="with ethnicity")
+plt.scatter(
+    y, result_with_ethnicity_and_precinct.fittedvalues, 
+    marker='^', color='#8da0cb', edgecolors='white', 
+    linewidths=0.4, s=60, label="with eth and precinct")
+plt.plot(y, y, '--', color='black', label='y = x')
+plt.ylabel("fitted value")
+plt.xlabel("observed value")
+plt.legend()
+plt.show()
+```
+
+
+### Application: Daily Bike Rentals
+
+We simulate a dataset of daily bicycle rental counts with weather and calendar predictors — the structure mirrors real bike-sharing data and allows us to verify that the model recovers the known coefficients.
+
+```{python}
+rng_b = np.random.default_rng(2024)
+n_b = 500
+temp_b    = rng_b.uniform(0.05, 0.95, n_b)
+hum_b     = rng_b.uniform(0.30, 0.95, n_b)
+wind_b    = rng_b.uniform(0.00, 0.50, n_b)
+season_b  = rng_b.choice([1, 2, 3, 4], n_b)
+working_b = rng_b.choice([0, 1], n_b)
+
+log_lam = (
+    5.5
+    + 1.8 * temp_b
+    - 1.2 * hum_b
+    - 0.6 * wind_b
+    + 0.3 * (season_b == 2).astype(float)
+    + 0.1 * (season_b == 3).astype(float)
+    - 0.1 * (season_b == 4).astype(float)
+    + 0.15 * working_b
+)
+cnt_b = rng_b.poisson(np.exp(log_lam))
+
+bikes = pd.DataFrame({
+    'cnt': cnt_b, 'temp': temp_b, 'hum': hum_b,
+    'windspeed': wind_b, 'season': season_b, 'workingday': working_b
+})
+print(bikes.describe().round(2))
+```
+
+::: {.panel-tabset}
+
+## Distribution
+
+```{python}
+#| echo: false
+#| fig-cap: "Distribution of daily rental counts. The right skew is characteristic of count data and motivates the use of Poisson regression over OLS."
+
+fig, ax = plt.subplots(figsize=(7, 4))
+sns.histplot(bikes['cnt'], bins=40, ax=ax, color='steelblue')
+ax.set_xlabel('Daily rentals')
+ax.set_title('Distribution of Rental Counts')
+plt.tight_layout(); plt.show()
+```
+
+## Temperature
+
+```{python}
+#| echo: false
+#| fig-cap: "Rentals vs. normalised temperature. A clear positive association is visible, consistent with the positive coefficient on temperature in the Poisson model."
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.scatter(bikes['temp'], bikes['cnt'], alpha=0.25, s=10, color='steelblue')
+ax.set_xlabel('Normalised temperature')
+ax.set_ylabel('Daily rentals')
+ax.set_title('Rentals vs. Temperature')
+plt.tight_layout(); plt.show()
+```
+
+## Humidity
+
+```{python}
+#| echo: false
+#| fig-cap: "Rentals vs. normalised humidity. Higher humidity is associated with fewer rentals, consistent with the negative humidity coefficient."
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.scatter(bikes['hum'], bikes['cnt'], alpha=0.25, s=10, color='#fc8d62')
+ax.set_xlabel('Normalised humidity')
+ax.set_ylabel('Daily rentals')
+ax.set_title('Rentals vs. Humidity')
+plt.tight_layout(); plt.show()
+```
+
+## Season
+
+```{python}
+#| echo: false
+#| fig-cap: "Rental counts by season (1 = Spring, 2 = Summer, 3 = Autumn, 4 = Winter). Summer and autumn show higher median rentals than spring or winter."
+
+fig, ax = plt.subplots(figsize=(7, 4))
+sns.boxplot(data=bikes, x='season', y='cnt', hue='season', legend=False, ax=ax, palette='Set2')
+ax.set_xlabel('Season (1=Spring, 2=Summer, 3=Autumn, 4=Winter)')
+ax.set_ylabel('Daily rentals')
+ax.set_title('Rentals by Season')
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+```{python}
+poisson1 = smf.poisson(
+    'cnt ~ temp + hum + windspeed + C(season) + workingday',
+    data=bikes
+).fit()
+print(poisson1.summary())
+```
+
+```{python}
+#| echo: false
+#| fig-cap: "Incidence rate ratios (IRR = exp(β̂)) with 95% CIs. An IRR > 1 means more rentals; < 1 means fewer rentals per unit increase in the predictor."
+
+coefs_p = poisson1.params.drop('Intercept')
+conf_p  = poisson1.conf_int().drop('Intercept')
+irr_df = pd.DataFrame({
+    'Predictor': coefs_p.index,
+    'IRR':     np.exp(coefs_p.values),
+    'CI_low':  np.exp(conf_p[0].values),
+    'CI_high': np.exp(conf_p[1].values)
+})
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+y_pos = np.arange(len(irr_df))
+ax.barh(y_pos, irr_df['IRR'], color='#8da0cb', alpha=0.8)
+ax.errorbar(
+    irr_df['IRR'], y_pos,
+    xerr=[irr_df['IRR'] - irr_df['CI_low'], irr_df['CI_high'] - irr_df['IRR']],
+    fmt='none', color='navy', capsize=4, lw=1.5
+)
+ax.axvline(1, color='crimson', lw=2, linestyle='--', label='IRR = 1 (no effect)')
+labels_p = [s.replace('C(season)[T.', 'Season ').replace(']', '') for s in irr_df['Predictor']]
+ax.set_yticks(y_pos); ax.set_yticklabels(labels_p, fontsize=10)
+ax.set_xlabel('Incidence Rate Ratio (95% CI)')
+ax.set_title('Poisson Regression: Incidence Rate Ratios — Daily Bike Rentals')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+```{python}
+#| echo: false
+#| fig-cap: "Poisson regression diagnostics. Left: Pearson residuals vs. fitted values — constant spread around zero indicates the model is well-specified; a fan shape would indicate overdispersion. Right: Q-Q plot of Pearson residuals — points near the diagonal confirm the standardised residuals follow N(0, 1) as expected under a correctly-specified Poisson model."
+
+from scipy.stats import probplot
+
+fitted_p = poisson1.fittedvalues
+pearson_resid = (bikes['cnt'] - fitted_p) / np.sqrt(fitted_p)
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+
+axes[0].scatter(fitted_p, pearson_resid, alpha=0.3, s=12, color='steelblue')
+axes[0].axhline(0, color='crimson', lw=1.5, linestyle='--')
+axes[0].set_xlabel('Fitted $\\hat{\\lambda}$')
+axes[0].set_ylabel('Pearson residual')
+axes[0].set_title('Pearson Residuals vs. Fitted')
+
+(osm, osr), (slope, intercept, _) = probplot(pearson_resid, dist='norm')
+axes[1].scatter(osm, osr, alpha=0.4, s=12, color='steelblue')
+axes[1].plot(osm, slope * osm + intercept, color='crimson', lw=1.5, linestyle='--')
+axes[1].set_xlabel('Theoretical quantiles')
+axes[1].set_ylabel('Pearson residual')
+axes[1].set_title('Q-Q Plot of Pearson Residuals')
+
+plt.suptitle('Poisson Regression Diagnostics — Bike Rentals', fontsize=13, y=1.01)
+plt.tight_layout(); plt.show()
+```
+
+## GLM Diagnostics and Assumptions
+
+In OLS, residuals $e_i = y_i - \hat{y}_i$ have constant variance. In GLMs the **variance of $Y_i$ depends on the mean**, so raw residuals are not comparable across observations. Two standardised alternatives are used:
+
+| Residual | Formula | Use |
+|---|---|---|
+| **Pearson** | $r_i = (y_i - \hat{\mu}_i)/\sqrt{\hat{V}(\hat{\mu}_i)}$ | Variance-standardised; detect outliers |
+| **Deviance** | $d_i = \text{sign}(y_i - \hat{\mu}_i)\sqrt{2[y_i\log(y_i/\hat{\mu}_i) - (y_i - \hat{\mu}_i)]}$ | Contribution to total deviance |
+
+Under a well-fitting GLM, both should look approximately $\mathcal{N}(0,1)$ with no pattern against fitted values. Core assumptions and how to check them:
+
+| Assumption | How to check |
+|---|---|
+| **Correct distribution family** | Residual plots; compare AIC across families |
+| **Correct link function** | Component-plus-residual plots; try alternative links |
+| **Correct linear predictor** | Residuals vs. each predictor; added-variable plots |
+| **Independence of observations** | Study design; check for clusters or time structure |
+| **No influential observations** | Cook's distance; leverage |
+
+GLMs do **not** require constant error variance or normally distributed errors — the exponential family framework handles both explicitly.
+
+### Overdispersion in Poisson Regression
+
+::: {.callout-important title="Overdispersion"}
+**Overdispersion** occurs when the observed variance **exceeds** the variance assumed by the model. For Poisson regression the model assumes $\text{Var}(Y_i) = \lambda_i$. If the true variance is $\phi \lambda_i$ with $\phi > 1$, the data are overdispersed.
+:::
+
+Overdispersion leads to underestimated standard errors and $p$-values that are too small. Diagnose it with the dispersion statistic $\hat{\phi} = \chi^2_P / (n - p - 1)$, where $\chi^2_P = \sum r_i^2$ is the Pearson chi-squared. Remedies include the **quasi-Poisson** model (which estimates $\phi$ from the data) or the **negative binomial** distribution.
+
+```{python}
+pearson_chi2 = np.sum(
+    (bikes['cnt'] - poisson1.fittedvalues)**2 / poisson1.fittedvalues
+)
+phi_hat = pearson_chi2 / poisson1.df_resid
+print(f"Pearson χ² / df = {phi_hat:.2f}")
+print("Overdispersed" if phi_hat > 1.5 else "Dispersion OK")
+```
+
+## Summary
+
+Linear regression is itself a GLM — Normal family, identity link. The framework unifies what might otherwise appear to be separate methods:
+
+| Feature | Linear Regression | GLM |
+|---|---|---|
+| **Response type** | Continuous, unbounded | Exponential family (binary, count, …) |
+| **Error distribution** | Normal | Flexible |
+| **Mean function** | $\mu = \mathbf{x}^\top\boldsymbol{\beta}$ (identity link) | $g(\mu) = \mathbf{x}^\top\boldsymbol{\beta}$ |
+| **Estimation** | OLS (closed-form) | MLE via IRLS (iterative) |
+| **Residual measure** | RSS | Deviance |
+| **Model comparison** | $F$-test, AIC, BIC | LRT ($G^2$, $\chi^2$), AIC, BIC |
+| **Coefficient interpretation** | Additive effect on $\mu$ | Additive effect on $g(\mu)$; back-transform for multiplicative interpretation |
+
+## References
