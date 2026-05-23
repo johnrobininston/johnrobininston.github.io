@@ -259,10 +259,6 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./resume.html"> 
-<span class="menu-text">Resume</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="./blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
@@ -326,7 +322,9 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </header><main class="content" id="quarto-document-content">
 
+<div id="bio-text">
 <p>I am a PhD candidate in the department of statistics and applied probability at the University of California Santa Barbara. My research interests lie within the intersection of financial mathematics, stochastic games, probability theory and groundwater conservation.</p>
+</div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const subtitle = document.querySelector(".subtitle");
@@ -335,12 +333,31 @@ document.addEventListener("DOMContentLoaded", function () {
   subtitle.textContent = "";
   subtitle.style.visibility = "visible";
   let i = 0;
-  const speed = 45; // ms per character
+  const speed = 45;
   function type() {
     if (i < text.length) {
       subtitle.textContent += text.charAt(i);
       i++;
       setTimeout(type, speed);
+    } else {
+      // Stop blinking cursor
+      subtitle.classList.add("typed-done");
+      // 1. Fade in bio
+      const bio = document.getElementById("bio-text");
+      if (bio) bio.style.opacity = "1";
+      // 2. Draw HR after bio fade completes
+      setTimeout(function () {
+        const hr = document.querySelector("hr.about-sep");
+        if (hr) hr.classList.add("draw-in");
+        // 3. Pop in buttons one by one after HR finishes
+        setTimeout(function () {
+          document.querySelectorAll(".about-link").forEach(function (btn, idx) {
+            setTimeout(function () {
+              btn.classList.add("btn-appear");
+            }, idx * 130);
+          });
+        }, 550);
+      }, 1200);
     }
   }
   type();
@@ -351,8 +368,34 @@ document.addEventListener("DOMContentLoaded", function () {
   content: "|";
   animation: blink 0.7s step-end infinite;
 }
+.subtitle.typed-done::after {
+  display: none;
+}
 @keyframes blink {
   50% { opacity: 0; }
+}
+#bio-text {
+  opacity: 0;
+  transition: opacity 1.0s ease-in;
+}
+hr.about-sep {
+  clip-path: inset(0 100% 0 0);
+}
+hr.about-sep.draw-in {
+  animation: draw-hr 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes draw-hr {
+  to { clip-path: inset(0 0% 0 0); }
+}
+.about-link {
+  opacity: 0;
+  transform: scale(0.75) translateY(6px);
+}
+.about-link.btn-appear {
+  animation: btn-appear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes btn-appear {
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 </style>
 

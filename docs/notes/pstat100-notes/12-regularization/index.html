@@ -329,10 +329,6 @@ window.Quarto = {
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../resume.html"> 
-<span class="menu-text">Resume</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
@@ -419,6 +415,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../../notes/pstat100-notes/00.2-python-fundamentals/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Python Fundamentals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/00.3-linear-algebra/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Algebra</span></a>
   </div>
 </li>
       </ul>
@@ -520,11 +522,8 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../../notes/pstat100-notes/10-glr/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Generalized Linear Models</span></a>
-  </div>
-</li>
+ <span class="menu-text">notes/pstat100-notes/10-glr/index.qmd</span>
+  </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../../notes/pstat100-notes/10.1-logistic-regression/index.html" class="sidebar-item-text sidebar-link">
@@ -673,7 +672,7 @@ window.Quarto = {
 </ul>
 </div>
 </div>
-<div id="d858b5b2" class="cell" data-execution_count="1">
+<div id="7d71a883" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Libraries and Styling</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -763,7 +762,7 @@ window.Quarto = {
 <p>For ordinary least squares there is a closed-form shortcut that avoids refitting <span class="math inline">\(n\)</span> times:</p>
 <p><span class="math display">\[\text{LOOCV} = \frac{1}{n}\sum_{i=1}^n \left(\frac{e_i}{1 - h_{ii}}\right)^2,\]</span></p>
 <p>where <span class="math inline">\(e_i = y_i - \hat{y}_i\)</span> is the ordinary residual and <span class="math inline">\(h_{ii}\)</span> is the <span class="math inline">\(i\)</span>-th diagonal of the hat matrix <span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\)</span>. Observations with high leverage <span class="math inline">\(h_{ii}\)</span> have large influence on the LOOCV score. This formula is computationally free once <span class="math inline">\(\mathbf{H}\)</span> is computed.</p>
-<div id="025bb326" class="cell" data-output-location="fragment" data-execution_count="2">
+<div id="a0349c1f" class="cell" data-output-location="fragment" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>housing <span class="op">=</span> fetch_california_housing(as_frame<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> housing.frame.copy()</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [c.lower() <span class="cf">for</span> c <span class="kw">in</span> df.columns]</span>
@@ -857,7 +856,7 @@ Full (8 predictors)                      0.5279</code></pre>
 <section id="why-does-sparsity-happen" class="level3">
 <h3 class="anchored" data-anchor-id="why-does-sparsity-happen">Why does sparsity happen?</h3>
 <p>In the constraint form, the <span class="math inline">\(L_1\)</span> constraint region is a <strong>diamond</strong> with sharp corners on the coordinate axes. The RSS contours are ellipses expanding outward from the OLS solution. As the constraint tightens, the first contact between the ellipse and the diamond most often occurs at a <strong>corner</strong> — where one or more <span class="math inline">\(\beta_j = 0\)</span> exactly. The <span class="math inline">\(L_2\)</span> constraint region (a smooth sphere) has no corners, which is why Ridge never produces exact zeros.</p>
-<div id="6a5e9795" class="cell" data-execution_count="3">
+<div id="8fa99c0a" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -940,7 +939,7 @@ Full (8 predictors)                      0.5279</code></pre>
 <section id="regularization-paths" class="level2">
 <h2 class="anchored" data-anchor-id="regularization-paths">Regularization Paths</h2>
 <p>The regularization path shows how coefficients change as <span class="math inline">\(\lambda\)</span> increases. Ridge shrinks all coefficients smoothly; Lasso sets some to exactly zero at a specific threshold.</p>
-<div id="e22d9ff3" class="cell" data-execution_count="4">
+<div id="cffea49c" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>feature_names <span class="op">=</span> [<span class="st">'MedInc'</span>, <span class="st">'HouseAge'</span>, <span class="st">'AveRooms'</span>, <span class="st">'AveBedrms'</span>,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">'AveOccup'</span>, <span class="st">'Population'</span>, <span class="st">'Latitude'</span>, <span class="st">'Longitude'</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>alphas <span class="op">=</span> np.logspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">200</span>)</span>
@@ -987,7 +986,7 @@ Full (8 predictors)                      0.5279</code></pre>
 <p>We demonstrate the full workflow on <code>sklearn</code>’s diabetes dataset: <span class="math inline">\(n = 442\)</span> patients, <span class="math inline">\(p = 10\)</span> predictors (age, sex, BMI, blood pressure, and six serum measurements), and a continuous response measuring disease progression one year after baseline. The predictors are already mean-centred and scaled.</p>
 <section id="train-test-split" class="level3">
 <h3 class="anchored" data-anchor-id="train-test-split">Train-test split</h3>
-<div id="74f034ab" class="cell" data-execution_count="5">
+<div id="7680c87c" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>diabetes  <span class="op">=</span> load_diabetes()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X_diab    <span class="op">=</span> pd.DataFrame(diabetes.data, columns<span class="op">=</span>diabetes.feature_names)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y_diab    <span class="op">=</span> pd.Series(diabetes.target, name<span class="op">=</span><span class="st">'progression'</span>)</span>
@@ -1003,7 +1002,7 @@ Full (8 predictors)                      0.5279</code></pre>
 </section>
 <section id="fitting-ridge-lasso-and-elastic-net" class="level3">
 <h3 class="anchored" data-anchor-id="fitting-ridge-lasso-and-elastic-net">Fitting Ridge, Lasso, and Elastic Net</h3>
-<div id="422c2b7d" class="cell" data-execution_count="6">
+<div id="f8c3b48e" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ridge_model <span class="op">=</span> Ridge(alpha<span class="op">=</span><span class="dv">1</span>).fit(X_train, y_train)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lasso_model <span class="op">=</span> Lasso(alpha<span class="op">=</span><span class="dv">1</span>).fit(X_train, y_train)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>enet_model  <span class="op">=</span> ElasticNet(alpha<span class="op">=</span><span class="dv">1</span>, l1_ratio<span class="op">=</span><span class="fl">0.5</span>).fit(X_train, y_train)</span>
@@ -1023,7 +1022,7 @@ ElNet  (α=1) — Features retained: 9/10   Test MSE: 5554.23</code></pre>
 </section>
 <section id="choosing-lambda-by-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="choosing-lambda-by-cross-validation">Choosing <span class="math inline">\(\lambda\)</span> by cross-validation</h3>
-<div id="02543469" class="cell" data-execution_count="7">
+<div id="90c2f378" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ridge_cv_d <span class="op">=</span> RidgeCV(alphas<span class="op">=</span>np.logspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">100</span>), cv<span class="op">=</span><span class="dv">10</span>).fit(X_train, y_train)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lasso_cv_d <span class="op">=</span> LassoCV(alphas<span class="op">=</span>np.logspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">100</span>), cv<span class="op">=</span><span class="dv">10</span>,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                     max_iter<span class="op">=</span><span class="dv">10_000</span>, random_state<span class="op">=</span><span class="dv">42</span>).fit(X_train, y_train)</span>
@@ -1043,7 +1042,7 @@ ElNet best λ:   0.0045   l1_ratio: 1.00</code></pre>
 </section>
 <section id="comparing-all-methods" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-all-methods">Comparing all methods</h3>
-<div id="9624a048" class="cell" data-execution_count="8">
+<div id="711c1ac2" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ols_model <span class="op">=</span> LinearRegression().fit(X_train, y_train)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'OLS'</span>:                    ols_model,</span>
