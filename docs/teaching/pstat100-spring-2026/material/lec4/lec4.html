@@ -7,11 +7,11 @@
 <script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.25">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="John Inston">
-  <meta name="dcterms.date" content="2026-05-06">
+  <meta name="dcterms.date" content="2026-05-22">
   <title>John Robin Inston – Lecture 4: Data Preparation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,6 +19,9 @@
   <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reveal.css">
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -97,7 +100,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-faa9d22f9c1b5b4b7bb7e42edfa9b105.css">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-e64b5f9e07e5c1eb141ef332793a0fdd.css">
   <link href="../../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -215,7 +218,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
     </div>
 </div>
 
-  <p class="date">May 6, 2026</p>
+  <p class="date">May 22, 2026</p>
 </section>
 <section id="overview" class="slide level2">
 <h2>🚁 Overview</h2>
@@ -238,7 +241,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 </div>
 <h3 id="required-libraries">📚 Required Libraries</h3>
 <p>In this lecture we will be using the following libraries:</p>
-<div id="de526a06" class="cell" data-execution_count="1">
+<div id="3940c70a" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a></a><span class="im">import</span> random <span class="im">as</span> rd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -369,7 +372,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 <div class="fragment">
 <h3 id="library">Library</h3>
 <p>To graphically analyze the missingness of data we can use the <a href="https://github.com/ResidentMario/missingno">Missingno Library</a>, which provides a suite of tools for visualizing missing data.</p>
-<div id="0fec6942" class="cell" data-execution_count="2">
+<div id="0566d74c" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a><span class="im">import</span> missingno <span class="im">as</span> msno</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
@@ -377,7 +380,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 <p><br></p>
 <h3 id="practice-data">Practice Data</h3>
 <p>For our example we consider a simple example of a dataset with missing data. We load the <code>nfl.csv</code> dataset which contains detailed NFL play-by-play data from 2009.</p>
-<div id="4de322e2" class="cell" data-execution_count="3">
+<div id="b4759c81" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a>nfl_data <span class="op">=</span> pd.read_csv(<span class="st">'data/nfl.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
@@ -563,7 +566,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 <li class="fragment">We can see that the dataset contains some missing data - i.e.&nbsp;<code>NaN</code> values.</li>
 </ul>
 <div class="fragment">
-<div id="cf8adc30" class="cell columns column-output-location" data-execution_count="5">
+<div id="ef363d67" class="cell columns column-output-location" data-execution_count="5">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>nfl_data.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column fragment">
@@ -588,7 +591,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 </ul>
 </div>
 <div class="fragment">
-<div id="a3aa4ba0" class="cell columns column-output-location" data-execution_count="6">
+<div id="c3f57d75" class="cell columns column-output-location" data-execution_count="6">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>missing_values_count <span class="op">=</span> nfl_data.isnull().<span class="bu">sum</span>()</span>
 <span id="cb7-2"><a></a>missing_values_count.sort_values(</span>
@@ -612,7 +615,7 @@ dtype: int64</code></pre>
 </div>
 <div class="fragment">
 <h3 id="percentage-missingness">Percentage Missingness</h3>
-<div id="d771ab6b" class="cell columns column-output-location" data-execution_count="7">
+<div id="e279bb71" class="cell columns column-output-location" data-execution_count="7">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a></a><span class="co"># how many total missing values do we have?</span></span>
 <span id="cb9-2"><a></a>total_cells <span class="op">=</span> np.prod(nfl_data.shape)</span>
@@ -637,7 +640,7 @@ dtype: int64</code></pre>
 <li class="fragment">We can use <code>msno.bar</code> to visualize the missing data counts (for the first few columns to make it easier to see).</li>
 </ul>
 <div class="fragment">
-<div id="96a9e6f0" class="cell" data-execution_count="8">
+<div id="20630884" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>msno.bar(nfl_data.iloc[:, <span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="fl">2.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -656,7 +659,7 @@ dtype: int64</code></pre>
 <li class="fragment"><code>msno.matrix</code> visualizes the missing data (white = missingness) for 500 random rows.</li>
 </ul>
 <div class="fragment">
-<div id="d88c0049" class="cell" data-execution_count="9">
+<div id="b94f26a9" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a></a>np.random.seed(<span class="dv">42</span>) <span class="co"># set seed for reproducible sample</span></span>
 <span id="cb12-2"><a></a>nfl_data_sample <span class="op">=</span> nfl_data.sample(<span class="dv">500</span>)</span>
 <span id="cb12-3"><a></a>msno.matrix(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -682,7 +685,7 @@ dtype: int64</code></pre>
 <li class="fragment"><code>msno.heatmap</code> visualizes these relationships.</li>
 </ul>
 <div class="fragment">
-<div id="c55dc372" class="cell" data-execution_count="10">
+<div id="a86d0371" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>msno.heatmap(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -704,7 +707,7 @@ dtype: int64</code></pre>
 <li class="fragment">We can use <code>msno.dendrogram</code> to visualize the hierarchical relationships between missing data.</li>
 </ul>
 <div class="fragment">
-<div id="ef7823c0" class="cell" data-execution_count="11">
+<div id="057f7cde" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a></a>msno.dendrogram(nfl_data_sample.iloc[:,<span class="dv">0</span>:<span class="dv">20</span>], figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
@@ -799,7 +802,7 @@ dtype: int64</code></pre>
 
 </div>
 <h3 id="deleting-rows-with-missing-data">Deleting Rows with Missing Data</h3>
-<div id="81a3c476" class="cell columns column-output-location" data-execution_count="12">
+<div id="207776bd" class="cell columns column-output-location" data-execution_count="12">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>nfl_data_delete_rows <span class="op">=</span> nfl_data.dropna()</span>
 <span id="cb15-2"><a></a><span class="co"># just how much data did we lose?</span></span>
@@ -818,7 +821,7 @@ Rows with na's dropped: 0</code></pre>
 </div>
 <div class="fragment">
 <h3 id="deleting-columns-with-missing-data">Deleting Columns with Missing Data</h3>
-<div id="40ece4b0" class="cell columns column-output-location" data-execution_count="13">
+<div id="db5b031b" class="cell columns column-output-location" data-execution_count="13">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a></a>nfl_data_delete_columns <span class="op">=</span> nfl_data.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb17-2"><a></a><span class="co"># just how much data did we lose?</span></span>
@@ -902,7 +905,7 @@ Columns with na's dropped: 37</code></pre>
 </section>
 <section id="imputation-example" class="slide level2">
 <h2>Imputation Example</h2>
-<div id="61ac2296" class="cell" data-execution_count="14">
+<div id="5e345b7a" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a></a>nfl_data_imputed <span class="op">=</span> nfl_data.bfill(axis<span class="op">=</span><span class="dv">0</span>).fillna(<span class="dv">0</span>)</span>
 <span id="cb19-2"><a></a>nfl_data_imputed.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -1192,7 +1195,7 @@ Columns with na's dropped: 37</code></pre>
 <li class="fragment">We can see that the dataset contains some duplicate values, lets count them using <code>duplicated()</code>:</li>
 </ul>
 <div class="fragment">
-<div id="97fa8653" class="cell columns column-output-location" data-execution_count="16">
+<div id="998a3f59" class="cell columns column-output-location" data-execution_count="16">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a></a>dup_total <span class="op">=</span> customer_data.duplicated().<span class="bu">sum</span>()</span>
 <span id="cb21-2"><a></a>dup_index <span class="op">=</span> customer_data.loc[customer_data.duplicated()].index</span>
@@ -1232,7 +1235,7 @@ Duplicate index values: Index([3, 5, 10, 12, 14, 16], dtype='int64')</code></pre
 </ul>
 </div>
 <div class="fragment">
-<div id="a938436b" class="cell" data-execution_count="17">
+<div id="a9fa01ab" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a></a>customer_data[<span class="st">'name'</span>]  <span class="op">=</span> customer_data[<span class="st">'name'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
 <span id="cb23-2"><a></a>customer_data[<span class="st">'email'</span>] <span class="op">=</span> customer_data[<span class="st">'email'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
 <span id="cb23-3"><a></a>customer_data[<span class="st">'city'</span>]  <span class="op">=</span> customer_data[<span class="st">'city'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1242,7 +1245,7 @@ Duplicate index values: Index([3, 5, 10, 12, 14, 16], dtype='int64')</code></pre
 </ul>
 </div>
 <div class="fragment">
-<div id="9853ed53" class="cell columns column-output-location" data-execution_count="18">
+<div id="bcba5031" class="cell columns column-output-location" data-execution_count="18">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a></a>dup_total <span class="op">=</span> customer_data.duplicated().<span class="bu">sum</span>()</span>
 <span id="cb24-2"><a></a>dup_index <span class="op">=</span> customer_data.loc[customer_data.duplicated()].index</span>
@@ -1271,13 +1274,13 @@ Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></
 </ul>
 </div>
 <div class="fragment">
-<div id="27138374" class="cell" data-execution_count="19">
+<div id="91801d35" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a></a>customer_data_no_dup <span class="op">=</span> customer_data.drop_duplicates()</span>
 <span id="cb26-2"><a></a>customer_data_no_dup.duplicated().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="19">
 <div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>np.int64(0)</code></pre>
+<pre><code>0</code></pre>
 </div>
 </div>
 </div>
@@ -1294,7 +1297,7 @@ Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></
 </ul>
 </div>
 <div class="fragment">
-<div id="13f4391e" class="cell columns column-output-location" data-execution_count="20">
+<div id="edeaabd8" class="cell columns column-output-location" data-execution_count="20">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a></a>customer_data_agg <span class="op">=</span> customer_data.groupby(</span>
 <span id="cb28-2"><a></a>    <span class="st">'customer_id'</span></span>
@@ -1308,7 +1311,7 @@ Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></
 <span id="cb28-10"><a></a>customer_data_agg.duplicated().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div><div class="column fragment">
 <div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>np.int64(0)</code></pre>
+<pre><code>0</code></pre>
 </div>
 </div></div>
 </div>
@@ -1348,7 +1351,7 @@ Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></
 </section>
 <section id="examples-of-inconsistent-data-types" class="slide level2">
 <h2>Examples of Inconsistent Data Types</h2>
-<div id="b58c856c" class="cell" data-execution_count="21">
+<div id="0596313a" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a></a>example_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb30-2"><a></a>    <span class="st">"Dates"</span>:[<span class="st">"2024-01-01"</span>, <span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span>],</span>
 <span id="cb30-3"><a></a>    <span class="st">"Floats"</span>:[<span class="st">"1.1"</span>, <span class="st">"2.2"</span>, <span class="st">"3.3"</span>],</span>
@@ -1357,35 +1360,35 @@ Duplicate index values: Index([3, 5, 8, 10, 12, 14, 16], dtype='int64')</code></
 </div>
 <div class="fragment">
 <h3 id="dates-as-strings">Dates as strings</h3>
-<div id="20844412" class="cell" data-execution_count="22">
+<div id="63a2756c" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a></a><span class="bu">print</span>(<span class="ss">f"Date column original type: </span><span class="sc">{</span>example_df[<span class="st">'Dates'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb31-2"><a></a>example_df[<span class="st">'Dates'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'Dates'</span>])</span>
 <span id="cb31-3"><a></a><span class="bu">print</span>(<span class="ss">f"Date column new type: </span><span class="sc">{</span>example_df[<span class="st">'Dates'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="22">
 <div class="cell-output cell-output-stdout">
-<pre><code>Date column original type: str
-Date column new type: datetime64[us]</code></pre>
+<pre><code>Date column original type: object
+Date column new type: datetime64[ns]</code></pre>
 </div>
 </div>
 </div>
 <div class="fragment">
 <h3 id="numbers-are-strings">Numbers are strings</h3>
-<div id="65b2961f" class="cell" data-execution_count="23">
+<div id="58468bda" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a></a><span class="bu">print</span>(<span class="ss">f"Floats column original type: </span><span class="sc">{</span>example_df[<span class="st">'Floats'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb33-2"><a></a>example_df[<span class="st">"Floats"</span>] <span class="op">=</span> pd.to_numeric(example_df[<span class="st">"Floats"</span>])</span>
 <span id="cb33-3"><a></a><span class="bu">print</span>(<span class="ss">f"Floats column new type: </span><span class="sc">{</span>example_df[<span class="st">'Floats'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell fragment" data-execution_count="23">
 <div class="cell-output cell-output-stdout">
-<pre><code>Floats column original type: str
+<pre><code>Floats column original type: object
 Floats column new type: float64</code></pre>
 </div>
 </div>
 </div>
 <div class="fragment">
 <h3 id="booleans-are-strings">Booleans are strings</h3>
-<div id="d5bad44d" class="cell" data-execution_count="24">
+<div id="fb4f9d54" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a></a><span class="bu">print</span>(<span class="ss">f"Booleans column original type: </span><span class="sc">{</span>example_df[<span class="st">'Booleans'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb35-2"><a></a>example_df[<span class="st">"Booleans"</span>] <span class="op">=</span> (</span>
 <span id="cb35-3"><a></a>    example_df[<span class="st">"Booleans"</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower().<span class="bu">map</span>({<span class="st">"true"</span>: <span class="va">True</span>, <span class="st">"false"</span>: <span class="va">False</span>}).astype(<span class="st">"boolean"</span>)</span>
@@ -1394,7 +1397,7 @@ Floats column new type: float64</code></pre>
 </div>
 <div class="cell fragment" data-execution_count="24">
 <div class="cell-output cell-output-stdout">
-<pre><code>Booleans column original type: str
+<pre><code>Booleans column original type: object
 Booleans column new type: boolean</code></pre>
 </div>
 </div>
@@ -1413,7 +1416,7 @@ Booleans column new type: boolean</code></pre>
 <li class="fragment">We will not cover this in depth in this course but recommend you explore it further if your project data has mixed data formats.</li>
 </ul>
 <h3 id="harder-example">Harder Example</h3>
-<div id="dff1c6b0" class="cell" data-execution_count="25">
+<div id="92de6fef" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a></a>example_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb37-2"><a></a>    <span class="st">"Dates"</span>:[<span class="st">"2024-01-01"</span>, <span class="st">"21-12-2001"</span>, <span class="st">"December 21, 2001"</span>, <span class="st">"01/02/2024"</span>, <span class="st">"2018-03-04"</span>],</span>
 <span id="cb37-3"><a></a>    <span class="st">"Booleans"</span>:[<span class="st">"True"</span>, <span class="st">"false"</span>, <span class="st">"true"</span>, <span class="st">"no"</span>, <span class="st">"yes"</span>],</span>
@@ -1426,7 +1429,7 @@ Booleans column new type: boolean</code></pre>
 <section id="examples-of-mixed-data-formats" class="slide level2">
 <h2>Examples of Mixed Data Formats</h2>
 <h3 id="date-formats">Date Formats</h3>
-<div id="8e50ef1f" class="cell" data-execution_count="26">
+<div id="9239e2d8" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a></a>example_df[<span class="st">'Dates'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'Dates'</span>], <span class="bu">format</span><span class="op">=</span><span class="st">"mixed"</span>)</span>
 <span id="cb38-2"><a></a><span class="bu">print</span>(example_df[<span class="st">'Dates'</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1437,11 +1440,11 @@ Booleans column new type: boolean</code></pre>
 2   2001-12-21
 3   2024-01-02
 4   2018-03-04
-Name: Dates, dtype: datetime64[us]</code></pre>
+Name: Dates, dtype: datetime64[ns]</code></pre>
 </div>
 </div>
 <h3 id="boolean-formats">Boolean Formats</h3>
-<div id="b4691907" class="cell" data-execution_count="27">
+<div id="a306958e" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a></a>example_df[<span class="st">'Booleans'</span>] <span class="op">=</span> example_df[<span class="st">'Booleans'</span>].<span class="bu">str</span>.strip(</span>
 <span id="cb40-2"><a></a>).<span class="bu">str</span>.lower(</span>
 <span id="cb40-3"><a></a>).<span class="bu">map</span>({</span>
@@ -1490,7 +1493,7 @@ Name: Booleans, dtype: boolean</code></pre>
 </ul>
 </div>
 <div class="fragment">
-<div id="e6219741" class="cell columns column-output-location" data-execution_count="28">
+<div id="9ad629b6" class="cell columns column-output-location" data-execution_count="28">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a></a>ages <span class="op">=</span> pd.Series([<span class="dv">34</span>, <span class="dv">200</span>, <span class="dv">28</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">45</span>])</span>
 <span id="cb42-2"><a></a>ages[(ages <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">|</span> (ages <span class="op">&gt;</span> <span class="dv">120</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1522,7 +1525,7 @@ dtype: int64</code></pre>
 <li class="fragment">Build a <span class="accent">mapping dictionary</span> from raw labels to canonical ones and use <span class="accent"><code>map</code></span> or <span class="accent"><code>replace</code></span>.</li>
 <li class="fragment">For analysis, prefer a single <span class="accent">canonical vocabulary</span> per variable; keep a small “codebook” you can reuse.</li>
 </ul>
-<div id="5a2b7859" class="cell columns column-output-location" data-execution_count="29">
+<div id="c6808a25" class="cell columns column-output-location" data-execution_count="29">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a></a>city_raw <span class="op">=</span> pd.Series([<span class="st">"  nyc "</span>, <span class="st">"NYC"</span>, <span class="st">"New York"</span>, <span class="st">"new york"</span>])</span>
 <span id="cb44-2"><a></a>city_raw.<span class="bu">str</span>.strip().<span class="bu">str</span>.title().replace({<span class="st">"Nyc"</span>: <span class="st">"New York"</span>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1532,7 +1535,7 @@ dtype: int64</code></pre>
 1    New York
 2    New York
 3    New York
-dtype: str</code></pre>
+dtype: object</code></pre>
 </div>
 </div></div>
 </div>
@@ -1553,7 +1556,7 @@ dtype: str</code></pre>
 <li class="fragment">After load: <span class="accent"><code>pd.to_datetime</code></span>; use <code>format='...'</code> when you know the pattern, and <code>errors='coerce'</code> to isolate bad strings.</li>
 <li class="fragment">Use <code>dayfirst=True</code> or <code>yearfirst=True</code> when the data is not ISO-8601 and locale order matters.</li>
 </ul>
-<div id="b1ad1085" class="cell columns column-output-location" data-execution_count="30">
+<div id="7da6759d" class="cell columns column-output-location" data-execution_count="30">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a></a><span class="co"># Day-first strings (common outside the US); invalid entries become NaT.</span></span>
 <span id="cb46-2"><a></a>pd.to_datetime(</span>
@@ -1566,7 +1569,7 @@ dtype: str</code></pre>
 <pre><code>0   2024-03-15
 1   2024-04-02
 2          NaT
-dtype: datetime64[us]</code></pre>
+dtype: datetime64[ns]</code></pre>
 </div>
 </div></div>
 </div>
