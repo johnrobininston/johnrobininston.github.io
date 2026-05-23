@@ -1,42 +1,32 @@
 ---
-title: Hidden Markov Precipitation Model
+title: Precipitation HMM
 description: "A Hidden Markov Model for annual precipitation in the Central Valley of California."
 author: John Robin Inston
 date: 2026-03-08
 date-modified: 2026-03-08
-image: assets/rain-cloud-icon.svg
+image: assets/transition-probabilities-3s.png
 toc: true
 title-block-banner: true
 categories: [Groundwater, Hidden Markov Model, Precipitation]
 bibliography: references.bib
-format:
-  html:
-    css: assets/page-icon.css
 ---
 
 ## Introduction
 
 The [groundwater market model]{.alert} described by @Cialenco.Ludkovski2025 is stochastically driven by groundwater recharge process $\{R_t\}_{t\in\mathbb{N}_0}$ for year $t$.  In order for this model to be a useful tool for groundwater conservation and planning we need to be able to efficiently simulate this process whilst ensuring the result is 
 
-::::{layout-ncol="4"}
+<style>
+.chips { display: flex; flex-wrap: wrap; margin: 1.25rem 0; justify-content: space-evenly; }
+.chip { display: inline-block; padding: 0.45rem 1.3rem; border-radius: 999px; font-size: 1.1rem; font-weight: 500; line-height: 1.4; margin: 0 1rem; }
+.chip-outline { border: 1.5px solid var(--bs-primary, #0d6efd); color: var(--bs-primary, #0d6efd); }
+</style>
 
-:::{}
-1️⃣ Markovian 
-:::
-
-:::{}
-2️⃣ Exogenous
-:::
-
-:::{}
-3️⃣ Low-cost
-:::
-
-:::{}
-4️⃣ Controllable
-:::
-
-::::
+<div class="chips">
+  <span class="chip chip-outline">1. Markovian</span>
+  <span class="chip chip-outline">2. Exogenous</span>
+  <span class="chip chip-outline">3. Low-cost</span>
+  <span class="chip chip-outline">4. Controllable</span>
+</div>
 
 Assuming that precipitation is the primary driver of recharge we model annual precipitation using a [Hidden Markov Model (HMM)]{.alert} before mapping to groundwater recharge using functional estimates.  In this note we outline our procedure and provide a summary of our results. 
 
@@ -44,7 +34,7 @@ Assuming that precipitation is the primary driver of recharge we model annual pr
 
 HMMs consist of a pair of stochastic processes $(S(t), P(t))$ known as the (unobserved) [latent process]{.alert} and the (observed) [emission process]{.alert} respectively.
 
-![HMM Connected Graph.](assets/hmm-diagram.svg){width='90%'}
+![HMM Connected Graph.](assets/hmm-diagram.png){width='90%'}
 
 The latent state process $\{S(t)\}$ is a Markov chain (MC) taking values in finite state space $\mathcal{S}:=\{1, ..., S\}$. The number of states is specified *a priori* and the interpretation of these states can only be intferred post-fitting. 
 
@@ -164,7 +154,7 @@ $$
 \mu\cdot \Gamma = \mu \implies \mu = \begin{bmatrix}0.183 & 0.276 & 0.541\end{bmatrix}.
 $$
 
-![Latent state process transition probabilty diagram.](assets/transition-probabilities-3s.svg)
+![Latent state process transition probabilty diagram.](assets/transition-probabilities-3s.png)
 
 Producing a plot of the precipitation distributions we see that our model seems to avoid redundancy with clear distinction between latent state distributions.
 

@@ -51,7 +51,7 @@
         "\n",
         "In this lecture we will be using the following libraries:"
       ],
-      "id": "f368f12d"
+      "id": "88218445"
     },
     {
       "cell_type": "code",
@@ -61,7 +61,7 @@
         "import numpy as np\n",
         "import random as rd"
       ],
-      "id": "4f2767f0",
+      "id": "087994d6",
       "execution_count": null,
       "outputs": []
     },
@@ -175,7 +175,7 @@
         "\n",
         "To graphically analyze the missingness of data we can use the [Missingno Library](https://github.com/ResidentMario/missingno), which provides a suite of tools for visualizing missing data."
       ],
-      "id": "a8229813"
+      "id": "3d32abd4"
     },
     {
       "cell_type": "code",
@@ -183,7 +183,7 @@
       "source": [
         "import missingno as msno"
       ],
-      "id": "71aa294b",
+      "id": "b908f1ec",
       "execution_count": null,
       "outputs": []
     },
@@ -201,7 +201,7 @@
         "\n",
         "For our example we consider a simple example of a dataset with missing data.  We load the `nfl.csv` dataset which contains detailed NFL play-by-play data from 2009."
       ],
-      "id": "1352dc1e"
+      "id": "171c8b29"
     },
     {
       "cell_type": "code",
@@ -209,7 +209,7 @@
       "source": [
         "nfl_data = pd.read_csv('data/nfl.csv')"
       ],
-      "id": "57683ae2",
+      "id": "dd8c676d",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +223,7 @@
         "\n",
         "Let's take a first look at the first few rows and the shape."
       ],
-      "id": "9e5ff924"
+      "id": "16280e79"
     },
     {
       "cell_type": "code",
@@ -232,7 +232,7 @@
         "#| tbl-cap: \"NFL Play-by-Play Data\"\n",
         "nfl_data.head()"
       ],
-      "id": "7ea436d0",
+      "id": "813bbca6",
       "execution_count": null,
       "outputs": []
     },
@@ -244,7 +244,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "464b969f"
+      "id": "50814b08"
     },
     {
       "cell_type": "code",
@@ -254,7 +254,7 @@
       "source": [
         "nfl_data.shape"
       ],
-      "id": "f7b67ef0",
+      "id": "778b16d9",
       "execution_count": null,
       "outputs": []
     },
@@ -279,7 +279,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "04878cb7"
+      "id": "43e7c38d"
     },
     {
       "cell_type": "code",
@@ -292,7 +292,7 @@
         "    ascending=False\n",
         "    ).head(10)"
       ],
-      "id": "e502f588",
+      "id": "a2544efc",
       "execution_count": null,
       "outputs": []
     },
@@ -307,7 +307,7 @@
         "\n",
         "### Percentage Missingness"
       ],
-      "id": "3824bc0c"
+      "id": "424d947b"
     },
     {
       "cell_type": "code",
@@ -323,7 +323,7 @@
         "percent_missing = (total_missing/total_cells) * 100\n",
         "print(percent_missing)"
       ],
-      "id": "cece16a5",
+      "id": "e7509c4a",
       "execution_count": null,
       "outputs": []
     },
@@ -341,7 +341,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "5caa4da5"
+      "id": "dd030c51"
     },
     {
       "cell_type": "code",
@@ -350,7 +350,7 @@
         "#| fig-cap: \"Missing Data Bar Chart\"\n",
         "msno.bar(nfl_data.iloc[:, 0:20], figsize=(15, 2.5))"
       ],
-      "id": "eb1758e8",
+      "id": "cc800b64",
       "execution_count": null,
       "outputs": []
     },
@@ -366,7 +366,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "9376cf33"
+      "id": "69c0f358"
     },
     {
       "cell_type": "code",
@@ -376,7 +376,7 @@
         "nfl_data_sample = nfl_data.sample(500)\n",
         "msno.matrix(nfl_data_sample.iloc[:,0:20], figsize=(15, 3))"
       ],
-      "id": "29ad472d",
+      "id": "8930d89e",
       "execution_count": null,
       "outputs": []
     },
@@ -394,7 +394,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "0d09e512"
+      "id": "e5fd6ac2"
     },
     {
       "cell_type": "code",
@@ -402,7 +402,7 @@
       "source": [
         "msno.heatmap(nfl_data_sample.iloc[:,0:20], figsize=(10, 3))"
       ],
-      "id": "cc32ba4c",
+      "id": "f3996ce5",
       "execution_count": null,
       "outputs": []
     },
@@ -421,7 +421,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "7163826e"
+      "id": "9191ad01"
     },
     {
       "cell_type": "code",
@@ -429,7 +429,7 @@
       "source": [
         "msno.dendrogram(nfl_data_sample.iloc[:,0:20], figsize=(10, 3))"
       ],
-      "id": "9b547e72",
+      "id": "bfb69b30",
       "execution_count": null,
       "outputs": []
     },
@@ -520,7 +520,7 @@
         "\n",
         "### Deleting Rows with Missing Data"
       ],
-      "id": "5c99dc36"
+      "id": "845132eb"
     },
     {
       "cell_type": "code",
@@ -533,7 +533,7 @@
         "print(\"Rows in original dataset: %d \\n\" % nfl_data.shape[0])\n",
         "print(\"Rows with na's dropped: %d\" % nfl_data_delete_rows.shape[0])"
       ],
-      "id": "b10f1fbe",
+      "id": "5a571bf4",
       "execution_count": null,
       "outputs": []
     },
@@ -549,7 +549,7 @@
         "\n",
         "### Deleting Columns with Missing Data"
       ],
-      "id": "afd29ae2"
+      "id": "512f647b"
     },
     {
       "cell_type": "code",
@@ -562,7 +562,7 @@
         "print(\"Columns in original dataset: %d \\n\" % nfl_data.shape[1])\n",
         "print(\"Columns with na's dropped: %d\" % nfl_data_delete_columns.shape[1])"
       ],
-      "id": "cbdd1f51",
+      "id": "41795f94",
       "execution_count": null,
       "outputs": []
     },
@@ -634,7 +634,7 @@
         "\n",
         "## Imputation Example"
       ],
-      "id": "27a822f4"
+      "id": "22527101"
     },
     {
       "cell_type": "code",
@@ -643,7 +643,7 @@
         "nfl_data_imputed = nfl_data.bfill(axis=0).fillna(0)\n",
         "nfl_data_imputed.head()"
       ],
-      "id": "e5795530",
+      "id": "d4db8530",
       "execution_count": null,
       "outputs": []
     },
@@ -680,7 +680,7 @@
         "\n",
         "## Duplicate Data Example"
       ],
-      "id": "0ac500b5"
+      "id": "0355c41c"
     },
     {
       "cell_type": "code",
@@ -690,7 +690,7 @@
         "customer_data = pd.read_csv('data/customer.csv')\n",
         "customer_data.head()"
       ],
-      "id": "7a4e8c8b",
+      "id": "f4d8445f",
       "execution_count": null,
       "outputs": []
     },
@@ -702,7 +702,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "ace092df"
+      "id": "41e75638"
     },
     {
       "cell_type": "code",
@@ -715,7 +715,7 @@
         "print(f\"Total duplicate values: {dup_total}\")\n",
         "print(f\"Duplicate index values: {dup_index}\")"
       ],
-      "id": "d4d06784",
+      "id": "88453ba2",
       "execution_count": null,
       "outputs": []
     },
@@ -753,7 +753,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "f02f9141"
+      "id": "2700dd6f"
     },
     {
       "cell_type": "code",
@@ -763,7 +763,7 @@
         "customer_data['email'] = customer_data['email'].str.strip().str.lower()\n",
         "customer_data['city']  = customer_data['city'].str.strip().str.title()"
       ],
-      "id": "0e402d87",
+      "id": "d46281ed",
       "execution_count": null,
       "outputs": []
     },
@@ -777,7 +777,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "42682659"
+      "id": "ad9cd430"
     },
     {
       "cell_type": "code",
@@ -790,7 +790,7 @@
         "print(f\"Total duplicate values: {dup_total}\")\n",
         "print(f\"Duplicate index values: {dup_index}\")"
       ],
-      "id": "c7edfe40",
+      "id": "52139bee",
       "execution_count": null,
       "outputs": []
     },
@@ -816,7 +816,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "8c6e6c83"
+      "id": "5a704583"
     },
     {
       "cell_type": "code",
@@ -827,7 +827,7 @@
         "customer_data_no_dup = customer_data.drop_duplicates()\n",
         "customer_data_no_dup.duplicated().sum()"
       ],
-      "id": "206bb021",
+      "id": "9387cebf",
       "execution_count": null,
       "outputs": []
     },
@@ -851,7 +851,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "381ea000"
+      "id": "58ab9d90"
     },
     {
       "cell_type": "code",
@@ -870,7 +870,7 @@
         "})\n",
         "customer_data_agg.duplicated().sum()"
       ],
-      "id": "d9969eb3",
+      "id": "ccad969d",
       "execution_count": null,
       "outputs": []
     },
@@ -914,7 +914,7 @@
         "\n",
         "## Examples of Inconsistent Data Types"
       ],
-      "id": "b7efd0be"
+      "id": "b6a36769"
     },
     {
       "cell_type": "code",
@@ -926,7 +926,7 @@
         "    \"Booleans\":[\"True\", \"False\", \"True\"],\n",
         "    })"
       ],
-      "id": "ea55798f",
+      "id": "3e3a07b4",
       "execution_count": null,
       "outputs": []
     },
@@ -938,7 +938,7 @@
         "\n",
         "### Dates as strings"
       ],
-      "id": "764a2b27"
+      "id": "f6792f01"
     },
     {
       "cell_type": "code",
@@ -950,7 +950,7 @@
         "example_df['Dates'] = pd.to_datetime(example_df['Dates'])\n",
         "print(f\"Date column new type: {example_df['Dates'].dtype}\")"
       ],
-      "id": "b63904c7",
+      "id": "218640e9",
       "execution_count": null,
       "outputs": []
     },
@@ -964,7 +964,7 @@
         "\n",
         "### Numbers are strings"
       ],
-      "id": "a469b522"
+      "id": "25543c19"
     },
     {
       "cell_type": "code",
@@ -976,7 +976,7 @@
         "example_df[\"Floats\"] = pd.to_numeric(example_df[\"Floats\"])\n",
         "print(f\"Floats column new type: {example_df['Floats'].dtype}\")"
       ],
-      "id": "309e604d",
+      "id": "f0f64616",
       "execution_count": null,
       "outputs": []
     },
@@ -990,7 +990,7 @@
         "\n",
         "### Booleans are strings"
       ],
-      "id": "21891645"
+      "id": "dd29c338"
     },
     {
       "cell_type": "code",
@@ -1004,7 +1004,7 @@
         ")\n",
         "print(f\"Booleans column new type: {example_df['Booleans'].dtype}\")"
       ],
-      "id": "1c19ac73",
+      "id": "e2131f47",
       "execution_count": null,
       "outputs": []
     },
@@ -1026,7 +1026,7 @@
         "\n",
         "### Harder Example"
       ],
-      "id": "121ebeb5"
+      "id": "04ea4158"
     },
     {
       "cell_type": "code",
@@ -1039,7 +1039,7 @@
         "    \"Booleans\":[\"True\", \"false\", \"true\", \"no\", \"yes\"],\n",
         "    })"
       ],
-      "id": "41b1e95d",
+      "id": "baa72ab8",
       "execution_count": null,
       "outputs": []
     },
@@ -1051,7 +1051,7 @@
         "\n",
         "### Date Formats"
       ],
-      "id": "6c04e2e2"
+      "id": "f4303027"
     },
     {
       "cell_type": "code",
@@ -1062,7 +1062,7 @@
         "example_df['Dates'] = pd.to_datetime(example_df['Dates'], format=\"mixed\")\n",
         "print(example_df['Dates'])"
       ],
-      "id": "9e7a2fe3",
+      "id": "f2f7509a",
       "execution_count": null,
       "outputs": []
     },
@@ -1072,7 +1072,7 @@
       "source": [
         "### Boolean Formats"
       ],
-      "id": "0a86690d"
+      "id": "48a126bc"
     },
     {
       "cell_type": "code",
@@ -1087,7 +1087,7 @@
         "    }).astype(\"boolean\")\n",
         "print(example_df['Booleans'])"
       ],
-      "id": "15e9da29",
+      "id": "9ab70a10",
       "execution_count": null,
       "outputs": []
     },
@@ -1127,7 +1127,7 @@
         "\n",
         ":::{.fragment}"
       ],
-      "id": "0bb0ea80"
+      "id": "d554cf0a"
     },
     {
       "cell_type": "code",
@@ -1138,7 +1138,7 @@
         "ages = pd.Series([34, 200, 28, -1, 45])\n",
         "ages[(ages < 0) | (ages > 120)]"
       ],
-      "id": "92999a83",
+      "id": "2104e3ab",
       "execution_count": null,
       "outputs": []
     },
@@ -1170,7 +1170,7 @@
         "- Build a [mapping dictionary]{.accent} from raw labels to canonical ones and use [`map`]{.accent} or [`replace`]{.accent}.\n",
         "- For analysis, prefer a single [canonical vocabulary]{.accent} per variable; keep a small “codebook” you can reuse."
       ],
-      "id": "c3ae5b61"
+      "id": "e3f2ce61"
     },
     {
       "cell_type": "code",
@@ -1181,7 +1181,7 @@
         "city_raw = pd.Series([\"  nyc \", \"NYC\", \"New York\", \"new york\"])\n",
         "city_raw.str.strip().str.title().replace({\"Nyc\": \"New York\"})"
       ],
-      "id": "047a5444",
+      "id": "25413fc8",
       "execution_count": null,
       "outputs": []
     },
@@ -1210,7 +1210,7 @@
         "- After load: [`pd.to_datetime`]{.accent}; use `format='...'` when you know the pattern, and `errors='coerce'` to isolate bad strings.\n",
         "- Use `dayfirst=True` or `yearfirst=True` when the data is not ISO-8601 and locale order matters."
       ],
-      "id": "d3651907"
+      "id": "4333f06c"
     },
     {
       "cell_type": "code",
@@ -1225,7 +1225,7 @@
         "    dayfirst=True,\n",
         ")"
       ],
-      "id": "43992ec1",
+      "id": "a8ddb631",
       "execution_count": null,
       "outputs": []
     },
@@ -1318,7 +1318,7 @@
         "\n",
         "## References"
       ],
-      "id": "83b3fcd6"
+      "id": "9be75b8f"
     }
   ],
   "metadata": {

@@ -78,20 +78,48 @@ ul.task-list li input[type="checkbox"] {
 <script>
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    const listingTargetEl = window.document.querySelector('#listing-current-projects .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
     }
 
     const options = {
-      valueNames: ['listing-title','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-image','listing-subtitle','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+    window['quarto-listings']['listing-current-projects'] = new List('listing-current-projects', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-past-projects .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-image','listing-subtitle','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-image","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-past-projects'] = new List('listing-past-projects', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -348,12 +376,12 @@ window.Quarto = {
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/in/johninston/"> <i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://x.com/John_Inston"> <i class="bi bi-twitter-x" role="img">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -387,7 +415,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmluYW5jaWFsJTIwTWFya2V0cw==">Financial Markets <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R3JvdW5kd2F0ZXI=">Groundwater <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVzZWFyY2g=">Research <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U3RvY2hhc3RpYyUyMEdhbWVz">Stochastic Games <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Q3VycmVudA==">Current <span class="quarto-category-count">(1)</span></div><div class="category" data-category="RmluYW5jaWFsJTIwTWFya2V0cw==">Financial Markets <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R3JvdW5kd2F0ZXI=">Groundwater <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UmVzZWFyY2g=">Research <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U3RvY2hhc3RpYyUyMEdhbWVz">Stochastic Games <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -396,26 +424,47 @@ window.Quarto = {
 
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<section id="current-projects" class="level2">
+<h2 class="anchored" data-anchor-id="current-projects">Current Projects</h2>
+<div id="listing-current-projects" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="R3JvdW5kd2F0ZXIlMkNGaW5hbmNpYWwlMjBNYXJrZXRzJTJDU3RvY2hhc3RpYyUyMEdhbWVzJTJDUmVzZWFyY2g=" data-listing-date-sort="1770883200000" data-listing-file-modified-sort="1773015983761" data-listing-date-modified-sort="1770883200000" data-listing-reading-time-sort="1" data-listing-word-count-sort="46">
+<div class="g-col-1" data-index="0" data-categories="R3JvdW5kd2F0ZXIlMkNGaW5hbmNpYWwlMjBNYXJrZXRzJTJDU3RvY2hhc3RpYyUyMEdhbWVzJTJDUmVzZWFyY2glMkNDdXJyZW50" data-listing-date-sort="1770883200000" data-listing-file-modified-sort="1779574953748" data-listing-date-modified-sort="1770883200000" data-listing-reading-time-sort="1" data-listing-word-count-sort="63">
 <a href="./projects/groundwater-markets/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img loading='lazy' src="posts/hmm-precipitation/assets/rain-cloud-icon.svg" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<p class="card-img-top"><img loading='lazy' src="posts/hmm-precipitation/assets/transition-probabilities-3s.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
 Groundwater Markets
 </h5>
+<div class="card-subtitle listing-subtitle">
+Develoing a stochastic game model og groudnwater markets in California.
+</div>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+Feb 12, 2026
+</div>
+</div>
 </div>
 </div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
-</div><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+</div>
+</section>
+<section id="past-projects" class="level2">
+<h2 class="anchored" data-anchor-id="past-projects">Past Projects</h2>
+<div id="listing-past-projects" class="quarto-listing quarto-listing-container-grid">
+<div class="list grid quarto-listing-cols-3">
+
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

@@ -23,7 +23,7 @@
         "- Implement logistic regression in python using the famous Titanic classification data set.\n",
         ":::"
       ],
-      "id": "757025fa"
+      "id": "af561078"
     },
     {
       "cell_type": "code",
@@ -50,7 +50,7 @@
         "sns.set_style('whitegrid')\n",
         "sns.set_palette('Set2')"
       ],
-      "id": "c996b1ea",
+      "id": "053520ae",
       "execution_count": null,
       "outputs": []
     },
@@ -70,7 +70,7 @@
         "\n",
         "$$\\pi_i = \\sigma(\\eta_i) = \\frac{1}{1 + e^{-\\eta_i}}, \\quad \\eta_i = \\mathbf{x}_i^\\top\\boldsymbol{\\beta}.$$"
       ],
-      "id": "7d650233"
+      "id": "19bad3b4"
     },
     {
       "cell_type": "code",
@@ -91,7 +91,7 @@
         "ax.legend(fontsize=9)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "8deeec2f",
+      "id": "0ed7f58d",
       "execution_count": null,
       "outputs": []
     },
@@ -123,7 +123,7 @@
         "\n",
         "We illustrate logistic regression on Titanic passenger data — a classic binary classification problem where $Y = 1$ indicates survival, with predictors including class, sex, age, and fare."
       ],
-      "id": "570b3a0b"
+      "id": "84baef8e"
     },
     {
       "cell_type": "code",
@@ -137,7 +137,7 @@
         ")\n",
         "titanic.head()"
       ],
-      "id": "c0711315",
+      "id": "5f9adb40",
       "execution_count": null,
       "outputs": []
     },
@@ -167,7 +167,7 @@
         "plt.suptitle('Titanic: Survival Rates by Demographic', fontsize=13, y=1.02)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "8e46e152",
+      "id": "0e463dea",
       "execution_count": null,
       "outputs": []
     },
@@ -189,7 +189,7 @@
         "ax.legend()\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "a5de4583",
+      "id": "205e6eae",
       "execution_count": null,
       "outputs": []
     },
@@ -199,7 +199,7 @@
       "source": [
         "We fit the model using `smf.logit()`, which uses the same formula syntax as `smf.ols()`. Categorical variables are automatically dummy-coded with `C(...)`."
       ],
-      "id": "592884dc"
+      "id": "573d4bcd"
     },
     {
       "cell_type": "code",
@@ -211,7 +211,7 @@
         ").fit()\n",
         "print(logit1.summary())"
       ],
-      "id": "3a8e51e5",
+      "id": "7c8f0268",
       "execution_count": null,
       "outputs": []
     },
@@ -232,7 +232,7 @@
         "\n",
         "Standard errors and tests are based on the Wald statistic $z = \\hat{\\beta}_j / \\widehat{\\text{SE}}(\\hat{\\beta}_j) \\approx \\mathcal{N}(0,1)$, a large-sample result from maximum likelihood theory."
       ],
-      "id": "b24fd4cd"
+      "id": "895ab73d"
     },
     {
       "cell_type": "code",
@@ -270,7 +270,7 @@
         "ax.legend(fontsize=9)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "377ceebf",
+      "id": "7191c78f",
       "execution_count": null,
       "outputs": []
     },
@@ -280,7 +280,7 @@
       "source": [
         "We can predict probabilities for individual passengers using `logit1.predict()`. The coefficient table lives on the log-odds scale, but for communication we usually want probabilities:"
       ],
-      "id": "e8aaed7d"
+      "id": "4fc5ac2c"
     },
     {
       "cell_type": "code",
@@ -297,7 +297,7 @@
         "    print(f\"  {row['sex']:6s}, age {row['age']}, class {row['pclass']}, \"\n",
         "          f\"fare {row['fare']:.0f}: P(survive) = {probs[i]:.3f}\")"
       ],
-      "id": "130e328d",
+      "id": "0e7a1eaa",
       "execution_count": null,
       "outputs": []
     },
@@ -307,7 +307,7 @@
       "source": [
         "A 30-year-old female in first class has a high predicted survival probability; a 30-year-old male in third class has a much lower one — consistent with the historical record."
       ],
-      "id": "743cfb91"
+      "id": "9dee5304"
     },
     {
       "cell_type": "code",
@@ -341,7 +341,7 @@
         "ax.legend(fontsize=9)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "02376ec8",
+      "id": "ff647151",
       "execution_count": null,
       "outputs": []
     },
@@ -357,7 +357,7 @@
         "\n",
         "We classify $\\hat{Y}_i = 1$ if $\\hat{\\pi}_i > 0.5$ and summarise performance with the confusion matrix and ROC curve."
       ],
-      "id": "8d6ae2a3"
+      "id": "638f6223"
     },
     {
       "cell_type": "code",
@@ -369,7 +369,7 @@
         "acc = (y_pred == y_true).mean()\n",
         "print(f\"Accuracy: {acc:.3f}\")"
       ],
-      "id": "0a99925a",
+      "id": "9c839c2c",
       "execution_count": null,
       "outputs": []
     },
@@ -388,7 +388,7 @@
         "ax.set_title('Confusion Matrix — Logistic Regression (threshold = 0.5)', fontsize=11)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "7736d751",
+      "id": "b53c3da0",
       "execution_count": null,
       "outputs": []
     },
@@ -398,7 +398,7 @@
       "source": [
         "The **ROC curve** plots the true positive rate (sensitivity) against the false positive rate (1 - specificity) as the threshold varies from 1 to 0. The **AUC** (area under the ROC curve) measures overall discriminative ability: AUC = 1 is perfect; AUC = 0.5 is a random classifier."
       ],
-      "id": "e95ce9a5"
+      "id": "3daf5f6e"
     },
     {
       "cell_type": "code",
@@ -419,7 +419,7 @@
         "ax.legend(fontsize=9)\n",
         "plt.tight_layout(); plt.show()"
       ],
-      "id": "f76c5855",
+      "id": "70bd56ec",
       "execution_count": null,
       "outputs": []
     },
@@ -429,7 +429,7 @@
       "source": [
         "We can test whether adding `embark_town` improves the model using the LRT:"
       ],
-      "id": "991f8da2"
+      "id": "b48b2463"
     },
     {
       "cell_type": "code",
@@ -446,7 +446,7 @@
         "p_lrt = chi2.sf(G2, df=dof)\n",
         "print(f\"LRT G² = {G2:.3f},  df = {int(dof)},  p-value = {p_lrt:.4f}\")"
       ],
-      "id": "33fa4be0",
+      "id": "5d350337",
       "execution_count": null,
       "outputs": []
     },
@@ -460,7 +460,7 @@
         "    pr2 = 1 - m.llf / m.llnull\n",
         "    print(f\"{name:<30} {m.aic:>8.2f} {m.bic:>8.2f} {pr2:>10.4f}\")"
       ],
-      "id": "3b91db51",
+      "id": "e12c27ee",
       "execution_count": null,
       "outputs": []
     },
@@ -470,7 +470,7 @@
       "source": [
         "## References"
       ],
-      "id": "edd10e9a"
+      "id": "3c19bc16"
     }
   ],
   "metadata": {
