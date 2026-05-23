@@ -1,0 +1,836 @@
+---
+title: "Lecture 12: Multiple Linear Regression in Python"
+subtitle: "PSTAT100: Data Science — Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+jupyter: pstat100
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        html-math-method: katex
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Fit **multiple linear regression** models with `statsmodels` using the formula interface.
+- Incorporate **categorical predictors** via dummy variables and interpret their coefficients.
+- Read and interpret the **MLR regression summary**.
+- **Compare nested models** using partial $F$-tests and information criteria.
+- Specify and interpret **interaction terms**.
+- Run the full **residual diagnostic panel** and **added-variable plots**.
+- Detect multicollinearity with **VIF**.
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import probplot
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+from statsmodels.stats.anova import anova_lm
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from sklearn.datasets import fetch_california_housing
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+
+
+# The Dataset
+
+## 🐧 Palmer Penguins — Extended Analysis
+
+### Recall from Lecture 10
+
+- SLR with **flipper length alone** gave $R^2 \approx 0.76$ — a strong fit, but not the whole story.
+- Residual diagnostics showed **systematic banding** by species — a clear sign of an omitted variable.
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+penguins = (
+    sns.load_dataset('penguins')
+    .dropna()
+    .reset_index(drop=True)
+)
+penguins.head()
+```
+
+:::
+
+## Pairplot
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Pairplot of all numeric regression variables, coloured by species. Note the strong species separation across multiple dimensions."
+
+sns.pairplot(
+    penguins[['body_mass_g', 'flipper_length_mm',
+              'bill_length_mm', 'bill_depth_mm', 'species']],
+    hue='species', plot_kws={'alpha': 0.5, 's': 25},
+    diag_kind='kde', height=1.5, aspect=1.5
+)
+plt.suptitle('Pairplot of Palmer Penguins Numeric Variables', y=1.01)
+plt.show()
+```
+
+## Correlation Matrix
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Pearson correlation heatmap. Flipper length and bill length are moderately correlated — a potential multicollinearity concern."
+
+numeric_cols = ['body_mass_g', 'flipper_length_mm', 'bill_length_mm', 'bill_depth_mm']
+corr = penguins[numeric_cols].corr()
+
+fig, ax = plt.subplots(figsize=(7, 5))
+mask = np.triu(np.ones_like(corr, dtype=bool))
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm',
+            center=0, square=True, mask=mask, ax=ax,
+            cbar_kws={'shrink': 0.8})
+ax.set_title('Correlation Matrix: Numeric Variables')
+plt.tight_layout(); plt.show()
+```
+
+# Fitting MLR with statsmodels
+
+## 🛠️ The Formula Interface for MLR
+
+### Extending what we know
+
+:::{.fragment}
+
+The `statsmodels` formula interface extends naturally from SLR to MLR — just add more terms:
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+| Formula | Meaning |
+|---|---|
+| `'y ~ x1 + x2'` | Additive model (intercept automatic) |
+| `'y ~ x1 + x2 - 1'` | No intercept |
+| `'y ~ C(species)'` | Treat `species` as categorical (dummy coding) |
+| `'y ~ x1 * x2'` | $x_1 + x_2 + x_1 x_2$ (main effects + interaction) |
+| `'y ~ x1 + x1:x2'` | $x_1$ and the interaction term only |
+| `'y ~ np.log(x1)'` | Apply transformation inline |
+
+:::
+
+## Model 1: Numeric Predictors Only
+
+### Without species terms
+
+Let's start with a model that includes all numeric predictors but no 
+species terms.
+
+For response $Y=$`body_mass_g` and predictors $X_1=$`flipper_length_mm`, $X_2=$`bill_length_mm`, $X_3=$`bill_depth_mm`, the formula is:
+
+$$
+Y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} + \varepsilon_i,
+$$
+
+where $\varepsilon_i \sim \mathcal{N}(0, \sigma^2)$.
+
+## Model 1: Python Code
+
+We fit the model and print the summary.
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+
+model1 = smf.ols(
+    'body_mass_g ~ flipper_length_mm + bill_length_mm + bill_depth_mm',
+    data=penguins
+).fit()
+print(model1.summary())
+```
+
+:::
+
+## Reading the MLR Summary
+
+### Coefficients
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+print(model1.summary2().tables[1].round(3))
+```
+
+- Each slope is a **partial** effect — holding all other predictors constant.
+- `bill_length_mm` has a large $p$-value — once
+flipper length and depth are in the model, bill length adds little additional information.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Have we improved on SLR?
+
+```{python}
+#| output-location: fragment
+
+model_slr = smf.ols('body_mass_g ~ flipper_length_mm', data=penguins).fit()
+rows = {'SLR (flipper only)':    model_slr, 'MLR (+ bill dims)':     model1, }
+print(f"{'Model':<24} {'R²':>6} {'Adj. R²':>9} {'AIC':>10} {'BIC':>10}")
+print("-" * 61)
+for name, m in rows.items():
+    print(f"{name:<24} {m.rsquared:>6.4f} " f"{m.rsquared_adj:>9.4f} "
+          f"{m.aic:>10.1f} " f"{m.bic:>10.1f}")
+```
+
+- Adjusted $R^2$ improves slightly but both AIC and BIC increase — the added bill length and depth terms do not justify their complexity.
+  
+:::
+
+# Categorical Predictors
+
+## 🏷️ Dummy Coding
+
+### How statsmodels handles categorical variables
+
+:::{.fragment}
+
+For a categorical variable with $k$ levels, `statsmodels` creates **$k - 1$ dummy variables** using **treatment (reference) coding**:
+
+- One level is chosen as the **reference category** (alphabetically by default).
+- Each dummy variable equals 1 for observations in that category, 0 otherwise.
+- The **intercept** gives the expected response for the reference category.
+- Each slope gives the **difference** from the reference, holding other variables constant.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+For `species` (Adelie, Chinstrap, Gentoo), statsmodels creates:
+
+| Dummy | Value for Adelie | Value for Chinstrap | Value for Gentoo |
+|---|---|---|---|
+| `C(species)[T.Chinstrap]` | 0 | 1 | 0 |
+| `C(species)[T.Gentoo]` | 0 | 0 | 1 |
+
+Adelie is the **reference category** (first alphabetically).
+
+:::
+
+## Dummy Impact 
+
+### What are we really doing?
+
+- By adding `C(species)`, we allow the model to fit **different intercepts** 
+  for each species.
+- This results in **3 parallel regression planes** (one per species) rather than a 
+  single plane for all data.
+
+:::{.fragment}
+
+### Visualising the effect of adding species (SLR + species)
+
+
+
+```{python}
+#| echo: false
+#| fig-cap: "Adding species allows the model to fit separate intercepts for each species, capturing much of the previously observed residual structure."
+model_slr_cat = smf.ols('body_mass_g ~ flipper_length_mm + C(species)', data=penguins).fit()
+fig, ax = plt.subplots(figsize=(8, 4))
+colors = {'Adelie': '#66c2a5', 'Chinstrap': '#fc8d62', 'Gentoo': '#8da0cb'}
+for sp, grp in penguins.groupby('species'):
+    ax.scatter(grp['flipper_length_mm'], grp['body_mass_g'],
+               color=colors[sp], alpha=0.5, s=35, zorder=3, label=f'{sp} (data)')
+    x_range = pd.DataFrame({
+        'flipper_length_mm': np.linspace(
+            grp['flipper_length_mm'].min(),
+            grp['flipper_length_mm'].max(), 100),
+        'species': sp
+    })
+    y_pred = model_slr_cat.predict(x_range)
+    ax.plot(x_range['flipper_length_mm'], y_pred,
+            color=colors[sp], lw=2.5, label=f'{sp} (fit)')
+ax.set_xlabel('Flipper length (mm)')
+ax.set_ylabel('Body mass (g)')
+ax.set_title('SLR + Species: Parallel Regression Planes')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+## Model 2: Adding Species
+
+### Let's add Species
+
+Now we modify our MLR model to include `C(species)` as a **categorical predictor**. 
+We define **indicator variables** for Chinstrap and Gentoo, with Adelie as the 
+reference category.
+
+$$
+Y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{3i} + 
+\beta_4 d_{Ci}+ \beta_5 d_{Gi} + \varepsilon_i, 
+$$
+
+$$
+\varepsilon_i \overset{\text{iid}}{\sim} \mathcal{N}(0, \sigma^2),
+$$
+
+where $d_{Ci}$ and $d_{Gi}$ are the **dummy variables** for Chinstrap and Gentoo, 
+respectively.
+
+- We have added **two parameters** ($\beta_4$, $\beta_5$).
+
+- We will need to check if these parameters **sufficiently improve model fit** to 
+  justify their inclusion (partial $F$-test, AIC/BIC comparison).
+
+## Model 2: Python Code
+
+We add `C(species)` to the formula and fit the model:  
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+
+model2 = smf.ols(
+    'body_mass_g ~ flipper_length_mm + bill_length_mm + bill_depth_mm + C(species)',
+    data=penguins
+).fit()
+print(model2.summary())
+```
+
+:::
+
+## Interpreting the Species Coefficients
+
+### The constant impact of species on body mass
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+params = model2.params
+ci     = model2.conf_int()
+
+for name in ['C(species)[T.Chinstrap]', 'C(species)[T.Gentoo]']:
+    short = name.replace('C(species)[T.', '').replace(']', '')
+    print(f"{short}: {params[name]:+.1f} g   "
+          f"95% CI: ({ci.loc[name, 0]:.1f},  {ci.loc[name, 1]:.1f})")
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### How to read these
+
+- These are differences relative to the reference category (Adelie).
+- **`Gentoo`**: holding all numeric measurements constant, Geintoo penguins 
+  weigh approximately 965g *more* than Adelie penguins on average.
+- **`Chinstrap`**: similarly, Chinstrap penguins weight approximately 497g 
+  less than Adelie penguins on average **after controlling for** flipper 
+  length and bill measurements. 
+- These are **within-measurement** comparisons: given two penguins with 
+  identical flipper and bill values, how much does **species alone** account 
+  for?
+
+:::
+
+## Visualising the Categorical Model
+
+We produce a multiplot of observed vs. fitted values and residuals vs. fitted
+for the MLR model.
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Left: observed vs. fitted values coloured by species — the model now captures species-level structure. Right: residuals vs. fitted — the banding visible in the SLR model (Lecture 10) is substantially reduced."
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+sp_colors = penguins['species'].map({'Adelie': 0, 'Chinstrap': 1, 'Gentoo': 2})
+
+# Observed vs. Fitted
+axes[0].scatter(model2.fittedvalues, penguins['body_mass_g'],
+                c=sp_colors, cmap='Set2', alpha=0.6, s=30)
+lims = [penguins['body_mass_g'].min() - 200, penguins['body_mass_g'].max() + 200]
+axes[0].plot(lims, lims, 'k--', lw=1.5, label='Perfect fit')
+axes[0].set_xlabel('Fitted values $\\hat{y}$')
+axes[0].set_ylabel('Observed $y$')
+axes[0].set_title('Observed vs. Fitted — Model 2 (+Species)')
+axes[0].legend()
+
+# Residuals vs. Fitted
+axes[1].scatter(model2.fittedvalues, model2.resid,
+                c=sp_colors, cmap='Set2', alpha=0.6, s=30)
+axes[1].axhline(0, color='crimson', lw=1.5, linestyle='--')
+lowess = sm.nonparametric.lowess(model2.resid, model2.fittedvalues, frac=0.5)
+axes[1].plot(lowess[:, 0], lowess[:, 1], 'crimson', lw=2, label='LOWESS')
+axes[1].set_xlabel('Fitted values $\\hat{y}$')
+axes[1].set_ylabel('Residuals')
+axes[1].set_title('Residuals vs. Fitted — Model 2 (+Species)')
+axes[1].legend()
+
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+# Model Comparison
+
+## 🔍 Partial $F$-Test with `anova_lm`
+
+### Does adding species significantly improve the fit?
+
+:::{.fragment}
+
+We compare:
+
+- **Reduced (Model 1)**: `body_mass_g ~ flipper + bill_length + bill_depth`
+- **Full (Model 2)**: adds `C(species)` — 2 extra parameters (Chinstrap, Gentoo dummies)
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+anova_table = anova_lm(model1, model2)
+print(anova_table.round(4))
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- A very small $p$-value means: yes, species terms **jointly** and significantly improve the fit.
+- The $F$-statistic measures the average improvement in fit per additional parameter.
+- `anova_lm` automatically computes the correct $F_{q,\, n-p-1}$ statistic.
+
+:::
+
+## Summary Comparison of All Models
+
+```{python}
+#| output-location: fragment
+
+models = {
+    'SLR (flipper)':   model_slr,
+    'MLR numeric':     model1,
+    'MLR + species':   model2,
+}
+
+print(f"{'Model':<22} {'R²':>6} {'Adj. R²':>9} {'AIC':>10} {'BIC':>10}")
+print("-" * 59)
+for name, m in models.items():
+    print(f"{name:<22} {m.rsquared:>6.4f} "
+          f"{m.rsquared_adj:>9.4f} "
+          f"{m.aic:>10.1f} "
+          f"{m.bic:>10.1f}")
+```
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Every metric — Adj. $R^2$, AIC, BIC — improves substantially when species is added. The partial $F$-test confirms this improvement is statistically significant.
+
+:::
+
+# Interaction Terms
+
+## 🤝 What Is an Interaction?
+
+:::{.fragment}
+
+An **interaction** between $X_j$ and $X_k$ allows the **slope** of $X_j$ to depend on the value of $X_k$:
+
+$$Y_i = \beta_0 + \beta_1 x_{j} + \beta_2 x_{k} + \beta_{jk}\,x_{j}\,x_{k} + \varepsilon_i.$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- Without the interaction: the effect of $X_j$ on $Y$ is always $\beta_1$ regardless of $X_k$.
+- With the interaction: the effect of $X_j$ is $\beta_1 + \beta_{jk}\,x_k$ — it **changes with $x_k$**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### A natural question for penguins
+
+> Does the relationship between **flipper length** and **body mass** differ by **species**?
+
+- Each species may have a different slope, not just a different intercept.
+- We test this with: `flipper_length_mm * C(species)`.
+
+:::
+
+## Model 3: Adding the interaction
+
+To allow species-specific slopes for flipper length, we add the interaction term `flipper_length_mm * C(species)` to the formula. This expands to:
+
+$$
+Y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{3i} +
+\beta_4 d_{Ci} + \beta_5 d_{Gi} + \beta_6 x_{1i} d_{Ci} + \beta_7 x_{1i} d_{Gi} + \varepsilon_i,
+$$
+
+$$
+\varepsilon_i \overset{\text{iid}}{\sim} \mathcal{N}(0, \sigma^2),
+$$
+
+where $x_{1i}$ is flipper length, $d_{Ci}$ and $d_{Gi}$ are the species dummies, and $\beta_6$, $\beta_7$ capture how the flipper length slope changes for Chinstrap and Gentoo relative to Adelie.
+
+## Model 3: Python Code
+
+We fit the interaction model and print the summary.
+
+```{python}
+#| output-location: fragment
+model3 = smf.ols(
+    'body_mass_g ~ flipper_length_mm * C(species) + bill_depth_mm + bill_length_mm',
+    data=penguins
+).fit()
+print(model3.summary())
+```
+
+## Visualising the Interaction
+
+We produce a plot to help visualize the impact of the interaction terms — separate regression lines for each species.
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Interaction model: each species has its own regression slope (not just intercept). The slopes are broadly similar, suggesting the interaction terms may not add much beyond different intercepts."
+
+colors = {'Adelie': '#66c2a5', 'Chinstrap': '#fc8d62', 'Gentoo': '#8da0cb'}
+fig, ax = plt.subplots(figsize=(10, 6))
+
+for sp, grp in penguins.groupby('species'):
+    ax.scatter(grp['flipper_length_mm'], grp['body_mass_g'],
+               color=colors[sp], alpha=0.5, s=35, zorder=3, label=f'{sp} (data)')
+    x_range = pd.DataFrame({
+        'flipper_length_mm': np.linspace(
+            grp['flipper_length_mm'].min(),
+            grp['flipper_length_mm'].max(), 100),
+        'species': sp,
+        'bill_depth_mm': penguins['bill_depth_mm'].mean(),
+        'bill_length_mm': penguins['bill_length_mm'].mean()
+    })
+    y_pred = model3.predict(x_range)
+    ax.plot(x_range['flipper_length_mm'], y_pred,
+            color=colors[sp], lw=2.5, label=f'{sp} (fit)')
+
+ax.set_xlabel('Flipper length (mm)')
+ax.set_ylabel('Body mass (g)')
+ax.set_title('Interaction Model: Species $\\times$ Flipper Length')
+ax.legend(fontsize=9, ncol=2)
+plt.tight_layout(); plt.show()
+```
+
+## Testing Whether the Interaction Terms Help
+
+### Lots of Parameters, but do they improve fit?
+
+- Model 3 already has 8 parameters (intercept + 3 numeric slopes + 2 species dummies + 2 interaction terms).
+
+- We are interested to test whether these parameters are significant and 
+  whether they provide enough improvement. 
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+
+anova_int = anova_lm(model2, model3)
+print(anova_int.round(4))
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- Compare the $p$-value to $\alpha = 0.05$.
+- If the interaction terms are not significant, Model 2 (parallel slopes, different intercepts) is preferred — it is simpler and nearly as well-fitting.
+- This is the **principle of parsimony**: prefer the simpler model when the more complex one does not significantly improve fit.
+
+:::
+
+# Residual Diagnostics for MLR
+
+## 🔬 The Full Diagnostic Panel
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Four-panel diagnostic plot for Model 2 (+species). Compare with the SLR diagnostics from Lecture 10 — adding species substantially reduces the residual structure."
+
+fitted   = model2.fittedvalues
+residual = model2.resid
+resid_std = residual / np.sqrt(np.sum(residual**2) / model2.df_resid)
+sqrt_abs  = np.sqrt(np.abs(resid_std))
+influence = model2.get_influence()
+cooks_d   = influence.cooks_distance[0]
+threshold = 4 / len(penguins)
+
+fig, axes = plt.subplots(2, 2, figsize=(13, 6))
+
+# 1. Residuals vs Fitted
+axes[0,0].scatter(fitted, residual, alpha=0.45, color='steelblue', s=25, zorder=3)
+axes[0,0].axhline(0, color='crimson', lw=1.5, linestyle='--')
+lw1 = sm.nonparametric.lowess(residual, fitted, frac=0.5)
+axes[0,0].plot(lw1[:,0], lw1[:,1], 'crimson', lw=2)
+axes[0,0].set_xlabel('Fitted values'); axes[0,0].set_ylabel('Residuals')
+axes[0,0].set_title('Residuals vs. Fitted')
+
+# 2. Normal Q-Q
+qq = probplot(residual, dist='norm')
+axes[0,1].scatter(qq[0][0], qq[0][1], alpha=0.5, color='steelblue', s=25, zorder=3)
+axes[0,1].plot(qq[0][0], qq[1][1] + qq[1][0]*qq[0][0], 'crimson', lw=2, label='Reference')
+axes[0,1].set_xlabel('Theoretical quantiles'); axes[0,1].set_ylabel('Sample quantiles')
+axes[0,1].set_title('Normal Q-Q'); axes[0,1].legend(fontsize=9)
+
+# 3. Scale-Location
+axes[1,0].scatter(fitted, sqrt_abs, alpha=0.45, color='steelblue', s=25, zorder=3)
+lw2 = sm.nonparametric.lowess(sqrt_abs, fitted, frac=0.5)
+axes[1,0].plot(lw2[:,0], lw2[:,1], 'crimson', lw=2)
+axes[1,0].set_xlabel('Fitted values')
+axes[1,0].set_ylabel('$\\sqrt{|\\mathrm{Std.\\ Residuals}|}$')
+axes[1,0].set_title('Scale-Location')
+
+# 4. Cook's Distance
+axes[1,1].stem(range(len(cooks_d)), cooks_d,
+               linefmt='steelblue', markerfmt='o', basefmt=' ')
+axes[1,1].axhline(threshold, color='crimson', linestyle='--',
+                   label=f'4/n = {threshold:.3f}')
+axes[1,1].set_xlabel('Observation index')
+axes[1,1].set_ylabel("Cook's $D_i$")
+axes[1,1].set_title("Cook's Distance"); axes[1,1].legend(fontsize=9)
+
+plt.suptitle('MLR Diagnostic Panel — Model 2 (+Species)', fontsize=14, y=1.01)
+plt.tight_layout(); plt.show()
+```
+
+## Added-Variable (Partial Regression) Plots
+
+:::{.fragment}
+
+### What are they?
+
+- Show the **marginal effect** of one predictor after removing the linear influence of all other predictors.
+- Plot: residuals of $Y \sim \{\text{all others}\}$ vs. residuals of $X_j \sim \{\text{all others}\}$.
+- The slope in this plot **equals** $\hat{\beta}_j$ in the full model.
+- Useful for visualising partial effects and spotting leverage/influence for a specific predictor.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Added-variable plots for each numeric predictor in Model 2. Each panel shows the partial relationship after accounting for all other predictors in the model."
+
+fig = sm.graphics.plot_partregress_grid(
+    model2, fig=plt.figure(figsize=(13, 5))
+)
+fig.suptitle('Added-Variable Plots — Model 2 (+Species)', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+# Multicollinearity in Practice
+
+## What is Multicollinearity?
+
+**Multicollinearity** occurs when two or more predictors in a regression model are highly correlated with each other.
+
+:::{.fragment}
+
+### Why it causes problems
+
+- The model cannot cleanly separate the individual effects of correlated predictors.
+- **Coefficient estimates become unstable** — small changes in the data can produce large swings in $\hat{\beta}$.
+- **Standard errors inflate**, making $t$-statistics small and $p$-values large even when predictors genuinely matter.
+- The model's *predictions* may still be accurate, but **interpretation of individual coefficients** becomes unreliable.
+
+:::
+
+
+## The Variance Inflation Factor (VIF)
+
+The **VIF** for predictor $X_j$ measures how much its variance is inflated due to correlation with the other predictors:
+
+$$
+\text{VIF}_j = \frac{1}{1 - R^2_j},
+$$
+
+where $R^2_j$ is the $R^2$ from regressing $X_j$ on all other predictors.
+
+- $\text{VIF} = 1$: no collinearity.
+- $\text{VIF} > 5$: moderate concern; inspect carefully.
+- $\text{VIF} > 10$: serious collinearity; coefficients are likely unreliable.
+
+
+## ⚠️ Computing VIF in Python
+
+To compute the VIF we use the `variance_inflation_factor` function from `statsmodels`. We need to create a design matrix that includes all numeric predictors (and a constant) and then compute the VIF for each predictor.
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "VIF values for the numeric predictors in Model 2. Values are all below 5, suggesting multicollinearity is not a serious concern here."
+
+numeric_preds = ['flipper_length_mm', 'bill_length_mm', 'bill_depth_mm']
+X_vif = sm.add_constant(penguins[numeric_preds]).values
+
+vif_df = pd.DataFrame({
+    'Predictor': numeric_preds,
+    'VIF': [variance_inflation_factor(X_vif, i + 1)
+            for i in range(len(numeric_preds))]
+}).round(3)
+
+print(vif_df.to_string(index=False))
+
+fig, ax = plt.subplots(figsize=(7, 3))
+ax.barh(vif_df['Predictor'], vif_df['VIF'],
+        color='steelblue', alpha=0.8)
+ax.axvline(5,  color='orange', lw=2, linestyle='--', label='VIF = 5')
+ax.axvline(10, color='crimson', lw=2, linestyle='--', label='VIF = 10')
+ax.set_xlabel('VIF')
+ax.set_title('Variance Inflation Factors — Model 2 Numeric Predictors')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+## A Note on What MLR Cannot Tell Us
+
+:::{.fragment}
+
+### What we found
+
+- Adding species and bill dimensions pushes $R^2$ to $> 0.85$ and dramatically reduces residual structure.
+- Species coefficients suggest meaningful mass differences between species **after controlling for** body measurements.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### What we should not conclude
+
+- **Causation**: the model describes associations, not mechanisms.
+- **Completeness**: other omitted variables (age, sex, diet) likely explain residual variation.
+- **Extrapolation**: predictions are reliable only within the observed range of predictor values.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> These limitations motivate moving to **generalised models** — extending regression beyond continuous Gaussian responses.
+
+:::
+
+## Conclusion
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ What we covered
+
+- **Fitting MLR** with `statsmodels` using the formula interface.
+- **Categorical predictors**: dummy coding, treatment contrasts, and interpreting species coefficients.
+- **Reading the MLR summary**: adj. $R^2$, overall $F$-test, and partial $t$-tests.
+- **Model comparison**: partial $F$-test via `anova_lm`; AIC/BIC and adj. $R^2$ table.
+- **Interaction terms**: `x1 * x2` syntax; visualising species-specific slopes; testing necessity with partial $F$.
+- **Residual diagnostics**: the four-panel plot; added-variable plots via `plot_partregress_grid`.
+- **VIF**: detecting multicollinearity with `variance_inflation_factor`.
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 What's next?
+
+- Model Selection methods: stepwise regression, regularisation (Lasso, Ridge), and best subsets.
+- Logistic Regression.
+
+:::
+
+## References

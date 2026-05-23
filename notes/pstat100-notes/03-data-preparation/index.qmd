@@ -3,7 +3,7 @@ title: "Data Preparation"
 description: "Data preparation in python including missingness, duplicates, fixing data types, relabeling, and more."
 author: "John Robin Inston"
 date: "2026-05-06"
-date-modified: "2026-05-06"
+date-modified: "2026-05-22"
 toc: true
 title-block-banner: false
 sidebar: pstat100-notes
@@ -11,3 +11,448 @@ page-navigation: true
 execute:
     echo: true
 ---
+
+::: {.callout-important title="Learning Objectives"}
+- Understand what data preparation is and why it is necessary.
+- Diagnose and handle missing data, including the MCAR / MAR / MNAR classification.
+- Identify and remove or aggregate duplicate records.
+- Fix inconsistent and mixed data types, including dates and booleans.
+- Detect and resolve invalid values and labelling inconsistencies.
+- Follow a principled, step-by-step data preparation workflow.
+:::
+
+```{python}
+#| code-fold: true
+#| code-summary: "Libraries"
+import pandas as pd
+import numpy as np
+import missingno as msno
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+## Tidy Data and Common Problems
+
+In the previous chapter we introduced the **tidy data standard**:
+
+::: {.callout-important title="Tidy Data Standard"}
+For data to be tidy it must satisfy the following three rules:
+
+1. Each variable is a column.
+2. Each observation is a row.
+3. Each type of observational unit forms a table.
+:::
+
+In practice, raw data almost never arrives in this form. Beyond structure, real datasets routinely contain:
+
+- **Missing values** — entries that were never collected, lost, or recorded incorrectly.
+- **Duplicate records** — rows that represent the same observation more than once.
+- **Inconsistent or incorrect data types** — dates stored as strings, numbers encoded as text.
+- **Invalid values** — entries that appear real but break domain rules (e.g. a negative age).
+- **Labelling issues** — the same category written in multiple ways across rows or files.
+
+Data preparation is the process of systematically identifying and resolving these problems before analysis.
+
+::: {.callout-important title="Data Preparation"}
+**Data preparation** is the process of cleaning and transforming data to make it suitable for analysis.
+:::
+
+The workflow for each problem follows the same pattern:
+
+1. **Identify** — find what is wrong with the data.
+2. **Determine** — decide how to fix the problem.
+3. **Update and check** — apply the fix and verify the result.
+
+## Missing Data
+
+### Causes and consequences
+
+Missing data can arise for many reasons: a field was never collected, data was collected but subsequently lost, or a value was recorded incorrectly and then nullified. Understanding *why* data is missing is important because it determines what treatment is appropriate.
+
+### Classifying missingness
+
+There are three standard classifications:
+
+1. **Missing Completely at Random (MCAR)** — missingness is independent of both observed and unobserved data. Deleting missing rows introduces no bias.
+2. **Missing at Random (MAR)** — missingness can be fully accounted for by other observed variables. Imputation using those variables is justified.
+3. **Missing Not at Random (MNAR)** — missingness depends on the missing value itself or on unobserved factors. This is the most problematic case and requires careful modelling.
+
+Missingness is often informative in its own right. A blank income field may mean the respondent preferred not to disclose it (biasing a sample toward lower earners). Missing follow-up appointments in a clinical trial may indicate patients who became too ill to return (biasing an efficacy estimate upward). Ignoring these patterns leads to biased analysis.
+
+### Practice data
+
+We will use a synthetic student academic records dataset throughout this section. It has enough columns and varied missingness patterns to illustrate the key tools.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Creating synthetic student dataset with missing values."
+rng = np.random.default_rng(42)
+n = 500
+
+year  = rng.choice([1, 2, 3, 4], size=n, p=[0.25, 0.25, 0.25, 0.25])
+gpa   = rng.normal(3.0, 0.5, size=n).clip(0, 4.0)
+
+# SAT score — missing for ~15% (some students sat the ACT instead)
+sat = rng.integers(900, 1600, size=n).astype(float)
+sat[rng.random(n) < 0.15] = np.nan
+
+# Income bracket and parent education — sensitive fields, often missing together
+income_mask   = rng.random(n) < 0.30
+parent_mask   = income_mask | (rng.random(n) < 0.10)
+income        = pd.Series(rng.choice(["Low", "Middle", "High"], size=n), dtype=object)
+parent_ed     = pd.Series(rng.choice(["High School", "Some College", "Bachelor's", "Graduate"], size=n), dtype=object)
+income[income_mask]     = np.nan
+parent_ed[parent_mask]  = np.nan
+
+study_hours   = rng.integers(5, 40, size=n).astype(float)
+study_hours[rng.random(n) < 0.10] = np.nan
+
+internship    = rng.choice([0, 1], size=n).astype(float)
+internship[rng.random(n) < 0.25] = np.nan
+
+# Research hours — mostly missing for first- and second-year students
+research      = rng.integers(0, 20, size=n).astype(float)
+research[(year < 3) | (rng.random(n) < 0.30)] = np.nan
+
+# Scholarship and financial aid — correlated missingness
+scholarship_mask  = rng.random(n) < 0.20
+scholarship       = rng.choice([0, 1], size=n).astype(float)
+financial_aid     = rng.integers(0, 20000, size=n).astype(float)
+scholarship[scholarship_mask] = np.nan
+financial_aid[scholarship_mask | (rng.random(n) < 0.10)] = np.nan
+
+# Thesis score — only exists for year-4 students
+thesis = rng.normal(75, 10, size=n).clip(0, 100)
+thesis[year < 4] = np.nan
+
+mentor         = rng.choice([0, 1], size=n).astype(float)
+mentor[rng.random(n) < 0.05] = np.nan
+
+# Exit survey — only year-4 students, and only ~40% completed it
+exit_survey = rng.integers(1, 10, size=n).astype(float)
+exit_survey[(year < 4) | (rng.random(n) < 0.60)] = np.nan
+
+students = pd.DataFrame({
+    'student_id':    [f"S{str(i).zfill(4)}" for i in range(1, n + 1)],
+    'year':          year,
+    'gpa':           gpa,
+    'sat_score':     sat,
+    'income_bracket': income,
+    'parent_education': parent_ed,
+    'study_hours_wk': study_hours,
+    'internship':    internship,
+    'research_hours': research,
+    'scholarship':   scholarship,
+    'financial_aid': financial_aid,
+    'thesis_score':  thesis,
+    'mentor_assigned': mentor,
+    'exit_survey_score': exit_survey,
+})
+```
+
+### Inspecting missingness
+
+The first step is to understand the scale of the problem.
+
+```{python}
+students.head()
+```
+
+```{python}
+students.shape
+```
+
+We count missing values per column and compute an overall percentage.
+
+```{python}
+missing_counts = students.isnull().sum().sort_values(ascending=False)
+missing_counts
+```
+
+```{python}
+total_cells   = np.prod(students.shape)
+total_missing = missing_counts.sum()
+print(f"Overall missingness: {total_missing / total_cells * 100:.1f}%")
+```
+
+### Visualising missingness with `missingno`
+
+The `missingno` library provides four complementary views of missing data patterns.
+
+**Bar chart** — shows the count of non-null values per column at a glance.
+
+```{python}
+#| fig-cap: "Non-null value counts per column (bar chart)."
+msno.bar(students, figsize=(9, 5))
+plt.tight_layout()
+plt.show()
+```
+
+**Matrix** — plots a random sample of rows; white streaks mark missing entries. Aligned streaks across columns indicate that variables are missing together.
+
+```{python}
+#| fig-cap: "Missing data matrix for 200 randomly sampled rows."
+msno.matrix(students.sample(200, random_state=1), figsize=(11, 4))
+plt.show()
+```
+
+**Heatmap** — shows the correlation between missingness indicators across pairs of columns. A positive value means the two columns tend to be missing at the same time; a negative value means they are missing at opposite times.
+
+```{python}
+#| fig-cap: "Missingness correlation heatmap."
+msno.heatmap(students, figsize=(10, 4))
+plt.show()
+```
+
+**Dendrogram** — clusters variables by the similarity of their missingness patterns. Variables linked at distance 0 fully predict one another's presence.
+
+```{python}
+#| fig-cap: "Missingness dendrogram."
+msno.dendrogram(students, figsize=(10, 4))
+plt.tight_layout()
+plt.show()
+```
+
+From these plots we can see that `scholarship` and `financial_aid` have highly correlated missingness (they were missing together by design), while `thesis_score` and `exit_survey_score` are missing as a structural consequence of student year — a clear MNAR pattern.
+
+### Handling missing data
+
+**Deletion** is appropriate when data is MCAR. It is simple but loses information.
+
+```{python}
+# Drop rows with any missing value
+students_row_dropped = students.dropna()
+print(f"Original rows:       {students.shape[0]}")
+print(f"After row deletion:  {students_row_dropped.shape[0]}")
+```
+
+```{python}
+# Drop columns with any missing value
+students_col_dropped = students.dropna(axis=1)
+print(f"Original columns:    {students.shape[1]}")
+print(f"After col deletion:  {students_col_dropped.shape[1]}")
+```
+
+Row deletion eliminates almost every record here because nearly every row has at least one missing field. Column deletion removes any column with even one null. In practice, targeted deletion — dropping only columns or rows above a missingness threshold — is more useful.
+
+**Imputation** replaces missing values with plausible substitutes. The `fillna` method covers the most common strategies:
+
+```{python}
+# Mean imputation for study_hours_wk (MCAR — plausibly random non-response)
+students['study_hours_wk'] = students['study_hours_wk'].fillna(
+    students['study_hours_wk'].mean()
+)
+
+# Forward fill for a time-ordered column (not this dataset, but common in time-series)
+# df['col'].ffill()
+
+# Constant fill for remaining numeric columns as a simple baseline
+students_imputed = students.bfill(axis=0).fillna(0)
+students_imputed.isnull().sum().sum()
+```
+
+::: {.callout-important title="Important"}
+Imputation is a deep topic in its own right. The right strategy depends on why data is missing and on the downstream analysis. Always ask: *would imputing this value introduce bias?*
+:::
+
+## Duplicate Values
+
+### Why duplicates arise
+
+Well-structured data should have a unique identifier for each observation. Duplicates typically arise from data entry errors, merging datasets without deduplication, or system migrations.
+
+We create a small customer dataset that contains both exact duplicates and near-duplicates arising from inconsistent capitalisation.
+
+```{python}
+customers = pd.DataFrame({
+    'customer_id': [1001, 1002, 1003, 1004, 1005, 1003, 1006, 1002, 1007, 1004, 1008],
+    'name':        ['Alice Johnson', 'bob smith',   'Carol White', 'david lee',
+                    'Eve Martinez',  'Carol White', 'Frank Brown', 'Bob Smith',
+                    'Grace Kim',     'David Lee',   'Hank Wilson'],
+    'email':       ['alice@example.com', 'bob@example.com',   'carol@example.com',
+                    'david@example.com', 'eve@example.com',   'carol@example.com',
+                    'frank@example.com', 'bob@example.com',   'grace@example.com',
+                    'david@example.com', 'hank@example.com'],
+    'age':         [28, 34, 45, 29, 52, 45, 38, 34, 41, 29, 55],
+    'city':        ['New York', 'los angeles', 'Chicago',     'new york', 'Houston',
+                    'Chicago',  'Phoenix',     'Los Angeles', 'Seattle',  'New York', 'Dallas'],
+    'spend':       [120.50, 89.99, 245.00, 55.75, 310.20,
+                    245.00, 178.40, 89.99,  95.60, 120.00, 430.10],
+})
+customers
+```
+
+### Identifying exact duplicates
+
+```{python}
+dup_count = customers.duplicated().sum()
+dup_rows  = customers.loc[customers.duplicated()].index.tolist()
+print(f"Exact duplicates: {dup_count}  (rows {dup_rows})")
+```
+
+### Near-duplicates from formatting inconsistency
+
+Exact duplicate detection misses rows that differ only in case or whitespace — `"bob smith"` and `"Bob Smith"` are the same person. Normalising strings first reveals the full extent of the problem.
+
+```{python}
+customers['name']  = customers['name'].str.strip().str.title()
+customers['email'] = customers['email'].str.strip().str.lower()
+customers['city']  = customers['city'].str.strip().str.title()
+
+dup_count = customers.duplicated().sum()
+dup_rows  = customers.loc[customers.duplicated()].index.tolist()
+print(f"Duplicates after normalisation: {dup_count}  (rows {dup_rows})")
+```
+
+### Removing duplicates
+
+The simplest resolution is deletion — keep the first occurrence.
+
+```{python}
+customers_clean = customers.drop_duplicates()
+print(f"Rows after deduplication: {len(customers_clean)}")
+```
+
+When we want to maximise information, we can **aggregate** rather than delete. Here we sum spend across duplicate customer IDs and take the first value for all other fields.
+
+```{python}
+customers_agg = (
+    customers
+    .groupby('customer_id', sort=False)
+    .agg({'name': 'first', 'email': 'first', 'age': 'mean', 'city': 'first', 'spend': 'sum'})
+    .reset_index()
+)
+customers_agg
+```
+
+## Inconsistent Data Types
+
+Pandas infers column types when loading a file, but inference is not always correct. Wrong types break operations silently — averaging a column of numbers stored as strings produces an error, and comparing dates stored as text gives alphabetical rather than chronological ordering. The goal is for every column to have a type that matches its meaning.
+
+Useful inspection tools: `dtypes`, `info()`, `head()`, and `unique()`.
+
+```{python}
+example_df = pd.DataFrame({
+    "date":    ["2024-01-01", "2024-01-02", "2024-01-03"],
+    "price":   ["1.10", "2.20", "3.30"],
+    "in_stock": ["True", "False", "True"],
+})
+print(example_df.dtypes)
+```
+
+All three columns are read as `object` (string). Each needs to be coerced to its correct type.
+
+### Dates stored as strings
+
+```{python}
+print(f"Before: {example_df['date'].dtype}")
+example_df['date'] = pd.to_datetime(example_df['date'])
+print(f"After:  {example_df['date'].dtype}")
+```
+
+### Numbers stored as strings
+
+```{python}
+print(f"Before: {example_df['price'].dtype}")
+example_df['price'] = pd.to_numeric(example_df['price'])
+print(f"After:  {example_df['price'].dtype}")
+```
+
+### Booleans stored as strings
+
+```{python}
+print(f"Before: {example_df['in_stock'].dtype}")
+example_df['in_stock'] = (
+    example_df['in_stock'].str.strip().str.lower()
+    .map({"true": True, "false": False})
+    .astype("boolean")
+)
+print(f"After:  {example_df['in_stock'].dtype}")
+```
+
+### Mixed date formats
+
+Hand-prepared data often contains dates written in multiple formats within the same column.
+
+```{python}
+mixed_df = pd.DataFrame({
+    "date":    ["2024-01-15", "21-12-2001", "December 21, 2001", "01/02/2024", "2018-03-04"],
+    "active":  ["True", "false", "true", "no", "yes"],
+})
+
+mixed_df['date'] = pd.to_datetime(mixed_df['date'], format="mixed")
+mixed_df['active'] = (
+    mixed_df['active'].str.strip().str.lower()
+    .map({"true": True, "false": False, "yes": True, "no": False})
+    .astype("boolean")
+)
+mixed_df
+```
+
+When loading CSVs you can direct pandas to parse date columns at load time with `parse_dates=[...]`, or specify exact formats via `pd.to_datetime(..., format='...')`. Use `errors='coerce'` to turn unparseable entries into `NaT` rather than raising an exception — this makes it easy to spot remaining problems.
+
+```{python}
+# Day-first strings; invalid entries silently become NaT
+pd.to_datetime(
+    pd.Series(["15/03/2024", "02/04/2024", "not a date"]),
+    dayfirst=True,
+    errors="coerce",
+)
+```
+
+## Invalid Values
+
+Invalid values are not missing: they appear as real entries but violate domain constraints — an age of 200, a negative count, a temperature of −999 (a common sentinel). They differ from outliers, which may be legitimate extremes. Invalid values are especially dangerous because they do not produce errors; they propagate silently through calculations.
+
+```{python}
+ages = pd.Series([34, 200, 28, -1, 45, 130])
+invalid_mask = (ages < 0) | (ages > 120)
+print("Invalid entries:\n", ages[invalid_mask])
+```
+
+To handle them: define rules from a data dictionary or domain knowledge, flag rows using boolean masks, then drop, replace, or convert to `NaN` and treat as missing. Document every rule — the *why* matters as much as the code.
+
+```{python}
+ages_clean = ages.where(~invalid_mask, other=np.nan)
+print("After cleaning:\n", ages_clean)
+```
+
+## Labelling Issues
+
+The same category can appear under multiple labels: `"NYC"`, `"nyc"`, and `"New York"` all refer to the same city. Column names can differ across files (`customerID` vs `customer_id`), which silently breaks joins and merges.
+
+The fix involves: normalising text with `str.strip()`, `str.lower()` / `str.title()`; building a mapping dictionary from raw labels to canonical ones; and applying it with `map()` or `replace()`.
+
+```{python}
+city_raw = pd.Series(["  nyc ", "NYC", "New York", "new york", "N.Y.C."])
+city_clean = city_raw.str.strip().str.title().replace({"Nyc": "New York", "N.Y.C.": "New York"})
+city_clean
+```
+
+For analysis, maintain a single canonical vocabulary per variable and keep a small "codebook" you can reuse across scripts.
+
+## Data Preparation Workflow
+
+The nine-step guide below is a useful starting point for any new dataset. It is not a rigid recipe — the order and depth of each step depend on the data.
+
+| Step | Action |
+|---|---|
+| 1 | **Inspection** — shape, `head()`, `info()`, `describe()`. Get oriented. |
+| 2 | **Variable labelling** — rename columns to a consistent convention. |
+| 3 | **Remove redundant variables** — drop columns unused in your analysis. |
+| 4 | **Fix data types and mixed formats** — dates, numerics, booleans. |
+| 5 | **Handle duplicates** — exact and near-duplicates. |
+| 6 | **Handle missing values** — classify, visualise, delete or impute. |
+| 7 | **Clean strings / encode categoricals** — normalise text, encode factors. |
+| 8 | **Handle outliers / invalid values** — flag, investigate, remove or cap. |
+| 9 | **Final validation and documentation** — confirm shapes, spot-check, record decisions. |
+
+A few principles to keep in mind:
+
+- Thoroughly understand the data *before* touching it. Read the documentation and data dictionaries.
+- Document every decision — not just *what* you changed but *why*.
+- Being thorough up front saves far more time than fixing a corrupted analysis later.
+- Expect to iterate: data preparation is rarely a linear, one-pass process.

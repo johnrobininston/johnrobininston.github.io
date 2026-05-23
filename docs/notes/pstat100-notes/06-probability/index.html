@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -47,12 +82,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark-954f74211988904d40b4eeb0bee6388c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -81,11 +114,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -227,10 +289,8 @@ ul.task-list li input[type="checkbox"] {
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = false;
+    const authorPrefersDark = true;
     const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -336,7 +396,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../notes/pstat100-notes/00-introduction/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../notes/pstat100-notes/00-introduction/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">PSTAT100 Notes</span></a>
   </div>
 </li>
@@ -441,7 +501,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Modelling</span></a>
+ <span class="menu-text">Statistical Models</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -477,6 +537,35 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Poisson Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/11-model-selection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Selection</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/12-regularization/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Machine Learning Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/13-classification/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -484,8 +573,42 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-modelling" id="toc-introduction-to-modelling" class="nav-link active" data-scroll-target="#introduction-to-modelling">Introduction to Modelling</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-model" id="toc-what-is-a-model" class="nav-link" data-scroll-target="#what-is-a-model">What is a Model?</a></li>
+  <li><a href="#why-build-models" id="toc-why-build-models" class="nav-link" data-scroll-target="#why-build-models">Why Build Models?</a></li>
+  <li><a href="#categories-of-models" id="toc-categories-of-models" class="nav-link" data-scroll-target="#categories-of-models">Categories of Models</a></li>
+  </ul></li>
+  <li><a href="#probability-theory" id="toc-probability-theory" class="nav-link" data-scroll-target="#probability-theory">Probability Theory</a>
+  <ul class="collapse">
+  <li><a href="#sample-spaces-and-events" id="toc-sample-spaces-and-events" class="nav-link" data-scroll-target="#sample-spaces-and-events">Sample Spaces and Events</a></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables">Random Variables</a></li>
+  <li><a href="#probability-mass-functions" id="toc-probability-mass-functions" class="nav-link" data-scroll-target="#probability-mass-functions">Probability Mass Functions</a></li>
+  <li><a href="#probability-density-functions" id="toc-probability-density-functions" class="nav-link" data-scroll-target="#probability-density-functions">Probability Density Functions</a></li>
+  <li><a href="#cumulative-distribution-functions" id="toc-cumulative-distribution-functions" class="nav-link" data-scroll-target="#cumulative-distribution-functions">Cumulative Distribution Functions</a></li>
+  <li><a href="#expectation" id="toc-expectation" class="nav-link" data-scroll-target="#expectation">Expectation</a></li>
+  <li><a href="#variance" id="toc-variance" class="nav-link" data-scroll-target="#variance">Variance</a></li>
+  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability">Conditional Probability</a></li>
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem">Bayes’ Theorem</a></li>
+  <li><a href="#independence" id="toc-independence" class="nav-link" data-scroll-target="#independence">Independence</a></li>
+  <li><a href="#conditional-expectation" id="toc-conditional-expectation" class="nav-link" data-scroll-target="#conditional-expectation">Conditional Expectation</a></li>
+  <li><a href="#joint-and-marginal-distributions" id="toc-joint-and-marginal-distributions" class="nav-link" data-scroll-target="#joint-and-marginal-distributions">Joint and Marginal Distributions</a></li>
+  </ul></li>
+  <li><a href="#standard-distributions" id="toc-standard-distributions" class="nav-link" data-scroll-target="#standard-distributions">Standard Distributions</a>
+  <ul class="collapse">
+  <li><a href="#the-binomial-distribution" id="toc-the-binomial-distribution" class="nav-link" data-scroll-target="#the-binomial-distribution">The Binomial Distribution</a></li>
+  <li><a href="#the-gaussian-normal-distribution" id="toc-the-gaussian-normal-distribution" class="nav-link" data-scroll-target="#the-gaussian-normal-distribution">The Gaussian (Normal) Distribution</a></li>
+  <li><a href="#the-multivariate-gaussian-distribution" id="toc-the-multivariate-gaussian-distribution" class="nav-link" data-scroll-target="#the-multivariate-gaussian-distribution">The Multivariate Gaussian Distribution</a></li>
+  <li><a href="#other-important-distributions" id="toc-other-important-distributions" class="nav-link" data-scroll-target="#other-important-distributions">Other Important Distributions</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -522,7 +645,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 14, 2026</p>
+      <p class="date-modified">May 22, 2026</p>
     </div>
   </div>
     
@@ -533,8 +656,694 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-default callout-important callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Understand what models are and the four broad categories: deterministic, probabilistic, statistical, and machine learning.</li>
+<li>Define random variables, probability mass functions (PMF), probability density functions (PDF), and cumulative distribution functions (CDF).</li>
+<li>Compute expectations and variances of random variables and apply their key properties.</li>
+<li>Apply conditional probability, Bayes’ theorem, and conditional expectation.</li>
+<li>Describe joint and marginal distributions of multiple random variables.</li>
+<li>Recognise and work with key standard distributions: Binomial, Gaussian, and Multivariate Gaussian.</li>
+</ul>
+</div>
+</div>
+<div id="712a15d1" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Libraries and Styling</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom, norm, multivariate_normal</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">'Set2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="introduction-to-modelling" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-modelling">Introduction to Modelling</h2>
+<section id="what-is-a-model" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-a-model">What is a Model?</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>model</strong> is a simplified, mathematical representation of a real-world system or process. It captures the essential features of the system while abstracting away unnecessary detail.</p>
+</div>
+</div>
+<p>Models appear throughout data science in many forms: a regression equation predicting house prices from square footage, a probability distribution describing the heights of adult males, a decision tree classifying emails as spam, or a differential equation modelling the spread of a disease.</p>
+<p>A fundamental trade-off is always present: all models are wrong, but some are <strong>useful</strong> (Box, 1979). A good model is simple enough to understand and accurate enough to be informative.</p>
+</section>
+<section id="why-build-models" class="level3">
+<h3 class="anchored" data-anchor-id="why-build-models">Why Build Models?</h3>
+<p>We build models to serve several distinct purposes:</p>
+<ul>
+<li><strong>Understand</strong> — reveal the relationships and mechanisms underlying observed data.</li>
+<li><strong>Predict</strong> — forecast future or unobserved outcomes from observed inputs.</li>
+<li><strong>Infer</strong> — draw conclusions about <em>populations</em> from <em>samples</em> (statistical inference).</li>
+<li><strong>Simulate</strong> — study hypothetical scenarios and their consequences.</li>
+<li><strong>Communicate</strong> — express complex patterns in data concisely and precisely.</li>
+</ul>
+</section>
+<section id="categories-of-models" class="level3">
+<h3 class="anchored" data-anchor-id="categories-of-models">Categories of Models</h3>
+<p>Models fall into four broad categories that differ in how they treat randomness and how their parameters are determined.</p>
+<p><strong>Deterministic models</strong> produce the same output for the same input with no randomness.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Deterministic Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Deterministic Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>deterministic model</strong> produces the same output for the same input — there is <strong>no randomness</strong> in the model.</p>
+</div>
+</div>
+<p>Classic examples include Newton’s second law <span class="math inline">\(F = ma\)</span> and compound interest <span class="math inline">\(A = P(1 + r)^t\)</span>. The key limitation is that real-world data always contains noise and variability, which deterministic models cannot represent or quantify.</p>
+<p><strong>Probabilistic models</strong> introduce randomness explicitly.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Probabilistic Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Probabilistic Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>probabilistic model</strong> introduces <strong>randomness</strong> explicitly. Outputs are described by <strong>probability distributions</strong> rather than fixed values.</p>
+</div>
+</div>
+<p>For example, the number of heads in 10 coin flips follows <span class="math inline">\(X \sim \text{Binomial}(10, 0.5)\)</span>, measurement error is often modelled as <span class="math inline">\(\varepsilon \sim \text{Normal}(0, \sigma^2)\)</span>, and time between arrivals as <span class="math inline">\(T \sim \text{Exponential}(\lambda)\)</span>. The key advantage is that probabilistic models let us <strong>quantify uncertainty</strong> in conclusions and predictions.</p>
+<p><strong>Statistical models</strong> are probabilistic models whose parameters are unknown and estimated from data.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Statistical Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Statistical Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>statistical model</strong> is a probabilistic model whose <strong>parameters are unknown</strong> and estimated from data. The process of finding parameter values that best explain the data is called <strong>model fitting</strong>.</p>
+</div>
+</div>
+<p>Simple linear regression is a canonical example: we assume <span class="math inline">\(Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i\)</span> with <span class="math inline">\(\varepsilon_i \sim \text{Normal}(0, \sigma^2)\)</span>. The parameters <span class="math inline">\(\beta_0, \beta_1, \sigma^2\)</span> are unknown and estimated from data. Statistical models support estimation, uncertainty quantification, hypothesis testing, and prediction.</p>
+<p><strong>Machine learning models</strong> learn patterns directly from data using optimisation algorithms.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Machine Learning Model">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Machine Learning Model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>machine learning model</strong> learns patterns directly from data using optimization algorithms. These models are often highly flexible and prioritise <strong>predictive performance</strong> over interpretability.</p>
+</div>
+</div>
+<p>Examples include decision trees, random forests, gradient boosting, and neural networks (supervised), as well as <span class="math inline">\(k\)</span>-means clustering and PCA (unsupervised). The table below summarises the key differences between statistical and machine learning models:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Statistical Models</th>
+<th>Machine Learning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Primary goal</strong></td>
+<td>Inference &amp; understanding</td>
+<td>Prediction</td>
+</tr>
+<tr class="even">
+<td><strong>Interpretability</strong></td>
+<td>High</td>
+<td>Often low</td>
+</tr>
+<tr class="odd">
+<td><strong>Assumptions</strong></td>
+<td>Explicit</td>
+<td>Implicit</td>
+</tr>
+<tr class="even">
+<td><strong>Sample size</strong></td>
+<td>Can work with small <span class="math inline">\(n\)</span></td>
+<td>Often requires large <span class="math inline">\(n\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>Uncertainty</strong></td>
+<td>Quantified</td>
+<td>Often not</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="probability-theory" class="level2">
+<h2 class="anchored" data-anchor-id="probability-theory">Probability Theory</h2>
+<p>Statistical and machine learning models are grounded in probability theory. Probability provides the mathematical language to describe uncertainty and variability in data, define distributions over possible outcomes, and reason formally about relationships between variables.</p>
+<section id="sample-spaces-and-events" class="level3">
+<h3 class="anchored" data-anchor-id="sample-spaces-and-events">Sample Spaces and Events</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Sample Space and Events">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Sample Space and Events
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>sample space</strong> <span class="math inline">\(\Omega\)</span> is the set of all possible outcomes of a random experiment. An <strong>event</strong> is any subset <span class="math inline">\(A \subseteq \Omega\)</span> (i.e.&nbsp;a collection of outcomes).</p>
+</div>
+</div>
+<p>A <strong>probability measure</strong> <span class="math inline">\(\mathbb{P}\)</span> assigns a number in <span class="math inline">\([0, 1]\)</span> to each event and satisfies the Kolmogorov Axioms:</p>
+<ul>
+<li><strong>Non-negativity</strong>: <span class="math inline">\(\mathbb{P}(A) \geq 0\)</span> for all events <span class="math inline">\(A\)</span>.</li>
+<li><strong>Normalization</strong>: <span class="math inline">\(\mathbb{P}(\Omega) = 1\)</span>.</li>
+<li><strong>Countable additivity</strong>: For mutually exclusive events <span class="math inline">\(A_1, A_2, \ldots\)</span>: <span class="math inline">\(\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty \mathbb{P}(A_i)\)</span>.</li>
+</ul>
+<p>These axioms form the formal foundation of probability theory, though in this course you will not need to write proofs from them.</p>
+</section>
+<section id="random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="random-variables">Random Variables</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Random Variable">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Random Variable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>random variable</strong> <span class="math inline">\(X\)</span> is a function <span class="math inline">\(X \colon \Omega \to \mathbb{R}\)</span> that maps each outcome in the sample space to a real number.</p>
+</div>
+</div>
+<p>Random variables are classified as either <strong>discrete</strong> or <strong>continuous</strong>:</p>
+<ul>
+<li>A <strong>discrete</strong> random variable takes values in a countable set <span class="math inline">\(\{x_1, x_2, \ldots\}\)</span>. For example, the number of heads in 5 coin flips.</li>
+<li>A <strong>continuous</strong> random variable can take any value in an interval or union of intervals. For example, the height of a randomly selected person.</li>
+</ul>
+<p>Random variables give us a unified, numerical framework for describing uncertainty — regardless of what the underlying sample space looks like.</p>
+</section>
+<section id="probability-mass-functions" class="level3">
+<h3 class="anchored" data-anchor-id="probability-mass-functions">Probability Mass Functions</h3>
+<p>For discrete random variables, the distribution is described by a <strong>probability mass function (PMF)</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Probability Mass Function (PMF)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Probability Mass Function (PMF)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>PMF</strong> of a discrete random variable <span class="math inline">\(X\)</span> is: <span class="math display">\[p(x) = \mathbb{P}(X = x), \quad \text{for all } x \text{ in the support of } X.\]</span></p>
+</div>
+</div>
+<p>The PMF must satisfy two properties: <span class="math inline">\(0 \leq p(x) \leq 1\)</span> for all <span class="math inline">\(x\)</span>, and <span class="math inline">\(\sum_x p(x) = 1\)</span>.</p>
+<p><strong>Example: Fair Die.</strong> Define <span class="math inline">\(X\)</span> as the result of throwing a fair 6-sided die. The support of <span class="math inline">\(X\)</span> is <span class="math inline">\(\{1, \ldots, 6\}\)</span> and all values are equally likely, so the PMF is: <span class="math display">\[p(x) = \frac{1}{6}, \quad \forall x \in \{1, \ldots, 6\}.\]</span> This is called a <strong>discrete uniform random variable</strong>.</p>
+<div id="5f1a7c7a" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">1</span>, <span class="dv">7</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pmf <span class="op">=</span> np.ones(<span class="dv">6</span>) <span class="op">/</span> <span class="dv">6</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.bar(x, pmf, color<span class="op">=</span><span class="st">'steelblue'</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>, width<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'x'</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'P(X = x)'</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'PMF of a Fair Die'</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.xticks(x)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="fl">0.25</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-3-output-1.png" width="662" height="470" class="figure-img"></p>
+<figcaption>Probability mass function of a uniform random variable representing a fair die.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="probability-density-functions" class="level3">
+<h3 class="anchored" data-anchor-id="probability-density-functions">Probability Density Functions</h3>
+<p>For continuous random variables, the distribution is described by a <strong>probability density function (PDF)</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Probability Density Function (PDF)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Probability Density Function (PDF)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>PDF</strong> of a continuous random variable <span class="math inline">\(X\)</span> is a function <span class="math inline">\(f(x) \geq 0\)</span> such that: <span class="math display">\[P(a \leq X \leq b) = \int_a^b f(x)\, dx.\]</span></p>
+</div>
+</div>
+<p>The PDF must satisfy: <span class="math inline">\(f(x) \geq 0\)</span> for all <span class="math inline">\(x\)</span>, and <span class="math inline">\(\int_{-\infty}^{\infty} f(x)\, dx = 1\)</span>. Crucially, for a continuous random variable <span class="math inline">\(P(X = x) = 0\)</span> for any single point <span class="math inline">\(x\)</span> — probabilities are <strong>areas</strong> under the curve, not heights.</p>
+<p><strong>Example: Bus waiting times.</strong> Consider a bus that arrives every 30 minutes. A person arrives at the stop not knowing the time, so their waiting time <span class="math inline">\(Y\)</span> is equally likely to be anywhere in <span class="math inline">\([0, 30]\)</span>. The PDF is: <span class="math display">\[f(x) = \frac{1}{30}, \quad \forall x \in [0, 30].\]</span> This is a <strong>continuous uniform distribution</strong>.</p>
+<div id="d5560c7f" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dv">1000</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.ones(<span class="dv">1000</span>) <span class="op">/</span> <span class="dv">30</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"f(x)"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"PDF of Uniform Waiting Times on [0, 30]"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="663" height="470" class="figure-img"></p>
+<figcaption>Density plot for continuous uniform bus waiting times.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cumulative-distribution-functions" class="level3">
+<h3 class="anchored" data-anchor-id="cumulative-distribution-functions">Cumulative Distribution Functions</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Cumulative Distribution Function (CDF)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Cumulative Distribution Function (CDF)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>CDF</strong> of a random variable <span class="math inline">\(X\)</span> is: <span class="math display">\[F(x) = P(X \leq x), \quad x \in \mathbb{R}.\]</span></p>
+</div>
+</div>
+<p>The CDF is <strong>non-decreasing</strong>: <span class="math inline">\(x_1 \leq x_2 \Rightarrow F(x_1) \leq F(x_2)\)</span>. It satisfies <span class="math inline">\(\lim_{x \to -\infty} F(x) = 0\)</span> and <span class="math inline">\(\lim_{x \to \infty} F(x) = 1\)</span>. For a continuous random variable, <span class="math inline">\(f(x) = F'(x)\)</span> — the PDF is the derivative of the CDF. A useful identity for computing probabilities is: <span class="math display">\[P(a &lt; X \leq b) = F(b) - F(a).\]</span></p>
+</section>
+<section id="expectation" class="level3">
+<h3 class="anchored" data-anchor-id="expectation">Expectation</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Expectation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Expectation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>expectation</strong> (or <strong>mean</strong>) of a random variable <span class="math inline">\(X\)</span> is: <span class="math display">\[\mathbb{E}[X] = \begin{cases} \displaystyle\sum_x x \cdot p(x) &amp; \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x \cdot f(x)\, dx &amp; \text{(continuous).} \end{cases}\]</span></p>
+</div>
+</div>
+<p>The expectation is the <strong>long-run average</strong> value of <span class="math inline">\(X\)</span> over many independent repetitions of the experiment. A key property is <strong>linearity of expectation</strong>: for constants <span class="math inline">\(a, b\)</span> and random variables <span class="math inline">\(X, Y\)</span>, <span class="math display">\[\mathbb{E}[aX + bY] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y].\]</span> This holds regardless of whether <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, and is particularly useful in linear regression.</p>
+</section>
+<section id="variance" class="level3">
+<h3 class="anchored" data-anchor-id="variance">Variance</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Variance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Variance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>variance</strong> of a random variable <span class="math inline">\(X\)</span> is: <span class="math display">\[\text{Var}(X) = \mathbb{E}\!\left[(X - \mathbb{E}[X])^2\right] = \mathbb{E}[X^2] - \bigl(\mathbb{E}[X]\bigr)^2.\]</span></p>
+</div>
+</div>
+<p>The <strong>standard deviation</strong> is <span class="math inline">\(\text{SD}(X) = \sqrt{\text{Var}(X)}\)</span>, which has the same units as <span class="math inline">\(X\)</span>. Key properties of variance are:</p>
+<ul>
+<li><span class="math inline">\(\text{Var}(aX + b) = a^2\,\text{Var}(X)\)</span> — shifting does not affect spread; scaling does.</li>
+<li>For <strong>independent</strong> <span class="math inline">\(X, Y\)</span>: <span class="math inline">\(\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)\)</span>.</li>
+</ul>
+</section>
+<section id="conditional-probability" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-probability">Conditional Probability</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Conditional Probability">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Conditional Probability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>conditional probability</strong> of event <span class="math inline">\(A\)</span> given event <span class="math inline">\(B\)</span> (with <span class="math inline">\(P(B) &gt; 0\)</span>) is: <span class="math display">\[P(A \mid B) = \frac{P(A \cap B)}{P(B)}.\]</span></p>
+</div>
+</div>
+<p><span class="math inline">\(P(A \mid B)\)</span> is the probability of <span class="math inline">\(A\)</span> once we know that <span class="math inline">\(B\)</span> has occurred — we restrict attention to the sub-universe where <span class="math inline">\(B\)</span> is true. From the definition it follows immediately that: <span class="math display">\[P(A \cap B) = P(A \mid B)\, P(B) = P(B \mid A)\, P(A),\]</span> which is called the <strong>multiplication rule</strong>.</p>
+</section>
+<section id="bayes-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="bayes-theorem">Bayes’ Theorem</h3>
+<p>Bayes’ theorem allows us to invert conditional probabilities — computing <span class="math inline">\(P(A \mid B)\)</span> from <span class="math inline">\(P(B \mid A)\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Bayes' Theorem">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Bayes’ Theorem
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}.\]</span></p>
+</div>
+</div>
+<p>In the language of statistical modelling:</p>
+<ul>
+<li><span class="math inline">\(P(A)\)</span> is the <strong>prior</strong> — our belief about <span class="math inline">\(A\)</span> before observing <span class="math inline">\(B\)</span>.</li>
+<li><span class="math inline">\(P(B \mid A)\)</span> is the <strong>likelihood</strong> — how probable is <span class="math inline">\(B\)</span> if <span class="math inline">\(A\)</span> is true?</li>
+<li><span class="math inline">\(P(A \mid B)\)</span> is the <strong>posterior</strong> — our updated belief after observing <span class="math inline">\(B\)</span>.</li>
+</ul>
+<p>Bayes’ theorem is the foundation of Bayesian statistics and many probabilistic classifiers (e.g.&nbsp;Naive Bayes). It formalises the idea of learning from data: updating beliefs in light of evidence.</p>
+</section>
+<section id="independence" class="level3">
+<h3 class="anchored" data-anchor-id="independence">Independence</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Independence">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Independence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> if: <span class="math display">\[P(A \cap B) = P(A)\, P(B), \quad \text{equivalently} \quad P(A \mid B) = P(A).\]</span> Random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>independent</strong> if knowing the value of one provides <strong>no information</strong> about the other.</p>
+</div>
+</div>
+<p>An important distinction: <strong>independence implies zero covariance (uncorrelatedness), but the converse is not generally true</strong>. Two variables can have correlation <span class="math inline">\(\approx 0\)</span> yet exhibit a strong non-linear relationship — a point encountered earlier in EDA.</p>
+</section>
+<section id="conditional-expectation" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-expectation">Conditional Expectation</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Conditional Expectation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Conditional Expectation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>conditional expectation</strong> of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> is: <span class="math display">\[\mathbb{E}[Y \mid X = x] = \begin{cases} \displaystyle\sum_y y \cdot P(Y = y \mid X = x) &amp; \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} y \cdot f_{Y \mid X}(y \mid x)\, dy &amp; \text{(continuous).} \end{cases}\]</span></p>
+</div>
+</div>
+<p><span class="math inline">\(\mathbb{E}[Y \mid X]\)</span> is itself a <strong>random variable</strong> — a function of <span class="math inline">\(X\)</span>. In regression, <span class="math inline">\(\mathbb{E}[Y \mid X = x]\)</span> is the <strong>regression function</strong>: the best prediction of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span>.</p>
+<p>Two key properties of conditional expectation are:</p>
+<ul>
+<li><strong>Linearity</strong>: <span class="math inline">\(\mathbb{E}[aX + bY \mid X] = aX + b\mathbb{E}[Y \mid X]\)</span>.</li>
+<li><strong>Law of Total Expectation</strong>: <span class="math inline">\(\mathbb{E}[Y] = \mathbb{E}\!\bigl[\mathbb{E}[Y \mid X]\bigr]\)</span> — averaging conditional expectations over <span class="math inline">\(X\)</span> recovers the unconditional mean.</li>
+</ul>
+</section>
+<section id="joint-and-marginal-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="joint-and-marginal-distributions">Joint and Marginal Distributions</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Joint Distribution">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Joint Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>joint distribution</strong> of <span class="math inline">\((X, Y)\)</span> describes the probability of all pairs of outcomes simultaneously.</p>
+<ul>
+<li><strong>Discrete</strong>: <span class="math inline">\(p(x, y) = P(X = x,\, Y = y)\)</span>.</li>
+<li><strong>Continuous</strong>: <span class="math inline">\(f(x, y)\)</span> such that <span class="math inline">\(P\!\bigl((X, Y) \in A\bigr) = \iint_A f(x, y)\, dx\, dy\)</span>.</li>
+</ul>
+</div>
+</div>
+<p>The <strong>marginal distribution</strong> of <span class="math inline">\(X\)</span> is obtained by integrating (or summing) out <span class="math inline">\(Y\)</span>:</p>
+<ul>
+<li>Discrete: <span class="math inline">\(p_X(x) = \displaystyle\sum_y p(x, y)\)</span>.</li>
+<li>Continuous: <span class="math inline">\(f_X(x) = \displaystyle\int_{-\infty}^{\infty} f(x, y)\, dy\)</span>.</li>
+</ul>
+<p>The <strong>conditional distribution</strong> of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> is: <span class="math display">\[f_{Y \mid X}(y \mid x) = \frac{f(x, y)}{f_X(x)}, \quad f_X(x) &gt; 0.\]</span></p>
+</section>
+</section>
+<section id="standard-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="standard-distributions">Standard Distributions</h2>
+<section id="the-binomial-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="the-binomial-distribution">The Binomial Distribution</h3>
+<p>The Binomial distribution models the number of successes in a fixed number of independent binary trials.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Binomial Distribution">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Binomial Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If <span class="math inline">\(X\)</span> counts the number of <strong>successes</strong> in <span class="math inline">\(n\)</span> independent <strong>Bernoulli trials</strong>, each with success probability <span class="math inline">\(p\)</span>, then <span class="math inline">\(X \sim \text{Binomial}(n, p)\)</span> with PMF: <span class="math display">\[P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n.\]</span></p>
+</div>
+</div>
+<p>Its mean and variance are: <span class="math display">\[\mathbb{E}[X] = np, \qquad \text{Var}(X) = np(1-p).\]</span></p>
+<p>The Binomial distribution arises naturally in data science for modelling click-through rates, defect counts, and disease incidence. It is also the foundation for <strong>logistic regression</strong>, which models binary outcomes.</p>
+<div id="05351bed" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> [(<span class="dv">10</span>, <span class="fl">0.3</span>), (<span class="dv">10</span>, <span class="fl">0.5</span>), (<span class="dv">20</span>, <span class="fl">0.7</span>)]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (n, p) <span class="kw">in</span> <span class="bu">zip</span>(axes, params):</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    k <span class="op">=</span> np.arange(<span class="dv">0</span>, n <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    ax.bar(k, binom.pmf(k, n, p), color<span class="op">=</span><span class="st">'steelblue'</span>, edgecolor<span class="op">=</span><span class="st">'white'</span>, width<span class="op">=</span><span class="fl">0.6</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    ax.axvline(n <span class="op">*</span> p, color<span class="op">=</span><span class="st">'crimson'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'Mean = </span><span class="sc">{</span>n<span class="op">*</span>p<span class="sc">:.1f}</span><span class="ss">'</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Binomial(n=</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">, p=</span><span class="sc">{</span>p<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'k'</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'P(X = k)'</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    ax.legend(fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-5-output-1.png" width="1334" height="374" class="figure-img"></p>
+<figcaption>PMFs of the Binomial distribution for different parameter values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-gaussian-normal-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="the-gaussian-normal-distribution">The Gaussian (Normal) Distribution</h3>
+<p>The Gaussian distribution is the most important continuous distribution in statistics.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Gaussian (Normal) Distribution">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Gaussian (Normal) Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A random variable <span class="math inline">\(X \sim \text{Normal}(\mu, \sigma^2)\)</span> has PDF: <span class="math display">\[f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right), \quad x \in \mathbb{R}.\]</span></p>
+</div>
+</div>
+<p>Its mean and variance are simply: <span class="math display">\[\mathbb{E}[X] = \mu, \qquad \text{Var}(X) = \sigma^2.\]</span></p>
+<p>The Gaussian distribution is ubiquitous for two reasons. First, the <strong>Central Limit Theorem</strong> states that the standardised sum of many i.i.d. random variables converges in distribution to <span class="math inline">\(\text{Normal}(0,1)\)</span>. Second, many natural phenomena — heights, measurement errors, noise — are approximately Gaussian.</p>
+<p>If <span class="math inline">\(X \sim \text{Normal}(\mu, \sigma^2)\)</span>, then <span class="math inline">\(Z = (X - \mu)/\sigma \sim \text{Normal}(0, 1)\)</span> is the <strong>standard normal</strong>. The <strong>68–95–99.7 rule</strong> provides useful probability benchmarks:</p>
+<ul>
+<li><span class="math inline">\(P(\mu - \sigma \leq X \leq \mu + \sigma) \approx 0.68\)</span></li>
+<li><span class="math inline">\(P(\mu - 2\sigma \leq X \leq \mu + 2\sigma) \approx 0.95\)</span></li>
+<li><span class="math inline">\(P(\mu - 3\sigma \leq X \leq \mu + 3\sigma) \approx 0.997\)</span></li>
+</ul>
+<p>This rule also connects back to EDA: a distribution is symmetric and mesokurtic (skewness <span class="math inline">\(= 0\)</span>, kurtosis <span class="math inline">\(= 3\)</span>) when it is Gaussian.</p>
+<div id="3892228e" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Left: varying parameters</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">7</span>, <span class="dv">7</span>, <span class="dv">500</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> mu, sigma, color, label <span class="kw">in</span> [(<span class="dv">0</span>, <span class="dv">1</span>, <span class="st">'steelblue'</span>, <span class="st">'μ=0, σ=1'</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                  (<span class="dv">0</span>, <span class="dv">2</span>, <span class="st">'crimson'</span>,   <span class="st">'μ=0, σ=2'</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                                  (<span class="dv">2</span>, <span class="dv">1</span>, <span class="st">'seagreen'</span>,  <span class="st">'μ=2, σ=1'</span>)]:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].plot(x, norm.pdf(x, mu, sigma), color<span class="op">=</span>color, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span>label)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Normal Distributions'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'f(x)'</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Right: 68-95-99.7 rule</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">500</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(x2, norm.pdf(x2), <span class="st">'k'</span>, lw<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n_sig, color, label <span class="kw">in</span> [(<span class="dv">3</span>, <span class="st">'#d0e8ff'</span>, <span class="st">'±3σ  (99.7%)'</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">2</span>, <span class="st">'#85b9f5'</span>, <span class="st">'±2σ  (95%)'</span>),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                              (<span class="dv">1</span>, <span class="st">'#2f6fbd'</span>, <span class="st">'±1σ  (68%)'</span>)]:</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    xf <span class="op">=</span> np.linspace(<span class="op">-</span>n_sig, n_sig, <span class="dv">300</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].fill_between(xf, norm.pdf(xf), alpha<span class="op">=</span><span class="fl">0.65</span>, color<span class="op">=</span>color, label<span class="op">=</span>label)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'68-95-99.7 Rule'</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'f(x)'</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].legend()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="1334" height="470" class="figure-img"></p>
+<figcaption>Normal PDFs with different parameters (left) and the 68-95-99.7 rule (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-multivariate-gaussian-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="the-multivariate-gaussian-distribution">The Multivariate Gaussian Distribution</h3>
+<p>The Multivariate Gaussian extends the Normal distribution to multiple dimensions and is essential for multivariate modelling.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Multivariate Gaussian Distribution">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Multivariate Gaussian Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A random vector <span class="math inline">\(\mathbf{X} = (X_1, \ldots, X_d)^\top \sim \text{Normal}(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> has PDF: <span class="math display">\[f(\mathbf{x}) = \frac{1}{(2\pi)^{d/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})\right),\]</span> where <span class="math inline">\(\boldsymbol{\mu} \in \mathbb{R}^d\)</span> is the <strong>mean vector</strong> and <span class="math inline">\(\boldsymbol{\Sigma} \in \mathbb{R}^{d \times d}\)</span> is the <strong>covariance matrix</strong> (symmetric, positive semi-definite).</p>
+</div>
+</div>
+<p>The parameters capture:</p>
+<ul>
+<li><span class="math inline">\(\mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}\)</span>: the mean of each component.</li>
+<li><span class="math inline">\(\text{Cov}(X_i, X_j) = \Sigma_{ij}\)</span>: off-diagonal entries capture linear co-movement; diagonal entries are variances <span class="math inline">\(\sigma_i^2\)</span>.</li>
+<li>When <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is diagonal, the components are uncorrelated and — for Gaussians — independent.</li>
+</ul>
+<p>The shape of the density contours reflects the covariance structure: circular for independent components and elliptical for correlated components.</p>
+<div id="49edade2" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">4</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>configs <span class="op">=</span> [</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'title'</span>: <span class="st">'Independent</span><span class="ch">\n</span><span class="st">(Σ = I)'</span>,            <span class="st">'cov'</span>: [[<span class="dv">1</span>,    <span class="dv">0</span>   ], [<span class="dv">0</span>,    <span class="dv">1</span>   ]]},</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'title'</span>: <span class="st">'Positive correlation</span><span class="ch">\n</span><span class="st">(ρ = 0.8)'</span>, <span class="st">'cov'</span>: [[<span class="dv">1</span>,    <span class="fl">0.8</span> ], [<span class="fl">0.8</span>,  <span class="dv">1</span>   ]]},</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    {<span class="st">'title'</span>: <span class="st">'Negative correlation</span><span class="ch">\n</span><span class="st">(ρ = −0.8)'</span>, <span class="st">'cov'</span>: [[<span class="dv">1</span>,   <span class="op">-</span><span class="fl">0.8</span> ], [<span class="op">-</span><span class="fl">0.8</span>, <span class="dv">1</span>   ]]},</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>x1, x2 <span class="op">=</span> np.mgrid[<span class="op">-</span><span class="dv">3</span>:<span class="dv">3</span>:<span class="fl">0.05</span>, <span class="op">-</span><span class="dv">3</span>:<span class="dv">3</span>:<span class="fl">0.05</span>]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>pos <span class="op">=</span> np.dstack((x1, x2))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, cfg <span class="kw">in</span> <span class="bu">zip</span>(axes, configs):</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    rv <span class="op">=</span> multivariate_normal(mean<span class="op">=</span>[<span class="dv">0</span>, <span class="dv">0</span>], cov<span class="op">=</span>cfg[<span class="st">'cov'</span>])</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ax.contourf(x1, x2, rv.pdf(pos), levels<span class="op">=</span><span class="dv">15</span>, cmap<span class="op">=</span><span class="st">'Blues'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    ax.set_title(cfg[<span class="st">'title'</span>])</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'$X_1$'</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'$X_2$'</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="1430" height="372" class="figure-img"></p>
+<figcaption>Bivariate Gaussian densities with different covariance structures.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The Multivariate Gaussian is the building block of multivariate regression, Gaussian processes, and PCA.</p>
+</section>
+<section id="other-important-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="other-important-distributions">Other Important Distributions</h3>
+<p>Beyond the Binomial and Gaussian, several other distributions appear frequently in data science.</p>
+<p><strong>Discrete distributions:</strong></p>
+<ul>
+<li><strong>Bernoulli<span class="math inline">\((p)\)</span></strong> — a single binary trial with <span class="math inline">\(P(X = 1) = p\)</span>. This is the special case Binomial<span class="math inline">\((n=1, p)\)</span>.</li>
+<li><strong>Poisson<span class="math inline">\((\lambda)\)</span></strong> — counts events in a fixed interval; <span class="math inline">\(P(X = k) = e^{-\lambda}\lambda^k / k!\)</span>. Mean <span class="math inline">\(=\)</span> Variance <span class="math inline">\(= \lambda\)</span>.</li>
+<li><strong>Geometric<span class="math inline">\((p)\)</span></strong> — the number of trials until the first success.</li>
+</ul>
+<p><strong>Continuous distributions:</strong></p>
+<ul>
+<li><strong>Uniform<span class="math inline">\((a, b)\)</span></strong> — equal density across <span class="math inline">\([a, b]\)</span>; <span class="math inline">\(f(x) = \frac{1}{b-a}\)</span>.</li>
+<li><strong>Exponential<span class="math inline">\((\lambda)\)</span></strong> — time until the first Poisson event; <span class="math inline">\(f(x) = \lambda e^{-\lambda x}\)</span> for <span class="math inline">\(x \geq 0\)</span>.</li>
+<li><strong>Beta<span class="math inline">\((\alpha, \beta)\)</span></strong> — supported on <span class="math inline">\([0, 1]\)</span>; models probabilities and is used extensively in Bayesian statistics.</li>
+<li><strong>Chi-squared, <span class="math inline">\(t\)</span>, <span class="math inline">\(F\)</span></strong> — arise as transformations of Gaussians and are fundamental in classical hypothesis testing.</li>
+</ul>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>The table below summarises the key probability concepts and their roles in statistical modelling.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept</th>
+<th>Formula</th>
+<th>Role in Modelling</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PMF / PDF</td>
+<td><span class="math inline">\(p(x)\)</span>, <span class="math inline">\(f(x)\)</span></td>
+<td>Describes the distribution of <span class="math inline">\(X\)</span></td>
+</tr>
+<tr class="even">
+<td>CDF</td>
+<td><span class="math inline">\(F(x) = P(X \leq x)\)</span></td>
+<td>Computes probabilities</td>
+</tr>
+<tr class="odd">
+<td>Expectation</td>
+<td><span class="math inline">\(\mathbb{E}[X]\)</span></td>
+<td>Population mean</td>
+</tr>
+<tr class="even">
+<td>Variance</td>
+<td><span class="math inline">\(\text{Var}(X) = \mathbb{E}[(X-\mathbb{E}X)^2]\)</span></td>
+<td>Population spread</td>
+</tr>
+<tr class="odd">
+<td>Conditional Prob.</td>
+<td><span class="math inline">\(P(A \mid B) = P(A\cap B)/P(B)\)</span></td>
+<td>Updating beliefs</td>
+</tr>
+<tr class="even">
+<td>Conditional Exp.</td>
+<td><span class="math inline">\(\mathbb{E}[Y \mid X]\)</span></td>
+<td>Regression function</td>
+</tr>
+<tr class="odd">
+<td>Joint / Marginal</td>
+<td><span class="math inline">\(f(x,y)\)</span>, <span class="math inline">\(f_X(x)\)</span></td>
+<td>Multivariate models</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

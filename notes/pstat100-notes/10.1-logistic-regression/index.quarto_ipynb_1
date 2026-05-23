@@ -1,0 +1,486 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Logistic Regression\"\n",
+        "description: \"Logistic regression in python using the famous Titanic data set.\"\n",
+        "author: \"John Robin Inston\"\n",
+        "date: \"2026-05-13\"\n",
+        "date-modified: \"2026-05-13\"\n",
+        "toc: true\n",
+        "title-block-banner: false\n",
+        "sidebar: pstat100-notes\n",
+        "page-navigation: true\n",
+        "execute:\n",
+        "    echo: true\n",
+        "---\n",
+        "\n",
+        "::: {.callout-important title=\"Learning Objectives\"}\n",
+        "- Define the logistic regression model.\n",
+        "- Implement logistic regression in python using the famous Titanic classification data set.\n",
+        ":::"
+      ],
+      "id": "52617d8b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| code-fold: true\n",
+        "#| code-summary: \"Libraries and Styling\"\n",
+        "# Libraries\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "import seaborn as sns\n",
+        "from scipy.stats import norm, binom\n",
+        "from scipy.special import expit          # the logistic (sigmoid) function\n",
+        "import statsmodels.formula.api as smf\n",
+        "import statsmodels.api as sm\n",
+        "from statsmodels.stats.anova import anova_lm\n",
+        "from sklearn.metrics import (\n",
+        "    confusion_matrix, ConfusionMatrixDisplay,\n",
+        "    roc_curve, roc_auc_score\n",
+        ")\n",
+        "\n",
+        "# Figure styling\n",
+        "sns.set_style('whitegrid')\n",
+        "sns.set_palette('Set2')"
+      ],
+      "id": "8d91e287",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Logistic Regression\n",
+        "\n",
+        "Logistic regression is the GLM for a **binary response** $Y_i \\in \\{0,1\\}$. It arises naturally in settings like: did a patient recover? did a loan default? is a species present at a site?\n",
+        "\n",
+        "We assume $Y_i \\mid \\mathbf{x}_i \\sim \\text{Bernoulli}(\\pi_i)$ and model the **log-odds** (logit) of $\\pi_i$ as a linear function of the predictors:\n",
+        "\n",
+        "$$\\log\\frac{\\pi_i}{1 - \\pi_i} = \\mathbf{x}_i^\\top\\boldsymbol{\\beta} = \\beta_0 + \\beta_1 x_{i1} + \\cdots + \\beta_p x_{ip}.$$\n",
+        "\n",
+        "Inverting the logit link gives the **logistic (sigmoid) function**, which maps any real number to $(0,1)$ and ensures probabilities are always valid:\n",
+        "\n",
+        "$$\\pi_i = \\sigma(\\eta_i) = \\frac{1}{1 + e^{-\\eta_i}}, \\quad \\eta_i = \\mathbf{x}_i^\\top\\boldsymbol{\\beta}.$$"
+      ],
+      "id": "7872b5af"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| fig-cap: \"The logistic function maps any real number to the interval (0, 1).\"\n",
+        "\n",
+        "eta = np.linspace(-6, 6, 300)\n",
+        "fig, ax = plt.subplots(figsize=(6, 3))\n",
+        "ax.plot(eta, expit(eta), color='#fc8d62', lw=2.5)\n",
+        "ax.axhline(0.5, color='gray', lw=1, linestyle='--', label='$\\\\sigma(0)=0.5$')\n",
+        "ax.axhline(0, color='gray', lw=0.8, linestyle=':')\n",
+        "ax.axhline(1, color='gray', lw=0.8, linestyle=':')\n",
+        "ax.set_xlabel('$\\\\eta$', fontsize=12)\n",
+        "ax.set_ylabel('$\\\\sigma(\\\\eta)$', fontsize=12)\n",
+        "ax.set_title('The Logistic (Sigmoid) Function')\n",
+        "ax.legend(fontsize=9)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "d643480c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Interpreting Coefficients\n",
+        "\n",
+        "Coefficients can be read on three equivalent scales:\n",
+        "\n",
+        "| Scale | Formula | Interpretation |\n",
+        "|---|---|---|\n",
+        "| **Log-odds** | $\\log\\frac{\\pi}{1-\\pi} = \\boldsymbol{x}^\\top\\boldsymbol{\\beta}$ | Linear, unbounded — the model lives here |\n",
+        "| **Odds** | $\\frac{\\pi}{1-\\pi} = e^{\\boldsymbol{x}^\\top\\boldsymbol{\\beta}}$ | $e^{\\beta_j}$ is the **odds ratio** per unit increase in $x_j$ |\n",
+        "| **Probability** | $\\pi = \\sigma(\\boldsymbol{x}^\\top\\boldsymbol{\\beta})$ | Non-linear; depends on the values of all predictors |\n",
+        "\n",
+        "If $\\beta_j = 0.5$, then $e^{0.5} \\approx 1.65$: a one-unit increase in $X_j$ **multiplies the odds** by $1.65$. Odds ratios are multiplicative, not additive. If $\\beta_j < 0$, the odds decrease with $X_j$.\n",
+        "\n",
+        "The log-likelihood (also called binary cross-entropy) is:\n",
+        "\n",
+        "$$\n",
+        "\\ell(\\boldsymbol{\\beta}) = \\sum_{i=1}^n \\left[y_i \\log \\pi_i + (1 - y_i)\\log(1 - \\pi_i)\\right].\n",
+        "$$\n",
+        "\n",
+        "A **pseudo-$R^2$** is often computed as McFadden's $R^2 = 1 - D/D_0$.\n",
+        "\n",
+        "### Application: Titanic Survival\n",
+        "\n",
+        "We illustrate logistic regression on Titanic passenger data — a classic binary classification problem where $Y = 1$ indicates survival, with predictors including class, sex, age, and fare."
+      ],
+      "id": "8041693a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "titanic = (\n",
+        "    sns.load_dataset('titanic')\n",
+        "    [['survived', 'pclass', 'sex', 'age', 'fare', 'embark_town']]\n",
+        "    .dropna()\n",
+        "    .reset_index(drop=True)\n",
+        ")\n",
+        "titanic.head()"
+      ],
+      "id": "c6031f0a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| code-fold: true\n",
+        "#| code-summary: Count Plot Code\n",
+        "#| fig-cap: \"Survival rates by sex and passenger class. Women and first-class passengers had substantially higher survival rates.\"\n",
+        "\n",
+        "fig, axes = plt.subplots(1, 2, figsize=(9.5, 4))\n",
+        "\n",
+        "sex_surv = titanic.groupby('sex')['survived'].mean().reset_index()\n",
+        "sns.barplot(data=sex_surv, x='sex', y='survived', hue='sex', legend=False, ax=axes[0], palette='Set2')\n",
+        "axes[0].set_ylabel('Survival rate')\n",
+        "axes[0].set_title('Survival Rate by Sex')\n",
+        "axes[0].set_ylim(0, 1)\n",
+        "\n",
+        "cls_surv = titanic.groupby('pclass', observed=True)['survived'].mean().reset_index()\n",
+        "sns.barplot(data=cls_surv, x='pclass', y='survived', hue='pclass', legend=False, ax=axes[1], palette='Set2')\n",
+        "axes[1].set_ylabel('Survival rate')\n",
+        "axes[1].set_xlabel('Passenger class')\n",
+        "axes[1].set_title('Survival Rate by Passenger Class')\n",
+        "axes[1].set_ylim(0, 1)\n",
+        "\n",
+        "plt.suptitle('Titanic: Survival Rates by Demographic', fontsize=13, y=1.02)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "15d881eb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| code-fold: true\n",
+        "#| code-summary: \"KDE Plot Code\"\n",
+        "#| fig-cap: \"Age distributions for survivors and non-survivors. Children show a somewhat higher survival rate, consistent with the 'women and children first' policy.\"\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(9, 4))\n",
+        "for label, grp in titanic.groupby('survived'):\n",
+        "    sns.kdeplot(grp['age'], ax=ax, fill=True, alpha=0.4,\n",
+        "                label='Survived' if label == 1 else 'Did not survive')\n",
+        "ax.set_xlabel('Age (years)')\n",
+        "ax.set_ylabel('Density')\n",
+        "ax.set_title('Age Distribution by Survival Outcome')\n",
+        "ax.legend()\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "4d01e0ca",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We fit the model using `smf.logit()`, which uses the same formula syntax as `smf.ols()`. Categorical variables are automatically dummy-coded with `C(...)`."
+      ],
+      "id": "943b2a24"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "logit1 = smf.logit(\n",
+        "    'survived ~ C(sex) + age + C(pclass) + fare',\n",
+        "    data=titanic\n",
+        ").fit()\n",
+        "print(logit1.summary())"
+      ],
+      "id": "dbac196a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Key fields in the output:\n",
+        "\n",
+        "| Output | Meaning |\n",
+        "|---|---|\n",
+        "| **Log-Likelihood** | Value of $\\ell(\\hat{\\boldsymbol{\\beta}})$ at convergence — higher is better |\n",
+        "| **LL-Null** | Log-likelihood of intercept-only model |\n",
+        "| **Pseudo $R^2$** | McFadden's: $1 - \\ell(\\hat{\\boldsymbol{\\beta}})/\\ell_0$ |\n",
+        "| **Coef** | Log-odds coefficients $\\hat{\\beta}_j$ |\n",
+        "| **$P > |z|$** | Wald test $p$-value for $H_0: \\beta_j = 0$ |\n",
+        "| **$[0.025,\\, 0.975]$** | 95% confidence interval on the log-odds scale |\n",
+        "\n",
+        "Standard errors and tests are based on the Wald statistic $z = \\hat{\\beta}_j / \\widehat{\\text{SE}}(\\hat{\\beta}_j) \\approx \\mathcal{N}(0,1)$, a large-sample result from maximum likelihood theory."
+      ],
+      "id": "1ec05505"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| fig-cap: \"Odds ratios with 95% confidence intervals for the Titanic logistic regression. An odds ratio > 1 means increased odds of survival; < 1 means decreased odds.\"\n",
+        "\n",
+        "coefs = logit1.params.drop('Intercept')\n",
+        "conf  = logit1.conf_int().drop('Intercept')\n",
+        "or_df = pd.DataFrame({\n",
+        "    'Predictor': coefs.index,\n",
+        "    'OR':     np.exp(coefs.values),\n",
+        "    'CI_low': np.exp(conf[0].values),\n",
+        "    'CI_high':np.exp(conf[1].values)\n",
+        "})\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(9, 4))\n",
+        "y_pos = np.arange(len(or_df))\n",
+        "ax.barh(y_pos, or_df['OR'], color='steelblue', alpha=0.75)\n",
+        "ax.errorbar(\n",
+        "    or_df['OR'], y_pos,\n",
+        "    xerr=[or_df['OR'] - or_df['CI_low'], or_df['CI_high'] - or_df['OR']],\n",
+        "    fmt='none', color='navy', capsize=4, lw=1.5\n",
+        ")\n",
+        "ax.axvline(1, color='crimson', lw=2, linestyle='--', label='OR = 1 (no effect)')\n",
+        "ax.set_yticks(y_pos)\n",
+        "ax.set_yticklabels(\n",
+        "    [s.replace('C(sex)[T.', '').replace('C(pclass)[T.', 'Class ').replace(']', '')\n",
+        "     for s in or_df['Predictor']],\n",
+        "    fontsize=10\n",
+        ")\n",
+        "ax.set_xlabel('Odds Ratio (95% CI)')\n",
+        "ax.set_title('Logistic Regression: Odds Ratios — Titanic Survival')\n",
+        "ax.legend(fontsize=9)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "ecc7f049",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can predict probabilities for individual passengers using `logit1.predict()`. The coefficient table lives on the log-odds scale, but for communication we usually want probabilities:"
+      ],
+      "id": "15280ae3"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "newdata = pd.DataFrame({\n",
+        "    'sex':    ['female', 'male'],\n",
+        "    'age':    [30, 30],\n",
+        "    'pclass': [1, 3],\n",
+        "    'fare':   [50, 10]\n",
+        "})\n",
+        "probs = logit1.predict(newdata)\n",
+        "for i, row in newdata.iterrows():\n",
+        "    print(f\"  {row['sex']:6s}, age {row['age']}, class {row['pclass']}, \"\n",
+        "          f\"fare {row['fare']:.0f}: P(survive) = {probs[i]:.3f}\")"
+      ],
+      "id": "9915416d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "A 30-year-old female in first class has a high predicted survival probability; a 30-year-old male in third class has a much lower one — consistent with the historical record."
+      ],
+      "id": "217ec1dd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| fig-cap: \"Predicted survival probability as a function of age, stratified by sex, for a third-class passenger with median fare. The logistic curve is clearly visible.\"\n",
+        "\n",
+        "ages = np.linspace(1, 70, 200)\n",
+        "grid = pd.concat([\n",
+        "    pd.DataFrame({'age': ages, 'sex': 'female', 'pclass': 3, 'fare': titanic['fare'].median()}),\n",
+        "    pd.DataFrame({'age': ages, 'sex': 'male',   'pclass': 3, 'fare': titanic['fare'].median()})\n",
+        "], ignore_index=True)\n",
+        "grid['prob'] = logit1.predict(grid)\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(9, 4.5))\n",
+        "colors_sex = {'female': '#fc8d62', 'male': '#8da0cb'}\n",
+        "for sex, grp in grid.groupby('sex'):\n",
+        "    ax.plot(grp['age'], grp['prob'], lw=2.5, color=colors_sex[sex], label=sex.capitalize())\n",
+        "\n",
+        "ax.axhline(0.5, color='gray', lw=1, linestyle='--', label='Threshold = 0.5')\n",
+        "ax.scatter(\n",
+        "    titanic.query(\"pclass == 3\")['age'],\n",
+        "    titanic.query(\"pclass == 3\")['survived'],\n",
+        "    c=titanic.query(\"pclass == 3\")['sex'].map({'female': '#fc8d62', 'male': '#8da0cb'}),\n",
+        "    alpha=0.3, s=15, zorder=2\n",
+        ")\n",
+        "ax.set_xlabel('Age (years)')\n",
+        "ax.set_ylabel('$P(\\\\text{survived} = 1)$')\n",
+        "ax.set_title('Predicted Survival Probability — 3rd Class, Median Fare')\n",
+        "ax.legend(fontsize=9)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "f102f7c2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Classification Performance\n",
+        "\n",
+        "::: {.callout-important title=\"In-sample evaluation\"}\n",
+        "The classification metrics below are computed on the **same data used to fit the model**, giving an **optimistic** picture of predictive performance. In a prediction-focused workflow you would split data into training and test sets before reporting these metrics. Here our primary goal is **inference** — understanding which predictors are associated with survival — and the classification metrics illustrate how a fitted logistic regression translates into a classifier.\n",
+        ":::\n",
+        "\n",
+        "We classify $\\hat{Y}_i = 1$ if $\\hat{\\pi}_i > 0.5$ and summarise performance with the confusion matrix and ROC curve."
+      ],
+      "id": "3c3fab34"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "pi_hat = logit1.predict()\n",
+        "y_pred = (pi_hat >= 0.5).astype(int)\n",
+        "y_true = titanic['survived'].values\n",
+        "acc = (y_pred == y_true).mean()\n",
+        "print(f\"Accuracy: {acc:.3f}\")"
+      ],
+      "id": "411ca937",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| fig-cap: \"Confusion matrix for the logistic regression model at threshold 0.5 (in-sample).\"\n",
+        "\n",
+        "cm = confusion_matrix(y_true, y_pred)\n",
+        "fig, ax = plt.subplots(figsize=(6, 5))\n",
+        "ConfusionMatrixDisplay(cm, display_labels=['Did not survive', 'Survived']).plot(\n",
+        "    ax=ax, colorbar=False, cmap='Blues'\n",
+        ")\n",
+        "ax.set_title('Confusion Matrix — Logistic Regression (threshold = 0.5)', fontsize=11)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "4caac405",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The **ROC curve** plots the true positive rate (sensitivity) against the false positive rate (1 - specificity) as the threshold varies from 1 to 0. The **AUC** (area under the ROC curve) measures overall discriminative ability: AUC = 1 is perfect; AUC = 0.5 is a random classifier."
+      ],
+      "id": "da0fe7ef"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| fig-cap: \"ROC curve for the logistic regression model (in-sample). AUC substantially above 0.5 indicates good discriminative power.\"\n",
+        "\n",
+        "fpr, tpr, _ = roc_curve(y_true, pi_hat)\n",
+        "auc = roc_auc_score(y_true, pi_hat)\n",
+        "\n",
+        "fig, ax = plt.subplots(figsize=(6, 5))\n",
+        "ax.plot(fpr, tpr, color='steelblue', lw=2.5, label=f'Logistic regression (AUC = {auc:.3f})')\n",
+        "ax.plot([0, 1], [0, 1], 'k--', lw=1.5, label='Random classifier (AUC = 0.5)')\n",
+        "ax.set_xlabel('False Positive Rate (1 - Specificity)')\n",
+        "ax.set_ylabel('True Positive Rate (Sensitivity)')\n",
+        "ax.set_title('ROC Curve — Titanic Logistic Regression')\n",
+        "ax.legend(fontsize=9)\n",
+        "plt.tight_layout(); plt.show()"
+      ],
+      "id": "ee74ebf4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can test whether adding `embark_town` improves the model using the LRT:"
+      ],
+      "id": "106ae828"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "logit2 = smf.logit(\n",
+        "    'survived ~ C(sex) + age + C(pclass) + fare + C(embark_town)',\n",
+        "    data=titanic\n",
+        ").fit(disp=False)\n",
+        "\n",
+        "G2 = 2 * (logit2.llf - logit1.llf)\n",
+        "dof = logit2.df_model - logit1.df_model\n",
+        "from scipy.stats import chi2\n",
+        "p_lrt = chi2.sf(G2, df=dof)\n",
+        "print(f\"LRT G² = {G2:.3f},  df = {int(dof)},  p-value = {p_lrt:.4f}\")"
+      ],
+      "id": "1b13c5fe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(f\"{'Model':<30} {'AIC':>8} {'BIC':>8} {'Pseudo R²':>10}\")\n",
+        "print(\"-\" * 58)\n",
+        "for name, m in [('Without embark_town', logit1), ('With embark_town', logit2)]:\n",
+        "    pr2 = 1 - m.llf / m.llnull\n",
+        "    print(f\"{name:<30} {m.aic:>8.2f} {m.bic:>8.2f} {pr2:>10.4f}\")"
+      ],
+      "id": "48b4ddfc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## References"
+      ],
+      "id": "69049db0"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Library/Frameworks/Python.framework/Versions/3.12/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

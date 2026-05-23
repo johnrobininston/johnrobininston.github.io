@@ -26,10 +26,45 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -47,12 +82,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark-954f74211988904d40b4eeb0bee6388c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,12 +113,15 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -227,10 +263,8 @@ ul.task-list li input[type="checkbox"] {
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = false;
+    const authorPrefersDark = true;
     const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -336,7 +370,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../notes/pstat100-notes/00-introduction/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../notes/pstat100-notes/00-introduction/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">PSTAT100 Notes</span></a>
   </div>
 </li>
@@ -441,7 +475,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Modelling</span></a>
+ <span class="menu-text">Statistical Models</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -477,6 +511,35 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Poisson Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/11-model-selection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Selection</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/12-regularization/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Machine Learning Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/13-classification/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -484,8 +547,40 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#tidy-data-and-common-problems" id="toc-tidy-data-and-common-problems" class="nav-link active" data-scroll-target="#tidy-data-and-common-problems">Tidy Data and Common Problems</a></li>
+  <li><a href="#missing-data" id="toc-missing-data" class="nav-link" data-scroll-target="#missing-data">Missing Data</a>
+  <ul class="collapse">
+  <li><a href="#causes-and-consequences" id="toc-causes-and-consequences" class="nav-link" data-scroll-target="#causes-and-consequences">Causes and consequences</a></li>
+  <li><a href="#classifying-missingness" id="toc-classifying-missingness" class="nav-link" data-scroll-target="#classifying-missingness">Classifying missingness</a></li>
+  <li><a href="#practice-data" id="toc-practice-data" class="nav-link" data-scroll-target="#practice-data">Practice data</a></li>
+  <li><a href="#inspecting-missingness" id="toc-inspecting-missingness" class="nav-link" data-scroll-target="#inspecting-missingness">Inspecting missingness</a></li>
+  <li><a href="#visualising-missingness-with-missingno" id="toc-visualising-missingness-with-missingno" class="nav-link" data-scroll-target="#visualising-missingness-with-missingno">Visualising missingness with <code>missingno</code></a></li>
+  <li><a href="#handling-missing-data" id="toc-handling-missing-data" class="nav-link" data-scroll-target="#handling-missing-data">Handling missing data</a></li>
+  </ul></li>
+  <li><a href="#duplicate-values" id="toc-duplicate-values" class="nav-link" data-scroll-target="#duplicate-values">Duplicate Values</a>
+  <ul class="collapse">
+  <li><a href="#why-duplicates-arise" id="toc-why-duplicates-arise" class="nav-link" data-scroll-target="#why-duplicates-arise">Why duplicates arise</a></li>
+  <li><a href="#identifying-exact-duplicates" id="toc-identifying-exact-duplicates" class="nav-link" data-scroll-target="#identifying-exact-duplicates">Identifying exact duplicates</a></li>
+  <li><a href="#near-duplicates-from-formatting-inconsistency" id="toc-near-duplicates-from-formatting-inconsistency" class="nav-link" data-scroll-target="#near-duplicates-from-formatting-inconsistency">Near-duplicates from formatting inconsistency</a></li>
+  <li><a href="#removing-duplicates" id="toc-removing-duplicates" class="nav-link" data-scroll-target="#removing-duplicates">Removing duplicates</a></li>
+  </ul></li>
+  <li><a href="#inconsistent-data-types" id="toc-inconsistent-data-types" class="nav-link" data-scroll-target="#inconsistent-data-types">Inconsistent Data Types</a>
+  <ul class="collapse">
+  <li><a href="#dates-stored-as-strings" id="toc-dates-stored-as-strings" class="nav-link" data-scroll-target="#dates-stored-as-strings">Dates stored as strings</a></li>
+  <li><a href="#numbers-stored-as-strings" id="toc-numbers-stored-as-strings" class="nav-link" data-scroll-target="#numbers-stored-as-strings">Numbers stored as strings</a></li>
+  <li><a href="#booleans-stored-as-strings" id="toc-booleans-stored-as-strings" class="nav-link" data-scroll-target="#booleans-stored-as-strings">Booleans stored as strings</a></li>
+  <li><a href="#mixed-date-formats" id="toc-mixed-date-formats" class="nav-link" data-scroll-target="#mixed-date-formats">Mixed date formats</a></li>
+  </ul></li>
+  <li><a href="#invalid-values" id="toc-invalid-values" class="nav-link" data-scroll-target="#invalid-values">Invalid Values</a></li>
+  <li><a href="#labelling-issues" id="toc-labelling-issues" class="nav-link" data-scroll-target="#labelling-issues">Labelling Issues</a></li>
+  <li><a href="#data-preparation-workflow" id="toc-data-preparation-workflow" class="nav-link" data-scroll-target="#data-preparation-workflow">Data Preparation Workflow</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -522,7 +617,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 6, 2026</p>
+      <p class="date-modified">May 22, 2026</p>
     </div>
   </div>
     
@@ -533,8 +628,987 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-default callout-important callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Understand what data preparation is and why it is necessary.</li>
+<li>Diagnose and handle missing data, including the MCAR / MAR / MNAR classification.</li>
+<li>Identify and remove or aggregate duplicate records.</li>
+<li>Fix inconsistent and mixed data types, including dates and booleans.</li>
+<li>Detect and resolve invalid values and labelling inconsistencies.</li>
+<li>Follow a principled, step-by-step data preparation workflow.</li>
+</ul>
+</div>
+</div>
+<div id="3d5c811e" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Libraries</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> missingno <span class="im">as</span> msno</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">'Set2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="tidy-data-and-common-problems" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-data-and-common-problems">Tidy Data and Common Problems</h2>
+<p>In the previous chapter we introduced the <strong>tidy data standard</strong>:</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Tidy Data Standard">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Tidy Data Standard
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For data to be tidy it must satisfy the following three rules:</p>
+<ol type="1">
+<li>Each variable is a column.</li>
+<li>Each observation is a row.</li>
+<li>Each type of observational unit forms a table.</li>
+</ol>
+</div>
+</div>
+<p>In practice, raw data almost never arrives in this form. Beyond structure, real datasets routinely contain:</p>
+<ul>
+<li><strong>Missing values</strong> — entries that were never collected, lost, or recorded incorrectly.</li>
+<li><strong>Duplicate records</strong> — rows that represent the same observation more than once.</li>
+<li><strong>Inconsistent or incorrect data types</strong> — dates stored as strings, numbers encoded as text.</li>
+<li><strong>Invalid values</strong> — entries that appear real but break domain rules (e.g.&nbsp;a negative age).</li>
+<li><strong>Labelling issues</strong> — the same category written in multiple ways across rows or files.</li>
+</ul>
+<p>Data preparation is the process of systematically identifying and resolving these problems before analysis.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Data Preparation">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Data Preparation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Data preparation</strong> is the process of cleaning and transforming data to make it suitable for analysis.</p>
+</div>
+</div>
+<p>The workflow for each problem follows the same pattern:</p>
+<ol type="1">
+<li><strong>Identify</strong> — find what is wrong with the data.</li>
+<li><strong>Determine</strong> — decide how to fix the problem.</li>
+<li><strong>Update and check</strong> — apply the fix and verify the result.</li>
+</ol>
+</section>
+<section id="missing-data" class="level2">
+<h2 class="anchored" data-anchor-id="missing-data">Missing Data</h2>
+<section id="causes-and-consequences" class="level3">
+<h3 class="anchored" data-anchor-id="causes-and-consequences">Causes and consequences</h3>
+<p>Missing data can arise for many reasons: a field was never collected, data was collected but subsequently lost, or a value was recorded incorrectly and then nullified. Understanding <em>why</em> data is missing is important because it determines what treatment is appropriate.</p>
+</section>
+<section id="classifying-missingness" class="level3">
+<h3 class="anchored" data-anchor-id="classifying-missingness">Classifying missingness</h3>
+<p>There are three standard classifications:</p>
+<ol type="1">
+<li><strong>Missing Completely at Random (MCAR)</strong> — missingness is independent of both observed and unobserved data. Deleting missing rows introduces no bias.</li>
+<li><strong>Missing at Random (MAR)</strong> — missingness can be fully accounted for by other observed variables. Imputation using those variables is justified.</li>
+<li><strong>Missing Not at Random (MNAR)</strong> — missingness depends on the missing value itself or on unobserved factors. This is the most problematic case and requires careful modelling.</li>
+</ol>
+<p>Missingness is often informative in its own right. A blank income field may mean the respondent preferred not to disclose it (biasing a sample toward lower earners). Missing follow-up appointments in a clinical trial may indicate patients who became too ill to return (biasing an efficacy estimate upward). Ignoring these patterns leads to biased analysis.</p>
+</section>
+<section id="practice-data" class="level3">
+<h3 class="anchored" data-anchor-id="practice-data">Practice data</h3>
+<p>We will use a synthetic student academic records dataset throughout this section. It has enough columns and varied missingness patterns to illustrate the key tools.</p>
+<div id="264e19d4" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Creating synthetic student dataset with missing values.</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">500</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>year  <span class="op">=</span> rng.choice([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>], size<span class="op">=</span>n, p<span class="op">=</span>[<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gpa   <span class="op">=</span> rng.normal(<span class="fl">3.0</span>, <span class="fl">0.5</span>, size<span class="op">=</span>n).clip(<span class="dv">0</span>, <span class="fl">4.0</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># SAT score — missing for ~15% (some students sat the ACT instead)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>sat <span class="op">=</span> rng.integers(<span class="dv">900</span>, <span class="dv">1600</span>, size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>sat[rng.random(n) <span class="op">&lt;</span> <span class="fl">0.15</span>] <span class="op">=</span> np.nan</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Income bracket and parent education — sensitive fields, often missing together</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>income_mask   <span class="op">=</span> rng.random(n) <span class="op">&lt;</span> <span class="fl">0.30</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>parent_mask   <span class="op">=</span> income_mask <span class="op">|</span> (rng.random(n) <span class="op">&lt;</span> <span class="fl">0.10</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>income        <span class="op">=</span> pd.Series(rng.choice([<span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span>], size<span class="op">=</span>n), dtype<span class="op">=</span><span class="bu">object</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>parent_ed     <span class="op">=</span> pd.Series(rng.choice([<span class="st">"High School"</span>, <span class="st">"Some College"</span>, <span class="st">"Bachelor's"</span>, <span class="st">"Graduate"</span>], size<span class="op">=</span>n), dtype<span class="op">=</span><span class="bu">object</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>income[income_mask]     <span class="op">=</span> np.nan</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>parent_ed[parent_mask]  <span class="op">=</span> np.nan</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>study_hours   <span class="op">=</span> rng.integers(<span class="dv">5</span>, <span class="dv">40</span>, size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>study_hours[rng.random(n) <span class="op">&lt;</span> <span class="fl">0.10</span>] <span class="op">=</span> np.nan</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>internship    <span class="op">=</span> rng.choice([<span class="dv">0</span>, <span class="dv">1</span>], size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>internship[rng.random(n) <span class="op">&lt;</span> <span class="fl">0.25</span>] <span class="op">=</span> np.nan</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Research hours — mostly missing for first- and second-year students</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>research      <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">20</span>, size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>research[(year <span class="op">&lt;</span> <span class="dv">3</span>) <span class="op">|</span> (rng.random(n) <span class="op">&lt;</span> <span class="fl">0.30</span>)] <span class="op">=</span> np.nan</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Scholarship and financial aid — correlated missingness</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>scholarship_mask  <span class="op">=</span> rng.random(n) <span class="op">&lt;</span> <span class="fl">0.20</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>scholarship       <span class="op">=</span> rng.choice([<span class="dv">0</span>, <span class="dv">1</span>], size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>financial_aid     <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">20000</span>, size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>scholarship[scholarship_mask] <span class="op">=</span> np.nan</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>financial_aid[scholarship_mask <span class="op">|</span> (rng.random(n) <span class="op">&lt;</span> <span class="fl">0.10</span>)] <span class="op">=</span> np.nan</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Thesis score — only exists for year-4 students</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>thesis <span class="op">=</span> rng.normal(<span class="dv">75</span>, <span class="dv">10</span>, size<span class="op">=</span>n).clip(<span class="dv">0</span>, <span class="dv">100</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>thesis[year <span class="op">&lt;</span> <span class="dv">4</span>] <span class="op">=</span> np.nan</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>mentor         <span class="op">=</span> rng.choice([<span class="dv">0</span>, <span class="dv">1</span>], size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>mentor[rng.random(n) <span class="op">&lt;</span> <span class="fl">0.05</span>] <span class="op">=</span> np.nan</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Exit survey — only year-4 students, and only ~40% completed it</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>exit_survey <span class="op">=</span> rng.integers(<span class="dv">1</span>, <span class="dv">10</span>, size<span class="op">=</span>n).astype(<span class="bu">float</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>exit_survey[(year <span class="op">&lt;</span> <span class="dv">4</span>) <span class="op">|</span> (rng.random(n) <span class="op">&lt;</span> <span class="fl">0.60</span>)] <span class="op">=</span> np.nan</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>students <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">'student_id'</span>:    [<span class="ss">f"S</span><span class="sc">{</span><span class="bu">str</span>(i)<span class="sc">.</span>zfill(<span class="dv">4</span>)<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, n <span class="op">+</span> <span class="dv">1</span>)],</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">'year'</span>:          year,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gpa'</span>:           gpa,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">'sat_score'</span>:     sat,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">'income_bracket'</span>: income,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">'parent_education'</span>: parent_ed,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">'study_hours_wk'</span>: study_hours,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">'internship'</span>:    internship,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="st">'research_hours'</span>: research,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">'scholarship'</span>:   scholarship,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">'financial_aid'</span>: financial_aid,</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">'thesis_score'</span>:  thesis,</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">'mentor_assigned'</span>: mentor,</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">'exit_survey_score'</span>: exit_survey,</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="inspecting-missingness" class="level3">
+<h3 class="anchored" data-anchor-id="inspecting-missingness">Inspecting missingness</h3>
+<p>The first step is to understand the scale of the problem.</p>
+<div id="d2bd6b42" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>students.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">student_id</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">gpa</th>
+<th data-quarto-table-cell-role="th">sat_score</th>
+<th data-quarto-table-cell-role="th">income_bracket</th>
+<th data-quarto-table-cell-role="th">parent_education</th>
+<th data-quarto-table-cell-role="th">study_hours_wk</th>
+<th data-quarto-table-cell-role="th">internship</th>
+<th data-quarto-table-cell-role="th">research_hours</th>
+<th data-quarto-table-cell-role="th">scholarship</th>
+<th data-quarto-table-cell-role="th">financial_aid</th>
+<th data-quarto-table-cell-role="th">thesis_score</th>
+<th data-quarto-table-cell-role="th">mentor_assigned</th>
+<th data-quarto-table-cell-role="th">exit_survey_score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>S0001</td>
+<td>4</td>
+<td>3.716607</td>
+<td>1267.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>34.0</td>
+<td>0.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>67.096113</td>
+<td>1.0</td>
+<td>8.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>S0002</td>
+<td>2</td>
+<td>3.045760</td>
+<td>1139.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>16.0</td>
+<td>1.0</td>
+<td>NaN</td>
+<td>0.0</td>
+<td>9065.0</td>
+<td>NaN</td>
+<td>1.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>S0003</td>
+<td>4</td>
+<td>3.290389</td>
+<td>1289.0</td>
+<td>Middle</td>
+<td>Graduate</td>
+<td>7.0</td>
+<td>0.0</td>
+<td>13.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>74.403315</td>
+<td>1.0</td>
+<td>8.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>S0004</td>
+<td>3</td>
+<td>2.971608</td>
+<td>1024.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>12.0</td>
+<td>1.0</td>
+<td>5.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1.0</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>S0005</td>
+<td>1</td>
+<td>2.914796</td>
+<td>963.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>22.0</td>
+<td>1.0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1.0</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="23ded016" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>students.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(500, 14)</code></pre>
+</div>
+</div>
+<p>We count missing values per column and compute an overall percentage.</p>
+<div id="a15e99d9" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_counts <span class="op">=</span> students.isnull().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>exit_survey_score    443
+thesis_score         376
+research_hours       322
+parent_education     195
+income_bracket       155
+financial_aid        143
+internship           135
+scholarship          105
+sat_score             61
+study_hours_wk        49
+mentor_assigned       18
+student_id             0
+year                   0
+gpa                    0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="dccde358" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>total_cells   <span class="op">=</span> np.prod(students.shape)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>total_missing <span class="op">=</span> missing_counts.<span class="bu">sum</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall missingness: </span><span class="sc">{</span>total_missing <span class="op">/</span> total_cells <span class="op">*</span> <span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Overall missingness: 28.6%</code></pre>
+</div>
+</div>
+</section>
+<section id="visualising-missingness-with-missingno" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-missingness-with-missingno">Visualising missingness with <code>missingno</code></h3>
+<p>The <code>missingno</code> library provides four complementary views of missing data patterns.</p>
+<p><strong>Bar chart</strong> — shows the count of non-null values per column at a glance.</p>
+<div id="659e23af" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>msno.bar(students, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="852" height="471" class="figure-img"></p>
+<figcaption>Non-null value counts per column (bar chart).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Matrix</strong> — plots a random sample of rows; white streaks mark missing entries. Aligned streaks across columns indicate that variables are missing together.</p>
+<div id="2622bb9f" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>msno.matrix(students.sample(<span class="dv">200</span>, random_state<span class="op">=</span><span class="dv">1</span>), figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">4</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="920" height="474" class="figure-img"></p>
+<figcaption>Missing data matrix for 200 randomly sampled rows.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Heatmap</strong> — shows the correlation between missingness indicators across pairs of columns. A positive value means the two columns tend to be missing at the same time; a negative value means they are missing at opposite times.</p>
+<div id="003b85a0" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>msno.heatmap(students, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-1.png" width="890" height="465" class="figure-img"></p>
+<figcaption>Missingness correlation heatmap.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Dendrogram</strong> — clusters variables by the similarity of their missingness patterns. Variables linked at distance 0 fully predict one another’s presence.</p>
+<div id="402bee91" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(students, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-11-output-1.png" width="948" height="374" class="figure-img"></p>
+<figcaption>Missingness dendrogram.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>From these plots we can see that <code>scholarship</code> and <code>financial_aid</code> have highly correlated missingness (they were missing together by design), while <code>thesis_score</code> and <code>exit_survey_score</code> are missing as a structural consequence of student year — a clear MNAR pattern.</p>
+</section>
+<section id="handling-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="handling-missing-data">Handling missing data</h3>
+<p><strong>Deletion</strong> is appropriate when data is MCAR. It is simple but loses information.</p>
+<div id="53795f49" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with any missing value</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>students_row_dropped <span class="op">=</span> students.dropna()</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Original rows:       </span><span class="sc">{</span>students<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After row deletion:  </span><span class="sc">{</span>students_row_dropped<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original rows:       500
+After row deletion:  8</code></pre>
+</div>
+</div>
+<div id="553ecb91" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop columns with any missing value</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>students_col_dropped <span class="op">=</span> students.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Original columns:    </span><span class="sc">{</span>students<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After col deletion:  </span><span class="sc">{</span>students_col_dropped<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original columns:    14
+After col deletion:  3</code></pre>
+</div>
+</div>
+<p>Row deletion eliminates almost every record here because nearly every row has at least one missing field. Column deletion removes any column with even one null. In practice, targeted deletion — dropping only columns or rows above a missingness threshold — is more useful.</p>
+<p><strong>Imputation</strong> replaces missing values with plausible substitutes. The <code>fillna</code> method covers the most common strategies:</p>
+<div id="22755852" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean imputation for study_hours_wk (MCAR — plausibly random non-response)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>students[<span class="st">'study_hours_wk'</span>] <span class="op">=</span> students[<span class="st">'study_hours_wk'</span>].fillna(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    students[<span class="st">'study_hours_wk'</span>].mean()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward fill for a time-ordered column (not this dataset, but common in time-series)</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co"># df['col'].ffill()</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Constant fill for remaining numeric columns as a simple baseline</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>students_imputed <span class="op">=</span> students.bfill(axis<span class="op">=</span><span class="dv">0</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>students_imputed.isnull().<span class="bu">sum</span>().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>0</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Important">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Imputation is a deep topic in its own right. The right strategy depends on why data is missing and on the downstream analysis. Always ask: <em>would imputing this value introduce bias?</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="duplicate-values" class="level2">
+<h2 class="anchored" data-anchor-id="duplicate-values">Duplicate Values</h2>
+<section id="why-duplicates-arise" class="level3">
+<h3 class="anchored" data-anchor-id="why-duplicates-arise">Why duplicates arise</h3>
+<p>Well-structured data should have a unique identifier for each observation. Duplicates typically arise from data entry errors, merging datasets without deduplication, or system migrations.</p>
+<p>We create a small customer dataset that contains both exact duplicates and near-duplicates arising from inconsistent capitalisation.</p>
+<div id="312fe647" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>customers <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'customer_id'</span>: [<span class="dv">1001</span>, <span class="dv">1002</span>, <span class="dv">1003</span>, <span class="dv">1004</span>, <span class="dv">1005</span>, <span class="dv">1003</span>, <span class="dv">1006</span>, <span class="dv">1002</span>, <span class="dv">1007</span>, <span class="dv">1004</span>, <span class="dv">1008</span>],</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'name'</span>:        [<span class="st">'Alice Johnson'</span>, <span class="st">'bob smith'</span>,   <span class="st">'Carol White'</span>, <span class="st">'david lee'</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'Eve Martinez'</span>,  <span class="st">'Carol White'</span>, <span class="st">'Frank Brown'</span>, <span class="st">'Bob Smith'</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'Grace Kim'</span>,     <span class="st">'David Lee'</span>,   <span class="st">'Hank Wilson'</span>],</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'email'</span>:       [<span class="st">'alice@example.com'</span>, <span class="st">'bob@example.com'</span>,   <span class="st">'carol@example.com'</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'david@example.com'</span>, <span class="st">'eve@example.com'</span>,   <span class="st">'carol@example.com'</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'frank@example.com'</span>, <span class="st">'bob@example.com'</span>,   <span class="st">'grace@example.com'</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'david@example.com'</span>, <span class="st">'hank@example.com'</span>],</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'age'</span>:         [<span class="dv">28</span>, <span class="dv">34</span>, <span class="dv">45</span>, <span class="dv">29</span>, <span class="dv">52</span>, <span class="dv">45</span>, <span class="dv">38</span>, <span class="dv">34</span>, <span class="dv">41</span>, <span class="dv">29</span>, <span class="dv">55</span>],</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'city'</span>:        [<span class="st">'New York'</span>, <span class="st">'los angeles'</span>, <span class="st">'Chicago'</span>,     <span class="st">'new york'</span>, <span class="st">'Houston'</span>,</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'Chicago'</span>,  <span class="st">'Phoenix'</span>,     <span class="st">'Los Angeles'</span>, <span class="st">'Seattle'</span>,  <span class="st">'New York'</span>, <span class="st">'Dallas'</span>],</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'spend'</span>:       [<span class="fl">120.50</span>, <span class="fl">89.99</span>, <span class="fl">245.00</span>, <span class="fl">55.75</span>, <span class="fl">310.20</span>,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                    <span class="fl">245.00</span>, <span class="fl">178.40</span>, <span class="fl">89.99</span>,  <span class="fl">95.60</span>, <span class="fl">120.00</span>, <span class="fl">430.10</span>],</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>customers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">spend</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1001</td>
+<td>Alice Johnson</td>
+<td>alice@example.com</td>
+<td>28</td>
+<td>New York</td>
+<td>120.50</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1002</td>
+<td>bob smith</td>
+<td>bob@example.com</td>
+<td>34</td>
+<td>los angeles</td>
+<td>89.99</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1003</td>
+<td>Carol White</td>
+<td>carol@example.com</td>
+<td>45</td>
+<td>Chicago</td>
+<td>245.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1004</td>
+<td>david lee</td>
+<td>david@example.com</td>
+<td>29</td>
+<td>new york</td>
+<td>55.75</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1005</td>
+<td>Eve Martinez</td>
+<td>eve@example.com</td>
+<td>52</td>
+<td>Houston</td>
+<td>310.20</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>1003</td>
+<td>Carol White</td>
+<td>carol@example.com</td>
+<td>45</td>
+<td>Chicago</td>
+<td>245.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>1006</td>
+<td>Frank Brown</td>
+<td>frank@example.com</td>
+<td>38</td>
+<td>Phoenix</td>
+<td>178.40</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>1002</td>
+<td>Bob Smith</td>
+<td>bob@example.com</td>
+<td>34</td>
+<td>Los Angeles</td>
+<td>89.99</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
+<td>1007</td>
+<td>Grace Kim</td>
+<td>grace@example.com</td>
+<td>41</td>
+<td>Seattle</td>
+<td>95.60</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">9</th>
+<td>1004</td>
+<td>David Lee</td>
+<td>david@example.com</td>
+<td>29</td>
+<td>New York</td>
+<td>120.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">10</th>
+<td>1008</td>
+<td>Hank Wilson</td>
+<td>hank@example.com</td>
+<td>55</td>
+<td>Dallas</td>
+<td>430.10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="identifying-exact-duplicates" class="level3">
+<h3 class="anchored" data-anchor-id="identifying-exact-duplicates">Identifying exact duplicates</h3>
+<div id="f27df1c8" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dup_count <span class="op">=</span> customers.duplicated().<span class="bu">sum</span>()</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dup_rows  <span class="op">=</span> customers.loc[customers.duplicated()].index.tolist()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Exact duplicates: </span><span class="sc">{</span>dup_count<span class="sc">}</span><span class="ss">  (rows </span><span class="sc">{</span>dup_rows<span class="sc">}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Exact duplicates: 1  (rows [5])</code></pre>
+</div>
+</div>
+</section>
+<section id="near-duplicates-from-formatting-inconsistency" class="level3">
+<h3 class="anchored" data-anchor-id="near-duplicates-from-formatting-inconsistency">Near-duplicates from formatting inconsistency</h3>
+<p>Exact duplicate detection misses rows that differ only in case or whitespace — <code>"bob smith"</code> and <code>"Bob Smith"</code> are the same person. Normalising strings first reveals the full extent of the problem.</p>
+<div id="4183a184" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'name'</span>]  <span class="op">=</span> customers[<span class="st">'name'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'email'</span>] <span class="op">=</span> customers[<span class="st">'email'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'city'</span>]  <span class="op">=</span> customers[<span class="st">'city'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>dup_count <span class="op">=</span> customers.duplicated().<span class="bu">sum</span>()</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>dup_rows  <span class="op">=</span> customers.loc[customers.duplicated()].index.tolist()</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Duplicates after normalisation: </span><span class="sc">{</span>dup_count<span class="sc">}</span><span class="ss">  (rows </span><span class="sc">{</span>dup_rows<span class="sc">}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Duplicates after normalisation: 2  (rows [5, 7])</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-duplicates" class="level3">
+<h3 class="anchored" data-anchor-id="removing-duplicates">Removing duplicates</h3>
+<p>The simplest resolution is deletion — keep the first occurrence.</p>
+<div id="3db3986d" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>customers_clean <span class="op">=</span> customers.drop_duplicates()</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Rows after deduplication: </span><span class="sc">{</span><span class="bu">len</span>(customers_clean)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows after deduplication: 9</code></pre>
+</div>
+</div>
+<p>When we want to maximise information, we can <strong>aggregate</strong> rather than delete. Here we sum spend across duplicate customer IDs and take the first value for all other fields.</p>
+<div id="abd0e568" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>customers_agg <span class="op">=</span> (</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    customers</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'customer_id'</span>, sort<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    .agg({<span class="st">'name'</span>: <span class="st">'first'</span>, <span class="st">'email'</span>: <span class="st">'first'</span>, <span class="st">'age'</span>: <span class="st">'mean'</span>, <span class="st">'city'</span>: <span class="st">'first'</span>, <span class="st">'spend'</span>: <span class="st">'sum'</span>})</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>customers_agg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">age</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">spend</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>1001</td>
+<td>Alice Johnson</td>
+<td>alice@example.com</td>
+<td>28.0</td>
+<td>New York</td>
+<td>120.50</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>1002</td>
+<td>Bob Smith</td>
+<td>bob@example.com</td>
+<td>34.0</td>
+<td>Los Angeles</td>
+<td>179.98</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>1003</td>
+<td>Carol White</td>
+<td>carol@example.com</td>
+<td>45.0</td>
+<td>Chicago</td>
+<td>490.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>1004</td>
+<td>David Lee</td>
+<td>david@example.com</td>
+<td>29.0</td>
+<td>New York</td>
+<td>175.75</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>1005</td>
+<td>Eve Martinez</td>
+<td>eve@example.com</td>
+<td>52.0</td>
+<td>Houston</td>
+<td>310.20</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>1006</td>
+<td>Frank Brown</td>
+<td>frank@example.com</td>
+<td>38.0</td>
+<td>Phoenix</td>
+<td>178.40</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>1007</td>
+<td>Grace Kim</td>
+<td>grace@example.com</td>
+<td>41.0</td>
+<td>Seattle</td>
+<td>95.60</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>1008</td>
+<td>Hank Wilson</td>
+<td>hank@example.com</td>
+<td>55.0</td>
+<td>Dallas</td>
+<td>430.10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="inconsistent-data-types" class="level2">
+<h2 class="anchored" data-anchor-id="inconsistent-data-types">Inconsistent Data Types</h2>
+<p>Pandas infers column types when loading a file, but inference is not always correct. Wrong types break operations silently — averaging a column of numbers stored as strings produces an error, and comparing dates stored as text gives alphabetical rather than chronological ordering. The goal is for every column to have a type that matches its meaning.</p>
+<p>Useful inspection tools: <code>dtypes</code>, <code>info()</code>, <code>head()</code>, and <code>unique()</code>.</p>
+<div id="4d109ad0" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>example_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:    [<span class="st">"2024-01-01"</span>, <span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span>],</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"price"</span>:   [<span class="st">"1.10"</span>, <span class="st">"2.20"</span>, <span class="st">"3.30"</span>],</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"in_stock"</span>: [<span class="st">"True"</span>, <span class="st">"False"</span>, <span class="st">"True"</span>],</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(example_df.dtypes)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>date        object
+price       object
+in_stock    object
+dtype: object</code></pre>
+</div>
+</div>
+<p>All three columns are read as <code>object</code> (string). Each needs to be coerced to its correct type.</p>
+<section id="dates-stored-as-strings" class="level3">
+<h3 class="anchored" data-anchor-id="dates-stored-as-strings">Dates stored as strings</h3>
+<div id="6d8785d2" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'date'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'date'</span>])</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After:  </span><span class="sc">{</span>example_df[<span class="st">'date'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before: object
+After:  datetime64[ns]</code></pre>
+</div>
+</div>
+</section>
+<section id="numbers-stored-as-strings" class="level3">
+<h3 class="anchored" data-anchor-id="numbers-stored-as-strings">Numbers stored as strings</h3>
+<div id="3a5977a4" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'price'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'price'</span>] <span class="op">=</span> pd.to_numeric(example_df[<span class="st">'price'</span>])</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After:  </span><span class="sc">{</span>example_df[<span class="st">'price'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before: object
+After:  float64</code></pre>
+</div>
+</div>
+</section>
+<section id="booleans-stored-as-strings" class="level3">
+<h3 class="anchored" data-anchor-id="booleans-stored-as-strings">Booleans stored as strings</h3>
+<div id="b47ea402" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'in_stock'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'in_stock'</span>] <span class="op">=</span> (</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    example_df[<span class="st">'in_stock'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">map</span>({<span class="st">"true"</span>: <span class="va">True</span>, <span class="st">"false"</span>: <span class="va">False</span>})</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    .astype(<span class="st">"boolean"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After:  </span><span class="sc">{</span>example_df[<span class="st">'in_stock'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Before: object
+After:  boolean</code></pre>
+</div>
+</div>
+</section>
+<section id="mixed-date-formats" class="level3">
+<h3 class="anchored" data-anchor-id="mixed-date-formats">Mixed date formats</h3>
+<p>Hand-prepared data often contains dates written in multiple formats within the same column.</p>
+<div id="2e266f32" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mixed_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:    [<span class="st">"2024-01-15"</span>, <span class="st">"21-12-2001"</span>, <span class="st">"December 21, 2001"</span>, <span class="st">"01/02/2024"</span>, <span class="st">"2018-03-04"</span>],</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"active"</span>:  [<span class="st">"True"</span>, <span class="st">"false"</span>, <span class="st">"true"</span>, <span class="st">"no"</span>, <span class="st">"yes"</span>],</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>mixed_df[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(mixed_df[<span class="st">'date'</span>], <span class="bu">format</span><span class="op">=</span><span class="st">"mixed"</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>mixed_df[<span class="st">'active'</span>] <span class="op">=</span> (</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    mixed_df[<span class="st">'active'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">map</span>({<span class="st">"true"</span>: <span class="va">True</span>, <span class="st">"false"</span>: <span class="va">False</span>, <span class="st">"yes"</span>: <span class="va">True</span>, <span class="st">"no"</span>: <span class="va">False</span>})</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>    .astype(<span class="st">"boolean"</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>mixed_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">active</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>2024-01-15</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>2001-12-21</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>2001-12-21</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>2024-01-02</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>2018-03-04</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>When loading CSVs you can direct pandas to parse date columns at load time with <code>parse_dates=[...]</code>, or specify exact formats via <code>pd.to_datetime(..., format='...')</code>. Use <code>errors='coerce'</code> to turn unparseable entries into <code>NaT</code> rather than raising an exception — this makes it easy to spot remaining problems.</p>
+<div id="36662623" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Day-first strings; invalid entries silently become NaT</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pd.to_datetime(</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    pd.Series([<span class="st">"15/03/2024"</span>, <span class="st">"02/04/2024"</span>, <span class="st">"not a date"</span>]),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    dayfirst<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    errors<span class="op">=</span><span class="st">"coerce"</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>0   2024-03-15
+1   2024-04-02
+2          NaT
+dtype: datetime64[ns]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="invalid-values" class="level2">
+<h2 class="anchored" data-anchor-id="invalid-values">Invalid Values</h2>
+<p>Invalid values are not missing: they appear as real entries but violate domain constraints — an age of 200, a negative count, a temperature of −999 (a common sentinel). They differ from outliers, which may be legitimate extremes. Invalid values are especially dangerous because they do not produce errors; they propagate silently through calculations.</p>
+<div id="fd668466" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ages <span class="op">=</span> pd.Series([<span class="dv">34</span>, <span class="dv">200</span>, <span class="dv">28</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">45</span>, <span class="dv">130</span>])</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>invalid_mask <span class="op">=</span> (ages <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">|</span> (ages <span class="op">&gt;</span> <span class="dv">120</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Invalid entries:</span><span class="ch">\n</span><span class="st">"</span>, ages[invalid_mask])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Invalid entries:
+ 1    200
+3     -1
+5    130
+dtype: int64</code></pre>
+</div>
+</div>
+<p>To handle them: define rules from a data dictionary or domain knowledge, flag rows using boolean masks, then drop, replace, or convert to <code>NaN</code> and treat as missing. Document every rule — the <em>why</em> matters as much as the code.</p>
+<div id="9aac1462" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ages_clean <span class="op">=</span> ages.where(<span class="op">~</span>invalid_mask, other<span class="op">=</span>np.nan)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After cleaning:</span><span class="ch">\n</span><span class="st">"</span>, ages_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>After cleaning:
+ 0    34.0
+1     NaN
+2    28.0
+3     NaN
+4    45.0
+5     NaN
+dtype: float64</code></pre>
+</div>
+</div>
+</section>
+<section id="labelling-issues" class="level2">
+<h2 class="anchored" data-anchor-id="labelling-issues">Labelling Issues</h2>
+<p>The same category can appear under multiple labels: <code>"NYC"</code>, <code>"nyc"</code>, and <code>"New York"</code> all refer to the same city. Column names can differ across files (<code>customerID</code> vs <code>customer_id</code>), which silently breaks joins and merges.</p>
+<p>The fix involves: normalising text with <code>str.strip()</code>, <code>str.lower()</code> / <code>str.title()</code>; building a mapping dictionary from raw labels to canonical ones; and applying it with <code>map()</code> or <code>replace()</code>.</p>
+<div id="d36515e4" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>city_raw <span class="op">=</span> pd.Series([<span class="st">"  nyc "</span>, <span class="st">"NYC"</span>, <span class="st">"New York"</span>, <span class="st">"new york"</span>, <span class="st">"N.Y.C."</span>])</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>city_clean <span class="op">=</span> city_raw.<span class="bu">str</span>.strip().<span class="bu">str</span>.title().replace({<span class="st">"Nyc"</span>: <span class="st">"New York"</span>, <span class="st">"N.Y.C."</span>: <span class="st">"New York"</span>})</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>city_clean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>0    New York
+1    New York
+2    New York
+3    New York
+4    New York
+dtype: object</code></pre>
+</div>
+</div>
+<p>For analysis, maintain a single canonical vocabulary per variable and keep a small “codebook” you can reuse across scripts.</p>
+</section>
+<section id="data-preparation-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation-workflow">Data Preparation Workflow</h2>
+<p>The nine-step guide below is a useful starting point for any new dataset. It is not a rigid recipe — the order and depth of each step depend on the data.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Inspection</strong> — shape, <code>head()</code>, <code>info()</code>, <code>describe()</code>. Get oriented.</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Variable labelling</strong> — rename columns to a consistent convention.</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Remove redundant variables</strong> — drop columns unused in your analysis.</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Fix data types and mixed formats</strong> — dates, numerics, booleans.</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>Handle duplicates</strong> — exact and near-duplicates.</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><strong>Handle missing values</strong> — classify, visualise, delete or impute.</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><strong>Clean strings / encode categoricals</strong> — normalise text, encode factors.</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td><strong>Handle outliers / invalid values</strong> — flag, investigate, remove or cap.</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td><strong>Final validation and documentation</strong> — confirm shapes, spot-check, record decisions.</td>
+</tr>
+</tbody>
+</table>
+<p>A few principles to keep in mind:</p>
+<ul>
+<li>Thoroughly understand the data <em>before</em> touching it. Read the documentation and data dictionaries.</li>
+<li>Document every decision — not just <em>what</em> you changed but <em>why</em>.</li>
+<li>Being thorough up front saves far more time than fixing a corrupted analysis later.</li>
+<li>Expect to iterate: data preparation is rarely a linear, one-pass process.</li>
+</ul>
+
+
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

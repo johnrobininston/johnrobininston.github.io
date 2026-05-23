@@ -1,0 +1,1008 @@
+---
+title: "Lecture 15: Regularization"
+subtitle: "PSTAT100: Data Science — Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+jupyter: pstat100
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        html-math-method: katex
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Appreciate the **limitations of subset selection** and why they motivate regularization.
+- Understand **cross-validation** as a principled method for estimating out-of-sample error.
+- Introduce **regularization** (Ridge, Lasso, Elastic Net) and the shrinkage idea.
+- Diagnose **multicollinearity** and understand how regularization addresses it.
+- Compare nested models with **partial $F$-tests**.
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+from statsmodels.stats.anova import anova_lm
+from statsmodels.stats.outliers_influence import (
+    variance_inflation_factor
+)
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import (
+    LinearRegression,
+    Ridge, Lasso, ElasticNet,
+    RidgeCV, LassoCV, ElasticNetCV
+)
+from sklearn.model_selection import KFold, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import mean_squared_error
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+## Recap: Lecture 14 — Subset Selection
+
+:::{.columns}
+:::{.column width="50%"}
+
+:::{.fragment}
+
+### What we established
+
+- The **bias-variance tradeoff**: adding predictors reduces bias but inflates variance.
+- **Information criteria** (AIC, BIC, adj. $R^2$) add a complexity penalty to avoid overfitting.
+- **Subset selection** searches over models to find a good predictor set.
+
+:::
+
+:::
+
+:::{.column width="50%"}
+
+:::{.fragment}
+
+### Subset selection strategies
+
+| Method | Start | Cost |
+|---|---|---|
+| Best subsets | — | $2^p$ models |
+| Forward stepwise | Null model | $O(p^2)$ |
+| Backward stepwise | Full model | $O(p^2)$ |
+| Hybrid | Either | $O(p^2)$ |
+
+:::
+
+:::
+:::
+
+## Example: Housing Data
+
+### We have been looking at California housing data!
+
+:::{.fragment}
+
+```{python}
+# Load dataset — used throughout this lecture
+housing = fetch_california_housing(as_frame=True)
+df = housing.frame.copy()
+df.columns = [c.lower() for c in df.columns]
+
+predictors = ['medinc','houseage','averooms','avebedrms',
+              'aveoccup','population','latitude','longitude']
+feature_names = ['MedInc','HouseAge','AveRooms','AveBedrms',
+                 'AveOccup','Population','Latitude','Longitude']
+
+X_full = df[predictors].values
+y_full = df['medhouseval'].values
+# Standardize predictors for regularization 
+X_scaled = StandardScaler().fit_transform(X_full)
+```
+
+:::
+
+## Limitations of Subset Selection
+
+:::{.fragment}
+
+Subset selection methods are powerful but carry important limitations that become severe as $p$ grows.
+
+:::
+
+:::{.fragment}
+
+| Limitation | Detail |
+|---|---|
+| **Computational cost** | Best subsets requires $2^p$ fits — infeasible for $p \gtrsim 30$ |
+| **Greedy, not global** | Stepwise methods can miss the truly optimal subset |
+| **Discrete selection** | Each predictor is either in or out — no gradation of importance |
+| **Instability** | Small changes in the data can produce very different selected subsets |
+| **Fails when $p \geq n$** | The full model cannot be estimated when predictors outnumber observations |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> **Regularization** (this lecture) overcomes all of these: it is computationally cheap, globally optimised, produces continuous coefficient values, is stable, and works when $p \gg n$.
+
+:::
+
+
+
+# Cross-Validation
+
+## 🔄 Why Cross-Validation?
+
+### The problem with in-sample fit
+
+- RSS, $R^2$, and the likelihood are computed on the **training data** — the same data used to fit the model.
+- The model has already "seen" these observations: in-sample fit is optimistic.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The solution: hold out data
+
+- **Cross-validation** repeatedly splits the data into a training set and a validation set.
+- Model error is evaluated on observations the model **has not seen during fitting**.
+- This gives an honest estimate of **out-of-sample (generalisation) error**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Cross-validation is also our main tool for **choosing the regularization hyperparameter** $\lambda$ — we will return to it in the regularization section.
+
+:::
+
+## $k$-Fold Cross-Validation
+
+:::{.callout-important title="$k$-fold CV"}
+1. Randomly partition the $n$ observations into $k$ roughly equal **folds**.
+2. For each fold $j = 1, \ldots, k$: fit the model on the other $k-1$ folds, predict on fold $j$.
+3. Report the average test error:
+$$\text{CV}_{(k)} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i^{(-\kappa(i))})^2,$$
+where $\hat{y}_i^{(-\kappa(i))}$ is the prediction for observation $i$ from the model fit without its fold $\kappa(i)$.
+:::
+
+:::{.fragment}
+
+- **$k = 5$ or $k = 10$** are standard choices — they balance bias and variance of the CV estimate well.
+- **$k = n$ (LOOCV)**: leave one observation out at a time — low bias, but high variance and expensive.
+
+:::
+
+## LOOCV and the Hat Matrix
+
+:::{.fragment}
+
+For OLS, there is a remarkable **shortcut** that avoids refitting the model $n$ times:
+
+$$\text{LOOCV} = \frac{1}{n}\sum_{i=1}^n \left(\frac{e_i}{1 - h_{ii}}\right)^2,$$
+
+where $e_i = y_i - \hat{y}_i$ is the ordinary residual and $h_{ii}$ is the $i$-th diagonal of the hat matrix $\mathbf{H}$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Why does this work?
+
+- When observation $i$ is removed, the prediction at $x_i$ changes by $e_i / (1 - h_{ii})$.
+- Observations with **high leverage** $h_{ii}$ have a large influence on the LOOCV score — they are "risky" in the sense that leaving them out changes the fit substantially.
+- This formula is computationally free once $\mathbf{H}$ is computed.
+
+:::
+
+## $k$-Fold CV in Python with `sklearn`
+
+```{python}
+#| output-location: fragment
+
+kf = KFold(n_splits=10, shuffle=True, random_state=0)
+
+# Compare subsets of features using 10-fold CV MSE
+feature_sets = {
+    '1 predictor (MedInc)': X_full[:, [0]],
+    '3 predictors': X_full[:, :3],
+    '5 predictors': X_full[:, :5],
+    'Full (8 predictors)': X_full,
+}
+
+print(f"{'Model':<30} {'10-fold CV MSE':>16}")
+print("-" * 48)
+for name, X_sub in feature_sets.items():
+    scores = cross_val_score(
+        LinearRegression(), X_sub, y_full,
+        cv=kf, scoring='neg_mean_squared_error'
+    )
+    print(f"{name:<30} {-scores.mean():>16.4f}")
+```
+
+## LOOCV via the Hat Matrix
+
+```{python}
+#| output-location: fragment
+
+# LOOCV shortcut using the hat matrix
+X_aug = sm.add_constant(
+    df[['medinc','houseage','averooms','avebedrms',
+        'aveoccup','population','latitude','longitude']]
+)
+fit_full = sm.OLS(y_full, X_aug).fit()
+H        = X_aug @ np.linalg.solve(X_aug.T @ X_aug, X_aug.T)
+h_diag   = np.diag(H)
+e        = fit_full.resid
+
+loocv = np.mean((e / (1 - h_diag))**2)
+print(f"LOOCV MSE (hat-matrix shortcut): {loocv:.4f}")
+```
+
+
+
+# Regularization (Shrinkage Methods)
+
+## 🎯 Why Regularize?
+
+### The problem with OLS in high dimensions
+
+- When $p$ is large relative to $n$, or when predictors are highly correlated, $(\mathbf{X}^\top\mathbf{X})^{-1}$ becomes ill-conditioned.
+- OLS coefficients have **high variance** — tiny changes in the data lead to large changes in $\hat{\boldsymbol{\beta}}$.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The regularization idea
+
+- Add a **penalty** on the size of $\boldsymbol{\beta}$ to the least squares objective.
+- Trading a little bias for a large reduction in variance can lower total test error.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> This is exactly the bias-variance tradeoff in action: we deliberately introduce bias to tame variance.
+
+:::
+
+## Regularization as Constrained Optimization
+
+:::{.fragment}
+
+Regularization can be written in two equivalent forms.
+
+**Penalty (Lagrangian) form** — what we minimize:
+
+$$\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|_q$$
+
+**Constraint form** — equivalent formulation:
+
+$$\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 \quad \text{subject to} \quad \|\boldsymbol{\beta}\|_q \leq t$$
+
+:::
+
+:::{.fragment}
+
+- For every value of $\lambda \geq 0$ there is a corresponding budget $t \geq 0$ that produces the same solution.
+- **As $\lambda$ increases, $t$ decreases** — the constraint tightens and coefficients must shrink further.
+- At $\lambda = 0$ ($t = \infty$): no constraint — recovers the OLS solution.
+- At $\lambda \to \infty$ ($t = 0$): all $\hat{\beta}_j = 0$ — the null model.
+
+:::
+
+:::{.fragment}
+
+> The constraint perspective makes the geometry transparent: the regularized solution is the point on the constraint region $\|\boldsymbol{\beta}\|_q \leq t$ that is closest to the OLS solution.
+
+:::
+
+## ⚠️ Why Standardize Predictors?
+
+:::{.fragment}
+
+The regularization penalty $\lambda \sum_j \beta_j^2$ (or $\lambda \sum_j |\beta_j|$) penalizes **coefficients by their magnitude**.
+
+:::
+
+:::{.fragment}
+
+### The scale problem
+
+- Suppose $X_1$ is measured in **millions of dollars** and $X_2$ in **metres**.
+- A unit change in $X_1$ moves the response by $\beta_1$ — but $\beta_1$ will naturally be tiny (because the units are huge).
+- A unit change in $X_2$ moves the response by $\beta_2$ — with larger units, $\beta_2$ can be larger.
+- The penalty then falls almost entirely on $\beta_2$, **unfairly shrinking it relative to $\beta_1$**.
+
+:::
+
+:::{.fragment}
+
+### The fix: standardize before fitting
+
+$$X_j \leftarrow \frac{X_j - \bar{X}_j}{s_j}$$
+
+This puts all predictors on a **unit-variance, zero-mean** scale so the penalty is applied equally.
+
+:::
+
+:::{.fragment}
+
+> **Important**: the intercept $\beta_0$ is **never penalized** — shrinking it would shift all predictions by the mean of $y$, which is not what we want.
+
+:::
+
+## Ridge Regression ($L_2$ Penalty)
+
+:::{.callout-important title="Ridge Regression"}
+
+$$\hat{\boldsymbol{\beta}}_{\text{ridge}} = \underset{\boldsymbol{\beta}}{\arg\min}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|^2_2,$$
+
+where $\lambda \geq 0$ is the **regularization hyperparameter** and $\|\boldsymbol{\beta}\|^2_2 = \sum_j \beta_j^2$ is the squared $L_2$ norm.
+
+:::
+
+:::{.fragment}
+
+**Closed-form solution**:
+
+$$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}.$$
+
+**Why does adding $\lambda\mathbf{I}$ help?** Think in terms of eigenvalues.
+
+:::
+
+## Regularization and Eigenvalues
+
+### Impact of $\lambda$.
+
+:::{.fragment}
+
+- $\mathbf{X}^\top\mathbf{X}$ is a symmetric positive semi-definite matrix with eigenvalues $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$.
+- The OLS inverse involves $1/\lambda_j$ for each eigenvalue. If any $\lambda_j \approx 0$ (nearly singular — which happens when predictors are correlated), that term explodes, inflating $\text{Var}(\hat{\boldsymbol{\beta}})$.
+- Adding $\lambda\mathbf{I}$ **shifts every eigenvalue up by $\lambda$**: the eigenvalues of $\mathbf{X}^\top\mathbf{X} + \lambda\mathbf{I}$ are $\lambda_j + \lambda$.
+- The inverse now involves $1/(\lambda_j + \lambda)$ — even if $\lambda_j \approx 0$, the denominator is at least $\lambda > 0$, so it stays bounded.
+
+:::
+
+:::{.fragment}
+
+The matrix is therefore always invertible for any $\lambda > 0$, regardless of multicollinearity.
+
+- Ridge shrinks all coefficients **toward zero** but **never sets them exactly to zero** — all predictors are retained.
+- Particularly useful when predictors are correlated (multicollinearity).
+- Predictors must be **standardised** first (the penalty is scale-sensitive).
+
+:::
+
+## Ridge: The Effect of $\lambda$
+
+```{python}
+#| echo: false
+#| output-location: slide
+#| fig-cap: "As λ increases (moving right), Ridge coefficients are smoothly shrunk toward zero. All predictors remain in the model — none are zeroed out. Dashed horizontal lines show the OLS coefficient values (λ = 0 limit). Note: coefficients are on the standardised scale."
+
+alphas_demo = np.logspace(-3, 4, 200)
+feature_names_demo = ['MedInc','HouseAge','AveRooms','AveBedrms',
+                      'AveOccup','Population','Latitude','Longitude']
+
+ridge_coefs_demo = np.array([
+    Ridge(alpha=a).fit(X_scaled, y_full).coef_
+    for a in alphas_demo
+])
+
+# OLS coefficients = Ridge at α → 0 (use very small alpha as proxy)
+ols_coefs = LinearRegression().fit(X_scaled, y_full).coef_
+
+fig, ax = plt.subplots(figsize=(11, 5))
+palette = sns.color_palette('tab10', n_colors=8)
+
+for j, name in enumerate(feature_names_demo):
+    ax.plot(np.log10(alphas_demo), ridge_coefs_demo[:, j],
+            lw=2, color=palette[j], label=name)
+    # Horizontal dashed line at the true OLS value
+    ax.axhline(ols_coefs[j], color=palette[j], lw=0.8, linestyle='--', alpha=0.5)
+
+ax.axhline(0, color='black', lw=0.8)
+ax.set_xlabel('$\\log_{10}(\\lambda)$', fontsize=12)
+ax.set_ylabel('Coefficient value (standardised scale)', fontsize=12)
+ax.set_title('Ridge Regression: Coefficient Shrinkage as $\\lambda$ Increases', fontsize=13)
+ax.legend(fontsize=8, ncol=2, loc='upper right')
+plt.tight_layout()
+plt.show()
+```
+
+## Lasso ($L_1$ Penalty)
+
+:::{.callout-important title="Lasso — Least Absolute Shrinkage and Selection Operator"}
+
+$$\hat{\boldsymbol{\beta}}_{\text{lasso}} = \underset{\boldsymbol{\beta}}{\arg\min}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|_1,$$
+
+where $\|\boldsymbol{\beta}\|_1 = \sum_j |\beta_j|$ is the $L_1$ norm.
+
+:::
+
+:::{.fragment}
+
+- **No closed-form solution** — requires coordinate descent or convex optimization.
+- The $L_1$ penalty induces **sparsity**: for large enough $\lambda$, some $\hat{\beta}_j$ are set **exactly to zero**.
+- Lasso performs **automatic variable selection** — it simultaneously shrinks and selects.
+- Like Ridge, predictors must be standardised.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> The key difference: Ridge shrinks coefficients toward zero uniformly; Lasso can zero them out completely.
+
+:::
+
+## Lasso: Why Does Sparsity Happen?
+
+:::{.columns}
+:::{.column width="55%"}
+
+:::{.fragment}
+
+Recall the constraint form: minimize RSS subject to $\|\boldsymbol{\beta}\|_1 \leq t$.
+
+- The **$L_1$ constraint region** (diamond) has **corners on the coordinate axes**.
+- The RSS contours are ellipses centred at the OLS solution, expanding outward.
+- As we shrink $t$, the ellipse first touches the diamond.
+- Because the diamond has **sharp corners**, contact most often occurs at a corner — where one or more $\beta_j = 0$ **exactly**.
+
+:::
+
+:::
+
+:::{.column width="45%"}
+
+:::{.fragment}
+
+```{python}
+#| echo: false
+#| fig-cap: "The L₁ ball (diamond) has corners where an axis meets the boundary. The expanding RSS ellipse tends to first touch a corner, setting one coefficient exactly to zero."
+
+fig, ax = plt.subplots(figsize=(5, 4))
+diamond_x = [1, 0, -1, 0, 1]
+diamond_y = [0, 1, 0, -1, 0]
+ax.fill(diamond_x, diamond_y, alpha=0.25, color='steelblue')
+ax.plot(diamond_x, diamond_y, color='steelblue', lw=2, label='$L_1$ ball')
+
+ols = np.array([1.4, 1.1])
+for r in [0.55, 0.85, 1.25]:
+    e_t = np.linspace(0, 2*np.pi, 400)
+    ax.plot(ols[0] + r*np.cos(e_t), ols[1] + 0.55*r*np.sin(e_t),
+            color='#fc8d62', lw=1.2, alpha=0.7)
+
+ax.scatter(*ols, color='#fc8d62', s=80, zorder=5, label='OLS solution')
+ax.scatter(0, 0.95, color='crimson', s=120, zorder=6,
+           marker='*', label='Lasso solution\n($\\hat{\\beta}_1=0$)')
+ax.axhline(0, color='gray', lw=0.8)
+ax.axvline(0, color='gray', lw=0.8)
+ax.set_xlabel('$\\beta_1$'); ax.set_ylabel('$\\beta_2$')
+ax.set_title('Sparsity from the $L_1$ Corner')
+ax.legend(fontsize=8, loc='lower right')
+ax.set_xlim(-1.8, 2.2); ax.set_ylim(-1.5, 1.8)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+:::
+:::
+
+:::{.fragment}
+
+> This geometry is why $L_2$ (Ridge) never produces exactly-zero coefficients: the smooth $L_2$ ball has no corners, so the ellipse touches it at a non-axis point.
+
+:::
+
+## Ridge vs. Lasso: Geometry
+
+```{python}
+#| echo: false
+#| output-location: slide
+#| fig-cap: "Constraint regions for Ridge (circle, L₂ ball) and Lasso (diamond, L₁ ball). The OLS solution is at the unconstrained minimum. The Lasso constraint region has corners along the axes, making it likely that the constrained minimum falls on a corner — setting one coefficient exactly to zero."
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+theta = np.linspace(0, 2*np.pi, 400)
+
+# Ridge: L2 ball
+axes[0].fill(np.cos(theta), np.sin(theta), alpha=0.3, color='steelblue')
+axes[0].plot(np.cos(theta), np.sin(theta), color='steelblue', lw=2)
+# Contours of RSS (ellipses centred at OLS solution)
+ols = np.array([1.5, 1.2])
+for r in [0.6, 1.0, 1.5]:
+    e_theta = np.linspace(0, 2*np.pi, 400)
+    ex = ols[0] + r * np.cos(e_theta)
+    ey = ols[1] + 0.6*r * np.sin(e_theta)
+    axes[0].plot(ex, ey, color='#fc8d62', lw=1.2, alpha=0.7)
+axes[0].scatter(*ols, color='#fc8d62', s=80, zorder=5, label='OLS solution')
+# Ridge solution: closest point on L2 ball to OLS solution
+ridge_sol = ols / np.linalg.norm(ols) * 0.95
+axes[0].scatter(*ridge_sol, color='crimson', s=100, zorder=6,
+                marker='*', label='Ridge solution')
+axes[0].set_xlim(-2, 2.5); axes[0].set_ylim(-1.8, 2)
+axes[0].set_xlabel('$\\beta_1$'); axes[0].set_ylabel('$\\beta_2$')
+axes[0].set_title('Ridge ($L_2$ constraint region)')
+axes[0].axhline(0, color='gray', lw=0.8); axes[0].axvline(0, color='gray', lw=0.8)
+axes[0].legend(fontsize=9)
+
+# Lasso: L1 ball (diamond)
+lasso_diamond_x = [1, 0, -1, 0, 1]
+lasso_diamond_y = [0, 1, 0, -1, 0]
+axes[1].fill(lasso_diamond_x, lasso_diamond_y, alpha=0.3, color='steelblue')
+axes[1].plot(lasso_diamond_x, lasso_diamond_y, color='steelblue', lw=2)
+for r in [0.6, 1.0, 1.5]:
+    e_theta = np.linspace(0, 2*np.pi, 400)
+    ex = ols[0] + r * np.cos(e_theta)
+    ey = ols[1] + 0.6*r * np.sin(e_theta)
+    axes[1].plot(ex, ey, color='#fc8d62', lw=1.2, alpha=0.7)
+axes[1].scatter(*ols, color='#fc8d62', s=80, zorder=5, label='OLS solution')
+# Lasso solution: touches a corner (axis) of the L1 ball
+lasso_sol = np.array([0.0, 0.95])
+axes[1].scatter(*lasso_sol, color='crimson', s=100, zorder=6,
+                marker='*', label='Lasso solution ($\\beta_1 = 0$)')
+axes[1].set_xlim(-2, 2.5); axes[1].set_ylim(-1.8, 2)
+axes[1].set_xlabel('$\\beta_1$'); axes[1].set_ylabel('$\\beta_2$')
+axes[1].set_title('Lasso ($L_1$ constraint region)')
+axes[1].axhline(0, color='gray', lw=0.8); axes[1].axvline(0, color='gray', lw=0.8)
+axes[1].legend(fontsize=9)
+
+plt.suptitle('Ridge vs. Lasso: Geometry of the Constraint Regions', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+## Elastic Net
+
+:::{.callout-important title="Elastic Net"}
+
+$$\hat{\boldsymbol{\beta}}_{\text{EN}} = \underset{\boldsymbol{\beta}}{\arg\min}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\!\left[\alpha\|\boldsymbol{\beta}\|_1 + \frac{1-\alpha}{2}\|\boldsymbol{\beta}\|^2_2\right],$$
+
+where $\alpha \in [0, 1]$ controls the mix: $\alpha = 1$ is pure Lasso, $\alpha = 0$ is pure Ridge.
+
+:::
+
+:::{.fragment}
+
+- **Combines** the sparsity of Lasso with the grouping property of Ridge.
+- When predictors are **correlated**, Lasso tends to arbitrarily select one from a group; Elastic Net tends to **select the group together**.
+- Two hyperparameters: $\lambda$ (overall penalty strength) and $\alpha$ (L1 vs. L2 mix).
+
+:::
+
+## Ridge vs. Lasso — Practical Guidance
+
+:::{.fragment}
+
+| | Ridge | Lasso | Elastic Net |
+|---|---|---|---|
+| **Variable selection** | No | Yes | Yes |
+| **Correlated predictors** | Handles well | Picks one arbitrarily | Selects group |
+| **Works when $p > n$** | Yes | Yes (selects $\leq n$) | Yes |
+| **Interpretability** | All retained | Sparse | Sparse |
+| **Inference on $\hat{\beta}$** | Non-standard | Non-standard | Non-standard |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Rules of thumb
+
+- Use **Ridge** when you expect a **dense signal** — most predictors contribute something.
+- Use **Lasso** when you expect **sparsity** — only a few predictors truly matter.
+- Use **Elastic Net** when predictors are **correlated and sparse** — combines the best of both.
+- When $p \gg n$, prefer Lasso or Elastic Net to obtain an interpretable sparse model.
+
+:::
+
+## Choosing $\lambda$: Cross-Validated Grid Search
+
+```{python}
+#| output-location: fragment
+
+# RidgeCV — built-in leave-one-out CV over a grid of alpha values
+ridge_cv  = RidgeCV(alphas=np.logspace(-3, 4, 100), cv=10)
+ridge_cv.fit(X_scaled, y_full)
+print(f"Ridge best λ (alpha): {ridge_cv.alpha_:.4f}")
+
+# LassoCV — coordinate descent + k-fold CV
+lasso_cv = LassoCV(alphas=np.logspace(-4, 1, 100),
+                   cv=10, max_iter=10_000, random_state=0)
+lasso_cv.fit(X_scaled, y_full)
+print(f"Lasso best λ (alpha): {lasso_cv.alpha_:.6f}")
+```
+
+## Coefficient Path Plots
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Coefficient paths for Ridge (left) and Lasso (right) as λ increases. Ridge shrinks all coefficients smoothly to zero; Lasso sets some to exactly zero, performing variable selection. The dashed red line marks the CV-selected λ."
+
+alphas = np.logspace(-3, 4, 200)
+
+# Ridge path
+ridge_coefs = np.array([
+    Ridge(alpha=a).fit(X_scaled, y_full).coef_
+    for a in alphas
+])
+
+# Lasso path
+lasso_coefs = np.array([
+    Lasso(alpha=a, max_iter=10000).fit(X_scaled, y_full).coef_
+    for a in alphas
+])
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+palette = sns.color_palette('tab10', n_colors=8)
+
+for j, name in enumerate(feature_names):
+    axes[0].plot(np.log10(alphas), ridge_coefs[:, j],
+                 lw=1.8, color=palette[j], label=name)
+    axes[1].plot(np.log10(alphas), lasso_coefs[:, j],
+                 lw=1.8, color=palette[j], label=name)
+
+for ax, title, best_a in [
+    (axes[0], 'Ridge Coefficient Path', ridge_cv.alpha_),
+    (axes[1], 'Lasso Coefficient Path', lasso_cv.alpha_),
+]:
+    ax.axvline(np.log10(best_a), color='crimson', lw=2,
+               linestyle='--', label=f'CV-selected $\\lambda$')
+    ax.axhline(0, color='gray', lw=0.8)
+    ax.set_xlabel('$\\log_{10}(\\lambda)$')
+    ax.set_ylabel('Coefficient value')
+    ax.set_title(title)
+    ax.legend(fontsize=7, ncol=2)
+
+plt.suptitle('Regularization Paths — California Housing', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+
+
+# Implementation in Python
+
+## 🗺️ The Dataset: Diabetes
+
+:::{.fragment}
+
+We use `sklearn`'s built-in **diabetes dataset** [@GeeksForGeeks2024], a classic regression benchmark.
+
+- $n = 442$ patients; response = **disease progression** one year after baseline (continuous).
+- $p = 10$ predictors: age, sex, BMI, blood pressure, and six blood serum measurements.
+- Predictors are **already mean-centred and scaled** by `sklearn`.
+
+:::
+
+:::{.fragment}
+
+```{python}
+from sklearn.datasets import load_diabetes
+
+diabetes = load_diabetes()
+X_diab = pd.DataFrame(diabetes.data, columns=diabetes.feature_names)
+y_diab = pd.Series(diabetes.target, name='progression')
+
+print(X_diab.shape)
+print(y_diab.describe().round(1))
+```
+
+:::
+
+## Step 1: Train-Test Split
+
+:::{.fragment}
+
+Before fitting any model we hold out 25% of the data as a **test set** — this will never be seen during training or hyperparameter tuning.
+
+:::
+
+:::{.fragment}
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_diab, y_diab, test_size=0.25, random_state=42
+)
+
+print(f"Training set: {X_train.shape[0]} observations")
+print(f"Test set:     {X_test.shape[0]} observations")
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Because the predictors are already scaled in this dataset, we do not need to apply `StandardScaler` here. In general, you should always scale when using regularized methods.
+
+:::
+
+## Step 2: Fitting Ridge Regression
+
+:::{.fragment}
+
+We fit Ridge with `alpha=1` ($\lambda = 1$) as a starting point, then inspect the coefficients.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+
+# Fit Ridge with α = 1
+ridge_model = Ridge(alpha=1)
+ridge_model.fit(X_train, y_train)
+y_pred_ridge = ridge_model.predict(X_test)
+
+# Test MSE
+mse_ridge = np.mean((y_pred_ridge - y_test)**2)
+print(f"Ridge (α=1) — Test MSE: {mse_ridge:.2f}\n")
+
+# Coefficient table
+ridge_coef_df = pd.DataFrame({
+    'Feature':    X_train.columns,
+    'Coefficient': ridge_model.coef_
+}).sort_values('Coefficient', key=abs, ascending=False)
+
+print(ridge_coef_df.round(2).to_string(index=False))
+```
+
+:::
+
+## Step 3: Fitting Lasso Regression
+
+:::{.fragment}
+
+We fit Lasso with `alpha=1`. Notice that some coefficients are set **exactly to zero** — Lasso has performed automatic variable selection.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+
+# Fit Lasso with α = 1
+lasso_model = Lasso(alpha=1)
+lasso_model.fit(X_train, y_train)
+y_pred_lasso = lasso_model.predict(X_test)
+
+# Test MSE
+mse_lasso = np.mean((y_pred_lasso - y_test)**2)
+print(f"Lasso (α=1) — Test MSE: {mse_lasso:.2f}\n")
+
+# Coefficient table — mark zeroed-out predictors
+lasso_coef_df = pd.DataFrame({
+    'Feature':    X_train.columns,
+    'Coefficient': lasso_model.coef_,
+    'Selected':    lasso_model.coef_ != 0
+}).sort_values('Coefficient', key=abs, ascending=False)
+
+print(f"Features retained: {(lasso_model.coef_ != 0).sum()} / {X_train.shape[1]}\n")
+print(lasso_coef_df.round(2).to_string(index=False))
+```
+
+:::
+
+## Step 4: Fitting Elastic Net
+
+:::{.fragment}
+
+Elastic Net adds a second hyperparameter `l1_ratio` ($\alpha$ in our notation) controlling the L1/L2 mix. Here we use `l1_ratio=0.5` — equal weight to both penalties.
+
+:::
+
+:::{.fragment}
+```{python}
+#| output-location: slide
+
+# Fit Elastic Net with λ=1, α=0.5
+enet_model = ElasticNet(alpha=1, l1_ratio=0.5)
+enet_model.fit(X_train, y_train)
+y_pred_enet = enet_model.predict(X_test)
+
+# Test MSE
+mse_enet = np.mean((y_pred_enet - y_test)**2)
+print(f"Elastic Net (α=1, l1_ratio=0.5) — Test MSE: {mse_enet:.2f}\n")
+
+# Coefficient table
+enet_coef_df = pd.DataFrame({
+    'Feature':    X_train.columns,
+    'Coefficient': enet_model.coef_,
+    'Selected':    enet_model.coef_ != 0
+}).sort_values('Coefficient', key=abs, ascending=False)
+
+print(f"Features retained: {(enet_model.coef_ != 0).sum()} / {X_train.shape[1]}\n")
+print(enet_coef_df.round(2).to_string(index=False))
+```
+
+:::
+
+## Step 5: Choosing $\lambda$ by Cross-Validation
+
+:::{.fragment}
+
+`alpha=1` was arbitrary. We use built-in CV classes to search over a grid and find the optimal $\lambda$ for each method.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+
+# Ridge: CV over grid
+ridge_cv_diab = RidgeCV(alphas=np.logspace(-3, 4, 100), cv=10)
+ridge_cv_diab.fit(X_train, y_train)
+
+# Lasso: CV over grid
+lasso_cv_diab = LassoCV(alphas=np.logspace(-3, 2, 100),
+                        cv=10, max_iter=10_000, random_state=42)
+lasso_cv_diab.fit(X_train, y_train)
+
+# Elastic Net: CV over grid
+enet_cv_diab = ElasticNetCV(alphas=np.logspace(-3, 2, 100),
+                            l1_ratio=[0.1, 0.5, 0.7, 0.9, 1.0],
+                            cv=10, max_iter=10_000, random_state=42)
+enet_cv_diab.fit(X_train, y_train)
+
+print(f"Ridge   best λ: {ridge_cv_diab.alpha_:.4f}")
+print(f"Lasso   best λ: {lasso_cv_diab.alpha_:.4f}")
+print(f"ElasNet best λ: {enet_cv_diab.alpha_:.4f},  "
+      f"best l1_ratio: {enet_cv_diab.l1_ratio_:.2f}")
+```
+
+:::
+
+## Step 6: Comparing All Methods
+
+```{python}
+#| output-location: slide
+
+# OLS baseline
+ols_model = LinearRegression().fit(X_train, y_train)
+
+models = {
+    'OLS':                    ols_model,
+    'Ridge (α=1)':            ridge_model,
+    'Ridge (CV-tuned)':       ridge_cv_diab,
+    'Lasso (α=1)':            lasso_model,
+    'Lasso (CV-tuned)':       lasso_cv_diab,
+    'Elastic Net (CV-tuned)': enet_cv_diab,
+}
+
+print(f"{'Method':<28} {'Test MSE':>10} {'# Features':>12}")
+print("-" * 52)
+for name, mdl in models.items():
+    y_hat = mdl.predict(X_test)
+    mse   = np.mean((y_hat - y_test)**2)
+    # count non-zero coefficients (OLS and Ridge always keep all)
+    coefs = mdl.coef_
+    n_feat = (coefs != 0).sum() if hasattr(mdl, 'coef_') else 10
+    print(f"{name:<28} {mse:>10.2f} {n_feat:>12}")
+```
+
+## Visualising the Results
+
+```{python}
+#| echo: false
+#| output-location: slide
+#| fig-cap: "Coefficient estimates for all six methods on the diabetes dataset. OLS and Ridge retain all 10 features; Lasso and Elastic Net zero out some. CV tuning substantially changes the estimates compared to α=1."
+
+methods_plot = {
+    'OLS':                    ols_model.coef_,
+    'Ridge (α=1)':            ridge_model.coef_,
+    'Ridge (CV)':             ridge_cv_diab.coef_,
+    'Lasso (α=1)':            lasso_model.coef_,
+    'Lasso (CV)':             lasso_cv_diab.coef_,
+    'Elastic Net (CV)':       enet_cv_diab.coef_,
+}
+
+feat_names = X_train.columns.tolist()
+x = np.arange(len(feat_names))
+width = 0.13
+colors = sns.color_palette('tab10', n_colors=6)
+
+fig, ax = plt.subplots(figsize=(14, 5))
+for i, (label, coefs) in enumerate(methods_plot.items()):
+    ax.bar(x + i*width, coefs, width, label=label,
+           color=colors[i], alpha=0.85)
+
+ax.set_xticks(x + width * 2.5)
+ax.set_xticklabels(feat_names, fontsize=10)
+ax.axhline(0, color='black', lw=0.8)
+ax.set_ylabel('Coefficient value')
+ax.set_title('Coefficient Estimates by Method — Diabetes Dataset', fontsize=13)
+ax.legend(fontsize=8, ncol=3)
+plt.tight_layout(); plt.show()
+```
+
+
+
+# Conclusion
+
+## ✅ What We Covered
+
+- **Limitations of subset selection**: discrete, greedy, and unstable for large $p$.
+- **Cross-validation**: honest out-of-sample error estimation; the key tool for choosing $\lambda$.
+- **Regularization**: Ridge ($L_2$) shrinks smoothly; Lasso ($L_1$) shrinks and selects; Elastic Net combines both.
+- **Constrained optimization view**: regularization = fitting RSS subject to a norm ball constraint.
+- **Standardization**: essential before applying any penalized method.
+- **Implementation**: fitting Ridge, Lasso, and Elastic Net in `sklearn`, with CV-tuned $\lambda$.
+
+## 📅 What's Next?
+
+- **Classification models**: logistic regression, support vector machines, decision trees.
+- **Non-linear regression** and basis expansions.
+
+## References

@@ -1,0 +1,628 @@
+---
+title: "Lecture 14: Subset Selection"
+subtitle: "PSTAT100: Data Science — Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+jupyter: pstat100
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        html-math-method: katex
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Understand what **"optimal" model** means and why it depends on your goal.
+- Introduce the **bias-variance tradeoff** as the central tension in model selection.
+- Survey **subset selection** strategies: best subsets, forward, backward, and hybrid stepwise.
+- Use **information criteria** (AIC, BIC, adjusted $R^2$) to compare models.
+
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+
+from sklearn.datasets import fetch_california_housing
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+
+
+# Framing the Problem
+
+## 🎯 What Does "Optimal" Model Mean?
+
+### The goal depends on the task
+
+:::{.fragment}
+
+| Goal | What matters | Implication |
+|---|---|---|
+| **Prediction accuracy** | Low out-of-sample error | Can tolerate many predictors if they help |
+| **Interpretability** | Sparse, readable model | Prefer fewer, meaningful predictors |
+| **Inference validity** | Correct standard errors | Need well-specified, parsimonious model |
+| **Parsimony** | Fewest predictors possible | Occam's razor; generalisability |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> There is no universal "best" model — only models that are better suited to a given purpose. **The criterion you use to select a model should match the criterion you care about.**
+
+:::
+
+## The Bias-Variance Tradeoff
+
+:::{.fragment}
+
+For any estimator $\hat{f}$ of $f$, the expected test error at a point $x_0$ decomposes as:
+
+$$
+\mathbb{E}\!\left[(Y - \hat{f}(x_0))^2\right]
+= \underbrace{\left(\mathbb{E}[\hat{f}(x_0)] - f(x_0)\right)^2}_{\text{Bias}^2}
++ \underbrace{\mathrm{Var}(\hat{f}(x_0))}_{\text{Variance}}
++ \underbrace{\sigma^2}_{\text{Irreducible error}}.
+$$
+
+:::
+
+:::{.fragment}
+
+- **Bias**: systematic error from using the wrong model class — underfitting.
+- **Variance**: sensitivity to the particular training sample — overfitting.
+- $\sigma^2$: noise in the data itself; cannot be reduced by any model.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Adding predictors **reduces bias** (the model fits more patterns) but **inflates variance** (the model memorises the training data). The tradeoff is managed by choosing model complexity wisely.
+
+:::
+
+## Bias-Variance Tradeoff — Visualization
+
+```{python}
+#| echo: false
+#| output-location: slide
+#| fig-cap: "The bias-variance tradeoff. As model complexity grows, bias falls but variance rises. The optimal complexity minimises total test error."
+
+rng = np.random.default_rng(42)
+complexity = np.linspace(1, 15, 200)
+
+bias2    = 5 * np.exp(-0.35 * complexity)
+variance = 0.05 * np.exp(0.30 * complexity)
+irreducible = 0.5 * np.ones_like(complexity)
+total    = bias2 + variance + irreducible
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.plot(complexity, bias2,      lw=2.5, color='steelblue',  label='Bias²')
+ax.plot(complexity, variance,   lw=2.5, color='#fc8d62',    label='Variance')
+ax.plot(complexity, irreducible,lw=1.5, color='gray',
+        linestyle='--', label='Irreducible error')
+ax.plot(complexity, total,      lw=3,   color='#8da0cb',    label='Total test error')
+
+opt = np.argmin(total)
+ax.axvline(complexity[opt], color='crimson', lw=1.5,
+           linestyle=':', label='Optimal complexity')
+ax.set_xlabel('Model Complexity (number of predictors)', fontsize=12)
+ax.set_ylabel('Error', fontsize=12)
+ax.set_title('The Bias-Variance Tradeoff', fontsize=13)
+ax.legend(fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+## Overfitting vs. Underfitting
+
+```{python}
+#| echo: false
+#| output-location: slide
+#| fig-cap: "Underfitting (degree 1): the model misses real structure. Overfitting (degree 12): the model chases noise. A degree-3 polynomial captures the true pattern well."
+
+rng2 = np.random.default_rng(7)
+x_train = np.sort(rng2.uniform(-3, 3, 25))
+y_true  = np.sin(x_train)
+y_train = y_true + rng2.normal(0, 0.4, 25)
+x_grid  = np.linspace(-3, 3, 300)
+
+fig, axes = plt.subplots(1, 3, figsize=(14, 4.5), sharey=True)
+titles  = ['Underfit (degree 1)', 'Good fit (degree 3)', 'Overfit (degree 12)']
+degrees = [1, 3, 12]
+
+for ax, deg, title in zip(axes, degrees, titles):
+    coeffs = np.polyfit(x_train, y_train, deg)
+    y_grid = np.polyval(coeffs, x_grid)
+    ax.scatter(x_train, y_train, color='steelblue', s=25, alpha=0.8, zorder=3)
+    ax.plot(x_grid, np.sin(x_grid), 'k--', lw=1.5, label='True $f(x)$')
+    ax.plot(x_grid, y_grid, color='crimson', lw=2.5, label=f'Degree {deg}')
+    ax.set_title(title, fontsize=11)
+    ax.set_xlabel('$x$')
+    ax.legend(fontsize=8)
+    ax.set_ylim(-2.5, 2.5)
+
+axes[0].set_ylabel('$y$')
+plt.suptitle('Underfitting, Good Fit, and Overfitting', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+
+
+# Prerequisite Review
+
+## The MLR Model
+
+:::{.callout-important title="Multiple Linear Regression"}
+
+$$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}, \qquad \boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0},\, \sigma^2 \mathbf{I}_n),$$
+
+where $\mathbf{y} \in \mathbb{R}^n$, $\mathbf{X} \in \mathbb{R}^{n \times (p+1)}$ (including an intercept column), and $\boldsymbol{\beta} \in \mathbb{R}^{p+1}$.
+
+The **OLS estimator** is:
+
+$$\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}.$$
+
+:::
+
+:::{.fragment}
+
+### Key quantities
+
+| Symbol | Formula | Role |
+|---|---|---|
+| $\hat{\mathbf{y}}$ | $\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{H}\mathbf{y}$ | Fitted values |
+| $\mathbf{H}$ | $\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ | Hat (projection) matrix |
+| $h_{ii}$ | $[\mathbf{H}]_{ii}$ | Leverage of observation $i$ |
+| $\text{RSS}$ | $\mathbf{e}^\top\mathbf{e} = \|\mathbf{y} - \hat{\mathbf{y}}\|^2$ | Residual sum of squares |
+
+:::
+
+## The Hat Matrix and Leverage
+
+:::{.fragment}
+
+The hat matrix $\mathbf{H}$ is an **orthogonal projector** onto $\text{col}(\mathbf{X})$:
+
+- $\mathbf{H}^2 = \mathbf{H}$ (idempotent), $\mathbf{H}^\top = \mathbf{H}$ (symmetric).
+- $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$; residuals $\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}$.
+- $\text{tr}(\mathbf{H}) = p + 1$ (the number of parameters).
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Leverage $h_{ii}$
+
+- $h_{ii} \in [1/n,\, 1]$; observation $i$ has **high leverage** if its predictor values are far from the centroid of $\mathbf{X}$.
+- High leverage alone does not mean the point is influential — it needs to also have a large residual.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> We will see that $h_{ii}$ reappears in the LOOCV formula, making leverage a bridge between geometry, influence, and cross-validation.
+
+:::
+
+## MLR Assumptions
+
+:::{.fragment}
+
+| Assumption | Statement | Consequence if violated |
+|---|---|---|
+| **Linearity** | $\mathbb{E}[\mathbf{y}] = \mathbf{X}\boldsymbol{\beta}$ | Systematic bias in $\hat{\boldsymbol{\beta}}$ |
+| **Homoscedasticity** | $\text{Var}(\varepsilon_i) = \sigma^2$ for all $i$ | Inefficient OLS; SEs wrong |
+| **No multicollinearity** | $\mathbf{X}^\top\mathbf{X}$ is invertible (ideally well-conditioned) | Inflated variances of $\hat{\boldsymbol{\beta}}$ |
+| **Exogeneity** | $\mathbb{E}[\boldsymbol{\varepsilon} \mid \mathbf{X}] = \mathbf{0}$ | OLS is biased |
+| **Normality** | $\boldsymbol{\varepsilon} \sim \mathcal{N}(\mathbf{0}, \sigma^2 \mathbf{I})$ | Needed for finite-sample inference |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- **Multicollinearity** is particularly damaging for model selection — it inflates coefficient variances, making it hard to identify which predictors matter.
+- We will diagnose and address it directly in this lecture.
+
+:::
+
+
+
+# Subset Selection Methods
+
+## 🔍 The Subset Selection Problem
+
+### The setup
+
+- We have $p$ candidate predictors. How do we choose which to include?
+- There are $2^p$ possible subsets — including the intercept-only model and the full model.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Four strategies
+
+1. **Best subset**: evaluate all $2^p$ subsets, pick the one minimising an information criterion.
+2. **Forward stepwise**: start from the null model, add one predictor at a time.
+3. **Backward stepwise**: start from the full model, drop one predictor at a time.
+4. **Hybrid**: allow both additions and removals at each step.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> For $p \leq 20$ or so, best subset is feasible. For $p \gtrsim 30$, stepwise or regularization is preferred.
+
+:::
+
+## Best Subset Selection
+
+### Algorithm
+
+:::{.fragment}
+
+For each $k = 0, 1, \ldots, p$:
+
+1. Fit all $\binom{p}{k}$ models with exactly $k$ predictors.
+2. Save the best (lowest RSS) model of size $k$: call it $\mathcal{M}_k$.
+
+:::
+
+:::{.fragment}
+
+Then select among $\mathcal{M}_0, \mathcal{M}_1, \ldots, \mathcal{M}_p$ using a criterion such as AIC, BIC, or adjusted $R^2$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Computational cost
+
+- $p = 10$: $2^{10} = 1024$ models — trivial.
+- $p = 20$: $2^{20} \approx 10^6$ models — manageable.
+- $p = 40$: $2^{40} \approx 10^{12}$ models — **infeasible**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Best subset selection is the gold standard for small $p$, but its exponential cost means stepwise methods or regularization are needed for moderate to large $p$.
+
+:::
+
+## Forward Stepwise Selection
+
+### Algorithm
+
+1. Start with the null model $\mathcal{M}_0$ (intercept only).
+2. At each step, **add** the predictor that most improves a criterion (e.g., largest $|t|$-statistic, smallest AIC, or largest decrease in RSS).
+3. Stop when no addition improves the criterion — or when all $p$ predictors are added.
+
+:::{.fragment}
+
+> What would this look like in `python`?
+
+:::
+
+## Forward Stepwise Implementation in Python
+
+```{python}
+def forward_stepwise(y, X_candidates, criterion='aic'):
+    """
+    Greedy forward stepwise selection.
+    y: pd.Series, X_candidates: pd.DataFrame (predictors only, no intercept)
+    Returns a list of selected predictor names.
+    """
+    remaining  = list(X_candidates.columns)  # predictors not yet in the model
+    selected   = []                           # predictors chosen so far
+    best_score = np.inf                       # track the best criterion seen
+
+    while remaining:
+        # Try adding each remaining predictor to the current selected set
+        scores = {}
+        for col in remaining:
+            cols  = selected + [col]               # candidate set with one addition
+            X_fit = sm.add_constant(X_candidates[cols])
+            res   = sm.OLS(y, X_fit).fit()
+            scores[col] = getattr(res, criterion)  # AIC (or BIC) of this candidate
+
+        # Pick whichever addition gave the lowest criterion value
+        best_col = min(scores, key=scores.get)
+        best_new = scores[best_col]
+
+        if best_new < best_score:       # adding best_col actually improved the fit
+            best_score = best_new
+            selected.append(best_col)   # commit the addition
+            remaining.remove(best_col)
+        else:
+            break   # no remaining predictor improves the criterion: stop
+
+    return selected
+```
+
+
+## Backward Stepwise Selection
+
+### Algorithm
+
+:::{.fragment}
+
+1. Start with the full model $\mathcal{M}_p$ (all $p$ predictors).
+2. At each step, **drop** the predictor with the smallest $|t|$-statistic (or largest $p$-value, or that decreases AIC most).
+3. Stop when no removal improves the criterion.
+
+:::
+
+## Backward Stepwise Implementation in Python
+
+```{python}
+def backward_stepwise(y, X_candidates, criterion='aic'):
+    """
+    Greedy backward stepwise selection.
+    """
+    selected = list(X_candidates.columns)  # start with all predictors in the model
+
+    # Score the full model as the initial benchmark
+    X_fit      = sm.add_constant(X_candidates[selected])
+    best_score = getattr(sm.OLS(y, X_fit).fit(), criterion)
+
+    improved = True
+    while improved and len(selected) > 1:   # stop if no improvement or only intercept left
+        improved = False
+        scores   = {}
+
+        # Try dropping each predictor and score the resulting smaller model
+        for col in selected:
+            cols  = [c for c in selected if c != col]  # all predictors except col
+            X_fit = sm.add_constant(X_candidates[cols])
+            res   = sm.OLS(y, X_fit).fit()
+            scores[col] = getattr(res, criterion)      # criterion when col is removed
+
+        # Find the predictor whose removal most improves (lowers) the criterion
+        drop_col   = min(scores, key=scores.get)
+        drop_score = scores[drop_col]
+
+        if drop_score < best_score:        # dropping drop_col actually helped
+            best_score = drop_score
+            selected.remove(drop_col)      # commit the removal
+            improved   = True              # signal that another pass should be tried
+
+    return selected
+```
+
+
+## Comparing Forward and Backward Stepwise
+
+:::{.fragment}
+
+| Property | Forward | Backward |
+|---|---|---|
+| Start | Null model | Full model |
+| Requires $n > p$? | No | **Yes** (full model must be estimable) |
+| Can re-include dropped predictors? | No | No |
+| Can drop previously added predictors? | No | No |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Hybrid stepwise
+
+- At each step, consider **both** additions and removals.
+- Implemented by alternating forward and backward passes.
+- More flexible, but still greedy — not guaranteed to find the globally optimal subset.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> **Caution**: stepwise selection inflates Type I error and produces overoptimistic $p$-values — it should be used for **model building**, not for inference. Report final model uncertainty honestly.
+
+:::
+
+
+
+# Information Criteria
+
+## 📏 Penalised Likelihood Criteria
+
+### The general idea
+
+- RSS always decreases as we add predictors — using it alone leads to the full model.
+- Information criteria add a **penalty for model complexity** to discourage overfitting.
+
+:::{.fragment}
+
+:::{.callout-important title="AIC and BIC"}
+
+$$\text{AIC} = -2\ell(\hat{\boldsymbol{\beta}}) + 2k$$
+
+$$\text{BIC} = -2\ell(\hat{\boldsymbol{\beta}}) + k\ln n$$
+
+where $\ell(\hat{\boldsymbol{\beta}})$ is the maximised log-likelihood, $k$ is the number of free parameters (including $\sigma^2$), and $n$ is the sample size. **Lower is better.**
+
+:::
+
+:::
+
+:::{.fragment}
+
+- **AIC** (Akaike, 1974): derived from information-theoretic arguments; estimates out-of-sample prediction error.
+- **BIC** (Schwarz, 1978): derived from Bayesian arguments; penalises $k$ more heavily when $n$ is large.
+- For $n \geq 8$, $\ln n > 2$, so **BIC penalises harder** and tends to favour sparser models.
+
+:::
+
+## AIC vs. BIC in Practice
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "AIC vs BIC penalty as a function of sample size. BIC penalises each additional parameter more heavily, growing without bound as n increases."
+
+n_vals = np.arange(8, 1001)
+fig, ax = plt.subplots(figsize=(9, 4))
+ax.plot(n_vals, 2 * np.ones_like(n_vals), lw=2.5,
+        color='steelblue', label='AIC penalty per parameter (constant = 2)')
+ax.plot(n_vals, np.log(n_vals), lw=2.5,
+        color='#fc8d62', label='BIC penalty per parameter ($\\ln n$)')
+ax.set_xlabel('Sample size $n$')
+ax.set_ylabel('Penalty per parameter')
+ax.set_title('AIC vs. BIC: Penalty Per Parameter')
+ax.legend(fontsize=10)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+## Adjusted $R^2$
+
+:::{.fragment}
+
+Ordinary $R^2 = 1 - \text{RSS}/\text{TSS}$ increases whenever a predictor is added, even if that predictor is irrelevant.
+
+**Adjusted $R^2$** corrects for this:
+
+$$\bar{R}^2 = 1 - \frac{\text{RSS}/(n - p - 1)}{\text{TSS}/(n-1)} = 1 - \frac{n-1}{n-p-1}(1 - R^2).$$
+
+:::
+
+:::{.fragment}
+
+- Adding a predictor increases $\bar{R}^2$ **only if** it reduces the residual variance more than expected by chance.
+- Unlike AIC/BIC, higher $\bar{R}^2$ is better.
+- Asymptotically, maximising $\bar{R}^2$ is equivalent to minimising AIC.
+
+:::
+
+## Model Comparison Table in Python
+
+```{python}
+#| output-location: slide
+
+# Load data and fit a sequence of models for illustration
+housing = fetch_california_housing(as_frame=True)
+df = housing.frame.copy()
+df.columns = [c.lower() for c in df.columns]
+
+# Fit models of increasing complexity
+formulas = {
+    'Intercept only':         'medhouseval ~ 1',
+    '+ MedInc':               'medhouseval ~ medinc',
+    '+ MedInc + HouseAge':    'medhouseval ~ medinc + houseage',
+    '+ MedInc + HouseAge\n+ AveRooms + AveBedrms':
+                              'medhouseval ~ medinc + houseage + averooms + avebedrms',
+    'Full (all 8)':           'medhouseval ~ medinc + houseage + averooms + avebedrms'
+                              ' + aveoccup + population + latitude + longitude',
+}
+
+rows = []
+for name, formula in formulas.items():
+    fit = smf.ols(formula, data=df).fit()
+    rows.append({
+        'Model': name.replace('\n', ' '),
+        'k': int(fit.df_model) + 2,   # predictors + intercept + sigma²
+        'R²': round(fit.rsquared, 4),
+        'Adj. R²': round(fit.rsquared_adj, 4),
+        'AIC': round(fit.aic, 1),
+        'BIC': round(fit.bic, 1),
+    })
+
+cmp = pd.DataFrame(rows)
+print(cmp.to_string(index=False))
+```
+
+## Conclusion
+
+### ✅ What We Covered
+
+- **Framing**: what "optimal" means depends on the goal — prediction, inference, interpretability.
+- **Bias-variance tradeoff**: the central tension; more complexity lowers bias but inflates variance.
+- **Subset selection**: best subsets, forward, backward, and hybrid stepwise.
+- **Information criteria**: AIC, BIC, and adjusted $R^2$ as principled model comparison tools.
+
+:::{.fragment}
+
+### 📅 What's Next?
+
+- **Cross-validation**: estimating out-of-sample error and selecting tuning parameters.
+- **Regularization**: Ridge, Lasso, and Elastic Net for high-dimensional problems.
+- **Multicollinearity**: diagnosing with VIF and condition numbers, and how regularization can help.
+- **Model comparison**: partial $F$-tests for nested models.
+
+:::
+
+## References

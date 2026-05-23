@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -47,12 +82,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark-954f74211988904d40b4eeb0bee6388c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -81,11 +114,40 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -227,10 +289,8 @@ ul.task-list li input[type="checkbox"] {
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = false;
+    const authorPrefersDark = true;
     const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -336,7 +396,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../notes/pstat100-notes/00-introduction/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../notes/pstat100-notes/00-introduction/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">PSTAT100 Notes</span></a>
   </div>
 </li>
@@ -441,7 +501,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">Modelling</span></a>
+ <span class="menu-text">Statistical Models</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -477,6 +537,35 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Poisson Regression</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/11-model-selection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Selection</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/12-regularization/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Machine Learning Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/13-classification/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -484,8 +573,52 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-statistical-inference" id="toc-introduction-to-statistical-inference" class="nav-link active" data-scroll-target="#introduction-to-statistical-inference">Introduction to Statistical Inference</a>
+  <ul class="collapse">
+  <li><a href="#what-is-statistical-inference" id="toc-what-is-statistical-inference" class="nav-link" data-scroll-target="#what-is-statistical-inference">What is Statistical Inference?</a></li>
+  <li><a href="#populations-parameters-and-statistics" id="toc-populations-parameters-and-statistics" class="nav-link" data-scroll-target="#populations-parameters-and-statistics">Populations, Parameters, and Statistics</a></li>
+  <li><a href="#example-fiv-in-cats" id="toc-example-fiv-in-cats" class="nav-link" data-scroll-target="#example-fiv-in-cats">Example: FIV in Cats</a></li>
+  <li><a href="#statistics-are-random-variables" id="toc-statistics-are-random-variables" class="nav-link" data-scroll-target="#statistics-are-random-variables">Statistics are Random Variables</a></li>
+  </ul></li>
+  <li><a href="#sampling-distributions-and-the-clt" id="toc-sampling-distributions-and-the-clt" class="nav-link" data-scroll-target="#sampling-distributions-and-the-clt">Sampling Distributions and the CLT</a>
+  <ul class="collapse">
+  <li><a href="#sampling-distributions" id="toc-sampling-distributions" class="nav-link" data-scroll-target="#sampling-distributions">Sampling Distributions</a></li>
+  <li><a href="#the-central-limit-theorem" id="toc-the-central-limit-theorem" class="nav-link" data-scroll-target="#the-central-limit-theorem">The Central Limit Theorem</a></li>
+  </ul></li>
+  <li><a href="#point-estimation" id="toc-point-estimation" class="nav-link" data-scroll-target="#point-estimation">Point Estimation</a>
+  <ul class="collapse">
+  <li><a href="#estimators-and-estimates" id="toc-estimators-and-estimates" class="nav-link" data-scroll-target="#estimators-and-estimates">Estimators and Estimates</a></li>
+  <li><a href="#properties-of-estimators" id="toc-properties-of-estimators" class="nav-link" data-scroll-target="#properties-of-estimators">Properties of Estimators</a></li>
+  <li><a href="#why-the-sample-variance-divides-by-n-1" id="toc-why-the-sample-variance-divides-by-n-1" class="nav-link" data-scroll-target="#why-the-sample-variance-divides-by-n-1">Why the Sample Variance Divides by <span class="math inline">\(n-1\)</span></a></li>
+  </ul></li>
+  <li><a href="#maximum-likelihood-estimation" id="toc-maximum-likelihood-estimation" class="nav-link" data-scroll-target="#maximum-likelihood-estimation">Maximum Likelihood Estimation</a>
+  <ul class="collapse">
+  <li><a href="#the-likelihood-function" id="toc-the-likelihood-function" class="nav-link" data-scroll-target="#the-likelihood-function">The Likelihood Function</a></li>
+  <li><a href="#mle-for-the-gaussian" id="toc-mle-for-the-gaussian" class="nav-link" data-scroll-target="#mle-for-the-gaussian">MLE for the Gaussian</a></li>
+  </ul></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals">Confidence Intervals</a>
+  <ul class="collapse">
+  <li><a href="#quantifying-estimation-uncertainty" id="toc-quantifying-estimation-uncertainty" class="nav-link" data-scroll-target="#quantifying-estimation-uncertainty">Quantifying Estimation Uncertainty</a></li>
+  <li><a href="#ci-for-the-population-mean-known-sigma" id="toc-ci-for-the-population-mean-known-sigma" class="nav-link" data-scroll-target="#ci-for-the-population-mean-known-sigma">CI for the Population Mean (Known <span class="math inline">\(\sigma\)</span>)</a></li>
+  <li><a href="#ci-for-the-population-mean-unknown-sigma" id="toc-ci-for-the-population-mean-unknown-sigma" class="nav-link" data-scroll-target="#ci-for-the-population-mean-unknown-sigma">CI for the Population Mean (Unknown <span class="math inline">\(\sigma\)</span>)</a></li>
+  </ul></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing">Hypothesis Testing</a>
+  <ul class="collapse">
+  <li><a href="#the-framework" id="toc-the-framework" class="nav-link" data-scroll-target="#the-framework">The Framework</a></li>
+  <li><a href="#p-values" id="toc-p-values" class="nav-link" data-scroll-target="#p-values"><span class="math inline">\(p\)</span>-Values</a></li>
+  <li><a href="#type-i-and-type-ii-errors" id="toc-type-i-and-type-ii-errors" class="nav-link" data-scroll-target="#type-i-and-type-ii-errors">Type I and Type II Errors</a></li>
+  <li><a href="#the-one-sample-t-test" id="toc-the-one-sample-t-test" class="nav-link" data-scroll-target="#the-one-sample-t-test">The One-Sample <span class="math inline">\(t\)</span>-Test</a></li>
+  <li><a href="#connecting-cis-and-hypothesis-tests" id="toc-connecting-cis-and-hypothesis-tests" class="nav-link" data-scroll-target="#connecting-cis-and-hypothesis-tests">Connecting CIs and Hypothesis Tests</a></li>
+  <li><a href="#statistical-vs.-practical-significance" id="toc-statistical-vs.-practical-significance" class="nav-link" data-scroll-target="#statistical-vs.-practical-significance">Statistical vs.&nbsp;Practical Significance</a></li>
+  </ul></li>
+  <li><a href="#summary-the-inference-pipeline" id="toc-summary-the-inference-pipeline" class="nav-link" data-scroll-target="#summary-the-inference-pipeline">Summary: The Inference Pipeline</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -522,7 +655,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 15, 2026</p>
+      <p class="date-modified">May 22, 2026</p>
     </div>
   </div>
     
@@ -533,8 +666,653 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-default callout-important callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Understand the framework of statistical inference and distinguish populations, samples, parameters, and statistics.</li>
+<li>Define the sampling distribution of a statistic and apply the Central Limit Theorem.</li>
+<li>Evaluate estimators using bias, variance, and mean squared error.</li>
+<li>Derive and apply maximum likelihood estimation (MLE).</li>
+<li>Construct and correctly interpret confidence intervals.</li>
+<li>Conduct and interpret hypothesis tests, including <span class="math inline">\(p\)</span>-values, Type I/II errors, and the one-sample <span class="math inline">\(t\)</span>-test.</li>
+</ul>
+</div>
+</div>
+<div id="105414c2" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Libraries and Styling</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm, t, binom</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">'Set2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="introduction-to-statistical-inference" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-to-statistical-inference">Introduction to Statistical Inference</h2>
+<section id="what-is-statistical-inference" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-statistical-inference">What is Statistical Inference?</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Statistical Inference">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Statistical Inference
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Statistical inference</strong> is the process of drawing conclusions about an unknown <strong>population</strong> from a <strong>sample</strong> of observed data, while rigorously accounting for <strong>uncertainty</strong>.</p>
+</div>
+</div>
+<p>The core problem is simple: we want to know something about a large population (all voters, all patients), but we cannot observe it in its entirety — we only have a sample. We must therefore reason from the sample to the population, quantifying how uncertain our conclusions are.</p>
+<p>There are two main branches of statistical inference. <strong>Frequentist inference</strong> treats unknown parameters as fixed constants and interprets probability as the long-run frequency of events. <strong>Bayesian inference</strong> treats parameters as random variables with prior distributions that are updated by the data.</p>
+</section>
+<section id="populations-parameters-and-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="populations-parameters-and-statistics">Populations, Parameters, and Statistics</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Population and Sample">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Population and Sample
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>population</strong> is the complete set of units we are interested in. A <strong>sample</strong> is a subset of the population that we actually observe.</p>
+</div>
+</div>
+<p>A <strong>parameter</strong> is a numerical characteristic of the <em>population</em> — it is fixed but unknown. Common examples are the population mean <span class="math inline">\(\mu\)</span>, population variance <span class="math inline">\(\sigma^2\)</span>, and proportion <span class="math inline">\(p\)</span>. A <strong>statistic</strong> is a numerical function of the <em>sample</em> — it is observed and used to estimate parameters. Common examples are the sample mean <span class="math inline">\(\bar{x}\)</span>, sample variance <span class="math inline">\(s^2\)</span>, and sample proportion <span class="math inline">\(\hat{p}\)</span>. The goal of inference is to use a statistic, computed from data, to <strong>estimate</strong> or <strong>test claims</strong> about the unknown parameter.</p>
+</section>
+<section id="example-fiv-in-cats" class="level3">
+<h3 class="anchored" data-anchor-id="example-fiv-in-cats">Example: FIV in Cats</h3>
+<p>Suppose we want to determine the proportion of cats that have Feline Immunodeficiency Virus (FIV). We cannot examine the entire cat population to find the true proportion <span class="math inline">\(p\)</span>, so we model each cat as an independent Bernoulli random variable with unknown success probability <span class="math inline">\(p\)</span> and take a sample of <span class="math inline">\(n = 100\)</span> cats. The <strong>sample proportion</strong> <span class="math inline">\(\hat{p}\)</span> is our statistic — we use hat notation to denote parameter estimates.</p>
+<div id="ad007fa4" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">123</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_cat_sample():</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rng.binomial(n<span class="op">=</span><span class="dv">1</span>, p<span class="op">=</span><span class="fl">0.15</span>, size<span class="op">=</span><span class="dv">100</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>sample1 <span class="op">=</span> generate_cat_sample()</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Sample proportion: </span><span class="sc">{</span>sample1<span class="sc">.</span>mean()<span class="sc">:.3f}</span><span class="ss">  (true p = 0.15)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sample proportion: 0.120  (true p = 0.15)</code></pre>
+</div>
+</div>
+</section>
+<section id="statistics-are-random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="statistics-are-random-variables">Statistics are Random Variables</h3>
+<p>Because the sample is drawn <strong>randomly</strong> from the population, any statistic computed from it is a <strong>random variable</strong>. A different sample would produce a different value of the statistic. This <strong>sampling variability</strong> is precisely what we need to quantify to make valid inferences.</p>
+<p>We can visualise this variability by simulating many samples and examining the distribution of the resulting statistics.</p>
+<div id="f4731c54" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sample_proportions <span class="op">=</span> [generate_cat_sample().mean() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(sample_proportions, bins<span class="op">=</span><span class="dv">20</span>, kde<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'steelblue'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Sample proportion p̂"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Count"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Distribution of Sample Proportions (true p = 0.15, n = 100)"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="662" height="469" class="figure-img"></p>
+<figcaption>Sampling variability: distribution of sample proportions from 1,000 samples of size n = 100.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As a second example, consider estimating the average height of members of the Santa Barbara pool league. We assume heights are normally distributed with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, collect a sample of players, and compute <span class="math inline">\(\bar{X} \approx \mu\)</span> and <span class="math inline">\(S \approx \sigma\)</span>. The simulation below uses a true mean of 170 cm and <span class="math inline">\(\sigma = 3\)</span>.</p>
+<div id="3038736b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">456</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> generate_height_sample(n<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> rng.normal(loc<span class="op">=</span><span class="dv">170</span>, scale<span class="op">=</span><span class="dv">3</span>, size<span class="op">=</span>n)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>samples <span class="op">=</span> [generate_height_sample() <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>sample_means <span class="op">=</span> [samp.mean() <span class="cf">for</span> samp <span class="kw">in</span> samples]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>sample_sdvs  <span class="op">=</span> [samp.std(ddof<span class="op">=</span><span class="dv">1</span>) <span class="cf">for</span> samp <span class="kw">in</span> samples]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="e47386fc" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">4</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(sample_means, bins<span class="op">=</span><span class="dv">20</span>, kde<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'steelblue'</span>, ax<span class="op">=</span>axes[<span class="dv">0</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Distribution of Sample Means"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">"x̄"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>sns.histplot(sample_sdvs, bins<span class="op">=</span><span class="dv">20</span>, kde<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'crimson'</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Distribution of Sample Standard Deviations"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">"S"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="1238" height="374" class="figure-img"></p>
+<figcaption>Distributions of the sample mean (left) and sample standard deviation (right) from 1,000 samples of size n = 100.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Both statistics vary across samples, but the sample mean follows an approximately normal shape — a consequence of the Central Limit Theorem discussed below.</p>
+</section>
+</section>
+<section id="sampling-distributions-and-the-clt" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-distributions-and-the-clt">Sampling Distributions and the CLT</h2>
+<section id="sampling-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="sampling-distributions">Sampling Distributions</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Sampling Distribution">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Sampling Distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>sampling distribution</strong> of a statistic is the probability distribution of that statistic over all possible samples of a given size <span class="math inline">\(n\)</span> from the population.</p>
+</div>
+</div>
+<p>For a population with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, the sample mean <span class="math inline">\(\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i\)</span> has the following properties: <span class="math display">\[\mathbb{E}[\bar{X}] = \mu, \qquad \text{Var}(\bar{X}) = \frac{\sigma^2}{n}.\]</span></p>
+<p>The <strong>standard error (SE)</strong> of <span class="math inline">\(\bar{X}\)</span> is <span class="math inline">\(\text{SE}(\bar{X}) = \sigma / \sqrt{n}\)</span> — the standard deviation of the sampling distribution. As <span class="math inline">\(n \to \infty\)</span>, the SE shrinks, meaning larger samples produce more precise estimates.</p>
+</section>
+<section id="the-central-limit-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="the-central-limit-theorem">The Central Limit Theorem</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Central Limit Theorem (CLT)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Central Limit Theorem (CLT)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> be i.i.d. random variables with mean <span class="math inline">\(\mu\)</span> and finite variance <span class="math inline">\(\sigma^2\)</span>. Then as <span class="math inline">\(n \to \infty\)</span>: <span class="math display">\[\frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \xrightarrow{d} \mathcal{N}(0, 1).\]</span></p>
+</div>
+</div>
+<p>The CLT is the most important theorem in statistics. It says that regardless of the <strong>shape of the population distribution</strong>, the sample mean is <strong>approximately normally distributed</strong> for large <span class="math inline">\(n\)</span>. A common rule of thumb is that the approximation is reliable for <span class="math inline">\(n \geq 30\)</span>, though this depends on the skewness of the population. The CLT justifies applying normal-based inference to a huge variety of real-world data — this is precisely why the heights simulation above produced a bell-shaped distribution of sample means.</p>
+</section>
+</section>
+<section id="point-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="point-estimation">Point Estimation</h2>
+<section id="estimators-and-estimates" class="level3">
+<h3 class="anchored" data-anchor-id="estimators-and-estimates">Estimators and Estimates</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Estimator and Estimate">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Estimator and Estimate
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An <strong>estimator</strong> <span class="math inline">\(\hat{\theta}\)</span> is a function of the sample used to estimate a population parameter <span class="math inline">\(\theta\)</span>. An <strong>estimate</strong> is the specific value of the estimator computed from an observed sample.</p>
+</div>
+</div>
+<p>The most common estimators are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Estimator</th>
+<th>Formula</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Mean <span class="math inline">\(\mu\)</span></td>
+<td>Sample mean</td>
+<td><span class="math inline">\(\bar{X} = \frac{1}{n}\sum X_i\)</span></td>
+</tr>
+<tr class="even">
+<td>Variance <span class="math inline">\(\sigma^2\)</span></td>
+<td>Sample variance</td>
+<td><span class="math inline">\(S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2\)</span></td>
+</tr>
+<tr class="odd">
+<td>Proportion <span class="math inline">\(p\)</span></td>
+<td>Sample proportion</td>
+<td><span class="math inline">\(\hat{p} = \frac{\text{successes}}{n}\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="properties-of-estimators" class="level3">
+<h3 class="anchored" data-anchor-id="properties-of-estimators">Properties of Estimators</h3>
+<p>How do we judge whether an estimator is good? Two key criteria are bias and mean squared error.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Bias">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Bias
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>bias</strong> of an estimator <span class="math inline">\(\hat{\theta}\)</span> is: <span class="math display">\[\text{Bias}(\hat{\theta}) = \mathbb{E}[\hat{\theta}] - \theta.\]</span> An estimator is <strong>unbiased</strong> if <span class="math inline">\(\text{Bias}(\hat{\theta}) = 0\)</span>.</p>
+</div>
+</div>
+<p>The <strong>mean squared error (MSE)</strong> combines bias and variance into a single criterion: <span class="math display">\[\text{MSE}(\hat{\theta}) = \mathbb{E}\!\left[(\hat{\theta} - \theta)^2\right] = \text{Var}(\hat{\theta}) + \left[\text{Bias}(\hat{\theta})\right]^2.\]</span></p>
+<p>This decomposition reveals the <strong>bias-variance trade-off</strong>: a low-bias, high-variance estimator is accurate on average but erratic across samples; a high-bias, low-variance estimator is consistently wrong but predictably so. Good estimators minimise MSE by balancing both.</p>
+</section>
+<section id="why-the-sample-variance-divides-by-n-1" class="level3">
+<h3 class="anchored" data-anchor-id="why-the-sample-variance-divides-by-n-1">Why the Sample Variance Divides by <span class="math inline">\(n-1\)</span></h3>
+<p>The naive estimator <span class="math inline">\(\tilde{S}^2 = \frac{1}{n}\sum(X_i - \bar{X})^2\)</span> is <strong>biased</strong>: <span class="math inline">\(\mathbb{E}[\tilde{S}^2] = \frac{n-1}{n}\sigma^2\)</span>. Dividing by <span class="math inline">\(n-1\)</span> instead corrects this bias: <span class="math display">\[\mathbb{E}[S^2] = \sigma^2.\]</span> The factor <span class="math inline">\(n-1\)</span> is called the <strong>degrees of freedom</strong> — we lose one degree of freedom because <span class="math inline">\(\bar{X}\)</span> is estimated from the same data, imposing one linear constraint on the residuals <span class="math inline">\(X_i - \bar{X}\)</span>.</p>
+<div id="f2da96c6" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>true_var <span class="op">=</span> <span class="fl">4.0</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>biased, unbiased <span class="op">=</span> [], []</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10_000</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> rng.normal(<span class="dv">0</span>, np.sqrt(true_var), size<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    biased.append(np.var(x, ddof<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    unbiased.append(np.var(x, ddof<span class="op">=</span><span class="dv">1</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ax.hist(biased,   bins<span class="op">=</span><span class="dv">60</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, density<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f'÷n   (mean = </span><span class="sc">{</span>np<span class="sc">.</span>mean(biased)<span class="sc">:.2f}</span><span class="ss">)'</span>,   color<span class="op">=</span><span class="st">'steelblue'</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ax.hist(unbiased, bins<span class="op">=</span><span class="dv">60</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, density<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="ss">f'÷(n-1) (mean = </span><span class="sc">{</span>np<span class="sc">.</span>mean(unbiased)<span class="sc">:.2f}</span><span class="ss">)'</span>, color<span class="op">=</span><span class="st">'crimson'</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>ax.axvline(true_var, color<span class="op">=</span><span class="st">'black'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'True σ² = </span><span class="sc">{</span>true_var<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Estimated variance'</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Density'</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Biased vs. Unbiased Variance Estimator (n = 10, 10,000 samples)'</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-7-output-1.png" width="854" height="374" class="figure-img"></p>
+<figcaption>Biased (÷n) vs.&nbsp;unbiased (÷n−1) sample variance estimators over 10,000 samples of size n = 10.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The biased estimator consistently underestimates <span class="math inline">\(\sigma^2\)</span>, while the unbiased estimator centres on the true value.</p>
+</section>
+</section>
+<section id="maximum-likelihood-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-likelihood-estimation">Maximum Likelihood Estimation</h2>
+<section id="the-likelihood-function" class="level3">
+<h3 class="anchored" data-anchor-id="the-likelihood-function">The Likelihood Function</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Likelihood Function">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Likelihood Function
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Given data <span class="math inline">\(x_1, \ldots, x_n\)</span> assumed i.i.d. from a distribution with parameter <span class="math inline">\(\theta\)</span>, the <strong>likelihood</strong> is: <span class="math display">\[L(\theta) = \prod_{i=1}^n f(x_i;\, \theta).\]</span> The <strong>log-likelihood</strong> <span class="math inline">\(\ell(\theta) = \sum_{i=1}^n \log f(x_i;\, \theta)\)</span> is typically easier to maximise.</p>
+</div>
+</div>
+<p>The <strong>maximum likelihood estimator (MLE)</strong> is: <span class="math display">\[\hat{\theta}_{\text{MLE}} = \arg\max_\theta\, \ell(\theta).\]</span> The MLE is the parameter value that makes the observed data <strong>most probable</strong>. MLEs are generally <strong>consistent</strong> (they converge to the true value as <span class="math inline">\(n \to \infty\)</span>) and <strong>asymptotically normal</strong>.</p>
+</section>
+<section id="mle-for-the-gaussian" class="level3">
+<h3 class="anchored" data-anchor-id="mle-for-the-gaussian">MLE for the Gaussian</h3>
+<p>For data <span class="math inline">\(x_1, \ldots, x_n \sim \mathcal{N}(\mu, \sigma^2)\)</span> the log-likelihood is: <span class="math display">\[\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n (x_i - \mu)^2.\]</span></p>
+<p>Setting the partial derivatives to zero gives: <span class="math display">\[\hat{\mu}_{\text{MLE}} = \bar{x} = \frac{1}{n}\sum_{i=1}^n x_i, \qquad \hat{\sigma}^2_{\text{MLE}} = \frac{1}{n}\sum_{i=1}^n (x_i - \bar{x})^2.\]</span></p>
+<p>Note that <span class="math inline">\(\hat{\mu}_{\text{MLE}}\)</span> is unbiased, but <span class="math inline">\(\hat{\sigma}^2_{\text{MLE}}\)</span> uses <span class="math inline">\(n\)</span> (not <span class="math inline">\(n-1\)</span>) and is therefore biased — which is why the sample variance corrects to <span class="math inline">\(n-1\)</span> in practice.</p>
+<div id="87173cb2" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">3</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="fl">5.0</span>, scale<span class="op">=</span><span class="fl">2.0</span>, size<span class="op">=</span><span class="dv">50</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>mu_grid     <span class="op">=</span> np.linspace(<span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">300</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sigma2_grid <span class="op">=</span> np.linspace(<span class="dv">1</span>, <span class="dv">9</span>, <span class="dv">300</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>ll_mu <span class="op">=</span> [<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>((data <span class="op">-</span> m)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> np.var(data, ddof<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="bu">len</span>(data) <span class="op">*</span> np.log(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> np.var(data, ddof<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> m <span class="kw">in</span> mu_grid]</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>ll_s2 <span class="op">=</span> [<span class="op">-</span><span class="bu">len</span>(data) <span class="op">/</span> <span class="dv">2</span> <span class="op">*</span> np.log(<span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> s2) <span class="op">-</span> np.<span class="bu">sum</span>((data <span class="op">-</span> data.mean())<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> s2)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>          <span class="cf">for</span> s2 <span class="kw">in</span> sigma2_grid]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="dv">4</span>))</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].plot(mu_grid, ll_mu, <span class="st">'steelblue'</span>, lw<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].axvline(data.mean(), color<span class="op">=</span><span class="st">'crimson'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="ss">f'MLE μ̂ = </span><span class="sc">{</span>data<span class="sc">.</span>mean()<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_xlabel(<span class="st">'μ'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_ylabel(<span class="st">'Log-likelihood'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Profile log-likelihood for μ'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].plot(sigma2_grid, ll_s2, <span class="st">'steelblue'</span>, lw<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].axvline(np.var(data, ddof<span class="op">=</span><span class="dv">0</span>), color<span class="op">=</span><span class="st">'crimson'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="ss">f'MLE σ̂² = </span><span class="sc">{</span>np<span class="sc">.</span>var(data, ddof<span class="op">=</span><span class="dv">0</span>)<span class="sc">:.2f}</span><span class="ss">'</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'σ²'</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">'Log-likelihood'</span>)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Profile log-likelihood for σ²'</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].legend()</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" width="1239" height="374" class="figure-img"></p>
+<figcaption>Profile log-likelihood for μ (left) and σ² (right) from a simulated Gaussian sample of size n = 50.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The log-likelihood is maximised at exactly the MLE values derived analytically.</p>
+</section>
+</section>
+<section id="confidence-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="confidence-intervals">Confidence Intervals</h2>
+<section id="quantifying-estimation-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="quantifying-estimation-uncertainty">Quantifying Estimation Uncertainty</h3>
+<p>A point estimate <span class="math inline">\(\hat{\theta}\)</span> is a single number — it tells us nothing about uncertainty. A <strong>confidence interval (CI)</strong> gives a range of plausible values for <span class="math inline">\(\theta\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Confidence Interval">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Confidence Interval
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong><span class="math inline">\((1-\alpha)\times 100\%\)</span> confidence interval</strong> for <span class="math inline">\(\theta\)</span> is a random interval <span class="math inline">\([L, U]\)</span> (depending on the data) such that: <span class="math display">\[P(L \leq \theta \leq U) = 1 - \alpha.\]</span></p>
+</div>
+</div>
+<p>The correct interpretation is subtle and frequently misunderstood. A 95% CI does <strong>not</strong> mean “there is a 95% probability that <span class="math inline">\(\theta\)</span> lies in this particular interval.” Once the data are observed, <span class="math inline">\(\theta\)</span> either is or is not in the interval. The correct statement is: if we repeated the sampling procedure many times, <strong>95% of the resulting intervals</strong> would contain the true <span class="math inline">\(\theta\)</span>.</p>
+</section>
+<section id="ci-for-the-population-mean-known-sigma" class="level3">
+<h3 class="anchored" data-anchor-id="ci-for-the-population-mean-known-sigma">CI for the Population Mean (Known <span class="math inline">\(\sigma\)</span>)</h3>
+<p>When <span class="math inline">\(\sigma\)</span> is known and either <span class="math inline">\(n\)</span> is large (CLT applies) or the population is normal, the <strong><span class="math inline">\(z\)</span>-interval</strong> is: <span class="math display">\[\bar{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}},\]</span> where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of <span class="math inline">\(\mathcal{N}(0, 1)\)</span>. Common critical values are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Confidence level</th>
+<th><span class="math inline">\(\alpha\)</span></th>
+<th><span class="math inline">\(z_{\alpha/2}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>90%</td>
+<td>0.10</td>
+<td>1.645</td>
+</tr>
+<tr class="even">
+<td>95%</td>
+<td>0.05</td>
+<td>1.960</td>
+</tr>
+<tr class="odd">
+<td>99%</td>
+<td>0.01</td>
+<td>2.576</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="ci-for-the-population-mean-unknown-sigma" class="level3">
+<h3 class="anchored" data-anchor-id="ci-for-the-population-mean-unknown-sigma">CI for the Population Mean (Unknown <span class="math inline">\(\sigma\)</span>)</h3>
+<p>When <span class="math inline">\(\sigma\)</span> is unknown — the typical situation — we replace it with the sample standard deviation <span class="math inline">\(S\)</span> and use the <strong><span class="math inline">\(t\)</span>-distribution</strong>, which has heavier tails than the normal to account for the additional uncertainty from estimating <span class="math inline">\(\sigma\)</span>: <span class="math display">\[\bar{X} \pm t_{\alpha/2,\, n-1} \frac{S}{\sqrt{n}},\]</span> where <span class="math inline">\(t_{\alpha/2, n-1}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. As <span class="math inline">\(n \to \infty\)</span>, the <span class="math inline">\(t_{n-1}\)</span> distribution converges to <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
+<p>The simulation below illustrates the frequentist interpretation: running the <span class="math inline">\(t\)</span>-interval procedure 50 times and checking how often the resulting intervals capture the true <span class="math inline">\(\mu\)</span>.</p>
+<div id="d8bac980" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">12</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>true_mu, true_sigma, n_obs, n_intervals <span class="op">=</span> <span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="dv">30</span>, <span class="dv">50</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>covered, not_covered <span class="op">=</span> [], []</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_intervals):</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    sample <span class="op">=</span> rng.normal(true_mu, true_sigma, size<span class="op">=</span>n_obs)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    xbar, s <span class="op">=</span> sample.mean(), sample.std(ddof<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    margin <span class="op">=</span> t.ppf(<span class="fl">0.975</span>, df<span class="op">=</span>n_obs <span class="op">-</span> <span class="dv">1</span>) <span class="op">*</span> s <span class="op">/</span> np.sqrt(n_obs)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    (covered <span class="cf">if</span> <span class="bu">abs</span>(xbar <span class="op">-</span> true_mu) <span class="op">&lt;=</span> margin <span class="cf">else</span> not_covered).append(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        (xbar <span class="op">-</span> margin, xbar <span class="op">+</span> margin)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (lo, hi) <span class="kw">in</span> <span class="bu">enumerate</span>(covered):</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    ax.plot([lo, hi], [i, i], color<span class="op">=</span><span class="st">'steelblue'</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (lo, hi) <span class="kw">in</span> <span class="bu">enumerate</span>(not_covered, start<span class="op">=</span><span class="bu">len</span>(covered)):</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    ax.plot([lo, hi], [i, i], color<span class="op">=</span><span class="st">'crimson'</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>ax.axvline(true_mu, color<span class="op">=</span><span class="st">'black'</span>, lw<span class="op">=</span><span class="dv">2</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="st">'True μ = 0'</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Parameter value'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>ax.set_yticks([])</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f'95% Confidence Intervals (n=</span><span class="sc">{</span>n_obs<span class="sc">}</span><span class="ss">): '</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>             <span class="ss">f'</span><span class="sc">{</span><span class="bu">len</span>(covered)<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>n_intervals<span class="sc">}</span><span class="ss"> contain μ'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-9-output-1.png" width="950" height="566" class="figure-img"></p>
+<figcaption>Simulation: 50 confidence intervals at the 95% level. Blue = contains μ; red = misses.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="hypothesis-testing" class="level2">
+<h2 class="anchored" data-anchor-id="hypothesis-testing">Hypothesis Testing</h2>
+<section id="the-framework" class="level3">
+<h3 class="anchored" data-anchor-id="the-framework">The Framework</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="Hypothesis Test">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Hypothesis Test
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>hypothesis test</strong> is a formal procedure for deciding between two competing hypotheses about a parameter, based on observed data.</p>
+</div>
+</div>
+<p>Every hypothesis test involves two hypotheses:</p>
+<ul>
+<li>The <strong>null hypothesis</strong> <span class="math inline">\(H_0\)</span> is a default claim assumed to be true (often “no effect” or “no difference”).</li>
+<li>The <strong>alternative hypothesis</strong> <span class="math inline">\(H_1\)</span> is what we are trying to find evidence for.</li>
+</ul>
+<p>For example: <span class="math inline">\(H_0: \mu = 0\)</span> vs.&nbsp;<span class="math inline">\(H_1: \mu \neq 0\)</span> (two-sided), or <span class="math inline">\(H_0: \mu \leq 0\)</span> vs.&nbsp;<span class="math inline">\(H_1: \mu &gt; 0\)</span> (one-sided). The test proceeds by computing a <strong>test statistic</strong> <span class="math inline">\(T\)</span> that measures evidence against <span class="math inline">\(H_0\)</span>, and then asking: if <span class="math inline">\(H_0\)</span> were true, how likely is a test statistic at least this extreme? If the answer is “very unlikely”, we <strong>reject</strong> <span class="math inline">\(H_0\)</span>.</p>
+</section>
+<section id="p-values" class="level3">
+<h3 class="anchored" data-anchor-id="p-values"><span class="math inline">\(p\)</span>-Values</h3>
+<div class="callout callout-style-default callout-important callout-titled" title="$p$-Value">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span><span class="math inline">\(p\)</span>-Value
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong><span class="math inline">\(p\)</span>-value</strong> is the probability, under <span class="math inline">\(H_0\)</span>, of observing a test statistic at least as extreme as the one actually observed: <span class="math display">\[p\text{-value} = P_{H_0}(T \geq t_{\text{obs}}) \quad \text{(one-sided example)}.\]</span></p>
+</div>
+</div>
+<p>At a chosen <strong>significance level</strong> <span class="math inline">\(\alpha\)</span>, the decision rule is:</p>
+<ul>
+<li>If <span class="math inline">\(p\text{-value} \leq \alpha\)</span>: <strong>reject</strong> <span class="math inline">\(H_0\)</span> (the result is “statistically significant”).</li>
+<li>If <span class="math inline">\(p\text{-value} &gt; \alpha\)</span>: <strong>fail to reject</strong> <span class="math inline">\(H_0\)</span> (insufficient evidence).</li>
+</ul>
+<p>Common choices are <span class="math inline">\(\alpha = 0.05\)</span> and <span class="math inline">\(\alpha = 0.01\)</span>. Two common misconceptions: the <span class="math inline">\(p\)</span>-value is <strong>not</strong> the probability that <span class="math inline">\(H_0\)</span> is true, and it does <strong>not</strong> measure the size or practical importance of an effect.</p>
+</section>
+<section id="type-i-and-type-ii-errors" class="level3">
+<h3 class="anchored" data-anchor-id="type-i-and-type-ii-errors">Type I and Type II Errors</h3>
+<p>A hypothesis test can be wrong in two distinct ways.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(H_0\)</span> true</th>
+<th><span class="math inline">\(H_0\)</span> false</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Reject <span class="math inline">\(H_0\)</span></strong></td>
+<td>Type I Error (false positive)</td>
+<td>Correct (Power)</td>
+</tr>
+<tr class="even">
+<td><strong>Fail to reject <span class="math inline">\(H_0\)</span></strong></td>
+<td>Correct</td>
+<td>Type II Error (false negative)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The <strong>Type I error rate</strong> equals <span class="math inline">\(\alpha = P(\text{reject } H_0 \mid H_0 \text{ true})\)</span>, controlled directly by our choice of significance level.</li>
+<li>The <strong>Type II error rate</strong> is <span class="math inline">\(\beta = P(\text{fail to reject } H_0 \mid H_1 \text{ true})\)</span>.</li>
+<li>The <strong>power</strong> of the test is <span class="math inline">\(1 - \beta = P(\text{reject } H_0 \mid H_1 \text{ true})\)</span> — the probability of correctly detecting a true effect.</li>
+</ul>
+<p>These errors trade off against each other: decreasing <span class="math inline">\(\alpha\)</span> (stricter test) reduces Type I errors but increases Type II errors. Larger sample sizes increase power without inflating the Type I error rate.</p>
+</section>
+<section id="the-one-sample-t-test" class="level3">
+<h3 class="anchored" data-anchor-id="the-one-sample-t-test">The One-Sample <span class="math inline">\(t\)</span>-Test</h3>
+<p>For testing <span class="math inline">\(H_0: \mu = \mu_0\)</span> based on a sample <span class="math inline">\(x_1, \ldots, x_n\)</span>, the <strong>test statistic</strong> is: <span class="math display">\[T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t_{n-1} \quad \text{under } H_0.\]</span></p>
+<p>The <span class="math inline">\(p\)</span>-value depends on the form of the alternative:</p>
+<ul>
+<li><strong>Two-sided</strong> (<span class="math inline">\(H_1: \mu \neq \mu_0\)</span>): <span class="math inline">\(p = 2\,P(t_{n-1} \geq |t_{\text{obs}}|)\)</span>.</li>
+<li><strong>One-sided upper</strong> (<span class="math inline">\(H_1: \mu &gt; \mu_0\)</span>): <span class="math inline">\(p = P(t_{n-1} \geq t_{\text{obs}})\)</span>.</li>
+<li><strong>One-sided lower</strong> (<span class="math inline">\(H_1: \mu &lt; \mu_0\)</span>): <span class="math inline">\(p = P(t_{n-1} \leq t_{\text{obs}})\)</span>.</li>
+</ul>
+<div id="9a97e4af" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">99</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> rng.normal(loc<span class="op">=</span><span class="fl">2.5</span>, scale<span class="op">=</span><span class="fl">3.0</span>, size<span class="op">=</span><span class="dv">40</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mu_0 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>t_stat, p_val <span class="op">=</span> stats.ttest_1samp(sample, popmean<span class="op">=</span>mu_0)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> <span class="bu">len</span>(sample) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>x_grid <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">400</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>ax.plot(x_grid, t.pdf(x_grid, df<span class="op">=</span>df), <span class="st">'k'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="ss">f't distribution (df=</span><span class="sc">{</span>df<span class="sc">}</span><span class="ss">)'</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>crit <span class="op">=</span> t.ppf(<span class="fl">0.975</span>, df<span class="op">=</span>df)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>x_left  <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">5</span>, <span class="op">-</span>crit, <span class="dv">200</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>x_right <span class="op">=</span> np.linspace(crit, <span class="dv">5</span>, <span class="dv">200</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>ax.fill_between(x_left,  t.pdf(x_left,  df<span class="op">=</span>df), alpha<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'crimson'</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>                label<span class="op">=</span><span class="st">'Rejection region (α = 0.05)'</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>ax.fill_between(x_right, t.pdf(x_right, df<span class="op">=</span>df), alpha<span class="op">=</span><span class="fl">0.3</span>, color<span class="op">=</span><span class="st">'crimson'</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>ax.axvline(t_stat, color<span class="op">=</span><span class="st">'steelblue'</span>, lw<span class="op">=</span><span class="fl">2.5</span>, linestyle<span class="op">=</span><span class="st">'--'</span>,</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>           label<span class="op">=</span><span class="ss">f'Observed T = </span><span class="sc">{</span>t_stat<span class="sc">:.2f}</span><span class="ss">,  p = </span><span class="sc">{</span>p_val<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'t'</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Density'</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f'One-sample t-test: H₀: μ = </span><span class="sc">{</span>mu_0<span class="sc">}</span><span class="ss">  vs.  H₁: μ ≠ </span><span class="sc">{</span>mu_0<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/_6/jc7858k547x7lvpc19h7z2w00000gn/T/ipykernel_57562/1860010693.py:25: UserWarning:
+
+Glyph 8320 (\N{SUBSCRIPT ZERO}) missing from font(s) Arial.
+
+/var/folders/_6/jc7858k547x7lvpc19h7z2w00000gn/T/ipykernel_57562/1860010693.py:25: UserWarning:
+
+Glyph 8321 (\N{SUBSCRIPT ONE}) missing from font(s) Arial.
+
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/IPython/core/pylabtools.py:170: UserWarning:
+
+Glyph 8320 (\N{SUBSCRIPT ZERO}) missing from font(s) Arial.
+
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/IPython/core/pylabtools.py:170: UserWarning:
+
+Glyph 8321 (\N{SUBSCRIPT ONE}) missing from font(s) Arial.
+</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-2.png" width="950" height="470" class="figure-img"></p>
+<figcaption>One-sample t-test: observed test statistic against the null t-distribution, with the two-sided rejection region shaded in red.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="connecting-cis-and-hypothesis-tests" class="level3">
+<h3 class="anchored" data-anchor-id="connecting-cis-and-hypothesis-tests">Connecting CIs and Hypothesis Tests</h3>
+<p>Confidence intervals and hypothesis tests are two sides of the same coin. A <span class="math inline">\((1-\alpha)\)</span> confidence interval for <span class="math inline">\(\mu\)</span> contains exactly those values <span class="math inline">\(\mu_0\)</span> for which the two-sided test at level <span class="math inline">\(\alpha\)</span> <strong>fails to reject</strong> <span class="math inline">\(H_0: \mu = \mu_0\)</span>. Equivalently, we reject <span class="math inline">\(H_0: \mu = \mu_0\)</span> at level <span class="math inline">\(\alpha\)</span> if and only if <span class="math inline">\(\mu_0\)</span> lies <strong>outside</strong> the <span class="math inline">\((1-\alpha)\)</span> CI.</p>
+<p>The two approaches answer complementary questions: a CI asks “what values of <span class="math inline">\(\mu\)</span> are consistent with the data?”, while a test asks “is this specific value <span class="math inline">\(\mu_0\)</span> consistent with the data?” Reporting a CI is often more informative than a binary reject/fail-to-reject decision.</p>
+</section>
+<section id="statistical-vs.-practical-significance" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-vs.-practical-significance">Statistical vs.&nbsp;Practical Significance</h3>
+<p>With a very large sample, even a trivially small difference from <span class="math inline">\(\mu_0\)</span> will yield a tiny <span class="math inline">\(p\)</span>-value. A statistically significant result is <strong>not</strong> necessarily practically important. Always report the estimated effect and a CI, not just the <span class="math inline">\(p\)</span>-value. An <strong>effect size</strong> measure such as Cohen’s <span class="math inline">\(d\)</span> helps communicate the magnitude of the result: <span class="math display">\[d = \frac{\bar{X} - \mu_0}{S}.\]</span> A large effect size with a non-significant <span class="math inline">\(p\)</span>-value may indicate insufficient power (small <span class="math inline">\(n\)</span>), not the absence of a real effect.</p>
+</section>
+</section>
+<section id="summary-the-inference-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="summary-the-inference-pipeline">Summary: The Inference Pipeline</h2>
+<p>The table below summarises the six-step pipeline from research question to communicable result.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Question</th>
+<th>Tool</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Formulate</td>
+<td>What do I want to learn?</td>
+<td>Research question</td>
+</tr>
+<tr class="even">
+<td>2. Model</td>
+<td>What is the data-generating process?</td>
+<td>Probability model</td>
+</tr>
+<tr class="odd">
+<td>3. Estimate</td>
+<td>What are the parameter values?</td>
+<td>MLE / method of moments</td>
+</tr>
+<tr class="even">
+<td>4. Quantify uncertainty</td>
+<td>How precise is my estimate?</td>
+<td>Confidence interval</td>
+</tr>
+<tr class="odd">
+<td>5. Test</td>
+<td>Is a specific claim consistent with the data?</td>
+<td>Hypothesis test / <span class="math inline">\(p\)</span>-value</td>
+</tr>
+<tr class="even">
+<td>6. Communicate</td>
+<td>What do the results mean in context?</td>
+<td>Effect size, CI, visualisation</td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

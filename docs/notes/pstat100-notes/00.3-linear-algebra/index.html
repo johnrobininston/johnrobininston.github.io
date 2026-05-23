@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-04-02">
+<meta name="description" content="An introduction to the key linear algebra definitions and results used in statistics, including vectors, matrices, matrix inverses, projections, and the matrix derivation of the OLS estimator.">
+
+<title>Linear Algebra – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../../notes/pstat100-notes/01-data-science-fundamentals/index.html" rel="next">
+<link href="../../../notes/pstat100-notes/00.2-python-fundamentals/index.html" rel="prev">
+<link href="../../../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-954f74211988904d40b4eeb0bee6388c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johninston/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/John_Inston"> <i class="bi bi-twitter-x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../notes/pstat100-notes/00.1-python-installation-guide/index.html">Preliminary Topics</a></li><li class="breadcrumb-item"><a href="../../../notes/pstat100-notes/00.3-linear-algebra/index.html">Linear Algebra</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/00-introduction/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PSTAT100 Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Preliminary Topics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/00.1-python-installation-guide/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting Started with Python</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/00.2-python-fundamentals/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python Fundamentals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/00.3-linear-algebra/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Linear Algebra</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Introduction</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/01-data-science-fundamentals/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Science Fundamentals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/02-data-structure/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Structure</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Exploration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/03-data-preparation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Preparation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/04-visualization/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/05-eda/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exploratory Data Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Probability and Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/06-probability/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Theory</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/07-statistics/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Statistics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/08-slr/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/09-mlr/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">notes/pstat100-notes/10-glr/index.qmd</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/10.1-logistic-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/10.2-poisson-regression/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Poisson Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/11-model-selection/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Selection</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/12-regularization/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regularization</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Machine Learning Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../notes/pstat100-notes/13-classification/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Classification</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link active" data-scroll-target="#vectors">Vectors</a>
+  <ul class="collapse">
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
+  <li><a href="#vector-operations" id="toc-vector-operations" class="nav-link" data-scroll-target="#vector-operations">Vector Operations</a></li>
+  <li><a href="#linear-combinations-and-span" id="toc-linear-combinations-and-span" class="nav-link" data-scroll-target="#linear-combinations-and-span">Linear Combinations and Span</a></li>
+  </ul></li>
+  <li><a href="#matrices" id="toc-matrices" class="nav-link" data-scroll-target="#matrices">Matrices</a>
+  <ul class="collapse">
+  <li><a href="#definition-and-basic-operations" id="toc-definition-and-basic-operations" class="nav-link" data-scroll-target="#definition-and-basic-operations">Definition and Basic Operations</a></li>
+  <li><a href="#transpose" id="toc-transpose" class="nav-link" data-scroll-target="#transpose">Transpose</a></li>
+  </ul></li>
+  <li><a href="#special-matrices" id="toc-special-matrices" class="nav-link" data-scroll-target="#special-matrices">Special Matrices</a>
+  <ul class="collapse">
+  <li><a href="#identity-matrix" id="toc-identity-matrix" class="nav-link" data-scroll-target="#identity-matrix">Identity Matrix</a></li>
+  <li><a href="#diagonal-matrix" id="toc-diagonal-matrix" class="nav-link" data-scroll-target="#diagonal-matrix">Diagonal Matrix</a></li>
+  <li><a href="#symmetric-matrix" id="toc-symmetric-matrix" class="nav-link" data-scroll-target="#symmetric-matrix">Symmetric Matrix</a></li>
+  <li><a href="#orthogonal-matrix" id="toc-orthogonal-matrix" class="nav-link" data-scroll-target="#orthogonal-matrix">Orthogonal Matrix</a></li>
+  </ul></li>
+  <li><a href="#rank-and-invertibility" id="toc-rank-and-invertibility" class="nav-link" data-scroll-target="#rank-and-invertibility">Rank and Invertibility</a>
+  <ul class="collapse">
+  <li><a href="#rank" id="toc-rank" class="nav-link" data-scroll-target="#rank">Rank</a></li>
+  <li><a href="#matrix-inverse" id="toc-matrix-inverse" class="nav-link" data-scroll-target="#matrix-inverse">Matrix Inverse</a></li>
+  </ul></li>
+  <li><a href="#quadratic-forms-and-positive-definiteness" id="toc-quadratic-forms-and-positive-definiteness" class="nav-link" data-scroll-target="#quadratic-forms-and-positive-definiteness">Quadratic Forms and Positive Definiteness</a></li>
+  <li><a href="#eigenvalues-and-eigenvectors" id="toc-eigenvalues-and-eigenvectors" class="nav-link" data-scroll-target="#eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</a>
+  <ul class="collapse">
+  <li><a href="#definition-1" id="toc-definition-1" class="nav-link" data-scroll-target="#definition-1">Definition</a></li>
+  <li><a href="#eigendecomposition" id="toc-eigendecomposition" class="nav-link" data-scroll-target="#eigendecomposition">Eigendecomposition</a></li>
+  <li><a href="#trace-and-determinant-via-eigenvalues" id="toc-trace-and-determinant-via-eigenvalues" class="nav-link" data-scroll-target="#trace-and-determinant-via-eigenvalues">Trace and Determinant via Eigenvalues</a></li>
+  </ul></li>
+  <li><a href="#projections" id="toc-projections" class="nav-link" data-scroll-target="#projections">Projections</a>
+  <ul class="collapse">
+  <li><a href="#orthogonal-projection" id="toc-orthogonal-projection" class="nav-link" data-scroll-target="#orthogonal-projection">Orthogonal Projection</a></li>
+  <li><a href="#properties-of-projection-matrices" id="toc-properties-of-projection-matrices" class="nav-link" data-scroll-target="#properties-of-projection-matrices">Properties of Projection Matrices</a></li>
+  </ul></li>
+  <li><a href="#linear-regression-in-matrix-form" id="toc-linear-regression-in-matrix-form" class="nav-link" data-scroll-target="#linear-regression-in-matrix-form">Linear Regression in Matrix Form</a>
+  <ul class="collapse">
+  <li><a href="#the-design-matrix" id="toc-the-design-matrix" class="nav-link" data-scroll-target="#the-design-matrix">The Design Matrix</a></li>
+  <li><a href="#deriving-the-ols-estimator" id="toc-deriving-the-ols-estimator" class="nav-link" data-scroll-target="#deriving-the-ols-estimator">Deriving the OLS Estimator</a></li>
+  <li><a href="#the-hat-matrix-and-its-properties" id="toc-the-hat-matrix-and-its-properties" class="nav-link" data-scroll-target="#the-hat-matrix-and-its-properties">The Hat Matrix and Its Properties</a></li>
+  <li><a href="#variance-of-the-ols-estimator" id="toc-variance-of-the-ols-estimator" class="nav-link" data-scroll-target="#variance-of-the-ols-estimator">Variance of the OLS Estimator</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../notes/pstat100-notes/00.1-python-installation-guide/index.html">Preliminary Topics</a></li><li class="breadcrumb-item"><a href="../../../notes/pstat100-notes/00.3-linear-algebra/index.html">Linear Algebra</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Linear Algebra</h1>
+</div>
+
+<div>
+  <div class="description">
+    An introduction to the key linear algebra definitions and results used in statistics, including vectors, matrices, matrix inverses, projections, and the matrix derivation of the OLS estimator.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Robin Inston </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 2, 2026</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">May 22, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-important callout-titled" title="Learning Objectives">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Learning Objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Understand vectors, matrices, and the fundamental operations on them.</li>
+<li>Identify special matrix structures: symmetric, orthogonal, and positive definite.</li>
+<li>Compute and interpret matrix inverses and understand when they exist.</li>
+<li>Define eigenvalues and eigenvectors and understand their role in statistics.</li>
+<li>Set up the linear regression problem in matrix form and derive the OLS estimator.</li>
+<li>Understand the hat matrix and its geometric interpretation.</li>
+</ul>
+</div>
+</div>
+<div id="f4394b14" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Libraries</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.patches <span class="im">as</span> mpatches</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">'Set2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="vectors" class="level2">
+<h2 class="anchored" data-anchor-id="vectors">Vectors</h2>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p>A <strong>vector</strong> is an ordered list of real numbers. A column vector <span class="math inline">\(\mathbf{v} \in \mathbb{R}^n\)</span> is written:</p>
+<p><span class="math display">\[
+\mathbf{v} = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}.
+\]</span></p>
+<p>Geometrically, a vector in <span class="math inline">\(\mathbb{R}^n\)</span> represents a point (or a direction) in <span class="math inline">\(n\)</span>-dimensional space.</p>
+</section>
+<section id="vector-operations" class="level3">
+<h3 class="anchored" data-anchor-id="vector-operations">Vector Operations</h3>
+<p><strong>Addition</strong> and <strong>scalar multiplication</strong> work element-wise:</p>
+<p><span class="math display">\[
+\mathbf{u} + \mathbf{v} = \begin{pmatrix} u_1 + v_1 \\ \vdots \\ u_n + v_n \end{pmatrix}, \qquad c\,\mathbf{v} = \begin{pmatrix} c v_1 \\ \vdots \\ c v_n \end{pmatrix}.
+\]</span></p>
+<p>The <strong>inner product</strong> (dot product) of two vectors <span class="math inline">\(\mathbf{u}, \mathbf{v} \in \mathbb{R}^n\)</span> is the scalar:</p>
+<p><span class="math display">\[
+\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^\top \mathbf{v} = \sum_{i=1}^n u_i v_i.
+\]</span></p>
+<p>Two vectors are <strong>orthogonal</strong> if their inner product is zero: <span class="math inline">\(\mathbf{u}^\top \mathbf{v} = 0\)</span>.</p>
+<p>The <strong>Euclidean norm</strong> (length) of a vector is:</p>
+<p><span class="math display">\[
+\|\mathbf{v}\| = \sqrt{\mathbf{v}^\top \mathbf{v}} = \sqrt{\sum_{i=1}^n v_i^2}.
+\]</span></p>
+<p>A vector with <span class="math inline">\(\|\mathbf{v}\| = 1\)</span> is called a <strong>unit vector</strong>.</p>
+<div id="96c6016d" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.array([<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.array([<span class="fl">4.0</span>, <span class="op">-</span><span class="fl">1.0</span>, <span class="fl">2.0</span>])</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Inner product:"</span>, np.dot(u, v))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Norm of u:"</span>, np.linalg.norm(u))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Orthogonal?"</span>, np.isclose(np.dot(u, v), <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Inner product: 8.0
+Norm of u: 3.7416573867739413
+Orthogonal? False</code></pre>
+</div>
+</div>
+</section>
+<section id="linear-combinations-and-span" class="level3">
+<h3 class="anchored" data-anchor-id="linear-combinations-and-span">Linear Combinations and Span</h3>
+<p>A <strong>linear combination</strong> of vectors <span class="math inline">\(\mathbf{v}_1, \ldots, \mathbf{v}_k\)</span> is any vector of the form <span class="math inline">\(c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k\)</span>. The <strong>span</strong> of a set of vectors is the collection of all their linear combinations.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Linear Independence">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Linear Independence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Vectors <span class="math inline">\(\mathbf{v}_1, \ldots, \mathbf{v}_k\)</span> are <strong>linearly independent</strong> if the only solution to <span class="math display">\[c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k = \mathbf{0}\]</span> is <span class="math inline">\(c_1 = \cdots = c_k = 0\)</span>. Otherwise they are <strong>linearly dependent</strong>, meaning at least one vector can be written as a linear combination of the others.</p>
+</div>
+</div>
+<p>Linear independence is central to regression: if the predictor variables are linearly dependent, the design matrix loses rank and we cannot uniquely estimate coefficients.</p>
+</section>
+</section>
+<section id="matrices" class="level2">
+<h2 class="anchored" data-anchor-id="matrices">Matrices</h2>
+<section id="definition-and-basic-operations" class="level3">
+<h3 class="anchored" data-anchor-id="definition-and-basic-operations">Definition and Basic Operations</h3>
+<p>A <strong>matrix</strong> <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times n}\)</span> is a rectangular array with <span class="math inline">\(m\)</span> rows and <span class="math inline">\(n\)</span> columns:</p>
+<p><span class="math display">\[
+\mathbf{A} = \begin{pmatrix} a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1n} \\ a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n} \\ \vdots &amp; &amp; \ddots &amp; \vdots \\ a_{m1} &amp; a_{m2} &amp; \cdots &amp; a_{mn} \end{pmatrix}.
+\]</span></p>
+<p><strong>Addition</strong> and <strong>scalar multiplication</strong> are element-wise (matrices must have the same shape for addition). <strong>Matrix multiplication</strong> <span class="math inline">\(\mathbf{A}\mathbf{B}\)</span> requires the inner dimensions to match: if <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times k}\)</span> and <span class="math inline">\(\mathbf{B} \in \mathbb{R}^{k \times n}\)</span> then <span class="math inline">\(\mathbf{C} = \mathbf{A}\mathbf{B} \in \mathbb{R}^{m \times n}\)</span> with entries:</p>
+<p><span class="math display">\[
+c_{ij} = \sum_{l=1}^k a_{il}\, b_{lj}.
+\]</span></p>
+<p>Note that matrix multiplication is <strong>not</strong> commutative in general: <span class="math inline">\(\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}\)</span>.</p>
+</section>
+<section id="transpose" class="level3">
+<h3 class="anchored" data-anchor-id="transpose">Transpose</h3>
+<p>The <strong>transpose</strong> of <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times n}\)</span> is <span class="math inline">\(\mathbf{A}^\top \in \mathbb{R}^{n \times m}\)</span>, obtained by swapping rows and columns: <span class="math inline">\((A^\top)_{ij} = a_{ji}\)</span>.</p>
+<p>Key properties of the transpose:</p>
+<p><span class="math display">\[
+(\mathbf{A}^\top)^\top = \mathbf{A}, \qquad (\mathbf{A} + \mathbf{B})^\top = \mathbf{A}^\top + \mathbf{B}^\top, \qquad (\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top.
+\]</span></p>
+<p>The last identity is the <strong>reversal rule</strong> for transposes, and appears constantly in regression derivations.</p>
+<div id="6f8f7ad5" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]])</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.array([[<span class="dv">7</span>, <span class="dv">8</span>],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">9</span>, <span class="dv">10</span>],</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">11</span>, <span class="dv">12</span>]])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> A <span class="op">@</span> B         <span class="co"># matrix multiplication</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A @ B:</span><span class="ch">\n</span><span class="st">"</span>, C)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"(A @ B).T:</span><span class="ch">\n</span><span class="st">"</span>, C.T)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"B.T @ A.T:</span><span class="ch">\n</span><span class="st">"</span>, B.T <span class="op">@</span> A.T)   <span class="co"># should match (AB)^T = B^T A^T</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A @ B:
+ [[ 58  64]
+ [139 154]]
+(A @ B).T:
+ [[ 58 139]
+ [ 64 154]]
+B.T @ A.T:
+ [[ 58 139]
+ [ 64 154]]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="special-matrices" class="level2">
+<h2 class="anchored" data-anchor-id="special-matrices">Special Matrices</h2>
+<section id="identity-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="identity-matrix">Identity Matrix</h3>
+<p>The <strong>identity matrix</strong> <span class="math inline">\(\mathbf{I}_n \in \mathbb{R}^{n \times n}\)</span> has ones on the diagonal and zeros elsewhere. It satisfies <span class="math inline">\(\mathbf{A}\mathbf{I} = \mathbf{I}\mathbf{A} = \mathbf{A}\)</span> for any compatible matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+</section>
+<section id="diagonal-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="diagonal-matrix">Diagonal Matrix</h3>
+<p>A <strong>diagonal matrix</strong> has non-zero entries only on the main diagonal. Diagonal matrices are easy to invert: if <span class="math inline">\(\mathbf{D} = \mathrm{diag}(d_1, \ldots, d_n)\)</span> with all <span class="math inline">\(d_i \neq 0\)</span>, then <span class="math inline">\(\mathbf{D}^{-1} = \mathrm{diag}(1/d_1, \ldots, 1/d_n)\)</span>.</p>
+</section>
+<section id="symmetric-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="symmetric-matrix">Symmetric Matrix</h3>
+<p>A matrix is <strong>symmetric</strong> if <span class="math inline">\(\mathbf{A}^\top = \mathbf{A}\)</span>, i.e.&nbsp;<span class="math inline">\(a_{ij} = a_{ji}\)</span> for all <span class="math inline">\(i, j\)</span>. Many important matrices in statistics are symmetric: covariance matrices, Gram matrices <span class="math inline">\(\mathbf{X}^\top \mathbf{X}\)</span>, and the hat matrix <span class="math inline">\(\mathbf{H}\)</span>.</p>
+</section>
+<section id="orthogonal-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="orthogonal-matrix">Orthogonal Matrix</h3>
+<p>A square matrix <span class="math inline">\(\mathbf{Q}\)</span> is <strong>orthogonal</strong> if its columns are orthonormal (mutually orthogonal unit vectors), which implies:</p>
+<p><span class="math display">\[
+\mathbf{Q}^\top \mathbf{Q} = \mathbf{Q}\mathbf{Q}^\top = \mathbf{I}, \quad \text{i.e.} \quad \mathbf{Q}^{-1} = \mathbf{Q}^\top.
+\]</span></p>
+<p>Orthogonal matrices preserve norms: <span class="math inline">\(\|\mathbf{Q}\mathbf{v}\| = \|\mathbf{v}\|\)</span>. They arise in eigendecompositions and in the geometric interpretation of least squares.</p>
+</section>
+</section>
+<section id="rank-and-invertibility" class="level2">
+<h2 class="anchored" data-anchor-id="rank-and-invertibility">Rank and Invertibility</h2>
+<section id="rank" class="level3">
+<h3 class="anchored" data-anchor-id="rank">Rank</h3>
+<p>The <strong>rank</strong> of a matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{m \times n}\)</span> is the maximum number of linearly independent columns (equivalently, rows). We always have <span class="math inline">\(\mathrm{rank}(\mathbf{A}) \leq \min(m, n)\)</span>.</p>
+<ul>
+<li><span class="math inline">\(\mathbf{A}\)</span> has <strong>full column rank</strong> if <span class="math inline">\(\mathrm{rank}(\mathbf{A}) = n\)</span> (all columns are linearly independent).</li>
+<li><span class="math inline">\(\mathbf{A}\)</span> has <strong>full row rank</strong> if <span class="math inline">\(\mathrm{rank}(\mathbf{A}) = m\)</span>.</li>
+</ul>
+<div id="4194f814" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>],</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>],</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>              [<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]])   <span class="co"># rank-deficient: row 3 = row 1 + row 2 up to constant</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rank:"</span>, np.linalg.matrix_rank(X))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>X_full <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>],</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                   [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>],</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                   [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>]])</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Rank (identity):"</span>, np.linalg.matrix_rank(X_full))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rank: 2
+Rank (identity): 3</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-inverse" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-inverse">Matrix Inverse</h3>
+<p>For a <strong>square</strong> matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times n}\)</span>, the <strong>inverse</strong> <span class="math inline">\(\mathbf{A}^{-1}\)</span> satisfies:</p>
+<p><span class="math display">\[
+\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}_n.
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled" title="Conditions for Invertibility">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Conditions for Invertibility
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A square matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times n}\)</span> is invertible (non-singular) if and only if any of the following equivalent conditions hold:</p>
+<ol type="1">
+<li><span class="math inline">\(\mathrm{rank}(\mathbf{A}) = n\)</span> (full rank).</li>
+<li><span class="math inline">\(\det(\mathbf{A}) \neq 0\)</span>.</li>
+<li>All eigenvalues of <span class="math inline">\(\mathbf{A}\)</span> are non-zero.</li>
+<li>The columns of <span class="math inline">\(\mathbf{A}\)</span> are linearly independent.</li>
+</ol>
+</div>
+</div>
+<p>Key properties of the inverse:</p>
+<p><span class="math display">\[
+(\mathbf{A}^{-1})^{-1} = \mathbf{A}, \qquad (\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}, \qquad (\mathbf{A}^\top)^{-1} = (\mathbf{A}^{-1})^\top.
+\]</span></p>
+<p>The reversal rule <span class="math inline">\((\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}\)</span> mirrors the reversal rule for transposes.</p>
+<div id="f3b52e41" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">2.0</span>, <span class="fl">1.0</span>],</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>              [<span class="fl">5.0</span>, <span class="fl">3.0</span>]])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>A_inv <span class="op">=</span> np.linalg.inv(A)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A_inv:</span><span class="ch">\n</span><span class="st">"</span>, A_inv)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A @ A_inv:</span><span class="ch">\n</span><span class="st">"</span>, np.<span class="bu">round</span>(A <span class="op">@</span> A_inv, <span class="dv">10</span>))  <span class="co"># should be identity</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A_inv:
+ [[ 3. -1.]
+ [-5.  2.]]
+A @ A_inv:
+ [[ 1.  0.]
+ [-0.  1.]]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="quadratic-forms-and-positive-definiteness" class="level2">
+<h2 class="anchored" data-anchor-id="quadratic-forms-and-positive-definiteness">Quadratic Forms and Positive Definiteness</h2>
+<p>A <strong>quadratic form</strong> associated with a symmetric matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times n}\)</span> is the scalar-valued function:</p>
+<p><span class="math display">\[
+Q(\mathbf{v}) = \mathbf{v}^\top \mathbf{A} \mathbf{v} = \sum_{i=1}^n \sum_{j=1}^n a_{ij} v_i v_j.
+\]</span></p>
+<p>Quadratic forms arise throughout statistics — for example, the OLS residual sum of squares is <span class="math inline">\(\mathrm{RSS} = \mathbf{e}^\top \mathbf{e}\)</span> and the Mahalanobis distance is <span class="math inline">\((\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Positive Definiteness">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Positive Definiteness
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A symmetric matrix <span class="math inline">\(\mathbf{A}\)</span> is:</p>
+<ul>
+<li><strong>Positive definite (PD)</strong> if <span class="math inline">\(\mathbf{v}^\top \mathbf{A} \mathbf{v} &gt; 0\)</span> for all <span class="math inline">\(\mathbf{v} \neq \mathbf{0}\)</span>.</li>
+<li><strong>Positive semi-definite (PSD)</strong> if <span class="math inline">\(\mathbf{v}^\top \mathbf{A} \mathbf{v} \geq 0\)</span> for all <span class="math inline">\(\mathbf{v}\)</span>.</li>
+</ul>
+<p>Equivalently, <span class="math inline">\(\mathbf{A}\)</span> is PD iff all its eigenvalues are strictly positive, and PSD iff all eigenvalues are non-negative.</p>
+</div>
+</div>
+<p>The Gram matrix <span class="math inline">\(\mathbf{X}^\top \mathbf{X}\)</span> is always PSD, and is PD (hence invertible) when <span class="math inline">\(\mathbf{X}\)</span> has full column rank — a crucial condition for OLS to have a unique solution.</p>
+</section>
+<section id="eigenvalues-and-eigenvectors" class="level2">
+<h2 class="anchored" data-anchor-id="eigenvalues-and-eigenvectors">Eigenvalues and Eigenvectors</h2>
+<section id="definition-1" class="level3">
+<h3 class="anchored" data-anchor-id="definition-1">Definition</h3>
+<p>For a square matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times n}\)</span>, a non-zero vector <span class="math inline">\(\mathbf{q}\)</span> and scalar <span class="math inline">\(\lambda\)</span> satisfying:</p>
+<p><span class="math display">\[
+\mathbf{A}\mathbf{q} = \lambda \mathbf{q}
+\]</span></p>
+<p>are called an <strong>eigenvector</strong> and its associated <strong>eigenvalue</strong>, respectively. The eigenvalue equation says that <span class="math inline">\(\mathbf{A}\)</span> stretches (or reflects) <span class="math inline">\(\mathbf{q}\)</span> by factor <span class="math inline">\(\lambda\)</span> without changing its direction.</p>
+<p>Eigenvalues are found by solving the <strong>characteristic equation</strong> <span class="math inline">\(\det(\mathbf{A} - \lambda \mathbf{I}) = 0\)</span>.</p>
+</section>
+<section id="eigendecomposition" class="level3">
+<h3 class="anchored" data-anchor-id="eigendecomposition">Eigendecomposition</h3>
+<p>A symmetric matrix <span class="math inline">\(\mathbf{A} \in \mathbb{R}^{n \times n}\)</span> always has <span class="math inline">\(n\)</span> real eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_n\)</span> and <span class="math inline">\(n\)</span> orthonormal eigenvectors <span class="math inline">\(\mathbf{q}_1, \ldots, \mathbf{q}_n\)</span> (by the spectral theorem). We can write:</p>
+<p><span class="math display">\[
+\mathbf{A} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^\top,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Q} = [\mathbf{q}_1 \mid \cdots \mid \mathbf{q}_n]\)</span> is orthogonal and <span class="math inline">\(\boldsymbol{\Lambda} = \mathrm{diag}(\lambda_1, \ldots, \lambda_n)\)</span>.</p>
+<div id="6c784416" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.array([[<span class="fl">4.0</span>, <span class="fl">2.0</span>],</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>              [<span class="fl">2.0</span>, <span class="fl">3.0</span>]])</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>eigenvalues, eigenvectors <span class="op">=</span> np.linalg.eigh(A)   <span class="co"># eigh for symmetric matrices</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvalues:"</span>, eigenvalues)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eigenvectors (columns):</span><span class="ch">\n</span><span class="st">"</span>, eigenvectors)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify: A q = lambda q for first eigenpair</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>q1, lam1 <span class="op">=</span> eigenvectors[:, <span class="dv">0</span>], eigenvalues[<span class="dv">0</span>]</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"A @ q1:"</span>, A <span class="op">@</span> q1)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"lam1 * q1:"</span>, lam1 <span class="op">*</span> q1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eigenvalues: [1.43844719 5.56155281]
+Eigenvectors (columns):
+ [[ 0.61541221 -0.78820544]
+ [-0.78820544 -0.61541221]]
+A @ q1: [ 0.88523796 -1.1337919 ]
+lam1 * q1: [ 0.88523796 -1.1337919 ]</code></pre>
+</div>
+</div>
+</section>
+<section id="trace-and-determinant-via-eigenvalues" class="level3">
+<h3 class="anchored" data-anchor-id="trace-and-determinant-via-eigenvalues">Trace and Determinant via Eigenvalues</h3>
+<p>Two convenient identities link eigenvalues to matrix invariants:</p>
+<p><span class="math display">\[
+\mathrm{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i, \qquad \det(\mathbf{A}) = \prod_{i=1}^n \lambda_i.
+\]</span></p>
+<p>These are useful for understanding properties of the hat matrix later.</p>
+</section>
+</section>
+<section id="projections" class="level2">
+<h2 class="anchored" data-anchor-id="projections">Projections</h2>
+<section id="orthogonal-projection" class="level3">
+<h3 class="anchored" data-anchor-id="orthogonal-projection">Orthogonal Projection</h3>
+<p>Given a subspace <span class="math inline">\(\mathcal{V} \subseteq \mathbb{R}^n\)</span>, the <strong>orthogonal projection</strong> of a vector <span class="math inline">\(\mathbf{y}\)</span> onto <span class="math inline">\(\mathcal{V}\)</span> is the unique vector <span class="math inline">\(\hat{\mathbf{y}} \in \mathcal{V}\)</span> closest to <span class="math inline">\(\mathbf{y}\)</span> in Euclidean distance:</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}} = \underset{\mathbf{v} \in \mathcal{V}}{\arg\min}\, \|\mathbf{y} - \mathbf{v}\|^2.
+\]</span></p>
+<p>The residual <span class="math inline">\(\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}\)</span> is orthogonal to every vector in <span class="math inline">\(\mathcal{V}\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Projection Matrix">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Projection Matrix
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If <span class="math inline">\(\mathcal{V} = \mathrm{col}(\mathbf{X})\)</span> (the column space of <span class="math inline">\(\mathbf{X}\)</span>) and <span class="math inline">\(\mathbf{X}\)</span> has full column rank, the orthogonal projection onto <span class="math inline">\(\mathcal{V}\)</span> is the linear map: <span class="math display">\[
+\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}, \qquad \mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.
+\]</span> <span class="math inline">\(\mathbf{H}\)</span> is called the <strong>hat matrix</strong> (or projection matrix).</p>
+</div>
+</div>
+</section>
+<section id="properties-of-projection-matrices" class="level3">
+<h3 class="anchored" data-anchor-id="properties-of-projection-matrices">Properties of Projection Matrices</h3>
+<p>Any orthogonal projection matrix <span class="math inline">\(\mathbf{H}\)</span> satisfies two key properties:</p>
+<ol type="1">
+<li><strong>Symmetric</strong>: <span class="math inline">\(\mathbf{H}^\top = \mathbf{H}\)</span>.</li>
+<li><strong>Idempotent</strong>: <span class="math inline">\(\mathbf{H}^2 = \mathbf{H}\)</span> (projecting twice gives the same result as projecting once).</li>
+</ol>
+<div id="09509be9" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple 2D projection example</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.array([[<span class="fl">1.0</span>], [<span class="fl">2.0</span>], [<span class="fl">3.0</span>]])   <span class="co"># n=3, p=1 (no intercept, for illustration)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> X <span class="op">@</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">@</span> X.T</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Symmetric?"</span>, np.allclose(H, H.T))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Idempotent?"</span>, np.allclose(H <span class="op">@</span> H, H))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Trace of H:"</span>, np.trace(H))     <span class="co"># = number of columns in X</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Symmetric? True
+Idempotent? True
+Trace of H: 0.9999999999999999</code></pre>
+</div>
+</div>
+<p>The <strong>trace</strong> of the hat matrix equals the number of columns in <span class="math inline">\(\mathbf{X}\)</span> (i.e.&nbsp;<span class="math inline">\(p + 1\)</span> for a model with an intercept and <span class="math inline">\(p\)</span> predictors), which counts the “degrees of freedom” used by the model.</p>
+<p>The complementary matrix <span class="math inline">\(\mathbf{M} = \mathbf{I} - \mathbf{H}\)</span> projects onto the orthogonal complement of <span class="math inline">\(\mathrm{col}(\mathbf{X})\)</span> and is also symmetric and idempotent. The residual vector in OLS is <span class="math inline">\(\mathbf{e} = \mathbf{M}\mathbf{y}\)</span>.</p>
+</section>
+</section>
+<section id="linear-regression-in-matrix-form" class="level2">
+<h2 class="anchored" data-anchor-id="linear-regression-in-matrix-form">Linear Regression in Matrix Form</h2>
+<section id="the-design-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="the-design-matrix">The Design Matrix</h3>
+<p>Suppose we have <span class="math inline">\(n\)</span> observations <span class="math inline">\((y_i, x_{i1}, \ldots, x_{ip})\)</span> for <span class="math inline">\(i = 1, \ldots, n\)</span>. The multiple linear regression model is:</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip} + \varepsilon_i.
+\]</span></p>
+<p>Stacking all <span class="math inline">\(n\)</span> equations, we can write this compactly as:</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon},
+\]</span></p>
+<p>where:</p>
+<p><span class="math display">\[
+\mathbf{y} = \begin{pmatrix} y_1 \\ \vdots \\ y_n \end{pmatrix} \in \mathbb{R}^n, \quad
+\mathbf{X} = \begin{pmatrix} 1 &amp; x_{11} &amp; \cdots &amp; x_{1p} \\ \vdots &amp; \vdots &amp; &amp; \vdots \\ 1 &amp; x_{n1} &amp; \cdots &amp; x_{np} \end{pmatrix} \in \mathbb{R}^{n \times (p+1)}, \quad
+\boldsymbol{\beta} = \begin{pmatrix} \beta_0 \\ \beta_1 \\ \vdots \\ \beta_p \end{pmatrix} \in \mathbb{R}^{p+1}.
+\]</span></p>
+<p><span class="math inline">\(\mathbf{X}\)</span> is called the <strong>design matrix</strong>. The leading column of ones encodes the intercept term.</p>
+</section>
+<section id="deriving-the-ols-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="deriving-the-ols-estimator">Deriving the OLS Estimator</h3>
+<p>Ordinary least squares (OLS) minimises the <strong>residual sum of squares</strong>:</p>
+<p><span class="math display">\[
+\mathrm{RSS}(\boldsymbol{\beta}) = \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^\top(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}).
+\]</span></p>
+<p>Expanding the quadratic form:</p>
+<p><span class="math display">\[
+\mathrm{RSS}(\boldsymbol{\beta}) = \mathbf{y}^\top\mathbf{y} - 2\boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{y} + \boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}.
+\]</span></p>
+<p>Taking the gradient with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> and setting it to zero:</p>
+<p><span class="math display">\[
+\frac{\partial\, \mathrm{RSS}}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^\top\mathbf{y} + 2\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} = \mathbf{0}.
+\]</span></p>
+<p>This gives the <strong>normal equations</strong>:</p>
+<p><span class="math display">\[
+\mathbf{X}^\top \mathbf{X}\,\hat{\boldsymbol{\beta}} = \mathbf{X}^\top \mathbf{y}.
+\]</span></p>
+<p>When <span class="math inline">\(\mathbf{X}\)</span> has full column rank, <span class="math inline">\(\mathbf{X}^\top\mathbf{X}\)</span> is invertible and the unique solution is:</p>
+<div class="callout callout-style-default callout-important callout-titled" title="OLS Estimator">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>OLS Estimator
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}.
+\]</span></p>
+</div>
+</div>
+<p>The fitted values are then:</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y} = \mathbf{H}\mathbf{y},
+\]</span></p>
+<p>confirming that <span class="math inline">\(\mathbf{H}\)</span> projects <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<div id="290151ed" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># True model: y = 1 + 2*x + noise</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">5</span>, n)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, n)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Design matrix (intercept + one predictor)</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.column_stack([np.ones(n), x])</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># OLS via normal equations</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>XtX <span class="op">=</span> X.T <span class="op">@</span> X</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>Xty <span class="op">=</span> X.T <span class="op">@</span> y</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>beta_hat <span class="op">=</span> np.linalg.solve(XtX, Xty)   <span class="co"># solve is numerically preferred to inv()</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"beta_hat:"</span>, beta_hat)            <span class="co"># should be close to [1, 2]</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>y_hat <span class="op">=</span> X <span class="op">@</span> beta_hat</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>residuals <span class="op">=</span> y <span class="op">-</span> y_hat</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"RSS:"</span>, residuals <span class="op">@</span> residuals)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>beta_hat: [1.06444309 1.8840332 ]
+RSS: 41.257089755557885</code></pre>
+</div>
+</div>
+<p>Note that we use <code>np.linalg.solve</code> rather than explicitly computing <code>np.linalg.inv(XtX)</code>. Solving the linear system directly is numerically more stable and avoids forming the inverse unnecessarily.</p>
+</section>
+<section id="the-hat-matrix-and-its-properties" class="level3">
+<h3 class="anchored" data-anchor-id="the-hat-matrix-and-its-properties">The Hat Matrix and Its Properties</h3>
+<p>The hat matrix <span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\)</span> has several properties that matter for regression diagnostics:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Formula</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Symmetric</td>
+<td><span class="math inline">\(\mathbf{H}^\top = \mathbf{H}\)</span></td>
+<td>Projection matrices are self-adjoint</td>
+</tr>
+<tr class="even">
+<td>Idempotent</td>
+<td><span class="math inline">\(\mathbf{H}^2 = \mathbf{H}\)</span></td>
+<td>Projecting twice = projecting once</td>
+</tr>
+<tr class="odd">
+<td>Trace</td>
+<td><span class="math inline">\(\mathrm{tr}(\mathbf{H}) = p + 1\)</span></td>
+<td>Degrees of freedom used by the model</td>
+</tr>
+<tr class="even">
+<td>Eigenvalues</td>
+<td><span class="math inline">\(\lambda_i \in \{0, 1\}\)</span></td>
+<td>Consequence of idempotency</td>
+</tr>
+<tr class="odd">
+<td>Residuals</td>
+<td><span class="math inline">\(\mathbf{e} = (\mathbf{I} - \mathbf{H})\mathbf{y}\)</span></td>
+<td>Residuals live in the null space of <span class="math inline">\(\mathbf{X}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The diagonal entries <span class="math inline">\(h_{ii} = [\mathbf{H}]_{ii}\)</span> are called <strong>leverage values</strong>. They measure how far observation <span class="math inline">\(i\)</span> is from the centre of the predictor space; high-leverage points have a disproportionate influence on the fitted values.</p>
+<div id="f3cd9910" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>H <span class="op">=</span> X <span class="op">@</span> np.linalg.inv(X.T <span class="op">@</span> X) <span class="op">@</span> X.T</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Symmetric?"</span>, np.allclose(H, H.T))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Idempotent?"</span>, np.allclose(H <span class="op">@</span> H, H))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Trace:"</span>, np.<span class="bu">round</span>(np.trace(H)))    <span class="co"># = p + 1 = 2</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>leverages <span class="op">=</span> np.diag(H)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">3</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>ax.stem(x, leverages, markerfmt<span class="op">=</span><span class="st">'C0o'</span>, linefmt<span class="op">=</span><span class="st">'C0-'</span>, basefmt<span class="op">=</span><span class="st">'k-'</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">2</span> <span class="op">*</span> (<span class="dv">2</span>) <span class="op">/</span> n, color<span class="op">=</span><span class="st">'C1'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, label<span class="op">=</span><span class="ss">f'2(p+1)/n threshold'</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'x'</span>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Leverage $h_</span><span class="sc">{ii}</span><span class="st">$'</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Hat Matrix Diagonal (Leverage Values)'</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Symmetric? True
+Idempotent? True
+Trace: 2.0</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-10-output-2.png" width="756" height="278" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Points at the extremes of the predictor range have the highest leverage — they exert the most pull on the estimated regression line. The conventional threshold for flagging high leverage is <span class="math inline">\(h_{ii} &gt; 2(p+1)/n\)</span>.</p>
+</section>
+<section id="variance-of-the-ols-estimator" class="level3">
+<h3 class="anchored" data-anchor-id="variance-of-the-ols-estimator">Variance of the OLS Estimator</h3>
+<p>Under the classical OLS assumptions (<span class="math inline">\(\mathbb{E}[\boldsymbol{\varepsilon}] = \mathbf{0}\)</span>, <span class="math inline">\(\mathrm{Var}(\boldsymbol{\varepsilon}) = \sigma^2 \mathbf{I}\)</span>), the covariance matrix of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is:</p>
+<p><span class="math display">\[
+\mathrm{Var}(\hat{\boldsymbol{\beta}}) = \sigma^2 (\mathbf{X}^\top \mathbf{X})^{-1}.
+\]</span></p>
+<p>This follows from the general formula <span class="math inline">\(\mathrm{Var}(\mathbf{A}\mathbf{y}) = \mathbf{A}\,\mathrm{Var}(\mathbf{y})\,\mathbf{A}^\top\)</span> applied with <span class="math inline">\(\mathbf{A} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{Var}(\hat{\boldsymbol{\beta}}) = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top \cdot \sigma^2\mathbf{I} \cdot \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1} = \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}.
+\]</span></p>
+<p>The diagonal entries of <span class="math inline">\((\mathbf{X}^\top\mathbf{X})^{-1}\)</span> (scaled by <span class="math inline">\(\hat{\sigma}^2\)</span>) give the estimated variances of <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \ldots, \hat{\beta}_p\)</span>, used to construct standard errors and <span class="math inline">\(t\)</span>-statistics.</p>
+<div id="27c517b9" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sigma2_hat <span class="op">=</span> (residuals <span class="op">@</span> residuals) <span class="op">/</span> (n <span class="op">-</span> <span class="dv">2</span>)   <span class="co"># unbiased estimate: n - (p+1)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cov_beta <span class="op">=</span> sigma2_hat <span class="op">*</span> np.linalg.inv(X.T <span class="op">@</span> X)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>se_beta <span class="op">=</span> np.sqrt(np.diag(cov_beta))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Estimated coefficients:"</span>, np.<span class="bu">round</span>(beta_hat, <span class="dv">4</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standard errors:"</span>, np.<span class="bu">round</span>(se_beta, <span class="dv">4</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"t-statistics:"</span>, np.<span class="bu">round</span>(beta_hat <span class="op">/</span> se_beta, <span class="dv">4</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Estimated coefficients: [1.0644 1.884 ]
+Standard errors: [0.2583 0.089 ]
+t-statistics: [ 4.1203 21.1598]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This chapter developed the matrix language used throughout the regression chapters. The key results are:</p>
+<ul>
+<li>The OLS estimator <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}\)</span> is derived by minimising RSS, and exists uniquely when <span class="math inline">\(\mathbf{X}\)</span> has full column rank.</li>
+<li>The fitted values <span class="math inline">\(\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}\)</span> are the orthogonal projection of <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>.</li>
+<li>The hat matrix <span class="math inline">\(\mathbf{H}\)</span> is symmetric and idempotent with trace <span class="math inline">\(p+1\)</span>; its diagonal entries are leverage values.</li>
+<li>The covariance matrix <span class="math inline">\(\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\)</span> underlies all standard errors and inference procedures in linear regression.</li>
+</ul>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../notes/pstat100-notes/00.2-python-fundamentals/index.html" class="pagination-link" aria-label="Python Fundamentals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Python Fundamentals</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../notes/pstat100-notes/01-data-science-fundamentals/index.html" class="pagination-link" aria-label="Data Science Fundamentals">
+        <span class="nav-page-text">Data Science Fundamentals</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

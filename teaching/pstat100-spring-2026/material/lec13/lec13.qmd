@@ -1,0 +1,1280 @@
+---
+title: "Lecture 13: Generalized Linear Models"
+subtitle: "PSTAT100: Data Science — Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+jupyter: pstat100
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        html-math-method: katex
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Identify the **limitations of linear regression** when the response is not continuous.
+- Introduce the **Generalized Linear Model (GLM)** framework: exponential family, link functions, and maximum likelihood estimation.
+- Derive and interpret **logistic regression** for binary responses.
+- Introduce **Poisson regression** for count responses.
+- Fit GLMs in Python using `statsmodels` and interpret outputs, diagnostics, and model comparisons.
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import norm, binom
+from scipy.special import expit          # the logistic (sigmoid) function
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+from statsmodels.stats.anova import anova_lm
+from sklearn.metrics import (
+    confusion_matrix, ConfusionMatrixDisplay,
+    roc_curve, roc_auc_score
+)
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+
+
+# The Limits of Linear Regression
+
+## 🤔 When Does Linear Regression Break Down?
+
+### Recall the assumptions
+
+- The MLR model assumes $Y_i \sim \mathcal{N}(\mu_i, \sigma^2)$ with $\mu_i = \mathbf{x}_i^\top \boldsymbol{\beta}$.
+- The **mean** $\mu_i$ is modelled as an unrestricted linear combination of predictors.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### But many responses are not continuous or Gaussian
+
+:::
+
+:::{.fragment}
+
+| Response type | Example | Problem with linear regression |
+|---|---|---|
+| **Binary** | Patient survived / died | Predictions outside $[0, 1]$; errors not normal |
+| **Count** | Number of insurance claims | Must be non-negative; variance grows with mean |
+| **Proportion** | Percentage of votes won | Bounded in $[0, 1]$; heteroscedastic |
+| **Positive continuous** | Hospital length of stay | Right-skewed; errors non-normal |
+
+:::
+
+## A Concrete Problem: Predicting a Binary Outcome
+
+### Can we predict whether a passenger survived the Titanic?
+
+- $Y_i \in \{0, 1\}$ — **binary** response.
+- We want to model $P(Y_i = 1 \mid \mathbf{x}_i)$ — the **probability** of survival.
+
+:::{.fragment}
+
+### What goes wrong with OLS?
+
+```{python}
+#| output-location: slide
+#| fig-cap: "OLS fitted to a binary outcome: predicted values fall outside [0, 1] for extreme predictor values, and the residuals are clearly non-normal."
+
+rng = np.random.default_rng(0)
+x = np.linspace(-3, 3, 200)
+p_true = expit(2 * x)
+y = rng.binomial(1, p_true)
+
+X_ols = sm.add_constant(x)
+ols_fit = sm.OLS(y, X_ols).fit()
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+axes[0].scatter(x, y, alpha=0.4, color='steelblue', s=20, label='Observed $Y \in \{0,1\}$')
+axes[0].plot(x, ols_fit.fittedvalues, color='crimson', lw=2, label='OLS fitted line')
+axes[0].axhline(0, color='gray', lw=1, linestyle='--')
+axes[0].axhline(1, color='gray', lw=1, linestyle='--')
+axes[0].set_xlabel('$X$'); axes[0].set_ylabel('$Y$')
+axes[0].set_title('OLS on Binary Response')
+axes[0].legend(fontsize=9)
+
+axes[1].scatter(ols_fit.fittedvalues, ols_fit.resid, alpha=0.4, color='steelblue', s=20)
+axes[1].axhline(0, color='crimson', lw=1.5, linestyle='--')
+axes[1].set_xlabel('Fitted values'); axes[1].set_ylabel('Residuals')
+axes[1].set_title('Residuals vs. Fitted (OLS on Binary Response)')
+
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+# The Generalized Linear Model
+
+## 🏗️ The Three Components of a GLM
+
+:::{.callout-important title="Generalized Linear Model (GLM)"}
+A **GLM** extends linear regression by relaxing the normality assumption. It has three components:
+
+1. **Random component**: the response $Y_i$ follows a distribution from the **exponential family** with mean $\mu_i = \mathbb{E}[Y_i]$.
+2. **Systematic component**: a linear predictor $\eta_i = \mathbf{x}_i^\top \boldsymbol{\beta}$.
+3. **Link function** $g$: connects the mean to the linear predictor, $g(\mu_i) = \eta_i$.
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The key idea
+
+- We no longer model $\mu_i$ **directly** as a linear combination.
+- Instead, we model a **transformation** of $\mu_i$ linearly: $g(\mu_i) = \eta_i = \mathbf{x}_i^\top \boldsymbol{\beta}$.
+- The link function ensures that $\mu_i$ stays in the valid range for the chosen distribution.
+
+:::
+
+## The Exponential Family
+
+:::{.fragment}
+
+A distribution belongs to the **exponential family** if its probability density/mass function can be written as
+
+$$
+f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y, \phi)\right\},
+$$
+
+where $\theta$ is the **canonical parameter**, $\phi$ is the **dispersion parameter**, and $b(\cdot)$, $a(\cdot)$, $c(\cdot)$ are known functions. 
+Note the following important properties:
+
+:::
+
+:::{.fragment}
+
+- $\mu = \mathbb{E}[Y] = b'(\theta)$.
+- $\text{Var}(Y) = b''(\theta)\,a(\phi)$ — variance is a function of the mean.
+
+:::
+
+:::{.fragment}
+
+
+| Distribution | Response type | Canonical link $g(\mu)$ |
+|---|---|---|
+| Normal | Continuous $(-\infty, \infty)$ | Identity: $g(\mu) = \mu$ |
+| Bernoulli/Binomial | Binary / proportion $[0,1]$ | Logit: $g(\mu) = \log\frac{\mu}{1-\mu}$ |
+| Poisson | Count $\{0, 1, 2, \ldots\}$ | Log: $g(\mu) = \log\mu$ |
+| Gamma | Positive continuous $(0, \infty)$ | Inverse: $g(\mu) = 1/\mu$ |
+
+:::
+
+## Link Functions
+
+### What does the link function do?
+
+- The link function $g$ maps the **mean** $\mu_i$ (which must lie in a constrained range) to the **real line**.
+- The **inverse** $g^{-1}(\eta_i) = \mu_i$ then maps the linear predictor back to a valid mean.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Canonical vs. non-canonical links
+
+- The **canonical link** is the natural choice derived from the exponential family form.
+- Other links can be used if they make scientific sense — the canonical link is often used as a default.
+
+:::
+
+
+## Link Function Visualization
+
+```{python}
+#| echo: false
+#| fig-cap: "The three most commonly used link functions and their inverses: identity (linear regression), logit (logistic regression), and log (Poisson regression)."
+
+eta = np.linspace(-4, 4, 300)
+
+fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+
+# Identity
+axes[0].plot(eta, eta, color='steelblue', lw=2.5)
+axes[0].set_xlabel('$\\eta = \\mathbf{x}^\\top\\boldsymbol{\\beta}$')
+axes[0].set_ylabel('$\\mu = g^{-1}(\\eta)$')
+axes[0].set_title('Identity link\n(Normal / linear regression)')
+axes[0].axhline(0, color='gray', lw=0.8, linestyle='--')
+
+# Logit / logistic
+axes[1].plot(eta, expit(eta), color='#fc8d62', lw=2.5)
+axes[1].set_xlabel('$\\eta$'); axes[1].set_ylabel('$\\mu = \\sigma(\\eta)$')
+axes[1].set_title('Logit link (inverse = logistic)\n(Bernoulli / logistic regression)')
+axes[1].axhline(0, color='gray', lw=0.8, linestyle='--')
+axes[1].axhline(1, color='gray', lw=0.8, linestyle='--')
+
+# Log / exp
+axes[2].plot(eta, np.exp(eta), color='#8da0cb', lw=2.5)
+axes[2].set_xlabel('$\\eta$'); axes[2].set_ylabel('$\\mu = e^{\\eta}$')
+axes[2].set_title('Log link (inverse = exponential)\n(Poisson regression)')
+axes[2].set_ylim(-2, 55)
+axes[2].axhline(0, color='gray', lw=0.8, linestyle='--')
+
+plt.suptitle('Link Functions and Their Inverses', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+
+## Estimation: Maximum Likelihood
+
+### Why not OLS?
+
+- OLS minimises the **sum of squared residuals** — optimal when errors are Gaussian.
+- For non-Gaussian responses, squared residuals are no longer the right loss.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Maximum likelihood estimation
+
+- GLMs are estimated by **maximising the log-likelihood** of the data given $\boldsymbol{\beta}$.
+- The log-likelihood for a GLM is:
+
+:::
+
+:::{.fragment}
+
+$$
+\ell(\boldsymbol{\beta}) = \sum_{i=1}^n \frac{y_i \theta_i - b(\theta_i)}{a(\phi)} + \text{const}.
+$$
+
+:::
+
+:::{.fragment}
+
+- There is **no closed-form solution** in general — we use **iteratively reweighted least squares (IRLS)**, an iterative numerical algorithm.
+- `statsmodels` handles this automatically.
+
+:::
+
+## Iteratively Reweighted Least Squares (IRLS) I
+
+### The key insight
+
+- The score equations $\nabla_{\boldsymbol{\beta}}\,\ell(\boldsymbol{\beta}) = \mathbf{0}$ cannot be solved directly.
+- IRLS recasts MLE as a **sequence of weighted least squares problems**, each of which has a closed-form solution.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### One iteration of IRLS
+
+At the current estimate $\boldsymbol{\beta}^{(t)}$, compute:
+
+| Quantity | Formula | Role |
+|---|---|---|
+| Fitted means | $\hat{\mu}_i = g^{-1}(\mathbf{x}_i^\top\boldsymbol{\beta}^{(t)})$ | Current predicted means |
+| Weights | $w_i = \frac{1}{V(\hat{\mu}_i)\,[g'(\hat{\mu}_i)]^2}$ | Downweight noisy observations |
+| Working response | $z_i = \eta_i + (y_i - \hat{\mu}_i)\,g'(\hat{\mu}_i)$ | Linearised pseudo-response |
+
+
+:::
+
+## Iteratively Reweighted Least Squares (IRLS) II
+
+Then solve the **weighted least squares** problem:
+
+$$\boldsymbol{\beta}^{(t+1)} = \left(\mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{X}\right)^{-1} \mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{z}^{(t)},$$
+
+where $\mathbf{W}^{(t)} = \mathrm{diag}(w_1, \ldots, w_n)$. Repeat until $\boldsymbol{\beta}^{(t+1)} \approx \boldsymbol{\beta}^{(t)}$.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> When applied to the Normal family with the identity link, $w_i = 1$ for all $i$ and $z_i = y_i$ — IRLS reduces to a single step of ordinary least squares.
+
+:::
+
+## Deviance
+
+### Measuring goodness of fit in a GLM
+
+:::{.fragment}
+
+:::{.callout-important title="Deviance"}
+The **deviance** of a fitted GLM is:
+$$D = 2\left[\ell(\text{saturated model}) - \ell(\hat{\boldsymbol{\beta}})\right],$$
+where the **saturated model** fits each observation perfectly.
+:::
+
+:::
+
+
+:::{.spacer-sm}
+:::
+
+- Deviance is the GLM analogue of the **residual sum of squares (RSS)** in OLS.
+- The **null deviance** ($D_0$) measures fit of the intercept-only model — the baseline.
+- The **residual deviance** ($D$) measures fit of the fitted model.
+- A large drop $D_0 - D$ indicates that the predictors are useful.
+
+
+## Likelihood Ratio Test (LRT)
+
+### What is this used for?
+
+:::{.fragment}
+
+Tests if $q$ additional parameters significantly improve model fit: $$H_0: \beta_{p-q+1} = \cdots = \beta_p = 0.$$
+
+:::
+
+:::{.fragment}
+
+Has the test statistics: $$G^2 = D_\text{reduced} - D_\text{full} \;\underset{H_0}{\sim}\; \chi^2_q,$$ where $q$ is the difference in the number of parameters. This is the GLM analogue of the partial $F$-test.
+
+:::
+
+:::{.fragment}
+
+**Equivalent form.** The saturated likelihood cancels, giving:
+$$G^2 = 2[\ell(\hat{\boldsymbol{\mu}}_\text{full}) - \ell(\hat{\boldsymbol{\mu}}_\text{reduced})]$$
+
+:::
+
+:::{.fragment}
+
+**Decision rule.** Reject $H_0$ at level $\alpha$ if $G^2 > \chi^2_{q,\, 1-\alpha}$.
+
+**Note.** For $q=1$, asymptotically equivalent to the Wald $z$-test, but preferred in small samples.
+
+:::
+
+# Logistic Regression
+
+## 🎲 The Binary Response Setting
+
+### When does this arise?
+
+- Medical: did a patient recover? ($Y = 1$) or not ($Y = 0$)?
+- Finance: did a loan default?
+- Ecology: is a species present at a site?
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The statistical model
+
+We assume $Y_i \mid \mathbf{x}_i \sim \text{Bernoulli}(\pi_i)$, where $\pi_i = P(Y_i = 1 \mid \mathbf{x}_i)$.
+
+We model the **log-odds** (logit) of $\pi_i$ as a linear function of the predictors:
+
+$$\log\frac{\pi_i}{1 - \pi_i} = \mathbf{x}_i^\top\boldsymbol{\beta} = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}.$$
+
+:::
+
+## The Logistic Function
+
+:::{.fragment}
+
+Inverting the logit link gives the **logistic function** (also called the sigmoid):
+
+$$\pi_i = \sigma(\eta_i) = \frac{e^{\eta_i}}{1 + e^{\eta_i}} = \frac{1}{1 + e^{-\eta_i}}, \quad \eta_i = \mathbf{x}_i^\top\boldsymbol{\beta}.$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- $\sigma(\eta) \in (0, 1)$ for all $\eta \in \mathbb{R}$ — probabilities are always valid.
+- $\sigma(0) = 0.5$: when the linear predictor is zero, the probability is $0.5$.
+- $\sigma$ is **monotone increasing**: larger $\eta$ means higher probability.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+#| fig-cap: "The logistic function maps any real number to the interval (0, 1)."
+
+eta = np.linspace(-6, 6, 300)
+fig, ax = plt.subplots(figsize=(6, 3))
+ax.plot(eta, expit(eta), color='#fc8d62', lw=2.5)
+ax.axhline(0.5, color='gray', lw=1, linestyle='--', 
+  label='$\\sigma(0)=0.5$')
+ax.axhline(0,   color='gray', lw=0.8, linestyle=':')
+ax.axhline(1,   color='gray', lw=0.8, linestyle=':')
+ax.set_xlabel('$\\eta$', fontsize=12)
+ax.set_ylabel('$\\sigma(\\eta)$', fontsize=12)
+ax.set_title('The Logistic (Sigmoid) Function')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+## Interpreting Logistic Regression Coefficients
+
+### Three equivalent scales
+
+:::{.fragment}
+
+| Scale | Formula | Interpretation |
+|---|---|---|
+| **Log-odds** | $\log\frac{\pi}{1-\pi} = \boldsymbol{x}^\top\boldsymbol{\beta}$ | Linear, unbounded — the model lives here |
+| **Odds** | $\frac{\pi}{1-\pi} = e^{\boldsymbol{x}^\top\boldsymbol{\beta}}$ | $e^{\beta_j}$ is the **odds ratio** per unit increase in $x_j$ |
+| **Probability** | $\pi = \sigma(\boldsymbol{x}^\top\boldsymbol{\beta})$ | Non-linear; depends on the values of all predictors |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Odds ratio interpretation
+
+- If $\beta_j = 0.5$, then $e^{0.5} \approx 1.65$: a one-unit increase in $X_j$ **multiplies the odds** by $1.65$.
+- If $\beta_j < 0$, the odds **decrease** with $X_j$ (odds ratio $< 1$).
+- Odds ratios are **multiplicative**, not additive.
+
+:::
+
+## The Log-Likelihood for Logistic Regression
+
+:::{.fragment}
+
+Each observation contributes a Bernoulli log-likelihood:
+
+$$
+\ell(\boldsymbol{\beta}) = \sum_{i=1}^n \left[y_i \log \pi_i + (1 - y_i)\log(1 - \pi_i)\right],
+$$
+
+where $\pi_i = \sigma(\mathbf{x}_i^\top\boldsymbol{\beta})$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- This is also called the **binary cross-entropy** (common in deep learning).
+- The **score equations** (setting the gradient to zero) have no closed form.
+- **IRLS** iterates weighted least squares regressions until convergence.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Deviance in logistic regression
+
+- The **null deviance** compares the intercept-only model to the saturated model.
+- The **residual deviance** compares the fitted model to the saturated model.
+- A **pseudo-$R^2$** is often computed as $1 - D/D_0$ (McFadden's $R^2$).
+
+:::
+
+# Logistic Regression in Python
+
+## 🗂️ The Dataset: Titanic Survival
+
+### Why Titanic?
+
+- A classic binary classification problem: did a passenger survive ($Y = 1$) or not ($Y = 0$)?
+- Predictors include passenger class, sex, age, and fare — a mix of numeric and categorical variables.
+- Available directly via `seaborn`.
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+titanic = (
+    sns.load_dataset('titanic')
+    [['survived', 'pclass', 'sex', 'age', 'fare', 'embark_town']]
+    .dropna()
+    .reset_index(drop=True)
+)
+titanic.head()
+```
+
+:::
+
+## Exploratory Analysis
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Survival rates by sex and passenger class. Women and first-class passengers had substantially higher survival rates."
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+# By sex
+sex_surv = titanic.groupby('sex')['survived'].mean().reset_index()
+sns.barplot(data=sex_surv, x='sex', y='survived', ax=axes[0], palette='Set2')
+axes[0].set_ylabel('Survival rate')
+axes[0].set_title('Survival Rate by Sex')
+axes[0].set_ylim(0, 1)
+
+# By class
+cls_surv = titanic.groupby('pclass', observed=True)['survived'].mean().reset_index()
+sns.barplot(data=cls_surv, x='pclass', y='survived', ax=axes[1], palette='Set2')
+axes[1].set_ylabel('Survival rate')
+axes[1].set_xlabel('Passenger class')
+axes[1].set_title('Survival Rate by Passenger Class')
+axes[1].set_ylim(0, 1)
+
+plt.suptitle('Titanic: Survival Rates by Demographic', fontsize=13, y=1.02)
+plt.tight_layout(); plt.show()
+```
+
+## Age Distribution by Survival
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Age distributions for survivors and non-survivors. Children show a somewhat higher survival rate, consistent with the 'women and children first' policy."
+
+fig, ax = plt.subplots(figsize=(9, 4))
+for label, grp in titanic.groupby('survived'):
+    sns.kdeplot(grp['age'], ax=ax, fill=True, alpha=0.4,
+                label='Survived' if label == 1 else 'Did not survive')
+ax.set_xlabel('Age (years)')
+ax.set_ylabel('Density')
+ax.set_title('Age Distribution by Survival Outcome')
+ax.legend()
+plt.tight_layout(); plt.show()
+```
+
+## Fitting a Logistic Regression Model
+
+### The formula interface
+
+- `statsmodels` uses the same formula syntax as for OLS.
+- We use `smf.logit(...)` instead of `smf.ols(...)`.
+- Categorical variables are automatically dummy-coded with `C(...)`.
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+logit1 = smf.logit(
+    'survived ~ C(sex) + age + C(pclass) + fare',
+    data=titanic
+).fit()
+print(logit1.summary())
+```
+
+:::
+
+## Reading the Logistic Regression Summary
+
+### Key output fields
+
+:::{.fragment}
+
+| Output | Meaning |
+|---|---|
+| **Log-Likelihood** | Value of $\ell(\hat{\boldsymbol{\beta}})$ at convergence — higher is better |
+| **LL-Null** | Log-likelihood of intercept-only model ($D_0 / {-2}$) |
+| **Pseudo $R^2$** | McFadden's: $1 - \ell(\hat{\boldsymbol{\beta}})/\ell_0$ |
+| **Coef** | Log-odds coefficients $\hat{\beta}_j$ |
+| **$P > |z|$** | Wald test $p$-value for $H_0: \beta_j = 0$ |
+| **$[0.025,\, 0.975]$** | 95% confidence interval on the log-odds scale |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Note: standard errors and tests are based on the **Wald statistic** $z = \hat{\beta}_j / \widehat{\text{SE}}(\hat{\beta}_j) \approx \mathcal{N}(0,1)$ — a large-sample result from maximum likelihood theory.
+
+:::
+
+## Interpreting Coefficients as Odds Ratios
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Odds ratios with 95% confidence intervals for the Titanic logistic regression. An odds ratio > 1 means increased odds of survival; < 1 means decreased odds."
+
+coefs = logit1.params.drop('Intercept')
+conf  = logit1.conf_int().drop('Intercept')
+or_df = pd.DataFrame({
+    'Predictor': coefs.index,
+    'OR':     np.exp(coefs.values),
+    'CI_low': np.exp(conf[0].values),
+    'CI_high':np.exp(conf[1].values)
+})
+
+fig, ax = plt.subplots(figsize=(9, 4))
+y_pos = np.arange(len(or_df))
+ax.barh(y_pos, or_df['OR'], color='steelblue', alpha=0.75)
+ax.errorbar(
+    or_df['OR'], y_pos,
+    xerr=[or_df['OR'] - or_df['CI_low'], or_df['CI_high'] - or_df['OR']],
+    fmt='none', color='navy', capsize=4, lw=1.5
+)
+ax.axvline(1, color='crimson', lw=2, linestyle='--', label='OR = 1 (no effect)')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(
+    [s.replace('C(sex)[T.', '').replace('C(pclass)[T.', 'Class ').replace(']', '')
+     for s in or_df['Predictor']],
+    fontsize=10
+)
+ax.set_xlabel('Odds Ratio (95% CI)')
+ax.set_title('Logistic Regression: Odds Ratios — Titanic Survival')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+## Predicted Probabilities
+
+### The probability scale
+
+- The coefficient table lives on the **log-odds** scale.
+- For communication and decision-making we often want **predicted probabilities**.
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+# Predicted probability for two hypothetical passengers
+newdata = pd.DataFrame({
+    'sex':    ['female', 'male'],
+    'age':    [30, 30],
+    'pclass': [1, 3],
+    'fare':   [50, 10]
+})
+probs = logit1.predict(newdata)
+for i, row in newdata.iterrows():
+    print(f"  {row['sex']:6s}, age {row['age']}, class {row['pclass']}, "
+          f"fare {row['fare']:.0f}: P(survive) = {probs[i]:.3f}")
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- A 30-year-old female in first class has a **high** predicted survival probability.
+- A 30-year-old male in third class has a much **lower** probability.
+- This matches the historical record.
+
+:::
+
+## Visualising the Decision Boundary
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Predicted survival probability as a function of age, stratified by sex, for a third-class passenger with median fare. The logistic curve is clearly visible."
+
+ages = np.linspace(1, 70, 200)
+grid = pd.concat([
+    pd.DataFrame({
+        'age': ages, 'sex': 'female',
+        'pclass': 3,
+        'fare': titanic['fare'].median()
+    }),
+    pd.DataFrame({
+        'age': ages, 'sex': 'male',
+        'pclass': 3,
+        'fare': titanic['fare'].median()
+    })
+], ignore_index=True)
+
+grid['prob'] = logit1.predict(grid)
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+colors_sex = {'female': '#fc8d62', 'male': '#8da0cb'}
+for sex, grp in grid.groupby('sex'):
+    ax.plot(grp['age'], grp['prob'], lw=2.5,
+            color=colors_sex[sex], label=sex.capitalize())
+
+ax.axhline(0.5, color='gray', lw=1, linestyle='--', label='Threshold = 0.5')
+ax.scatter(
+    titanic.query("pclass == 3")['age'],
+    titanic.query("pclass == 3")['survived'],
+    c=titanic.query("pclass == 3")['sex'].map({'female': '#fc8d62', 'male': '#8da0cb'}),
+    alpha=0.3, s=15, zorder=2
+)
+ax.set_xlabel('Age (years)')
+ax.set_ylabel('$P(\\text{survived} = 1)$')
+ax.set_title('Predicted Survival Probability — 3rd Class, Median Fare')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+# Classification Performance
+
+## ⚠️ A Note on Inference vs. Prediction
+
+:::{.callout-important title="In-sample evaluation"}
+
+- The classification metrics on the following slides — accuracy, confusion matrix, and ROC/AUC — are computed on the **same data used to fit the model**. This gives an **optimistic** picture of predictive performance: the model has already seen every observation it is being evaluated on.
+
+- In a **prediction-focused** workflow you would split the data into a training set (for fitting) and a held-out test set (for evaluation) before reporting these metrics.
+
+- Here, our primary goal is **inference** — understanding which predictors are associated with survival and by how much. For that purpose the full dataset is used, and the classification metrics are included only to illustrate how a fitted logistic regression translates into a classifier.
+:::
+
+## 🎯 From Probabilities to Predictions
+
+### Applying a threshold
+
+- We classify $\hat{Y}_i = 1$ if $\hat{\pi}_i > \tau$, where $\tau$ is a **decision threshold** (default: $0.5$).
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+pi_hat = logit1.predict()
+y_pred = (pi_hat >= 0.5).astype(int)
+y_true = titanic['survived'].values
+
+# Accuracy
+acc = (y_pred == y_true).mean()
+print(f"Accuracy: {acc:.3f}")
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The confusion matrix
+
+- Accuracy alone can be misleading when classes are imbalanced.
+- The **confusion matrix** breaks down predictions into four categories:
+
+:::
+
+:::{.fragment}
+
+| | Predicted 0 | Predicted 1 |
+|---|---|---|
+| **True 0** | True negative (TN) | False positive (FP) |
+| **True 1** | False negative (FN) | True positive (TP) |
+
+:::
+
+## Confusion Matrix
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Confusion matrix for the logistic regression model at threshold 0.5 (in-sample). The model correctly classifies the majority of passengers, though these figures are optimistic without a held-out test set."
+
+cm = confusion_matrix(y_true, y_pred)
+fig, ax = plt.subplots(figsize=(6, 5))
+ConfusionMatrixDisplay(cm, display_labels=['Did not survive', 'Survived']).plot(
+    ax=ax, colorbar=False, cmap='Blues'
+)
+ax.set_title('Confusion Matrix — Logistic Regression (threshold = 0.5)', fontsize=11)
+plt.tight_layout(); plt.show()
+```
+
+## The ROC Curve
+
+:::{.fragment}
+
+The **Receiver Operating Characteristic (ROC) curve** plots the **true positive rate** (sensitivity) against the **false positive rate** (1 - specificity) as the threshold $\tau$ varies from 1 to 0.
+
+:::
+
+:::{.fragment}
+
+- A **perfect classifier** has AUC (area under the ROC curve) $= 1$.
+- A **random classifier** has AUC $= 0.5$ — the diagonal.
+- AUC measures **overall discriminative ability**, independent of the chosen threshold.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "ROC curve for the logistic regression model (in-sample). AUC substantially above 0.5 indicates good discriminative power, though in a prediction workflow this would be evaluated on a held-out test set."
+
+fpr, tpr, _ = roc_curve(y_true, pi_hat)
+auc = roc_auc_score(y_true, pi_hat)
+
+fig, ax = plt.subplots(figsize=(6, 5))
+ax.plot(fpr, tpr, color='steelblue', lw=2.5,
+        label=f'Logistic regression (AUC = {auc:.3f})')
+ax.plot([0, 1], [0, 1], 'k--', lw=1.5, label='Random classifier (AUC = 0.5)')
+ax.set_xlabel('False Positive Rate (1 - Specificity)')
+ax.set_ylabel('True Positive Rate (Sensitivity)')
+ax.set_title('ROC Curve — Titanic Logistic Regression')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+:::
+
+## Model Comparison with the LRT
+
+### Does adding `embark_town` improve the model?
+
+:::{.fragment}
+
+```{python}
+#| output-location: fragment
+logit2 = smf.logit(
+    'survived ~ C(sex) + age + C(pclass) + fare + C(embark_town)',
+    data=titanic
+).fit(disp=False)
+
+# Likelihood ratio test statistic
+G2 = 2 * (logit2.llf - logit1.llf)
+dof = logit2.df_model - logit1.df_model
+from scipy.stats import chi2
+p_lrt = chi2.sf(G2, df=dof)
+print(f"LRT G² = {G2:.3f},  df = {int(dof)},  p-value = {p_lrt:.4f}")
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{python}
+#| output-location: fragment
+# AIC / BIC comparison
+print(f"{'Model':<30} {'AIC':>8} {'BIC':>8} {'Pseudo R²':>10}")
+print("-" * 58)
+for name, m in [('Without embark_town', logit1), ('With embark_town', logit2)]:
+    pr2 = 1 - m.llf / m.llnull
+    print(f"{name:<30} {m.aic:>8.2f} {m.bic:>8.2f} {pr2:>10.4f}")
+```
+
+:::
+
+# Poisson Regression
+
+## 🔢 Modelling Count Data
+
+### When the response is a count
+
+- Counts are **non-negative integers**: $Y_i \in \{0, 1, 2, \ldots\}$.
+- A natural model is $Y_i \sim \text{Poisson}(\lambda_i)$, with $\mathbb{E}[Y_i] = \lambda_i > 0$.
+- Recall that for the Poisson distribution, $\text{Var}(Y_i) = \lambda_i = \mathbb{E}[Y_i]$ — **variance equals the mean**.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The Poisson regression model
+
+We use the **log link** to ensure $\lambda_i > 0$:
+
+$$\log \lambda_i = \mathbf{x}_i^\top\boldsymbol{\beta} = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}.$$
+
+Taking the exponential: $\lambda_i = e^{\mathbf{x}_i^\top\boldsymbol{\beta}}$.
+
+:::
+
+## Interpreting Poisson Regression Coefficients
+
+:::{.fragment}
+
+| Coefficient | Interpretation |
+|---|---|
+| $\beta_j$ | A one-unit increase in $X_j$ **adds** $\beta_j$ to $\log\lambda$ |
+| $e^{\beta_j}$ | A one-unit increase in $X_j$ **multiplies** $\lambda$ by $e^{\beta_j}$ |
+| $e^{\beta_j} > 1$ | The expected count **increases** |
+| $e^{\beta_j} < 1$ | The expected count **decreases** |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- Coefficients are on the **log scale** — like logistic regression, back-transform with $e^{\hat{\beta}_j}$ for multiplicative interpretation.
+- The **incidence rate ratio** $e^{\hat{\beta}_j}$ is the Poisson analogue of the odds ratio.
+
+:::
+
+## Poisson Regression in Python
+
+### Dataset: simulated daily bike rentals
+
+We simulate a dataset of daily bicycle rental counts with weather and calendar predictors — the structure mirrors real bike-sharing data and lets us verify that the model recovers known coefficients.
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+rng_b = np.random.default_rng(2024)
+n_b = 500
+temp_b = rng_b.uniform(0.05, 0.95, n_b)   # normalised temperature
+hum_b = rng_b.uniform(0.30, 0.95, n_b)   # normalised humidity
+wind_b = rng_b.uniform(0.00, 0.50, n_b)   # normalised windspeed
+season_b = rng_b.choice([1, 2, 3, 4], n_b)  # 1=Spring … 4=Winter
+working_b = rng_b.choice([0, 1], n_b)        # 1=working day
+
+# True log-linear mean: known parameters
+log_lam = (
+    5.5
+    + 1.8 * temp_b
+    - 1.2 * hum_b
+    - 0.6 * wind_b
+    + 0.3 * (season_b == 2).astype(float)   # Summer boost
+    + 0.1 * (season_b == 3).astype(float)   # Autumn boost
+    - 0.1 * (season_b == 4).astype(float)   # Winter dip
+    + 0.15 * working_b
+)
+cnt_b = rng_b.poisson(np.exp(log_lam))
+
+bikes = pd.DataFrame({
+    'cnt': cnt_b, 'temp': temp_b, 'hum': hum_b,
+    'windspeed': wind_b, 'season': season_b, 'workingday': working_b
+})
+print(bikes.describe().round(2))
+```
+
+:::
+
+## Counts and Predictors
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Daily bike rental counts: right-skewed distribution (top left) and relationship with temperature (top right) and humidity (bottom left). Season effects are visible in the box plots (bottom right)."
+
+fig, axes = plt.subplots(2, 2, figsize=(13, 6))
+
+sns.histplot(bikes['cnt'], bins=40, ax=axes[0,0], color='steelblue')
+axes[0,0].set_xlabel('Daily rentals'); axes[0,0].set_title('Distribution of Rental Counts')
+
+axes[0,1].scatter(bikes['temp'], bikes['cnt'], alpha=0.25, s=10, color='steelblue')
+axes[0,1].set_xlabel('Normalised temperature'); axes[0,1].set_ylabel('Rentals')
+axes[0,1].set_title('Rentals vs. Temperature')
+
+axes[1,0].scatter(bikes['hum'], bikes['cnt'], alpha=0.25, s=10, color='#fc8d62')
+axes[1,0].set_xlabel('Normalised humidity'); axes[1,0].set_ylabel('Rentals')
+axes[1,0].set_title('Rentals vs. Humidity')
+
+sns.boxplot(data=bikes, x='season', y='cnt', ax=axes[1,1], palette='Set2')
+axes[1,1].set_xlabel('Season (1=Spring … 4=Winter)'); axes[1,1].set_ylabel('Rentals')
+axes[1,1].set_title('Rentals by Season')
+
+plt.suptitle('Daily Bike Rentals — Exploratory Analysis', fontsize=13, y=1.01)
+plt.tight_layout(); plt.show()
+```
+
+## Fitting the Poisson Model
+
+```{python}
+#| output-location: fragment
+poisson1 = smf.poisson(
+    'cnt ~ temp + hum + windspeed + C(season) + workingday',
+    data=bikes
+).fit()
+print(poisson1.summary())
+```
+
+## Interpreting the Poisson Coefficients
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Incidence rate ratios (IRR = exp(β̂)) with 95% CIs. An IRR > 1 means more rentals; < 1 means fewer rentals per unit increase in the predictor."
+
+coefs_p = poisson1.params.drop('Intercept')
+conf_p  = poisson1.conf_int().drop('Intercept')
+irr_df = pd.DataFrame({
+    'Predictor': coefs_p.index,
+    'IRR':     np.exp(coefs_p.values),
+    'CI_low':  np.exp(conf_p[0].values),
+    'CI_high': np.exp(conf_p[1].values)
+})
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+y_pos = np.arange(len(irr_df))
+ax.barh(y_pos, irr_df['IRR'], color='#8da0cb', alpha=0.8)
+ax.errorbar(
+    irr_df['IRR'], y_pos,
+    xerr=[irr_df['IRR'] - irr_df['CI_low'], irr_df['CI_high'] - irr_df['IRR']],
+    fmt='none', color='navy', capsize=4, lw=1.5
+)
+ax.axvline(1, color='crimson', lw=2, linestyle='--', label='IRR = 1 (no effect)')
+labels_p = [s.replace('C(season)[T.', 'Season ').replace(']', '') for s in irr_df['Predictor']]
+ax.set_yticks(y_pos); ax.set_yticklabels(labels_p, fontsize=10)
+ax.set_xlabel('Incidence Rate Ratio (95% CI)')
+ax.set_title('Poisson Regression: Incidence Rate Ratios — Daily Bike Rentals')
+ax.legend(fontsize=9)
+plt.tight_layout(); plt.show()
+```
+
+## Poisson Fit: Observed vs. Fitted
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Observed vs. fitted rental counts for the Poisson model. Points near the diagonal indicate good fit; the spread increases at larger counts, consistent with the Poisson mean–variance relationship."
+
+fitted_p = np.exp(poisson1.fittedvalues)
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+
+axes[0].scatter(fitted_p, bikes['cnt'], alpha=0.3, s=12, color='steelblue')
+lims = [0, max(bikes['cnt'].max(), fitted_p.max()) + 100]
+axes[0].plot(lims, lims, 'k--', lw=1.5, label='Perfect fit')
+axes[0].set_xlim(lims)
+axes[0].set_ylim(lims)
+axes[0].set_xlabel('Fitted $\\hat{\\lambda}$'); axes[0].set_ylabel('Observed count')
+axes[0].set_title('Observed vs. Fitted — Poisson Model')
+axes[0].legend()
+
+pearson_resid = (bikes['cnt'] - fitted_p) / np.sqrt(fitted_p)
+axes[1].scatter(fitted_p, pearson_resid, alpha=0.3, s=12, color='steelblue')
+axes[1].axhline(0, color='crimson', lw=1.5, linestyle='--')
+axes[1].set_xlabel('Fitted $\\hat{\\lambda}$')
+axes[1].set_ylabel('Pearson residual')
+axes[1].set_title('Pearson Residuals vs. Fitted — Poisson Model')
+
+plt.suptitle('Poisson Regression Diagnostics — Bike Rentals', fontsize=13, y=1.01)
+plt.tight_layout(); plt.show()
+```
+
+# GLM Diagnostics and Assumptions
+
+## 🔬 Residuals for GLMs
+
+### What changes from OLS?
+
+- In OLS, residuals $e_i = y_i - \hat{y}_i$ have constant variance under the model.
+- In GLMs, the **variance of $Y_i$ depends on the mean** — so raw residuals are not comparable across observations.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Two useful residual types
+
+| Residual | Formula | Use |
+|---|---|---|
+| **Pearson** | $r_i = (y_i - \hat{\mu}_i)/\sqrt{\hat{V}(\hat{\mu}_i)}$ | Variance-standardised; detect outliers |
+| **Deviance** | $d_i = \text{sign}(y_i - \hat{\mu}_i)\sqrt{2[y_i\log(y_i/\hat{\mu}_i) - (y_i - \hat{\mu}_i)]}$ | Contribution to total deviance |
+
+- Under a well-fitting GLM, both should look **approximately $\mathcal{N}(0,1)$** with no pattern against fitted values.
+
+:::
+
+## Residual Distributions: Bike-Rental Example
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Histograms of Pearson and deviance residuals from the Poisson bike-rental model, with a standard normal density overlaid. Both distributions are centred near zero and approximately bell-shaped, consistent with a well-fitting model."
+
+from scipy.stats import norm
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+z = np.linspace(-4, 4, 300)
+
+# Pearson residuals
+axes[0].hist(poisson1.resid_pearson, bins=35, density=True,
+             color='steelblue', alpha=0.75, edgecolor='white')
+axes[0].plot(z, norm.pdf(z), 'k-', lw=2, label='$\\mathcal{N}(0,1)$')
+axes[0].axvline(0, color='crimson', lw=1.5, linestyle='--')
+axes[0].set_xlabel('Pearson residual $r_i$')
+axes[0].set_ylabel('Density')
+axes[0].set_title('Pearson Residuals')
+axes[0].legend()
+
+# Deviance residuals — computed manually (PoissonResults lacks resid_deviance)
+# Use predict() for count-scale mu (fittedvalues returns the linear predictor)
+mu_hat = poisson1.predict()
+y_b = bikes['cnt'].values.astype(float)
+log_term = np.where(y_b > 0, y_b * np.log(y_b / mu_hat), 0.0)
+dev_resid = np.sign(y_b - mu_hat) * np.sqrt(2 * (log_term - (y_b - mu_hat)))
+
+axes[1].hist(dev_resid, bins=35, density=True,
+             color='#8da0cb', alpha=0.75, edgecolor='white')
+axes[1].plot(z, norm.pdf(z), 'k-', lw=2, label='$\\mathcal{N}(0,1)$')
+axes[1].axvline(0, color='crimson', lw=1.5, linestyle='--')
+axes[1].set_xlabel('Deviance residual $d_i$')
+axes[1].set_ylabel('Density')
+axes[1].set_title('Deviance Residuals')
+axes[1].legend()
+
+plt.suptitle('GLM Residual Distributions — Poisson Bike-Rental Model', fontsize=13, y=1.01)
+plt.tight_layout(); plt.show()
+```
+
+## GLM Assumptions: What Must Hold?
+
+### Core assumptions
+
+:::{.fragment}
+
+| Assumption | How to check |
+|---|---|
+| **Correct distribution family** | Residual plots; compare AIC across families |
+| **Correct link function** | Component-plus-residual plots; try alternative links |
+| **Correct linear predictor** | Residuals vs. each predictor; added-variable plots |
+| **Independence of observations** | Study design; check for clusters or time structure |
+| **No influential observations** | Cook's distance; leverage |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### What we *don't* need for GLMs
+
+- **Constant error variance** — variance is explicitly modelled as a function of $\mu$.
+- **Normally distributed errors** — the exponential family replaces Gaussianity.
+
+:::
+
+## Overdispersion in Poisson Regression
+
+:::{.fragment}
+
+:::{.callout-important title="Overdispersion"}
+**Overdispersion** occurs when the observed variance **exceeds** the variance assumed by the model. For Poisson regression, the model assumes $\text{Var}(Y_i) = \lambda_i$. If the true variance is $\phi \lambda_i$ with $\phi > 1$, the data are overdispersed.
+:::
+
+:::
+
+:::{.fragment}
+
+- **Consequence**: standard errors are underestimated, $p$-values are too small.
+- **Diagnose**: compute the **dispersion statistic** $\hat{\phi} = \chi^2_P / (n - p - 1)$, where $\chi^2_P = \sum r_i^2$ is the Pearson chi-squared.
+- **Remedies**: use a **quasi-Poisson** model (estimate $\phi$ from the data) or the **negative binomial** distribution.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+pearson_chi2 = np.sum(
+    (bikes['cnt'] - poisson1.predict())**2
+    / poisson1.predict()
+)
+phi_hat = pearson_chi2 / poisson1.df_resid
+print(f"Pearson χ² / df = {phi_hat:.2f}")
+print("Overdispersed" if phi_hat > 1.5 else "Dispersion OK")
+```
+
+:::
+
+# Comparing Linear and Generalized Linear Models
+
+## 🗺️ The Big Picture
+
+:::{.fragment}
+
+| Feature | Linear Regression | GLM |
+|---|---|---|
+| **Response type** | Continuous, unbounded | Exponential family (binary, count, …) |
+| **Error distribution** | Normal | Flexible |
+| **Mean function** | $\mu = \mathbf{x}^\top\boldsymbol{\beta}$ (identity link) | $g(\mu) = \mathbf{x}^\top\boldsymbol{\beta}$ |
+| **Estimation** | OLS (closed-form) | MLE via IRLS (iterative) |
+| **Residual measure** | RSS | Deviance |
+| **Model comparison** | $F$-test, AIC, BIC | LRT ($G^2$, $\chi^2$), AIC, BIC |
+| **Coefficient interpretation** | Additive effect on $\mu$ | Additive effect on $g(\mu)$; back-transform for multiplicative interpretation |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+> Linear regression is itself a GLM — Normal family, identity link. The framework unifies what might otherwise appear to be separate methods.
+
+:::
+
+## Conclusion
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ What we covered
+
+- **Limits of OLS**: why linear regression is unsuitable for binary, count, and other non-Gaussian responses.
+- **GLM framework**: the three components (random, systematic, link); the exponential family; maximum likelihood estimation via IRLS.
+- **Deviance and LRT**: GLM analogues of RSS, $R^2$, and the $F$-test.
+- **Logistic regression**: logit link; log-odds and odds ratio interpretation; Wald tests; predicted probabilities; confusion matrix; ROC curve and AUC.
+- **Poisson regression**: log link; incidence rate ratio interpretation; overdispersion and the dispersion statistic.
+- **GLM diagnostics**: Pearson and deviance residuals; assumptions; overdispersion.
+- **Unified view**: linear regression as a special case of the GLM framework.
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 What's next?
+
+- **Model Selection and Regularization**: variable selection strategies (stepwise, best subsets), ridge regression, LASSO, and cross-validation — applicable to both linear models and GLMs.
+
+:::
+
+## References
