@@ -341,6 +341,10 @@ window.Quarto = {
 <span class="menu-text">Teaching</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="https://johnrobininston.com/brain/"> 
+<span class="menu-text">Brain</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../../../contact.html"> 
 <span class="menu-text">Contact</span></a>
   </li>  
@@ -658,7 +662,7 @@ window.Quarto = {
 </ul>
 </div>
 </div>
-<div id="088a4030" class="cell" data-execution_count="1">
+<div id="01f97e22" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Libraries and Styling</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -729,7 +733,7 @@ window.Quarto = {
 <li><span class="math inline">\(\sigma^2\)</span> is noise inherent in the data; it cannot be reduced by any model.</li>
 </ul>
 <p>Adding predictors <strong>reduces bias</strong> (the model fits more patterns) but <strong>inflates variance</strong> (the model memorises the training data). The bias-variance tradeoff is managed by choosing model complexity wisely.</p>
-<div id="a05d9676" class="cell" data-execution_count="2">
+<div id="c96edd57" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -739,7 +743,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="8c362e1f" class="cell" data-execution_count="3">
+<div id="532063fa" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -768,7 +772,7 @@ window.Quarto = {
 <section id="forward-stepwise-selection" class="level3">
 <h3 class="anchored" data-anchor-id="forward-stepwise-selection">Forward Stepwise Selection</h3>
 <p>The forward stepwise algorithm starts with the null model (intercept only) and at each step adds the predictor that most improves a chosen criterion. It stops when no further addition improves the criterion.</p>
-<div id="5d193e36" class="cell" data-execution_count="4">
+<div id="b68a6577" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_stepwise(y, X_candidates, criterion<span class="op">=</span><span class="st">'aic'</span>):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Greedy forward stepwise selection.</span></span>
@@ -803,7 +807,7 @@ window.Quarto = {
 <section id="backward-stepwise-selection" class="level3">
 <h3 class="anchored" data-anchor-id="backward-stepwise-selection">Backward Stepwise Selection</h3>
 <p>The backward stepwise algorithm starts with the full model (all <span class="math inline">\(p\)</span> predictors) and at each step drops the predictor whose removal most improves the criterion. It stops when no removal helps.</p>
-<div id="f8b69c5c" class="cell" data-execution_count="5">
+<div id="6a714343" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward_stepwise(y, X_candidates, criterion<span class="op">=</span><span class="st">'aic'</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Greedy backward stepwise selection.</span></span>
@@ -900,7 +904,7 @@ window.Quarto = {
 </div>
 </div>
 <p><strong>AIC</strong> (Akaike, 1974) is derived from information-theoretic arguments and estimates out-of-sample prediction error. <strong>BIC</strong> (Schwarz, 1978) is derived from Bayesian arguments and penalises complexity more heavily for large <span class="math inline">\(n\)</span> — for <span class="math inline">\(n \geq 8\)</span>, <span class="math inline">\(\ln n &gt; 2\)</span>, so BIC penalises each extra parameter harder than AIC and tends to favour sparser models.</p>
-<div id="866053eb" class="cell" data-execution_count="6">
+<div id="ac4df276" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">8</span>, <span class="dv">1001</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ax.plot(n_vals, <span class="dv">2</span> <span class="op">*</span> np.ones_like(n_vals),  lw<span class="op">=</span><span class="fl">2.5</span>, color<span class="op">=</span><span class="st">'steelblue'</span>,</span>
@@ -931,7 +935,7 @@ window.Quarto = {
 <section id="comparing-models-california-housing" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-models-california-housing">Comparing Models: California Housing</h2>
 <p>We illustrate how these criteria behave in practice using the California housing dataset — a regression problem with 8 predictors and over 20,000 observations.</p>
-<div id="43d8b77e" class="cell" data-execution_count="7">
+<div id="d537c713" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>housing <span class="op">=</span> fetch_california_housing(as_frame<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> housing.frame.copy()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [c.lower() <span class="cf">for</span> c <span class="kw">in</span> df.columns]</span>
