@@ -1,0 +1,1319 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Python Fundamentals\"\n",
+        "description: \"Learn the fundamentals of the `python` programming language including variables, data types, and basic operations.\"\n",
+        "author: John Inston\n",
+        "date: \"2026-04-02\"\n",
+        "date-modified: \"2026-04-03\"\n",
+        "toc: true\n",
+        "title-block-banner: false\n",
+        "sidebar: pstat100-notes\n",
+        "page-navigation: true\n",
+        "---\n",
+        "\n",
+        "::: {.callout-important}\n",
+        "\n",
+        "## Aims\n",
+        "\n",
+        "- Understand basic `python` syntax and programming concepts.\n",
+        "- Python variables and data types.\n",
+        "- Branching and iteration.\n",
+        "- `numpy` arrays.\n",
+        "\n",
+        ":::\n",
+        "\n",
+        "## Python Fundamentals\n",
+        "\n",
+        "Now that we have finished our set up we are ready to begin coding in `python`.  We will start with the basics including variable assignment, data types and basic operations.  \n",
+        "\n",
+        "### `print()` Function\n",
+        "\n",
+        "As with every introduction to `python` programming, we first introduce the `print()` function which displays the output:"
+      ],
+      "id": "3566b379"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(\"Hello\" + \" \" + \"world!\")"
+      ],
+      "id": "4e93ba4b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Variables and Assignment\n",
+        "\n",
+        "A **variable** is a named container for storing a value.  In Python, we create one by assigning a value with `=`.  Here we create three variables called `name`, `age` and `height`:"
+      ],
+      "id": "1ee98bf5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "name = \"Alice\"\n",
+        "age = 25\n",
+        "height = 5.6\n",
+        "\n",
+        "print(name, \"is\", age, \"years old and\", height, \"feet tall.\")"
+      ],
+      "id": "ecf67afe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Variable names should be lowercase with underscores for spaces (e.g. `my_variable`) and cannot start with a number (same as `R`).  \n",
+        "\n",
+        "### Python Data Types\n",
+        "\n",
+        "Python has several built-in data types.  The most common are:\n",
+        "\n",
+        "| Type | Example | Description |\n",
+        "|------|---------|------------|\n",
+        "|`int` | `42`    | Whole numbers |\n",
+        "|`float` | `3.14` | Decimal numbers |\n",
+        "|`str` | `\"hello\"` | Text (string) |\n",
+        "|`bool` | `True/False` | Boolean (true/false) |"
+      ],
+      "id": "567a2577"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "x = 42           # int\n",
+        "pi = 3.14159     # float\n",
+        "greeting = \"Hi\"  # str\n",
+        "is_fun = True    # bool\n",
+        "\n",
+        "# Check the type of any variable with type()\n",
+        "print(type(x))\n",
+        "print(type(pi))\n",
+        "print(type(greeting))\n",
+        "print(type(is_fun))"
+      ],
+      "id": "711a32bb",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "You can convert between types (explored further in our lab on data preparation):"
+      ],
+      "id": "46b1643f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "number = 7\n",
+        "as_float = float(number)\n",
+        "as_string = str(number)\n",
+        "\n",
+        "print(as_float)   # 7.0\n",
+        "print(as_string)  # \"7\""
+      ],
+      "id": "892c7d2f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Strings\n",
+        "\n",
+        "Strings are sequences of characters.  Python (unlike `R`) has a lot of built-in functionality for handling strings:"
+      ],
+      "id": "50d72d53"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "s = \"Hello, Python!\"\n",
+        "\n",
+        "print(len(s))          # Length of the string\n",
+        "print(s.upper())       # All uppercase\n",
+        "print(s.lower())       # All lowercase\n",
+        "print(s.replace(\"Python\", \"World\"))  # Replace a word\n",
+        "print(s[0])            # First character: \"H\"\n",
+        "print(s[0:5])          # Slice: \"Hello\""
+      ],
+      "id": "485cbb6c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Note that in python some functions are attached directly to a value or variable and called using **dot notation**: `variable.method()`.  These are called **methods** - functions for a specific data type.  For example `upper()` is the method on the string `s`.  This is our first-look at **object-oriented programming**, something that we will explore as we advance in python.\n",
+        "\n",
+        "The cleanest way to embed variables inside strings are **f-strings** (formatted-strings):"
+      ],
+      "id": "11b8ab73"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "name = \"Alice\"\n",
+        "age = 25\n",
+        "\n",
+        "message = f\"My name is {name} and I am {age} years old.\"\n",
+        "print(message)"
+      ],
+      "id": "e55d9ecd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "This is particularly helpful when combined with looping, for example to efficiently generate labels for multiple plots.\n",
+        "\n",
+        "#### Lists\n",
+        "\n",
+        "A **list** is an ordered, changeable collection of items.  Lists can hold any data type, even mixed types (in this way they differ to vectors) and as such are very flexible for data storage.  They are created using **square brackets** `[...]` with items separated by commas:"
+      ],
+      "id": "970d0f31"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fruits = [\"apple\", \"banana\", \"cherry\"]\n",
+        "\n",
+        "print(fruits[0])    # First item: \"apple\"\n",
+        "print(fruits[-1])   # Last item: \"cherry\"\n",
+        "print(len(fruits))  # Number of items: 3\n",
+        "\n",
+        "# Modifying a list\n",
+        "fruits.append(\"mango\")      # Add to end\n",
+        "fruits.insert(1, \"grape\")   # Insert at index 1\n",
+        "fruits.remove(\"banana\")     # Remove by value\n",
+        "\n",
+        "print(fruits)"
+      ],
+      "id": "77917c95",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To index items from a list numerically we again use **square brackets** (not curly braces `{ }`).  Note that (unlike `R`) python indexes start from 0.  We can index from the end of the list using the minus signs:"
+      ],
+      "id": "f2e39593"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "print(fruits[0])\n",
+        "print(fruits[-1])"
+      ],
+      "id": "034265ce",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We can **slice** a list, which means returning all elements before/after a certain point by using `:`:"
+      ],
+      "id": "13615354"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "numbers = [0, 1, 2, 3, 4, 5]\n",
+        "\n",
+        "print(numbers[1:4])   # [1, 2, 3]\n",
+        "print(numbers[:3])    # [0, 1, 2]\n",
+        "print(numbers[3:])    # [3, 4, 5]\n",
+        "print(numbers[::2])   # Every other item: [0, 2, 4]"
+      ],
+      "id": "61856f81",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "#### Dictionaries\n",
+        "\n",
+        "A **dictionary** stores data as key-value pairs, like a real dictionary where you look up a work (key) to find its definition (value).  These are defined with brackets ${...}$ where key values are strings:"
+      ],
+      "id": "2404a3cb"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "person = {\n",
+        "    \"name\": \"Alice\",\n",
+        "    \"age\": 25,\n",
+        "    \"city\": \"New York\"\n",
+        "}\n",
+        "\n",
+        "print(person[\"name\"])   # Access by key\n",
+        "print(person[\"age\"])\n",
+        "\n",
+        "# Add or update a key\n",
+        "person[\"email\"] = \"alice@example.com\"\n",
+        "person[\"age\"] = 26\n",
+        "\n",
+        "print(person)\n",
+        "\n",
+        "# Check if a key exists\n",
+        "print(\"city\" in person)   # True"
+      ],
+      "id": "12cb410f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Basic Math\n",
+        "\n",
+        "Python supports all standard arithmetic operations:"
+      ],
+      "id": "30bec74e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "a = 10\n",
+        "b = 3\n",
+        "\n",
+        "print(a + b)   # Addition:       13\n",
+        "print(a - b)   # Subtraction:    7\n",
+        "print(a * b)   # Multiplication: 30\n",
+        "print(a / b)   # Division:       3.333...\n",
+        "print(a // b)  # Floor division: 3  (rounds down)\n",
+        "print(a % b)   # Modulo:         1  (remainder)\n",
+        "print(a ** b)  # Exponent:       1000"
+      ],
+      "id": "3b2950ea",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Branching\n",
+        "\n",
+        "Branching is a fundamental concept in programming that allows you to control the flow of your program based on certain conditions. In Python, you can use `if`, `elif`, and `else` statements to create conditional logic:"
+      ],
+      "id": "4471e74e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "temperature = 72\n",
+        "\n",
+        "if temperature > 90:\n",
+        "    print(\"It's very hot outside!\")\n",
+        "elif temperature > 65:\n",
+        "    print(\"It's a nice day.\")\n",
+        "elif temperature > 40:\n",
+        "    print(\"It's a bit chilly.\")\n",
+        "else:\n",
+        "    print(\"It's cold outside!\")"
+      ],
+      "id": "33397692",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Note here that unlike `R` branching statements have no parentheses or brackets, it has a much cleaner and more intuitive syntax.  These The branching conditions are logical statements with a single `True/False` output.  Python uses the standard programming syntax for logical operators:\n",
+        "\n",
+        "| Operator | Meaning |\n",
+        "|----------|---------|\n",
+        "| `==`     | Equal to |\n",
+        "| `!=`     | Not equal to |\n",
+        "| `>`      | Greater than |\n",
+        "| `<`      | Less than |\n",
+        "| `>=`     | Greater than or equal to |\n",
+        "| `<=`     | Less than or equal to |"
+      ],
+      "id": "ef1017f0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "x = 10\n",
+        "print(x == 10)  # True\n",
+        "print(x != 5)   # True\n",
+        "print(x > 20)   # False"
+      ],
+      "id": "d1f011cc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "We note here another divergence from `R` in the existence of `not`, `and` and `or` rather than mathematical symbols.  Python typically reads more like plain English."
+      ],
+      "id": "81336cfd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "is_raining = False\n",
+        "\n",
+        "# Preferred\n",
+        "if not is_raining:\n",
+        "    print(\"No umbrella needed!\")\n",
+        "\n",
+        "# Also common: checking if a list is empty\n",
+        "items = []\n",
+        "\n",
+        "if not items:\n",
+        "    print(\"The list is empty.\")\n",
+        "\n",
+        "# Combining with and / or\n",
+        "logged_in = True\n",
+        "is_admin = False\n",
+        "\n",
+        "if logged_in and not is_admin:\n",
+        "    print(\"Welcome, regular user!\")"
+      ],
+      "id": "27e3ba6e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Here are a few rules of thumb for when to use `not`:\n",
+        "\n",
+        "* Use `not x` instead of `x == False`.\n",
+        "* Use `not items` instead of `len(items) == 0` to check for empty objects.\n",
+        "* Use `not x in my_list` - or better `x not in my_list` - to check for absence.\n",
+        "\n",
+        "### Iteration\n",
+        "\n",
+        "A `for` loop iterates over a sequence.  Similar to branching, we see that python looping syntax has no parentheses or braces:"
+      ],
+      "id": "8ceb985a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "fruits = [\"apple\", \"banana\", \"cherry\"]\n",
+        "\n",
+        "for fruit in fruits:\n",
+        "    print(fruit)"
+      ],
+      "id": "16117000",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Use range() to loop a specific number of times:"
+      ],
+      "id": "bda40ff2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "for i in range(5):\n",
+        "    print(f\"Step {i}\")"
+      ],
+      "id": "17e81bac",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "A while loop repeats as long as a condition is true:"
+      ],
+      "id": "12fcdae2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "count = 0\n",
+        "\n",
+        "while count < 5:\n",
+        "    print(f\"Count is {count}\")\n",
+        "    count += 1\n",
+        "\n",
+        "print(\"Done!\")"
+      ],
+      "id": "f7369aa4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Write a `for loop` that runs through all of the integers from 1 to 100 and appends them to two lists:\n",
+        "1. `nine_multiples` if the number is divisible by 9.\n",
+        "2. `sevens_list` if the number contains a 7."
+      ],
+      "id": "2c60efe7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Solution"
+      ],
+      "id": "d8b2d83a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Functions\n",
+        "\n",
+        "A function is a reusable block of code. You define it once and call it as many times as you like.  The syntax is very simple:"
+      ],
+      "id": "e1dbbefb"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def greet(name):\n",
+        "    print(f\"Hello, {name}!\")\n",
+        "\n",
+        "greet(\"Alice\")\n",
+        "greet(\"Bob\")"
+      ],
+      "id": "cce74f8a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Functions can send a value back using **return**:"
+      ],
+      "id": "137959a9"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def add(a, b):\n",
+        "    return a + b\n",
+        "\n",
+        "result = add(3, 7)\n",
+        "print(result)  # 10"
+      ],
+      "id": "cc8097f2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "You can set default values for parameters:"
+      ],
+      "id": "9f70ab4c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def greet(name, greeting=\"Hello\"):\n",
+        "    print(f\"{greeting}, {name}!\")\n",
+        "\n",
+        "greet(\"Alice\")              # Uses default: \"Hello, Alice!\"\n",
+        "greet(\"Bob\", \"Good morning\")  # Overrides default"
+      ],
+      "id": "a2c411c9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Define a function called `compute_radius()` that computes the **radius** `r` of a sphere for some specified volume `V`. Recall that the volume $V$ of a sphere of radius $r$ is given by\n",
+        "$$\n",
+        "V = \\frac{4}{3}\\pi r^3.\n",
+        "$$"
+      ],
+      "id": "f73ab576"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Solution"
+      ],
+      "id": "7c513532",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Write a function `summation` that evaluates the following summation for $n \\geq 1$:\n",
+        "$$\\sum_{i=1}^{n} \\left(i^3 + 5i\\right)$$"
+      ],
+      "id": "0a8d35af"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Solution"
+      ],
+      "id": "377f4c2b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Importing Libraries and Magic Commands\n",
+        "\n",
+        "In this course, we will be using common Python libraries to help us process data. By convention, we import all libraries at the very top of the notebook. There are also a set of standard aliases that are used to shorten the library names. Below are some of the libraries that you may encounter throughout the course, along with their respective aliases."
+      ],
+      "id": "7f02af6b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "deletable": false,
+        "editable": false,
+        "tags": []
+      },
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np"
+      ],
+      "id": "81676e55",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "A useful magic command is `%%time`, which times the execution of that cell. You can use this by writing it as the first line of a cell. (Note that `%%` is used for *cell magic commands* that apply to the entire cell, whereas `%` is used for *line magic commands* that only apply to a single line. If you are interested, you can read more about the magic commands in this [Tutorials Point article](https://www.tutorialspoint.com/jupyter/ipython_magic_commands.htm))."
+      ],
+      "id": "32998c0f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "%%time\n",
+        "\n",
+        "lst = []\n",
+        "for i in range(100):\n",
+        "    lst.append(i)"
+      ],
+      "id": "07c6b794",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Complete `summation(n)` in the next cell (same formula as above), then use it for the values of `n` below."
+      ],
+      "id": "4ae6993f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def summation(n):\n",
+        "    \"\"\"Compute sum of (i**3 + 5*i) for i from 1 to n (inclusive).\"\"\"\n",
+        "    ..."
+      ],
+      "id": "1d80ac97",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Use your function to compute the sum for..."
+      ],
+      "id": "4e4116be"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# n = 2\n",
+        "..."
+      ],
+      "id": "b7fba1c2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# n = 20\n",
+        "..."
+      ],
+      "id": "80d66e3c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### List comprehension\n",
+        "\n",
+        "In Python, normally you can fill a list with elements using a for loop as seen in the example below."
+      ],
+      "id": "0263bbc7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "deletable": false,
+        "tags": []
+      },
+      "source": [
+        "squares = []\n",
+        "# Add square numbers from 1 to 100 inclusive to the list \"squares\" if they end in the digit \"4\"\n",
+        "for i in range(1,101):\n",
+        "    if (i**2)%10 == 4:\n",
+        "        squares.append(i**2)\n",
+        "print(squares)"
+      ],
+      "id": "6c295ded",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Alternatively, you can create this same list in a single line of code by moving the for-loop and if-statement inside the loop's creation. This is called a **list comprehension**.\n",
+        "\n",
+        "The syntax for a list comprehension is this: \\[**value** **for-loop** **condition**\\]\n",
+        "* **value** is the value you want to put into the list\n",
+        "* **for-loop** is the for-loop that iterates through a list or a range\n",
+        "* **condition** is the if-statement that determines if the **value** is allowed to be inserted into the list\n",
+        "\n",
+        "For more information, you can read [this beginner's tutorial](https://www.pythonforbeginners.com/basics/list-comprehensions-in-python) on list comprehensions"
+      ],
+      "id": "ce9c8424"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "deletable": false,
+        "tags": []
+      },
+      "source": [
+        "# value: i**2\n",
+        "# for-loop: for i in range(1,101)\n",
+        "# condition: if (i**2)%10 == 4\n",
+        "squares_list_comprehension = [i**2 for i in range(1,101) if (i**2)%10 == 4]"
+      ],
+      "id": "94ddbb28",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Aligning lists with `zip()`\n",
+        "\n",
+        "If you need to line up 2 or more lists, Python has a built-in function called **zip()**. This allows you to loop through more than one list at a time such that you get values in each list that have the same index in the other lists. This can also be used within for-loops to make them even more powerful."
+      ],
+      "id": "0181cba6"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "deletable": false,
+        "tags": []
+      },
+      "source": [
+        "a = [1,2,3,4]\n",
+        "b = [2,3,4,5]\n",
+        "# Print a[0]*b[0], a[1]*b[1],...\n",
+        "for x, y in zip(a,b):\n",
+        "    print(x*y)"
+      ],
+      "id": "41ec4cf6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:**  Write a function `list_sum` that computes **the square** of _each_ value in `list_1`, **the cube** of _each_ value in `list_2`, and returns a list containing the element-wise sum of these results. Assume that `list_1` and `list_2` have the same number of elements. Try to use a list comprehension to write it all on one line.  I have started the function for you below:"
+      ],
+      "id": "ceade1d4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# SOLUTION\n",
+        "\n",
+        "def list_sum(list_1, list_2):\n",
+        "    \"\"\"Compute x^2 + y^3 for each x, y in list_1, list_2. \n",
+        "    \n",
+        "    Assume list_1 and list_2 have the same length.\n",
+        "    \"\"\"\n",
+        "    assert len(list_1) == len(list_2), \"both args must have the same number of elements\"\n",
+        "    ...\n",
+        "\n",
+        "    return [x**2 + y**3 for x, y in zip(list_1, list_2)]"
+      ],
+      "id": "f3518ca9",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To test this function we define two lists and call the function:"
+      ],
+      "id": "afc6ea44"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "list_1 = [1, 2, 3, 4, 5]\n",
+        "list_2 = [6, 7, 8, 9, 10]\n",
+        "print(list_sum(list_1, list_2))"
+      ],
+      "id": "22718a03",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## `numpy` Package\n",
+        "\n",
+        "NumPy (pronounced \"NUM-pie\") is the numerical computing module, which we will be using a lot in this course. Here's a quick recap of NumPy. For more review, read the following materials.\n",
+        "\n",
+        "- **[NumPy Quick Start Tutorial](https://docs.scipy.org/doc/numpy-1.15.4/user/quickstart.html)**\n",
+        "- **[Stanford CS231n NumPy Tutorial](https://cs231n.github.io/python-numpy-tutorial/#numpy)**\n",
+        "\n",
+        "### Arrays\n",
+        "\n",
+        "The core of NumPy is the **array**. Like Python lists, arrays store data; however, they store data in a more efficient manner. In many cases, this allows for faster computation and data manipulation.\n",
+        "\n",
+        "Let's use `np.array` to create an array. It takes a sequence, such as a list or range (remember that list elements are included between the square brackets `[` and `]`). \n",
+        "\n",
+        "**Example:** Create an array `arr` containing the values 1, 2, 3, 4, and 5 (in that order)."
+      ],
+      "id": "edd55e8f"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr = np.array([1, 2, 3, 4, 5])"
+      ],
+      "id": "30aa3102",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "In addition to values in the array, we can access attributes such as array's shape and data type. A full list of attributes can be found [here](https://docs.scipy.org/doc/numpy-1.15.0/reference/arrays.ndarray.html#array-attributes).\n",
+        "\n",
+        "### Indexing\n",
+        "\n",
+        "NumPy arrays are integer-indexed by position, with the first element indexed as position 0. Elements can be retrieved by enclosing the desired positions in brackets `[]`. "
+      ],
+      "id": "48f2d91a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr[3]"
+      ],
+      "id": "073ac851",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To retrieve consecutive positions, specify the starting index and the ending index separated by `:` -- *e.g.*, `arr[from:to]`. This syntax is non-inclusive of the left endpoint; notice below that the starting index is *not* included in the output."
+      ],
+      "id": "3ddccdc4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr[2:4]"
+      ],
+      "id": "91cc4e32",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Attributes\n",
+        "\n",
+        "NumPy arrays have several attributes that can be retrieved by name using syntax of the form `arr.attr`. Some useful attributes are:\n",
+        "\n",
+        "* `.shape`, a tuple with the length of each array dimension\n",
+        "* `.size`, the length of the first array dimension\n",
+        "* `.dtype`, the data type of the entries (float, integer, etc.)"
+      ],
+      "id": "1a253fcf"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr.shape"
+      ],
+      "id": "7602051b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr.size"
+      ],
+      "id": "7435a46b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "arr.dtype"
+      ],
+      "id": "ded559dd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Arrays, unlike Python lists, **cannot store items of different data types**."
+      ],
+      "id": "ad05934e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# A regular Python list can store items of different data types\n",
+        "[1, '3']"
+      ],
+      "id": "07b9e165",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Arrays will convert everything to the same data type\n",
+        "np.array([1, '3'])"
+      ],
+      "id": "c064440d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Another example of array type conversion\n",
+        "np.array([5, 8.3])"
+      ],
+      "id": "c6333d1e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Operations on arrays\n",
+        "\n",
+        "Arrays are also useful in performing *vectorized operations*. Given two or more arrays of equal length, arithmetic will perform **element-wise computations** across the arrays. \n",
+        "\n",
+        "For example, observe the following:"
+      ],
+      "id": "cea7e1a4"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Python list addition will concatenate the two lists\n",
+        "[1, 2, 3] + [4, 5, 6]"
+      ],
+      "id": "5371ad21",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# NumPy array addition will add them element-wise\n",
+        "np.array([1, 2, 3]) + np.array([4, 5, 6])"
+      ],
+      "id": "d5c90d6a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Given the array `random_arr`, assign `valid_values` to an array containing all values $x$ of `random_arr` such that $2x^4 > 1$."
+      ],
+      "id": "803ffe7c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "# for reproducibility - setting the seed will result in the same random draw each time\n",
+        "np.random.seed(67)\n",
+        "\n",
+        "# draw uniformly random integers between 1 and 60\n",
+        "random_arr = np.random.rand(60)\n",
+        "\n",
+        "# solution\n",
+        "valid_values = random_arr[2*random_arr**4 > 1]"
+      ],
+      "id": "82eee507",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Example:** Recreate the `list_sum` function using `numpy` arrays, calling your new function `array_sum`."
+      ],
+      "id": "f7d74edc"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "def array_sum(array_1, array_2):\n",
+        "    return np.array([x**2 + y**3 for x, y in zip(array_1, array_2)])"
+      ],
+      "id": "92c4456c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "You might have been told that Python is slow, but array arithmetic is carried out very fast, even for large arrays.\n",
+        "\n",
+        "For ten numbers, `list_sum` and `array_sum` both take a similar amount of time."
+      ],
+      "id": "cdf57ec8"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sample_list_1 = list(range(10))\n",
+        "sample_array_1 = np.arange(10)"
+      ],
+      "id": "bd2e4813",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "%%time\n",
+        "list_sum(sample_list_1, sample_list_1)"
+      ],
+      "id": "06a1d2e3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "%%time\n",
+        "array_sum(sample_array_1, sample_array_1)"
+      ],
+      "id": "2274ddec",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The time difference seems negligible for a list/array of size 10; depending on your setup, you may even observe that `list_sum` executes faster than `array_sum`! However, we will commonly be working with much larger datasets:"
+      ],
+      "id": "b20dc229"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sample_list_2 = list(range(100000))\n",
+        "sample_array_2 = np.arange(100000)"
+      ],
+      "id": "4eae91fa",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "%%time\n",
+        "list_sum(sample_list_2, sample_list_2)\n",
+        "; # The semicolon hides the output"
+      ],
+      "id": "24e47f73",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "%%time\n",
+        "array_sum(sample_array_2, sample_array_2)\n",
+        ";"
+      ],
+      "id": "3bb89a1c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "With the larger dataset, we see that using NumPy results in code that executes over 50 times faster! Throughout this course (and in the real world), you will find that writing efficient code will be important; arrays and vectorized operations are the most common way of making Python programs run quickly.\n",
+        "\n",
+        "#### A note on `np.arange` and `np.linspace`\n",
+        "\n",
+        "Usually we use `np.arange` to return an array that steps from `a` to `b` with a fixed step size `s`. While this is fine in some cases, we sometimes prefer to use `np.linspace(a, b, N)`, which divides the interval `[a, b]` into N equally spaced points.\n",
+        "\n",
+        "`np.arange(start, stop, step)` produces an array with all the numbers starting at `start`, incremented up by `step`, stopping **before** `stop` is reached. For example, the value of `np.arange(1, 6, 2)` is an array with elements 1, 3, and 5 -- it starts at 1 and counts up by 2, then stops before 6. `np.arange(4, 9, 1)` is an array with elements 4, 5, 6, 7, and 8. (It doesn't contain 9 because `np.arange` stops _before_ the stop value is reached.)\n",
+        "\n",
+        " `np.linspace` always includes **both end points** while `np.arange` will **not** include the second end point `b`. For this reason, especially when we are plotting ranges of values we tend to prefer `np.linspace`.\n",
+        "\n",
+        "Notice how the following two statements have different parameters but return the same result."
+      ],
+      "id": "6056460b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "np.arange(-5, 6, 1.0)"
+      ],
+      "id": "c2db250b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "np.linspace(-5, 5, 11)"
+      ],
+      "id": "e546434a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "### Matrices\n",
+        "\n",
+        "Arrays are not limited to one dimension (i.e. vectors) but can also be used to define **matrices**. For example, we define a $3\\times 3$ matrix `A` and a $3\\times 1$ vector `b` (the right-hand side of a linear system). "
+      ],
+      "id": "798b2a49"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "A = np.array([[2, 1, 3],\n",
+        "              [4, 3, 2],\n",
+        "              [1, 2, 2]], dtype=float)\n",
+        "              \n",
+        "b = np.array([34, 46, 26], dtype=float)"
+      ],
+      "id": "1382c03d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Elementwise multiplication can be performed with `*` as normal and matrix multiplication by `@`:"
+      ],
+      "id": "9e3fa605"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Computations with matrices\n",
+        "print(A*A)  \n",
+        "print(A@A)\n",
+        "print(A@b)"
+      ],
+      "id": "1a5fcef5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "As one final example of just some of the functionality of `numpy` we demonstrate its ability to solve linear systems.  Consider the following system of linear equations:\n",
+        "\n",
+        "$$\n",
+        "\\begin{aligned}\n",
+        "2x + y + 3z & = 34 \\\\\n",
+        "4x + 3y + 3z & = 46 \\\\\n",
+        "x + 2y + 2z & = 26.\n",
+        "\\end{aligned}\n",
+        "$$\n",
+        "\n",
+        "To find solutions $x$, $y$ and $z$ we can use the `np.linalg.solve` function:"
+      ],
+      "id": "88316798"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "A = np.array([[2, 1, 3],\n",
+        "              [4, 3, 2],\n",
+        "              [1, 2, 2]], dtype=float)\n",
+        "\n",
+        "b = np.array([34, 46, 26], dtype=float)\n",
+        "\n",
+        "# Task 2\n",
+        "x = np.linalg.solve(A, b)\n",
+        "print(f\"x: {x[0]:.1f}, y: {x[1]:.1f}, z: {x[2]:.1f}\")\n",
+        "\n",
+        "# Task 3\n",
+        "print(f\"Verification passed: {np.allclose(A @ x, b)}\")\n",
+        "\n",
+        "# Bonus\n",
+        "x_inv = np.linalg.inv(A) @ b\n",
+        "print(f\"Via inverse — x: {x_inv[0]:.1f}, y: {x_inv[1]:.1f}, z: {x_inv[2]:.1f}\")"
+      ],
+      "id": "aebc7c5b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Parting Message\n",
+        "\n",
+        "This note is only scratching the surface of what we can do with python but thankfully, you never need to remember everything!  Part of being a data scientist is becoming efficient at reading and understanding new code quickly.  Never prioritize memorizing code, prioritize writing code and, more importantly, using code to solve problems.  Programming is a tool you sharpen through application! \n"
+      ],
+      "id": "821c0249"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Library/Frameworks/Python.framework/Versions/3.12/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
