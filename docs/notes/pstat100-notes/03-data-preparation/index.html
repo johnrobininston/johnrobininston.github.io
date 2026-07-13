@@ -82,10 +82,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/bootstrap/bootstrap-dark-954f74211988904d40b4eeb0bee6388c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-1b8143a5af30aa0587ead8c64582f750.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -121,7 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../../styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -263,8 +265,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = true;
+    const authorPrefersDark = false;
     const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -651,7 +655,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </div>
 </div>
-<div id="f956d0a1" class="cell" data-execution_count="1">
+<div id="f8d41849" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Libraries</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -733,7 +737,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="practice-data" class="level3">
 <h3 class="anchored" data-anchor-id="practice-data">Practice data</h3>
 <p>We will use a synthetic student academic records dataset throughout this section. It has enough columns and varied missingness patterns to illustrate the key tools.</p>
-<div id="042eca0c" class="cell" data-execution_count="2">
+<div id="8e806406" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Creating synthetic student dataset with missing values.</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
@@ -804,7 +808,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="inspecting-missingness" class="level3">
 <h3 class="anchored" data-anchor-id="inspecting-missingness">Inspecting missingness</h3>
 <p>The first step is to understand the scale of the problem.</p>
-<div id="e1f217ad" class="cell" data-execution_count="3">
+<div id="b19528aa" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>students.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
@@ -922,14 +926,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="3b0ef03f" class="cell" data-execution_count="4">
+<div id="172186b3" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>students.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>(500, 14)</code></pre>
 </div>
 </div>
 <p>We count missing values per column and compute an overall percentage.</p>
-<div id="e8fe0a4d" class="cell" data-execution_count="5">
+<div id="7c3965b3" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>missing_counts <span class="op">=</span> students.isnull().<span class="bu">sum</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>missing_counts</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -950,7 +954,7 @@ gpa                    0
 dtype: int64</code></pre>
 </div>
 </div>
-<div id="7e121089" class="cell" data-execution_count="6">
+<div id="b7217177" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>total_cells   <span class="op">=</span> np.prod(students.shape)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>total_missing <span class="op">=</span> missing_counts.<span class="bu">sum</span>()</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Overall missingness: </span><span class="sc">{</span>total_missing <span class="op">/</span> total_cells <span class="op">*</span> <span class="dv">100</span><span class="sc">:.1f}</span><span class="ss">%"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -963,7 +967,7 @@ dtype: int64</code></pre>
 <h3 class="anchored" data-anchor-id="visualising-missingness-with-missingno">Visualising missingness with <code>missingno</code></h3>
 <p>The <code>missingno</code> library provides four complementary views of missing data patterns.</p>
 <p><strong>Bar chart</strong> — shows the count of non-null values per column at a glance.</p>
-<div id="02aef1ed" class="cell" data-execution_count="7">
+<div id="73cd65de" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>msno.bar(students, figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -977,7 +981,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p><strong>Matrix</strong> — plots a random sample of rows; white streaks mark missing entries. Aligned streaks across columns indicate that variables are missing together.</p>
-<div id="e172ecbd" class="cell" data-execution_count="8">
+<div id="a3848dd9" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>msno.matrix(students.sample(<span class="dv">200</span>, random_state<span class="op">=</span><span class="dv">1</span>), figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">4</span>))</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -990,7 +994,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p><strong>Heatmap</strong> — shows the correlation between missingness indicators across pairs of columns. A positive value means the two columns tend to be missing at the same time; a negative value means they are missing at opposite times.</p>
-<div id="ccc5e773" class="cell" data-execution_count="9">
+<div id="34e04401" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>msno.heatmap(students, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1003,7 +1007,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p><strong>Dendrogram</strong> — clusters variables by the similarity of their missingness patterns. Variables linked at distance 0 fully predict one another’s presence.</p>
-<div id="c4a151c0" class="cell" data-execution_count="10">
+<div id="b66e01d5" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>msno.dendrogram(students, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1021,7 +1025,7 @@ dtype: int64</code></pre>
 <section id="handling-missing-data" class="level3">
 <h3 class="anchored" data-anchor-id="handling-missing-data">Handling missing data</h3>
 <p><strong>Deletion</strong> is appropriate when data is MCAR. It is simple but loses information.</p>
-<div id="02669c10" class="cell" data-execution_count="11">
+<div id="c2c30212" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop rows with any missing value</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>students_row_dropped <span class="op">=</span> students.dropna()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Original rows:       </span><span class="sc">{</span>students<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -1031,7 +1035,7 @@ dtype: int64</code></pre>
 After row deletion:  8</code></pre>
 </div>
 </div>
-<div id="5eeaebcb" class="cell" data-execution_count="12">
+<div id="b82c843a" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop columns with any missing value</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>students_col_dropped <span class="op">=</span> students.dropna(axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Original columns:    </span><span class="sc">{</span>students<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -1043,7 +1047,7 @@ After col deletion:  3</code></pre>
 </div>
 <p>Row deletion eliminates almost every record here because nearly every row has at least one missing field. Column deletion removes any column with even one null. In practice, targeted deletion — dropping only columns or rows above a missingness threshold — is more useful.</p>
 <p><strong>Imputation</strong> replaces missing values with plausible substitutes. The <code>fillna</code> method covers the most common strategies:</p>
-<div id="ed7a1577" class="cell" data-execution_count="13">
+<div id="95dac65a" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean imputation for study_hours_wk (MCAR — plausibly random non-response)</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>students[<span class="st">'study_hours_wk'</span>] <span class="op">=</span> students[<span class="st">'study_hours_wk'</span>].fillna(</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    students[<span class="st">'study_hours_wk'</span>].mean()</span>
@@ -1080,7 +1084,7 @@ After col deletion:  3</code></pre>
 <h3 class="anchored" data-anchor-id="why-duplicates-arise">Why duplicates arise</h3>
 <p>Well-structured data should have a unique identifier for each observation. Duplicates typically arise from data entry errors, merging datasets without deduplication, or system migrations.</p>
 <p>We create a small customer dataset that contains both exact duplicates and near-duplicates arising from inconsistent capitalisation.</p>
-<div id="c9898b79" class="cell" data-execution_count="14">
+<div id="80d22e4e" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>customers <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'customer_id'</span>: [<span class="dv">1001</span>, <span class="dv">1002</span>, <span class="dv">1003</span>, <span class="dv">1004</span>, <span class="dv">1005</span>, <span class="dv">1003</span>, <span class="dv">1006</span>, <span class="dv">1002</span>, <span class="dv">1007</span>, <span class="dv">1004</span>, <span class="dv">1008</span>],</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'name'</span>:        [<span class="st">'Alice Johnson'</span>, <span class="st">'bob smith'</span>,   <span class="st">'Carol White'</span>, <span class="st">'david lee'</span>,</span>
@@ -1222,7 +1226,7 @@ After col deletion:  3</code></pre>
 </section>
 <section id="identifying-exact-duplicates" class="level3">
 <h3 class="anchored" data-anchor-id="identifying-exact-duplicates">Identifying exact duplicates</h3>
-<div id="1291e59e" class="cell" data-execution_count="15">
+<div id="e7a82725" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dup_count <span class="op">=</span> customers.duplicated().<span class="bu">sum</span>()</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dup_rows  <span class="op">=</span> customers.loc[customers.duplicated()].index.tolist()</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Exact duplicates: </span><span class="sc">{</span>dup_count<span class="sc">}</span><span class="ss">  (rows </span><span class="sc">{</span>dup_rows<span class="sc">}</span><span class="ss">)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1234,7 +1238,7 @@ After col deletion:  3</code></pre>
 <section id="near-duplicates-from-formatting-inconsistency" class="level3">
 <h3 class="anchored" data-anchor-id="near-duplicates-from-formatting-inconsistency">Near-duplicates from formatting inconsistency</h3>
 <p>Exact duplicate detection misses rows that differ only in case or whitespace — <code>"bob smith"</code> and <code>"Bob Smith"</code> are the same person. Normalising strings first reveals the full extent of the problem.</p>
-<div id="d3b22bf8" class="cell" data-execution_count="16">
+<div id="6d479ab4" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'name'</span>]  <span class="op">=</span> customers[<span class="st">'name'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'email'</span>] <span class="op">=</span> customers[<span class="st">'email'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>customers[<span class="st">'city'</span>]  <span class="op">=</span> customers[<span class="st">'city'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
@@ -1250,7 +1254,7 @@ After col deletion:  3</code></pre>
 <section id="removing-duplicates" class="level3">
 <h3 class="anchored" data-anchor-id="removing-duplicates">Removing duplicates</h3>
 <p>The simplest resolution is deletion — keep the first occurrence.</p>
-<div id="c7d48487" class="cell" data-execution_count="17">
+<div id="8105559d" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>customers_clean <span class="op">=</span> customers.drop_duplicates()</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Rows after deduplication: </span><span class="sc">{</span><span class="bu">len</span>(customers_clean)<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1258,7 +1262,7 @@ After col deletion:  3</code></pre>
 </div>
 </div>
 <p>When we want to maximise information, we can <strong>aggregate</strong> rather than delete. Here we sum spend across duplicate customer IDs and take the first value for all other fields.</p>
-<div id="b2ce7855" class="cell" data-execution_count="18">
+<div id="00178520" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>customers_agg <span class="op">=</span> (</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    customers</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    .groupby(<span class="st">'customer_id'</span>, sort<span class="op">=</span><span class="va">False</span>)</span>
@@ -1367,7 +1371,7 @@ After col deletion:  3</code></pre>
 <h2 class="anchored" data-anchor-id="inconsistent-data-types">Inconsistent Data Types</h2>
 <p>Pandas infers column types when loading a file, but inference is not always correct. Wrong types break operations silently — averaging a column of numbers stored as strings produces an error, and comparing dates stored as text gives alphabetical rather than chronological ordering. The goal is for every column to have a type that matches its meaning.</p>
 <p>Useful inspection tools: <code>dtypes</code>, <code>info()</code>, <code>head()</code>, and <code>unique()</code>.</p>
-<div id="8015bc52" class="cell" data-execution_count="19">
+<div id="15a4336e" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>example_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:    [<span class="st">"2024-01-01"</span>, <span class="st">"2024-01-02"</span>, <span class="st">"2024-01-03"</span>],</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"price"</span>:   [<span class="st">"1.10"</span>, <span class="st">"2.20"</span>, <span class="st">"3.30"</span>],</span>
@@ -1384,7 +1388,7 @@ dtype: object</code></pre>
 <p>All three columns are read as <code>object</code> (string). Each needs to be coerced to its correct type.</p>
 <section id="dates-stored-as-strings" class="level3">
 <h3 class="anchored" data-anchor-id="dates-stored-as-strings">Dates stored as strings</h3>
-<div id="88df9a43" class="cell" data-execution_count="20">
+<div id="af0171d0" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'date'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'date'</span>] <span class="op">=</span> pd.to_datetime(example_df[<span class="st">'date'</span>])</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After:  </span><span class="sc">{</span>example_df[<span class="st">'date'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1396,7 +1400,7 @@ After:  datetime64[ns]</code></pre>
 </section>
 <section id="numbers-stored-as-strings" class="level3">
 <h3 class="anchored" data-anchor-id="numbers-stored-as-strings">Numbers stored as strings</h3>
-<div id="b4555889" class="cell" data-execution_count="21">
+<div id="89fdfaed" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'price'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'price'</span>] <span class="op">=</span> pd.to_numeric(example_df[<span class="st">'price'</span>])</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"After:  </span><span class="sc">{</span>example_df[<span class="st">'price'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1408,7 +1412,7 @@ After:  float64</code></pre>
 </section>
 <section id="booleans-stored-as-strings" class="level3">
 <h3 class="anchored" data-anchor-id="booleans-stored-as-strings">Booleans stored as strings</h3>
-<div id="57afa077" class="cell" data-execution_count="22">
+<div id="ee04c315" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Before: </span><span class="sc">{</span>example_df[<span class="st">'in_stock'</span>]<span class="sc">.</span>dtype<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>example_df[<span class="st">'in_stock'</span>] <span class="op">=</span> (</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    example_df[<span class="st">'in_stock'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.lower()</span>
@@ -1425,7 +1429,7 @@ After:  boolean</code></pre>
 <section id="mixed-date-formats" class="level3">
 <h3 class="anchored" data-anchor-id="mixed-date-formats">Mixed date formats</h3>
 <p>Hand-prepared data often contains dates written in multiple formats within the same column.</p>
-<div id="d05c1202" class="cell" data-execution_count="23">
+<div id="10f1092d" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>mixed_df <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>:    [<span class="st">"2024-01-15"</span>, <span class="st">"21-12-2001"</span>, <span class="st">"December 21, 2001"</span>, <span class="st">"01/02/2024"</span>, <span class="st">"2018-03-04"</span>],</span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"active"</span>:  [<span class="st">"True"</span>, <span class="st">"false"</span>, <span class="st">"true"</span>, <span class="st">"no"</span>, <span class="st">"yes"</span>],</span>
@@ -1483,7 +1487,7 @@ After:  boolean</code></pre>
 </div>
 </div>
 <p>When loading CSVs you can direct pandas to parse date columns at load time with <code>parse_dates=[...]</code>, or specify exact formats via <code>pd.to_datetime(..., format='...')</code>. Use <code>errors='coerce'</code> to turn unparseable entries into <code>NaT</code> rather than raising an exception — this makes it easy to spot remaining problems.</p>
-<div id="dbc0173a" class="cell" data-execution_count="24">
+<div id="b3c5d548" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Day-first strings; invalid entries silently become NaT</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pd.to_datetime(</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    pd.Series([<span class="st">"15/03/2024"</span>, <span class="st">"02/04/2024"</span>, <span class="st">"not a date"</span>]),</span>
@@ -1502,7 +1506,7 @@ dtype: datetime64[ns]</code></pre>
 <section id="invalid-values" class="level2">
 <h2 class="anchored" data-anchor-id="invalid-values">Invalid Values</h2>
 <p>Invalid values are not missing: they appear as real entries but violate domain constraints — an age of 200, a negative count, a temperature of −999 (a common sentinel). They differ from outliers, which may be legitimate extremes. Invalid values are especially dangerous because they do not produce errors; they propagate silently through calculations.</p>
-<div id="ce68827c" class="cell" data-execution_count="25">
+<div id="27a3f987" class="cell" data-execution_count="25">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ages <span class="op">=</span> pd.Series([<span class="dv">34</span>, <span class="dv">200</span>, <span class="dv">28</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">45</span>, <span class="dv">130</span>])</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>invalid_mask <span class="op">=</span> (ages <span class="op">&lt;</span> <span class="dv">0</span>) <span class="op">|</span> (ages <span class="op">&gt;</span> <span class="dv">120</span>)</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Invalid entries:</span><span class="ch">\n</span><span class="st">"</span>, ages[invalid_mask])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1515,7 +1519,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>To handle them: define rules from a data dictionary or domain knowledge, flag rows using boolean masks, then drop, replace, or convert to <code>NaN</code> and treat as missing. Document every rule — the <em>why</em> matters as much as the code.</p>
-<div id="868a3aed" class="cell" data-execution_count="26">
+<div id="cd81fead" class="cell" data-execution_count="26">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>ages_clean <span class="op">=</span> ages.where(<span class="op">~</span>invalid_mask, other<span class="op">=</span>np.nan)</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"After cleaning:</span><span class="ch">\n</span><span class="st">"</span>, ages_clean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -1534,7 +1538,7 @@ dtype: float64</code></pre>
 <h2 class="anchored" data-anchor-id="labelling-issues">Labelling Issues</h2>
 <p>The same category can appear under multiple labels: <code>"NYC"</code>, <code>"nyc"</code>, and <code>"New York"</code> all refer to the same city. Column names can differ across files (<code>customerID</code> vs <code>customer_id</code>), which silently breaks joins and merges.</p>
 <p>The fix involves: normalising text with <code>str.strip()</code>, <code>str.lower()</code> / <code>str.title()</code>; building a mapping dictionary from raw labels to canonical ones; and applying it with <code>map()</code> or <code>replace()</code>.</p>
-<div id="e75756ab" class="cell" data-execution_count="27">
+<div id="550cf183" class="cell" data-execution_count="27">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>city_raw <span class="op">=</span> pd.Series([<span class="st">"  nyc "</span>, <span class="st">"NYC"</span>, <span class="st">"New York"</span>, <span class="st">"new york"</span>, <span class="st">"N.Y.C."</span>])</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>city_clean <span class="op">=</span> city_raw.<span class="bu">str</span>.strip().<span class="bu">str</span>.title().replace({<span class="st">"Nyc"</span>: <span class="st">"New York"</span>, <span class="st">"N.Y.C."</span>: <span class="st">"New York"</span>})</span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>city_clean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
