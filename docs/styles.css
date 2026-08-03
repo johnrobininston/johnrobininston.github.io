@@ -1,30 +1,102 @@
 /* css styles */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-
-.subtitle {
-  font-family: 'Libertinus Serif', serif;
+body {
+  font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 }
 
-.navbar-title,
-.nav-link {
-  font-family: 'Libertinus Serif', serif;
-  font-size: 1.0rem;
+/* Light mode: softer, less saturated navbar background (Catppuccin Latte "surface0") */
+body.quarto-light .navbar {
+  background-color: #ccd0da !important;
 }
 
-.about-link-text,
-.nav-footer p {
-  font-family: 'Libertinus Serif', serif;
+/* Dark mode: navbar background slightly lighter than the page background
+   (Catppuccin Frappé "surface0" over "base"), text/icons matching body text */
+body.quarto-dark .navbar {
+  background-color: #414559 !important;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
-.stat-num, .stat-label,
-.tl-date, .tl-inst, .tl-title, .tl-body,
-.view-all-link,
-#quarto-back-to-top,
-.listing-title, .listing-subtitle {
-  font-family: 'Libertinus Serif', serif;
+body.quarto-dark .navbar .nav-link,
+body.quarto-dark .navbar .navbar-brand,
+body.quarto-dark .navbar .navbar-title,
+body.quarto-dark .navbar a,
+body.quarto-dark .navbar i {
+  color: #c6d0f5 !important;
+}
+
+body.quarto-dark .navbar .nav-link:hover,
+body.quarto-dark .navbar a:hover {
+  color: rgba(198, 208, 245, 0.75) !important;
+}
+
+/* Dark mode: the color-scheme toggle icon is a baked SVG background-image
+   (doesn't follow `color`), so its fill has to be overridden directly */
+body.quarto-dark .navbar .quarto-color-scheme-toggle:not(.alternate) .bi::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(198, 208, 245, 1)" class="bi bi-toggle-off" viewBox="0 0 16 16"><path d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z"/></svg>') !important;
+}
+
+body.quarto-dark .navbar .quarto-color-scheme-toggle.alternate .bi::before {
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(198, 208, 245, 1)" class="bi bi-toggle-on" viewBox="0 0 16 16"><path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>') !important;
+}
+
+/* Dark mode: brighten the search icon to match the other nav icons */
+body.quarto-dark .navbar #quarto-search svg.aa-SubmitIcon {
+  color: #c6d0f5 !important;
+}
+
+.navbar-title {
+  font-size: 1.1rem;
+}
+
+/* Light mode: muted pastel title banner (blend of Catppuccin Latte blue + base) */
+body.quarto-light .quarto-title-banner {
+  background-color: #c9d9f7 !important;
+}
+
+body.quarto-light .quarto-title-banner,
+body.quarto-light .quarto-title-banner a,
+body.quarto-light .quarto-title-banner h1,
+body.quarto-light .quarto-title-banner .h1,
+body.quarto-light .quarto-title-banner h2,
+body.quarto-light .quarto-title-banner .h2 {
+  color: #4c4f69 !important;
+}
+
+/* Dark mode: darker, muted title banner with light text (Catppuccin Frappé blue blended toward base) */
+body.quarto-dark .quarto-title-banner {
+  background-color: #47526f !important;
+}
+
+body.quarto-dark .quarto-title-banner,
+body.quarto-dark .quarto-title-banner a,
+body.quarto-dark .quarto-title-banner h1,
+body.quarto-dark .quarto-title-banner .h1,
+body.quarto-dark .quarto-title-banner h2,
+body.quarto-dark .quarto-title-banner .h2 {
+  color: #c6d0f5 !important;
+}
+
+/* Tag/category chips use fixed Bootstrap gray text and (for .quarto-category)
+   a 0.6 opacity, neither of which follows the theme — brighten for legibility */
+body.quarto-light .listing-category {
+  color: #4c4f69 !important;
+  border-color: #acb0be !important;
+}
+
+body.quarto-dark .listing-category {
+  color: #c6d0f5 !important;
+  border-color: #626880 !important;
+}
+
+body.quarto-light .quarto-category {
+  color: #4c4f69 !important;
+  border-color: #acb0be !important;
+  opacity: 0.85 !important;
+}
+
+body.quarto-dark .quarto-category {
+  color: #c6d0f5 !important;
+  border-color: #626880 !important;
+  opacity: 0.85 !important;
 }
 
 /* Match button corner radius to the index page's about-link icon buttons */
@@ -39,13 +111,6 @@ main h2 {
   margin-top: 2.5rem;
   margin-bottom: 1.25rem;
 }
-.content p,
-main p,
-main li {
-  font-family: 'Libertinus Serif', serif;
-  font-size: 1.0rem;
-}
-
 /* Callout body matches main article text (same as default body, ~1rem) */
 .callout .callout-body-container,
 .callout .callout-body,
