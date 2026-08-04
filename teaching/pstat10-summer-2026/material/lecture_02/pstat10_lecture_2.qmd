@@ -1,0 +1,1313 @@
+---
+title: "PSTAT 10 Data Science Principles"
+subtitle: "Lecture 2: Vectors"
+author:
+  - name: "John Robin Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+bibliography: static/references.bib
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        include-in-header: assets/theme-init.js
+        include-after-body: assets/theme-toggle.js
+        incremental: true
+execute:
+  echo: true
+  warning: false
+knitr:
+  opts_chunk:
+    fig.align: center
+    dev: png
+---
+
+# Introduction
+
+## 🔁 Review: Lecture 1
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+👈 Last lecture we started by going through course logistics 🥱 before looking into:
+
+- The programming language [R]{.accent}
+- The IDE [RStudio]{.accent}
+- [Quarto]{.accent} documents
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We then looked at some basic programming concepts such as:
+
+- Data types
+- R calculations
+- The assignment operator (`<-`)
+
+:::
+
+## 👀 Overview: Lecture 2
+
+::: {.spacer-sm}
+:::
+
+👇 This lecture we continue our introduction, looking at
+
+- [Data structures]{.accent}
+- Filtering
+- Recycling
+- Sorting
+- [Vectorization]{.accent}
+
+# Data Structures
+
+## 🔹 Scalars
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### What is a scalar?
+
+- A [scalar]{.accent} data form is an object holding [one value]{.accent}. 
+  - For example, from last lecture:
+
+:::
+
+:::{.fragment}
+
+```{r}
+x <- 16 # numeric scalar
+y <- "PSTAT 10" # character string scalar
+z <- FALSE # Boolean scalar
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### Vectors, Matrices and Lists 
+
+- Often we need to use different data structures that contain [multiple values]{.accent} of [multiple dimensions]{.accent} 
+  - This including (possibly) a [variety of data types]{.accent}. 
+
+::: {.columns}
+
+::: {.column width="25%"}
+- [Vectors]{.accent}
+:::
+
+::: {.column width="25%"}
+- [Matrices]{.accent}
+:::
+
+::: {.column width="25%"}
+- [Data frames]{.accent}
+:::
+
+::: {.column width="25%"}
+- [Lists]{.accent}
+:::
+
+:::
+
+:::
+
+:::{.fragment}
+
+$$
+\vec{x} = \begin{bmatrix} x_1 \\ \vdots \\ x_n\end{bmatrix};\qquad 
+\mathbf{X} = \begin{bmatrix} x_{11} & \cdots & x_{1p} \\ \vdots & \ddots & \vdots \\ x_{n1} & \cdots & x_{np}\end{bmatrix}; \qquad L = \{ x,~\vec{x},~X \}.
+$$
+
+:::
+
+## 🧮 Vectors
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### What is a vector?
+
+- A [vector]{.accent} data form is an object holding [multiple values all of the same datatype]{.accent}.
+  — For example all values are numeric, or all strings. 
+  - We therefore say that vectors are [atomic]{.accent}.
+
+:::
+
+:::{.fragment}
+
+![Vector Diagram](static/images/vector_diagram.png){.slide-img-center width="800"}
+
+:::
+
+::: {.fragment}
+
+:::{.emphasize}
+
+There are a number of different ways of constructing vector objects in R.
+
+:::
+
+:::
+
+## Creating Vectors I
+
+::: {.fragment}
+
+### Combine Function `c()`
+
+- The simplest way to create a vector in R is using the [combine function]{.accent} `c()`.
+  - This function takes a [comma separated list]{.accent} of values and combines them into a vector.
+  - Use the `help` function `?c` to learn more about the `c()` function.
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+# numeric vector
+num_vec <- c(1,2,3,4,5)
+print(num_vec)
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+# character string vector
+char_vec <- c("Dog", "Cat", "Parrot", "Monkey")
+print(char_vec)
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+# Boolean vector
+bool_vec <- c(TRUE, TRUE, FALSE, FALSE, TRUE)
+print(bool_vec)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+
+- ❗Note that all elements of a vector must be of the [same data type]{.accent}. 
+
+  - If you try to combine different data types, R will [coerce]{.accent} the values into a single data type (discussed later in this lecture).
+
+:::
+
+
+## Creating Vectors II
+
+### 🔁 `rep()` Function
+
+- The [repeat function]{.accent} `rep()` [repeats a value]{.accent} a specified number of times.
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+# repeating 3 over 7 values
+rep_1 <- rep(3, 7)
+rep_1
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+# repeating "dog" over 4 values
+rep_2 <- rep("dog", 4)
+rep_2
+```
+:::
+
+::: {.fragment}
+
+<br>
+
+### 🔢 `seq()` Function
+
+- The [sequence function]{.accent} `seq()` creates a vector of [consecutive values]{.accent}.
+  - There are a number of different combinations of arguments that can be used to create a vector using `seq()`.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+seq_1 <- seq(from = 1, to = 10, by = 1); seq_1
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+seq_2 <- seq(from = 1, to = 10, length.out = 5); seq_2
+```
+:::
+
+## 🧩 Combining Methods
+
+### Flexibity of Vector Creation
+
+- You can [combine methods]{.accent} to efficiently produce any vector you need.
+  - Simply [nest]{.accent} the functions inside one another.
+- For example, to create a vector of 12 values consisting of the numbers 1 through 4 repeated 3 times:
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+comb_1 <- rep(c(1,2,3,4), 3)
+comb_1
+```
+
+
+- Or to create a vector of 2 TRUE values followed by 3 FALSE values:
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+comb_2 <- c(rep(TRUE, 2), rep(FALSE, 3))
+comb_2
+```
+
+
+- Or to create a vector of numbers from 1 to 3 in increments of 0.25, followed by two 1.7 values:
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+comb_3 <- c(seq(1,3,by=0.25), rep(1.7,2))
+comb_3
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+:::{.emphasize}
+Try to always think about the most [efficient]{.accent} way to create a vector, as there are often multiple ways to do so!
+:::
+
+:::
+
+## Vector Property Functions
+
+
+### 📏 `length()` Function
+
+- If we want to know how many values are in a vector we can use the `length()` function.
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+length(comb_3)
+```
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+length(rep_2)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### 🏷️ `typeof()` Function
+
+- To find the [datatype]{.accent} of our vector we use the `typeof()` function:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+typeof(bool_vec)
+```
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+typeof(comb_1)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### `is.type` Functions
+
+- We can also use the `is.numeric()`, `is.character`, and `is.logical` functions to check the datatype of a vector:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+is.numeric(comb_1)
+```
+
+:::
+
+## Double Datatype
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+
+Did anybody notice something interesting about the `typeof()` function output for `comb_1`?
+
+:::
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+print(comb_1)
+```
+
+
+```{r}
+#| output-location: column
+typeof(comb_1)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### What is a double?
+
+- Numeric datatypes are split into two sub-types:
+  - [Integer type]{.accent} — all integer values.
+  - [Double type]{.accent} - a numeric datatype that can store decimal values.
+    - Equivalently, a double is a [floating point number]{.accent}.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+typeof(seq(1,6))
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+typeof(seq(1,8, by = 2))
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+
+Typically, numeric data is [by default saved as a double]{.accent} unless we specify that it should be saved as an integer using the `as.integer()` function.
+
+:::
+
+:::
+
+
+## 💪 Exercise — Coding Vectors
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes=2)
+```
+
+For the next 2 minutes consider the following example.
+
+Your somewhat unhelpful team mate on a class project reports the result of their survey of 20 members of the public about their pets: 
+
+> The first 10 people I asked said they had dogs, then it was back and forth between cat and dog for 8 people, and the last two were fish.
+
+Create a vector called `pets` that contains the 20 values of the survey results.
+
+## ✅ Solution — Coding Vectors
+
+### Combining Methods
+
+- The easiest way to create the vector is to combine the `rep()` and `c()` functions:
+
+:::{.fragment}
+
+```{r}
+#| output-location: fragment
+pets <- c(rep("dog", 10), rep(c("cat", "dog"), 4), rep("fish", 2))
+print(pets)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Side Note on Syntax
+
+- Here we have nested functions inside each other and our code is both a bit long and hard to read.
+  - To make it easier to read we can use line breaks and indentation to make the code more clear:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: fragment
+pets <- c(
+  rep("dog", 10),
+  rep(c("cat", "dog"), 4),
+  rep("fish", 2)
+)
+```
+
+- Some standard conventions:
+  - Start new function arguments on a new line and to indent them (use `Tab` key in RStudio).
+  - If your code is longer than 80 characters, consider breaking it up into multiple lines.
+
+:::
+
+# Vectorization
+
+## ⚡ Vectorization
+
+### What is vectorization?
+
+- One of the most powerful features of R is its ability to perform [vectorized computations]{.accent}.
+  - This means that we can perform operations on entire vectors at once.
+  - Vectorized computations are [fast]{.accent}, as they are much more [efficient]{.accent} than alternatives such as looping (discussed in Lecture 4).
+
+:::{.fragment}
+
+### Vectorized Arithmetic 
+
+- Recall that we can perform mathematical operations on scalars:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+# mathematical operations on scalars
+a <- 5
+a^3 - 2 
+```
+
+- We can perform mathematical operations on vectors in the same way, and R will [apply the operation to each element]{.accent} of the vector:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+# Recall sequence 1
+print(seq_1)
+```
+
+```{r}
+#| output-location: column
+# mathematical operations
+seq_1^3 - 2
+```
+
+:::
+
+## 💪 Exercise - Vectorized Computations 
+
+```{r}
+#| echo: false
+countdown(minutes=3)
+```
+
+Suppose a class of 5 students have [midterm scores]{.accent} of `73, 82, 86, 86, 94` and [final exam scores]{.accent} `85, 71, 83, 92, 92`.
+
+::: {.nonincremental}
+1. Create two vectors named `midterm_scores` and `final_scores` storing the midterm and final score values.
+2. Create a vector named `final_grade` consisting of the students' final grades which are calculated as follows:
+
+$$
+\text{final} = \frac{(2\times \text{midterm}) + (3\times\text{final})}{5}.
+$$
+
+:::
+
+
+## ✅ Solution — Coding Vectors
+
+### Defining the Vectors
+
+- Use combine function `c()` to define the vectors:
+
+:::{.fragment}
+
+```{r}
+# define the vectors
+midterm_scores <- c(73, 82, 86, 86, 94)
+final_scores <- c(85, 71, 83, 92, 92)
+```
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### Calculating Final Grades
+
+- Use vectorized arithmetic to calculate the final grades:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+# calculate final grades
+final_grade <- (2*midterm_scores + 3*final_scores)/5
+print(final_grade)
+```
+
+:::
+
+# Indexing
+
+## 🎯 Accessing Vector Data
+
+### What is indexing?
+
+- If we need to [access specific elements]{.accent} of a vector we do so by [indexing]{.accent}. 
+  - In `R` we use braces `vec_1[...]`.
+
+::: {.fragment}
+
+```{r}
+#| layout-ncol: 3
+# recall the vectors we created earlier
+print(comb_1)
+print(comb_2)
+print(comb_3)
+```
+
+- We can index specific values as follows:
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+# index the 4th value of comb_3
+comb_3[4]
+```
+
+- We can also index multiple values by providing a vector of indices:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+# index multiple values
+comb_2[c(1,3,5)]
+```
+```{r}
+#| output-location: column
+comb_1[2:8] # NOTE: use of colon operator (look up) 
+```
+
+:::
+
+
+
+## 🎯 Negating & Logical Indexing
+
+### Specifying what we don't want! 👎
+
+- We can index [everything but certain values]{.accent} by simply [negating our index]{.accent} value / vector:
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+# Index everything but the 2nd value of comb_2
+comb_2[-2]
+```
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+# Index everything but 2nd through 8th values of comb_3
+comb_3[-(2:8)] # careful to use parenthesis
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### Boolean Indexing
+
+- We can also [index using logical statements]{.accent}:
+
+:::
+
+:::{.fragment}
+
+```{r}
+comb_2[c(FALSE, FALSE, TRUE, TRUE, TRUE)]
+```
+
+- This is specifying that we want values 3, 4, and 5 of `comb_2` because the logical vector is `TRUE` for those indices.
+
+:::
+
+::: {.fragment}
+
+:::{.emphasize}
+
+❗This will become very important when we look at filtering later in this lecture.
+
+:::
+
+:::
+
+## 🏷️ Named Vector Indices
+
+### From numbers to names
+
+- For convenience we can [assign names to each vector index]{.accent}.
+
+- The `names()` function can be used to both [inspect the current names of vector indices]{.accent}, and [assign new names to vector indices]{.accent}.
+
+:::{.fragment}
+
+### Grading Excercise Example
+
+- Suppose the students from our exercise on grades a few slides ago (in the correct order) are named: `Alex`, `Becca`, `Ciar`, `Dobby`, and `Eliah`. 
+
+- We can inspect the current index names using the `names()` function (currently empty).
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column-fragment
+names(final_scores)
+```
+
+- Assign new names to the vector indices using the `names()` function with the assignment operator:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: fragment
+names(final_scores) <- c("Alex", "Becca", "Ciar", "Dobby", "Eliah")
+names(final_scores)
+```
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column-fragment
+# Indexing using names
+final_scores[c("Alex", "Dobby")]
+```
+
+:::
+
+
+# Filtering
+
+## 🔍 Filtering
+
+### What is filtering?
+
+- Instead of indexing specific values we can [return all values that meet some logical criteria]{.accent}
+  - This is called [filtering]{.accent}.
+  - We input some [logical expression]{.accent} into the index and [any value for which the expression is true is returned]{.accent}.
+
+- For example, to return the final grades of students who scored [85% or higher]{.accent} on their final grade:
+
+:::{.fragment}
+
+```{r}
+final_grade[final_grade >= 85]
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### 🤔 Recall Boolean Indexing
+
+- Notice that the logical expression is creating the following logical vector:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column-fragment
+final_grade >= 85
+```
+- Our indexing is returning the [last two elements]{.accent}.
+
+:::
+
+## 💪 Exercise — Handling Vectors
+
+```{r}
+#| echo: false
+countdown(minutes=3)
+```
+
+For the next 3 minutes complete the following exercise.
+
+The following 8 values are an individual's monthly grocery bill from January through August:
+
+`326, 281, 287, 308, 405, 299, 421, 301`
+
+::: {.nonincremental}
+1. Create a vector called `grocery` with the 8 values. Check that all 8 are accounted for.
+2. Name the [vector indices]{.accent} as `Jan, Feb, Mar, Apr, May, Jun, Jul, Aug`.
+3. Determine how many months had a grocery bill [exceeding 300]{.accent}.
+4. Determine how much was spent on groceries in `Jan, Mar` and `Aug` [combined]{.accent}.
+:::
+
+## ✅ Solution — Handling Vectors
+
+:::{.fragment}
+
+### Define the Vector
+
+```{r}
+# define grocery vector
+grocery <- c(326, 281, 287, 308, 405, 299, 421, 301)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Label the Indices
+
+```{r}
+# label indices
+names(grocery) <- c("Jan", "Feb", "Mar", "Apr", "May", "June", "Jul", "Aug")
+```
+
+:::
+
+:::{.fragment}
+
+
+:::{.spacer-sm}
+:::
+
+### Compute the Number of Months Exceeding 300
+
+```{r}
+# determine how many months had a grocery bill > 300
+length(grocery[grocery > 300])
+```
+
+:::
+
+:::{.fragment}
+
+
+:::{.spacer-sm}
+:::
+
+### Compute the Sum of Selected Months
+
+```{r}
+# determine how much was spent on groceries in months
+sum(grocery[c("Jan", "Mar", "Aug")])
+```
+
+:::
+
+# Recycling
+
+## ♻️ Recycling
+
+### What is Recycling?
+
+- We have seen the result of [adding two numeric vectors of the same length]{.accent}:
+
+:::{.fragment}
+
+```{r}
+c(1,2) + c(3,4)
+```
+
+- When we add two numeric vectors of [different length]{.accent}, R will [recycle]{.accent} values on the shorter vector ([looping from start to finish]{.accent}) until the computation is complete:
+
+:::
+
+:::{.fragment}
+
+```{r}
+c(1,2) + rep(1,7)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 🤔 Recall Vectorized Arithmetic
+
+- Recycling is actually what let us subtract a [single scalar]{.accent} from an entire vector earlier in the lecture:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+seq_1 - 2
+```
+
+- R silently [recycles the length-1 vector `2`]{.accent} to match the length of `seq_1`, subtracting it from every element.
+
+:::
+
+## ❗ When Recycling Goes Wrong
+
+### Multiples of Lengths
+
+- Recycling only works [cleanly]{.accent} when the longer length is a [whole-number multiple]{.accent} of the shorter length.
+  - If it isn't, R still recycles — but warns you:
+
+:::{.fragment}
+
+```{r}
+#| warning: true
+c(1,2,3) + c(1,2)
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 The computation still runs, but this is a common source of silent bugs — always [double-check your vector lengths]{.accent} before combining them.
+:::
+
+- Hint: If in doubt, the [modulo operator]{.accent} `%%` tells you if one length divides evenly into the other — a [non-zero]{.accent} result means expect a warning.
+
+:::
+
+:::{.fragment}
+
+
+```{r}
+#| output-location: column
+length(c(1,2,3)) %% length(c(1,2))
+```
+
+- As a general rule it is easier to try to avoid recycling!
+
+:::
+
+# Coercion
+
+## 🔀 What is Coercion?
+
+### What is Coercion?
+
+- [Vector coercion]{.accent} happens when R changes a vector's data type because you're [combining different data types]{.accent}.
+- For example, if we try to create a vector consisting of both character strings and numeric values:
+
+:::{.fragment}
+
+```{r}
+combined_vec <- c("cat", "dog", 2, "monkey", 7, 9)
+combined_vec
+```
+
+- Notice the new vector consists of [only character strings]{.accent} — even the numbers `2`, `7` and `9` were converted:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+typeof(combined_vec)
+```
+
+:::
+
+## 🔀 Examples of Coercion
+
+### More Combinations
+
+- The same thing happens whenever we mix [logical]{.accent}, [numeric]{.accent} or [character]{.accent} values in one vector:
+
+:::{.fragment}
+
+**Logical & Numeric Values**
+
+```{r}
+bool_num_vec <- c(TRUE, FALSE, TRUE, 12, 5, 6)
+bool_num_vec
+```
+
+- Now let's try combining all three types together:
+
+:::
+
+:::{.fragment}
+
+**Logical, Numeric & Character Strings**
+
+```{r}
+triple_vec <- c("dog", TRUE, FALSE, 7, 6, "cat")
+triple_vec
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 We notice an order of priority: (1) [Character strings]{.accent}; (2) [Numeric]{.accent}; and (3) [Boolean]{.accent}.
+:::
+
+:::
+
+## ❗ Why Coercion Matters
+
+### A Common Gotcha
+
+- Coercion can silently break your calculations if you're not paying attention:
+
+:::{.fragment}
+
+```{r}
+#| error: true
+nums <- c("1", "2", 3)
+nums + 1
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 Because `nums` was coerced to [character]{.accent}, R can no longer do arithmetic on it — always check `typeof()` if a calculation errors unexpectedly.
+:::
+
+- Hint: use `as.numeric()`, `as.character()`, or `as.logical()` to [explicitly convert]{.accent} a vector back to the type you need.
+
+:::
+
+# Sorting
+
+## 🔃 Sorting
+
+### The `sort()` Function
+
+- When dealing with vectors we often wish to [sort]{.accent} them into some kind of order — we can do so using the `sort()` function.
+
+:::{.fragment}
+
+```{r}
+sort(c(5,23,7,87,45,65)) # numerical sorting
+```
+
+- The same function works on character vectors — sorted [alphabetically]{.accent}, with an optional `decreasing = TRUE` argument:
+
+:::
+
+:::{.fragment}
+
+```{r}
+sort(c("a", "g", "b", "e", "z"), decreasing = TRUE) # alphabetical sorting
+```
+
+- And for logical vectors, `FALSE` is always treated as [smaller]{.accent} than `TRUE`:
+
+:::
+
+:::{.fragment}
+
+```{r}
+sort(c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)) # logical sorting
+```
+
+:::
+
+## 🔢 The `order()` Function
+
+### Sorting One Vector by Another
+
+- `sort()` only reorders the [values of a single vector]{.accent} — but what if we want to reorder a [second, related vector]{.accent} to match?
+- The `order()` function returns the [indices]{.accent} that would sort a vector, rather than the sorted values themselves:
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+scores <- c(73, 95, 88, 60)
+order(scores)
+```
+
+- We can then use these indices to [reorder a different vector]{.accent} — for example, a vector of the corresponding student names:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+students <- c("Alex", "Becca", "Ciar", "Dobby")
+students[order(scores)]
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 This is the standard way to keep [multiple related vectors in sync]{.accent} when sorting by one of them.
+:::
+
+:::
+
+## 💪 Exercise — Final Problem
+
+```{r}
+#| echo: false
+countdown(minutes=5)
+```
+
+Spend the last 5 minutes completing the following exercises, combining all of the skills you have developed throughout the lecture.
+
+::: {.nonincremental}
+1. Define the vector `num_seq` as a vector of consecutive integers starting at 1 and ending at 500.
+2. Calculate the sum of the square roots of all numbers between 200 and 400.
+3. Calculate the sum of the natural logarithm of every even number between 1 and 500.
+4. Create a vector named `rev_seq` which consists of all numbers between 1 and 5 and between 495 and 500, displayed in descending order.
+:::
+
+## ✅ Solution — Final Problem
+
+### Define the sequence
+
+```{r}
+# define the sequence
+num_seq <- seq(1, 500, by = 1)
+```
+
+:::{.fragment}
+
+
+:::{.spacer-sm}
+:::
+
+### Sum the square roots
+
+```{r}
+# compute the sum of sqrts
+sum(sqrt(num_seq[200:400]))
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Sum of natural logs 
+
+```{r}
+# compute the sum of natural logs
+sum(log(num_seq[c(FALSE, TRUE)]))
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+
+### Create the reverse sequence
+
+```{r}
+# create vector
+rev_seq <- sort(c(num_seq[1:5], num_seq[495:500]), decreasing = TRUE); rev_seq
+```
+
+:::
+
+## Summary
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ Topics Covered
+
+- Data structures
+- Indexing
+- Filtering
+- Recycling
+- Coercion
+- Sorting
+- Vectorization
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 Next Class
+
+- Matrices
+- Arrays
+- Lists
+
+:::
