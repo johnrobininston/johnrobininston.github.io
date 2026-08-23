@@ -1,6 +1,31 @@
 project:
   type: website
   output-dir: docs
+  pre-render: quarto-graph prerender
+  post-render: quarto-graph postrender
+
+filters:
+  - quarto-graph
+
+# Graph view over all notes EXCEPT the lecture slides/notes (teaching/).
+# Kept in the graph: brain/, posts/, projects/. exclude: is opt-out-only
+# (trailing "/" drops a whole subtree; bare names are fnmatch globs, and
+# fnmatch "*" also matches "/", so pages are listed by name rather than
+# with "*.qmd", which would also catch nested notes).
+quarto-graph:
+  sidebar:
+    enabled: true   # per-page local mini-graph in the top-right (next to the TOC)
+    depth: 2        # hops shown around the current note (2 = neighbours + their neighbours)
+  exclude:
+    - teaching/        # lecture slides and lecture notes
+    # site-chrome / listing pages (not notes):
+    - about.qmd
+    - blog.qmd
+    - contact.qmd
+    - index.qmd
+    - projects.qmd
+    - resume.qmd
+    - teaching.qmd
 
 website:
   description: "Personal Academic Website"
@@ -8,51 +33,52 @@ website:
   title: "John Robin Inston"
   favicon: assets/images/favicon-new.png
   sidebar:
-    - id: markov-chain-notes
-      title: "Markov Chain Notes"
+    - id: pstat160a-notes
+      title: "PSTAT160A Applied Stochastic Processes"
       style: "docked"
       contents:
-        - teaching/markov-chains/notes.qmd
+        - text: "PSTAT160A Notes"
+          href: brain/pstat160a-notes/00-introduction/intro.qmd
         - section: "Preliminary Topics"
           contents:
-            - topics/generating-functions.qmd
-            - topics/markov-chains.qmd
+            - brain/pstat160a-notes/generating-functions/generating-functions.qmd
+            - brain/pstat160a-notes/markov-chains/markov-chains.qmd
     - id: pstat100-notes
       title: "PSTAT100 Data Science and Analysis"
       style: "docked"
       contents:
         - text: "PSTAT100 Notes" # ← replaces the file path display
-          href: notes/pstat100-notes/00-introduction/intro.qmd
+          href: brain/pstat100-notes/00-introduction/intro.qmd
         - section: "Preliminary Topics"
           contents:
-            - notes/pstat100-notes/00.1-python-installation-guide/index.qmd
-            - notes/pstat100-notes/00.2-python-fundamentals/index.qmd
-            - notes/pstat100-notes/00.3-linear-algebra/index.qmd
+            - brain/pstat100-notes/00.1-python-installation-guide/index.qmd
+            - brain/pstat100-notes/00.2-python-fundamentals/index.qmd
+            - brain/pstat100-notes/00.3-linear-algebra/index.qmd
         - section: "Introduction"
           contents:
-            - notes/pstat100-notes/01-data-science-fundamentals/index.qmd
-            - notes/pstat100-notes/02-data-structure/index.qmd
+            - brain/pstat100-notes/01-data-science-fundamentals/index.qmd
+            - brain/pstat100-notes/02-data-structure/index.qmd
         - section: "Data Exploration"
           contents:
-            - notes/pstat100-notes/03-data-preparation/index.qmd
-            - notes/pstat100-notes/04-visualization/index.qmd
-            - notes/pstat100-notes/05-eda/index.qmd
+            - brain/pstat100-notes/03-data-preparation/index.qmd
+            - brain/pstat100-notes/04-visualization/index.qmd
+            - brain/pstat100-notes/05-eda/index.qmd
         - section: "Probability and Statistics"
           contents:
-            - notes/pstat100-notes/06-probability/index.qmd
-            - notes/pstat100-notes/07-statistics/index.qmd
+            - brain/pstat100-notes/06-probability/index.qmd
+            - brain/pstat100-notes/07-statistics/index.qmd
         - section: "Statistical Models"
           contents:
-            - notes/pstat100-notes/08-slr/index.qmd
-            - notes/pstat100-notes/09-mlr/index.qmd
-            - notes/pstat100-notes/10-glr/index.qmd
-            - notes/pstat100-notes/10.1-logistic-regression/index.qmd
-            - notes/pstat100-notes/10.2-poisson-regression/index.qmd
-            - notes/pstat100-notes/11-model-selection/index.qmd
-            - notes/pstat100-notes/12-regularization/index.qmd
+            - brain/pstat100-notes/08-slr/index.qmd
+            - brain/pstat100-notes/09-mlr/index.qmd
+            - brain/pstat100-notes/10-glm/index.qmd
+            - brain/pstat100-notes/10.1-logistic-regression/index.qmd
+            - brain/pstat100-notes/10.2-poisson-regression/index.qmd
+            - brain/pstat100-notes/11-model-selection/index.qmd
+            - brain/pstat100-notes/12-regularization/index.qmd
         - section: "Machine Learning Models"
           contents:
-            - notes/pstat100-notes/13-classification/index.qmd
+            - brain/pstat100-notes/13-classification/index.qmd
 
   navbar:
     left:
@@ -62,7 +88,7 @@ website:
       - projects.qmd
       - teaching.qmd
       - text: Brain
-        href: https://johnrobininston.com/brain/
+        href: brain.qmd
       - contact.qmd
     right:
       - icon: youtube

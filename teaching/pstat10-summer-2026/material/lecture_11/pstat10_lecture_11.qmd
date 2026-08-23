@@ -1,0 +1,1273 @@
+---
+title: "PSTAT 10 Data Science Principles"
+subtitle: "Lecture 11: Continuous Random Variables"
+author:
+  - name: "John Robin Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+bibliography: static/references.bib
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        include-in-header: assets/theme-init.js
+        include-after-body: assets/theme-toggle.js
+        incremental: true
+execute:
+  echo: true
+  warning: false
+knitr:
+  opts_chunk:
+    fig.align: center
+    dev: png
+---
+
+# Introduction
+
+## 🔁 Review: Lecture 10
+
+::: {.spacer-sm}
+:::
+
+👈 Last lecture we had a [very math heavy]{.accent} lecture covering:
+
+- Random Variables (RVs)
+- Probability Mass Functions (PMFs)
+- Cumulative Distribution Functions (CDFs)
+- Binomial Distribution
+- `rbinom()`, `pbinom()` and `dbinom()` functions
+
+## 👀 Outline: Lecture 11
+
+::: {.spacer-sm}
+:::
+
+👇 This lecture is again a little math heavy, and we shall be looking at:
+
+- Generalizing `rbinom()`, `pbinom()` and `dbinom()` functions
+- Continuous RVs
+- Continuous Uniform Distribution
+- Normal (Gaussian) Distribution
+
+# Recap
+
+## 🔁 Recap — Discrete Random Variables
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Recall the following definitions:
+
+- A [random variable]{.accent} $X$ is a mathematical object taking numerical outputs corresponding to a random experiment.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- A [probability mass function (PMF)]{.accent} of random variable $X$ is defined by
+  $$
+  p_X(k) = \mathbb{P}(X=k),
+  $$
+  which is non-zero for values $k$ in the support of $X$.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- The [cumulative distribution function (CDF)]{.accent} of a random variable $X$ is defined by
+  $$
+  F_X(k) = \mathbb{P}(X\leq k).
+  $$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- The [expectation]{.accent} of (discrete) $X$ is defined by $\mathbb{E}[X] = \sum_{x\in\mathcal{X}} x\cdot\mathbb{P}(X=x).$
+
+:::
+
+## 🔁 Recap — Binomial Distribution
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Consider a random variable $X$ that follows a $\text{Binomial}(n,p)$ distribution.
+
+The [PMF]{.accent} and [CDF]{.accent} of $X$ respectively are
+
+$$
+\begin{align}
+p_X(k) & = \mathbb{P}(X=k) = {n \choose k} \cdot p^k \cdot (1-p)^{n-k} \\
+\\
+F_X(k) & = \mathbb{P}(X\leq k) = \mathbb{P}(X=0) + \mathbb{P}(X=1) + ... +\mathbb{P}(X=k)
+\end{align}
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We have a quick practice with the `rbinom()`, `pbinom()` and `dbinom()` functions.
+
+:::
+
+## 🔁 Recap — `dbinom()`, `pbinom()` & `rbinom()`
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+- `dbinom()` determines the probability of $X$ taking a specific value, i.e. $\mathbb{P}(X=k)$.
+- `pbinom()` determines the CDF of $X$ at a certain value, i.e. $\mathbb{P}(X\leq k)$.
+- `rbinom()` generates realizations from a $X\sim\text{Binomial}(n,p)$ random variable.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+[**Examples:**]{.accent} for $X\sim\text{Binomial}(n=15, p=0.69)$,
+
+```{r}
+#| layout-ncol: 3
+# P(X = 7)
+dbinom(x = 7, size = 15, prob = 0.69)
+# P(X <= 7)
+pbinom(q = 7, size = 15, prob = 0.69)
+# 5 realizations of X
+rbinom(n = 5, size = 15, prob = 0.69)
+```
+
+:::
+
+## 📋 General Functions
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+These functions each take the [general form]{.accent} of the base R functions that exist for the [key named distributions]{.accent} (some of which we will cover later).
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We summarize these functions in the table below:
+
+| Binomial | Poisson | Geometric | Role |
+|----------|---------|-----------|------|
+| `dbinom()` | `dpois()` | `dgeom()` | PMF |
+| `pbinom()` | `ppois()` | `pgeom()` | CDF |
+| `qbinom()` | `qpois()` | `qgeom()` | Quantile |
+| `rbinom()` | `rpois()` | `rgeom()` | Simulation |
+
+: R Base Discrete Distribution Functions
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 Note that the discrete uniform is different since we use the `sample()` function instead.
+:::
+
+::: {.spacer-sm}
+:::
+
+:::
+
+# Poisson Distribution
+
+## 🐦 Poisson Distribution
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+::: definition
+
+A [Poisson random variable]{.accent} describes the outcomes of an experiment [counting occurrences in a fixed time interval]{.accent} when the [mean rate of occurrence]{.accent} is known.
+
+:::
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- E.g. the number of [emails received per hour]{.accent}, [customers arriving]{.accent} at a store per day, or [typos]{.accent} on a printed page.
+- E.g. the number of [earthquakes]{.accent} in a region per year, or [radioactive decay events]{.accent} detected per second.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Formally, the [PMF]{.accent} of the Poisson random variable $X\sim\mathcal{P}(\lambda)$ with mean rate $\lambda$ is:
+
+$$
+\mathbb{P}(X=k)=\frac{e^{-\lambda}\lambda^k}{k!};\quad k \in\{0,1,2,...\}.
+$$
+
+:::{.emphasize}
+📌 The CDF of this distribution is quite complicated mathematically and is not covered in this course.
+:::
+
+:::
+
+## 🐦 Poisson Distribution Plot
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 6
+#| out-height: "90%"
+#| fig-cap: "Poisson distribution plot"
+plot(0:20, dpois(0:20, 1), type = "n", ylab = "P(X=k)", xlab = "k", main = "Poisson Distribution Plot")
+points(0:20, dpois(0:20, 1), pch = 20, col = "darkgreen")
+lines(0:20, dpois(0:20, 1), col = "darkgreen")
+points(0:20, dpois(0:20, 4), pch = 20, col = "red")
+lines(0:20, dpois(0:20, 4), col = "red")
+points(0:20, dpois(0:20, 10), pch = 20, col = "purple")
+lines(0:20, dpois(0:20, 10), col = "purple")
+legend(
+    "topright",
+    legend = c(
+        expression(paste(lambda, "=1")),
+        expression(paste(lambda, "=4")),
+        expression(paste(lambda, "=10"))
+        ),
+    lty = 1,
+    col = c("darkgreen", "red", "purple")
+    )
+```
+
+:::
+
+## 🐦 Poisson Distribution Functions
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Recall the roles of the functions `dpois()`, `ppois()` and `rpois()`. Below we demonstrate how to use them.
+
+[**Examples**]{.accent}
+
+Compute $\mathbb{P}(X=3)$ when $X\sim\mathcal{P}(2)$.
+
+```{r}
+#| output-location: column
+dpois(3, 2)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Compute $\mathbb{P}(X>5)$ when $X\sim\mathcal{P}(3)$.
+
+```{r}
+#| output-location: column
+1 - ppois(4, 3)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Using 10000 simulations, estimate the mean of $X$ when $X\sim\mathcal{P}(3)$.
+
+```{r}
+#| output-location: column
+rpois(10000, 3) |> mean()
+```
+
+:::
+
+## 🎯 Example — Expectation of a Poisson RV
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Since $\lambda$ is defined as the [mean rate of occurrence]{.accent}, the expectation of a Poisson random variable is simply
+
+$$
+\mathbb{E}[X] = \lambda.
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Recall $X\sim\mathcal{P}(3)$ from our previous example. Applying the formula:
+
+$$
+\mathbb{E}[X] = 3.
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+This matches the simulation from the previous slide, which averaged to approximately 3:
+
+```{r}
+#| output-location: column
+rpois(10000, 3) |> mean()
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 In general, for $X\sim\mathcal{P}(\lambda)$, $\mathbb{E}[X] = \lambda$.
+:::
+
+:::
+
+# Continuous Random Variables
+
+## 🔄 Motivation
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+So far we have been considering [discrete random variables]{.accent}, i.e. random variables with [discrete]{.accent} support:
+
+- Bernoulli $\{0, 1\}$
+- Binomial $\{0,1,...,n\}$
+- Discrete Uniform $\{\text{item}_1, \text{item}_2, ..., \text{item}_k\}$
+- Anything countable $\{..., -2, -1, 0, 1, 2, ...\}$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+What about [continuous random variables]{.accent} with [continuous]{.accent} support:
+
+- Closed intervals $[0,1]$
+- Open or partially open intervals $(0,1)$ and $[0,1)$
+- Times, heights, weights, position on a dartboard or in a cube, etc.
+
+:::
+
+## ⚡ Probability Paradox
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Remember that $\mathbb{P}(X=k)\neq 0$ for any value $k$ in the support of a [discrete]{.accent} random variable $X$.
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 [This is not true for a continuous random variable!]{.accent}
+:::
+
+::: {.spacer-sm}
+:::
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- Recall we discussed that the probability of selecting a single number from a [continuous interval]{.accent} is zero.
+- However, the probability for selecting a subinterval from a continuous interval is nonzero.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Returning to our [dartboard]{.accent} example: the probability of hitting any single point is zero, but the probability of hitting a whole [region]{.accent} is not.
+
+- E.g. the probability of hitting the [bottom half]{.accent} of the dartboard is [non-zero]{.accent}.
+- In fact, with a [uniformly random]{.accent} throw, that probability is exactly $\frac{1}{2}$ — the region's share of the board's area.
+
+:::
+
+## 📊 Probability Density Functions
+
+::: {.spacer-sm}
+:::
+
+
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- [Continuous random variables]{.accent} are described by density functions.
+  - Similar to mass functions for discrete random variables but with no point masses.
+  - Probabilities are no longer point masses but are instead described by [areas under curves]{.accent}.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+::: definition
+
+The [probability density function (PDF)]{.accent} of a continuous random variable $X$ is a function $f_X(x)$ such that for any $a\leq b$,
+$$
+\mathbb{P}(a\leq X\leq b) = \int_a^b f_X(x)\,dx.
+$$
+
+:::
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+::: definition
+
+The [cumulative distribution function (CDF)]{.accent} of a continuous random variable $X$ is
+$$
+F_X(x) = \mathbb{P}(X\leq x) = \int_{-\infty}^x f_X(t)\,dt.
+$$
+
+:::
+
+:::
+
+# Continuous Uniform Distribution
+
+## 🚌 Motivating Example
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### Bus waiting times
+
+To consider a practical example, suppose buses arrive at a stop every 12 minutes. If you arrive at the bus stop at a random time, how long will you wait?
+
+- In the best case scenario?
+- In the worst case scenario?
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Let $X$ be the time you wait for the bus, i.e. a [continuous random variable]{.accent} supported on $(0,12)$.
+
+To [select a distribution]{.accent} we must consider what [assumptions]{.accent} to make.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+To make a claim about the [distribution]{.accent} of $X$ we make the following assumptions:
+
+- We arrive at the bus stop at a [random time]{.accent}; and
+- You are [equally likely to arrive at any point]{.accent} between the $n$-th and $(n+1)$-st bus.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+This is the continuous version of the uniform distribution, hence we define a [continuous uniform random variable]{.accent}.
+
+:::
+
+## 📏 Continuous Uniform Distribution
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+A [continuous uniform random variable]{.accent} $X\sim\mathcal{U}([a,b])$ with continuous support $[a,b]$ has [probability density function]{.accent}
+
+$$
+f_X(x) = \begin{cases}
+\frac{1}{b-a} &\quad x\in[a,b] \\
+0 & \quad \text{otherwise}.
+\end{cases}
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+As a check, notice that the density integrates to 1 over its support, as required of any PDF:
+
+$$
+\int_a^b f_X(x)\,dx = \int_a^b \frac{1}{b-a}\,dx = \left[\frac{x}{b-a}\right]_a^b = \frac{b-a}{b-a} = 1.
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+In the case of our bus stop example the support is $[0,12]$, i.e. $a=0$ and $b=12$, and so for $X\sim\mathcal{U}([0,12])$ we have that
+
+$$
+f_X(x) = \frac{1}{12};\quad x\in[0,12].
+$$
+
+:::
+
+## 📏 Visualizing the Uniform Density
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-cap: "Probability Density Plot"
+#| fig-width: 10
+#| fig-height: 6
+#| out-height: "90%"
+plot(0:12, rep(1/12, 13), ylim = c(0,0.1), type = "n",
+xlab = "Waiting Time", ylab = " ",
+main = "Potential Waiting Times")
+lines(0:12, rep(1/12, 13))
+lines(c(0,0), c(0,1/12), lty = 3)
+lines(c(12,12), c(0,1/12), lty = 3)
+lines(c(-0.3,0), c(0,0))
+lines(c(12,12.3), c(0,0))
+```
+
+:::
+
+## 📈 Continuous Uniform CDF
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+You may have noticed that since we can only compute the probability that $X$ falls in an [interval]{.accent}, we are primarily interested in the [CDF]{.accent} of continuous random variables, since
+
+$$
+\mathbb{P}(p\leq X\leq q)=\mathbb{P}(X\leq q) - \mathbb{P}(X\leq p) = F_X(q) - F_X(p).
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Often it is challenging to write a closed form expression for the CDF, but in the case of the continuous uniform we find that the CDF is given by:
+
+$$
+F_X(x) = \mathbb{P}(X\leq x) = \frac{x-a}{b-a};\quad x\in [a,b].
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Using calculus, we can [derive this CDF]{.accent} directly from the PDF by computing:
+
+$$
+\begin{align}
+F_X(x) & = \mathbb{P}(X\leq x) = \int_a^x f_X(y)\,dy \\
+& = \int_a^x \frac{1}{b-a}\,dy = \left[\frac{y}{b-a}\right]_a^x \\
+& = \frac{x-a}{b-a}.
+\end{align}
+$$
+
+:::
+
+## 🎯 Uniform Probabilities
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Let's say we wish to compute [analytically]{.accent} the probability that the wait time is between 3 and 7 minutes. This is equivalent to computing the shaded area:
+
+```{r}
+#| echo: false
+#| fig-cap: "Probability Density Plot"
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: "60%"
+#| out-height: "90%"
+plot(0:12, rep(1/12, 13), ylim = c(0,0.1), type = "n",
+xlab = "Waiting Time", ylab = " ",
+main = "Potential Waiting Times")
+lines(0:12, rep(1/12, 13))
+lines(c(0,0), c(0,1/12), lty = 3)
+lines(c(12,12), c(0,1/12), lty = 3)
+lines(c(-0.3,0), c(0,0))
+lines(c(12,12.3), c(0,0))
+rect(xleft=3, ybottom=0, xright=7, ytop=1/12, col="orange", border=NA)
+lines(c(3,3), c(0,1/12), lty = 3)
+lines(c(7,7), c(0,1/12), lty = 3)
+```
+
+:::
+
+## 🧮 Uniform Integral
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+We can compute this quickly using the [CDF]{.accent}:
+
+$$
+\begin{align}
+\mathbb{P}(3\leq X\leq 7) & = \mathbb{P}(X\leq 7) - \mathbb{P}(X\leq 3) \\
+& = \frac{7-0}{12-0} - \frac{3-0}{12-0} = \frac{1}{3}.
+\end{align}
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+This can clearly be computed using basic geometry, but to practice our calculus methods we can also arrive at the [same answer]{.accent} directly:
+
+$$
+\begin{align}
+\mathbb{P}(3\leq X\leq 7) & = \int_3^7 f_X(x)dx \\
+& = \int_3^7 \frac{1}{12}dx \\
+& = \left[\frac{x}{12}\right]_3^7 \\
+& = \frac{7}{12}-\frac{3}{12} = \frac{4}{12}=\frac{1}{3}.
+\end{align}
+$$
+
+:::
+
+## 🧮 `punif()` Function
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+R has the in-built function `punif()` for computing the [uniform CDF]{.accent} $\mathbb{P}(X\leq x)$, which has the syntax:
+
+```{r}
+#| eval: false
+punif(q = x, min = a, max = b, lower.tail = TRUE)
+```
+
+- `q` is the quantile $x$
+- `min` is the lower bound of the support $a$
+- `max` is the upper bound of the support $b$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+[**Quick Examples:**]{.accent} for $X\sim\mathcal{U}([0,12])$,
+
+```{r}
+#| layout-ncol: 2
+# P(X <= 6)
+punif(6, 0, 12)
+# P(X <= 12)
+punif(12, 0, 12)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Checking our computations earlier we have that:
+
+```{r}
+#| output-location: column-fragment
+punif(7, 0, 12) - punif(3,0,12)
+```
+
+:::
+
+## 📋 General Functions (Continuous)
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Much like with discrete random variables we have 4 [standard functions]{.accent} for each distribution:
+
+| Uniform     | Exponential | Normal    | Role       |
+|-------------|-------------|-----------|------------|
+| `dunif()`   | `dexp()`    | `dnorm()` | PDF        |
+| `punif()`   | `pexp()`    | `pnorm()` | CDF        |
+| `qunif()`   | `qexp()`    | `qnorm()` | Quantile   |
+| `runif()`   | `rexp()`    | `rnorm()` | Simulation |
+
+: R Base Continuous Distribution Functions
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 R has built-in `d`/`p`/`q`/`r` functions for [many more continuous distributions]{.accent} too — e.g. gamma (`dgamma()`), beta (`dbeta()`), chi-squared (`dchisq()`), Student's t (`dt()`), and log-normal (`dlnorm()`).
+:::
+
+:::
+
+## 💪 Exercise — Continuous Uniform in R
+
+::: {.spacer-sm}
+:::
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 4)
+```
+
+Use the functions from the previous slide to answer the following questions about the continuous uniform random variable $X\sim\mathcal{U}(10,25)$:
+
+::: {.nonincremental}
+1. What is the probability that $X$ takes a value greater than 20? (Hint: You can set `lower.tail = FALSE`)
+2. What is the probability that $X$ takes a value either greater than 19 or less than 15?
+3. Use simulation to approximate the expected value of $X$.
+:::
+
+## ✅ Solution — Continuous Uniform in R
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| layout-ncol: 3
+punif(20, min = 10, max = 25, lower.tail = FALSE)
+punif(19, min = 10, max = 25, lower.tail = FALSE) +
+  punif(15, min = 10, max = 25, lower.tail = TRUE)
+runif(10000, min = 10, max = 25) |>
+    mean()
+```
+
+- `punif(20, ..., lower.tail = FALSE)` computes $\mathbb{P}(X>20)$ directly using the [upper tail]{.accent} of the CDF.
+- Since the events $\{X>19\}$ and $\{X<15\}$ are [mutually exclusive]{.accent}, we can just [add]{.accent} their individual probabilities together.
+- `runif(10000, ...)` simulates 10000 realizations of $X$, and `mean()` approximates $\mathbb{E}[X]$ via their [long-run average]{.accent}.
+
+:::
+
+# Normal Distribution
+
+## 🔔 What is the Normal Distribution
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+The [normal (Gaussian) distribution]{.accent} is the most important distribution in statistics. It is more commonly known as the bell curve.
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| fig-cap: "Distribution plot for a standard normal random variable."
+#| fig-width: 10
+#| fig-height: 5
+#| out-height: "70%"
+plot(
+    seq(-4, 4, by = 0.01), dnorm(seq(-4, 4, by = 0.01)), type = "l",
+    xlab = "x", ylab = expression(f(x)), main = "Normal Distribution (Bell Curve)"
+)
+```
+
+:::
+
+## 🔔 Normal Parameters
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### What is the Normal Distribution?
+
+- The [normal (Gaussian) distribution]{.accent} is the most important distribution in statistics.
+- It is more commonly known as the [bell curve]{.accent} because of its symmetric, bell-shaped density.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### Normal Random Variable
+
+We denote a normal random variable $X\sim\mathcal{N}(\mu,\sigma^2)$.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+The normal distribution is described by [parameters]{.accent}:
+
+- The [mean]{.accent} $\mu$ describes the location of the peak; and
+- The [variance]{.accent} $\sigma^2$ describes the spread of the bell.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+In our previous plot above we used $\mu=0$ and $\sigma^2=\sigma=1$, which is known as a [standard normal distribution]{.accent}.
+
+:::
+
+## 🔔 Normal Parameter Plots
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| fig-cap: "Multiple Normal Distributions"
+#| fig-width: 10
+#| fig-height: 5
+#| out-height: "90%"
+plot(
+    NA, type = "n",
+    xlab = "x", ylab = expression(f(x)), main = "Normal Distribution (Bell Curve)",
+    xlim = c(-8,8), ylim = c(0,0.55)
+)
+lines(seq(-8, 8, by = 0.01), dnorm(seq(-8, 8, by = 0.01), mean = 0, sd = 1), col = "blue")
+lines(seq(-8, 8, by = 0.01), dnorm(seq(-8, 8, by = 0.01), mean = 3, sd = 2), col = "darkgreen")
+lines(seq(-8, 8, by = 0.01), dnorm(seq(-8, 8, by = 0.01), mean = 0, sd = 3), col = "red")
+lines(seq(-8, 8, by = 0.01), dnorm(seq(-8, 8, by = 0.01), mean = -4, sd = 0.75), col = "orange")
+legend("topright",
+    c(expression(paste(mu, "=0, ", sigma, "=1")),
+      expression(paste(mu, "=3, ", sigma, "=2")),
+      expression(paste(mu, "=0, ", sigma, "=3")),
+      expression(paste(mu, "=-4, ", sigma, "=0.5"))
+    ),
+    col = c("blue", "darkgreen", "red", "orange"),
+    lty = 1
+    )
+```
+
+:::
+
+## 🔔 Normal PDF and CDF
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### PDF
+
+For normal random variable $X\sim\mathcal{N}(\mu,\sigma^2)$ the [density function]{.accent} is
+
+$$
+f_X(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(\frac{-(x-\mu)^2}{2\sigma^2}\right);\quad x\in\mathbb{R}.
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### CDF
+
+Hence if we wish to determine $\mathbb{P}(-1\leq X\leq 1)$ we determine
+
+$$
+\mathbb{P}(-1\leq X\leq 1) = \int_{-1}^1 \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(\frac{-(x-\mu)^2}{2\sigma^2}\right) dx,
+$$
+
+which isn't so easy to compute. Instead we can use R functions!
+
+:::
+
+## 🔔 Examples — Normal R Functions
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Compute $\mathbb{P}(3\leq X\leq 10)$ when $X\sim\mathcal{N}(4,3^2)$.
+
+```{r}
+#| output-location: fragment
+pnorm(10, mean = 4, sd = 3, lower.tail = TRUE) -
+    pnorm(3, mean = 4, sd = 3, lower.tail = TRUE)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Approximate the mean of the sum of two $X\sim\mathcal{N}(1,2^2)$ random variables using $n=10000$ simulations.
+
+```{r}
+#| output-location: fragment
+(rnorm(10000, mean = 1, sd = 2) + rnorm(10000, mean = 1, sd = 2))  |>
+    mean()
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Find the value $x$ such that $\mathbb{P}(X\leq x) = 0.9$ when $X\sim\mathcal{N}(5,2^2)$ — the [90th percentile]{.accent} — using `qnorm()`.
+
+```{r}
+#| output-location: fragment
+qnorm(0.9, mean = 5, sd = 2)
+```
+
+:::
+
+## 💪 Exercise — Normal Probability
+
+::: {.spacer-sm}
+:::
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 5)
+```
+
+Suppose the heights of students in class A are normally distributed with a mean $\mu=67$ inches and a standard deviation of $\sigma=3$ inches.
+
+::: {.nonincremental}
+1. What is the probability that a randomly selected student's height is between 63 and 70 inches?
+:::
+
+Now consider class B student heights, which we suppose are normally distributed with mean $\mu=70$ inches and a standard deviation of $\sigma=4$ inches.
+
+::: {.nonincremental}
+2. Use $n=10000$ simulations to determine the probability that a randomly selected student from class A is taller than a randomly selected student from class B, assuming the class heights are independent.
+:::
+
+## ✅ Solution — Normal Probability
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+pnorm(70, mean = 67, sd = 3) - pnorm(63, mean = 67, sd = 3)
+```
+
+- We compute $\mathbb{P}(63\leq X\leq 70)$ for class A ($X\sim\mathcal{N}(67,3^2)$) as the [difference of two CDF values]{.accent}: $F_X(70)-F_X(63)$.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+(rnorm(10000, mean = 67, sd = 3) > rnorm(10000, mean = 70, sd = 4)) |> mean()
+```
+
+- We simulate 10000 heights from [each class]{.accent} independently, then use `mean()` on the [logical comparison]{.accent} to approximate $\mathbb{P}(X>Y)$ — the proportion of simulations where the class A height exceeds the class B height.
+
+:::
+
+## 🤔 Interesting Result — Motivating Problem
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Stepping outside the bounds of the course for a moment, we take a look at this last simulation.
+
+Define $X\sim\mathcal{N}(67,3^2)$ and $Y\sim\mathcal{N}(70,4^2)$.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We approximated via simulation:
+
+$$
+\mathbb{P}(X>Y)=\mathbb{P}(X-Y>0)
+$$
+
+But can we compute this [probability exactly]{.accent}?
+
+:::
+
+## 🤔 Interesting Result — Why is $X-Y$ Gaussian?
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+A remarkable fact from probability theory: any [linear combination]{.accent} of independent normal random variables is [itself normal]{.accent}.
+
+Suppose $X_1\sim\mathcal{N}(\mu_1,\sigma_1^2)$ and $X_2\sim\mathcal{N}(\mu_2,\sigma_2^2)$ are independent. Then
+
+$$
+X_1 - X_2 \sim \mathcal{N}\left(\mu_1-\mu_2,\; \sigma_1^2+\sigma_2^2\right).
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+The [mean]{.accent} follows from linearity of expectation:
+
+$$
+\mathbb{E}[X_1-X_2] = \mathbb{E}[X_1] - \mathbb{E}[X_2] = \mu_1-\mu_2.
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+The [variance]{.accent} follows since $X_1$ and $X_2$ are independent:
+
+$$
+\text{Var}(X_1-X_2) = \text{Var}(X_1) + \text{Var}(-X_2) = \sigma_1^2+\sigma_2^2.
+$$
+
+:::
+
+## 🤔 Interesting Result — Computing the Probability
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Applying this to $X\sim\mathcal{N}(67,3^2)$ and $Y\sim\mathcal{N}(70,4^2)$ with $\mu_1=67,\sigma_1=3,\mu_2=70,\sigma_2=4$, we get
+
+$$
+X-Y \sim \mathcal{N}\left(67-70,\; 3^2+4^2\right) = \mathcal{N}(-3, 25) = \mathcal{N}(-3, 5^2).
+$$
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+So we can compute $\mathbb{P}(X>Y)=\mathbb{P}(X-Y>0)$ [explicitly]{.accent} as:
+
+```{r}
+#| output-location: column-fragment
+pnorm(0, mean = -3, sd = 5, lower.tail = F)
+```
+
+:::
+
+## 🤔 Interesting Result — Visualizing $X$, $Y$ and $X-Y$
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| fig-cap: "Distributions of X, Y and X - Y"
+#| fig-width: 10
+#| fig-height: 5
+#| out-height: "90%"
+plot(
+    NA, type = "n",
+    xlab = "value", ylab = expression(f(x)), main = "X, Y and X - Y",
+    xlim = c(-25, 85), ylim = c(0, 0.14)
+)
+lines(seq(-25, 85, by = 0.05), dnorm(seq(-25, 85, by = 0.05), mean = 67, sd = 3), col = "blue")
+lines(seq(-25, 85, by = 0.05), dnorm(seq(-25, 85, by = 0.05), mean = 70, sd = 4), col = "darkgreen")
+lines(seq(-25, 85, by = 0.05), dnorm(seq(-25, 85, by = 0.05), mean = -3, sd = 5), col = "red")
+legend("topright",
+    c(expression(paste("X ~ N(67, ", 3^2, ")")),
+      expression(paste("Y ~ N(70, ", 4^2, ")")),
+      expression(paste("X - Y ~ N(-3, ", 5^2, ")"))
+    ),
+    col = c("blue", "darkgreen", "red"),
+    lty = 1
+    )
+```
+
+:::
+
+# Summary
+
+## ✅ Topics Covered
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤔 Today we covered a lot of material, including:
+
+- Poisson Distributions
+- Generalizing R Functions
+- Continuous Random Variables
+- Continuous Uniform Distribution
+- Normal (Gaussian) Distribution
+
+:::
+
+## 📅 Next Class
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤩 Next class we will conclude our exploration of probability by looking into:
+
+- More Advanced Simulations!
+
+:::

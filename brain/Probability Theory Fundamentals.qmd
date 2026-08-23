@@ -1,0 +1,222 @@
+---
+title: Probability Theory Fundamentals
+date: 2026-08-20
+---
+
+## Overview
+
+This note collects the core results of an undergraduate introduction to probability: the language of sample spaces and events, the axioms of probability, counting, conditional probability and Bayes' theorem, random variables and their distributions, expectation and variance, and the two headline limit theorems. Where a topic has its own (often more rigorous / measure-theoretic) note in the vault, only the key definition or result is given here, with a link out for details. See [[Probability Theory]] for the broader map of the subject, including the measure-theoretic foundations.
+
+## 1. Sample Spaces and Events
+
+::: {.definition data-title="Sample Space"}
+The **sample space** $\Omega$ is the set of all possible outcomes of a random experiment. An **outcome** $\omega \in \Omega$ is a single possible result. An **event** $A$ is a subset of $\Omega$, $A \subseteq \Omega$, i.e. a collection of outcomes.
+:::
+
+- The **empty event** $\varnothing$ never occurs; the **sure event** $\Omega$ always occurs.
+- Two events $A, B$ are **mutually exclusive (disjoint)** if $A \cap B = \varnothing$.
+- A collection of events $\{A_i\}$ **partitions** $\Omega$ if the $A_i$ are pairwise disjoint and $\bigcup_i A_i = \Omega$.
+
+**Event algebra** (set operations on events):
+
+| Operation | Notation | Meaning |
+|---|---|---|
+| Union | $A \cup B$ | $A$ or $B$ (or both) occurs |
+| Intersection | $A \cap B$ | both $A$ and $B$ occur |
+| Complement | $A^c = \Omega \setminus A$ | $A$ does not occur |
+| Difference | $A \setminus B = A \cap B^c$ | $A$ occurs but $B$ does not |
+
+For the full measure-theoretic treatment of $\Omega$, $\sigma$-algebras of events, and probability measures, see [[Probability Spaces]] and [[Fundamentals of Probability Spaces]].
+
+## 2. Axioms of Probability (Kolmogorov Axioms)
+
+::: {.definition data-title="Axioms of Probability"}
+A **probability measure** $\mathbb{P}$ on $\Omega$ assigns to every event $A$ a number $\mathbb{P}(A)$ satisfying:
+
+1. **Non-negativity:** $\mathbb{P}(A) \geq 0$ for every event $A$.
+2. **Normalization:** $\mathbb{P}(\Omega) = 1$.
+3. **Countable additivity:** for pairwise disjoint events $A_1, A_2, \dots$, $$\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty \mathbb{P}(A_i).$$
+:::
+
+Immediate consequences:
+
+- $\mathbb{P}(\varnothing) = 0$.
+- $\mathbb{P}(A^c) = 1 - \mathbb{P}(A)$ (**complement rule**).
+- If $A \subseteq B$ then $\mathbb{P}(A) \leq \mathbb{P}(B)$ (**monotonicity**).
+- $0 \leq \mathbb{P}(A) \leq 1$ for every event $A$.
+
+## 3. Probability Laws
+
+::: {.theorem data-title="Addition Law (Inclusion–Exclusion)"}
+For any two events $A, B$: $$\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B).$$
+If $A$ and $B$ are mutually exclusive, this reduces to $\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$.
+
+For three events: $$\mathbb{P}(A \cup B \cup C) = \sum \mathbb{P}(A_i) - \sum \mathbb{P}(A_i \cap A_j) + \mathbb{P}(A \cap B \cap C),$$ and in general the **inclusion–exclusion principle** extends this alternating sum to any finite union of events.
+:::
+
+::: {.theorem data-title="Multiplication Law"}
+For any two events with $\mathbb{P}(B) > 0$: $$\mathbb{P}(A \cap B) = \mathbb{P}(A \mid B)\,\mathbb{P}(B) = \mathbb{P}(B \mid A)\,\mathbb{P}(A).$$
+More generally, for events $A_1, \dots, A_n$ (**chain rule**): $$\mathbb{P}(A_1 \cap \cdots \cap A_n) = \mathbb{P}(A_1)\,\mathbb{P}(A_2 \mid A_1)\,\mathbb{P}(A_3 \mid A_1 \cap A_2) \cdots \mathbb{P}(A_n \mid A_1 \cap \cdots \cap A_{n-1}).$$
+:::
+
+::: {.theorem data-title="De Morgan's Laws"}
+$$(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.$$
+These let you rewrite unions of events as complements of intersections (and vice versa) — useful for computing $\mathbb{P}(\text{at least one})$ via $1 - \mathbb{P}(\text{none})$. See [[De Morgan's Laws]] for the general set-theoretic statement.
+:::
+
+::: {.theorem data-title="De Moivre–Laplace Theorem"}
+A classical precursor to the CLT: if $X \sim \text{Binomial}(n,p)$, then for large $n$ the standardized binomial is approximately standard normal, $$\frac{X - np}{\sqrt{np(1-p)}} \approx N(0,1).$$
+This is the special case of the [[Central Limit Theorem]] for sums of Bernoulli trials, and historically the first CLT result proved.
+:::
+
+## 4. Counting (Combinatorics)
+
+Many sample spaces with equally likely outcomes require counting arguments to compute $\mathbb{P}(A) = |A|/|\Omega|$ (the **classical / equally-likely-outcomes** definition of probability). Key tools: the multiplication principle, permutations $n! / (n-k)!$, combinations $\binom{n}{k} = n!/(k!(n-k)!)$, and the binomial theorem. Full treatment and worked identities in [[Combinatorics]].
+
+## 5. Conditional Probability
+
+::: {.definition data-title="Conditional Probability"}
+For events $A, B$ with $\mathbb{P}(B) > 0$, the probability of $A$ given that $B$ has occurred is $$\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.$$
+:::
+
+- $\mathbb{P}(\cdot \mid B)$ is itself a valid probability measure (satisfies the Kolmogorov axioms) on $\Omega$.
+- **Independence:** $A$ and $B$ are **independent** iff $$\mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A).$$ Events $A_1,\dots,A_n$ are **mutually independent** if this factorization holds for every subcollection, not just pairwise.
+
+::: {.theorem data-title="Law of Total Probability"}
+If $\{B_1, \dots, B_n\}$ partitions $\Omega$ with $\mathbb{P}(B_i) > 0$, then for any event $A$: $$\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i).$$
+:::
+
+## 6. Bayes' Theorem
+
+::: {.theorem data-title="Bayes' Theorem"}
+$$\mathbb{P}(A \mid B) = \frac{\mathbb{P}(B \mid A)\,\mathbb{P}(A)}{\mathbb{P}(B)},$$
+and combined with the law of total probability, for a partition $\{B_1,\dots,B_n\}$: $$\mathbb{P}(B_i \mid A) = \frac{\mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i)}{\sum_j \mathbb{P}(A \mid B_j)\,\mathbb{P}(B_j)}.$$
+:::
+
+::: {.example data-title="Medical test"}
+Suppose a disease affects $1\%$ of a population, and a test is $95\%$ sensitive ($\mathbb{P}(+\mid D)=0.95$) and $90\%$ specific ($\mathbb{P}(-\mid D^c)=0.90$, so $\mathbb{P}(+\mid D^c)=0.10$). If a randomly chosen person tests positive, Bayes' theorem gives
+$$\mathbb{P}(D \mid +) = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.10 \times 0.99} \approx 0.088.$$
+A positive result still implies under a $9\%$ chance of disease — the low base rate dominates the test's accuracy.
+:::
+
+Interpreted as **prior** $\mathbb{P}(B_i)$, **likelihood** $\mathbb{P}(A \mid B_i)$, and **posterior** $\mathbb{P}(B_i \mid A)$; this is the seed of all Bayesian inference. See [[Bayes' Theorem]] and, for the statistical-inference framework built on it, [[Bayesian Inference]] / [[Bayesian Statistics]].
+
+## 7. Random Variables
+
+::: {.definition data-title="Random Variable"}
+A **random variable** $X$ is a function from the sample space to the real numbers, $X : \Omega \to \mathbb{R}$, assigning a numerical value to each outcome. $X$ is:
+
+- **discrete** if it takes values in a finite or countable set,
+- **continuous** if it takes values in an uncountable set (typically an interval) and its CDF is (absolutely) continuous.
+:::
+
+The rigorous, measure-theoretic definition (requiring $X$ to be measurable) is in [[Random Variables]] and [[Random Variables and Distribution Functions]].
+
+### Probability Mass Function (PMF)
+
+For a discrete random variable $X$, the **PMF** is $$p_X(x) = \mathbb{P}(X = x),$$ satisfying $p_X(x) \geq 0$ and $\sum_x p_X(x) = 1$.
+
+### Probability Density Function (PDF)
+
+For a continuous random variable $X$, the **PDF** $f_X(x) \geq 0$ satisfies $$\mathbb{P}(a \leq X \leq b) = \int_a^b f_X(x)\,dx, \qquad \int_{-\infty}^{\infty} f_X(x)\,dx = 1.$$
+Note $f_X(x)$ is a *density*, not a probability — $\mathbb{P}(X = x) = 0$ for any single point $x$ when $X$ is continuous.
+
+### Cumulative Distribution Function (CDF)
+
+::: {.definition data-title="CDF"}
+For any random variable $X$ (discrete or continuous): $$F_X(x) = \mathbb{P}(X \leq x).$$
+Properties: $F_X$ is non-decreasing, right-continuous, $\lim_{x \to -\infty} F_X(x) = 0$, $\lim_{x \to \infty} F_X(x) = 1$.
+
+- Discrete case: $F_X(x) = \sum_{t \leq x} p_X(t)$ (a step function).
+- Continuous case: $F_X(x) = \int_{-\infty}^x f_X(t)\,dt$, and where $F_X$ is differentiable, $f_X(x) = F_X'(x)$.
+- $\mathbb{P}(a < X \leq b) = F_X(b) - F_X(a)$.
+:::
+
+## 8. Joint, Marginal, and Conditional Distributions
+
+For two random variables $X, Y$:
+
+- **Joint PMF/PDF**: $p_{X,Y}(x,y) = \mathbb{P}(X=x, Y=y)$ (discrete) or $f_{X,Y}(x,y)$ with $\mathbb{P}((X,Y) \in A) = \iint_A f_{X,Y}\,dx\,dy$ (continuous).
+- **Marginal distribution**: recover the individual distribution by summing/integrating out the other variable, $p_X(x) = \sum_y p_{X,Y}(x,y)$ or $f_X(x) = \int f_{X,Y}(x,y)\,dy$.
+- **Conditional distribution**: $p_{Y \mid X}(y \mid x) = p_{X,Y}(x,y)/p_X(x)$, analogously with densities.
+- **Independence of random variables**: $X \perp Y$ iff $F_{X,Y}(x,y) = F_X(x)F_Y(y)$ for all $x,y$, equivalently $p_{X,Y} = p_X p_Y$ (or $f_{X,Y}=f_Xf_Y$) everywhere.
+
+## 9. Expectation
+
+::: {.definition data-title="Expectation"}
+The **expected value** (mean) of a random variable is
+$$\mathbb{E}[X] = \sum_x x\, p_X(x) \quad \text{(discrete)}, \qquad \mathbb{E}[X] = \int_{-\infty}^\infty x\, f_X(x)\,dx \quad \text{(continuous)}.$$
+:::
+
+**Law of the Unconscious Statistician (LOTUS):** for a function $g$, $$\mathbb{E}[g(X)] = \sum_x g(x)p_X(x) \quad \text{or} \quad \int g(x)f_X(x)\,dx$$ — computed *without* first finding the distribution of $g(X)$.
+
+**Linearity of expectation** (always holds, independence not required): $$\mathbb{E}[aX + bY + c] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y] + c.$$
+
+For the fully general, measure-theoretic construction of expectation as a Lebesgue integral, see [[Expectation]]; for expectation given information / another random variable, see [[Conditional Expectation]].
+
+### Variance and Standard Deviation
+
+::: {.definition data-title="Variance"}
+$$\operatorname{Var}(X) = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.$$
+The **standard deviation** is $\sigma_X = \sqrt{\operatorname{Var}(X)}$.
+:::
+
+Properties: $\operatorname{Var}(aX+b) = a^2\operatorname{Var}(X)$; if $X, Y$ are independent, $\operatorname{Var}(X+Y) = \operatorname{Var}(X)+\operatorname{Var}(Y)$ (in general there's a covariance cross term, see below).
+
+### Covariance and Correlation
+
+$$\operatorname{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].$$
+$$\operatorname{Corr}(X,Y) = \rho_{X,Y} = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1,1].$$
+General bilinear expansion: $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)$. If $X \perp Y$ then $\operatorname{Cov}(X,Y) = 0$ (converse not true in general — zero covariance does not imply independence).
+
+### Moment Generating Functions
+
+$$M_X(t) = \mathbb{E}[e^{tX}],$$ with $\mathbb{E}[X^n] = M_X^{(n)}(0)$ (the $n$-th derivative at $0$ gives the $n$-th moment). MGFs uniquely determine a distribution when they exist, and $M_{X+Y}(t) = M_X(t)M_Y(t)$ for independent $X,Y$. Full details in [[Moment Generating Function]] and, for the general characteristic-function version (always exists), [[Characteristic Functions]].
+
+## 10. Key Inequalities
+
+- **Markov's inequality:** for $X \geq 0$ and $a>0$, $\mathbb{P}(X \geq a) \leq \mathbb{E}[X]/a$. See [[Markov Inequality]].
+- **Chebyshev's inequality:** for any $X$ with finite variance, $\mathbb{P}(|X - \mathbb{E}[X]| \geq k\sigma_X) \leq 1/k^2$. See [[Chebyshev Inequality]].
+
+## 11. Common Distributions
+
+A quick undergraduate toolkit — full catalogue with PMFs/PDFs, means, and variances in [[Common Probability Distributions]].
+
+**Discrete:**
+
+- Bernoulli$(p)$ — single trial, success/failure.
+- [[Binomial Distribution]] — number of successes in $n$ i.i.d. Bernoulli$(p)$ trials.
+- [[Poisson Distribution]] — number of rare events in a fixed interval, rate $\lambda$.
+- Geometric$(p)$ — number of trials until first success.
+- [[Multinomial Distribution]] — vector generalization of the binomial.
+
+**Continuous:**
+
+- [[Uniform Distribution]] — equally likely outcomes on an interval.
+- [[Normal Distribution]] — the bell curve, $N(\mu, \sigma^2)$; central to the CLT.
+- [[Exponential Distribution]] — memoryless waiting time, rate $\lambda$.
+- [[Gamma Distribution]], [[Beta Distribution]], [[Chi-Squared Distribution]] — common in statistical inference.
+
+## 12. Transformations of Random Variables
+
+If $Y = g(X)$ for a monotonic differentiable $g$, the density of $Y$ is obtained via the change-of-variables formula $$f_Y(y) = f_X\big(g^{-1}(y)\big)\left|\frac{d}{dy}g^{-1}(y)\right|.$$ See [[Transformations of Random Variables]] for the general (including non-monotonic and multivariate) treatment.
+
+## 13. Limit Theorems
+
+::: {.theorem data-title="(Weak) Law of Large Numbers"}
+If $X_1, X_2, \dots$ are i.i.d. with mean $\mu$, then the sample mean converges in probability to $\mu$: $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{P} \mu \quad \text{as } n \to \infty.$$
+See [[Law of Large Numbers]] for the strong version and proofs.
+:::
+
+::: {.theorem data-title="Central Limit Theorem"}
+If $X_1, X_2, \dots$ are i.i.d. with mean $\mu$ and finite variance $\sigma^2$, then $$\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0,1) \quad \text{as } n \to \infty,$$ i.e. the standardized sample mean converges in distribution to a standard normal, regardless of the shape of the original distribution. See [[Central Limit Theorem]] for the Lindeberg–Feller and Lyapunov generalizations.
+:::
+
+## See Also
+
+- [[Probability Theory]] — the full map, including measure-theoretic foundations and stochastic processes.
+- [[Probability Spaces]] / [[Fundamentals of Probability Spaces]] — $\sigma$-algebras, measures, Borel sets.
+- [[Combinatorics]] — counting arguments.
+- [[Bayes' Theorem]], [[Bayesian Inference]] — conditional probability applied to inference.
+- [[Expectation]], [[Conditional Expectation]] — the general Lebesgue-integral treatment.
+- [[Convergence of Random Variables]] — the different modes of convergence behind LLN/CLT.

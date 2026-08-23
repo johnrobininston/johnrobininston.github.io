@@ -135,3 +135,86 @@ main h2 {
   padding: 0;
   margin: 0;
 }
+
+/* ===================================================================
+   Numbered math environments (like the reveal-slide blocks)
+   Author with fenced divs:
+     ::: {.definition data-title="Sample Space"} ... :::
+     ::: {.theorem   data-title="Bayes' Theorem"} ... :::
+     ::: {.example   data-title="Medical test"}   ... :::
+   data-title is optional. Each type is numbered per page automatically.
+   Definition & theorem are boxed; example is deliberately subtler.
+   =================================================================== */
+
+/* Per-page counters, reset on the article body */
+#quarto-document-content {
+  counter-reset: qdef qthm qexm;
+}
+
+/* Boxed environments: definition + theorem */
+.definition,
+.theorem {
+  --env-accent: var(--bs-primary, #1e66f5);
+  margin: 1.25rem 0;
+  padding: 0.7rem 1rem 0.55rem;
+  border-left: 4px solid var(--env-accent);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--env-accent) 7%, transparent);
+}
+.theorem {
+  --env-accent: #8839ef; /* catppuccin latte mauve */
+}
+body.quarto-dark .theorem {
+  --env-accent: #ca9ee6; /* catppuccin frappe mauve */
+}
+
+/* Bold label line above the body */
+.definition::before,
+.theorem::before {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
+  color: var(--env-accent);
+}
+.definition::before {
+  counter-increment: qdef;
+  content: "Definition " counter(qdef) ".";
+}
+.definition[data-title]::before {
+  content: "Definition " counter(qdef) " (" attr(data-title) ").";
+}
+.theorem::before {
+  counter-increment: qthm;
+  content: "Theorem " counter(qthm) ".";
+}
+.theorem[data-title]::before {
+  content: "Theorem " counter(qthm) " (" attr(data-title) ").";
+}
+
+/* Example: no fill, thin rule, muted italic label — a quiet aside */
+.example {
+  margin: 1.1rem 0;
+  padding: 0.1rem 0 0.1rem 0.9rem;
+  border-left: 2px solid var(--bs-border-color, #acb0be);
+}
+.example::before {
+  counter-increment: qexm;
+  content: "Example " counter(qexm) ".";
+  display: block;
+  margin-bottom: 0.2rem;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+.example[data-title]::before {
+  content: "Example " counter(qexm) " (" attr(data-title) ").";
+}
+
+/* Trim stray margins on the first/last child so the box hugs its content */
+.definition > :first-child,
+.theorem > :first-child,
+.example > :first-child { margin-top: 0; }
+.definition > :last-child,
+.theorem > :last-child,
+.example > :last-child { margin-bottom: 0; }
