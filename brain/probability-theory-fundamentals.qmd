@@ -1,0 +1,227 @@
+---
+title: Probability Theory Fundamentals
+description: 
+  "Quick summary of the underlying probability theory needed to understand 
+  statistical modelling.  This includes random variables, probability 
+  distributions and conditional expectation."
+date: 2026-08-20
+author: John Robin Inston
+title-block-banner: true
+number-sections: true
+---
+
+## Overview
+
+This note provides a summary of some of the key concepts in probability 
+theory, including the language of sample spaces and events, the axioms of 
+probability, counting, conditional probability and Bayes' theorem, 
+random variables and their distributions, expectation and variance. 
+
+## Sample Spaces and Events
+
+A **random experiment** is a repeatable process that produces an outcome that 
+cannot be predicted with certainty. 
+
+::: {.definition data-title="Sample Space"}
+The **sample space** $\Omega$ is the set of all possible outcomes of a random 
+experiment. An **outcome** $\omega \in \Omega$ is a single possible result. 
+An **event** $A$ is a subset of $\Omega$, $A \subseteq \Omega$, i.e. a 
+collection of outcomes.
+:::
+
+The **empty event** $\varnothing$ never occurs; the **sure event** $\Omega$ 
+always occurs.
+
+**Event algebra** (set operations on events):
+
+| Operation | Notation | Meaning |
+|---|---|---|
+| Union | $A \cup B$ | $A$ or $B$ (or both) occurs |
+| Intersection | $A \cap B$ | both $A$ and $B$ occur |
+| Complement | $A^c = \Omega \setminus A$ | $A$ does not occur |
+| Difference | $A \setminus B = A \cap B^c$ | $A$ occurs but $B$ does not |
+
+
+:::{.definition data-title="Mutually Exclusive Events"}
+Two events $A, B$ are **mutually exclusive (disjoint)** if 
+$A \cap B = \varnothing$.
+:::
+
+A collection of events $\{A_i\}$ **partitions** $\Omega$ if the $A_i$ are 
+pairwise disjoint and $\bigcup_i A_i = \Omega$.
+
+::: {.definition data-title="Axioms of Probability"}
+A **probability measure** $\mathbb{P}$ on $\Omega$ assigns to every event $A$ 
+a number $\mathbb{P}(A)$ satisfying:
+
+1. **Non-negativity:** $\mathbb{P}(A) \geq 0$ for every event $A$.
+2. **Normalization:** $\mathbb{P}(\Omega) = 1$.
+3. **Countable additivity:** for pairwise disjoint events $A_1, A_2, \dots$, 
+   $$\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) = 
+   \sum_{i=1}^\infty \mathbb{P}(A_i).$$
+:::
+
+Immediate consequences:
+
+- $\mathbb{P}(\varnothing) = 0$.
+- $\mathbb{P}(A^c) = 1 - \mathbb{P}(A)$ (**complement rule**).
+- If $A \subseteq B$ then $\mathbb{P}(A) \leq \mathbb{P}(B)$ (**monotonicity**).
+- $0 \leq \mathbb{P}(A) \leq 1$ for every event $A$.
+
+## Probability Laws
+
+The following results are immediate consequences of the axioms of probability. 
+They serve as the basic toolkit for computing probabilities of events.
+
+The Addition Law (Inclusion-Exclusion) is used to compute the probability of 
+a union of events. 
+
+::: {.theorem data-title="Addition Law (Inclusion–Exclusion)"}
+For any two events $A, B$: $$\mathbb{P}(A \cup B) = \mathbb{P}(A) + 
+\mathbb{P}(B) - \mathbb{P}(A \cap B).$$ If $A$ and $B$ are mutually exclusive, 
+this reduces to $\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$.
+:::
+
+:::{.proof}
+Clearly we have that
+$$
+\begin{align*}
+\mathbb{P}(A) + \mathbb{P}(B) 
+  & = \mathbb{P}\left((A\setminus B) \cup (A\cap B)\right) + 
+    \mathbb{P}\left((B\setminus A) \cup (A\cap B)\right) \\
+  & = \mathbb{P}(A\setminus B) + \mathbb{P}(A\cap B) +
+    \mathbb{P}(B\setminus A) + \mathbb{P}(A\cap B) \\
+  & = \mathbb{P}(A\cup B) + \mathbb{P}(A\cap B),
+\end{align*}
+$$
+as required.
+:::
+
+The multiplication law is used to compute the probability of an intersection 
+of events, and is the basis for conditional probability.
+
+::: {.theorem data-title="Multiplication Law"}
+For any two events with $\mathbb{P}(B) > 0$: $$\mathbb{P}(A \cap B) = 
+\mathbb{P}(A \mid B)\,\mathbb{P}(B) = \mathbb{P}(B \mid A)\,\mathbb{P}(A).$$
+More generally, for events $A_1, \dots, A_n$ (**chain rule**): 
+$$\mathbb{P}(A_1 \cap \cdots \cap A_n) = \mathbb{P}(A_1)\,
+\mathbb{P}(A_2 \mid A_1)\,\mathbb{P}(A_3 \mid A_1 \cap A_2) \cdots 
+\mathbb{P}(A_n \mid A_1 \cap \cdots \cap A_{n-1}).$$
+:::
+
+::: {.theorem data-title="De Morgan's Laws"}
+$$(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.$$
+These let you rewrite unions of events as complements of intersections (and vice versa) — useful for computing $\mathbb{P}(\text{at least one})$ via $1 - \mathbb{P}(\text{none})$. See [[De Morgan's Laws]] for the general set-theoretic statement.
+:::
+
+::: {.theorem data-title="De Moivre–Laplace Theorem"}
+A classical precursor to the CLT: if $X \sim \text{Binomial}(n,p)$, then for large $n$ the standardized binomial is approximately standard normal, $$\frac{X - np}{\sqrt{np(1-p)}} \approx N(0,1).$$
+This is the special case of the [[Central Limit Theorem]] for sums of Bernoulli trials, and historically the first CLT result proved.
+:::
+
+## Conditional Probability
+
+::: {.definition data-title="Conditional Probability"}
+For events $A, B$ with $\mathbb{P}(B) > 0$, the probability of $A$ given that $B$ has occurred is $$\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.$$
+:::
+
+- $\mathbb{P}(\cdot \mid B)$ is itself a valid probability measure (satisfies the Kolmogorov axioms) on $\Omega$.
+- **Independence:** $A$ and $B$ are **independent** iff $$\mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A).$$ Events $A_1,\dots,A_n$ are **mutually independent** if this factorization holds for every subcollection, not just pairwise.
+
+::: {.theorem data-title="Law of Total Probability"}
+If $\{B_1, \dots, B_n\}$ partitions $\Omega$ with $\mathbb{P}(B_i) > 0$, then for any event $A$: $$\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i).$$
+:::
+
+::: {.theorem data-title="Bayes' Theorem"}
+$$\mathbb{P}(A \mid B) = \frac{\mathbb{P}(B \mid A)\,\mathbb{P}(A)}{\mathbb{P}(B)},$$
+and combined with the law of total probability, for a partition $\{B_1,\dots,B_n\}$: $$\mathbb{P}(B_i \mid A) = \frac{\mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i)}{\sum_j \mathbb{P}(A \mid B_j)\,\mathbb{P}(B_j)}.$$
+:::
+
+::: {.example data-title="Medical test"}
+Suppose a disease affects $1\%$ of a population, and a test is $95\%$ sensitive ($\mathbb{P}(+\mid D)=0.95$) and $90\%$ specific ($\mathbb{P}(-\mid D^c)=0.90$, so $\mathbb{P}(+\mid D^c)=0.10$). If a randomly chosen person tests positive, Bayes' theorem gives
+$$\mathbb{P}(D \mid +) = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.10 \times 0.99} \approx 0.088.$$
+A positive result still implies under a $9\%$ chance of disease — the low base rate dominates the test's accuracy.
+:::
+
+Interpreted as **prior** $\mathbb{P}(B_i)$, **likelihood** $\mathbb{P}(A \mid B_i)$, and **posterior** $\mathbb{P}(B_i \mid A)$; this is the seed of all Bayesian inference. See [[Bayes' Theorem]] and, for the statistical-inference framework built on it, [[Bayesian Inference]] / [[Bayesian Statistics]].
+
+## Random Variables
+
+::: {.definition data-title="Random Variable"}
+A **random variable** $X$ is a function from the sample space to the real numbers, $X : \Omega \to \mathbb{R}$, assigning a numerical value to each outcome. $X$ is:
+
+- **discrete** if it takes values in a finite or countable set,
+- **continuous** if it takes values in an uncountable set (typically an interval) and its CDF is (absolutely) continuous.
+:::
+
+The rigorous, measure-theoretic definition (requiring $X$ to be measurable) is in [[Random Variables]] and [[Random Variables and Distribution Functions]].
+
+### Probability Mass Function (PMF)
+
+For a discrete random variable $X$, the **PMF** is $$p_X(x) = \mathbb{P}(X = x),$$ satisfying $p_X(x) \geq 0$ and $\sum_x p_X(x) = 1$.
+
+### Probability Density Function (PDF)
+
+For a continuous random variable $X$, the **PDF** $f_X(x) \geq 0$ satisfies $$\mathbb{P}(a \leq X \leq b) = \int_a^b f_X(x)\,dx, \qquad \int_{-\infty}^{\infty} f_X(x)\,dx = 1.$$
+Note $f_X(x)$ is a *density*, not a probability — $\mathbb{P}(X = x) = 0$ for any single point $x$ when $X$ is continuous.
+
+### Cumulative Distribution Function (CDF)
+
+::: {.definition data-title="CDF"}
+For any random variable $X$ (discrete or continuous): $$F_X(x) = \mathbb{P}(X \leq x).$$
+Properties: $F_X$ is non-decreasing, right-continuous, $\lim_{x \to -\infty} F_X(x) = 0$, $\lim_{x \to \infty} F_X(x) = 1$.
+
+- Discrete case: $F_X(x) = \sum_{t \leq x} p_X(t)$ (a step function).
+- Continuous case: $F_X(x) = \int_{-\infty}^x f_X(t)\,dt$, and where $F_X$ is differentiable, $f_X(x) = F_X'(x)$.
+- $\mathbb{P}(a < X \leq b) = F_X(b) - F_X(a)$.
+:::
+
+## Expectation
+
+::: {.definition data-title="Expectation"}
+The **expected value** (mean) of a random variable is
+$$\mathbb{E}[X] = \sum_x x\, p_X(x) \quad \text{(discrete)}, \qquad \mathbb{E}[X] = \int_{-\infty}^\infty x\, f_X(x)\,dx \quad \text{(continuous)}.$$
+:::
+
+**Law of the Unconscious Statistician (LOTUS):** for a function $g$, $$\mathbb{E}[g(X)] = \sum_x g(x)p_X(x) \quad \text{or} \quad \int g(x)f_X(x)\,dx$$ — computed *without* first finding the distribution of $g(X)$.
+
+**Linearity of expectation** (always holds, independence not required): $$\mathbb{E}[aX + bY + c] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y] + c.$$
+
+For the fully general, measure-theoretic construction of expectation as a Lebesgue integral, see [[Expectation]]; for expectation given information / another random variable, see [[Conditional Expectation]].
+
+::: {.definition data-title="Variance"}
+$$\operatorname{Var}(X) = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.$$
+The **standard deviation** is $\sigma_X = \sqrt{\operatorname{Var}(X)}$.
+:::
+
+Properties: $\operatorname{Var}(aX+b) = a^2\operatorname{Var}(X)$; if $X, Y$ are independent, $\operatorname{Var}(X+Y) = \operatorname{Var}(X)+\operatorname{Var}(Y)$ (in general there's a covariance cross term, see below).
+
+### Covariance and Correlation
+
+$$\operatorname{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].$$
+$$\operatorname{Corr}(X,Y) = \rho_{X,Y} = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1,1].$$
+General bilinear expansion: $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)$. If $X \perp Y$ then $\operatorname{Cov}(X,Y) = 0$ (converse not true in general — zero covariance does not imply independence).
+
+## Common Distributions
+
+A quick undergraduate toolkit — full catalogue with PMFs/PDFs, means, and variances in [[Common Probability Distributions]].
+
+**Discrete:**
+
+- Bernoulli$(p)$ — single trial, success/failure.
+- [[Binomial Distribution]] — number of successes in $n$ i.i.d. Bernoulli$(p)$ trials.
+- [[Poisson Distribution]] — number of rare events in a fixed interval, rate $\lambda$.
+- Geometric$(p)$ — number of trials until first success.
+- [[Multinomial Distribution]] — vector generalization of the binomial.
+
+**Continuous:**
+
+- [[Uniform Distribution]] — equally likely outcomes on an interval.
+- [[Normal Distribution]] — the bell curve, $N(\mu, \sigma^2)$; central to the CLT.
+- [[Exponential Distribution]] — memoryless waiting time, rate $\lambda$.
+- [[Gamma Distribution]], [[Beta Distribution]], [[Chi-Squared Distribution]] — common in statistical inference.
+
+
+
+
+

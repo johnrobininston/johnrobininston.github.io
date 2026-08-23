@@ -142,8 +142,11 @@ main h2 {
      ::: {.definition data-title="Sample Space"} ... :::
      ::: {.theorem   data-title="Bayes' Theorem"} ... :::
      ::: {.example   data-title="Medical test"}   ... :::
+     ::: {.proof} ... :::
    data-title is optional. Each type is numbered per page automatically.
    Definition & theorem are boxed; example is deliberately subtler.
+   Proof is unnumbered: an italic "Proof:" label on its own line, the
+   argument below it, and a QED box (□) flush to the end of the last line.
    =================================================================== */
 
 /* Per-page counters, reset on the article body */
@@ -218,3 +221,22 @@ body.quarto-dark .theorem {
 .definition > :last-child,
 .theorem > :last-child,
 .example > :last-child { margin-bottom: 0; }
+
+/* Proof: unnumbered, italic "Proof:" label above the argument, QED box at
+   the end of the last line. Author with:  ::: {.proof} ... :::            */
+.proof {
+  margin: 1.1rem 0;
+}
+.proof::before {
+  display: block;              /* forces the body onto the next line */
+  margin-bottom: 0.35rem;
+  content: "Proof:";
+  font-style: italic;
+}
+/* QED box appended to the last line of the proof, flush right */
+.proof > :last-child::after {
+  content: "\00A0\25A1";       /* nbsp + □ (matches LaTeX \square) */
+  float: right;
+}
+.proof > :first-child { margin-top: 0; }
+.proof > :last-child { margin-bottom: 0; }
