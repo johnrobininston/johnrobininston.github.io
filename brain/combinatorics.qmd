@@ -1,0 +1,203 @@
+---
+title: Combinatorics
+author: John Robin Inston
+date: 2026-08-22
+title-block-banner: true
+number-sections: true
+---
+
+## Introduction 
+
+**Combinatorics** is the branch of mathematics concerned with counting the
+number of ways to arrange, select, or organize objects. It provides
+fundamental tools for solving counting problems that arise throughout 
+probability theory, statistics, and applied mathematics.
+
+:::{.definition data-title="Combinatorics"}
+
+**Combinatorics** is the study of finite discrete structures and the methods 
+for counting arrangements, selections, and partitions of objects subject to
+given constraints.
+
+:::
+
+## Fundamental Counting Principles
+
+:::{.definition data-title="Multiplication Principle"}
+
+If a task can be broken into $k$ sequential stages, where stage $i$ has $n_i$ 
+possible outcomes independent of previous choices, then the total number of 
+outcomes is $$n_1 \cdot n_2 \cdot \ldots \cdot n_k.$$
+
+:::
+
+Specifically, suppose we are interested in counting the number of ways of 
+ordering $n$ objects.  The first object can be chosen in $n$ ways, the second 
+in $n-1$ ways, and so on, until the last object can be chosen in $1$ way.
+Thus, the total number of arrangements is 
+
+$$
+n(n-1)(n-2)\cdots(1) = n!.
+$$
+
+:::{.definition data-title="Addition Principle"}
+
+If a task can be accomplished in $k$ mutually exclusive ways, where way $i$ 
+has $n_i$ possible outcomes, then the total number of outcomes is 
+
+$$
+n_1 + n_2 + \ldots + n_k.
+$$
+
+:::
+
+## Permutations and Combinations
+
+A **permutation** is an arrangement of objects where the order matters.
+
+:::{.definition data-title="Permutations"}
+
+The number of permutations of $n$ distinct objects taken $r$ at a time is 
+
+$$
+P(n,r) = \frac{n!}{(n-r)!} = n(n-1)(n-2)\cdots(n-r+1).
+$$
+
+:::
+
+*Special case:* The number of permutations of all $n$ objects is $P(n,n) = n!$.
+
+A **combination** is a selection of objects where the order does not matter.
+
+:::{.definition data-title="Combinations"}
+
+The number of combinations of $n$ distinct objects taken $r$ at a time is 
+
+$$
+\binom{n}{r} = C(n,r) = \frac{n!}{r!(n-r)!}.
+$$
+
+:::
+
+:::{.proof}
+
+Starting from $P(n,r) = \frac{n!}{(n-r)!}$, we note that each subset of $r$ 
+objects can be arranged in $r!$ different ways. Since combinations do not 
+distinguish between these arrangements, we divide by $r!$:
+
+$$
+\binom{n}{r} = \frac{P(n,r)}{r!} = \frac{n!}{r!(n-r)!}.
+$$
+
+:::
+
+## Binomial Coefficient Properties
+
+
+:::{.theorem data-title="Symmetry of Binomial Coefficients"}
+
+$$\binom{n}{r} = \binom{n}{n-r}.$$
+
+:::
+
+:::{.proof}
+We can write that
+$$
+\binom{n}{n-r} = \frac{n!}{(n-r)!(n-(n-r))!} = 
+\frac{n!}{(n-r)!r!} = \binom{n}{r},
+$$
+as required.
+:::
+
+:::{.theorem data-title="Pascal's Identity"}
+$$\binom{n}{r} = \binom{n-1}{r-1} + \binom{n-1}{r}.$$
+:::
+
+:::{.proof]
+We count subsets of size $r$ from a set of $n$ elements. Partition these 
+subsets into two disjoint classes: those containing a specific element (say, 
+element $n$) and those not containing it. There are $\binom{n-1}{r-1}$ subsets 
+containing element $n$ (choose $r-1$ more from the remaining $n-1$), and 
+$\binom{n-1}{r}$ subsets not containing it. Thus:
+
+$$
+\binom{n}{r} = \binom{n-1}{r-1} + \binom{n-1}{r}.
+$$
+:::
+
+:::{.theorem data-title="Binomial Theorem"}
+For any real numbers $x$ and $y$ and non-negative integer $n$,
+$$(x+y)^n = \sum_{k=0}^n \binom{n}{k} x^{n-k} y^k.$$
+:::
+
+*Corollary:*
+
+- Setting $x=y=1$: $\sum_{k=0}^n \binom{n}{k} = 2^n$.
+- Setting $x=1, y=-1$: $\sum_{k=0}^n (-1)^k \binom{n}{k} = 0$.
+
+## Multinomial Coefficients
+
+A ==**multinomial coefficient**== counts the number of ways to divide $n$ distinct objects into $k$ groups of sizes $n_1, n_2, \ldots, n_k$ where $n_1 + n_2 + \cdots + n_k = n$.
+
+:::{.definition data-title="Multinomial Coefficient"}
+
+The number of ways to partition $n$ objects into $k$ groups of sizes $n_1, n_2, \ldots, n_k$ is $$\binom{n}{n_1, n_2, \ldots, n_k} = \frac{n!}{n_1! n_2! \cdots n_k!}.$$
+
+:::
+
+:::{.proof}
+
+Choose $n_1$ objects from $n$ for the first group: $\binom{n}{n_1}$ ways.
+Choose $n_2$ objects from the remaining $n-n_1$ for the second group: $\binom{n-n_1}{n_2}$ ways.
+Continue until all objects are assigned. The total is:
+$$
+\binom{n}{n_1} \binom{n-n_1}{n_2} \cdots \binom{n_k}{n_k} = \frac{n!}{n_1!(n-n_1)!} \cdot \frac{(n-n_1)!}{n_2!(n-n_1-n_2)!} \cdots \frac{n_k!}{n_k! 0!} = \frac{n!}{n_1! n_2! \cdots n_k!},
+$$
+as required.
+:::
+
+:::{.theorem data-title="Multinomial Theorem"}
+
+For any real numbers $x_1, x_2, \ldots, x_k$ and non-negative integer $n$,
+
+$$
+(x_1 + x_2 + \cdots + x_k)^n = 
+\sum_{n_1+n_2+\cdots+n_k=n} \binom{n}{n_1, n_2, \ldots, n_k} 
+x_1^{n_1} x_2^{n_2} \cdots x_k^{n_k}.
+$$
+
+:::
+
+## Stars and Bars
+
+The **stars and bars** method counts the number of ways to distribute $n$ identical objects into $k$ distinct bins.
+
+:::{.definition data-title="Stars and Bars"}
+
+The number of ways to place $n$ identical objects into $k$ distinct bins is $$\binom{n+k-1}{k-1} = \binom{n+k-1}{n}.$$
+
+:::
+
+:::{.proof}
+
+Represent $n$ identical objects as stars $\star$ and $k-1$ dividers as bars $|$. An arrangement of $n$ stars and $k-1$ bars corresponds to a unique distribution. For example, with $n=5$ objects and $k=3$ bins:
+$$\star\star | \star | \star\star \quad \text{represents} \quad (2,1,2).$$
+The total number of arrangements is the number of ways to choose positions for $k-1$ bars from $n+k-1$ positions:
+$$
+\binom{n+k-1}{k-1} = \binom{n+k-1}{n},
+$$
+as required.
+:::
+
+## 🐔 Pigeonhole Principle
+
+The **pigeonhole principle** states that if more objects are placed into fewer boxes, at least one box must contain multiple objects.
+
+:::{.theorem data-title="Pigeonhole Principle"}
+
+If $n$ objects are placed into $k$ boxes where $n > k$, then at least one box contains at least $\lceil n/k \rceil$ objects.
+
+:::
+
+*Application in probability:* The pigeonhole principle establishes lower bounds on expected values and collision probabilities in randomized algorithms.
+

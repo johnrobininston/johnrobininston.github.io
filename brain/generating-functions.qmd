@@ -4,15 +4,14 @@ author: "John Robin Inston"
 date: "2025-12-14"
 toc: true
 title-block-banner: true
+number-sections: true
 ---
 
 ## Generating Functions
 
 A **generating function** is simply a representation of an infinite sequence of numbers as the coefficients of a **power series**.  The main idea is that we are able to recover the $n$-th value of the sequence by taking the $n$-th derivative of the generating function.
 
-::: {.callout-important}
-
-## Definition: Generating Function
+:::{.definition data-title="Generating Function"}
 
 The **generating function** for a sequence $\{ a_{n} \}_{n=0}^\infty$ is the power series 
 $$
@@ -21,13 +20,12 @@ $$
 
 :::
 
+
 ### Convolutions
 
 Generally speaking, a **convolution** is a mathematical operation on two functions that produces a third function that represents how the shape of one function is modified by the other.
 
-::: {.callout-important}
-
-## Definition: Convolution
+::: {.definition data-title="Convolution"}
 
 For discrete functions $f$ and $g$ the convolution $f*g$ is defined as $$(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).$$Similarly, for continuous functions $f$ and $g$ the convolution $f*g$ is defined as 
 $$
@@ -41,9 +39,7 @@ $$
 c_{n}=a_{0}b_{n}+a_{1}b_{n-1}+\dots+a_{n}b_{0}.
 $$
 
-::: {.callout-note}
-
-## Theorem: Convolutions and Generating Functions
+::: {.theorem data-title="Convolution and Generating Functions"}
 
 For convolution $c=a*b$ we can write the generating function 
 $$
@@ -52,7 +48,7 @@ $$
 
 :::
 
-*Proof:*
+:::{.proof}
 We can manipulate the product of sums to write
 $$
 \begin{align}
@@ -60,10 +56,11 @@ G_{c}(s) & = \sum_{n=0}^\infty c_{n}s^n \\
  & = \sum_{n=0}^\infty \left( \sum_{i=0}^n a_{i}b_{n-i} \right)s^n  \\
  & = \sum_{i=0}^\infty \left( \sum_{n=i}^\infty b_{n-i}s^{n-i} \right)s^i \\
  & =\sum_{i=0}^\infty a_{i}s^i \left( \sum_{j=0}^\infty b_{j}s^j \right) \\
- & =G_{a}(s)\cdot G_{b}(s).
+ & =G_{a}(s)\cdot G_{b}(s),
 \end{align}
 $$
-$\square$
+as required.
+:::
 
 ## Generating Functions and Random Variables
 
@@ -89,9 +86,7 @@ $$
 \mathbb{P}(X = k) = p_k.
 $$
 
-::: {.callout-important}
-
-## Probability Generating Function (PGF)
+::: {.definition data-title="Probability Generating Function (PGF)"}
 
 The **probability generating function (PGF)** of $X$ is 
 $$
@@ -107,25 +102,23 @@ $$
 
 Below we work our way through some of the basic properties of PGFs used frequently in computations with discrete random variables.
 
-::: {.callout-note}
+::: {.theorem data-title="PGF Normalization"}
 
-## Theorem: PGF Normalization
 $$
 G_X(1) = 1.
 $$
 
 :::
 
-*Proof:*
+:::{.proof}
 This follows immediately by definition
 $$
-G_{X}(1) = \sum_{k=0}^\infty p_k = 1.
+G_{X}(1) = \sum_{k=0}^\infty p_k = 1,
 $$
-$\square$
+as required.
+:::
 
-::: {.callout-note}
-
-## Theorem: PGF Moments
+::: {.theorem data-title="PGF Moments"}
 
 Derivatives at $s=1$ recover moments: 
 $$
@@ -134,7 +127,7 @@ $$
 
 :::
 
-*Proof:*
+:::{.proof}
 First, we compute
 $$
 \begin{align}
@@ -161,14 +154,14 @@ $$
 \begin{align}
 G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  & = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
  & = \mathbb{E}[X^2] - \mathbb{E}[X] + \mathbb{E}[X] - (\mathbb{E}[X])^2 \\
- & = \text{Var}(X).
+ & = \text{Var}(X),
 \end{align}
 $$
-$\square$
+as required.
+:::
 
-::: {.callout-note}
+::: {.theorem data-title="PGF of Sums of Independent RVs"}
 
-## Theorem: PGFs of Sums of Independent RVs
 If $X$ and $Y$ are independent and integer-valued, 
 $$
 G_{X+Y}(s) = G_X(s)\,G_Y(s).
@@ -176,7 +169,7 @@ $$
 
 :::
 
-*Proof:*
+:::{.proof}
 We can write that
 $$
 \begin{align}
@@ -188,21 +181,25 @@ G_{X+Y}(s) & = \sum_{n=0}^\infty \mathbb{P}(X+Y=n)s^n  \\
 $$
 
 since this is the Cauchy product of two power series.
-$\square$
+:::
 
 This mirrors **convolution of distributions** and is one of the main reasons PGFs are powerful.
 
-#### PGF Examples
+:::{.example}
+If $X\sim \text{Bernoulli}(p)$ then we have that $$\mathbb{P}(X=1)=p, \quad \mathbb{P}(X=0)=1-p.$$Then $$G_X(s) = (1-p) + ps.$$
+:::
 
-1. $X\sim \text{Bernoulli}(p)$ then we have that $$\mathbb{P}(X=1)=p, \quad \mathbb{P}(X=0)=1-p.$$Then $$G_X(s) = (1-p) + ps.$$
-2. $X\sim \text{Binomial}(n,p)$ is a sum of $n$ independent Bernoulli variables which immediately gives $$G_X(s) = \bigl((1-p)+ps\bigr)^n.$$
-3. $X\sim \text{Poisson}(\lambda)$ with $p_k = e^{-\lambda}\frac{\lambda^k}{k!}$ gives $$G_X(s) = \sum_{k=0}^\infty e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.$$From this we can compute immediately that $$ \mathbb{E}[X] = G_X'(1) = \lambda, \qquad \operatorname{Var}(X) = \lambda. $$
+:::{.example}
+If $X\sim \text{Binomial}(n,p)$ is a sum of $n$ independent Bernoulli variables which immediately gives $$G_X(s) = \bigl((1-p)+ps\bigr)^n.$$
+:::
+
+:::{.example}
+If $X\sim \text{Poisson}(\lambda)$ with $p_k = e^{-\lambda}\frac{\lambda^k}{k!}$ gives $$G_X(s) = \sum_{k=0}^\infty e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.$$From this we can compute immediately that $$ \mathbb{E}[X] = G_X'(1) = \lambda, \qquad \operatorname{Var}(X) = \lambda. $$
+:::
 
 ### Moment Generating Functions (MGFs)
 
-::: {.callout-important}
-
-## Definition: Moment Generating Function (MGF)
+::: {.definition data-title="Moment Generating Function (MGF)"}
 
 For a real-valued random variable $X$, the **moment generating function** is $$M_X(t) = \mathbb{E}[e^{tX}],$$defined for all $t$ in an open interval containing $0$ where the expectation is finite.
 
@@ -224,16 +221,17 @@ M_{X+Y}(t) = M_X(t)\,M_Y(t)
 \quad \text{if } X \perp Y.
 $$
 
-#### MGF Examples
+:::{.example}
+If $X \sim \mathcal{N}(\mu,\sigma^2)$, then $$M_X(t) = \exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).$$
+:::
 
-1. $X \sim \mathcal{N}(\mu,\sigma^2)$, then $$M_X(t) = \exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).$$
-2. $X \sim \text{Exp}(\lambda)$, $$ M_X(t) = \frac{\lambda}{\lambda - t}, \qquad t < \lambda.$$
+:::{.example}
+If $X \sim \text{Exp}(\lambda)$, $$ M_X(t) = \frac{\lambda}{\lambda - t}, \qquad t < \lambda.$$
+:::
 
 ### Characteristic Functions (CFs)
 
-::: {.callout-important}
-
-## Definition: Characteristic Function
+::: {.definition data-title="Characteristic Function (CF)"}
 
 The **characteristic function** is $$\varphi_X(t) = \mathbb{E}[e^{itX}],$$ which always exists for any random variable.
 

@@ -1,0 +1,71 @@
+---
+title: Fokker-Planck Equation
+author: John Robin Inston
+date: 2026-08-22
+title-block-banner: true
+number-sections: true
+---
+
+> These lecture notes were written from studying the material provided by 
+Sungsoo Ahn on their personal website.  To read this source material please
+click [here](https://sungsoo-ahn.github.io/blog/2026/fokker-planck-equation/).
+
+## Fokker-Planck Equation
+
+### Definition & Intuition
+
+Consider a $d$-dimensional stochastic process $(X_t)_{t\in[0,T]}$ where 
+$X_t\in\mathbb{R}^d$ with dynamics given by the SDE
+
+$$
+\begin{cases}
+dX_t = f(X_t, t)dt + g(t) dW_t \\
+X_0 \sim p_0
+\end{cases}
+$$
+
+where:
+
+- $f:\mathbb{R}^d\times [0,T]\to \mathbb{R}^d$ is the *drift* term.
+- $g:[0,T]\to \mathbb{R}$ is the *diffusion* term.
+- $W_t$ is a $d$-dimensional Wiener process.
+- $p_0$ is the initial distribution of $X_0$.
+
+The **Fokker-Planck Equation (FPE)** is the PDE for the marginal density 
+$p_t(x)$ of $X_t$ at time $t$.  Intuitively, the SDE describes the evolution 
+of a single particle and the FPE describes the *probability of finding the 
+particle at position $x$ at time $t$*.  
+
+:::{.definition data-title="Fokker-Planck Equation"}
+The **Fokker-Planck Equation (FPE)** is a PDE that describes the time
+evolution of $p_t(x)$
+
+$$
+\frac{\partial p_t(x)}{\partial t} = 
+  \underbrace{-\nabla \cdot (f(x,t)p_t(x))}_{\text{drift advection}} +
+  \underbrace{\frac{g^2(t)}{2}\Delta_x p_t(x)}_{\text{diffusion spread}},
+$$
+
+where $\nabla_x$ is the gradient (divergence) operator and 
+$\Delta_x = \sum_{i=1}^D \frac{\partial^2}{\partial x_i^2}$ is the Laplacian 
+operator with respect to $x$.
+:::
+
+### Drift Advection
+
+The quantity $fp_t$ is the probability flux, that is the evolution of the 
+probability density due to the drift term.  The negative [[divergence]] of the 
+probability flux measures $-\nabla\cdot (fp_t)$ measures the net inflow of 
+probability to a small region around $x$.
+
+For $d=1$ this becomes the finite difference approximation
+
+$$
+\partial_t p \approx -\frac{(f\cdot p)(x+\Delta x)- (f\cdot p)(x)}{\Delta x}.
+$$
+
+### Diffusion Spread
+
+At each instant, the SDE's noise perturbs the particle by a symmetric random 
+displacement $gdW$.  The aggregate effect is Gaussian blurring: peaks erode 
+and valleys fill in.  

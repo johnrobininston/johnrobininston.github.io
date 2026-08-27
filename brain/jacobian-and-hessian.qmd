@@ -1,0 +1,165 @@
+---
+title: Jacobian and Hessian Matrices
+author: John Robin Inston
+date: 2026-08-22
+title-block-banner: true
+---
+
+## Jacobian Matrix
+
+### Definition
+
+In **vector calculus** the **Jacobian matrix** of a vector function 
+$f:\mathbb{R}^n\to \mathbb{R}^m$ is the matrix of all the first-order partial 
+derivatives.  If this matrix is square, that is $n=m$, then the matrix 
+determinant is called the **Jacobian determinant**.  Intuitively, the 
+Jacobian matrix is the natural generalization of the derivative
+of functions to vector valued functions.  
+
+:::{.definition data-title="Jacobian Matrix"}
+
+Let $\boldsymbol{f}:\mathbb{R}^n\to \mathbb{R}^m$ be a vector function such 
+that all first-order partial derivatives exist on $\mathbb{R}^n$.  Then the
+**Jacobian matrix** of $\boldsymbol{f}$ denoted $J_{\boldsymbol{f}}$ is the
+$m \times n$ matrix whose $(i,j)$-th entry is 
+$\frac{{\partial f_{i}}}{\partial x_{j}}$ 
+
+$$
+J_{\boldsymbol{f}}=\begin{bmatrix}
+\frac{{\partial \boldsymbol{f}}}{\partial x_{1}} & \cdots &
+\frac{{\partial \boldsymbol{f}}}{\partial x_{n}} 
+\end{bmatrix}=\begin{bmatrix}
+\nabla ^Tf_{1} \\
+\vdots  \\
+\nabla^T{f}_{m}
+\end{bmatrix}=\begin{bmatrix}
+\frac{{\partial f_{1}}}{\partial x_{1}} & \cdots &
+\frac{{\partial f_{1}}}{\partial x_{n}}  \\
+\vdots & \ddots & \vdots  \\
+\frac{{\partial f_{m}}}{\partial x_{1}}  & \cdots  & 
+\frac{{\partial f_{m}}}{\partial x_{n}}
+\end{bmatrix},
+$$
+
+where $\nabla^Tf_{i}$ is the transpose (row vector) of the
+**gradient** (see [[vector-calculus-identities]]) of the $i$-th component.
+
+:::
+
+:::{.example}
+
+Consider the function $f(x,y)=(2x^2+3xy, 4y^2x+2x)$.  We can compute the 
+Jacobian as
+
+$$
+J_{f}=\begin{bmatrix}
+4x+3y & 3x \\
+4y^2+2 & 8xy
+\end{bmatrix}.
+$$
+
+Further, the Jacobian determinant is given by
+
+$$
+\det(J_{f})=8xy(4x+3y)-3x(4y^2+2)=32x^2y+24xy^2-12xy^2-6x=32x^2y+12xy^2-6x.
+$$
+
+The Jacobian is giving the change of the *new* $x$ and $y$ coordinates with 
+respect to the *old* $x$ and $y$ coordinates.
+
+:::
+
+### Jacobian and Best Linear Approximations
+
+If the function $\boldsymbol{f}$ is differentiable at a point 
+$\boldsymbol{x}^*\in \mathbb{R}^n$ then its differential is represented by 
+$J_{\boldsymbol{f}}(\boldsymbol{x}^*)$.  In this case, the 
+[[linear-transformation]] represented by $J_{\boldsymbol{f}}(\boldsymbol{x})$ 
+is the **best linear approximation** of $\boldsymbol{f}$ near the point 
+$\boldsymbol{x}^*$ in the sense that
+
+$$
+\boldsymbol{f}(\boldsymbol{x})-\boldsymbol{f}(\boldsymbol{x}^*)=
+J_{\boldsymbol{f}}(\boldsymbol{x}^*)(\boldsymbol{x}-
+\boldsymbol{x^*})+o(\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert );
+\quad \boldsymbol{x}\to \boldsymbol{x}^*,
+$$
+where $o(\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert)$ denotes some quantity
+that is of inferior order to $\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert$ 
+and thus approaches zero much faster.
+
+This approximation specializes to the approximation of a scalar function of a
+single variable by [[taylor-series]] of degree one, namely
+$$
+f(x)-f(x^*) = f'(x^*)(x-x^*)+o(x-x^*);\quad x \to x^*.
+$$
+Thus our statement that a Jacobian may be regarded as a kind of 
+*first-order derivative* of a vector function.  
+
+### Jacobian Chain Rule
+
+:::{.theorem data-title="Jacobian Chain Rule"}
+
+Composable functions $f:\mathbb{R}^n\to \mathbb{R}^m$ and 
+$g:\mathbb{R}^m\to \mathbb{R}^k$ satisfy the [[Chain Rule]] in that for 
+$x \in \mathbb{R}^n$ we have $$J_{g\circ f}(x)=J_{g}(f(x))J_{f(x)}.$$
+
+:::
+
+:::{.proof}
+
+
+
+:::
+
+
+### Jacobian Inverse
+
+From the [[Inverse Function Theorem]], the matrix inverse of the Jacobian of an [[Bijective Function|invertible function]] $f:\mathbb{R}^n\to \mathbb{R}^n$ is the Jacobian of the inverse.  That is, the Jacobian matrix of the inverse function at some point $x \in \mathbb{R}^n$ is given by
+
+$$
+J_{f^{-1}}(x)=J_{f}^{-1}(f^{-1}(x)),
+$$
+
+and the Jacobian determinant is
+
+$$
+\det(J_{f^{-1}}(x))= \frac{1}{\det(J_{f}(f^{-1}(x)))}.
+$$
+
+If the Jacobian is [[Continuous Functions|continuous]] and nonsingular at the point $x \in\mathbb{R}^n$ then $f$ is invertible when restricted to some [[Neighborhoods|neighborhood]] of $x$.  In other words, if the Jacobian determinant is non-zero at a point, then the function is **locally invertible** near this point.
+
+### Critical Points
+
+If $f : \mathbb{R}^n → \mathbb{R}^m$ is a differentiable function, a **critical point** of $f$ is a point where the [[Matrix Rank|rank]] of the Jacobian matrix is not maximal. This means that the rank at the critical point is lower than the rank at some neighbor point. In other words, let $k$ be the maximal dimension of the open balls contained in the image of $f$; then a point is critical if all minors of rank $k$ of $f$ are zero.
+
+## Hessian Matrix
+
+The Jacobian of the [[vector-calculus-identities|gradient]] of a scalar 
+function of several variables is known as the **Hessian Matrix** which is intuitively the *second 
+derivative* of the function in question.
+
+The **Hessian matrix** is a square matrix of second-order partial derivatives of a scalar-valued function, or scalar-field (see [[linear-algebra]])..  The Hessian describes the **local curvature of a multivariate function**.  The Hessian is typically denoted $H$ but has historically also been denoted by $\nabla \nabla$ or $\nabla ^2$ or $\nabla \otimes \nabla$ or $D^2$.
+
+> [!definition] Hessian Matrix
+> Consider the scalar function $f:\mathbb{R}^n\to \mathbb{R}$.  If all second-order partial derivatives of $f$ exist, then the **Hessian matrix** $H$ of $f$ is a square $n \times n$ matrix defined as $$H_{f}=(H_{f})_{i,j}:=\left(\frac{{\partial^2f}}{\partial x_{i}\partial x_{j}}\right)_{i,j}.$$
+
+Further, if the second partial derivatives are all continuous, the Hessian matrix is a **symmetric matrix** by the symmetry of second derivatives.  The determinant of the Hessian matrix is called the **Hessian determinant**.
+
+The Hessian matrix of a function $F$ is the transpose of the [[Jacobian Matrix]] of the [[Gradient]] of the function $f$.  That is
+$$
+H(f(x))=J(\nabla f(x))^\top.
+$$
+## Applications
+
+### Optimization
+*References: [Wikipedia](https://en.wikipedia.org/wiki/Hessian_matrix).*
+
+Hessian matrices are used in large-scale optimization problems with Newton-type methods because they are the coefficient of the quadratic term of a local [[Taylor Series|Taylor expansion]] of a function.  That is
+$$
+y = f(\boldsymbol{x}+ \Delta \boldsymbol{ x})\approx f(\boldsymbol{x})+\nabla f(\boldsymbol{x})^\top \Delta \boldsymbol{x}+ \frac{1}{2}\Delta \boldsymbol{x}^\top H(\boldsymbol{x})\Delta \boldsymbol{x},
+$$
+where $\nabla f$ is the [[Gradient]].  
+
+Computing and storing the full Hessian takes $\mathcal{O}(n^2)$ memory, which is infeasible for high-dimensional functions such as the loss functions of Neural Networks, Conditional random fields and other statistical models with large numbers of parameters.
+
