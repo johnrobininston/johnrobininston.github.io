@@ -1,0 +1,201 @@
+---
+title: Exponential Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **exponential distribution** is a continuous probability distribution
+that models the time between consecutive events in a [[poisson-process]].
+It is the unique continuous distribution with the **memoryless property**.
+
+:::{.definition data-title="Exponential Distribution"}
+
+A random variable $X$ follows an **exponential distribution** with rate
+parameter $\lambda > 0$ if
+
+$$
+X \sim \text{Exponential}(\lambda) \quad \text{or}
+  \quad X \sim \mathcal{E}(\lambda).
+$$
+
+:::
+
+An alternative parameterisation uses the scale parameter
+$\theta = 1/\lambda$.
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \begin{cases}
+  \lambda e^{-\lambda x} & x \geq 0, \\
+  0 & x < 0.
+\end{cases}
+$$
+
+:::
+
+*Interpretation:* The density decays exponentially, so short waiting
+times are the most likely and arbitrarily long waits become increasingly
+rare.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Density of the exponential distribution for several rate
+#|   parameters $\\lambda$."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import expon
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(0, 5, 400)
+fig, ax = plt.subplots(figsize=(7, 4))
+for lam in (0.5, 1.0, 2.0):
+    ax.plot(x, expon.pdf(x, scale=1 / lam),
+            lw=2, label=rf'$\lambda = {lam}$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title('Exponential density')
+ax.legend()
+plt.show()
+```
+
+:::{.definition data-title="Cumulative Distribution Function (CDF)"}
+
+The cumulative distribution function is
+
+$$
+F(x) = \begin{cases}
+  1 - e^{-\lambda x} & x \geq 0, \\
+  0 & x < 0.
+\end{cases}
+$$
+
+:::
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Exponential Distribution"}
+
+The expectation and variance of $X \sim \text{Exponential}(\lambda)$ are
+
+$$
+\mathbb{E}[X] = \frac{1}{\lambda} \quad \& \quad
+  \operatorname{Var}(X) = \frac{1}{\lambda^2}.
+$$
+
+:::
+
+:::{.proof}
+
+Integrating by parts,
+
+$$
+\mathbb{E}[X] = \int_0^\infty x \lambda e^{-\lambda x} \, dx
+  = \frac{1}{\lambda}.
+$$
+
+Similarly $\mathbb{E}[X^2] = 2/\lambda^2$, so
+$\operatorname{Var}(X) = 2/\lambda^2 - 1/\lambda^2 = 1/\lambda^2$.
+
+:::
+
+## Generating Functions
+
+:::{.theorem data-title="Moment Generating Function"}
+
+The **moment generating function (MGF)** of
+$X \sim \text{Exponential}(\lambda)$ is
+
+$$
+M_X(t) = \frac{\lambda}{\lambda - t},
+  \quad t < \lambda.
+$$
+
+:::
+
+:::{.theorem data-title="Characteristic Function"}
+
+The characteristic function of $X \sim \text{Exponential}(\lambda)$ is
+
+$$
+\varphi_X(t) = \frac{\lambda}{\lambda - it}.
+$$
+
+:::
+
+## The Memoryless Property
+
+:::{.theorem data-title="Memoryless Property"}
+
+The exponential distribution is the unique continuous distribution with
+the **memoryless property**: for any $s, t > 0$,
+
+$$
+\mathbb{P}(X > s + t \mid X > s) = \mathbb{P}(X > t).
+$$
+
+:::
+
+:::{.proof}
+
+Since $\mathbb{P}(X > u) = e^{-\lambda u}$,
+
+$$
+\mathbb{P}(X > s + t \mid X > s)
+  = \frac{e^{-\lambda(s + t)}}{e^{-\lambda s}}
+  = e^{-\lambda t} = \mathbb{P}(X > t).
+$$
+
+:::
+
+*Interpretation:* Knowing that an event has not occurred for time $s$
+does not change the distribution of the remaining waiting time.
+
+## Relationship to Other Distributions
+
+- **[[poisson-distribution]]:** If events follow a [[poisson-process]]
+  with rate $\lambda$, the number of events in $[0, t]$ is
+  $\text{Poisson}(\lambda t)$ and the inter-arrival times are i.i.d.
+  $\text{Exponential}(\lambda)$.
+- **[[gamma-distribution]]:** A sum of $n$ i.i.d.
+  $\text{Exponential}(\lambda)$ variables is $\text{Gamma}(n, \lambda)$.
+- **[[geometric-distribution]]:** The discrete analogue with the
+  memoryless property.
+- **[[weibull-distribution]]:** Generalises the exponential by allowing a
+  non-constant hazard rate.
+
+## Examples and Applications
+
+:::{.example data-title="Service times"}
+
+The time between customer arrivals at a service counter, or the service
+time in an M/M/1 queue, is commonly modelled as exponential.
+
+:::
+
+:::{.example data-title="Reliability"}
+
+The lifetime of an electronic component with a constant failure rate, or
+the time to radioactive decay, follows an exponential distribution.
+
+:::
+
+:::{.example data-title="Waiting times"}
+
+The waiting time for the next earthquake at a location, or the gap
+between successive traffic accidents, is often modelled as exponential.
+
+:::

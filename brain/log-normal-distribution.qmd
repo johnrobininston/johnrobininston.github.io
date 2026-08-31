@@ -1,0 +1,165 @@
+---
+title: Log-Normal Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **log-normal distribution** is a continuous probability distribution
+whose logarithm is normally distributed. It models positive-valued
+quantities that arise as the product of many independent positive
+factors.
+
+:::{.definition data-title="Log-Normal Distribution"}
+
+A random variable $X$ follows a **log-normal distribution** with
+parameters $\mu \in \mathbb{R}$ and $\sigma > 0$ if
+
+$$
+X \sim \text{LogNormal}(\mu, \sigma^2)
+  \quad \text{and} \quad \ln(X) \sim \mathcal{N}(\mu, \sigma^2).
+$$
+
+:::
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \frac{1}{x\sigma\sqrt{2\pi}}
+  \exp\!\left(-\frac{(\ln x - \mu)^2}{2\sigma^2}\right),
+  \quad x > 0.
+$$
+
+:::
+
+*Interpretation:* The parameters $\mu$ and $\sigma$ are the mean and
+standard deviation of $\ln(X)$, not of $X$ itself. The density is
+right-skewed with a long upper tail.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Density of the log-normal distribution ($\\mu = 0$) for
+#|   several values of $\\sigma$."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import lognorm
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(0, 5, 400)
+fig, ax = plt.subplots(figsize=(7, 4))
+for sigma in (0.25, 0.5, 1.0):
+    ax.plot(x, lognorm.pdf(x, sigma),
+            lw=2, label=rf'$\sigma = {sigma}$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title(r'Log-normal density ($\mu = 0$)')
+ax.legend()
+plt.show()
+```
+
+:::{.definition data-title="Cumulative Distribution Function (CDF)"}
+
+The cumulative distribution function is
+
+$$
+F(x) = \Phi\!\left(\frac{\ln x - \mu}{\sigma}\right),
+  \quad x > 0,
+$$
+
+where $\Phi$ is the CDF of the standard normal distribution.
+
+:::
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Log-Normal Distribution"}
+
+The expectation and variance of $X \sim \text{LogNormal}(\mu, \sigma^2)$
+are
+
+$$
+\mathbb{E}[X] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right)
+  \quad \& \quad
+  \operatorname{Var}(X) = \left(e^{\sigma^2} - 1\right)
+  e^{2\mu + \sigma^2}.
+$$
+
+More generally, every moment exists and equals
+$\mathbb{E}[X^n] = \exp(n\mu + n^2\sigma^2/2)$.
+
+:::
+
+:::{.proof}
+
+Writing $X = e^Y$ with $Y \sim \mathcal{N}(\mu, \sigma^2)$ and using the
+normal MGF $M_Y(t) = e^{\mu t + \sigma^2 t^2/2}$,
+
+$$
+\mathbb{E}[X^n] = \mathbb{E}[e^{nY}] = M_Y(n)
+  = \exp\!\left(n\mu + \frac{n^2\sigma^2}{2}\right).
+$$
+
+The stated mean and variance are the cases $n = 1, 2$.
+
+:::
+
+*Note:* Although all moments are finite, the moment generating function
+of $X$ does not exist for any $t > 0$, because the tail is too heavy.
+
+## Relationship to the Normal Distribution
+
+If $Y \sim \mathcal{N}(\mu, \sigma^2)$ then $X = e^Y \sim
+\text{LogNormal}(\mu, \sigma^2)$, and conversely $\ln(X) \sim
+\mathcal{N}(\mu, \sigma^2)$. This exponential link, together with a
+multiplicative Central Limit Theorem, makes the log-normal the natural
+limit of products of independent positive factors.
+
+The distribution is right-skewed, and its median lies below its mean:
+
+$$
+\operatorname{Median}(X) = e^\mu < e^{\mu + \sigma^2/2}
+  = \mathbb{E}[X].
+$$
+
+## Relationship to Other Distributions
+
+- **[[normal-distribution]]:** $\ln(X)$ is normal; the log-normal is its
+  exponential image.
+- **Geometric Brownian motion:** The value of a
+  [[random-variable-transformations]] of Brownian motion at a fixed time
+  is log-normally distributed, underpinning models of asset prices.
+
+## Applications and Examples
+
+:::{.example data-title="Finance"}
+
+Stock prices and asset returns are often modelled as log-normal, as in
+geometric Brownian motion.
+
+:::
+
+:::{.example data-title="Environmental science"}
+
+Pollutant concentrations, particle sizes, and precipitation amounts
+frequently follow log-normal distributions.
+
+:::
+
+:::{.example data-title="Reliability and biology"}
+
+Times to failure under multiplicative degradation, and incubation
+periods of diseases, are commonly log-normal.
+
+:::

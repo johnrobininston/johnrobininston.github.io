@@ -1,0 +1,148 @@
+---
+title: Laplace Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **Laplace distribution** (or **double exponential distribution**) is
+a continuous probability distribution formed by placing two exponential
+densities back to back. It is symmetric about its location, with a sharp
+peak and heavier tails than the [[normal-distribution]].
+
+:::{.definition data-title="Laplace Distribution"}
+
+A random variable $X$ follows a **Laplace distribution** with location
+parameter $\mu \in \mathbb{R}$ and scale parameter $b > 0$ if
+
+$$
+X \sim \text{Laplace}(\mu, b).
+$$
+
+:::
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \frac{1}{2b} \exp\!\left(-\frac{|x - \mu|}{b}\right),
+  \quad x \in \mathbb{R}.
+$$
+
+:::
+
+*Interpretation:* The density decays exponentially in the distance from
+$\mu$ on both sides, producing a distinctive cusp at the peak.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Laplace density ($\\mu = 0$) compared with the standard
+#|   normal, showing its sharper peak and heavier tails."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import laplace, norm
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(-6, 6, 500)
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(x, laplace.pdf(x), lw=2, label='Laplace(0, 1)')
+ax.plot(x, norm.pdf(x), lw=2, ls='--',
+        label=r'$\mathcal{N}(0, 1)$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title('Laplace vs. standard normal')
+ax.legend()
+plt.show()
+```
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Laplace Distribution"}
+
+The expectation and variance of $X \sim \text{Laplace}(\mu, b)$ are
+
+$$
+\mathbb{E}[X] = \mu \quad \& \quad
+  \operatorname{Var}(X) = 2b^2.
+$$
+
+:::
+
+:::{.proof}
+
+By symmetry of the density about $\mu$, $\mathbb{E}[X] = \mu$. Centring
+at $\mu$ and using $\int_0^\infty y^2 e^{-y/b} \, dy = 2b^3$,
+
+$$
+\operatorname{Var}(X) = \frac{1}{b}\int_0^\infty y^2
+  e^{-y/b} \, dy = 2b^2.
+$$
+
+:::
+
+## Generating Functions
+
+:::{.theorem data-title="Moment Generating Function"}
+
+The **moment generating function (MGF)** of
+$X \sim \text{Laplace}(\mu, b)$ is
+
+$$
+M_X(t) = \frac{e^{\mu t}}{1 - b^2 t^2},
+  \quad |t| < \frac{1}{b}.
+$$
+
+:::
+
+:::{.theorem data-title="Characteristic Function"}
+
+The characteristic function of $X \sim \text{Laplace}(\mu, b)$ is
+
+$$
+\varphi_X(t) = \frac{e^{i\mu t}}{1 + b^2 t^2}.
+$$
+
+:::
+
+## Relationship to Other Distributions
+
+- **[[exponential-distribution]]:** If $Y_1, Y_2 \sim
+  \text{Exponential}(1/b)$ are independent, then
+  $\mu + Y_1 - Y_2 \sim \text{Laplace}(\mu, b)$.
+- **[[normal-distribution]]:** A Laplace variable can be written as a
+  normal with an exponentially distributed random variance (a scale
+  mixture), and both are symmetric location-scale families.
+
+## Examples and Applications
+
+:::{.example data-title="Robust regression"}
+
+Minimising absolute errors corresponds to maximum-likelihood estimation
+under Laplace-distributed noise, giving estimators that resist outliers.
+
+:::
+
+:::{.example data-title="LASSO and sparsity"}
+
+A Laplace prior on regression coefficients yields $\ell_1$
+regularisation, encouraging sparse solutions.
+
+:::
+
+:::{.example data-title="Differential privacy"}
+
+Adding Laplace-distributed noise calibrated to a query's sensitivity is
+the standard mechanism for achieving differential privacy.
+
+:::

@@ -1,0 +1,148 @@
+---
+title: Weibull Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **Weibull distribution** is a continuous probability distribution
+widely used in reliability engineering and survival analysis. It
+generalises the [[exponential-distribution]] by allowing the hazard rate
+to increase or decrease over time.
+
+:::{.definition data-title="Weibull Distribution"}
+
+A random variable $X$ follows a **Weibull distribution** with shape
+parameter $k > 0$ and scale parameter $\lambda > 0$ if
+
+$$
+X \sim \text{Weibull}(k, \lambda).
+$$
+
+:::
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \frac{k}{\lambda}
+  \left(\frac{x}{\lambda}\right)^{k - 1}
+  \exp\!\left(-\left(\frac{x}{\lambda}\right)^k\right),
+  \quad x \geq 0.
+$$
+
+:::
+
+*Interpretation:* The shape $k$ controls the hazard: $k < 1$ gives a
+decreasing failure rate (early-life failures), $k = 1$ a constant rate
+(the exponential case), and $k > 1$ an increasing rate (wear-out).
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Density of the Weibull distribution ($\\lambda = 1$) for
+#|   several shape parameters $k$."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import weibull_min
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(0, 2.5, 400)
+fig, ax = plt.subplots(figsize=(7, 4))
+for k in (0.5, 1.0, 1.5, 3.0):
+    ax.plot(x, weibull_min.pdf(x, k), lw=2, label=rf'$k = {k}$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title(r'Weibull density ($\lambda = 1$)')
+ax.set_ylim(0, 2)
+ax.legend()
+plt.show()
+```
+
+:::{.definition data-title="Cumulative Distribution Function (CDF)"}
+
+The cumulative distribution function is
+
+$$
+F(x) = 1 - \exp\!\left(-\left(\frac{x}{\lambda}\right)^k\right),
+  \quad x \geq 0.
+$$
+
+:::
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Weibull Distribution"}
+
+For $X \sim \text{Weibull}(k, \lambda)$,
+
+$$
+\mathbb{E}[X] = \lambda\,\Gamma\!\left(1 + \frac{1}{k}\right),
+$$
+
+$$
+\operatorname{Var}(X) = \lambda^2
+  \left[\Gamma\!\left(1 + \frac{2}{k}\right)
+  - \Gamma\!\left(1 + \frac{1}{k}\right)^2\right],
+$$
+
+where $\Gamma$ is the gamma function.
+
+:::
+
+:::{.proof}
+
+Substituting $u = (x/\lambda)^k$ gives, for any $n > 0$,
+
+$$
+\mathbb{E}[X^n] = \lambda^n \int_0^\infty u^{n/k} e^{-u} \, du
+  = \lambda^n\,\Gamma\!\left(1 + \frac{n}{k}\right).
+$$
+
+The mean and variance are the cases $n = 1$ and $n = 2$.
+
+:::
+
+## Relationship to Other Distributions
+
+- **[[exponential-distribution]]:** $\text{Weibull}(1, \lambda) =
+  \text{Exponential}(1/\lambda)$.
+- **[[rayleigh-distribution]]:** $\text{Weibull}(2, \lambda)$ is a
+  Rayleigh distribution with scale $\lambda/\sqrt{2}$.
+- **[[gumbel-distribution]]:** If $X \sim \text{Weibull}(k, \lambda)$,
+  then $-\ln X$ follows a Gumbel distribution; both are extreme-value
+  laws.
+
+## Examples and Applications
+
+:::{.example data-title="Reliability"}
+
+Component lifetimes with wear-out ($k > 1$) or infant-mortality
+($k < 1$) failure modes are routinely modelled with a Weibull
+distribution.
+
+:::
+
+:::{.example data-title="Wind speed"}
+
+The distribution of wind speeds at a site is commonly Weibull, which is
+used to estimate wind-power potential.
+
+:::
+
+:::{.example data-title="Survival analysis"}
+
+Time-to-event data with a monotone hazard — such as time to failure or
+time to recovery — are frequently fitted with Weibull models.
+
+:::

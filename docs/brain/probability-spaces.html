@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Inston">
+<meta name="dcterms.date" content="2026-08-30">
+
+<title>Probability Spaces – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2e9a4277ef77454ce49237360a8a141b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0b18a664a440bc6fc4e611d946d4cfde.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-2e9a4277ef77454ce49237360a8a141b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../brain.html"> 
+<span class="menu-text">Brain</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Probability Spaces</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 30, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#probability-spaces" id="toc-probability-spaces" class="nav-link active" data-scroll-target="#probability-spaces"><span class="header-section-number">1</span> Probability Spaces</a></li>
+  <li><a href="#borel-sets" id="toc-borel-sets" class="nav-link" data-scroll-target="#borel-sets"><span class="header-section-number">2</span> Borel Sets</a></li>
+  <li><a href="#lebesgue-measure" id="toc-lebesgue-measure" class="nav-link" data-scroll-target="#lebesgue-measure"><span class="header-section-number">3</span> Lebesgue Measure</a></li>
+  <li><span class="header-section-number">4</span> Backlinks</li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="probability-spaces" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="probability-spaces"><span class="header-section-number">1</span> Probability Spaces</h2>
+<div class="definition" data-title="Probability Space">
+<p>A <strong>probability space</strong> is a triple <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> consisting of a sample space <span class="math inline">\(\Omega\)</span>, a σ-algebra <span class="math inline">\(\mathcal{F}\)</span> and a probability measure <span class="math inline">\(\mathbb{P}:\mathcal{F}\to[0,1]\)</span>.</p>
+</div>
+<p>The sample space is the abstract collection of possible outcomes of a random experiment. The σ-algebra is the collection of all groups of outcomes called events. The probability measure is a function describing the probability of these events.</p>
+<p>A <strong>random experiment</strong> is any repeatable procedure or process with a well-defined set of possible outcomes, where the exact result cannot be predicted in advance. A <strong>sample space</strong> <span class="math inline">\(\Omega\)</span> is the collection of outcomes <span class="math inline">\(\omega \in \Omega\)</span> of a random experiment.</p>
+<div class="example">
+<p>The sample space for a single roll of a 6-sided die is</p>
+<p><span class="math display">\[
+\Omega :=\{ 1,2,3,4,5,6 \}.
+\]</span></p>
+</div>
+<p>Subsets of <span class="math inline">\(\Omega\)</span> (i.e.&nbsp;collections of outcomes) are known as <strong>events</strong> and are often denoted by capitalized letters (e.g.&nbsp;<span class="math inline">\(A\)</span>).</p>
+<div class="example">
+<p>We can define the event of rolling an event number by <span class="math inline">\(A:=\{ 2,4,6 \}.\)</span></p>
+</div>
+<p>In analysis, an [[algebra]] is a collection of sets that is non-empty, and closed under finite unions and compliments. A <span class="math inline">\(\sigma\)</span>-algebra is a specific type of algebra that is closed under countable unions.</p>
+<div class="definition" data-title="σ-Algebra">
+<p>A <strong><span class="math inline">\(\sigma\)</span>-algebra</strong> <span class="math inline">\(\mathcal{F}\)</span> for a sample set <span class="math inline">\(\Omega\)</span> is a collection of subsets of <span class="math inline">\(\Omega\)</span> (i.e.&nbsp;collection of events) that satisfies the following properties:</p>
+<ol type="1">
+<li>Non-empty: <span class="math inline">\(\Omega \in\mathcal{F}\)</span>.</li>
+<li>Closed under compliments: <span class="math inline">\(A\in\mathcal{F} \implies A^c\in\mathcal{F}\)</span>.</li>
+<li>Closed under countable unions:<span class="math inline">\(A_{i}\in\mathcal{F}\)</span> for countable <span class="math inline">\(i\)</span> <span class="math inline">\(\implies \cup_{i}A_{i}\in\mathcal{F}\)</span>.</li>
+</ol>
+</div>
+<div class="example">
+<p>The σ-algebra for our dice rolling experiment is the power set</p>
+<p><span class="math display">\[
+\mathcal{F}:=2^\Omega = \{\emptyset, \{1\}, \{2\}, \ldots, \{1,2,3,4,5,6\}\},
+\]</span></p>
+<p>which contains all 64 subsets of <span class="math inline">\(\Omega\)</span>.</p>
+</div>
+<p>Therefore a <span class="math inline">\(\sigma\)</span>-algebra is simply an [[Algebra|algebra]] that is closed under countable unions. Some intuitive examples include:</p>
+<ol type="1">
+<li><span class="math inline">\(\mathcal{F}=2^\Omega\)</span> (the power set of the sample space)</li>
+<li><span class="math inline">\(\mathcal{F}=\{ \emptyset, \Omega \}\)</span> (the trivial <span class="math inline">\(\sigma\)</span>-algebra)</li>
+<li><span class="math inline">\(\Omega=\{ 1,2,3 \}\implies \mathcal{F}=
+\{ \emptyset, \{ 1 \}, \{ 2,3 \}, \Omega \}\)</span>.</li>
+</ol>
+<div class="theorem" data-title="Intersection of σ-Algebra">
+<p>For a (possibly uncountable) collection of <span class="math inline">\(\sigma\)</span>-algebras <span class="math inline">\(\mathcal{F}_{i}\)</span> with index set <span class="math inline">\(i\in I\)</span> over sample space <span class="math inline">\(\Omega\)</span> the intersection <span class="math inline">\(\cap_{i}\mathcal{F}_{i}\)</span> is also a <span class="math inline">\(\sigma\)</span>-algebra.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We have that:</p>
+<ol type="1">
+<li><span class="math inline">\(\forall i,\Omega \in\mathcal{F}_{i} \implies
+\Omega \in\cap_{i}\mathcal{F}_{i}\)</span>.</li>
+<li>Let <span class="math inline">\(A\in\cap_{i}\mathcal{F}_{i}\implies \forall i,
+A\in\mathcal{F}_{i}\implies \forall i,A^c\in\mathcal{F}_{i}\implies
+A^c\in\cap_{i}\mathcal{F}_{i}\)</span>.</li>
+<li>Let <span class="math inline">\(\{ A_{n} \}_{n\in\mathbb{N}}\subseteq \cap_{i}\mathcal{F}_{i}\)</span></li>
+</ol>
+</div>
+<div class="theorem" data-title="Generated σ-Algebra">
+<p>For a collection <span class="math inline">\(\mathcal{A}\subseteq 2^\Omega\)</span> of subsets of <span class="math inline">\(\Omega\)</span> there is a unique smallest <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span> containing <span class="math inline">\(\mathcal{A}\)</span>, known as the <span class="math inline">\(\sigma\)</span>-algebra generated by <span class="math inline">\(\mathcal{A}\)</span> defined as</p>
+<p><span class="math display">\[
+\sigma(\mathcal{A})=\bigcap \{ \mathcal{F}:\mathcal{F}\text{ is a }\sigma
+\text{-algebra over }\Omega~s.t.~\mathcal{A}\subseteq \mathcal{F} \}.
+\]</span></p>
+</div>
+<p>From the study of [[Measure Theory]], a [[Measure]] is a generalized function <em>measuring</em> the <em>size</em> of a set.</p>
+<div class="definition" data-title="Probability Measure">
+<p>A <strong>probability measure</strong> <span class="math inline">\(\mathbb{P}\)</span> on measurable space <span class="math inline">\((\Omega,\mathcal{F})\)</span> is a mapping <span class="math inline">\(\mathbb{P}:\mathcal{F}\mapsto [0,1]\)</span> satisfying the following properties:</p>
+<ol type="1">
+<li><span class="math inline">\(\mathbb{P}(A)\geq \mathbb{P}(\emptyset)=0\)</span>;</li>
+<li><span class="math inline">\(\mathbb{P}(\Omega)=1\)</span>;</li>
+<li>For countable disjoint <span class="math inline">\(A_{i}\in\mathcal{F}\)</span> then <span class="math inline">\(\mathbb{P}(\cup_{i}A_{i})=\sum_{i}\mathbb{P}(A_{i})\)</span>.</li>
+</ol>
+</div>
+<div class="theorem" data-title="Properties of Measure">
+<p>For measure <span class="math inline">\(\mathbb{P}\)</span> on probability space <span class="math inline">\(\mathbb{P}\)</span> we have the following basic properties:</p>
+<ol type="1">
+<li><strong>Monotonicity:</strong> <span class="math inline">\(A\subset B,~A,B\in \mathcal{F}\implies \mathbb{P}(A)
+\leq \mathbb{P}(B)\)</span>;</li>
+<li><strong>Rule of Addition:</strong> <span class="math inline">\(A,B \in \mathcal{F}\implies \mathbb{P}(A \cup B)+
+\mathbb{P}(A\cap B)=\mathbb{P}(A)+\mathbb{P}(B)\)</span>;</li>
+<li><strong>Subadditivity:</strong> <span class="math inline">\(\{ A_{n} \}_{n\in\mathbb{N}}\subseteq
+\mathcal{F}\implies P(\cup_{n=1}^\infty A_{n})\leq \sum_{n=1}^\infty
+\mathbb{P}(A_{n})\)</span>;</li>
+<li><strong>Continuity from below:</strong> <span class="math inline">\(A_{i}\uparrow A\)</span> (i.e <span class="math inline">\(A_1 \subset A_2
+\subset\dots~\&amp;~\bigcup_{i}A_{i}=A\)</span>) <span class="math inline">\(\implies \mathbb{P}(A_{i})\uparrow
+\mathbb{P}(A)\)</span>.</li>
+<li><strong>Continuity from above:</strong> <span class="math inline">\(A_{i}\downarrow A\implies \mathbb{P}(A_{i})
+\downarrow \mathbb{P}(A)\)</span>.</li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span></p>
+<ol type="1">
+<li><strong>Monotonicity:</strong> Since <span class="math inline">\(A \subset B\)</span>, we have <span class="math inline">\(B =
+A \cup (B \setminus A)\)</span> (disjoint), so <span class="math inline">\(\mathbb{P}(B) =
+\mathbb{P}(A) + \mathbb{P}(B \setminus A) \geq \mathbb{P}(A)\)</span> as <span class="math inline">\(\mathbb{P}(B \setminus A) \geq 0\)</span>.</li>
+<li><strong>Rule of Addition:</strong> Write <span class="math inline">\(A \cup B = A \cup (B \setminus A)\)</span> (disjoint) and <span class="math inline">\(B = (A \cap B) \cup (B \setminus A)\)</span> (disjoint). Then <span class="math inline">\(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B \setminus A)\)</span> and <span class="math inline">\(\mathbb{P}(B) = \mathbb{P}(A \cap B) + \mathbb{P}(B \setminus A)\)</span>. Thus <span class="math inline">\(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) -
+\mathbb{P}(A \cap B)\)</span>.</li>
+<li><strong>Subadditivity:</strong> Define <span class="math inline">\(B_1 = A_1, B_n = A_n \setminus (A_1 \cup \cdots
+\cup A_{n-1})\)</span> for <span class="math inline">\(n \geq 2\)</span>. These are disjoint with <span class="math inline">\(\bigcup B_n =
+\bigcup A_n\)</span>. By countable additivity, <span class="math inline">\(\mathbb{P}(\bigcup A_n) =
+\sum \mathbb{P}(B_n)\)</span>. Since <span class="math inline">\(B_n \subseteq A_n\)</span>, <span class="math inline">\(\mathbb{P}(B_n) \leq
+\mathbb{P}(A_n)\)</span>, so <span class="math inline">\(\mathbb{P}(\bigcup A_n) \leq \sum \mathbb{P}(A_n)\)</span>.</li>
+<li><strong>Continuity from below:</strong> Write <span class="math inline">\(A = A_1 \cup (A_2 \setminus A_1) \cup
+(A_3 \setminus A_2) \cup \cdots\)</span> (disjoint). By countable additivity, <span class="math inline">\(\mathbb{P}(A) = \mathbb{P}(A_1) + \sum_{i=1}^{\infty} \mathbb{P}(A_{i+1}
+\setminus A_i)\)</span>. Since <span class="math inline">\(\mathbb{P}(A_n) = \mathbb{P}(A_1) +
+\sum_{i=1}^{n-1} \mathbb{P}(A_{i+1} \setminus A_i)\)</span>, we have <span class="math inline">\(\mathbb{P}(A_n) \to \mathbb{P}(A)\)</span> as <span class="math inline">\(n \to \infty\)</span>.</li>
+<li><strong>Continuity from above:</strong> Write <span class="math inline">\(A_1 \setminus A = (A_1 \setminus A_2)
+\cup (A_2 \setminus A_3) \cup \cdots\)</span> (disjoint). By countable additivity, <span class="math inline">\(\mathbb{P}(A_1) - \mathbb{P}(A) = \sum_{i=1}^{\infty} \mathbb{P}(A_i
+\setminus A_{i+1})\)</span>. Note that <span class="math inline">\(\mathbb{P}(A_n) - \mathbb{P}(A) =
+\sum_{i=n}^{\infty} \mathbb{P}(A_i \setminus A_{i+1}) \to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</li>
+</ol>
+</div>
+</section>
+<section id="borel-sets" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="borel-sets"><span class="header-section-number">2</span> Borel Sets</h2>
+<p>The Borel σ-algebra is a σ-algebra defined on the real numbers <span class="math inline">\(\mathbb{R}\)</span>.</p>
+<div class="definition" data-title="Borel σ-Algebra">
+<p>Taking <span class="math inline">\(\Omega:=\mathbb{R}\)</span>, the smallest σ-Algebra that contains <span class="math inline">\(\mathbb{R}\)</span> is called the <strong>Borel σ-algebra</strong> <span class="math inline">\(\mathcal{R}=\mathcal{B}_{\mathbb{R}}:
+=\sigma(\mathbb{R})\)</span>. Any set in <span class="math inline">\(\mathcal{R}\)</span> we call a <strong>Borel set</strong>.</p>
+</div>
+<p>More rigorously, for a topological space <span class="math inline">\(\mathcal{T}\)</span>, the Borel σ-algebra of <span class="math inline">\(\mathcal{T}\)</span> is the σ-algebra generated from the open sets of <span class="math inline">\(\mathcal{T}\)</span>.<br>
+That is, it is the smallest collection of subsets of <span class="math inline">\(\mathcal{T}\)</span> that contain all the open sets of <span class="math inline">\(\mathcal{T}\)</span> and satisfy the properties of a σ-algebra.</p>
+<p>Any measure that is defined on <span class="math inline">\(\mathcal{R}\)</span> is called a <strong>Borel measure</strong>.</p>
+</section>
+<section id="lebesgue-measure" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lebesgue-measure"><span class="header-section-number">3</span> Lebesgue Measure</h2>
+<p>To define measures on the real numbers <span class="math inline">\(\mathbb{R}\)</span> we first define <strong>Stieltjes measure functions</strong> which are non-decreasing, right continuous real functions.</p>
+<div class="definition" data-title="Stieltjes Measure Function">
+<p>On the measurable space <span class="math inline">\((\mathbb{R},\mathcal{R})\)</span> a <strong>Stieltjes measure function</strong> <span class="math inline">\(F:\mathbb{R} \to \mathbb{R}\)</span> is any function that is:</p>
+<ol type="1">
+<li><strong>Non-decreasing.</strong> <span class="math inline">\(F(b) \geq F(a)\)</span> for all <span class="math inline">\(b &gt; a\)</span>.</li>
+<li><strong>Right continuous.</strong> <span class="math inline">\(\lim_{y \downarrow x}F(y) = F(x)\)</span>.</li>
+</ol>
+</div>
+<p>For each Stieltjes measure function we can define a unique measure called the Stieltjes measure.</p>
+<div class="theorem" data-title="Lebesgue-Stieltjes Measure">
+<p>For each Stieltjes measure function <span class="math inline">\(F\)</span> there exists a unique <strong>Borel measure</strong> <span class="math inline">\(\mu\)</span> on the measure space <span class="math inline">\((\mathbb{R}, \mathcal{R})\)</span> known as the <strong>Lebesgue-Stieltjes measure</strong> satisfying</p>
+<p><span class="math display">\[
+\mu((a,b])=F(b)-F(a),
+\]</span></p>
+<p>for every <span class="math inline">\(a&lt;b\)</span>.</p>
+<p>When <span class="math inline">\(F(x):=x\)</span> for <span class="math inline">\(x \in \mathbb{R}\)</span> this measure is specified as the <strong>Lebesgue measure</strong> and is specifically denoted by <span class="math inline">\(\lambda\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span></p>
+<ol type="1">
+<li><p>First we define a [[Algebra|semi-algebra]] <span class="math inline">\(\mathcal{S}\)</span>, an algebra <span class="math inline">\(\bar{\mathcal{S}}\)</span>, and then a (<span class="math inline">\(\sigma\)</span>-finite) measure <span class="math inline">\(\mu\)</span> on the algebra <span class="math inline">\(\bar{\mathcal{S}}\)</span>.</p></li>
+<li><p>We extend a set function <span class="math inline">\(\mu\)</span> on <span class="math inline">\(\mathcal{S}\)</span> to a measure <span class="math inline">\(\bar{\mathcal{\mu}}\)</span> on <span class="math inline">\(\bar{\mathcal{S}}\)</span> under the conditions of (1) finite additivity and (2) sub-additivity. We check (1) finite additivity for every union of disjoint sets and (2) sub-additivity for every union of disjoint sets.</p></li>
+<li><p>We extend a <span class="math inline">\(\sigma\)</span>-finite measure <span class="math inline">\(\bar{\mu}\)</span> on algebra <span class="math inline">\(\bar{S}\)</span> uniquely to a measure <span class="math inline">\(\nu\)</span> on <span class="math inline">\(\sigma(S)\)</span> via the [[caratheodory-extension-theorem]].</p></li>
+</ol>
+</div>
+
+
+</section>
+<section class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id=""><span class="header-section-number">4</span> Backlinks</h2>
+<ul>
+<li><a href="../brain/probability-theory.html">Probability Theory</a></li>
+</ul>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

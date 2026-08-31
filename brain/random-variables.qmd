@@ -1,0 +1,276 @@
+---
+title: Random Variables and Distribution Functions
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+
+## Random Variables
+
+A **random variable** is a bridge between the abstract probability space and 
+concrete numerical values we can measure.
+
+:::{.definition data-title="Random Variable"}
+
+A **random variable** $X$ on a [[probability-spaces]] 
+$(\Omega, \mathcal{F}, \mathbb{P})$ is a function $X:\Omega \to \mathbb{R}$ 
+(or more generally $X:\Omega \to \mathbb{R}^n$) such that for every Borel set 
+$B \subseteq \mathbb{R}$, the preimage $X^{-1}(B) \in \mathcal{F}$. In other 
+words, $X$ is an $\mathcal{F}$-measurable function.
+
+:::
+
+The measurability condition ensures that we can assign probabilities to events 
+like "$X \leq x$" because the sets $\{\omega \in \Omega : X(\omega) \leq x\}$ 
+belong to the σ-algebra $\mathcal{F}$.
+
+:::{.example}
+
+Rolling a fair die defines a probability space $(\Omega, \mathcal{F}, 
+\mathbb{P})$ where $\Omega = \{1,2,3,4,5,6\}$. A random variable $X$ might map 
+each outcome to itself: $X(\omega) = \omega$. Another could be $Y(\omega) = 
+\omega^2$, assigning numerical values to each outcome.
+
+:::
+
+The key insight is that random variables allow us to work with the abstract 
+probability space indirectly—we don't need to understand $\Omega$ itself, 
+only the distribution of $X$.
+
+## Distribution Functions
+
+A random variable $X$ on probability space $(\Omega, \mathcal{F}, \mathbb{P})$ 
+induces a probability distribution on $(\mathbb{R}, \mathcal{B})$ where 
+$\mathcal{B}$ is the Borel σ-algebra.
+
+:::{.definition data-title="Distribution (Push-forward Measure)"}
+
+The **distribution** of a random variable $X$ is the probability measure 
+$\mathbb{P}_X$ on $(\mathbb{R}, \mathcal{B})$ defined by 
+
+$$
+\mathbb{P}_X(B) = \mathbb{P}(X^{-1}(B)) = 
+\mathbb{P}(\{\omega \in \Omega : X(\omega) \in B\})
+$$ 
+
+for every Borel set $B \in \mathcal{B}$.
+
+:::
+
+This is also called the **push-forward measure** of $\mathbb{P}$ under $X$, 
+often denoted $\mathbb{P}_X = X_*\mathbb{P}$.
+
+:::{.example}
+
+If we roll a fair die with $\mathbb{P}(\{i\}) = 1/6$ for each outcome, the 
+distribution of $X(\omega) = \omega$ assigns probability $\mathbb{P}_X(\{i\}) 
+= 1/6$ to each value $i \in \{1,2,3,4,5,6\}$. For a set like $B = \{1,3,5\}$ 
+(odd numbers), $\mathbb{P}_X(B) = 1/2$.
+
+:::
+
+The distribution is the complete probabilistic characterization of the random 
+variable. Once we know $\mathbb{P}_X$, we can compute probabilities of events 
+involving $X$ without reference to the original probability space 
+$(\Omega, \mathcal{F}, \mathbb{P})$.
+
+## Cumulative Distribution Functions
+
+The cumulative distribution function (CDF) is the most common way to describe 
+a distribution.
+
+:::{.definition data-title="Cumulative Distribution Function"}
+
+The **cumulative distribution function** of a random variable $X$ is the 
+function $F_X: \mathbb{R} \to [0,1]$ defined by $$F_X(x) = \mathbb{P}(X \leq x)
+= \mathbb{P}(\{\omega : X(\omega) \leq x\})$$ for all $x \in \mathbb{R}$.
+
+:::
+
+:::{.theorem data-title="CDF Properties"}
+
+For random variables $X,Y$ with CDFs $F_{X}, F_{Y}$ the following properties 
+hold
+
+1. **Non-decreasing:** If $x < y$ then $F_X(x) \leq F_X(y)$
+2. **Right-continuous:** $\lim_{h \downarrow 0} F_X(x+h) = F_X(x)$ for all $x$
+3. **Boundary conditions:** $\lim_{x \to -\infty} F_X(x) = 0$ and 
+   $\lim_{x \to \infty} F_X(x) = 1$
+4. **Jump interpretation:** $\mathbb{P}(X = x) = F_X(x) - \lim_{h \downarrow 0}
+    F_X(x-h) = F_X(x) - F_X(x-)$
+5. **Interval probabilities:** For $a < b$, we have $\mathbb{P}(a < X \leq b) 
+   = F_X(b) - F_X(a)$.
+
+:::
+
+:::{.proof}
+
+:::
+
+The CDF completely characterizes the distribution—two random variables with 
+the same CDF have the same distribution. Conversely, any non-decreasing 
+right-continuous function $F: \mathbb{R} \to [0,1]$ with $\lim_{x \to -\infty} 
+F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$ is the CDF of some probability 
+distribution (by the Lebesgue-Stieltjes theorem).
+
+> **Example:** For the fair die, $F_X(x) = 0$ for $x < 1$, $F_X(x) = k/6$ for 
+$k \leq x < k+1$ where $k \in \{1,2,3,4,5\}$, and $F_X(x) = 1$ for $x \geq 6$.
+
+## Density Functions
+
+A density function provides another way to describe distributions, useful when
+the distribution is "smooth" enough.
+
+:::{.definition data-title="Probability Density Function"}
+
+A random variable $X$ has a **probability density function** (pdf) 
+$f_X: \mathbb{R} \to [0, \infty)$ if its CDF can be written as 
+
+$$
+F_X(x) = \int_{-\infty}^{x} f_X(t) \, dt
+$$ 
+
+for all $x \in \mathbb{R}$.
+
+:::
+
+When $f_X$ exists, it satisfies:
+
+- $\int_{-\infty}^{\infty} f_X(x) \, dx = 1$ (normalization)
+- $\mathbb{P}(a < X \leq b) = \int_a^b f_X(x) \, dx$ (probability via 
+    integration)
+- $F_X'(x) = f_X(x)$ (derivative of CDF where the derivative exists)
+
+**Key distinction:** For continuous distributions, $\mathbb{P}(X = x) = 0$ for 
+individual points, but $f_X(x)$ describes the relative likelihood in a small 
+neighborhood of $x$. The density is a relative measure, not an absolute 
+probability.
+
+Not all distributions have a density. Discrete distributions (like the fair 
+die) have no pdf because their CDFs have jumps rather than being continuously
+differentiable. Some distributions are mixtures of continuous and discrete 
+parts (singular distributions) and also lack pdfs.
+
+:::{.example}
+
+The [[uniform-distribution]] on $[0,1]$ has pdf $f_X(x) = 1$ for $x \in [0,1]$
+and $f_X(x) = 0$ otherwise. The standard normal distribution has pdf $f_X(x) =
+\frac{1}{\sqrt{2\pi}} e^{-x^2/2}$.
+
+:::
+
+## Measurable Maps
+
+Measurability is the fundamental concept that allows us to work with 
+probability on abstract spaces.
+
+:::{.definition data-title="Measurable Function"}
+
+Let $(X, \mathcal{A})$ and $(Y, \mathcal{B})$ be measurable spaces. A function
+$f: X \to Y$ is **$\mathcal{A}$-$\mathcal{B}$-measurable** (or simply 
+**measurable**) if for every set $B \in \mathcal{B}$, the preimage 
+$f^{-1}(B) \in \mathcal{A}$.
+
+:::
+
+**Intuition:** A function is measurable if preimages of measurable sets are 
+measurable. This ensures we can "pull back" σ-algebras through the 
+function - whatever we can measure in the codomain corresponds to something we
+can measure in the domain.
+
+**Why this matters for probability:** If we want to assign a probability to
+the event "$X \in B$" for some set $B$, we need $X^{-1}(B)$ to be an event 
+(i.e., in $\mathcal{F}$). Measurability guarantees this.
+
+:::{.theorem data-title="Sufficient Conditions for Measurability"}
+
+A function $f: (X, \mathcal{A}) \to (\mathbb{R}, \mathcal{B})$ is measurable 
+if and only if for every $x \in \mathbb{R}$, 
+
+$$
+f^{-1}((-\infty, x]) \in \mathcal{A}.
+$$
+
+:::
+
+This is useful because we don't need to check all Borel sets—just checking 
+measurability on intervals is enough.
+
+**Intuition for measurability:** Think of the σ-algebra as describing what we 
+can "observe" or "measure" in that space. A measurable function is one that 
+respects this structure—observations we can make in the codomain corresponds
+to observations we can make in the domain.
+
+**Examples of measurable functions:**
+
+- Continuous functions are always measurable (with respect to Borel σ-algebras)
+- Monotone functions are measurable
+- Sums, products, and compositions of measurable functions are measurable
+
+## σ-Algebras Generated by Random Variables
+
+A random variable naturally generates a σ-algebra, representing the 
+information contained in that variable.
+
+:::{.definition data-title="σ-Algebra Generated by a Random Variable"}
+
+The **σ-algebra generated by a random variable** $X$ on probability space 
+$(\Omega, \mathcal{F}, \mathbb{P})$ is 
+
+$$
+\sigma(X) = \sigma(\{X^{-1}(B) : B \in \mathcal{B}\}),
+$$ 
+
+the smallest σ-algebra containing all sets of the form $X^{-1}(B)$ for Borel 
+sets $B$.
+
+:::
+
+This is equivalent to: 
+
+$$
+\sigma(X) = \{X^{-1}(B) : B \in \mathcal{B}\}.
+$$
+
+**Interpretation:** $\sigma(X)$ is the collection of all events we can 
+describe using knowledge of $X$'s value. If we know whether "$X \in B$" for 
+all Borel sets $B$, we know whether every event in $\sigma(X)$ has occurred.
+
+> [!NOTE] Theorem: Generated σ-Algebra Structure
+> For a random variable $X: \Omega \to \mathbb{R}$, $$\sigma(X) = \{\omega \in \Omega : X(\omega) \in B\} = X^{-1}(B_1), X^{-1}(B_2), \ldots$$ where $B_i$ are Borel sets, and the smallest σ-algebra containing these is generated by countable unions, complements, and intersections.
+
+**Example:** For a fair die with $X(\omega) = \omega$:
+- The event "X is even" = $\{2,4,6\} = X^{-1}(\{2,4,6\})$ is in $\sigma(X)$
+- The event "X ≤ 3" = $\{1,2,3\} = X^{-1}((-\infty, 3])$ is in $\sigma(X)$
+- In fact, $\sigma(X) = 2^\Omega$ (all subsets) because every point is in the range of $X$
+
+**Information interpretation:** $\sigma(X)$ represents the information revealed by observing $X$. A larger σ-algebra means more information; $\sigma(X) \subseteq \mathcal{F}$ means observing $X$ reveals only partial information about the outcome $\omega$.
+
+Multiple random variables generate larger σ-algebras: $\sigma(X, Y) = \sigma(\sigma(X) \cup \sigma(Y))$ represents the information from observing both variables.
+
+## Which Operations on Random Variables Preserve Measurability?
+---
+Since random variables must be measurable, it's important to know which operations maintain measurability.
+
+> [!NOTE] Theorem: Operations Preserving Measurability
+> Let $X, Y$ be random variables on $(\Omega, \mathcal{F}, \mathbb{P})$ taking values in $\mathbb{R}$. Then the following are measurable (i.e., random variables):
+>
+> 1. **Arithmetic operations:** $X + Y$, $X - Y$, $X \cdot Y$, and $X/Y$ (where $Y \neq 0$)
+> 2. **Monotone operations:** $X \vee Y := \max(X, Y)$ and $X \wedge Y := \min(X, Y)$
+> 3. **Absolute value:** $|X|$
+> 4. **Powers:** $X^p$ for $p > 0$
+> 5. **Limits:** If $X_n$ is a sequence of random variables, then $\sup_n X_n$, $\inf_n X_n$, $\limsup_n X_n$, and $\liminf_n X_n$ are measurable
+> 6. **Continuous functions:** If $g: \mathbb{R} \to \mathbb{R}$ is continuous, then $g(X)$ is measurable
+> 7. **Measurable functions:** If $g: \mathbb{R} \to \mathbb{R}$ is measurable, then $g(X)$ is measurable
+> 8. **Indicators:** For any $A \in \mathcal{F}$, the indicator function $\mathbf{1}_A(\omega) = \begin{cases} 1 & \text{if } \omega \in A \\ 0 & \text{otherwise} \end{cases}$ is a random variable
+
+**Key Principle:** Composition with measurable functions preserves measurability. If $X$ is measurable and $g$ is measurable, then $g \circ X$ is measurable.
+
+**Proof sketch for arithmetic:** For example, to show $X + Y$ is measurable, note that $\{X + Y \leq x\} = \{(X, Y) \in \{(u,v): u+v \leq x\}\}$. Since this is a preimage of a Borel set under the measurable function $(X,Y)$, it's measurable.
+
+**Important limitation:** Not all operations preserve measurability when dealing with uncountable sequences. For instance, the pointwise supremum of uncountably many measurable functions need not be measurable. However, countable suprema are always measurable.
+
+**Practical implication:** This closure under operations means we can build up complex random variables from simple ones and be confident they remain properly defined (measurable).
+

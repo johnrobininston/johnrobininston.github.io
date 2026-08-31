@@ -1,0 +1,154 @@
+---
+title: Cauchy Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **Cauchy distribution** is a continuous probability distribution
+notable for its heavy tails: it has no finite mean or variance. It arises
+as the ratio of two independent standard normal random variables and as
+the [[students-t-distribution]] with one degree of freedom.
+
+:::{.definition data-title="Cauchy Distribution"}
+
+A random variable $X$ follows a **Cauchy distribution** with location
+parameter $x_0 \in \mathbb{R}$ and scale parameter $\gamma > 0$ if
+
+$$
+X \sim \text{Cauchy}(x_0, \gamma).
+$$
+
+:::
+
+The **standard Cauchy distribution** is the case $x_0 = 0$, $\gamma = 1$.
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \frac{1}{\pi\gamma
+  \left[1 + \left(\dfrac{x - x_0}{\gamma}\right)^2\right]},
+  \quad x \in \mathbb{R}.
+$$
+
+:::
+
+*Interpretation:* The density is symmetric and bell-shaped about $x_0$,
+but its tails decay only like $x^{-2}$, so extreme values occur far more
+often than for the [[normal-distribution]].
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Standard Cauchy density compared with the standard normal,
+#|   highlighting the Cauchy distribution's heavier tails."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import cauchy, norm
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(-6, 6, 500)
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(x, cauchy.pdf(x), lw=2, label='Cauchy(0, 1)')
+ax.plot(x, norm.pdf(x), lw=2, ls='--',
+        label=r'$\mathcal{N}(0, 1)$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title('Standard Cauchy vs. standard normal')
+ax.legend()
+plt.show()
+```
+
+:::{.definition data-title="Cumulative Distribution Function (CDF)"}
+
+The cumulative distribution function is
+
+$$
+F(x) = \frac{1}{\pi} \arctan\!\left(\frac{x - x_0}{\gamma}\right)
+  + \frac{1}{2}.
+$$
+
+:::
+
+## Key Properties
+
+:::{.theorem data-title="Non-Existence of Moments"}
+
+For $X \sim \text{Cauchy}(x_0, \gamma)$, the expectation
+$\mathbb{E}[X]$ does not exist, and consequently neither the variance nor
+the moment generating function exists.
+
+:::
+
+:::{.proof}
+
+For the standard Cauchy, $\mathbb{E}[|X|] = \int_{-\infty}^\infty
+\frac{|x|}{\pi(1 + x^2)} \, dx$ diverges, since the integrand behaves
+like $1/(\pi|x|)$ for large $|x|$. Hence $\mathbb{E}[X]$ is undefined and
+no higher moments exist.
+
+:::
+
+The location $x_0$ is instead the **median** and **mode**, and $\gamma$
+is the half-width at half-maximum.
+
+## Characteristic Function
+
+:::{.theorem data-title="Characteristic Function"}
+
+Although the MGF does not exist, the characteristic function of
+$X \sim \text{Cauchy}(x_0, \gamma)$ is well defined:
+
+$$
+\varphi_X(t) = \exp\!\left(i x_0 t - \gamma |t|\right).
+$$
+
+:::
+
+A consequence is that the sample mean of $n$ i.i.d. standard Cauchy
+variables is again standard Cauchy — averaging does **not** reduce
+dispersion, in stark contrast to the Law of Large Numbers.
+
+## Relationship to Other Distributions
+
+- **[[normal-distribution]]:** If $Z_1, Z_2 \sim \mathcal{N}(0, 1)$ are
+  independent, then $Z_1/Z_2 \sim \text{Cauchy}(0, 1)$.
+- **[[students-t-distribution]]:** The standard Cauchy is Student's $t$
+  with one degree of freedom.
+- **Stable distribution:** The Cauchy is one of the few stable
+  distributions with a closed-form density, alongside the normal.
+
+## Examples and Applications
+
+:::{.example data-title="Ratio of normals"}
+
+The ratio of two independent centred normal measurements — for example
+the tangent of a uniformly random angle — follows a Cauchy distribution.
+
+:::
+
+:::{.example data-title="Resonance"}
+
+In physics, the Cauchy (Lorentzian) distribution describes the shape of
+spectral lines and the response of a driven resonant system.
+
+:::
+
+:::{.example data-title="Robustness testing"}
+
+Because it lacks a mean, the Cauchy distribution is a standard stress
+test for estimators and for the assumptions behind the Central Limit
+Theorem.
+
+:::

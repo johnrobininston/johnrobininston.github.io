@@ -1085,7 +1085,7 @@ opacity: 0.6;
   <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="John Inston">
-  <meta name="dcterms.date" content="2026-08-22">
+  <meta name="dcterms.date" content="2026-08-30">
   <title>John Robin Inston – Lecture 11: Multiple Linear Regression</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1767,7 +1767,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
     </div>
 </div>
 
-  <p class="date">August 22, 2026</p>
+  <p class="date">August 30, 2026</p>
 </section>
 <section id="overview" class="slide level2">
 <h2>🚁 Overview</h2>
@@ -1793,7 +1793,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 
 </div>
 <h3 id="required-libraries">📚 Required Libraries</h3>
-<div id="358e4167" class="cell" data-execution_count="1">
+<div id="7ba6de6e" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -1804,7 +1804,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 <span id="cb1-8"><a></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_california_housing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <h3 id="figure-styles">💅 Figure Styles</h3>
-<div id="961bae7e" class="cell" data-execution_count="2">
+<div id="13903f7b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a></a>sns.set_style(<span class="st">&#39;whitegrid&#39;</span>)</span>
 <span id="cb2-2"><a></a>sns.set_palette(<span class="st">&#39;Set2&#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -1965,7 +1965,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 </section>
 <section id="constructing-the-design-matrix-in-python" class="slide level2">
 <h2>Constructing the Design Matrix in Python</h2>
-<div id="d8d16109" class="cell" data-execution_count="3">
+<div id="d766ab77" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" data-code-line-numbers="1-6|8-12|"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a></a><span class="co"># Set seed and define true parameters</span></span>
 <span id="cb3-2"><a></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
 <span id="cb3-3"><a></a>n, p <span class="op">=</span> <span class="dv">150</span>, <span class="dv">3</span></span>
@@ -2002,7 +2002,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 </div>
 </div></section><section id="scatterplot-of-y-vs.-x_1-with-points-coloured-by-x_2-and-sized-by-x_3-to-illustrate-the-multivariate-relationship." class="slide level2">
 <h2>Scatterplot of <span class="math inline">Y</span> vs. <span class="math inline">X_1</span> (with points coloured by <span class="math inline">X_2</span> and sized by <span class="math inline">X_3</span>) to illustrate the multivariate relationship.</h2>
-<div id="c1e86588" class="cell" data-execution_count="4">
+<div id="3e55df8d" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" data-code-line-numbers="1-2|4-7|9-12|"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb4-2"><a></a>scatter <span class="op">=</span> plt.scatter(X_pred[:, <span class="dv">0</span>], y, c<span class="op">=</span>X_pred[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">100</span> <span class="op">*</span> np.<span class="bu">abs</span>(X_pred[:, <span class="dv">2</span>]),</span>
 <span id="cb4-3"><a></a>                      cmap<span class="op">=</span><span class="st">&#39;viridis&#39;</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, edgecolor<span class="op">=</span><span class="st">&#39;k&#39;</span>)</span>
@@ -2027,7 +2027,7 @@ John Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-
 </div></section><section id="pairplot-of-y-and-the-three-predictors-to-visualise-their-relationships." class="slide level2">
 <h2>Pairplot of <span class="math inline">Y</span> and the three predictors to visualise their relationships.</h2>
 <h3 id="correlation-matrix">Correlation Matrix</h3>
-<div id="7ccd4d53" class="cell columns column-output-location" data-execution_count="5">
+<div id="7a0be9ce" class="cell columns column-output-location" data-execution_count="5">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a></a>df <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb5-2"><a></a>    X_pred, </span>
@@ -2044,7 +2044,7 @@ $X_3$ -0.009  0.118  1.000  0.147
 $Y$    0.560 -0.432  0.147  1.000</code></pre>
 </div>
 </div></div>
-<div id="780e1f31" class="cell" data-fig-height="4" data-execution_count="6">
+<div id="faf9088f" class="cell" data-fig-height="4" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a></a>sns.pairplot(df, diag_kind<span class="op">=</span><span class="st">&#39;kde&#39;</span>, plot_kws<span class="op">=</span>{<span class="st">&#39;alpha&#39;</span>: <span class="fl">0.6</span>, <span class="st">&#39;edgecolor&#39;</span>: <span class="st">&#39;k&#39;</span>}, height<span class="op">=</span><span class="fl">1.5</span>, aspect<span class="op">=</span><span class="fl">1.0</span>)</span>
 <span id="cb7-2"><a></a>plt.suptitle(<span class="st">&#39;Pairplot of $Y$ and the three predictors&#39;</span>, fontsize<span class="op">=</span><span class="dv">13</span>, y<span class="op">=</span><span class="fl">1.02</span>)</span>
 <span id="cb7-3"><a></a>plt.tight_layout()<span class="op">;</span> plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -2169,7 +2169,7 @@ $Y$    0.560 -0.432  0.147  1.000</code></pre>
 </section>
 <section id="computing-ols-from-scratch" class="slide level2">
 <h2>Computing OLS from Scratch</h2>
-<div id="74b40069" class="cell" data-execution_count="7">
+<div id="5455818b" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" data-code-line-numbers="1-2|4-8|10-22|"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a></a><span class="co"># Solve the normal equations (numerically stable — avoids forming the explicit inverse)</span></span>
 <span id="cb8-2"><a></a>beta_hat <span class="op">=</span> np.linalg.solve(X_design.T <span class="op">@</span> X_design, X_design.T <span class="op">@</span> y)</span>
 <span id="cb8-3"><a></a></span>
@@ -2353,7 +2353,7 @@ $Y$    0.560 -0.432  0.147  1.000</code></pre>
 </section>
 <section id="simulating-the-sampling-distribution" class="slide level2">
 <h2>Simulating the Sampling Distribution</h2>
-<div id="18415aba" class="cell" data-execution_count="8">
+<div id="eb600791" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a></a>rng2 <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)</span>
 <span id="cb10-2"><a></a>beta_hat_sims <span class="op">=</span> []</span>
 <span id="cb10-3"><a></a></span>
@@ -2416,7 +2416,7 @@ $Y$    0.560 -0.432  0.147  1.000</code></pre>
 </ul>
 </div>
 <div class="fragment">
-<div id="0e7a0c6a" class="cell columns column-output-location" data-execution_count="9">
+<div id="0571d68a" class="cell columns column-output-location" data-execution_count="9">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a></a>y_hat   <span class="op">=</span> X_design <span class="op">@</span> beta_hat</span>
 <span id="cb11-2"><a></a>RSS     <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> y_hat)<span class="op">**</span><span class="dv">2</span>)</span>
@@ -2465,7 +2465,7 @@ $Y$    0.560 -0.432  0.147  1.000</code></pre>
 </div>
 </div>
 <div class="fragment">
-<div id="510ed5b1" class="cell columns column-output-location" data-execution_count="10">
+<div id="18a1c923" class="cell columns column-output-location" data-execution_count="10">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a></a>SST    <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> y.mean())<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb13-2"><a></a>SSE    <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> y_hat)<span class="op">**</span><span class="dv">2</span>)</span>
@@ -2565,7 +2565,7 @@ p-value = 8.88e-27</code></pre>
 <div class="spacer-sm">
 
 </div>
-<div id="c30e1c77" class="cell columns column-output-location" data-execution_count="11">
+<div id="e0b136da" class="cell columns column-output-location" data-execution_count="11">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a></a>rng3 <span class="op">=</span> np.random.default_rng(<span class="dv">99</span>)</span>
 <span id="cb15-2"><a></a>R2_vals <span class="op">=</span> []</span>
@@ -2628,7 +2628,7 @@ p-value = 8.88e-27</code></pre>
 </ul>
 </div>
 <div class="fragment">
-<div id="fd59eda7" class="cell columns column-output-location" data-execution_count="12">
+<div id="9df196d4" class="cell columns column-output-location" data-execution_count="12">
 <div class="column">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a></a>adj_R2_vals <span class="op">=</span> [<span class="dv">1</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> r2) <span class="op">*</span> (n <span class="op">-</span> <span class="dv">1</span>) <span class="op">/</span> (n <span class="op">-</span> k <span class="op">-</span> <span class="dv">1</span>)</span>
 <span id="cb16-2"><a></a>               <span class="cf">for</span> k, r2 <span class="kw">in</span> <span class="bu">enumerate</span>(R2_vals, start<span class="op">=</span><span class="dv">1</span>)]</span>

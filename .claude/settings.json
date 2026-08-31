@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0; cd \"$root\" || exit 0; git ls-files -z --others --directory 2>/dev/null | while IFS= read -r -d '' p; do case \"$p\" in docs/*|_freeze/*) : ;; *_files/) rm -rf -- \"$p\" ;; esac; done; git ls-files -z --others 2>/dev/null | while IFS= read -r -d '' p; do case \"$p\" in docs/*|_freeze/*) : ;; *.quarto_ipynb*) rm -f -- \"$p\" ;; esac; done; exit 0",
+            "timeout": 30,
+            "statusMessage": "Cleaning Quarto build artifacts"
+          }
+        ]
+      }
+    ]
+  }
+}

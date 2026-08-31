@@ -1,0 +1,149 @@
+---
+title: Gumbel Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **Gumbel distribution** is a continuous probability distribution used
+to model the maximum (or minimum) of a sample. It is one of the three
+extreme-value distributions and describes the limiting distribution of
+the maximum of many independent light-tailed variables.
+
+:::{.definition data-title="Gumbel Distribution"}
+
+A random variable $X$ follows a **Gumbel distribution** with location
+parameter $\mu \in \mathbb{R}$ and scale parameter $\beta > 0$ if
+
+$$
+X \sim \text{Gumbel}(\mu, \beta).
+$$
+
+:::
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+Writing $z = \dfrac{x - \mu}{\beta}$, the probability density function is
+
+$$
+f(x) = \frac{1}{\beta} \exp\!\left(-\left(z + e^{-z}\right)\right),
+  \quad x \in \mathbb{R}.
+$$
+
+:::
+
+*Interpretation:* The density is right-skewed, with a heavier upper tail
+reflecting the occasional very large maximum.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Density of the Gumbel distribution for several location and
+#|   scale parameters $(\\mu, \\beta)$."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import gumbel_r
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(-4, 8, 500)
+fig, ax = plt.subplots(figsize=(7, 4))
+for mu, beta in ((0, 1), (1, 2), (2, 1)):
+    ax.plot(x, gumbel_r.pdf(x, loc=mu, scale=beta),
+            lw=2, label=rf'$\mu={mu},\ \beta={beta}$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title('Gumbel density')
+ax.legend()
+plt.show()
+```
+
+:::{.definition data-title="Cumulative Distribution Function (CDF)"}
+
+The cumulative distribution function is
+
+$$
+F(x) = \exp\!\left(-e^{-(x - \mu)/\beta}\right).
+$$
+
+:::
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Gumbel Distribution"}
+
+For $X \sim \text{Gumbel}(\mu, \beta)$,
+
+$$
+\mathbb{E}[X] = \mu + \beta\gamma \quad \& \quad
+  \operatorname{Var}(X) = \frac{\pi^2}{6}\beta^2,
+$$
+
+where $\gamma \approx 0.5772$ is the Euler--Mascheroni constant.
+
+:::
+
+:::{.proof}
+
+With $z = (x - \mu)/\beta$ and the substitution $u = e^{-z}$, the mean
+reduces to $\mu + \beta\int_0^\infty (-\ln u) e^{-u} \, du = \mu +
+\beta\gamma$, using $\int_0^\infty (-\ln u) e^{-u}\,du = \gamma$. The
+variance follows from the second logarithmic moment of the exponential.
+
+:::
+
+## Generating Function
+
+:::{.theorem data-title="Moment Generating Function"}
+
+The **moment generating function (MGF)** of
+$X \sim \text{Gumbel}(\mu, \beta)$ is
+
+$$
+M_X(t) = e^{\mu t}\,\Gamma(1 - \beta t),
+  \quad t < \frac{1}{\beta},
+$$
+
+where $\Gamma$ is the gamma function.
+
+:::
+
+## Relationship to Other Distributions
+
+- **[[exponential-distribution]]:** If $Y \sim \text{Exponential}(1)$,
+  then $\mu - \beta\ln Y \sim \text{Gumbel}(\mu, \beta)$.
+- **[[weibull-distribution]]:** If $X \sim \text{Weibull}(k, \lambda)$,
+  then $-\ln X$ is Gumbel distributed; both are extreme-value laws.
+- **Extreme value theory:** The Gumbel is the limiting distribution of
+  the maximum of i.i.d. light-tailed variables (type I extreme value).
+
+## Examples and Applications
+
+:::{.example data-title="Hydrology"}
+
+Annual maximum river levels and rainfall extremes are modelled with the
+Gumbel distribution to estimate flood return periods.
+
+:::
+
+:::{.example data-title="Engineering"}
+
+Peak loads, maximum wind speeds, and material strength extremes are
+analysed using Gumbel models for design safety margins.
+
+:::
+
+:::{.example data-title="Discrete choice"}
+
+The Gumbel distribution of utility shocks gives rise to the logit model
+used throughout discrete-choice and machine-learning classification.
+
+:::

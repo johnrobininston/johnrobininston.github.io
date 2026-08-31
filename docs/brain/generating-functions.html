@@ -418,7 +418,9 @@ G_{a}(s)=\sum_{n=0}^\infty a_{n} s^n.
 <h3 data-number="1.1" class="anchored" data-anchor-id="convolutions"><span class="header-section-number">1.1</span> Convolutions</h3>
 <p>Generally speaking, a <strong>convolution</strong> is a mathematical operation on two functions that produces a third function that represents how the shape of one function is modified by the other.</p>
 <div class="definition" data-title="Convolution">
-<p>For discrete functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> the convolution <span class="math inline">\(f*g\)</span> is defined as <span class="math display">\[(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).\]</span>Similarly, for continuous functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> the convolution <span class="math inline">\(f*g\)</span> is defined as <span class="math display">\[
+<p>For discrete functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> the convolution <span class="math inline">\(f*g\)</span> is defined as <span class="math display">\[
+(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).
+\]</span> Similarly, for continuous functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> the convolution <span class="math inline">\(f*g\)</span> is defined as <span class="math display">\[
 (f*g)(x)=\int_{-\infty}^\infty f(s)g(x-s)ds.
 \]</span></p>
 </div>
@@ -484,7 +486,10 @@ G_{X}(1) = \sum_{k=0}^\infty p_k = 1,
 </div>
 <div class="theorem" data-title="PGF Moments">
 <p>Derivatives at <span class="math inline">\(s=1\)</span> recover moments: <span class="math display">\[
-\begin{aligned}G_X'(1) &amp; = \mathbb{E}[X] \\ G_X''(1) &amp; = \mathbb{E}[X(X-1)] \\ \operatorname{Var}(X) &amp; = G_X''(1) + G_X'(1) - \bigl(G_X'(1)\bigr)^2.\end{aligned}
+\begin{aligned}
+G_X'(1) &amp; = \mathbb{E}[X] \\ G_X''(1) &amp; = \mathbb{E}[X(X-1)] \\
+\operatorname{Var}(X) &amp; = G_X''(1) + G_X'(1) - \bigl(G_X'(1)\bigr)^2.
+\end{aligned}
 \]</span></p>
 </div>
 <div class="proof">
@@ -507,7 +512,8 @@ G_{X}''(1) &amp; = \sum_{k=0}^\infty p_{k}k \frac{d}{ds} s^{k-1} \Big |_{s=1}  \
 \]</span></p>
 <p>Combining these results we have that <span class="math display">\[
 \begin{align}
-G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  &amp; = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
+G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  &amp;
+  = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
 &amp; = \mathbb{E}[X^2] - \mathbb{E}[X] + \mathbb{E}[X] - (\mathbb{E}[X])^2 \\
 &amp; = \text{Var}(X),
 \end{align}
@@ -522,8 +528,10 @@ G_{X+Y}(s) = G_X(s)\,G_Y(s).
 <p><span class="proof-title"><em>Proof</em>. </span>We can write that <span class="math display">\[
 \begin{align}
 G_{X+Y}(s) &amp; = \sum_{n=0}^\infty \mathbb{P}(X+Y=n)s^n  \\
-&amp; = \sum_{n=0}^\infty \left( \sum_{j=0}^\infty \mathbb{P}(X=j)\mathbb{P}(Y=n-j) \right) s^n  \\
-&amp; = \left(  \sum_{j=0}^\infty \mathbb{P}(X=j) s^j \right) \left( \sum_{k=0}^\infty \mathbb{P}(Y=k)s^k \right)  \\
+&amp; = \sum_{n=0}^\infty \left( \sum_{j=0}^\infty
+  \mathbb{P}(X=j)\mathbb{P}(Y=n-j) \right) s^n  \\
+&amp; = \left(  \sum_{j=0}^\infty \mathbb{P}(X=j) s^j \right)
+  \left( \sum_{k=0}^\infty \mathbb{P}(Y=k)s^k \right)  \\
 &amp; =G_{X}(s) G_{Y}(s),
 \end{align}
 \]</span></p>
@@ -531,13 +539,17 @@ G_{X+Y}(s) &amp; = \sum_{n=0}^\infty \mathbb{P}(X+Y=n)s^n  \\
 </div>
 <p>This mirrors <strong>convolution of distributions</strong> and is one of the main reasons PGFs are powerful.</p>
 <div class="example">
-<p>If <span class="math inline">\(X\sim \text{Bernoulli}(p)\)</span> then we have that <span class="math display">\[\mathbb{P}(X=1)=p, \quad \mathbb{P}(X=0)=1-p.\]</span>Then <span class="math display">\[G_X(s) = (1-p) + ps.\]</span></p>
+<p>If <span class="math inline">\(X\sim \text{Bernoulli}(p)\)</span> then we have that <span class="math display">\[\mathbb{P}(X=1)=p, \quad
+\mathbb{P}(X=0)=1-p.\]</span>Then <span class="math display">\[G_X(s) = (1-p) + ps.\]</span></p>
 </div>
 <div class="example">
 <p>If <span class="math inline">\(X\sim \text{Binomial}(n,p)\)</span> is a sum of <span class="math inline">\(n\)</span> independent Bernoulli variables which immediately gives <span class="math display">\[G_X(s) = \bigl((1-p)+ps\bigr)^n.\]</span></p>
 </div>
 <div class="example">
-<p>If <span class="math inline">\(X\sim \text{Poisson}(\lambda)\)</span> with <span class="math inline">\(p_k = e^{-\lambda}\frac{\lambda^k}{k!}\)</span> gives <span class="math display">\[G_X(s) = \sum_{k=0}^\infty e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.\]</span>From this we can compute immediately that <span class="math display">\[ \mathbb{E}[X] = G_X'(1) = \lambda, \qquad \operatorname{Var}(X) = \lambda. \]</span></p>
+<p>If <span class="math inline">\(X\sim \text{Poisson}(\lambda)\)</span> with <span class="math inline">\(p_k =
+e^{-\lambda}\frac{\lambda^k}{k!}\)</span> gives <span class="math display">\[G_X(s) = \sum_{k=0}^\infty
+e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.\]</span>From this we can compute immediately that <span class="math display">\[ \mathbb{E}[X] = G_X'(1) = \lambda,
+\qquad \operatorname{Var}(X) = \lambda. \]</span></p>
 </div>
 </section>
 <section id="moment-generating-functions-mgfs" class="level3" data-number="2.2">
@@ -556,10 +568,12 @@ M_{X+Y}(t) = M_X(t)\,M_Y(t)
 \quad \text{if } X \perp Y.
 \]</span></p>
 <div class="example">
-<p>If <span class="math inline">\(X \sim \mathcal{N}(\mu,\sigma^2)\)</span>, then <span class="math display">\[M_X(t) = \exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).\]</span></p>
+<p>If <span class="math inline">\(X \sim \mathcal{N}(\mu,\sigma^2)\)</span>, then <span class="math display">\[M_X(t) =
+\exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).\]</span></p>
 </div>
 <div class="example">
-<p>If <span class="math inline">\(X \sim \text{Exp}(\lambda)\)</span>, <span class="math display">\[ M_X(t) = \frac{\lambda}{\lambda - t}, \qquad t &lt; \lambda.\]</span></p>
+<p>If <span class="math inline">\(X \sim \text{Exp}(\lambda)\)</span>, <span class="math display">\[ M_X(t) = \frac{\lambda}{\lambda - t},
+\qquad t &lt; \lambda.\]</span></p>
 </div>
 </section>
 <section id="characteristic-functions-cfs" class="level3" data-number="2.3">
@@ -581,6 +595,9 @@ M_{X+Y}(t) = M_X(t)\,M_Y(t)
 <section class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id=""><span class="header-section-number">3</span> Backlinks</h2>
 <ul>
+<li><a href="../brain/binomial-distribution.html">Binomial Distribution</a></li>
+<li><a href="../brain/normal-distribution.html">Normal Distribution</a></li>
+<li><a href="../brain/poisson-distribution.html">Poisson Distribution</a></li>
 <li><a href="../brain/probability-theory.html">Probability Theory</a></li>
 </ul>
 </section>

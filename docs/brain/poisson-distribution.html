@@ -387,10 +387,11 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
   <li><a href="#probability-mass-function" id="toc-probability-mass-function" class="nav-link" data-scroll-target="#probability-mass-function"><span class="header-section-number">2</span> Probability Mass Function</a></li>
   <li><a href="#key-properties" id="toc-key-properties" class="nav-link" data-scroll-target="#key-properties"><span class="header-section-number">3</span> Key Properties</a></li>
-  <li><a href="#sums-of-independent-poisson-rvs" id="toc-sums-of-independent-poisson-rvs" class="nav-link" data-scroll-target="#sums-of-independent-poisson-rvs"><span class="header-section-number">4</span> Sums of Independent Poisson RVs</a></li>
-  <li><a href="#relationship-to-other-distributions" id="toc-relationship-to-other-distributions" class="nav-link" data-scroll-target="#relationship-to-other-distributions"><span class="header-section-number">5</span> Relationship to Other Distributions</a></li>
-  <li><a href="#examples-and-applications" id="toc-examples-and-applications" class="nav-link" data-scroll-target="#examples-and-applications"><span class="header-section-number">6</span> Examples and Applications</a></li>
-  <li><span class="header-section-number">7</span> Backlinks</li>
+  <li><a href="#generating-functions" id="toc-generating-functions" class="nav-link" data-scroll-target="#generating-functions"><span class="header-section-number">4</span> Generating Functions</a></li>
+  <li><a href="#sums-of-independent-poisson-rvs" id="toc-sums-of-independent-poisson-rvs" class="nav-link" data-scroll-target="#sums-of-independent-poisson-rvs"><span class="header-section-number">5</span> Sums of Independent Poisson RVs</a></li>
+  <li><a href="#relationship-to-other-distributions" id="toc-relationship-to-other-distributions" class="nav-link" data-scroll-target="#relationship-to-other-distributions"><span class="header-section-number">6</span> Relationship to Other Distributions</a></li>
+  <li><a href="#examples-and-applications" id="toc-examples-and-applications" class="nav-link" data-scroll-target="#examples-and-applications"><span class="header-section-number">7</span> Examples and Applications</a></li>
+  <li><span class="header-section-number">8</span> Backlinks</li>
   </ul>
 </nav>
     </div>
@@ -427,7 +428,8 @@ X \sim \text{Poisson}(\lambda) \quad \text{or}
 <section id="key-properties" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="key-properties"><span class="header-section-number">3</span> Key Properties</h2>
 <div class="theorem" data-title="Moments of Poisson Distribution">
-<p>The expectation and variance of a Poisson random variable <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span> are given by</p>
+<p>The expectation and variance of a Poisson random variable <span class="math inline">\(X \sim
+\text{Poisson}(\lambda)\)</span> are given by</p>
 <p><span class="math display">\[
 \mathbb{E}[X] = \lambda \quad \&amp; \quad \operatorname{Var}(X) = \lambda.
 \]</span></p>
@@ -441,29 +443,65 @@ X \sim \text{Poisson}(\lambda) \quad \text{or}
   = \lambda e^{-\lambda} \sum_{j=0}^\infty \frac{\lambda^j}{j!}
   = \lambda.
 \]</span></p>
-<p>Similarly, <span class="math inline">\(\mathbb{E}[X(X-1)] = \lambda^2\)</span>, so <span class="math inline">\(\operatorname{Var}(X) = \lambda^2 + \lambda - \lambda^2 = \lambda\)</span>.</p>
+<p>Similarly, <span class="math inline">\(\mathbb{E}[X(X-1)] = \lambda^2\)</span>, so <span class="math inline">\(\operatorname{Var}(X) =
+\lambda^2 + \lambda - \lambda^2 = \lambda\)</span>.</p>
 </div>
-<div class="definition" data-title="Probability Generating Function">
-<p>The probability generating function (PGF) of a Poisson random variable <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span> is given by</p>
+</section>
+<section id="generating-functions" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="generating-functions"><span class="header-section-number">4</span> Generating Functions</h2>
+<p>The Poisson distribution has several <a href="../brain/generating-functions.html">Generating Functions</a> that are useful for deriving properties and relationships.</p>
+<div class="theorem" data-title="Probability Generating Function">
+<p>The <strong>probability generating function (PGF)</strong> of a Poisson random variable <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span> is given by</p>
 <p><span class="math display">\[
 G_X(s) = e^{\lambda(s-1)}.
 \]</span></p>
 </div>
-<div class="definition" data-title="Moment Generating Function">
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We compute the PGF as</p>
+<p><span class="math display">\[
+\begin{align*}
+G_X(s) &amp;= \mathbb{E}[s^X] =
+  \sum_{k=0}^\infty s^k \frac{\lambda^k e^{-\lambda}}{k!} \\
+&amp; = e^{-\lambda} \sum_{k=0}^\infty \frac{(\lambda s)^k}{k!}
+  = e^{-\lambda} e^{\lambda s} = e^{\lambda(s-1)}.
+\end{align*}
+as required.
+\]</span></p>
+</div>
+<p>The probabilities can be recovered from the PGF by taking derivatives:</p>
+<p><span class="math display">\[
+\mathbb{P}(X = k) = \frac{G_X^{(k)}(0)}{k!}.
+\]</span></p>
+<div class="theorem" data-title="Moment Generating Function">
 <p>The moment generating function (MGF) of a Poisson random variable <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span> is given by</p>
 <p><span class="math display">\[
 M_X(t) = e^{\lambda(e^t - 1)}.
 \]</span></p>
 </div>
-<div class="definition" data-title="Characteristic Function">
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>The computation of the MGF is similar to the PGF</p>
+<p><span class="math display">\[
+\begin{align*}
+M_X(t) &amp;= \mathbb{E}[e^{tX}] =
+  \sum_{k=0}^\infty e^{tk} \frac{\lambda^k e^{-\lambda}}{k!} \\
+&amp; = e^{-\lambda} \sum_{k=0}^\infty \frac{(\lambda e^t)^k}{k!}
+  = e^{-\lambda} e^{\lambda e^t} = e^{\lambda(e^t - 1)}.
+\end{align*}
+\]</span></p>
+<p>as required.</p>
+</div>
+<div class="theorem" data-title="Characteristic Function">
 <p>The characteristic function of a Poisson random variable <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span> is given by</p>
 <p><span class="math display">\[
 \varphi_X(t) = e^{\lambda(e^{it} - 1)}
 \]</span></p>
 </div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>The characteristic function is computed using the same method as above.</p>
+</div>
 </section>
-<section id="sums-of-independent-poisson-rvs" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="sums-of-independent-poisson-rvs"><span class="header-section-number">4</span> Sums of Independent Poisson RVs</h2>
+<section id="sums-of-independent-poisson-rvs" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="sums-of-independent-poisson-rvs"><span class="header-section-number">5</span> Sums of Independent Poisson RVs</h2>
 <div class="theorem" data-title="Sum of Independent Poisson Random Variables">
 <p>If <span class="math inline">\(X \sim \text{Poisson}(\lambda_1)\)</span> and <span class="math inline">\(Y \sim \text{Poisson}(\lambda_2)\)</span> are independent, then</p>
 <p><span class="math display">\[
@@ -471,19 +509,21 @@ X + Y \sim \text{Poisson}(\lambda_1 + \lambda_2).
 \]</span></p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>The MGF product gives <span class="math inline">\(e^{\lambda_1(e^t-1)} \cdot e^{\lambda_2(e^t-1)} = e^{(\lambda_1+\lambda_2)(e^t-1)}\)</span>.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>The MGF product gives <span class="math inline">\(e^{\lambda_1(e^t-1)} \cdot e^{\lambda_2(e^t-1)} =
+e^{(\lambda_1+\lambda_2)(e^t-1)}\)</span>.</p>
 </div>
 </section>
-<section id="relationship-to-other-distributions" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="relationship-to-other-distributions"><span class="header-section-number">5</span> Relationship to Other Distributions</h2>
+<section id="relationship-to-other-distributions" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="relationship-to-other-distributions"><span class="header-section-number">6</span> Relationship to Other Distributions</h2>
 <ul>
-<li><strong>From Binomial:</strong> Limit of <span class="math inline">\(\text{Binomial}(n, p)\)</span> as <span class="math inline">\(n \to \infty\)</span>, <span class="math inline">\(p \to 0\)</span> with <span class="math inline">\(np = \lambda\)</span>.</li>
-<li><strong>To Normal:</strong> For large <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\frac{X - \lambda}{\sqrt{\lambda}} \xrightarrow{d} \mathcal{N}(0,1)\)</span> (Central Limit Theorem).</li>
-<li><strong>Inter-arrival times:</strong> If events follow a Poisson process with rate <span class="math inline">\(\lambda\)</span>, the time between consecutive events is <span class="math inline">\(\text{Exponential}(\lambda)\)</span>.</li>
+<li><strong><a href="../brain/binomial-distribution.html">Binomial Distribution</a>:</strong> Limit of <span class="math inline">\(\text{Binomial}(n, p)\)</span> as <span class="math inline">\(n \to \infty\)</span>, <span class="math inline">\(p \to 0\)</span> with <span class="math inline">\(np = \lambda\)</span>.</li>
+<li><strong><a href="../brain/normal-distribution.html">Normal Distribution</a>:</strong> For large <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\frac{X -
+\lambda}{\sqrt{\lambda}} \xrightarrow{d} \mathcal{N}(0,1)\)</span> (Central Limit Theorem).</li>
+<li><strong>Inter-arrival times:</strong> If events follow a <a href="../brain/poisson-process.html">poisson-process</a> with rate <span class="math inline">\(\lambda\)</span>, the time between consecutive events follows an <a href="../brain/exponential-distribution.html">Exponential Distribution</a> with parameter <span class="math inline">\(\text{Exponential}(\lambda)\)</span>.</li>
 </ul>
 </section>
-<section id="examples-and-applications" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="examples-and-applications"><span class="header-section-number">6</span> Examples and Applications</h2>
+<section id="examples-and-applications" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="examples-and-applications"><span class="header-section-number">7</span> Examples and Applications</h2>
 <ul>
 <li>Number of emails received per hour with average rate 15 emails/hour: <span class="math inline">\(X \sim \text{Poisson}(15)\)</span>.</li>
 <li>Number of car accidents at an intersection in a day with average 3 accidents/day: <span class="math inline">\(X \sim \text{Poisson}(3)\)</span>.</li>
@@ -493,9 +533,13 @@ X + Y \sim \text{Poisson}(\lambda_1 + \lambda_2).
 
 
 </section>
-<section class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id=""><span class="header-section-number">7</span> Backlinks</h2>
+<section class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id=""><span class="header-section-number">8</span> Backlinks</h2>
 <ul>
+<li><a href="../brain/binomial-distribution.html">Binomial Distribution</a></li>
+<li><a href="../brain/exponential-distribution.html">Exponential Distribution</a></li>
+<li><a href="../brain/normal-distribution.html">Normal Distribution</a></li>
+<li><a href="../brain/probability-theory.html">Probability Theory</a></li>
 <li><a href="../brain/probability-theory-fundamentals.html">Probability Theory Fundamentals</a></li>
 <li><a href="../brain/random-variable-transformations.html">Random Variable Transformations</a></li>
 </ul>

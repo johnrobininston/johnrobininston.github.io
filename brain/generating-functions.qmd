@@ -9,11 +9,15 @@ number-sections: true
 
 ## Generating Functions
 
-A **generating function** is simply a representation of an infinite sequence of numbers as the coefficients of a **power series**.  The main idea is that we are able to recover the $n$-th value of the sequence by taking the $n$-th derivative of the generating function.
+A **generating function** is simply a representation of an infinite sequence of 
+numbers as the coefficients of a **power series**.  The main idea is that we 
+are able to recover the $n$-th value of the sequence by taking the $n$-th
+derivative of the generating function.
 
 :::{.definition data-title="Generating Function"}
 
-The **generating function** for a sequence $\{ a_{n} \}_{n=0}^\infty$ is the power series 
+The **generating function** for a sequence $\{ a_{n} \}_{n=0}^\infty$ is the
+power series 
 $$
 G_{a}(s)=\sum_{n=0}^\infty a_{n} s^n.
 $$
@@ -23,18 +27,28 @@ $$
 
 ### Convolutions
 
-Generally speaking, a **convolution** is a mathematical operation on two functions that produces a third function that represents how the shape of one function is modified by the other.
+Generally speaking, a **convolution** is a mathematical operation on two 
+functions that produces a third function that represents how the shape of one 
+function is modified by the other.
 
 ::: {.definition data-title="Convolution"}
 
-For discrete functions $f$ and $g$ the convolution $f*g$ is defined as $$(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).$$Similarly, for continuous functions $f$ and $g$ the convolution $f*g$ is defined as 
+For discrete functions $f$ and $g$ the convolution $f*g$ is defined as 
+$$
+(f*g)(n)=\sum_{m=-\infty}^\infty f(m)g(n-m).
+$$
+Similarly, for continuous functions $f$ and $g$ the convolution $f*g$ is 
+defined as 
 $$
 (f*g)(x)=\int_{-\infty}^\infty f(s)g(x-s)ds.
 $$
 
 :::
 
-Let $a=\{ a_{n} \}$ and $b=\{  b_{n} \}$ be two infinite real sequences which can be thought of as discrete functions mapping from $\mathbb{N}$.  The convolution of $a$ and $b$ is the sequence $c=\{ c_{n} \}$ where $c=a*b$ such that 
+Let $a=\{ a_{n} \}$ and $b=\{  b_{n} \}$ be two infinite real sequences which 
+can be thought of as discrete functions mapping from $\mathbb{N}$.  The 
+convolution of $a$ and $b$ is the sequence $c=\{ c_{n} \}$ where $c=a*b$ such
+that 
 $$
 c_{n}=a_{0}b_{n}+a_{1}b_{n-1}+\dots+a_{n}b_{0}.
 $$
@@ -64,7 +78,9 @@ as required.
 
 ## Generating Functions and Random Variables
 
-Generating functions **encode the distribution of a random variable** into an analytic object.  They transform probabilistic questions into algebraic or analytic ones, allowing us to:
+Generating functions **encode the distribution of a random variable** into an 
+analytic object.  They transform probabilistic questions into algebraic or
+analytic ones, allowing us to:
 
 - Turn convolution into multiplication,
 - Provide direct access to moments,
@@ -73,15 +89,19 @@ Generating functions **encode the distribution of a random variable** into an an
 
 Two main types are used in probability:
 
-1. **Probability Generating Functions (PGFs).** Used for *discrete, nonnegative integer-valued* random variables.
+1. **Probability Generating Functions (PGFs).** Used for *discrete, 
+   nonnegative integer-valued* random variables.
 
-2. **Moment Generating Functions (MGFs).** Used for *general* real-valued random variables.
+2. **Moment Generating Functions (MGFs).** Used for *general* real-valued 
+   random variables.
 
-Closely related is the **characteristic function**, which always exists and plays a central theoretical role.
+Closely related is the **characteristic function**, which always exists and
+plays a central theoretical role.
 
 ### Probability Generating Functions (PGFs)
 
-Let $X$ be a random variable taking values in $\{0,1,2,\dots\}$ with mass function
+Let $X$ be a random variable taking values in $\{0,1,2,\dots\}$ with mass 
+function
 $$
 \mathbb{P}(X = k) = p_k.
 $$
@@ -95,12 +115,15 @@ $$
 
 :::
 
-This is exactly the ordinary power series whose coefficients are the probabilities. To recover the probability from the generating function we compute
+This is exactly the ordinary power series whose coefficients are the 
+probabilities. To recover the probability from the generating function we 
+compute
 $$
 p_{k} = \frac{G^{(k)}(0)}{k!}.
 $$
 
-Below we work our way through some of the basic properties of PGFs used frequently in computations with discrete random variables.
+Below we work our way through some of the basic properties of PGFs used 
+frequently in computations with discrete random variables.
 
 ::: {.theorem data-title="PGF Normalization"}
 
@@ -122,7 +145,10 @@ as required.
 
 Derivatives at $s=1$ recover moments: 
 $$
-\begin{aligned}G_X'(1) & = \mathbb{E}[X] \\ G_X''(1) & = \mathbb{E}[X(X-1)] \\ \operatorname{Var}(X) & = G_X''(1) + G_X'(1) - \bigl(G_X'(1)\bigr)^2.\end{aligned}
+\begin{aligned}
+G_X'(1) & = \mathbb{E}[X] \\ G_X''(1) & = \mathbb{E}[X(X-1)] \\
+\operatorname{Var}(X) & = G_X''(1) + G_X'(1) - \bigl(G_X'(1)\bigr)^2.
+\end{aligned}
 $$
 
 :::
@@ -152,7 +178,8 @@ $$
 Combining these results we have that
 $$
 \begin{align}
-G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  & = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
+G_{X}''(1)+G_{X}'(1)-(G_{X}'(1))^2  & 
+  = \mathbb{E}[X(X-1)]+\mathbb{E}[X]-(\mathbb{E}[X]) ^2  \\
  & = \mathbb{E}[X^2] - \mathbb{E}[X] + \mathbb{E}[X] - (\mathbb{E}[X])^2 \\
  & = \text{Var}(X),
 \end{align}
@@ -174,8 +201,10 @@ We can write that
 $$
 \begin{align}
 G_{X+Y}(s) & = \sum_{n=0}^\infty \mathbb{P}(X+Y=n)s^n  \\
- & = \sum_{n=0}^\infty \left( \sum_{j=0}^\infty \mathbb{P}(X=j)\mathbb{P}(Y=n-j) \right) s^n  \\
- & = \left(  \sum_{j=0}^\infty \mathbb{P}(X=j) s^j \right) \left( \sum_{k=0}^\infty \mathbb{P}(Y=k)s^k \right)  \\
+ & = \sum_{n=0}^\infty \left( \sum_{j=0}^\infty 
+  \mathbb{P}(X=j)\mathbb{P}(Y=n-j) \right) s^n  \\
+ & = \left(  \sum_{j=0}^\infty \mathbb{P}(X=j) s^j \right) 
+  \left( \sum_{k=0}^\infty \mathbb{P}(Y=k)s^k \right)  \\
  & =G_{X}(s) G_{Y}(s),
 \end{align}
 $$
@@ -183,25 +212,34 @@ $$
 since this is the Cauchy product of two power series.
 :::
 
-This mirrors **convolution of distributions** and is one of the main reasons PGFs are powerful.
+This mirrors **convolution of distributions** and is one of the main reasons 
+  PGFs are powerful.
 
 :::{.example}
-If $X\sim \text{Bernoulli}(p)$ then we have that $$\mathbb{P}(X=1)=p, \quad \mathbb{P}(X=0)=1-p.$$Then $$G_X(s) = (1-p) + ps.$$
+If $X\sim \text{Bernoulli}(p)$ then we have that $$\mathbb{P}(X=1)=p, \quad 
+\mathbb{P}(X=0)=1-p.$$Then $$G_X(s) = (1-p) + ps.$$
 :::
 
 :::{.example}
-If $X\sim \text{Binomial}(n,p)$ is a sum of $n$ independent Bernoulli variables which immediately gives $$G_X(s) = \bigl((1-p)+ps\bigr)^n.$$
+If $X\sim \text{Binomial}(n,p)$ is a sum of $n$ independent Bernoulli 
+variables which immediately gives $$G_X(s) = \bigl((1-p)+ps\bigr)^n.$$
 :::
 
 :::{.example}
-If $X\sim \text{Poisson}(\lambda)$ with $p_k = e^{-\lambda}\frac{\lambda^k}{k!}$ gives $$G_X(s) = \sum_{k=0}^\infty e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.$$From this we can compute immediately that $$ \mathbb{E}[X] = G_X'(1) = \lambda, \qquad \operatorname{Var}(X) = \lambda. $$
+If $X\sim \text{Poisson}(\lambda)$ with $p_k = 
+e^{-\lambda}\frac{\lambda^k}{k!}$ gives $$G_X(s) = \sum_{k=0}^\infty
+e^{-\lambda}\frac{(\lambda s)^k}{k!} = e^{\lambda(s-1)}.$$From this we can
+compute immediately that $$ \mathbb{E}[X] = G_X'(1) = \lambda, 
+\qquad \operatorname{Var}(X) = \lambda. $$
 :::
 
 ### Moment Generating Functions (MGFs)
 
 ::: {.definition data-title="Moment Generating Function (MGF)"}
 
-For a real-valued random variable $X$, the **moment generating function** is $$M_X(t) = \mathbb{E}[e^{tX}],$$defined for all $t$ in an open interval containing $0$ where the expectation is finite.
+For a real-valued random variable $X$, the **moment generating function** 
+is $$M_X(t) = \mathbb{E}[e^{tX}],$$defined for all $t$ in an open interval 
+containing $0$ where the expectation is finite.
 
 :::
 
@@ -222,18 +260,21 @@ M_{X+Y}(t) = M_X(t)\,M_Y(t)
 $$
 
 :::{.example}
-If $X \sim \mathcal{N}(\mu,\sigma^2)$, then $$M_X(t) = \exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).$$
+If $X \sim \mathcal{N}(\mu,\sigma^2)$, then $$M_X(t) =
+\exp\!\left(\mu t + \tfrac12 \sigma^2 t^2\right).$$
 :::
 
 :::{.example}
-If $X \sim \text{Exp}(\lambda)$, $$ M_X(t) = \frac{\lambda}{\lambda - t}, \qquad t < \lambda.$$
+If $X \sim \text{Exp}(\lambda)$, $$ M_X(t) = \frac{\lambda}{\lambda - t}, 
+\qquad t < \lambda.$$
 :::
 
 ### Characteristic Functions (CFs)
 
 ::: {.definition data-title="Characteristic Function (CF)"}
 
-The **characteristic function** is $$\varphi_X(t) = \mathbb{E}[e^{itX}],$$ which always exists for any random variable.
+The **characteristic function** is $$\varphi_X(t) = \mathbb{E}[e^{itX}],$$
+which always exists for any random variable.
 
 :::
 
@@ -243,5 +284,6 @@ Properties:
 - $\varphi_{X+Y}(t) = \varphi_X(t)\varphi_Y(t)$ for independent $X,Y$,
 - $(\star)$ The distribution of $X$ is **uniquely determined** by $\varphi_X$.
 
-MGFs may fail to exist (e.g. for heavy-tailed distributions), but characteristic functions never do.
+MGFs may fail to exist (e.g. for heavy-tailed distributions), but 
+characteristic functions never do.
 

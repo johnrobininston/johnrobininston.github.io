@@ -1,0 +1,131 @@
+---
+title: Maxwell-Boltzmann Distribution
+author: John Robin Inston
+date: 2026-08-30
+number-sections: true
+title-block-banner: true
+---
+
+## Introduction
+
+The **Maxwell-Boltzmann distribution** is a continuous probability
+distribution for the speed of particles in an idealised gas at thermal
+equilibrium. It is the three-dimensional analogue of the
+[[rayleigh-distribution]]: the magnitude of a vector with independent,
+zero-mean normal components.
+
+:::{.definition data-title="Maxwell-Boltzmann Distribution"}
+
+A random variable $X$ follows a **Maxwell-Boltzmann distribution** with
+scale parameter $a > 0$ if
+
+$$
+X \sim \text{Maxwell}(a).
+$$
+
+:::
+
+## Probability Density Function
+
+:::{.definition data-title="Probability Density Function (PDF)"}
+
+The probability density function is
+
+$$
+f(x) = \sqrt{\frac{2}{\pi}}\,\frac{x^2}{a^3}
+  \exp\!\left(-\frac{x^2}{2a^2}\right),
+  \quad x \geq 0.
+$$
+
+:::
+
+*Interpretation:* The factor $x^2$ suppresses small speeds and the
+Gaussian factor suppresses large ones, giving a single peak at the most
+probable speed $x = a\sqrt{2}$.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Plotting code"
+#| fig-cap: "Density of the Maxwell-Boltzmann distribution for several
+#|   scale parameters $a$."
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import maxwell
+
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+
+x = np.linspace(0, 10, 400)
+fig, ax = plt.subplots(figsize=(7, 4))
+for a in (1, 2, 3):
+    ax.plot(x, maxwell.pdf(x, scale=a), lw=2, label=rf'$a = {a}$')
+
+ax.set_xlabel('$x$')
+ax.set_ylabel('$f(x)$')
+ax.set_title('Maxwell-Boltzmann density')
+ax.legend()
+plt.show()
+```
+
+## Key Properties
+
+:::{.theorem data-title="Moments of the Maxwell-Boltzmann Distribution"}
+
+For $X \sim \text{Maxwell}(a)$,
+
+$$
+\mathbb{E}[X] = 2a\sqrt{\frac{2}{\pi}} \quad \& \quad
+  \operatorname{Var}(X) = \frac{3\pi - 8}{\pi}\,a^2.
+$$
+
+:::
+
+:::{.proof}
+
+With the substitution $u = x^2/(2a^2)$ and the gamma integral
+$\int_0^\infty u^{s-1} e^{-u}\,du = \Gamma(s)$,
+
+$$
+\mathbb{E}[X] = \sqrt{\frac{2}{\pi}}\,\frac{1}{a^3}
+  \int_0^\infty x^3 e^{-x^2/(2a^2)} \, dx
+  = 2a\sqrt{\frac{2}{\pi}}.
+$$
+
+Since $\mathbb{E}[X^2] = 3a^2$, the variance is
+$3a^2 - \frac{8}{\pi}a^2 = \frac{3\pi - 8}{\pi}a^2$.
+
+:::
+
+## Relationship to Other Distributions
+
+- **[[normal-distribution]]:** If $V_1, V_2, V_3 \sim \mathcal{N}(0,
+  a^2)$ are independent, then
+  $\sqrt{V_1^2 + V_2^2 + V_3^2} \sim \text{Maxwell}(a)$.
+- **[[chi-squared-distribution]]:** $X^2/a^2 \sim \chi^2_3$, so
+  Maxwell-Boltzmann is a chi distribution with three degrees of freedom.
+- **[[rayleigh-distribution]]:** The two-dimensional analogue (chi
+  distribution with two degrees of freedom).
+
+## Examples and Applications
+
+:::{.example data-title="Kinetic theory of gases"}
+
+The speeds of molecules in an ideal gas at temperature $T$ follow a
+Maxwell-Boltzmann distribution with scale $a = \sqrt{k_B T / m}$.
+
+:::
+
+:::{.example data-title="Thermodynamic quantities"}
+
+Mean speed, most probable speed, and root-mean-square speed of gas
+molecules are read directly from the distribution's moments.
+
+:::
+
+:::{.example data-title="Reaction rates"}
+
+The fraction of molecules exceeding an activation energy — governing
+chemical reaction rates — is obtained from the tail of the distribution.
+
+:::
