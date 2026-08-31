@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<link href="../../../../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../../../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="John Robin Inston">
+  <meta name="dcterms.date" content="2026-08-31">
+  <title>John Robin Inston – PSTAT 10 Data Science Principles</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../../../../site_libs/revealjs/dist/theme/quarto-e29f23c32169fc0a1d6900f93d8fd340.css">
+  <link href="../../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../../../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script>
+    (function () {
+      var STORAGE_KEY = "pstat10-lecture-theme";
+      try {
+        var saved = window.localStorage.getItem(STORAGE_KEY);
+        var theme = saved === "dark" || saved === "light"
+          ? saved
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        // Storage/matchMedia unavailable; default styling (light) applies.
+      }
+    })();
+  </script>
+  <link href="../../../../site_libs/countdown-0.4.0/countdown.css" rel="stylesheet">
+  <script src="../../../../site_libs/countdown-0.4.0/countdown.js"></script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">PSTAT 10 Data Science Principles</h1>
+  <p class="subtitle">Lecture 13: Databases</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+John Robin Inston <a href="https://orcid.org/0009-0001-7285-6823" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a>
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:johninston@ucsb.edu">johninston@ucsb.edu</a>
+</div>
+        <p class="quarto-title-affiliation">
+            University of California, Santa Barbara
+          </p>
+    </div>
+</div>
+
+  <p class="date">August 31, 2026</p>
+</section>
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
+
+</section>
+<section id="review-lectures-9-12" class="slide level2">
+<h2>🔁 Review: Lectures 9 – 12</h2>
+<div class="spacer-sm">
+
+</div>
+<p>🤔 This week we will move away from the language <code>R</code> and instead focus on <code>SQL</code>.</p>
+<ul>
+<li class="fragment">The following lectures will (explicitly) use <span class="accent">minimal R</span>.</li>
+<li class="fragment">It is still important to be comfortable with topics such as simulation, random variables and Monte Carlo methods.</li>
+</ul>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="emphasize">
+<p>📌 The bulk of the <span class="accent">final exam</span> will focus on the language R. Assignment 5 and the last labs will also use R.</p>
+</div>
+</div>
+</section>
+<section id="outline-lecture-13" class="slide level2">
+<h2>👀 Outline: Lecture 13</h2>
+<div class="spacer-sm">
+
+</div>
+<p>👇 In today’s lecture we will introduce ourselves to larger, more complex <span class="accent">database structures</span>. We aim to answer the questions:</p>
+<ul>
+<li class="fragment">What is a <span class="accent">database</span>?</li>
+<li class="fragment">What is a <span class="accent">relational database</span>?</li>
+<li class="fragment">What is a <span class="accent">database management system (DBMS)</span>?</li>
+</ul>
+<div class="fragment">
+<p>Furthermore we will cover the <span class="accent">relational model</span>, both the:</p>
+<ul>
+<li class="fragment"><span class="accent">Structural</span> portion; and</li>
+<li class="fragment"><span class="accent">Integrity</span> portion</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="databases" class="title-slide slide level1 center">
+<h1>Databases</h1>
+
+</section>
+<section id="what-is-a-database" class="slide level2">
+<h2>🗄️ What is a Database?</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>A <span class="accent">database</span> is an <span class="accent">organized collection of structured information</span>, or <span class="accent">data</span>, typically stored electronically in a computer system.</p>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment">Medical records</li>
+<li class="fragment">Bank accounts</li>
+<li class="fragment">Credit histories</li>
+<li class="fragment">Historical security prices</li>
+<li class="fragment">Census data</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment">Airline schedules and bookings</li>
+<li class="fragment">Bus and train timetables</li>
+<li class="fragment">Student records</li>
+<li class="fragment">Customer purchasing histories</li>
+<li class="fragment">Medical trial data</li>
+</ul>
+</div></div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 Essentially anything can be stored as a set of <span class="accent">related data values</span>.</p>
+</div>
+</div>
+</section>
+<section id="why-do-we-use-databases" class="slide level2">
+<h2>🗄️ Why Do We Use Databases?</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We have to when datasets get <span class="accent">incredibly large</span>.</p>
+<p>For example, a standard Excel document can store roughly:</p>
+<ul>
+<li class="fragment">1 million rows</li>
+<li class="fragment">16000 columns</li>
+</ul>
+</div>
+<div class="fragment">
+<p>Most Excel documents however are much smaller, around 0.5MB to 1MB.</p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>What happens if we are dealing with a <span class="accent">very large</span> dataset?</p>
+</div>
+</div>
+</section>
+<section id="example-why-do-we-use-databases" class="slide level2">
+<h2>🗄️ Example — Why Do We Use Databases?</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>Consider the <code>nycflights13</code> data from previous weeks.</p>
+<div class="cell columns column-output-location" data-layout-align="center">
+<div class="column">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-2"><a></a><span class="fu">format</span>(<span class="fu">object.size</span>(nycflights13<span class="sc">::</span>flights), <span class="at">units =</span><span class="st">"Mb"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "38.8 Mb"</code></pre>
+</div>
+</div></div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>This is still a <span class="accent">fairly small dataset</span>. Really large datasets can be many (GB) or even (TB).</p>
+<p>For example:</p>
+<ul>
+<li class="fragment">High-frequency securities data</li>
+<li class="fragment">Medical trials data</li>
+<li class="fragment">Advertising data</li>
+</ul>
+</div>
+</section>
+<section id="memory-usage" class="slide level2">
+<h2>💾 Memory Usage</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>If we import a <span class="accent">large dataset</span> into R, then we are storing that data in our computer’s <span class="accent">memory</span>.</p>
+<p>In our <span class="accent">environment tab</span> in RStudio we can see a read-out of the amount of memory we are currently using.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="static/img/R_memory.png" class="slide-img-center" width="500"></p>
+<figcaption>Memory usage in RStudio</figcaption>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 RStudio can only use so much memory before computer performance <span class="accent">declines rapidly</span> with high memory usage.</p>
+</div>
+</div>
+</section>
+<section id="exercise-available-memory" class="slide level2">
+<h2>💪 Exercise — Available Memory</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_d7006b25" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+<ol type="1">
+<li>Determine how much <span class="accent">random access memory (RAM)</span> your computer has.
+<ul>
+<li>For Macs go to <code>Apple -&gt; About This Mac -&gt; Memory</code></li>
+<li>For Windows go to <code>Task Manager -&gt; Performance -&gt; Memory</code></li>
+</ul></li>
+<li>Determine how much memory <code>R</code> has available.
+<ul>
+<li>Explore <code>?gc</code>.</li>
+<li>Run <code>gc()</code> (results will vary!)</li>
+</ul></li>
+</ol>
+</section>
+<section id="solution-available-memory" class="slide level2">
+<h2>✅ Solution — Available Memory</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>My Mac has <span class="accent">1TB of storage</span> and <span class="accent">16GB of RAM</span> (which is starting to lag behind 2026 laptops now).</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">gc</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          used (Mb) gc trigger  (Mb) limit (Mb) max used  (Mb)
+Ncells  726498 38.8    1363848  72.9         NA  1363848  72.9
+Vcells 6437629 49.2   21341494 162.9      16384 17402940 132.8</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">The <span class="accent"><code>used</code></span> columns report the memory <code>R</code> is <span class="accent">currently occupying</span>.</li>
+<li class="fragment">The <span class="accent"><code>max used</code></span> columns report the <span class="accent">peak</span> usage so far this session.</li>
+<li class="fragment">Values are shown for both <span class="accent"><code>Ncells</code></span> (objects) and <span class="accent"><code>Vcells</code></span> (vectors/data).</li>
+</ul>
+</div>
+</section>
+<section id="too-much-data" class="slide level2">
+<h2>📦 Too Much Data</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>The table below details several databases that are <span class="accent">too large</span> to load into R.</p>
+<table class="caption-top">
+<caption>Large Data File Examples</caption>
+<colgroup>
+<col style="width: 35%">
+<col style="width: 28%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">File Number</th>
+<th style="text-align: left;">File Name</th>
+<th style="text-align: center;">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">Diabetic Retinopathy Detection</td>
+<td style="text-align: center;">82.2 GiB</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">American Epilepsy Society Seizure Prediction Challenge</td>
+<td style="text-align: center;">59.6 GiB</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">Avito Duplicate Ads Detection</td>
+<td style="text-align: center;">48.4 GiB</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">Microsoft Malware Classification Challenge (BIG 2015)</td>
+<td style="text-align: center;">35.3 GiB</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">GE Flight Question</td>
+<td style="text-align: center;">34.4 GiB</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="dealing-with-big-data" class="slide level2">
+<h2>🗄️ Dealing with Big Data</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>Our approach:</p>
+<ul>
+<li class="fragment"><span class="accent">Store</span> the data on an <span class="accent">external disk</span></li>
+<li class="fragment">Open a <span class="accent">connection</span> to the data</li>
+<li class="fragment">Load <span class="accent">portions</span> of the data into local memory as needed</li>
+<li class="fragment">The dataset stored on this disk is a <span class="accent">database</span></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 We only ever hold <span class="accent">what we need</span> in memory — the <span class="accent">connection</span> lets us query a <span class="accent">database</span> far larger than our RAM.</p>
+</div>
+</div>
+</section>
+<section id="formal-definitions" class="slide level2">
+<h2>📖 Formal Definitions</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We defined a database earlier as an <span class="accent">organized collection of structured information</span>, or data, typically stored electronically in a computer system.</p>
+<p>Our databases will satisfy the following <span class="accent">two traits</span>:</p>
+<ol type="1">
+<li class="fragment">They will be <span class="accent">machine-updatable</span> (i.e.&nbsp;a collection of variables).</li>
+<li class="fragment">They will be <span class="accent">logically coherent</span> (i.e.&nbsp;they will have some understandable organizational structure).</li>
+</ol>
+</div>
+</section>
+<section id="database-management-systems-dbms" class="slide level2">
+<h2>🖥️ Database Management Systems (DBMS)</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We <span class="accent">manage</span> databases through <span class="accent">Database Management Systems (DBMS)</span>.</p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>There are <span class="accent">four</span> main types:</p>
+<ul>
+<li class="fragment"><span class="accent">Hierarchical</span></li>
+<li class="fragment"><span class="accent">Network Model</span></li>
+<li class="fragment"><span class="accent">Relational Model</span></li>
+<li class="fragment"><span class="accent">Object-Oriented Model</span></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>Broadly, we can classify DBMS into:</p>
+<ol type="1">
+<li class="fragment"><span class="accent">Relational</span> Database Management Systems (RDBMS); and</li>
+<li class="fragment"><span class="accent">Non-Relational</span> Database Management Systems (NoSQL).</li>
+</ol>
+</div>
+</section>
+<section id="databases-in-pstat-10" class="slide level2">
+<h2>🖥️ Databases in PSTAT 10</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>In PSTAT 10 we will specifically work with <span class="accent">Relational Databases</span>.</p>
+<ul>
+<li class="fragment">The most common databases used in industrial settings.</li>
+<li class="fragment">Easy to interface with using <span class="accent">structured query language (SQL)</span>.</li>
+<li class="fragment">Secure and very flexible design.</li>
+<li class="fragment">Easy to maintain, been in use for over 50 years.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="static/img/sql_examples.png" class="slide-img-center" width="800"></p>
+<figcaption>SQL Application Examples</figcaption>
+</figure>
+</div>
+</div>
+</section></section>
+<section>
+<section id="relational-database-model" class="title-slide slide level1 center">
+<h1>Relational Database Model</h1>
+
+</section>
+<section id="relational-database-model-parts" class="slide level2">
+<h2>🧩 Relational Database Model Parts</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We divide the <span class="accent">relational database model</span> into three parts:</p>
+<ul>
+<li class="fragment">Data <span class="accent">structure</span></li>
+<li class="fragment">Data <span class="accent">integrity</span></li>
+<li class="fragment">Data <span class="accent">manipulation</span></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 Today we discuss <span class="accent">data structure</span> and <span class="accent">data integrity</span>.</p>
+</div>
+</div>
+</section>
+<section id="core-definitions" class="slide level2">
+<h2>📖 Core Definitions</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We will consider the following definitions:</p>
+<ol type="1">
+<li class="fragment"><span class="accent">Relation</span>: table of columns and rows (“table”)</li>
+<li class="fragment"><span class="accent">Attribute</span>: column of a relation</li>
+<li class="fragment"><span class="accent">Domain</span>: allowable attribute values</li>
+<li class="fragment"><span class="accent">Tuple</span>: row of a relation</li>
+<li class="fragment"><span class="accent">Keys</span> (Super, Candidate, Primary, Foreign): identifiers</li>
+</ol>
+</div>
+</section>
+<section id="relational-databases" class="slide level2">
+<h2>🧩 Relational Databases</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>A <span class="accent">relational database</span> is a collection of <span class="accent">structured data</span> organized into <span class="accent">relations</span>.</p>
+</div>
+<p>For example, see the table below:</p>
+<table class="caption-top">
+<caption>Relations Example</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="interpretation" class="slide level2">
+<h2>🔎 Interpretation</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<caption>First Row</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+</tbody>
+</table>
+<p>From the first row we see that a student with ID <code>S1</code>, named <code>Remy</code>, is enrolled in <code>PSTAT8</code>.</p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">What other information can we see?</li>
+<li class="fragment">What other course is Remy enrolled in?</li>
+<li class="fragment">Who does Remy share a course with?</li>
+</ul>
+</div>
+</section>
+<section id="relations" class="slide level2">
+<h2>🧩 Relations</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>Relations have the following <span class="accent">properties</span>:</p>
+<ul>
+<li class="fragment"><span class="accent">Order is irrelevant</span>;</li>
+<li class="fragment">Each row (tuple) must be <span class="accent">unique</span>;</li>
+<li class="fragment">Every relation must have a <span class="accent">unique name</span>; and</li>
+<li class="fragment">Relations can be <span class="accent">updated</span> (tuples added) as desired.</li>
+</ul>
+</div>
+</section>
+<section id="relation-attributes" class="slide level2">
+<h2>🧩 Relation Attributes</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<caption>First Row</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">The <span class="accent">heading values</span> are all <span class="accent">attributes</span>, i.e.&nbsp;<code>StudentId</code>, <code>FirstName</code>, <code>Course#</code>.</li>
+<li class="fragment">The <span class="accent">attribute values</span> are in the columns.</li>
+<li class="fragment"><span class="accent">Rows</span> are called <span class="accent">tuples</span>.</li>
+<li class="fragment"><span class="accent">Structurally</span> relations are very similar to data frames in R.</li>
+</ul>
+</div>
+</section>
+<section id="domains-and-tuples" class="slide level2">
+<h2>🌐 Domains and Tuples</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>The <span class="accent">domain</span> of a <span class="accent">relation attribute</span> is the <span class="accent">set of atomic values</span> used to model that attribute’s data.</p>
+</div>
+<ul>
+<li class="fragment">Every relation attribute is linked to a domain.</li>
+<li class="fragment">For example, the domain for <code>Course#</code> would be <code>PSTAT5A, PSTAT5LS, PSTAT8, PSTAT10, ...</code></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">Note that this is the set of all values <span class="accent">a relation attribute can take</span> — the values themselves do not have to be present in the relation.</li>
+<li class="fragment">The <span class="accent">tuples</span> are all of the non-header rows.</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="keys" class="title-slide slide level1 center">
+<h1>Keys</h1>
+
+</section>
+<section id="keys-1" class="slide level2">
+<h2>🔑 Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p><span class="accent">Keys</span> are (subjectively) the <span class="accent">most important structural component</span> of the relational model.</p>
+<div class="definition">
+<p>A <span class="accent">key</span> is a set of attributes that <span class="accent">determine the other attributes</span> in each tuple, <span class="accent">establish and identify links</span> between relations, and <span class="accent">set any required constraints</span> on a database.</p>
+</div>
+<div class="slide-img-center">
+<p><img data-src="static/img/key.jpeg" width="600"></p>
+</div>
+</div>
+</section>
+<section id="super-keys" class="slide level2">
+<h2>🔑 Super Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="definition">
+<p>A <span class="accent">super key</span> is a set of attributes <span class="accent">uniquely identifying a tuple</span> in a relation.</p>
+</div>
+</div>
+</section>
+<section id="exercise-super-keys" class="slide level2">
+<h2>💪 Exercise — Super Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_02fda9cf" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">03</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+<p>Which of the following are <span class="accent">super keys</span>?</p>
+<ol type="1">
+<li><code>(StudentId, FirstName, Course#)</code></li>
+<li><code>(StudentId, FirstName)</code></li>
+<li><code>(StudentId, Course#)</code></li>
+<li><code>(StudentId)</code></li>
+</ol>
+</section>
+<section id="solution-super-keys" class="slide level2">
+<h2>✅ Solution — Super Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+<p>The following are both <span class="accent">super keys</span>:</p>
+<ol type="1">
+<li class="fragment"><code>(StudentId, FirstName, Course#)</code></li>
+<li class="fragment"><code>(StudentId, Course#)</code></li>
+</ol>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">A super key must <span class="accent">uniquely identify</span> every tuple.</li>
+<li class="fragment"><code>Remy</code> (<code>S1</code>) appears in <span class="accent">two rows</span>, so <code>(StudentId)</code> and <code>(StudentId, FirstName)</code> are <span class="accent">not</span> super keys — they cannot tell those rows apart.</li>
+<li class="fragment">Adding <code>Course#</code> <span class="accent">distinguishes</span> the tuples, so any set containing it uniquely identifies a row.</li>
+</ul>
+</div>
+</section>
+<section id="candidate-keys" class="slide level2">
+<h2>🔑 Candidate Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+<div class="definition">
+<p>A <span class="accent">candidate key</span> is a unique tuple identifier (super key) with <span class="accent">no redundancy</span>.</p>
+</div>
+<p>Consider the previous example’s super keys:</p>
+<p><code>{StudentId, FirstName, Course#}</code> &amp; <code>{StudentId, Course#}</code></p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">These two keys encode (effectively) the <span class="accent">same information</span>.</li>
+<li class="fragment">The <code>FirstName</code> attribute is <span class="accent">redundant</span>; both attribute sets point to the same tuple.</li>
+<li class="fragment">Only <code>{StudentId, Course#}</code> is a candidate key.</li>
+</ul>
+</div>
+</section>
+<section id="primary-keys" class="slide level2">
+<h2>🔑 Primary Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>A <span class="accent">primary key</span> is a set of attributes that <span class="accent">uniquely identifies any tuple in a given relation</span>.</p>
+</div>
+<ul>
+<li class="fragment">Each relation has <span class="accent">one primary key</span>, selected from the candidate keys.</li>
+<li class="fragment">The primary key is <span class="accent">chosen to minimize the number of attributes</span>.</li>
+<li class="fragment">Primary keys <span class="accent">cannot be duplicated</span>, i.e.&nbsp;the same primary key cannot refer to multiple relations.</li>
+<li class="fragment">Primary key values cannot be <code>null</code>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 In our previous example <code>{StudentId, Course#}</code> was the primary key for <code>ENROLLMENT</code>.</p>
+</div>
+</div>
+</section>
+<section id="foreign-keys" class="slide level2">
+<h2>🔑 Foreign Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>A <span class="accent">foreign key</span> is a set of attributes that <span class="accent">links attributes across relations</span>.</p>
+</div>
+<ul>
+<li class="fragment">Specifically: given two relations <code>R1</code> and <code>R2</code>, the foreign key links attributes from <code>R1</code> to those in <code>R2</code>.</li>
+<li class="fragment">This is <span class="accent">not intuitive</span> — we will look at an example.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>Before we do though, think about why foreign keys might be <span class="accent">useful</span>?</p>
+<ul>
+<li class="fragment">When would we want to link relations?</li>
+<li class="fragment">What sort of structure does a relational DB take?</li>
+</ul>
+</div>
+</section>
+<section id="example-foreign-keys" class="slide level2">
+<h2>🔑 Example — Foreign Keys</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="fragment">
+<table class="caption-top">
+<caption><code>STUDENT</code> Relation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Primary Key:</strong> <code>{StudentId}</code></p>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="fragment">
+<table class="caption-top">
+<caption><code>GPA</code> Relation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">GPA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">3.81</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">3.97</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">3.02</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">2.79</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Primary Key:</strong> <code>{StudentId, GPA}</code></p>
+<p><strong>Foreign Key:</strong> <code>{StudentId}</code></p>
+</div>
+</div></div>
+</section>
+<section id="key-summary" class="slide level2">
+<h2>🔑 Key Summary</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>The <span class="accent">structure of keys</span> may remind you of the basics of set theory:</p>
+<ul>
+<li class="fragment">Super Keys <span class="accent">contain</span> Candidate Keys.</li>
+<li class="fragment">Candidate Keys <span class="accent">contain</span> Primary Keys.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>Written in the language of <span class="accent">set theory</span> we have that:</p>
+<p><span class="math display">\[
+\{\text{Super Keys}\}\supset \{\text{Candidate Keys}\}\supset \{\text{Primary Keys}\}
+\]</span></p>
+<p>Foreign keys <span class="accent">link</span> relations together.</p>
+</div>
+</section></section>
+<section>
+<section id="data-integrity" class="title-slide slide level1 center">
+<h1>Data Integrity</h1>
+
+</section>
+<section id="data-integrity-1" class="slide level2">
+<h2>🔒 Data Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>The first portion of this lecture was focused on <span class="accent">data structure</span>, i.e.:</p>
+<ul>
+<li class="fragment"><span class="accent">Organization</span> of databases; and</li>
+<li class="fragment">Technical vocabulary.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>The next portion focuses on <span class="accent">data integrity</span>:</p>
+<ul>
+<li class="fragment">The rules all relational databases must obey.</li>
+<li class="fragment">Requirements to ensure <span class="accent">consistency</span> and <span class="accent">completeness</span>.</li>
+<li class="fragment">Integrity rules:
+<ol type="1">
+<li class="fragment"><span class="accent">Entity</span></li>
+<li class="fragment"><span class="accent">Referential</span></li>
+</ol></li>
+</ul>
+</div>
+</section>
+<section id="entity-integrity" class="slide level2">
+<h2>🔒 Entity Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>A relation has <span class="accent">entity integrity</span> when its primary keys are <span class="accent">unique</span> and have <span class="accent">values that are unique</span> and not <code>NULL</code> for every attribute (column).</p>
+</div>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 <span class="accent">Entity integrity</span> ensures we <span class="accent">do not have (potential) duplicate tuples</span> in a relation.</p>
+</div>
+<ul>
+<li class="fragment">How would duplicates impact <span class="accent">storage</span>?</li>
+<li class="fragment">How would they impact <span class="accent">accessing data</span>?</li>
+<li class="fragment">How would they impact the role of primary keys?</li>
+</ul>
+</div>
+</section>
+<section id="example-entity-integrity" class="slide level2">
+<h2>🔒 Example — Entity Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+<p>Primary Key: <code>{StudentId, Course#}</code></p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>Suppose we want to add a new student named <code>Sam</code> who is enrolled in <code>PSTAT174</code>.</p>
+<ul>
+<li class="fragment">Could we do this?</li>
+<li class="fragment">If not, what would we still need?</li>
+</ul>
+</div>
+</section>
+<section id="integrity-between-relations" class="slide level2">
+<h2>🔗 Integrity Between Relations</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>We considered two types of keys:</p>
+<ul>
+<li class="fragment">Super Keys, Candidate Keys, Primary Keys (all referring to a <span class="accent">single relation</span>)</li>
+<li class="fragment">Foreign Keys (linking to <span class="accent">multiple relations</span>)</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>We think of <span class="accent">integrity</span> the same way:</p>
+<ul>
+<li class="fragment"><span class="accent">Entity integrity</span> dealt with <span class="accent">individual relations</span>.</li>
+<li class="fragment"><span class="accent">Referential integrity</span> constrains <span class="accent">relations between relations</span>.</li>
+</ul>
+</div>
+</section>
+<section id="referential-integrity" class="slide level2">
+<h2>🔗 Referential Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>Foreign keys can take two types of values:</p>
+<ul>
+<li class="fragment">They can be <code>NULL</code>.</li>
+<li class="fragment">They can correspond to a <span class="accent">specific primary key</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="definition">
+<p><span class="accent">Referential integrity</span> ensures that we never attempt to reference a nonexistent tuple.</p>
+</div>
+<ul>
+<li class="fragment">Allows for easy <span class="accent">cross-referencing</span> across relations.</li>
+<li class="fragment">Prevents calls to nonexistent data.</li>
+</ul>
+</div>
+</section>
+<section id="example-referential-integrity" class="slide level2">
+<h2>🔗 Example — Referential Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="fragment">
+<table class="caption-top">
+<caption><code>CUSTOMER</code> Relation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">CUST_NO</th>
+<th style="text-align: center;">NAME</th>
+<th style="text-align: center;">Age</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">C1</td>
+<td style="text-align: center;">Alex</td>
+<td style="text-align: center;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">C2</td>
+<td style="text-align: center;">Charlie</td>
+<td style="text-align: center;">26</td>
+</tr>
+</tbody>
+</table>
+<p>Primary Key: <code>{CUST_NO}</code></p>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="fragment">
+<table class="caption-top">
+<caption><code>SALES_ORDER</code> Relation</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">ORDER_NO</th>
+<th style="text-align: center;">DATE</th>
+<th style="text-align: center;">CUST_NO</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">011</td>
+<td style="text-align: center;">6/11/23</td>
+<td style="text-align: center;">C1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">012</td>
+<td style="text-align: center;">6/24/23</td>
+<td style="text-align: center;">null</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">013</td>
+<td style="text-align: center;">7/1/23</td>
+<td style="text-align: center;">C3</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">015</td>
+<td style="text-align: center;">7/12/23</td>
+<td style="text-align: center;">C2</td>
+</tr>
+</tbody>
+</table>
+<p>Foreign Key: <code>{CUST_NO}</code></p>
+</div>
+</div></div>
+</section>
+<section id="example-referential-integrity-note" class="slide level2">
+<h2>🔗 Example — Referential Integrity (Note)</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<p>Note the third tuple of the <code>SALES_ORDER</code> relation:</p>
+<p><span class="math display">\[
+\{013,~7/1/23,~C_3\}.
+\]</span></p>
+<p>In customers, we have <code>CUST_NO</code> values:</p>
+<p><span class="math display">\[
+\{C_1, C_2\}.
+\]</span></p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<div class="emphasize">
+<p>📌 Thus referential integrity is <span class="accent">violated</span> — we reference a primary key value which does not exist.</p>
+</div>
+</div>
+</section>
+<section id="exercise-evaluating-integrity" class="slide level2">
+<h2>💪 Exercise — Evaluating Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="countdown" id="timer_480bd2d7" data-update-every="1" tabindex="0" style="right:0;bottom:0;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">04</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:60%;">
+<table class="caption-top">
+<caption><code>ITEMS</code></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Product</th>
+<th style="text-align: center;">Price ($)</th>
+<th style="text-align: left;">Category</th>
+<th style="text-align: left;">Manufacturer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Galaxy S23</td>
+<td style="text-align: center;">899</td>
+<td style="text-align: left;">Phones</td>
+<td style="text-align: left;">Samsung</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">null</td>
+<td style="text-align: center;">829</td>
+<td style="text-align: left;">Phones</td>
+<td style="text-align: left;">Apple</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Macbook Air</td>
+<td style="text-align: center;">1099</td>
+<td style="text-align: left;">Laptops</td>
+<td style="text-align: left;">Apple</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fire TV</td>
+<td style="text-align: center;">449</td>
+<td style="text-align: left;">Televisions</td>
+<td style="text-align: left;">Amazon</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:40%;">
+<table class="caption-top">
+<caption><code>ORDERS</code></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Product</th>
+<th style="text-align: center;">Order_NO</th>
+<th style="text-align: center;">Cust_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fire TV</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">CS1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Galaxy S23</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">CS11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Macbook Pro</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">CS11</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<p>We are given the tables above: <code>ITEMS</code> and <code>ORDERS</code>, with primary keys <code>Product</code> and <code>Cust_ID</code>.</p>
+<ol type="1">
+<li>What is the foreign key in <code>ORDERS</code>?</li>
+<li>Is entity integrity violated? If so, how?</li>
+<li>Is referential integrity violated? If so, how?</li>
+</ol>
+</section>
+<section id="solution-evaluating-integrity" class="slide level2">
+<h2>✅ Solution — Evaluating Integrity</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:60%;">
+<table class="caption-top">
+<caption><code>ITEMS</code></caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Product</th>
+<th style="text-align: center;">Price ($)</th>
+<th style="text-align: center;">Category</th>
+<th style="text-align: center;">Manufacturer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Galaxy S23</td>
+<td style="text-align: center;">899</td>
+<td style="text-align: center;">Phones</td>
+<td style="text-align: center;">Samsung</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">null</td>
+<td style="text-align: center;">829</td>
+<td style="text-align: center;">Phones</td>
+<td style="text-align: center;">Apple</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Macbook Air</td>
+<td style="text-align: center;">1099</td>
+<td style="text-align: center;">Laptops</td>
+<td style="text-align: center;">Apple</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Fire TV</td>
+<td style="text-align: center;">449</td>
+<td style="text-align: center;">Televisions</td>
+<td style="text-align: center;">Amazon</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:40%;">
+<table class="caption-top">
+<caption><code>ORDERS</code></caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Product</th>
+<th style="text-align: center;">Order_NO</th>
+<th style="text-align: center;">Cust_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Fire TV</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">CS1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Galaxy S23</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">CS11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Macbook Pro</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">CS11</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<ol type="1">
+<li class="fragment"><code>Product</code></li>
+<li class="fragment"><span class="accent">Yes</span>; <span class="accent">entity integrity</span> fails — <code>null</code> primary key in <code>ITEMS</code> → <code>Product</code>.</li>
+<li class="fragment"><span class="accent">Yes</span>; <span class="accent">referential integrity</span> fails — <code>Macbook Pro</code> in <code>ORDERS</code> → <code>Product</code> has no matching tuple.</li>
+</ol>
+</div>
+</section></section>
+<section>
+<section id="schema" class="title-slide slide level1 center">
+<h1>Schema</h1>
+
+</section>
+<section id="relation-schema" class="slide level2">
+<h2>📐 Relation Schema</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>The <span class="accent">relation schema</span> is the <span class="accent">relation name and its attributes</span>.</p>
+</div>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: center;">StudentId</th>
+<th style="text-align: center;">FirstName</th>
+<th style="text-align: center;">Course#</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT8</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">Remy</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">Sam</td>
+<td style="text-align: center;">PSTAT10</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">Taylor</td>
+<td style="text-align: center;">PSTAT131</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">S4</td>
+<td style="text-align: center;">Jordan</td>
+<td style="text-align: center;">PSTAT174</td>
+</tr>
+</tbody>
+</table>
+<p>Schema: <code>Enrollment {StudentId, FirstName, Course#}</code></p>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<ul>
+<li class="fragment">Conventionally, the primary key would be indicated in some fashion.</li>
+<li class="fragment">Recall that the primary key here was the pair <code>{StudentId, Course#}</code>; this type of key is known as a <span class="accent">composite key</span>.</li>
+</ul>
+</div>
+</section>
+<section id="database-schema" class="slide level2">
+<h2>📐 Database Schema</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="definition">
+<p>The <span class="accent">database schema</span> is the set of all <span class="accent">relation schema</span> in a database.</p>
+</div>
+<ul>
+<li class="fragment">New relations can be added at any point.</li>
+<li class="fragment">New relations must conform to integrity constraints.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>For example, the earlier <code>STUDENT</code> and <code>GPA</code> relations together form a database schema:</p>
+<p><span class="math display">\[
+\texttt{Student \{StudentId, FirstName\}},\quad \texttt{GPA \{StudentId, GPA\}}.
+\]</span></p>
+<div class="emphasize">
+<p>📌 The database schema records both the <span class="accent">relations</span> and the <span class="accent">keys</span> that link them.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="summary" class="title-slide slide level1 center">
+<h1>Summary</h1>
+
+</section>
+<section id="topics-covered" class="slide level2">
+<h2>✅ Topics Covered</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>🙌 This lecture we introduced ourselves to databases, specifically:</p>
+<ul>
+<li class="fragment">The <span class="accent">relational database</span> model</li>
+<li class="fragment"><span class="accent">Keys</span></li>
+<li class="fragment"><span class="accent">Data Integrity</span>; and</li>
+<li class="fragment"><span class="accent">Schema</span></li>
+</ul>
+</div>
+</section>
+<section id="next-class" class="slide level2">
+<h2>📅 Next Class</h2>
+<div class="spacer-sm">
+
+</div>
+<div class="fragment">
+<div class="spacer-sm">
+
+</div>
+<p>👉 Next class we will discuss <span class="accent">accessing</span> and <span class="accent">modifying</span> databases.</p>
+<ul>
+<li class="fragment">The database schema will form a core reference tool.</li>
+<li class="fragment">We will often discuss database schema theoretically.</li>
+</ul>
+</div>
+
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../../../../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../../../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../../../../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../../../../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script>
+      (function () {
+        var STORAGE_KEY = "pstat10-lecture-theme";
+        var root = document.documentElement;
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function storedTheme() {
+          try {
+            return window.localStorage.getItem(STORAGE_KEY);
+          } catch (e) {
+            return null;
+          }
+        }
+
+        function saveTheme(theme) {
+          try {
+            window.localStorage.setItem(STORAGE_KEY, theme);
+          } catch (e) {
+            // Ignore (e.g. privacy mode blocking storage).
+          }
+        }
+
+        function currentTheme() {
+          var saved = storedTheme();
+          if (saved === "dark" || saved === "light") return saved;
+          return media.matches ? "dark" : "light";
+        }
+
+        function applyTheme(theme) {
+          root.setAttribute("data-theme", theme);
+          var btn = document.getElementById("theme-toggle");
+          if (btn) {
+            var isDark = theme === "dark";
+            btn.textContent = isDark ? "☀️" : "🌙";
+            btn.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+            btn.setAttribute("title", isDark ? "Switch to light mode" : "Switch to dark mode");
+            btn.setAttribute("aria-pressed", String(isDark));
+          }
+        }
+
+        function toggleTheme() {
+          var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+          applyTheme(next);
+          saveTheme(next);
+        }
+
+        function createButton() {
+          if (document.getElementById("theme-toggle")) return;
+          var btn = document.createElement("button");
+          btn.id = "theme-toggle";
+          btn.type = "button";
+          btn.addEventListener("click", toggleTheme);
+          document.body.appendChild(btn);
+          // assets/theme-init.js already set data-theme in <head> to avoid a
+          // flash of the wrong theme; just sync the button's icon/labels to it.
+          applyTheme(root.getAttribute("data-theme") || currentTheme());
+        }
+
+        createButton();
+
+        // Follow system preference changes only if the user hasn't chosen manually.
+        media.addEventListener("change", function (e) {
+          if (storedTheme()) return;
+          applyTheme(e.matches ? "dark" : "light");
+        });
+      })();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
