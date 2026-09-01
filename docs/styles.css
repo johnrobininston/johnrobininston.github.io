@@ -4,16 +4,29 @@ body {
   font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
 }
 
-/* Light mode: softer, less saturated navbar background (Catppuccin Latte "surface0") */
-body.quarto-light .navbar {
-  background-color: #ccd0da !important;
+/* ─────────────────────────────────────────────────────────────────
+   Unified surface: navbar + title-block banner + page background all
+   share ONE low-blue tone per mode. Tweak these two custom properties
+   to taste (warm cream in light, neutral space-grey in dark) — every
+   surface below reads from them.
+   ───────────────────────────────────────────────────────────────── */
+body.quarto-light { --surface: #f4f1ea; }   /* warm cream */
+body.quarto-dark  { --surface: #26282e; }   /* neutral space grey */
+
+body.quarto-light,
+body.quarto-dark {
+  background-color: var(--surface) !important;
+  --bs-body-bg: var(--surface);            /* also drives graph modal / buttons */
 }
 
-/* Dark mode: navbar background slightly lighter than the page background
-   (Catppuccin Frappé "surface0" over "base"), text/icons matching body text */
-body.quarto-dark .navbar {
-  background-color: #414559 !important;
+body.quarto-light .navbar,
+body.quarto-dark  .navbar {
+  background-color: var(--surface) !important;
 }
+
+/* Faint divider so the flat navbar still reads as a bar against the page */
+body.quarto-light .navbar { border-bottom: 1px solid rgba(76, 79, 105, 0.12); }
+body.quarto-dark  .navbar { border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
 
 body.quarto-dark .navbar .nav-link,
 body.quarto-dark .navbar .navbar-brand,
@@ -47,9 +60,9 @@ body.quarto-dark .navbar #quarto-search svg.aa-SubmitIcon {
   font-size: 1.1rem;
 }
 
-/* Light mode: muted pastel title banner (blend of Catppuccin Latte blue + base) */
+/* Title banner shares the unified surface color set above */
 body.quarto-light .quarto-title-banner {
-  background-color: #c9d9f7 !important;
+  background-color: var(--surface) !important;
 }
 
 body.quarto-light .quarto-title-banner,
@@ -61,9 +74,8 @@ body.quarto-light .quarto-title-banner .h2 {
   color: #4c4f69 !important;
 }
 
-/* Dark mode: darker, muted title banner with light text (Catppuccin Frappé blue blended toward base) */
 body.quarto-dark .quarto-title-banner {
-  background-color: #47526f !important;
+  background-color: var(--surface) !important;
 }
 
 body.quarto-dark .quarto-title-banner,
