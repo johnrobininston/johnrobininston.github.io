@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-08-20">
+<meta name="description" content="Quick summary of the underlying probability theory needed to understand statistical modelling. This includes random variables, probability distributions and conditional expectation.">
+
+<title>Probability Theory Fundamentals – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-2e9a4277ef77454ce49237360a8a141b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-0b18a664a440bc6fc4e611d946d4cfde.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-2e9a4277ef77454ce49237360a8a141b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../brain.html"> 
+<span class="menu-text">Brain</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Probability Theory Fundamentals</h1>
+                  <div>
+        <div class="description">
+          Quick summary of the underlying probability theory needed to understand statistical modelling. This includes random variables, probability distributions and conditional expectation.
+        </div>
+      </div>
+                </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 20, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#sample-spaces-and-events" id="toc-sample-spaces-and-events" class="nav-link" data-scroll-target="#sample-spaces-and-events"><span class="header-section-number">2</span> Sample Spaces and Events</a></li>
+  <li><a href="#probability-laws" id="toc-probability-laws" class="nav-link" data-scroll-target="#probability-laws"><span class="header-section-number">3</span> Probability Laws</a></li>
+  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability"><span class="header-section-number">4</span> Conditional Probability</a></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables"><span class="header-section-number">5</span> Random Variables</a>
+  <ul class="collapse">
+  <li><a href="#probability-mass-function-pmf" id="toc-probability-mass-function-pmf" class="nav-link" data-scroll-target="#probability-mass-function-pmf"><span class="header-section-number">5.1</span> Probability Mass Function (PMF)</a></li>
+  <li><a href="#probability-density-function-pdf" id="toc-probability-density-function-pdf" class="nav-link" data-scroll-target="#probability-density-function-pdf"><span class="header-section-number">5.2</span> Probability Density Function (PDF)</a></li>
+  <li><a href="#cumulative-distribution-function-cdf" id="toc-cumulative-distribution-function-cdf" class="nav-link" data-scroll-target="#cumulative-distribution-function-cdf"><span class="header-section-number">5.3</span> Cumulative Distribution Function (CDF)</a></li>
+  </ul></li>
+  <li><a href="#expectation" id="toc-expectation" class="nav-link" data-scroll-target="#expectation"><span class="header-section-number">6</span> Expectation</a>
+  <ul class="collapse">
+  <li><a href="#covariance-and-correlation" id="toc-covariance-and-correlation" class="nav-link" data-scroll-target="#covariance-and-correlation"><span class="header-section-number">6.1</span> Covariance and Correlation</a></li>
+  </ul></li>
+  <li><a href="#common-distributions" id="toc-common-distributions" class="nav-link" data-scroll-target="#common-distributions"><span class="header-section-number">7</span> Common Distributions</a></li>
+  <li><span class="header-section-number">8</span> Backlinks</li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p>This note provides a summary of some of the key concepts in probability theory, including the language of sample spaces and events, the axioms of probability, counting, conditional probability and Bayes’ theorem, random variables and their distributions, expectation and variance.</p>
+</section>
+<section id="sample-spaces-and-events" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sample-spaces-and-events"><span class="header-section-number">2</span> Sample Spaces and Events</h2>
+<p>A <strong>random experiment</strong> is a repeatable process that produces an outcome that cannot be predicted with certainty.</p>
+<div class="definition" data-title="Sample Space">
+<p>The <strong>sample space</strong> <span class="math inline">\(\Omega\)</span> is the set of all possible outcomes of a random experiment. An <strong>outcome</strong> <span class="math inline">\(\omega \in \Omega\)</span> is a single possible result. An <strong>event</strong> <span class="math inline">\(A\)</span> is a subset of <span class="math inline">\(\Omega\)</span>, <span class="math inline">\(A \subseteq \Omega\)</span>, i.e.&nbsp;a collection of outcomes.</p>
+</div>
+<p>The <strong>empty event</strong> <span class="math inline">\(\varnothing\)</span> never occurs; the <strong>sure event</strong> <span class="math inline">\(\Omega\)</span> always occurs.</p>
+<p><strong>Event algebra</strong> (set operations on events):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Notation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Union</td>
+<td><span class="math inline">\(A \cup B\)</span></td>
+<td><span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> (or both) occurs</td>
+</tr>
+<tr class="even">
+<td>Intersection</td>
+<td><span class="math inline">\(A \cap B\)</span></td>
+<td>both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> occur</td>
+</tr>
+<tr class="odd">
+<td>Complement</td>
+<td><span class="math inline">\(A^c = \Omega \setminus A\)</span></td>
+<td><span class="math inline">\(A\)</span> does not occur</td>
+</tr>
+<tr class="even">
+<td>Difference</td>
+<td><span class="math inline">\(A \setminus B = A \cap B^c\)</span></td>
+<td><span class="math inline">\(A\)</span> occurs but <span class="math inline">\(B\)</span> does not</td>
+</tr>
+</tbody>
+</table>
+<div class="definition" data-title="Mutually Exclusive Events">
+<p>Two events <span class="math inline">\(A, B\)</span> are <strong>mutually exclusive (disjoint)</strong> if <span class="math inline">\(A \cap B = \varnothing\)</span>.</p>
+</div>
+<p>A collection of events <span class="math inline">\(\{A_i\}\)</span> <strong>partitions</strong> <span class="math inline">\(\Omega\)</span> if the <span class="math inline">\(A_i\)</span> are pairwise disjoint and <span class="math inline">\(\bigcup_i A_i = \Omega\)</span>.</p>
+<div class="definition" data-title="Axioms of Probability">
+<p>A <strong>probability measure</strong> <span class="math inline">\(\mathbb{P}\)</span> on <span class="math inline">\(\Omega\)</span> assigns to every event <span class="math inline">\(A\)</span> a number <span class="math inline">\(\mathbb{P}(A)\)</span> satisfying:</p>
+<ol type="1">
+<li><strong>Non-negativity:</strong> <span class="math inline">\(\mathbb{P}(A) \geq 0\)</span> for every event <span class="math inline">\(A\)</span>.</li>
+<li><strong>Normalization:</strong> <span class="math inline">\(\mathbb{P}(\Omega) = 1\)</span>.</li>
+<li><strong>Countable additivity:</strong> for pairwise disjoint events <span class="math inline">\(A_1, A_2, \dots\)</span>, <span class="math display">\[\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) =
+\sum_{i=1}^\infty \mathbb{P}(A_i).\]</span></li>
+</ol>
+</div>
+<p>Immediate consequences:</p>
+<ul>
+<li><span class="math inline">\(\mathbb{P}(\varnothing) = 0\)</span>.</li>
+<li><span class="math inline">\(\mathbb{P}(A^c) = 1 - \mathbb{P}(A)\)</span> (<strong>complement rule</strong>).</li>
+<li>If <span class="math inline">\(A \subseteq B\)</span> then <span class="math inline">\(\mathbb{P}(A) \leq \mathbb{P}(B)\)</span> (<strong>monotonicity</strong>).</li>
+<li><span class="math inline">\(0 \leq \mathbb{P}(A) \leq 1\)</span> for every event <span class="math inline">\(A\)</span>.</li>
+</ul>
+</section>
+<section id="probability-laws" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="probability-laws"><span class="header-section-number">3</span> Probability Laws</h2>
+<p>The following results are immediate consequences of the axioms of probability. They serve as the basic toolkit for computing probabilities of events.</p>
+<p>The Addition Law (Inclusion-Exclusion) is used to compute the probability of a union of events.</p>
+<div class="theorem" data-title="Addition Law (Inclusion–Exclusion)">
+<p>For any two events <span class="math inline">\(A, B\)</span>: <span class="math display">\[\mathbb{P}(A \cup B) = \mathbb{P}(A) +
+\mathbb{P}(B) - \mathbb{P}(A \cap B).\]</span> If <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are mutually exclusive, this reduces to <span class="math inline">\(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Clearly we have that <span class="math display">\[
+\begin{align*}
+\mathbb{P}(A) + \mathbb{P}(B)
+  &amp; = \mathbb{P}\left((A\setminus B) \cup (A\cap B)\right) +
+    \mathbb{P}\left((B\setminus A) \cup (A\cap B)\right) \\
+  &amp; = \mathbb{P}(A\setminus B) + \mathbb{P}(A\cap B) +
+    \mathbb{P}(B\setminus A) + \mathbb{P}(A\cap B) \\
+  &amp; = \mathbb{P}(A\cup B) + \mathbb{P}(A\cap B),
+\end{align*}
+\]</span> as required.</p>
+</div>
+<p>The multiplication law is used to compute the probability of an intersection of events, and is the basis for conditional probability.</p>
+<div class="theorem" data-title="Multiplication Law">
+<p>For any two events with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>: <span class="math display">\[\mathbb{P}(A \cap B) =
+\mathbb{P}(A \mid B)\,\mathbb{P}(B) = \mathbb{P}(B \mid A)\,\mathbb{P}(A).\]</span> More generally, for events <span class="math inline">\(A_1, \dots, A_n\)</span> (<strong>chain rule</strong>): <span class="math display">\[\mathbb{P}(A_1 \cap \cdots \cap A_n) = \mathbb{P}(A_1)\,
+\mathbb{P}(A_2 \mid A_1)\,\mathbb{P}(A_3 \mid A_1 \cap A_2) \cdots
+\mathbb{P}(A_n \mid A_1 \cap \cdots \cap A_{n-1}).\]</span></p>
+</div>
+<div class="theorem" data-title="De Morgan's Laws">
+<p><span class="math display">\[(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.\]</span> These let you rewrite unions of events as complements of intersections (and vice versa) — useful for computing <span class="math inline">\(\mathbb{P}(\text{at least one})\)</span> via <span class="math inline">\(1 - \mathbb{P}(\text{none})\)</span>. See [[De Morgan’s Laws]] for the general set-theoretic statement.</p>
+</div>
+<div class="theorem" data-title="De Moivre–Laplace Theorem">
+<p>A classical precursor to the CLT: if <span class="math inline">\(X \sim \text{Binomial}(n,p)\)</span>, then for large <span class="math inline">\(n\)</span> the standardized binomial is approximately standard normal, <span class="math display">\[\frac{X - np}{\sqrt{np(1-p)}} \approx N(0,1).\]</span> This is the special case of the [[Central Limit Theorem]] for sums of Bernoulli trials, and historically the first CLT result proved.</p>
+</div>
+</section>
+<section id="conditional-probability" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="conditional-probability"><span class="header-section-number">4</span> Conditional Probability</h2>
+<div class="definition" data-title="Conditional Probability">
+<p>For events <span class="math inline">\(A, B\)</span> with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>, the probability of <span class="math inline">\(A\)</span> given that <span class="math inline">\(B\)</span> has occurred is <span class="math display">\[\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.\]</span></p>
+</div>
+<ul>
+<li><span class="math inline">\(\mathbb{P}(\cdot \mid B)\)</span> is itself a valid probability measure (satisfies the Kolmogorov axioms) on <span class="math inline">\(\Omega\)</span>.</li>
+<li><strong>Independence:</strong> <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> iff <span class="math display">\[\mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A).\]</span> Events <span class="math inline">\(A_1,\dots,A_n\)</span> are <strong>mutually independent</strong> if this factorization holds for every subcollection, not just pairwise.</li>
+</ul>
+<div class="theorem" data-title="Law of Total Probability">
+<p>If <span class="math inline">\(\{B_1, \dots, B_n\}\)</span> partitions <span class="math inline">\(\Omega\)</span> with <span class="math inline">\(\mathbb{P}(B_i) &gt; 0\)</span>, then for any event <span class="math inline">\(A\)</span>: <span class="math display">\[\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i).\]</span></p>
+</div>
+<div class="theorem" data-title="Bayes' Theorem">
+<p><span class="math display">\[\mathbb{P}(A \mid B) = \frac{\mathbb{P}(B \mid A)\,\mathbb{P}(A)}{\mathbb{P}(B)},\]</span> and combined with the law of total probability, for a partition <span class="math inline">\(\{B_1,\dots,B_n\}\)</span>: <span class="math display">\[\mathbb{P}(B_i \mid A) = \frac{\mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i)}{\sum_j \mathbb{P}(A \mid B_j)\,\mathbb{P}(B_j)}.\]</span></p>
+</div>
+<div class="example" data-title="Medical test">
+<p>Suppose a disease affects <span class="math inline">\(1\%\)</span> of a population, and a test is <span class="math inline">\(95\%\)</span> sensitive (<span class="math inline">\(\mathbb{P}(+\mid D)=0.95\)</span>) and <span class="math inline">\(90\%\)</span> specific (<span class="math inline">\(\mathbb{P}(-\mid D^c)=0.90\)</span>, so <span class="math inline">\(\mathbb{P}(+\mid D^c)=0.10\)</span>). If a randomly chosen person tests positive, Bayes’ theorem gives <span class="math display">\[\mathbb{P}(D \mid +) = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.10 \times 0.99} \approx 0.088.\]</span> A positive result still implies under a <span class="math inline">\(9\%\)</span> chance of disease — the low base rate dominates the test’s accuracy.</p>
+</div>
+<p>Interpreted as <strong>prior</strong> <span class="math inline">\(\mathbb{P}(B_i)\)</span>, <strong>likelihood</strong> <span class="math inline">\(\mathbb{P}(A \mid B_i)\)</span>, and <strong>posterior</strong> <span class="math inline">\(\mathbb{P}(B_i \mid A)\)</span>; this is the seed of all Bayesian inference. See [[Bayes’ Theorem]] and, for the statistical-inference framework built on it, [[Bayesian Inference]] / [[Bayesian Statistics]].</p>
+</section>
+<section id="random-variables" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">5</span> Random Variables</h2>
+<div class="definition" data-title="Random Variable">
+<p>A <strong>random variable</strong> <span class="math inline">\(X\)</span> is a function from the sample space to the real numbers, <span class="math inline">\(X : \Omega \to \mathbb{R}\)</span>, assigning a numerical value to each outcome. <span class="math inline">\(X\)</span> is:</p>
+<ul>
+<li><strong>discrete</strong> if it takes values in a finite or countable set,</li>
+<li><strong>continuous</strong> if it takes values in an uncountable set (typically an interval) and its CDF is (absolutely) continuous.</li>
+</ul>
+</div>
+<p>The rigorous, measure-theoretic definition (requiring <span class="math inline">\(X\)</span> to be measurable) is in [<a href="#random-variables">Random Variables</a>] and <a href="../brain/random-variables.html">Random Variables and Distribution Functions</a>.</p>
+<section id="probability-mass-function-pmf" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="probability-mass-function-pmf"><span class="header-section-number">5.1</span> Probability Mass Function (PMF)</h3>
+<p>For a discrete random variable <span class="math inline">\(X\)</span>, the <strong>PMF</strong> is <span class="math display">\[p_X(x) = \mathbb{P}(X = x),\]</span> satisfying <span class="math inline">\(p_X(x) \geq 0\)</span> and <span class="math inline">\(\sum_x p_X(x) = 1\)</span>.</p>
+</section>
+<section id="probability-density-function-pdf" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="probability-density-function-pdf"><span class="header-section-number">5.2</span> Probability Density Function (PDF)</h3>
+<p>For a continuous random variable <span class="math inline">\(X\)</span>, the <strong>PDF</strong> <span class="math inline">\(f_X(x) \geq 0\)</span> satisfies <span class="math display">\[\mathbb{P}(a \leq X \leq b) = \int_a^b f_X(x)\,dx, \qquad \int_{-\infty}^{\infty} f_X(x)\,dx = 1.\]</span> Note <span class="math inline">\(f_X(x)\)</span> is a <em>density</em>, not a probability — <span class="math inline">\(\mathbb{P}(X = x) = 0\)</span> for any single point <span class="math inline">\(x\)</span> when <span class="math inline">\(X\)</span> is continuous.</p>
+</section>
+<section id="cumulative-distribution-function-cdf" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="cumulative-distribution-function-cdf"><span class="header-section-number">5.3</span> Cumulative Distribution Function (CDF)</h3>
+<div class="definition" data-title="CDF">
+<p>For any random variable <span class="math inline">\(X\)</span> (discrete or continuous): <span class="math display">\[F_X(x) = \mathbb{P}(X \leq x).\]</span> Properties: <span class="math inline">\(F_X\)</span> is non-decreasing, right-continuous, <span class="math inline">\(\lim_{x \to -\infty} F_X(x) = 0\)</span>, <span class="math inline">\(\lim_{x \to \infty} F_X(x) = 1\)</span>.</p>
+<ul>
+<li>Discrete case: <span class="math inline">\(F_X(x) = \sum_{t \leq x} p_X(t)\)</span> (a step function).</li>
+<li>Continuous case: <span class="math inline">\(F_X(x) = \int_{-\infty}^x f_X(t)\,dt\)</span>, and where <span class="math inline">\(F_X\)</span> is differentiable, <span class="math inline">\(f_X(x) = F_X'(x)\)</span>.</li>
+<li><span class="math inline">\(\mathbb{P}(a &lt; X \leq b) = F_X(b) - F_X(a)\)</span>.</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="expectation" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="expectation"><span class="header-section-number">6</span> Expectation</h2>
+<div class="definition" data-title="Expectation">
+<p>The <strong>expected value</strong> (mean) of a random variable is <span class="math display">\[\mathbb{E}[X] = \sum_x x\, p_X(x) \quad \text{(discrete)}, \qquad \mathbb{E}[X] = \int_{-\infty}^\infty x\, f_X(x)\,dx \quad \text{(continuous)}.\]</span></p>
+</div>
+<p><strong>Law of the Unconscious Statistician (LOTUS):</strong> for a function <span class="math inline">\(g\)</span>, <span class="math display">\[\mathbb{E}[g(X)] = \sum_x g(x)p_X(x) \quad \text{or} \quad \int g(x)f_X(x)\,dx\]</span> — computed <em>without</em> first finding the distribution of <span class="math inline">\(g(X)\)</span>.</p>
+<p><strong>Linearity of expectation</strong> (always holds, independence not required): <span class="math display">\[\mathbb{E}[aX + bY + c] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y] + c.\]</span></p>
+<p>For the fully general, measure-theoretic construction of expectation as a Lebesgue integral, see [<a href="#expectation">Expectation</a>]; for expectation given information / another random variable, see [[Conditional Expectation]].</p>
+<div class="definition" data-title="Variance">
+<p><span class="math display">\[\operatorname{Var}(X) = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.\]</span> The <strong>standard deviation</strong> is <span class="math inline">\(\sigma_X = \sqrt{\operatorname{Var}(X)}\)</span>.</p>
+</div>
+<p>Properties: <span class="math inline">\(\operatorname{Var}(aX+b) = a^2\operatorname{Var}(X)\)</span>; if <span class="math inline">\(X, Y\)</span> are independent, <span class="math inline">\(\operatorname{Var}(X+Y) = \operatorname{Var}(X)+\operatorname{Var}(Y)\)</span> (in general there’s a covariance cross term, see below).</p>
+<section id="covariance-and-correlation" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="covariance-and-correlation"><span class="header-section-number">6.1</span> Covariance and Correlation</h3>
+<p><span class="math display">\[\operatorname{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].\]</span> <span class="math display">\[\operatorname{Corr}(X,Y) = \rho_{X,Y} = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1,1].\]</span> General bilinear expansion: <span class="math inline">\(\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)\)</span>. If <span class="math inline">\(X \perp Y\)</span> then <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span> (converse not true in general — zero covariance does not imply independence).</p>
+</section>
+</section>
+<section id="common-distributions" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="common-distributions"><span class="header-section-number">7</span> Common Distributions</h2>
+<p>A quick undergraduate toolkit — full catalogue with PMFs/PDFs, means, and variances in [[Common Probability Distributions]].</p>
+<p><strong>Discrete:</strong></p>
+<ul>
+<li>Bernoulli<span class="math inline">\((p)\)</span> — single trial, success/failure.</li>
+<li><a href="../brain/binomial-distribution.html">Binomial Distribution</a> — number of successes in <span class="math inline">\(n\)</span> i.i.d. Bernoulli<span class="math inline">\((p)\)</span> trials.</li>
+<li><a href="../brain/poisson-distribution.html">Poisson Distribution</a> — number of rare events in a fixed interval, rate <span class="math inline">\(\lambda\)</span>.</li>
+<li>Geometric<span class="math inline">\((p)\)</span> — number of trials until first success.</li>
+<li>[[Multinomial Distribution]] — vector generalization of the binomial.</li>
+</ul>
+<p><strong>Continuous:</strong></p>
+<ul>
+<li>[[Uniform Distribution]] — equally likely outcomes on an interval.</li>
+<li><a href="../brain/normal-distribution.html">Normal Distribution</a> — the bell curve, <span class="math inline">\(N(\mu, \sigma^2)\)</span>; central to the CLT.</li>
+<li><a href="../brain/exponential-distribution.html">Exponential Distribution</a> — memoryless waiting time, rate <span class="math inline">\(\lambda\)</span>.</li>
+<li><a href="../brain/gamma-distribution.html">Gamma Distribution</a>, <a href="../brain/beta-distribution.html">Beta Distribution</a>, <a href="../brain/chi-squared-distribution.html">Chi-Squared Distribution</a> — common in statistical inference.</li>
+</ul>
+
+
+</section>
+<section class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id=""><span class="header-section-number">8</span> Backlinks</h2>
+<ul>
+<li><a href="../brain/probability-distributions.html">Probability Distributions</a></li>
+<li><a href="../brain/probability-theory.html">Probability Theory</a></li>
+</ul>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
