@@ -1,0 +1,54 @@
+---
+title: Projections
+author: John Robin Inston
+date: 2026-09-06
+number-sections: true
+---
+
+## Orthogonal Projection
+
+:::{.definition data-title="Orthogonal Projection"}
+
+Given a subspace $\mathcal{V} \subseteq \mathbb{R}^n$, the **orthogonal 
+projection** of a vector $\mathbf{y}$ onto $\mathcal{V}$ is the unique vector 
+$\hat{\mathbf{y}} \in \mathcal{V}$ closest to $\mathbf{y}$ in Euclidean 
+distance:
+
+$$
+\hat{\mathbf{y}} = \underset{\mathbf{v} \in \mathcal{V}}{\arg\min}\, 
+\|\mathbf{y} - \mathbf{v}\|^2.
+$$
+
+:::
+
+The residual $\mathbf{e} = \mathbf{y} - \hat{\mathbf{y}}$ is orthogonal to 
+every vector in $\mathcal{V}$.
+
+::: {.definition data-title="Projection Matrix"}
+If $\mathcal{V} = \mathrm{col}(\mathbf{X})$ (the column space of $\mathbf{X}$) 
+and $\mathbf{X}$ has full column rank, the orthogonal projection onto 
+$\mathcal{V}$ is the linear map:
+
+$$
+\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}, \qquad \mathbf{H} = 
+\mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top.
+$$
+
+$\mathbf{H}$ is called the **hat matrix** (or projection matrix).
+:::
+
+## Properties of Projection Matrices
+
+Any orthogonal projection matrix $\mathbf{H}$ satisfies two key properties:
+
+1. **Symmetric**: $\mathbf{H}^\top = \mathbf{H}$.
+2. **Idempotent**: $\mathbf{H}^2 = \mathbf{H}$ (projecting twice gives 
+   the same result as projecting once).
+
+The **trace** of the hat matrix equals the number of columns in $\mathbf{X}$ 
+(i.e. $p + 1$ for a model with an intercept and $p$ predictors), which counts 
+the "degrees of freedom" used by the model.
+
+The complementary matrix $\mathbf{M} = \mathbf{I} - \mathbf{H}$ projects onto 
+the orthogonal complement of $\mathrm{col}(\mathbf{X})$ and is also symmetric 
+and idempotent. 

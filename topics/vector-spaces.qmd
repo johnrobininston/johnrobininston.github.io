@@ -1,0 +1,150 @@
+---
+title: Vector Spaces
+author: John Robin Inston
+date: 2026-09-06
+title-block-banner: true
+number-sections: true
+---
+
+## Vector
+
+### Vectors
+
+Vectors are objects that have both magnitude and direction and as such most
+students are first introduced to them in physics class where they are used to
+describe velocities, accelerations and forces acting on objects.  More 
+generally in mathematics, vector refers to quantities that cannot be 
+expressed by a single number (scalars).
+
+:::{.definition data-title="Vector"}
+
+A **vector** is an ordered list of elements of a [[Fields|field]] $F$ 
+
+$$
+\vec{v}:=(v_{1}, \dots, v_{n})=\begin{bmatrix} v_{1}\\ \vdots \\ v_{n} \end{bmatrix},
+$$
+
+where $v_{i}\in F$ for all $i =1, \dots, n$.  
+
+:::
+
+Here a say that $\vec{ v}$ is an $n$-length vector or mathematically say the cardinality $\# \vec{ v}=n$.  
+
+### Vector Operations
+
+**Addition** and **scalar multiplication** work element-wise:
+
+$$
+\mathbf{u} + \mathbf{v} = \begin{pmatrix} u_1 + v_1 \\ \vdots \\ u_n + v_n \end{pmatrix}, \qquad c\,\mathbf{v} = \begin{pmatrix} c v_1 \\ \vdots \\ c v_n \end{pmatrix}.
+$$
+
+The **inner product** (dot product) of two vectors $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$ is the scalar:
+
+$$
+\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^\top \mathbf{v} = \sum_{i=1}^n u_i v_i.
+$$
+
+Two vectors are **orthogonal** if their inner product is zero: $\mathbf{u}^\top \mathbf{v} = 0$.
+
+The **Euclidean norm** (length) of a vector is:
+
+$$
+\|\mathbf{v}\| = \sqrt{\mathbf{v}^\top \mathbf{v}} = \sqrt{\sum_{i=1}^n v_i^2}.
+$$
+
+A vector with $\|\mathbf{v}\| = 1$ is called a **unit vector**.
+
+### Linear Combinations and Span
+
+:::{.definition data-title="Linear Combination"}
+
+A **linear combination** of vectors $\mathbf{v}_1, \ldots, \mathbf{v}_k$ is any vector of the form 
+
+$$
+c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k,
+$$ 
+
+where $c_1, ..., c_k\in F$.
+
+:::
+
+::: {.definition data-title="Linear Independence"}
+Vectors $\mathbf{v}_1, \ldots, \mathbf{v}_k$ are **linearly independent** if the only solution to
+$$c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k = \mathbf{0}$$
+is $c_1 = \cdots = c_k = 0$. Otherwise they are **linearly dependent**, meaning at least one vector can be written as a linear combination of the others.
+:::
+
+Linear independence is central to regression: if the predictor variables are linearly dependent, the design matrix loses rank and we cannot uniquely estimate coefficients.
+
+:::{.definition data-title="Span"}
+The **span** of a set of vectors $\{\mathbf{v}_1, \ldots, \mathbf{v}_k\}$ is the set of all linear combinations of those vectors
+
+$$
+\text{span}\{\mathbf{v}_1, \ldots, \mathbf{v}_k\} = \left\{ c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k : c_1, \ldots, c_k \in F \right\}.
+$$
+
+:::
+
+## Vector Spaces
+
+:::{.definition data-title="Vector Space"}
+
+A **vector space** $\mathcal{V}$ on a field $F$ - typically denoted by the 
+double $(\mathcal{V},F)$ is a collection of vectors of given length $n$ 
+with elements in $F$ upon which is defined operations of addition and scalar
+multiplication that satisfy the **vector space axioms**.
+
+:::
+
+The **vector space axioms** are given as follows:
+
+1. Binary addition: $\vec{x}, \vec{ y} \in \mathcal{V} \implies  \vec{x}+ \vec{ y} \in \mathcal{V}$.
+2. Commutative addition: $\vec{ x}, \vec{ y} \in \mathcal{V} \implies  \vec{x}+ \vec{ y}= \vec{ y} + \vec{ x}$.
+3. Associative addition: $\vec{ x}, \vec{ y}, \vec{ z}\in \mathcal{V}\implies  \vec{x}+( \vec{ y}+ \vec{ z})=(\vec{ x} + \vec{ y})+ \vec{ z}$.
+4. Zero vector: $\exists  \vec{ 0}\in\mathcal{V}:\forall  \vec{ x}\in\mathcal{V},~\vec{x}+ \vec{0}= \vec{ x}$.
+5. Additive inverse: $\forall  \vec{ x}\in\mathcal{V},~\vec{\exists} y \in \mathcal{V}: \vec{x}+ \vec{ y}=\vec{ 0}$.
+6. Scalar multiplication: $\vec{ x}\in\mathcal{V}~\&~\alpha \in F\implies \alpha  \vec{x}\in\mathcal{V}$.
+7. Scalar identity: $\vec{ x}\in \mathcal{V}\implies 1\vec{ x}=\vec{ x}$.
+8. Field compatible scalar multiplication: $\vec{x}\in\mathcal{V}~\&~\alpha, \beta \in F \implies \alpha(\beta \vec{x})=(\alpha \beta) \vec{x}$.
+9. Vector addition distributivity: $\alpha \in F~\&~\vec{ x}, \vec{ y} \in \mathcal{V} \implies \alpha(\vec{ x}+ \vec{ y})= \alpha \vec{x}+ \alpha \vec{y}$.
+10. Field addition distributivity: $\alpha, \beta \in F~\&~ \vec{ x} \in \mathcal{V}\implies (\alpha + \beta) \vec{x}=\alpha \vec{ x} +\beta  \vec{ x}$.
+
+:::{.example data-title="Real Euclidean Space"}
+
+We can see immediately that the real numbers $\mathbb{R}$ satisfy the field axioms.  Further the collection of vectors $(\vec{ v}_{1}, \dots, \vec{ v}_{n})\in \mathbb{R}^n$ known as Euclidean space is a vector space.  Defining $\alpha \in \mathbb{R}$ and $\vec{ x}, \vec{y}\in \mathbb{R}^n$ then *vector addition* and *scalar multiplication* are defined respectively as
+
+$$
+\vec{ x}+ \vec{ y}=(x_{1}+y_{1}, \dots, x_{n}+y_{n})\quad\&\quad \alpha \vec{x}=(\alpha x_{1},  \dots, \alpha x_{n}).
+$$
+
+:::
+
+Further the *zero vector* is intuitively defined as $\vec{ 0}=(0,\dots,0).$
+
+:::{.definition data-title="Vector Sub-Space"}
+
+For vector space $(\mathcal{V}, F)$ and subset $\mathcal{W}\subset\mathcal{V}$, then $(\mathcal{W},F)$ is also a vector space (known as a **subspace** of $\mathcal{V}$) if and only if the following conditions hold:
+
+1. $\vec{0}\in\mathcal{W}$;
+2. $\vec{v}, \vec{w}\in \mathcal{W}\implies \vec{v}+\vec{w}\in\mathcal{W}$;
+3. $\alpha \in F$ and $\vec{v}\in \mathcal{W}\implies \alpha \vec{v}\in \mathcal{W}$.
+
+:::
+
+## Linear Vector Spaces
+
+Vector space linearity is a fundamental property we assume vector spaces possess in our study of Linear Algebra. Linear vector spaces also form the foundation of our definition of **inner products**. 
+
+:::{.definition data-title="Linear Vector Space"}
+
+A vector space is **linear** if for all $\alpha_{1}, \alpha_{2}\in F$ and $\vec{v}_{1}, \vec{v}_{2}\in\mathcal{V}$  
+
+$$
+\alpha_{1}\vec{v_{1}}+\alpha_{2}\vec{v}_{2}\in\mathcal{V},
+$$
+
+where we call this vector the **linear combination** of $\vec{v}_{1}$ and $\vec{v}_{2}$.
+
+:::
+
+A vector space is therefore linear if it is closed under scalar multiplication and vector addition, otherwise known as linear transforms.  Linear spaces are desirable because linear transformations can stretch, shrink, rotate, or reflect a space whilst always preserves straight lines and keeping the origin fixed. 

@@ -1,0 +1,180 @@
+---
+title: Monotone Convergence Theorem
+author: John Robin Inston
+date: 2026-09-07
+number-sections: true
+---
+
+## Introduction
+
+The **monotone convergence theorem** is a selection of related theorems 
+proving, under certain conditions, the convergence of monotone sequences.  
+In its simplest form, it says that a non-decreasing bounded-above sequence of 
+real numbers 
+
+$$
+a_1 \leq a_2 \leq \ldots  \leq K,
+$$
+
+converges to its smallest upper bound, or supremum $K$.  Likewise, a 
+non-increasing bounded-below sequence of real numbers converges to its largest
+lower bound, its infimum. 
+
+In more advanced mathematics, the monotone convergence theorem states that for 
+sequences of non-negative pointwise-increasing measurable functions
+
+$$
+0 \leq f_1(x)\leq f_2(x) \le  \ldots ,
+$$
+
+taking the integral and the supremum can be interchanged with the result being
+finite if either one is finite.
+
+## Real Sequences
+
+In its simplest form the theorem concerns monotone sequences of real numbers,
+where it is a direct consequence of the completeness of $\mathbb{R}$.
+
+:::{.theorem data-title="Monotone Convergence Theorem (Real Sequences)"}
+
+Every bounded monotone sequence of real numbers converges. In particular, a
+non-decreasing sequence $(a_n)$ that is bounded above converges to its supremum,
+
+$$
+\lim_{n\to\infty} a_n = \sup_n a_n,
+$$
+
+and a non-increasing sequence that is bounded below converges to its infimum.
+
+:::
+
+:::{.proof}
+
+Let $(a_n)$ be non-decreasing with $a_n \leq K$ for all $n$. The set
+$S = \{a_n : n \in \mathbb{N}\}$ is non-empty and bounded above, so by the
+completeness (least upper bound) axiom it has a supremum $L = \sup S$. We claim
+$a_n \to L$.
+
+Fix $\epsilon > 0$. Since $L$ is the *least* upper bound, $L - \epsilon$ is not
+an upper bound of $S$, so there exists an index $N$ with $a_N > L - \epsilon$.
+Because the sequence is non-decreasing, $a_n \geq a_N > L - \epsilon$ for every
+$n \geq N$, while $a_n \leq L$ for all $n$ since $L$ is an upper bound. Hence
+
+$$
+L - \epsilon < a_n \leq L \quad\Longrightarrow\quad |a_n - L| < \epsilon
+\qquad \text{for all } n \geq N,
+$$
+
+so $a_n \to L = \sup_n a_n$. The non-increasing case follows by applying this
+result to $(-a_n)$.
+
+:::
+
+## Measurable Functions
+
+:::{.theorem data-title="Monotone Convergence Theorem"}
+
+If $\left\{f_n : X \to [0, \infty)\right\}$ is a sequence of measurable 
+functions on a measurable set $X$ (with measure $\mu$) such that $f_n \to f$ pointwise almost 
+everywhere and $f_1\leq f_2 \leq \ldots,$ then
+
+$$
+\lim_{n\to \infty} \int _X f_n ~ d\mu = \int_X f ~ d\mu.
+$$
+
+:::
+
+:::{.proof}
+
+Since changing each $f_n$ and $f$ on a $\mu$-null set alters none of the
+integrals, we may assume the convergence $f_n \to f$ and the ordering
+$f_1 \leq f_2 \leq \cdots$ hold at *every* point of $X$; in particular
+$f = \sup_n f_n$ pointwise.
+
+As $f_n \leq f_{n+1}$, monotonicity of the integral makes
+$\left(\int_X f_n \, d\mu\right)$ a non-decreasing sequence in $[0,\infty]$, so
+it converges to some $\alpha \in [0,\infty]$. Since $f_n \leq f$ for every $n$,
+we have $\int_X f_n \, d\mu \leq \int_X f \, d\mu$, and letting $n \to \infty$
+gives
+
+$$
+\alpha \leq \int_X f \, d\mu.
+$$
+
+For the reverse inequality, fix a simple measurable function $s$ with
+$0 \leq s \leq f$ and a constant $c \in (0,1)$, and set
+
+$$
+E_n = \left\{ x \in X : f_n(x) \geq c\, s(x) \right\}.
+$$
+
+Each $E_n$ is measurable, the ordering $f_n \leq f_{n+1}$ gives
+$E_n \subseteq E_{n+1}$, and $\bigcup_n E_n = X$: if $s(x) = 0$ then $x \in E_1$,
+while if $s(x) > 0$ then $c\, s(x) < s(x) \leq f(x)$ and $f_n(x) \uparrow f(x)$,
+so $x \in E_n$ for all large $n$. Therefore
+
+$$
+\int_X f_n \, d\mu \;\geq\; \int_{E_n} f_n \, d\mu \;\geq\; c \int_{E_n} s \, d\mu.
+$$
+
+The set function $A \mapsto \int_A s \, d\mu$ is a measure, so continuity from
+below gives $\int_{E_n} s \, d\mu \to \int_X s \, d\mu$. Letting $n \to \infty$,
+
+$$
+\alpha \geq c \int_X s \, d\mu.
+$$
+
+Now let $c \to 1$ to obtain $\alpha \geq \int_X s \, d\mu$, and take the
+supremum over all simple $0 \leq s \leq f$. By the definition of the Lebesgue
+integral,
+
+$$
+\int_X f \, d\mu = \sup\left\{ \int_X s \, d\mu : s \text{ simple},\ 0 \leq s \leq f \right\},
+$$
+
+so $\alpha \geq \int_X f \, d\mu$. Combining the two inequalities yields
+$\alpha = \int_X f \, d\mu$, that is,
+
+$$
+\lim_{n\to\infty} \int_X f_n \, d\mu = \int_X f \, d\mu.
+$$
+
+:::
+
+## Example
+
+A central application is the interchange of summation and integration for
+non-negative functions.
+
+:::{.example data-title="Term-by-term integration"}
+
+Let $g_1, g_2, \ldots : X \to [0,\infty)$ be measurable and define the partial
+sums $f_n = \sum_{k=1}^n g_k$. Each $f_n$ is non-negative and measurable, and the
+sequence is non-decreasing with $f_n \uparrow \sum_{k=1}^\infty g_k$ pointwise.
+Applying the monotone convergence theorem,
+
+$$
+\int_X \sum_{k=1}^\infty g_k \, d\mu
+= \lim_{n\to\infty} \int_X \sum_{k=1}^n g_k \, d\mu
+= \lim_{n\to\infty} \sum_{k=1}^n \int_X g_k \, d\mu
+= \sum_{k=1}^\infty \int_X g_k \, d\mu,
+$$
+
+so for non-negative measurable functions one may always integrate a series term
+by term.
+
+As a concrete instance, take $X = (0,1)$ with Lebesgue measure and expand the
+geometric series $\frac{1}{1-x} = \sum_{k=0}^\infty x^k$. Since $-\ln x \geq 0$
+on $(0,1)$, every term $x^k(-\ln x)$ is non-negative, so the theorem justifies
+
+$$
+\int_0^1 \frac{-\ln x}{1 - x} \, dx
+= \sum_{k=0}^\infty \int_0^1 x^k (-\ln x) \, dx
+= \sum_{k=0}^\infty \frac{1}{(k+1)^2}
+= \sum_{m=1}^\infty \frac{1}{m^2}
+= \frac{\pi^2}{6}.
+$$
+
+:::
+
+

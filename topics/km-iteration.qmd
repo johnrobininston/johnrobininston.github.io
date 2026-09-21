@@ -1,0 +1,141 @@
+---
+title: Krasnoselskii-Mann Iteration
+author: John Robin Inston
+date: 2026-09-06
+number-sections: true
+---
+
+## Introduction
+
+The Krasnoselskii-Mann (KM) iteration is a method for finding fixed points of
+non-expansive mappings in Hilbert spaces.  It is a generalization of the
+Picard iteration and is particularly useful for solving problems in optimization
+and variational inequalities.
+
+## Definition
+
+:::{.definition data-title="Krasnoselskii-Mann Iteration Theorem"}
+
+Let $T:D\to D$ be a non-expansive mapping on a closed convex subset 
+$D\neq \emptyset$ of a [[hilbert-space]] $\mathcal{H}$. Letting 
+$x_0\in D$ we define the Krasnoselskii-Mann (KM) iterations as
+
+$$
+x_{n+1}=G_{KM}(x_n, \lambda_n)=(1-\lambda_n)x_n+\lambda_nTx_n.
+$$
+
+where $\lambda_n\in[0,1]$.
+
+:::
+
+This is just a convex combination of the current iterate $x_n$ and the image 
+of the current iterate under the non-expansive mapping $T$ with 
+a weight $\lambda_n$ that can vary with each iteration.  The following 
+theorem gives conditions under which the KM iteration converges to a fixed
+point of $T$.
+
+## KM Iteration Convergence
+
+:::{.theorem data-title="KM Iteration Convergence Theorem"}
+
+If $\text{Fix}(T)=\empty$ and 
+
+$$
+\sum_{n=0}^{\infty}\lambda_n(1-\lambda_n)=\infty,
+$$
+
+then the following results hold:
+
+1. $x_n$ is $F$-mono with respect to set $\text{Fix}(T)$.
+2. $x_n - T X_n \to 0$ convergence of error to zero is strong.
+3. $x_n\stackrel{D}\to \bar{x} \in \text{Fix}(T)$ sequence converges weakly to 
+   a point in the fixed point set of $T$.
+
+:::
+
+When $D$ is a bounded set, theorem holds after if the existence assumption of 
+the fixed point set is removed because fixed point set of non-expansive 
+operator is convex (see **nonexpansive operator** in [[hilbert-space]]).
+
+:::{.proof}
+
+To prove (1) we take $y\in\text{Fix}(T)$ by non-empty assumption.  Consider
+
+$$
+\begin{align*}
+\lVert x_{n+1}-y\rVert^2 & = \lVert (1-\lambda_n)x_n+\lambda_nTx_n-y\rVert^2 \\
+& = \lVert (1-\lambda_n)(x_n-y)+\lambda_n(T x_n-y)\rVert^2 \\
+& = (1-\lambda_n)\lVert x_n-y\rVert^2+\lambda_n\lVert Tx_n-y\rVert^2 
+  - \lambda_n(1-\lambda_n)\lVert x_n - Tx_n \rVert^2 \\
+& \leq (1-\lambda_n)\lVert x_n - y\rVert^2 + \lambda_n\lVert x_n 
+  - y \rVert^2-\lambda_n(1-\lambda_n)\lVert x_n - Tx_n\rVert^2 \\
+& = \lVert x_n-y\rVert^2-\lambda_n(1-\lambda_n)\lVert x_n - Tx_n\rVert^2 \\
+& \leq \lVert x_n-y\rVert^2,
+\end{align*}
+$$
+
+where on line 3 we used an identity for the norm of a convex combination and 
+on line 4 we used the non-expansiveness of $T$ (see [[norm-spaces]]).  
+Thus $x_n$ is $F$-monotone with respect to the $\text{Fix}(T)$.  Moreover
+
+$$
+\begin{align*}
+\lambda_n(1-\lambda_n)\lVert x_n - tx_n\rVert^2 & \leq 
+\lVert x_n - y\rVert ^2 - \lVert x_{n+1} - y\rVert^2 \\
+\implies \sum_{n=0}^N\lambda_n(1-\lambda_n)\lVert x_n - Tx_n\rVert ^2 & \leq 
+\lVert x_0 - y\rVert ^2 - \lim_{n\to\infty}\lVert x_{n+1} - y\rVert^2 < \infty.
+\end{align*}
+$$
+
+Thus $x_{n+1}-x_n \to \mathbf{0}$, proving (2).  To prove (3) we consider
+
+$$
+\begin{align*}
+\lVert x_{n+1} - Tx_{n+1}\rVert & = 
+  \lVert (1-\lambda_n) x_n - \lambda_n T(x_n) - T(x_n+1) \rVert \\
+  & = \lVert (1-\lambda _n)(x_n - T(x_n)) + 
+    (T(x_n) - T(x_n+1))\rVert \\
+  & \leq (1-\lambda_n)\lVert x_n - T(x_n)\rVert + 
+    \lVert T(x_n) - T(x_n+1)\rVert \\
+  & \leq (1-\lambda _n) \lVert x_n - T(x_n)\rVert + \lVert x_n - x_{n+1}\rVert \\
+  & = \lvert x_n - (1-\lambda _n)x_n - \lambda _n T(x_n)\rVert + 
+  (1-\lambda _n)\lVert x_n - T(x_n)\rVert \\
+  & = \lambda _n \lVert x_n - T(x_n)\rVert + (1-\lambda _n)\lVert x_n -
+  T(x_n)\rVert \\
+  & = \lVert x_n - T(x_n)\rVert.
+\end{align*}
+$$
+
+Therefore $\lVert x_n - T(x_n)\rVert \to l \ge 0$ by the 
+[[monotone-convergence-theorem]].  We want to show that $l=0$, so for
+contradiction let $l>0$ and consider
+
+$$
+\infty > \sum_{n=0}^N \lambda _n(1-\lambda _n)\lVert x_n - T(x_n)\rVert^2 
+\geq l^2 \sum_{n=0}^N \lambda _n(1-\lambda _n).
+$$
+
+Therefore 
+
+$$
+\lim_{n \to \infty} \lVert T(x_n) - x_n\rVert = 0.
+$$
+
+Since $x_n$ is $F$-monotone with respect to $\text{Fix}(T)$ there exists a 
+subsequence $x_{n_k}$ with weak limit $\bar {x}$.  Thus
+
+$$
+x_{n_k} \stackrel{D}\to \bar{x}
+$$
+
+Hence, 
+
+$$
+T(x_{n_k})-x_{n_k} \to 0.
+$$
+
+By Demi-closure of a non-expansive operator, $\bar{x}\in\text{Fix}(T)$.  By 
+$F$-monotone convergence of the sequence, $x_n \to \bar {x}$.
+
+:::
+
