@@ -1,0 +1,118 @@
+---
+title: Linear Difference Equations
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+In this note we discuss how to solve linear difference equations and give some
+applications.
+### First Order Homogeneous Equation
+
+Consider time as discrete taking integer values $n = 0,1,2,\dots$ and $x(n)$
+describing the state of some system at time $n$.  
+
+:::{.definition data-title="First-Order Homogeneous Difference Equation"}
+
+A **first order homogeneous difference equation** takes the form
+$$
+x(n)=ax(n-1)
+$$
+where $x(n)$ is to be determined is a constant. Its general solution is given
+by
+$$
+x(n)=Ca^n.
+$$
+
+:::
+
+FOH difference equations are easy to solve iteratively 
+$$
+x(n)=ax(n-1)=a(ax(n-2))=\dots a^nx(0),
+$$
+hence if we are given the initial state, then the $n$-th state is given by
+$x(n)=a^nx(0)$ i.e. this is a model for exponential growth or decay.
+### First Order Inhomogeneous Equation
+
+:::{.definition data-title="First Order Inhomogeneous Difference Equation"}
+
+A **first order inhomogeneous difference equation** takes the form
+$$
+x(n)=ax(n-1)+b(n)
+$$
+where $b(n)$ is a given sequence and $x(n)$ is unknown.
+
+:::
+
+The equation is called **inhomogeneous** because of the term $b(n)$. The
+following useful principle is useful to solve such equations.
+
+**Linearity Principle:** Suppose $x(n)$ is a solution of the homogeneous first
+order equation $x(n)=ax(n-1)$ and $y(n)$ is a solution of the inhomogeneous
+first order equation $y(n)=ay(n-1)+b(n)$. Then $z(n)=x(n)+y(n)$ is a solution
+of the inhomogeneous equation $z(n)=az(n-1)+b(n)$. Indeed we have
+$$
+\begin{aligned}z(n) & = x(n) + y(n) \\ & = ax(n-1)+ay(n-1)+b(n) \\ & = a[x(n-1)+y(n-1)]+b(n)\\& = az(n-1)+b(n).\end{aligned}
+$$
+To find the general solution of a first order homogeneous equation we need to:
+
+1. Find one particular solution of the inhomogeneous equation;
+2. Find the general solution of the homogeneous equation. This solution has a
+   free constant in it which we then determine using (for example) the value of
+   $x(0)$;
+3. The general solution of the inhomogeneous equation is the sum of the
+   particular solution of the inhomogeneous equation and general solution of
+   the homogeneous equation.
+
+##### Example - First Order Inhomogeneous Equation
+We look to solve
+$$
+x(n)=ax(n-1)+b,
+$$
+i.e. the inhomogeneous term is $b(n)=b$ is constant. We look for a particular
+solution and after some head scratching we try $x(n)=D$ to be constant and find
+$$
+D=aD+b,\quad \text{or}\quad D= \frac{b}{1-a}.
+$$
+The general solution is then
+$$
+x(n)=Ca^n + \frac{b}{1-a}.
+$$
+### Second Order Homogeneous Equation
+
+We consider an equation where $x(n)$ depends on both $x(n-1)$ and $x(n-2)$.
+
+:::{.definition data-title="Second Order Homogeneous Difference Equation"}
+
+A **second order homogeneous difference equation** takes the form
+$$
+x(n)=ax(n-1)+bx(n-2).
+$$
+
+:::
+
+**Linearity Principle:** One verifies that if $x(n)$ and $y(n)$ are two
+solutions of the second order homogeneous equation, then $C_{1}x(n)+C_{2}y(n)$
+is also a solution for any choice of constants $C_{1}, C_{2}$.
+
+To find the general solution we get inspired by the homogeneous first order
+equation and look for solutions of the form
+$$
+x(n)=\alpha^n.
+$$
+If we plug this into the equation we find 
+$$
+\alpha^n=a\alpha^{n-1}+b\alpha^{n-2}
+$$
+and dividing by $\alpha^{n-2}$ gives
+$$
+\alpha^2-a\alpha-b=0.
+$$
+We find (in general) two distinct roots $\alpha_{1}$ and $\alpha_{2}$ and the
+general solution has the form
+$$
+x(n)=C_{1}\alpha_{1}^n+C_{2}\alpha_{2}^n.
+$$
+
+

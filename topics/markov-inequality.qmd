@@ -1,0 +1,62 @@
+---
+title: Markov Inequality
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is the Markov Inequality?
+
+The **Markov inequality** gives an upper bound on the probability that a
+non-negative random variable is greater than or equal to some positive
+constant. Markov's inequality is tight in the sense that for each chosen
+positive constant, there exists a random variable such that the inequality is
+in fact an equality.
+
+:::{.theorem data-title="Markov's Inequality"}
+
+If $X$ is a non-negative random variable, then for every $\epsilon>0$ we have
+that
+$$
+\mathbb{P}(X>\epsilon) \leq \frac{1}{\epsilon}\cdot \mathbb{E}X.
+$$
+
+:::
+
+*Proof:*
+From the definition of expectation we have that
+$$
+\begin{align}
+\mathbb{E}X & = \int _{-\infty}^\infty xf(x) \, dx \geq\int _{0}^\infty xf(x)\, dx =\int _{0}^\epsilon xf(x) \, dx +\int _{\epsilon}^\infty xf(x) \, dx  \\
+& \geq \int _{\epsilon}^\infty xf(x) \, dx  \geq \int_{\epsilon}^\infty af(x) \, dx =\epsilon\mathbb{P}(X> \epsilon).
+\end{align}
+$$
+$\square$
+
+More intuitively, we notice that
+$$
+\mathbb{E}X = \mathbb{E}X \mathbb{1}_{X>\epsilon } + \mathbb{E}X \mathbb{1}_{X\leq \epsilon} \geq \mathbb{E}X \mathbb{1}_{X>\epsilon }\geq \epsilon \mathbb{E}\mathbb{1}_{X>\epsilon }=\epsilon \mathbb{P}(X>\epsilon ).
+$$
+
+## Markov Inequality for Non-Decreasing Functions
+
+The Markov inequality for non-decreasing functions is stronger result that
+defines the bound by some nondecreasing non-negative function.
+
+:::{.theorem data-title="Markov Inequality for Non-Decreasing Functions"}
+
+If $\varphi$ is a nondecreasing non-negative function, $X$ is a random variable
+(not necessarily nonnegative) and $\varphi(a)>0$ then we have that
+$$
+\mathbb{P}(X\geq a)\leq \frac{{\mathbb{E}(\varphi(X))}}{\varphi(a)}.
+$$
+
+:::
+
+**Corollary (Higher Moments)**
+Immediately from above, using higher moments of $X$ supported on values larger
+than $0$ is
+$$
+\mathbb{P}(|X|\geq a)\leq \frac{{\mathbb{E}|X|^n}}{a^n}.
+$$

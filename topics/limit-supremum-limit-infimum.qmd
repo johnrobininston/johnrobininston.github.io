@@ -1,0 +1,94 @@
+---
+title: "Limit Supremum & Limit Infimum"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Set Theoretic Supremum & Infimum
+
+Consider a sequence of sets $\{ A_{n} \}_{n\in \mathbb{N}}$. In the context of
+the limsup and liminf of sets, the supremum of the sequence
+$\{ A_{n} \}_{n\in \mathbb{N}}$ is the smallest possible upper bound for every
+element (set) of the sequence, i.e the smallest set containing each $A_{n}$
+which by definition is
+$$
+\sup_{n \geq1}A_n= \bigcup_{n=1}^\infty A_n.
+$$
+Similarly, the infimum of the sequence $\{ A_{n} \}_{n\in\mathbb{N}}$ is the
+largest possible lower bound of every element (set) of the sequence, i.e. the
+smallest collection of elements in each $A_{n}$ which by definition is
+$$
+\inf_{n \geq 1} A_{n}=\bigcap_{n=1}^\infty A_n.
+$$
+
+### Set Theoretic Limit Supremum & Infimum
+
+Generally the limit supremum and limit infimum consider what happens to the
+supremum and the infimum as you disregard an increasingly larger finite
+collection of sets at the start of the sequence. So for the supremum we
+consider the union as we increase the lower bound
+$$
+\limsup_{ n \to \infty } A_{n}=\lim_{ n \to \infty } \bigcup_{m=n}^\infty A_{m}.
+$$
+However, since the sequence $\{ B_{n} \}_{n \in \mathbb{N}}$ where
+$B_{n}=\bigcup_{m=n}^\infty A_{m}$ is monotone decreasing, this limit is
+equivalent to the intersection and so
+$$
+\limsup_{ n \to \infty } A_{n}=\lim_{ n \to \infty } \bigcup_{m=n}^\infty A_{m}=\bigcap_{n=1}^\infty \bigcup_{m=n}^\infty A_{m}.
+$$
+Similarly, for the infimum we consider the intersection as we increase the
+lower bound
+$$
+\liminf_{ n \to \infty } A_{n}=\lim_{ n \to \infty } \bigcap_{m=n}^\infty A_{m}.
+$$
+Again, since the sequence $\{ B_{n} \}_{n \in \mathbb{N}}$ where
+$B_{n}:=\bigcap_{m=n}^\infty A_{m}$ is monotone increasing, this limit is
+equivalent to the unions as so
+$$
+\liminf_{ n \to \infty } A_{n} = \lim_{ n \to \infty } \bigcap_{m=n}^\infty A_{m}=\bigcup_{n=1}^\infty \bigcap _{m=n}^\infty A_{m}.
+$$
+
+### Limsup / Liminf & Probability Measure
+
+An important notion in [[probability-theory|probability theory]], specifically
+in the [[convergence-of-random-variables|convergence of random variables]] and
+the [[borel-cantelli-lemma|Borel-Cantelli lemma]] is the notion of events
+occurring infinitely often which, somewhat counterintuitively, is equivalent to
+the notion of even limit supremum, i.e. for sequence of events $A_{n}$, we have
+that
+$$
+\mathbb{P}(\{ A_{n}\text{ occurs }i.o \}) = \mathbb{P}\left(\limsup_{ n \to \infty } A_{n}\right).
+$$
+A powerful tool for constructing proofs that events occur i.o. is the following
+theorem.
+
+:::{.theorem data-title="Probability and Limsup / Liminf Relations"}
+
+For a sequence of events $\{ A_{n} \}_{n \in \mathbb{N}}$ we have that
+$$
+\mathbb{P}\left(\liminf_{ n \to \infty }  A_{n}\right) \leq \liminf_{ n \to \infty } \mathbb{P}(A_{n})\leq \limsup_{ n \to \infty }\mathbb{P}(A_{n})\leq \mathbb{P}\left( \limsup_{ n \to \infty } A_{n} \right).
+$$
+
+:::
+
+`\begin{proof}`
+The second inequality is clear by definition hence we show the first (i) and
+third (iii) inequalities.
+For (iii) we have that
+$$
+\limsup_{ n \to \infty } \mathbb{P}(A_{n})=\inf_{n\geq 1} \sup_{m \geq n}\mathbb{P}(A_{m})\stackrel{(\star)}{\leq} \inf_{n\geq 1}\sup_{m \geq n}\mathbb{P}\left( \bigcup_{k=m}^\infty A_{k} \right)=\inf_{n \geq 1}\mathbb{P}\left( \bigcup _{k=n}^\infty A_{k} \right)=\mathbb{P}\left( \bigcap_{n=1}^\infty \bigcup_{k=n}^\infty A_{k} \right)=\mathbb{P}\left( \limsup_{ n \to \infty }A_{n} \right) ,
+$$
+where for $(\star)$ we used the monotonicity of measure and making use of the
+fact that $\bigcup_{k=n}^\infty A_{k}\downarrow$ as $n\uparrow$.
+For (i) we simply replace $A_{n}$ with its complement
+$$
+\limsup_{ n \to \infty } \mathbb{P}(A_{n}^c) \leq \mathbb{P}\left( \limsup_{ n \to \infty } A_{n}^c \right),
+$$
+and then we obtain the result since
+$$
+\mathbb{P}\left( \liminf_{ n \to \infty } A_{n} \right) =1-\mathbb{P}\left( \limsup_{ n \to \infty } A_{n}^c \right) \leq 1-\limsup_{ n \to \infty } \mathbb{P}(A_{n}^c)=\liminf_{ n \to \infty } (1-\mathbb{P}(A_{n}^c))=\liminf_{ n \to \infty } \mathbb{P}(A_{n}).
+$$
+`\end{proof}`
+

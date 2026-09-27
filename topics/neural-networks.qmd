@@ -1,0 +1,202 @@
+---
+title: Neural Networks
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Neural Networks
+
+**Neural networks** are a broad class of parameterized function families
+inspired by biological neurons and designed to approximate complex,
+high-dimensional mappings. At their core, they are **compositions of affine
+maps and nonlinearities** trained from data.
+
+Formally, a (feedforward) neural network defines a function  
+$$
+f_\theta : \mathbb{R}^d \to \mathbb{R}^k
+$$
+of the form
+$$
+f_\theta(x)
+=
+W_L \sigma\!\left( W_{L-1} \sigma\!\left( \cdots \sigma(W_1 x + b_1)\cdots \right) + b_{L-1} \right) + b_L,
+$$
+where
+
+- $L$ is the number of layers,  
+- $W_\ell \in \mathbb{R}^{n_\ell \times n_{\ell-1}}$ and
+  $b_\ell \in \mathbb{R}^{n_\ell}$ are weights and biases,  
+- $\sigma : \mathbb{R} \to \mathbb{R}$ is a nonlinear **activation function**
+  (e.g. ReLU, sigmoid, tanh),  
+- $\theta = \{W_\ell, b_\ell\}_{\ell=1}^L$ are the parameters.
+
+![Feed Forward Neural Network Diagram](feed-forward-neural-network.png)
+
+Without the nonlinearity $\sigma$, this would collapse to a single linear map.
+The expressive power of neural networks comes entirely from **stacking
+nonlinear transformations**.
+
+## Training as Optimization
+
+Given data $\{(x_i, y_i)\}_{i=1}^N$ and a loss function $\ell$, training solves
+$$
+\min_{\theta} \; \frac{1}{N} \sum_{i=1}^N \ell\bigl(f_\theta(x_i), y_i\bigr).
+$$
+This is a high-dimensional, non-convex optimization problem. It is typically
+solved by **stochastic gradient descent (SGD)** and its variants, using
+**backpropagation** to efficiently compute gradients via the chain rule.
+
+## Universal Approximation
+
+A fundamental result is the *Universal Approximation Theorem*:
+
+> A feedforward neural network with a single hidden layer and a suitable nonlinearity $\sigma$ can approximate any continuous function on a compact set arbitrarily well.
+
+This is an *existence* result: it does not say that such a network is small,
+easy to train, or statistically efficient. Depth, structure, and inductive bias
+matter in practice.
+
+## Major Types of Neural Networks
+
+Different architectures encode different structural assumptions about the data.
+
+### Feedforward Networks (MLPs)
+
+- Also called *Multilayer Perceptrons*.  
+- Fully connected layers.  
+- Suitable for generic tabular data.  
+- No built-in notion of geometry, time, or locality.
+
+Mathematically: repeated compositions of
+$$
+x \mapsto \sigma(Wx + b).
+$$
+### Convolutional Neural Networks (CNNs)
+
+Designed for *spatially structured data* (images, grids).
+
+Key ideas:
+
+- Local connectivity,
+- Weight sharing,
+- Translation equivariance.
+
+A convolutional layer applies
+$$
+x \mapsto \sigma(K * x + b),
+$$
+where $K$ is a small kernel and $*$ denotes convolution.
+
+CNNs drastically reduce parameter count and encode the prior that *nearby
+pixels are related*.
+
+### Recurrent Neural Networks (RNNs)
+
+Designed for *sequential data* (time series, text).
+
+They define a hidden state recursion
+$$
+h_t = \sigma(W_h h_{t-1} + W_x x_t + b),
+\qquad
+y_t = g(h_t).
+$$
+
+RNNs model temporal dependence but suffer from vanishing/exploding gradients.
+
+Variants:
+
+- **LSTM** (Long Short-Term Memory),
+- **GRU** (Gated Recurrent Unit),
+
+which introduce gating mechanisms to stabilize long-range dependencies.
+
+### Transformers
+
+The dominant architecture for language and many sequence tasks.
+
+Core mechanism: **self-attention**. Given inputs $\{x_i\}_{i=1}^n$, attention
+computes
+$$
+\text{Attn}(Q,K,V)
+=
+\text{softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)V,
+$$
+where $Q,K,V$ are learned linear transforms of the inputs.
+
+Properties:
+- No recurrence,
+- Global interactions in a single layer,
+- Highly parallelizable,
+- Excellent for long-range dependencies.
+
+Transformers replace *state propagation* (RNNs) with *content-based
+interaction*.
+
+### Autoencoders
+
+Unsupervised architectures of the form
+$$
+x \xrightarrow{\;\text{encoder}\;} z \xrightarrow{\;\text{decoder}\;} \hat{x},
+$$
+trained to minimize
+$$
+\|x - \hat{x}\|^2.
+$$
+
+They learn low-dimensional representations $z$.
+
+Special case:
+- **Variational Autoencoders (VAEs)** impose a probabilistic structure,
+  $$
+  z \sim q_\phi(z \mid x), \qquad x \sim p_\theta(x \mid z),
+  $$
+  and optimize a variational lower bound.
+
+### Graph Neural Networks (GNNs)
+
+Designed for data on graphs: social networks, molecules, meshes.
+
+A typical update is
+$$
+h_v^{(k+1)}
+=
+\sigma\!\left(
+W^{(k)} h_v^{(k)} +
+\sum_{u \in \mathcal{N}(v)} W^{(k)}_n h_u^{(k)}
+\right),
+$$
+where $\mathcal{N}(v)$ are neighbors of node $v$.
+
+They encode permutation invariance and relational structure.
+
+## How These Architectures Differ
+
+| Architecture | Structure Encoded | Key Operation | Typical Use |
+|--------------|------------------|---------------|-------------|
+| MLP          | None             | Dense linear maps | Tabular data |
+| CNN          | Spatial locality | Convolution | Images, grids |
+| RNN / LSTM   | Temporal order   | State recursion | Time series |
+| Transformer  | Global relations | Attention | Language, sequences |
+| Autoencoder  | Latent structure | Encode–decode | Representation learning |
+| GNN          | Graph topology   | Message passing | Networks, molecules |
+
+Each architecture imposes an **inductive bias**: a prior belief about how the
+data is organized. Performance gains come less from raw expressivity (all are
+universal approximators) and more from *matching the architecture to the
+structure of the problem*.
+
+
+## Perspective
+
+From a mathematical viewpoint, neural networks are:
+
+- High-dimensional parametric families of nonlinear functions,
+- Trained by stochastic gradient methods,
+- With expressivity governed by depth, width, and architecture,
+- Whose success hinges on *structure*: geometry, symmetry, and invariance.
+
+They are not magic function approximators; they are **structured approximation
+schemes** whose power comes from embedding prior assumptions about the data
+into the function class.

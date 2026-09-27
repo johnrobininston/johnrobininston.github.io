@@ -1,0 +1,61 @@
+---
+title: MIDAS Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### MIDAS Models
+Standard time series regressions require all variables at a common sampling
+frequency, forcing either aggregation of high-frequency regressors (discarding
+information) or interpolation of low-frequency ones (fabricating information).
+**Mixed Data Sampling (MIDAS)** regressions (Ghysels, Santa-Clara & Valkanov,
+2004) instead regress a low-frequency variable directly on many lags of a
+high-frequency regressor, using a parsimonious weighting scheme to avoid
+parameter proliferation.
+
+:::{.definition data-title="MIDAS Regression"}
+
+To forecast a low-frequency variable $y_t$ (e.g. quarterly GDP growth, or
+monthly realized volatility) using a high-frequency regressor $x^{(m)}$ sampled
+$m$ times per low-frequency period,
+$$
+y_{t} = \beta_0 + \beta_1 \sum_{j=0}^{J} w(j;\boldsymbol\theta)\, x^{(m)}_{t - j/m} + \varepsilon_t,
+$$
+where $w(j;\boldsymbol\theta)$ is a **weighting function** with a small number
+of hyperparameters $\boldsymbol\theta$ (rather than $J$ free coefficients),
+e.g.:
+- **Exponential Almon lag**:
+  $w(j;\theta_1,\theta_2) \propto \exp(\theta_1 j + \theta_2 j^2)$,
+- **Beta lag weighting**: weights from a Beta density shape, flexible
+  hump/decay patterns with just 2 parameters.
+This reduces a potentially huge lag-coefficient vector to 2-3 parameters,
+estimated by nonlinear least squares.
+
+:::
+
+**Why not just aggregate?** Aggregating high-frequency data (e.g. averaging
+daily data to monthly) before regressing discards the *within-period dynamics
+and timing* of the high-frequency series, which MIDAS shows carries genuine
+forecasting content — especially valuable for **nowcasting** (using partially
+released high-frequency indicators to forecast the current low-frequency period
+before it is fully observed).
+
+**Applications.**
+- Forecasting GDP growth from monthly/weekly indicators (industrial production,
+  financial conditions indices).
+- **MIDAS volatility models** (e.g. GARCH-MIDAS): decompose volatility into a
+  short-run daily GARCH component and a slow-moving long-run component driven
+  by MIDAS-weighted lags of a lower-frequency macro/RV variable — a direct
+  competitor to [[har-rv-model|HAR-RV]] for long-horizon volatility
+  forecasting.
+- Mixed-frequency VARs and mixed-frequency factor models as alternatives
+  requiring explicit state-space treatment of the mismatch (see
+  [[state-space-models-and-the-kalman-filter]]).
+
+### References
+- [[har-rv-model]]
+- [[realized-volatility]]
+- [[garch-models]]
+- [[time-series-analysis]]

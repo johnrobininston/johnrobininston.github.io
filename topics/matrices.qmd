@@ -8,23 +8,32 @@ number-sections: true
 
 ## Matrices
 
-A **matrix** $\mathbf{A} \in \mathbb{R}^{m \times n}$ is a rectangular array with $m$ rows and $n$ columns:
+A **matrix** $\mathbf{A} \in \mathbb{R}^{m \times n}$ is a rectangular array
+with $m$ rows and $n$ columns:
 
 $$
 \mathbf{A} = \begin{pmatrix} a_{11} & a_{12} & \cdots & a_{1n} \\ a_{21} & a_{22} & \cdots & a_{2n} \\ \vdots & & \ddots & \vdots \\ a_{m1} & a_{m2} & \cdots & a_{mn} \end{pmatrix}.
 $$
 
-**Addition** and **scalar multiplication** are element-wise (matrices must have the same shape for addition). **Matrix multiplication** $\mathbf{A}\mathbf{B}$ requires the inner dimensions to match: if $\mathbf{A} \in \mathbb{R}^{m \times k}$ and $\mathbf{B} \in \mathbb{R}^{k \times n}$ then $\mathbf{C} = \mathbf{A}\mathbf{B} \in \mathbb{R}^{m \times n}$ with entries:
+**Addition** and **scalar multiplication** are element-wise (matrices must have
+the same shape for addition). **Matrix multiplication** $\mathbf{A}\mathbf{B}$
+requires the inner dimensions to match: if
+$\mathbf{A} \in \mathbb{R}^{m \times k}$ and
+$\mathbf{B} \in \mathbb{R}^{k \times n}$ then
+$\mathbf{C} = \mathbf{A}\mathbf{B} \in \mathbb{R}^{m \times n}$ with entries:
 
 $$
 c_{ij} = \sum_{l=1}^k a_{il}\, b_{lj}.
 $$
 
-Note that matrix multiplication is **not** commutative in general: $\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}$.
+Note that matrix multiplication is **not** commutative in general:
+$\mathbf{A}\mathbf{B} \neq \mathbf{B}\mathbf{A}$.
 
 ## Transpose
 
-The **transpose** of $\mathbf{A} \in \mathbb{R}^{m \times n}$ is $\mathbf{A}^\top \in \mathbb{R}^{n \times m}$, obtained by swapping rows and columns: $(A^\top)_{ij} = a_{ji}$.
+The **transpose** of $\mathbf{A} \in \mathbb{R}^{m \times n}$ is
+$\mathbf{A}^\top \in \mathbb{R}^{n \times m}$, obtained by swapping rows and
+columns: $(A^\top)_{ij} = a_{ji}$.
 
 Key properties of the transpose:
 
@@ -32,51 +41,69 @@ $$
 (\mathbf{A}^\top)^\top = \mathbf{A}, \qquad (\mathbf{A} + \mathbf{B})^\top = \mathbf{A}^\top + \mathbf{B}^\top, \qquad (\mathbf{A}\mathbf{B})^\top = \mathbf{B}^\top \mathbf{A}^\top.
 $$
 
-The last identity is the **reversal rule** for transposes, and appears constantly in regression derivations.
+The last identity is the **reversal rule** for transposes, and appears
+constantly in regression derivations.
 
 ## Special Matrices
 
 ### Identity Matrix
 
-The **identity matrix** $\mathbf{I}_n \in \mathbb{R}^{n \times n}$ has ones on the diagonal and zeros elsewhere. It satisfies $\mathbf{A}\mathbf{I} = \mathbf{I}\mathbf{A} = \mathbf{A}$ for any compatible matrix $\mathbf{A}$.
+The **identity matrix** $\mathbf{I}_n \in \mathbb{R}^{n \times n}$ has ones on
+the diagonal and zeros elsewhere. It satisfies
+$\mathbf{A}\mathbf{I} = \mathbf{I}\mathbf{A} = \mathbf{A}$ for any compatible
+matrix $\mathbf{A}$.
 
 ### Diagonal Matrix
 
-A **diagonal matrix** has non-zero entries only on the main diagonal. Diagonal matrices are easy to invert: if $\mathbf{D} = \mathrm{diag}(d_1, \ldots, d_n)$ with all $d_i \neq 0$, then $\mathbf{D}^{-1} = \mathrm{diag}(1/d_1, \ldots, 1/d_n)$.
+A **diagonal matrix** has non-zero entries only on the main diagonal. Diagonal
+matrices are easy to invert: if $\mathbf{D} = \mathrm{diag}(d_1, \ldots, d_n)$
+with all $d_i \neq 0$, then
+$\mathbf{D}^{-1} = \mathrm{diag}(1/d_1, \ldots, 1/d_n)$.
 
 ### Symmetric Matrix
 
-A matrix is **symmetric** if $\mathbf{A}^\top = \mathbf{A}$, i.e. $a_{ij} = a_{ji}$ for all $i, j$. Many important matrices in statistics are symmetric: covariance matrices, Gram matrices $\mathbf{X}^\top \mathbf{X}$, and the hat matrix $\mathbf{H}$.
+A matrix is **symmetric** if $\mathbf{A}^\top = \mathbf{A}$, i.e.
+$a_{ij} = a_{ji}$ for all $i, j$. Many important matrices in statistics are
+symmetric: covariance matrices, Gram matrices $\mathbf{X}^\top \mathbf{X}$, and
+the hat matrix $\mathbf{H}$.
 
 ### Orthogonal Matrix
 
-A square matrix $\mathbf{Q}$ is **orthogonal** if its columns are orthonormal (mutually orthogonal unit vectors), which implies:
+A square matrix $\mathbf{Q}$ is **orthogonal** if its columns are orthonormal
+(mutually orthogonal unit vectors), which implies:
 
 $$
 \mathbf{Q}^\top \mathbf{Q} = \mathbf{Q}\mathbf{Q}^\top = \mathbf{I}, \quad \text{i.e.} \quad \mathbf{Q}^{-1} = \mathbf{Q}^\top.
 $$
 
-Orthogonal matrices preserve norms: $\|\mathbf{Q}\mathbf{v}\| = \|\mathbf{v}\|$. They arise in eigendecompositions and in the geometric interpretation of least squares.
+Orthogonal matrices preserve norms:
+$\|\mathbf{Q}\mathbf{v}\| = \|\mathbf{v}\|$. They arise in eigendecompositions
+and in the geometric interpretation of least squares.
 
 ## Rank and Invertibility
 
 ### Rank
 
-The **rank** of a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ is the maximum number of linearly independent columns (equivalently, rows). We always have $\mathrm{rank}(\mathbf{A}) \leq \min(m, n)$.
+The **rank** of a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$ is the
+maximum number of linearly independent columns (equivalently, rows). We always
+have $\mathrm{rank}(\mathbf{A}) \leq \min(m, n)$.
 
-- $\mathbf{A}$ has **full column rank** if $\mathrm{rank}(\mathbf{A}) = n$ (all columns are linearly independent).
+- $\mathbf{A}$ has **full column rank** if $\mathrm{rank}(\mathbf{A}) = n$ (all
+  columns are linearly independent).
 - $\mathbf{A}$ has **full row rank** if $\mathrm{rank}(\mathbf{A}) = m$.
 
 ## Matrix Inverse
 
-For a **square** matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$, the **inverse** $\mathbf{A}^{-1}$ satisfies:
+For a **square** matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$, the
+**inverse** $\mathbf{A}^{-1}$ satisfies:
 
 $$
 \mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1}\mathbf{A} = \mathbf{I}_n.
 $$
 
 ::: {.definition data-title="Conditions for Invertibility"}
-A square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is invertible (non-singular) if and only if any of the following equivalent conditions hold:
+A square matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is invertible
+(non-singular) if and only if any of the following equivalent conditions hold:
 
 1. $\mathrm{rank}(\mathbf{A}) = n$ (full rank).
 2. $\det(\mathbf{A}) \neq 0$.
@@ -90,29 +117,40 @@ $$
 (\mathbf{A}^{-1})^{-1} = \mathbf{A}, \qquad (\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}, \qquad (\mathbf{A}^\top)^{-1} = (\mathbf{A}^{-1})^\top.
 $$
 
-The reversal rule $(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$ mirrors the reversal rule for transposes.
+The reversal rule
+$(\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1}\mathbf{A}^{-1}$ mirrors the
+reversal rule for transposes.
 
 
 ## Quadratic Forms and Positive Definiteness
 
-A **quadratic form** associated with a symmetric matrix $\mathbf{A} \in \mathbb{R}^{n \times n}$ is the scalar-valued function:
+A **quadratic form** associated with a symmetric matrix
+$\mathbf{A} \in \mathbb{R}^{n \times n}$ is the scalar-valued function:
 
 $$
 Q(\mathbf{v}) = \mathbf{v}^\top \mathbf{A} \mathbf{v} = \sum_{i=1}^n \sum_{j=1}^n a_{ij} v_i v_j.
 $$
 
-Quadratic forms arise throughout statistics — for example, the OLS residual sum of squares is $\mathrm{RSS} = \mathbf{e}^\top \mathbf{e}$ and the Mahalanobis distance is $(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})$.
+Quadratic forms arise throughout statistics — for example, the OLS residual sum
+of squares is $\mathrm{RSS} = \mathbf{e}^\top \mathbf{e}$ and the Mahalanobis
+distance is
+$(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})$.
 
 ::: {.definition data-title="Positive Definiteness"}
 A symmetric matrix $\mathbf{A}$ is:
 
-- **Positive definite (PD)** if $\mathbf{v}^\top \mathbf{A} \mathbf{v} > 0$ for all $\mathbf{v} \neq \mathbf{0}$.
-- **Positive semi-definite (PSD)** if $\mathbf{v}^\top \mathbf{A} \mathbf{v} \geq 0$ for all $\mathbf{v}$.
+- **Positive definite (PD)** if $\mathbf{v}^\top \mathbf{A} \mathbf{v} > 0$ for
+  all $\mathbf{v} \neq \mathbf{0}$.
+- **Positive semi-definite (PSD)** if
+  $\mathbf{v}^\top \mathbf{A} \mathbf{v} \geq 0$ for all $\mathbf{v}$.
 
-Equivalently, $\mathbf{A}$ is PD iff all its eigenvalues are strictly positive, and PSD iff all eigenvalues are non-negative.
+Equivalently, $\mathbf{A}$ is PD iff all its eigenvalues are strictly positive,
+and PSD iff all eigenvalues are non-negative.
 :::
 
-The Gram matrix $\mathbf{X}^\top \mathbf{X}$ is always PSD, and is PD (hence invertible) when $\mathbf{X}$ has full column rank — a crucial condition for OLS to have a unique solution.
+The Gram matrix $\mathbf{X}^\top \mathbf{X}$ is always PSD, and is PD (hence
+invertible) when $\mathbf{X}$ has full column rank — a crucial condition for
+OLS to have a unique solution.
 
 
 

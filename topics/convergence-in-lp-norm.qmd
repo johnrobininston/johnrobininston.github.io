@@ -1,0 +1,88 @@
+---
+title: Convergence in Lp Norm
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Convergence in $L_{p}$ Norm
+
+Recall that a [[norm|norm]] is any function $\Vert \cdot\Vert$ from a vector
+(function) space $V$ to $\mathbb{R}$ satisfying:
+
+1. $\Vert f\Vert \geq 0$ for every $f\in V$
+2. $\Vert f\Vert=0$ if $f$ is a zero function
+3. $\Vert af\Vert = |a|\Vert f\Vert$ for every $a \in \mathbb{R}$, $f \in V$
+4. $\Vert f+g \Vert \leq\Vert f\Vert +\Vert g\Vert$ (triangle inequality)
+
+The $L^p$ norm is a specific norm intimately linked with probability spaces and
+expectations defined as
+$$
+\Vert X\Vert_{p}=[\mathbb{E}|X|^p]^{1/p}=\left(\int _{\Omega}|X|^p \, d\mathbb{P}\right)^{1/p} .
+$$
+:::{.definition data-title="Convergence in Lp Norm"}
+
+A sequence of random variables $\{ X_{n} \}_{n\in\mathbb{N}}$ convergence in $L^p$-norm to $X$ denoted $X_{n}\stackrel{L^p}{\to}X$ if $$\lim_{ n \to \infty }\Vert X_{n}-X\Vert_{p}=\lim_{ n \to \infty }(\mathbb{E}|X_{n}-X|^p)^{1/p} = 0.$$
+
+:::
+
+Random variables can also converge [[convergence-almost-surely|almost surely]],
+[[convergence-in-probability|in probability]] and [[convergence-in-law|in law]]
+and the relationships between all types of convergence can be found in the
+note: [[convergence-of-random-variables]].  
+
+<!-- TODO: image "Note Jun 3, 2024.jpeg" not found in vault -->*Figure:  Random Variable Convergence Relationships.*
+
+### Convergence in Norm & Convergence in Probability
+
+The key results relating to convergence in norm are detailed below.
+
+:::{.theorem data-title="$\stackrel{L^s}{\to}\implies \stackrel{L^r}{\to}$ for $1<r<s<\infty$"}
+
+Consider $1<r<s<\infty$ and assume that $X_{n}\stackrel{L^s}{\to}X$ as
+$n \to \infty$. Then we have that $X_{n}\stackrel{L^r}{\to}X$. *In other words,
+higher orders of r-th mean convergence imply lower orders.*
+
+:::
+
+*Proof (1):*
+This result follows directly from applying [[lyapunovs-inequality]]
+$$
+(\mathbb{E}|X|^r)^{1/r}\leq(\mathbb{E}|X|^s)^{1/s};\quad 0<r<s<\infty.
+$$
+*Note: The converse does not hold in general.*
+
+*Proof (2):*
+The result holds by application of [[jensens-inequality]] using the convex
+function $f(x)=x^{\frac{s}{r}}$.
+
+:::{.theorem data-title="$\stackrel{L^1}{\to}\implies \stackrel{\mathbb{P}}{\to}$"}
+
+
+:::
+If $X_{n}\stackrel{L^1}{\to}X$ then $X_{n}\stackrel{\mathbb{P}}{\to}X$ as
+$n \to \infty$.
+
+*Proof:*
+This result follows directly from applying [[markov-inequality]] since, for
+every $\epsilon>0$ we have that
+$$
+\mathbb{P}(|X_{n}-X|>\epsilon)\leq \frac{1}{\epsilon}\cdot \mathbb{E}|X_{n}-X|.
+$$
+*Note: The converse does not hold in general however with the additional
+constraint of uniform integrability it does.*
+
+:::{.theorem data-title="Equivalence of convergence in $\mathbb{P}$ and in $L_1$ under uniform integrability"}
+
+For $p>0$ assume that $X_n \in L^p$, $n \geq 1$ and
+$X_{n}\stackrel{\mathbb{P}}{\to} X$. The following three statements are
+equivalent:
+1. $\{ |X_{n}|^p,~n\geq 1 \}$ is
+   [[uniform-integrability|uniformly integrable]];
+2. $X_{n}\stackrel{L^p}{\to}X$ and $X\in L^p$; and
+3. $\lim_{n \to \infty}\mathbb{E}[|X_{n}|^p]=\mathbb{E}[|X|^p]<\infty$.
+
+:::
+
+

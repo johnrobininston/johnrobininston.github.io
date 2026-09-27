@@ -1,0 +1,60 @@
+---
+title: Causality and Invertibility
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Causality and Invertibility
+:::{.definition data-title="Causality"}
+
+An $ARMA(p,q)$ process $\phi(B)X_t = \theta(B)Z_t$ is **causal** (a causal
+function of $\{Z_t\}$) if there exist coefficients $\{\psi_j\}$ with
+$\sum_{j=0}^\infty |\psi_j| < \infty$ such that
+$$
+X_t = \sum_{j=0}^\infty \psi_j Z_{t-j} = \psi(B)Z_t.
+$$
+Causality means $X_t$ depends only on present and past shocks, never future
+ones — required for the process to be interpretable as being *generated* over
+time and hence for real-time forecasting.
+
+:::
+
+:::{.definition data-title="Invertibility"}
+
+The process is **invertible** if there exist $\{\pi_j\}$ with
+$\sum_{j=0}^\infty|\pi_j|<\infty$ such that
+$$
+Z_t = \sum_{j=0}^\infty \pi_j X_{t-j} = \pi(B)X_t.
+$$
+Invertibility means the driving noise can be recovered from (an infinite
+history of) the observed series — required for consistent one-step-ahead
+prediction and residual-based estimation.
+
+:::
+
+:::{.theorem data-title="Root Conditions"}
+
+For $\phi(B)X_t=\theta(B)Z_t$ with $\phi,\theta$ sharing no common zeroes:
+- The process is causal iff $\phi(z) \neq 0$ for all $|z|\leq 1$ (roots of
+  $\phi$ outside the unit circle).
+- The process is invertible iff $\theta(z)\neq 0$ for all $|z|\leq 1$ (roots of
+  $\theta$ outside the unit circle).
+
+:::
+
+Consequences:
+- $MA(q)$ processes are always causal but only invertible when $\theta(z)$'s
+  roots lie outside the unit circle (see [[moving-average-processes]]).
+- $AR(p)$ processes are always invertible but only causal (stationary) when
+  $\phi(z)$'s roots lie outside the unit circle (see
+  [[autoregressive-processes]]).
+- Any non-invertible $MA$ model has an observationally equivalent invertible
+  representation with the same ACF (obtained by flipping roots inside the unit
+  circle to their reciprocals), which is why estimation routines always return
+  the invertible solution.
+
+### References
+- [[arma-processes]]
+- [[time-series-analysis]]

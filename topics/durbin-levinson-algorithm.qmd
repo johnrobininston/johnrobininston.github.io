@@ -1,0 +1,41 @@
+---
+title: Durbin-Levinson Algorithm
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Durbin-Levinson Algorithm
+The **Durbin-Levinson algorithm** recursively solves the sample
+[[yule-walker-equations]] for increasing orders $h=1,2,\dots$, avoiding a fresh
+$h\times h$ linear solve at each order and directly producing the sample
+[[partial-autocorrelation-function|PACF]] as a by-product.
+
+:::{.theorem data-title="Recursion"}
+
+Given the sample ACF $\hat\rho(\cdot)$, initialize
+$\hat\phi_{11} = \hat\rho(1)$. For $h = 2, 3, \dots$:
+$$
+\hat\phi_{hh} = \frac{\hat\rho(h) - \sum_{j=1}^{h-1}\hat\phi_{h-1,j}\,\hat\rho(h-j)}{1 - \sum_{j=1}^{h-1}\hat\phi_{h-1,j}\,\hat\rho(j)},
+$$
+$$
+\hat\phi_{hj} = \hat\phi_{h-1,j} - \hat\phi_{hh}\,\hat\phi_{h-1,h-j}, \qquad j = 1,\dots,h-1.
+$$
+The **sample PACF** at lag $h$ is $\hat\alpha(h) = \hat\phi_{hh}$, and
+$\{\hat\phi_{h1},\dots,\hat\phi_{hh}\}$ are the coefficients of the best linear
+predictor of $X_{t+h}$ from $X_{t+h-1},\dots,X_t$ fit as an $AR(h)$ (see
+[[time-series-best-linear-predictors]]).
+
+:::
+
+This is the standard algorithm used to fit AR models of increasing order and to
+compute PACF plots in practice, and is closely related to the
+[[innovations-algorithm]], which solves the analogous recursive prediction
+problem for general (not necessarily AR) stationary processes, including
+non-invertible/non-causal ones.
+
+### References
+- [[yule-walker-equations]]
+- [[autoregressive-processes]]
+- [[pstat274-time-series-summary-notes]]

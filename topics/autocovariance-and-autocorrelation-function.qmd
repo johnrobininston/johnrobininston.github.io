@@ -1,0 +1,58 @@
+---
+title: Autocovariance and Autocorrelation Function
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Autocovariance and Autocorrelation Function
+:::{.definition data-title="Autocovariance Function (ACVF)"}
+
+For a [[time-series|time series]] $\{X_t\}$ with $\mathbb{E}X_t^2 < \infty$,
+the **autocovariance function** is
+$$
+\gamma_X(t,s) = Cov(X_t, X_s) = \mathbb{E}[X_tX_s] - \mathbb{E}X_t\mathbb{E}X_s.
+$$
+If $\{X_t\}$ is [[stationary-processes|weakly stationary]], $\gamma_X$ depends
+only on the lag $h=t-s$, written $\gamma_X(h) = Cov(X_{t+h}, X_t)$.
+
+:::
+
+:::{.definition data-title="Autocorrelation Function (ACF)"}
+
+$$
+\rho_X(h) = \frac{\gamma_X(h)}{\gamma_X(0)} = Cor(X_{t+h}, X_t).
+$$
+Note $\rho_X(0)=1$ and $|\rho_X(h)|\leq 1$ for all $h$ (Cauchy-Schwarz).
+
+:::
+
+### Sample Estimation
+Given observations $x_1, \dots, x_n$, the **sample ACVF** and **sample ACF**
+are
+$$
+\hat\gamma(h) = \frac{1}{n}\sum_{t=1}^{n-h}(x_{t+h}-\bar x)(x_t - \bar x), \qquad \hat\rho(h) = \frac{\hat\gamma(h)}{\hat\gamma(0)}.
+$$
+
+:::{.theorem data-title="Bartlett's Formula"}
+
+If $\{X_t\}$ is stationary with i.i.d. innovations and $n$ is large,
+$\hat\rho_h := (\hat\rho(1),\dots,\hat\rho(h))'$ is approximately
+$\mathcal{N}(\rho_h, n^{-1}W)$ with
+$$
+w_{ij} = \sum_{k=1}^\infty \{\rho(k+i)+\rho(k-i)-2\rho(i)\rho(k)\}\{\rho(k+j)+\rho(k-j)-2\rho(j)\rho(k)\}.
+$$
+This gives the standard $\pm 1.96/\sqrt{n}$ significance bounds used in ACF
+plots to test for white noise (also see [[ljung-box-test]]).
+
+:::
+
+The [[time-series-best-linear-predictors|Best Linear Predictor]] of a
+stationary series is expressed entirely in terms of $\gamma_X$. The Fourier
+transform of $\gamma_X$ is the spectral density — see
+[[spectral-distributions]] and [[periodogram-and-spectral-estimation]].
+
+### References
+- [[time-series-analysis]]
+- [[pstat274-time-series-summary-notes]]

@@ -1,0 +1,134 @@
+---
+title: Finite-Difference Methods
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Finite-Difference Methods
+
+The [[black-scholes-pde-bspde|Black-Scholes PDE]] for euro-call option with
+strike price $K$ and terminal time $T$ with value function $u(x,t)$ as a
+function of asset price $x$ and time $t$ is given by the
+[[partial-differential-equations|PDE]]
+$$
+\begin{cases}
+\frac{{\partial u}}{\partial t}+rx \frac{{\partial u}}{\partial x}+\frac{1}{2}\sigma^2 x^2 \frac{{\partial^2u}}{\partial x ^2}-ru=0\\
+u(T,x)=(x-K)_{+}.\tag{1}
+\end{cases}
+$$
+Intuitively, this system is describing the changing slope of the surface of
+$u(x,t)$ as we move in $x$ or in $t$. To numerically solve this PDE the
+**finite difference method** discretizes this continuous space of $(t, S)$ into
+a mesh $(\Delta t, \Delta S)$ and approximates the mesh-point to mesh-point
+change of $u$ using tractable Taylor series expansions of functions near the
+point of interest.
+
+<!-- TODO: image "Screenshot 2025-05-14 at 6.28.11 PM.png" not found in vault -->
+
+For example, we can define the partial derivative $\partial u/\partial t$ to be
+the limiting difference
+$$
+\frac{{\partial u}}{\partial t}=\lim_{ \delta t \to 0 } \frac{{u(x, t+\delta t)-u(x,t)}}{\delta t}\approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t}+O(\Delta t),
+$$
+where we assume that $\Delta t$ is very small. This is specifically called a
+**forward difference** since the differencing is in the forwards direction. We
+also have the **backward difference** and the **central difference** and we
+define all three methods below.
+
+:::{.definition data-title="Forward \ Backward \ Central Differencing"}
+
+The following differencing methods are used for approximating partial
+differential equations:
+1. **Forward Differencing:**
+   $$
+   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t},
+   $$
+2. **Backward Differencing:**
+   $$
+   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t-\Delta t)-u(x,t)}}{\Delta t},
+   $$
+3. **Central Differencing:**
+   $$
+   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t-\Delta t)}}{2\Delta t}.
+   $$
+
+:::
+
+*Note: All three definitions hold when computing the partial derivative with
+respect to $x$, it will simply change to considering $x$ values rather than $t$
+values (see below for some examples)*.
+
+<!-- TODO: image "Screenshot 2025-05-14 at 7.12.03 PM.png" not found in vault -->
+
+For second partial derivatives we can define the **symmetric finite-difference
+approximation** as either the forward difference of backward-difference
+approximations to the first derivative or as the backward-difference of forward
+difference approximations to the first derivative, both of which give the same
+result which is stated in the definition below.
+
+:::{.definition data-title="Symmetric Central-Differencing"}
+
+The symmetric central-differencing approach for second partial derivatives is
+defined as
+$$
+\frac{{\partial ^2u}}{\partial x^2}\approx \frac{{u(x+\Delta x, t)-2u(x,t)+u(x-\Delta x, t)}}{(\Delta x)^2}.
+$$
+
+:::
+
+*Note: The error of these approximations is of the order $(\Delta x)^2$ and so
+the accuracy will increase faster for finer meshes than the previous three
+cases all of which have error order $\Delta x$.*
+
+When applying finite differencing we start by defining the discretization of
+the $(x,t)$ space by specifying $x_{min}$, $x_{max}$, $t_{min}$, $t_{max}$,
+$\Delta t$, $\Delta x$. In the Black-Scholes euro-call case introduced above we
+would set $x_{min}=0$ and $t_{min}=0$ as asset price and time cannot be
+negative. We then often introduce the following cleaner notation to specify
+mesh location in terms of indices
+$$
+u_{\mathscr{x}}^\mathscr{t} = u(x_{min}+\mathscr{x} \cdot\Delta x, t_{min}+\mathscr{t}\cdot\Delta t);~~\mathscr{x}=0,\dots,\mathscr{X};~~\mathscr{t}=0,\dots,\mathscr{T},
+$$
+where $\mathscr{X}$ and $\mathscr{T}$ are the desired number of mesh points in
+$x$ and $t$ respectively. Using this new notation and considering the
+Black-Scholes euro-call option we approximate the partial derivatives in $(1)$
+using **forward differencing** as
+$$
+\frac{{\partial u}}{\partial x}=\frac{{u_{\mathscr{x}+1}^\mathscr{t}-u_{\mathscr{x}}^\mathscr{t}}}{\Delta x};~~ \frac{{\partial^2 u}}{\partial x^2}={u^t}
+$$
+
+
+
+
+We can then compute the discrete partial derivatives as
+$$
+\begin{align}
+\frac{\partial}{\partial S}C(m\Delta t, n\Delta S) & = \frac{{C_{n+1}^m -C_{n}^m}}{2\Delta S} \\
+\frac{\partial^2}{\partial S^2}C(m\Delta t, n\Delta S) & =\frac{{\frac{{C_{n+1}^m-C_{n}^m}}{\Delta S}-\frac{{C_{n}^m - C_{n-1}^m}}{\Delta S}}}{\Delta S}=\frac{{C_{n+1}^m-2C_{n}^m + C_{n-1}^m}}{(\Delta S)^2} \\
+\frac{\partial}{\partial t}C(m\Delta t, n\Delta S) & =\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}.
+\end{align}
+$$
+Substituting back into the PDE we obtain
+$$
+\begin{align}
+&\begin{cases}
+\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}+r(n\Delta S) \frac{{C_{n+1}^m-C_{n-1}^m}}{2\Delta S}+\frac{1}{2\sigma^2}(n\Delta s)^2 \frac{{C_{n+1}^m-2C_{n}^m+C_{n-1}^m}}{(\Delta S)^2}-rC_{n}^m=0 \\
+C_{n}^m=(n\Delta S - K)_{+}
+\end{cases}\\
+&\implies C_{n}^{m-1}=P_{n}^+C_{n+1}^m+P_{n}^0C_{n}^m+P_{n}^- C_{n-1}^m
+\end{align},
+$$
+where we have defined
+$$
+P_{n}^\pm = \frac{1}{2}\Delta t(\sigma^2n^2\pm rm) ~~\&~~P_{n}^0=1-\Delta t(\sigma^2n^2+r).
+$$
+
+
+
+
+1. Explicit Method
+2. Implicit Method
+3. Crank-Nicolson Method
+

@@ -1,0 +1,82 @@
+---
+title: Itô Integral Construction
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+For functions $f \in\mathcal{V}$ we show how to define the **Itô integral**
+$$
+\mathcal{I}[f](\omega)=\int_{S}^Tf(t,\omega)dB_{t}(\omega),
+$$
+where $B_{t}$ is 1-dimensional Brownian motion. Our approach is to define the
+integral for elementary functions before extending results to all functions in
+$\mathcal{V}$.  
+
+:::{.definition data-title="Elementary Function"}
+
+A function $\phi \in\mathcal{V}$ is called **elementary** if it has the form
+$$
+\phi(t,\omega)=\sum_{j}e_{j}(\omega)\cdot \mathbb{1}_{[t_{j}, t_{j+1})}(t).
+$$
+
+:::
+
+This kind of function is also known as a step function. We note that since
+$\phi \in \mathcal{V} \implies$ each $e_{j}$ much be
+$\mathcal{F}_{t_{j}}$-measurable. For elementary functions $\phi$ we define
+Itô's integral by
+$$
+\int_{S}^T \phi(t,\omega)dB_{t}(\omega) = \sum_{j \geq 0}e_{j}(\omega)[B_{t_{j+1}}-B_{t_{j}}](\omega).
+$$
+
+:::{.theorem data-title="Itô's Isometry"}
+
+If $\phi(t,\omega)$ is bounded and elementary then
+$$
+\mathbb{E}\left[ \left( \int_{S}^T \phi(t, \omega)dB_{t}(\omega) \right)^2 \right] = \mathbb{E}\left[ \int_{S}^T \phi(t, \omega)^2dt \right].
+$$
+
+:::
+
+*Proof:*
+	We denote $\Delta B_{j}=B_{t_{j+1}}-B_{t_{j}}$ and we note that
+ $$
+ \mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\begin{cases}0 & i \neq j;  \\\mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j}) & i = j,\end{cases}
+ $$
+ from the independent increments of Brownian motion. Thus we have
+ $$
+ \mathbb{E}\left[ \left( \int_{S}^T \phi dB \right)^2 \right]=\sum_{i,j}\mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\sum_{j}\mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j})=\mathbb{E}\left[ \int_{S}^T\phi^2dt \right],
+ $$
+ giving the result. $\square$
+
+We now proceed to extend the integral to be defined on all functions
+$\mathcal{V}$ by applying three steps.
+
+**Step 1:** Let $g \in \mathcal{V}$ be bounded and $g(\cdot, \omega)$
+continuous for each $\omega$. Then there exists elementary functions
+$\phi_{n}\in\mathcal{V}$ such that
+$$
+\mathbb{E}\left[ \int_{S}^T(g-\phi_{n})^2dt \right]\to 0~~\text{as}~~n \to \infty.
+$$
+
+*Proof:*
+	We define
+ $\phi_{n}(t, \omega)=\sum_{j}g(t_{j}, \omega)\cdot \mathbb{1}_{[t_{j},t_{j+1})}$
+ so that $\phi_{n}$ is elementary since $g\in\mathcal{V}$ and further for each
+ $\omega$
+ $$
+ \int_{S}^T (g-\phi_{n})^2 dt \to 0~~\text{as}~~n \to \infty,
+ $$
+ since $g(\cdot, \omega)$ is continuous for each $\omega$. Hence
+ $\mathbb{E}\left[ \int_{S}^T (g-\phi_{n})^2dt \right]\to 0$ as $n \to \infty$
+ by bounded convergence. $\square$
+
+**Step 2:** Let $h \in\mathcal{V}$ be bounded. Then there exist bounded
+functions $g_{n} \in\mathcal{V}$ such that $g_{n}(\cdot, \omega)$ is continuous
+for all $\omega$ and $n$, and
+$$
+\mathbb{E}\left[ \int_{S}^T(h-g_{n})^2dt \right]\to 0.
+$$
+*Proof:*

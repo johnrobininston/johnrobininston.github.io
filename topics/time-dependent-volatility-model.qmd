@@ -1,0 +1,32 @@
+---
+title: Time-Dependent Volatility Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Structure
+
+We replace the constant volatility in the [[black-scholes-merton-model]]
+$\sigma$ with a deterministic function in time $\sigma_{t}$ then we can show
+that Black-Scholes still holds if $\sigma^2$ is replaced with
+$\frac{1}{T}\int _{0}^T\sigma^2_{s} \, ds$
+
+`\begin{proof}`
+To see this consider the stock price dynamics under $\mathbb{Q}$ 
+$$
+dS_{t}=rS_{t}dt+\sigma_{t}S_{t}dW_{t}^\mathbb{Q}.
+$$
+Applying the log transformation and [[ito-formula]] we obtain
+$$
+S_{t}=S_{0}\exp\left\{ \int _{0}^t\left( r- \frac{\sigma^2_{s}}{2} \right) \, ds+\int _{0}^t\sigma_{s} \, dW_{s}^\mathbb{Q}   \right\}.
+$$
+As a result, we simply replace $\sigma^2t$ with $\int _{0}^t\sigma_{s}^2 \, ds$
+and replace $\sigma dW_{t}^\mathbb{Q}$ with
+$\int _{0}^t \sigma_{s} \, dW_{s}^\mathbb{Q}$.
+`\end{proof}`
+
+The implied volatility surface $I(T,K)$ is not flat in $T$ but still flat in
+$K$. This is a subtle improvement on BS but is still far from ideal for
+practical purposes.

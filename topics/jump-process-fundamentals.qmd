@@ -1,0 +1,167 @@
+---
+title: Jump Process Fundamentals
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Jump Processes (Countable State Space)
+
+A *jump process* is a continuous time stochastic process taking values in some
+state space $S$ which we assume initially to be countable.  
+
+:::{.definition data-title="Jump Process"}
+
+We define a stochastic process $S_{0}=0$ and $\{ S_{n} \}_{n\geq 0}$ such that
+$S_{n}>S_{n-1}$ and $S_{n}\to \infty$ as $n \to  \infty$. We next define a
+second process $\{ X_{n} \}_{n\geq{0}}$ taking values in countable state
+$\mathcal{S}$.
+
+A **pure jump process** $\{ Y_{t} \}_{t \geq 0 }$ is defined by
+$$
+Y_{t}=X_{n}\quad\text{for}\quad S_{n-1}\leq  t<S_{n}.
+$$
+We define the fourth process $T_{n}=S_{n}-S_{n-1}$ to be the **holding times**
+of the process.
+
+:::
+
+Intuitively, we have $\{ S_{n} \}_{n\geq 0}$ describing the **jump times** and
+$\{ X_{n} \}_{n \geq 0}$ describing the **locations** jumped to.  
+<!-- TODO: image "PSTAT115 Assignment 1.jpeg" not found in vault -->
+### Continuous Time Markov Chain
+
+A **continuous time Markov chain** is any pure jump process with the additional
+properties that:
+- The location process $\{ X_{n} \}_{n \geq 0}$ is Markov with stationary
+  transition probability matrix.
+- The holding time process $T_{n}\sim\mathcal{E}(\lambda_{X_{n}})$ consist of
+  i.i.d. $\mathcal{E}(\lambda_{{X_{n}}})$ random variables with rate dependent
+  only on the state of the process
+
+#### Poisson Process
+
+A specific type of continuous time Markov chain of particular interest to us is
+the **Poisson process** which has the additional properties that:
+- The holding rate is constant i.e. $\lambda_{i}=\lambda$;
+- The location process $\{ X_{n} \}_{n \geq 0}$ is just the determinant
+  increasing sequence of naturals.
+
+
+**Continuous Time Markov Property**
+In continuous time a stochastic process satisfies the
+[[markov-property|Markov property]] if for all $n\geq 1$,
+$t_{1}<t_{2}<\dots<t_{n}$ and $j,i_{1}, i_{2}, \dots, i_{n-1}\in S$ the
+following holds
+$$
+\mathbb{P}(X_{t_{n}}=j|X_{t_{1}}=i_{1}, \dots, X_{t_{n-1}}=i_{n-1})=\mathbb{P}(X_{t_{n}}=j|X_{t_{n-1}}=i_{n-1}).
+$$
+
+**Transition Probabilities & Matrix**
+The *transition probabilities* of the jump process $(X_{t})$ are defined as
+$$
+p_{i,j}(s,t):=\mathbb{P}(X_{t}=j|X_{s}=i),
+$$
+for all $s<t$. For any time $t\geq 0$ we may define the jump process transition
+matrix as
+$$
+P_{t}:=(p_{i,j}(t))_{{i,j \in S}}.
+$$
+**Time Homogeneity**
+The jump process is *time homogeneous* if for $s<t$
+$$
+p_{i,j}(s,t)=p_{i,j}(t-s).
+$$
+
+:::{.theorem data-title="Stochastic Semigroup"}
+
+The family $\{ P_{t},~t\geq 0 \}$ is a stochastic semigroup, that is, it
+satisfies the following three conditions:
+1. $P_{0}=I$ the identity matrix, i.e. $p_{i,j}(0)=\delta_{i,j}$;
+2. $P_{t}$ is stochastic for all $t \geq 0$, that is, for all $i,j \in S$,
+   $p_{i,j}(t)\geq 0$ and $\sum_{j \in S}p_{i,j}(t)=1$;
+3. $P_{t+s}=P_{t}P_{s}$ (the Chapman Kolmogorov equations).
+
+:::
+
+The semigroup $\{ P_{t} \}$ is standard if $P_{t}\to I$ as $t \to 0$, tat is
+$p_{i,j}(t) \to \delta_{i,j}$ as $t \to 0$.
+
+:::{.definition data-title="Holding Times"}
+
+Let $X_{t}=i$ and $T$ be the time required to move out of state $i$ called the
+holding time defined as
+$$
+T=\inf\{ s\geq 0:X_{t+s}\neq i \}.
+$$
+Then $T$ is a continuous non-negative random variable with the memoryless
+property and therefore is exponential $T \sim \mathcal{E}(q_{i})$ such that
+$\mathbb{P}(T<t)=1-\exp(-q_{i}t)$ for $t\geq 0$ for some $q_{i}>0$.
+
+:::
+
+Note that is crucial for the holding times to be memoryless, otherwise the time
+that a chain remains in a state would influence the distribution of the chain
+and thus break the Markov property, and the Exponential distribution is the
+only continuous non-negative distribution with this property.
+
+#### Jump Process Construction
+
+The ingredients of a jump process are:
+
+1. A discrete-time [[markov-chains]] $\{ X_{n} \}$ with state space $S$.
+   $\{X_{n}\}\sim Markov(\mu^{(0)},P)$ where $P=(p_{i,j})$ with $p_{i,i}=0$ for
+   all $i\in S$. This is a pure jump chain.
+2. $(E_{n},n\geq 0)$ i.i.d. exponential r.v.s $E_{n}\sim \mathcal{E}(1)$,
+   independent of $\{ X_{n} \}$.
+3. Function $(q_{i},i\in S)$ on $S$, $q_{i}>0$ for all $i \in S$. These are the
+   *holding rates*.
+
+The chain *dynamics* are summarized as:
+
+1. Transitions $i \to j$ occur at *jump times* $S_n$, (also called arrival
+   times). $S_{n}$ is the time of the $n$-th transition $S_{0}=0$.
+2. Transitions $i \to j$ are governed by probabilities $(p_{ij})$s pf the
+   discrete chain $(X_{n})$.
+3. Holding times $T_{0}, T_{1}, \dots$ determine how long the chain stays in
+   each state:
+		$T_{0}=S_{1}-S_{0}\sim \mathcal{E}(q_{i})$ when $X_{0}=i$ i.e.
+  $T_{0}|X_{0}\sim\mathcal{E}(q(X_{0}))$.
+		$T_{1}=S_{2}-S_{1}\sim \mathcal{E}(q_{j})$ when $X_{S_{1}}=j$ i.e.
+  $T_{1}|X_{1}\sim\mathcal{E}(q(X_{1}))$.
+
+The chain construction algorithm is detailed as follows:
+
+1. Let $S_{0}=0$, $T_{0}=\frac{E_{0}}{q(X_{0})}$ i.e.
+   $T_{0}=\frac{E_{0}}{q_{i}}$ if $X_{0}=i$. Then:
+   $\mathbb{P}(T_{0}>x|X_{0}=i)=\mathbb{P}(E_{0}>q_{i}x)=e^{-q_{i}x},~x>0 \implies T_{0}\sim\mathcal{E}(q(X_{0}))=\exp(q_{i})|_{{X_{0}=i}}.$
+2. Let $S_{1}=S_{0}+T_{0}$ and $X_{t}=X_{0}$ for $S_{0}\leq t<S_{1}$.
+3. Let $T_{1}=\frac{E_{1}}{q(X_{1})}$, that is $T_{1}=\frac{E_{1}}{q_{j}}$ when
+   $X_{1}=j$. Then $T_{1}\sim\mathcal{E}(q(X_{1}))=\exp(q_{j})|_{X_{1}=j}$.
+4. Take $S_{2}=S_{1}+T_{1}$ and $X_{t}=X_{1}$ for $S_{1}\leq t<S_{2}$.
+5. Continue: Suppose $\{  T_{m},m\leq n-1 \}$, $\{  S_{m}, m\leq n \}$ and
+   $\{  X_{t};0\leq t<S_{n} \}$ have been defined. Define
+   $T_{n}=E_{n}/q(X_{n})\sim\mathcal{E}(q(X_{n}))$, $S_{n+1}=S_{n}+T_{n}$ and
+   $X_{t}=X_{n}$, $S_{n}\leq t <S_{n+1}$.
+6. Set $S_{\infty}=\lim_{ n \to \infty }S_{n}$ which always exists since
+   $\{ S_{n} \}$ is monotonically increasing. On $[0,S_{\infty})$,
+   $X_{t}=\sum_{n=1}^\infty X_{n}\mathbb{1}_{[S_{n},S_{n+1})}(t)$,
+   $t<S_{\infty}$, $S_{{n+1}}-S_{n}=T_{n}\sim\mathcal{E}(q(X_{n}))$.
+
+The construction builds $(X_{t}. t \in [0,S_{\infty}))$ from $(X_n)$ and
+$(S_{n})$.
+
+#### Properties of $(X_{n})$ and $(S_{n})$
+
+:::{.theorem}
+
+Holding times $\{ T_{m} = S_{m+1}-S_{m}, m\geq 0 \}$ are independent and exponentially distributed, given $(X_{n})$, that is, for all $u_{m}>0$, $m=1,2,\dots,n$ holds: $$\mathbb{P}(S_{m}-S_{m-1}=T_{m-1}>u_{m},~1\leq m\leq n|X_{0}=i_{0}, \dots, X_{n-1}=i_{n-1})=\prod_{m=1}^n \exp(-q(i_{m-1})u_{m}).$$
+
+:::
+
+This result follows directly from the construction. The interpretation is that,
+given states of the discrete jump chain
+$(X_{0}=i_{0}, \dots, X_{n-1}=i_{n-1})$, the holding times $T_{m}$s are
+independent and exponential with rates $q(i_{m})$s respectively.
+

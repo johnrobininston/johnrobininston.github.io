@@ -1,0 +1,92 @@
+---
+title: Markov Chain Time Reversibility
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+#### Time Reversibility
+
+Let $X:=\{X_{n}\}_{n=0}^\infty$ be an irreducible non-null persistent Markov
+chain with transition matrix $P$ and stationary distribution $\pi$. Assume that
+$X$ starts according to its stationary distribution $\mu^{(0)}=\pi$ so that $X$
+is in equilibrium and is strictly stationary,
+$X_{n}\stackrel{\mathcal{D}}{\sim}\pi$ for all $n$.
+
+:::{.definition data-title="Reverse Markov Chain"}
+
+For $\{ X_{n},~n=0,1,\dots,N \}$ the reverse Markov chain is defined as
+$$
+\{ Y_{n}:=X_{N-n},~n=0,1,\dots,N \},
+$$
+i.e. the original chain running backwards in time.
+
+:::
+
+We can prove the following theorem showing that the reversed chain $Y$ is
+Markov.
+
+:::{.theorem data-title="Reversed Chain Markov Property"}
+
+The reversed Markov chain $Y:=\{ Y_{n} \}_{n=0}^N$ satisfies the
+[[markov-property|markov property]] with transition probabilities $q_{i,j}$
+given by
+$$
+q_{i,j}= \frac{\pi_{j}}{\pi_{i}}p_{j,i}.
+$$
+
+:::
+
+*Proof:*
+We check the Markov property of the reverse chain $Y$
+$$
+\begin{align}
+\mathbb{P}(Y_{n+1}=i_{n+1}|Y_{n}=i_{n}, \dots, Y_{0}=i_{0}) & = \frac{{\mathbb{P}(Y_{0}=i_{0}, \dots, Y_{n+1}=i_{n+1})}}{\mathbb{P}(Y_{0}=i_{0}, \dots, Y_{n}=i_{n})} \\ 
+& = \frac{{\mathbb{P}(X_{N}=i_{0}, \dots, X_{N-n-1}=i_{n+1})}}{\mathbb{P}(X_{N}=i_{0}, \dots, X_{N-n}=i_{n})} \\
+& = \frac{{\pi_{n+1}p_{i_{n+1}, i_{n}}p_{i_{n}, i_{n-1}}\dots p_{i_{1}, i_{0}}}}{\pi_{n}p_{i_{n}, i_{n-1}}\dots p_{i_{1}, i_{0}}} = \frac{{\pi_{i_{n+1}}}}{\pi_{i_{n}}}p_{i_{n+1}, i_{n}} \\
+& = \mathbb{P}(Y_{n+1}=i_{n+1}|Y_{n}=i_{n})  \\
+& = q_{i_{n}, i_{n+1}}.
+\end{align}
+$$
+#### Balance Equations
+
+The balance equations are a way of testing whether a Markov chain $X$ is time
+reversible.
+
+:::{.theorem data-title="Balance Equations"}
+
+A Markov chain $X$ is time-reversible if and only if it satisfies the balance
+equations for all $i,j\in S$ which are defined (following from Theorem 2 above)
+as
+$$
+\pi_{i}p_{i,j}=\pi_{j}p_{j,i}.
+$$
+
+:::
+
+Note that one often considers infinite chains on
+$\{ -\infty, \dots, -2, -1, 0,1 ,2, \dots, +\infty \}$ rather than finite
+chains as above. The main result of this section is given below.
+
+:::{.theorem}
+
+Let $X$ be an irreducible Markov chain. If there exists a distribution $\pi$
+such that $0\leq \pi_{i}\leq 1$, $\sum_{i \in S}\pi_{i}=1$ and
+$\pi_{i}p_{i,j}=\pi_{j}p_{j,i}$ for all $i,j \in S$, then the chain is
+time-reversible (in equilibrium) non-null persistent with stationary
+distribution $\pi$.
+
+:::
+
+*Proof:*
+We sum the equations $\pi_{i}p_{i,j}=\pi_{j}p_{j,i}$ such that
+$$
+\sum_{i}\pi_{i}p_{i,j}=\pi_{j}\sum_{i}p_{j,i}=\pi_{j},
+$$
+because the sum of the probabilities must be 1. We conclude that $\pi P=\pi$ or
+that $\pi$ is the stationary distribution for $X$. Since the stationary
+distribution exists $\iff$ $X$ is non-null persistent and hence $X$ is
+time-reversible.
+
+

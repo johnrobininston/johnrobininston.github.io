@@ -1,0 +1,96 @@
+---
+title: Heston Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+```table-of-contents
+title: ## Contents
+style: nestedOrderedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
+minLevel: 0 # Include headings from the specified level
+maxLevel: 3 # Include headings up to the specified level
+includeLinks: true # Make headings clickable
+hideWhenEmpty: false # Hide TOC if no headings are found
+debugInConsole: false # Print debug info in Obsidian console
+```
+
+## Heston Model
+References: [[ksendal]];
+[Quantpie Video](https://www.youtube.com/watch?v=KncOcHnEA3Q).
+
+In mathematical finance the **Heston model** is a **stochastic volatility
+model** describing the evolution the **volatility** of an underlying asset.
+Specifically, the asset price process $(S_{t})$ and stochastic volatility
+process $(V_{t})$ have dynamics given by the [[cox-ingersoll-ross-cir-model]]
+under the [[risk-neutral-measure|risk-neutral measure]] by
+$$
+\begin{cases}
+dS_{t}=rS_{t}dt+S_{t}\sqrt{V_{t}}dW_{t}^1 \\
+dV_{t}=\kappa(\theta-V_{t})dt+\eta \sqrt{ V_{t} }dW_{t}^2 \\
+dB_{t}=rB_{t}dt,
+\end{cases}
+$$
+where $W_{t}^1$ and $W_{t}^2$ are dependent Wiener processes (under the
+risk-neutral measure) with $d\left< W^1, W^2 \right>_{t}=\rho$ with additional
+parameters:
+1. $V_{0}$ - the initial variance;
+2. $\theta$ - the long variance;
+3. $\kappa$ - the mean reversion rate of $V_{t}$ to $\theta$; and
+4. $\eta$ - the volatility of the volatility (i.e. variance of $V_{t}$).
+
+If the parameters $\kappa$, $\eta$ and $\theta$ obey **Feller's condition**
+$$
+2\kappa \theta> \eta^2,
+$$
+then the process $(V_{t})$ is strictly positive.
+
+The construction of this model was motivated to match observed market behavior,
+specifically high peak and fat tails and the non-constant volatility. The
+volatility process is positive and mean reverting and the correlation $\rho$ is
+a way of controlling the relationship between stock price and volatility.
+
+The Heston model is popular since under the PDE approach, after log transform,
+one gets a PDE with constant coefficient, solvable through
+[[fourier-transform]] or [[finite-difference-fd-methods]] since no closed form
+solution is availale. In application this model requires calibration (i.e.
+empirical estimation of the noted parameters) and simulation.  
+
+## Heston Model Pricing PDE
+References:
+[Online Note](https://www.frouah.com/finance%20notes/The%20Heston%20model%20short%20version.pdf)
+
+We see clearly that we need three entries in the value function of the option
+in order to build up to. PDE characterization. Defining the value function of a
+call option at time $t$ with stock price $S_{t}=s$ and volatility $V_{t}=v$ as
+$C(t,s,v)$. Applying the [[ito-formula]] we obtain
+$$
+\begin{align}
+dC & =C_{t}dt+C_{s}dS_{t}+C_{v}dV_{t}+ \frac{1}{2}C_{ss}d\left< S,S \right> _{t}+\frac{1}{2}C_{vv}d\left< V,V \right>_{t}+C_{vs}d\left< S,V \right> _{t} \\
+ & =\left( C_{t}+rS_{t}C_{s}+ \frac{1}{2}V_{t}S_{t}^2 C_{ss}+\kappa(\theta-V_{t})C_{v}+\frac{1}{2}\eta^2V_{t}C_{vv}+\eta V_{t}S_{t}\rho C_{vs} \right) dt  \\
+ & \qquad +C_{s}\sqrt{ V_{t} }S_{t}dW_{t}^1+C_{v}\eta \sqrt{ V_{t} } dW_{t}^2.
+\end{align}
+$$
+By assuming the stochastic integrals are [[martingale-theory|martingales]] we
+obtain the PDE characterization that
+$$
+0 = -rC + C_{t}+rsC_{s}+\frac{1}{2}vs^2 C_{ss}+\kappa s^2 C_{ss}+\kappa(\theta-v)C_{v}+\frac{1}{2}\eta^2v C_{vv}+\eta v s \rho C_{vs}.
+$$
+
+## Heston Model Simulation
+
+### Heston Model Simulation - Euler-Maruyama Method
+*References: [[sde-simulation]].*
+[[sde-simulation]]
+
+
+## Relevant Literature
+
+```dataview
+table without id 
+link(file.name, title) as "Title", type as "Type", author as "Author", dateadded as "Added"
+from "Articles" 
+where typeof(title) = "string" and contains(title, "Heston")
+sort dateadded desc
+```

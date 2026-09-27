@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Real Analysis – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Real Analysis</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#real-analysis" id="toc-real-analysis" class="nav-link active" data-scroll-target="#real-analysis"><span class="header-section-number">1</span> Real Analysis</a>
+  <ul class="collapse">
+  <li><a href="#preliminary-material" id="toc-preliminary-material" class="nav-link" data-scroll-target="#preliminary-material"><span class="header-section-number">1.1</span> Preliminary Material</a>
+  <ul class="collapse">
+  <li><a href="#the-real-numbers" id="toc-the-real-numbers" class="nav-link" data-scroll-target="#the-real-numbers"><span class="header-section-number">1.1.1</span> The Real Numbers</a></li>
+  <li><a href="#real-sequences" id="toc-real-sequences" class="nav-link" data-scroll-target="#real-sequences"><span class="header-section-number">1.1.2</span> Real Sequences</a></li>
+  <li><a href="#topology" id="toc-topology" class="nav-link" data-scroll-target="#topology"><span class="header-section-number">1.1.3</span> Topology</a></li>
+  <li><a href="#metric-spaces" id="toc-metric-spaces" class="nav-link" data-scroll-target="#metric-spaces"><span class="header-section-number">1.1.4</span> Metric Spaces</a></li>
+  <li><a href="#homeomorphisms" id="toc-homeomorphisms" class="nav-link" data-scroll-target="#homeomorphisms"><span class="header-section-number">1.1.5</span> Homeomorphisms</a></li>
+  <li><a href="#reimann-integration" id="toc-reimann-integration" class="nav-link" data-scroll-target="#reimann-integration"><span class="header-section-number">1.1.6</span> Reimann Integration</a></li>
+  </ul></li>
+  <li><a href="#measure-theory" id="toc-measure-theory" class="nav-link" data-scroll-target="#measure-theory"><span class="header-section-number">1.2</span> Measure Theory</a>
+  <ul class="collapse">
+  <li><a href="#motivations-and-challenges" id="toc-motivations-and-challenges" class="nav-link" data-scroll-target="#motivations-and-challenges"><span class="header-section-number">1.2.1</span> Motivations and Challenges</a></li>
+  <li><a href="#algebra" id="toc-algebra" class="nav-link" data-scroll-target="#algebra"><span class="header-section-number">1.2.2</span> Algebra</a></li>
+  <li><a href="#measure" id="toc-measure" class="nav-link" data-scroll-target="#measure"><span class="header-section-number">1.2.3</span> Measure</a></li>
+  <li><a href="#outer-measures" id="toc-outer-measures" class="nav-link" data-scroll-target="#outer-measures"><span class="header-section-number">1.2.4</span> Outer-Measures</a></li>
+  <li><a href="#pre-measures" id="toc-pre-measures" class="nav-link" data-scroll-target="#pre-measures"><span class="header-section-number">1.2.5</span> Pre-measures</a></li>
+  <li><a href="#carathéodory-extension-theorem" id="toc-carathéodory-extension-theorem" class="nav-link" data-scroll-target="#carathéodory-extension-theorem"><span class="header-section-number">1.2.6</span> Carathéodory Extension Theorem</a></li>
+  <li><a href="#lebesgue-measures" id="toc-lebesgue-measures" class="nav-link" data-scroll-target="#lebesgue-measures"><span class="header-section-number">1.2.7</span> Lebesgue Measures</a></li>
+  <li><a href="#borel-measures" id="toc-borel-measures" class="nav-link" data-scroll-target="#borel-measures"><span class="header-section-number">1.2.8</span> Borel Measures</a></li>
+  </ul></li>
+  <li><a href="#lebesgue-integrals" id="toc-lebesgue-integrals" class="nav-link" data-scroll-target="#lebesgue-integrals"><span class="header-section-number">1.3</span> Lebesgue Integrals</a>
+  <ul class="collapse">
+  <li><a href="#measurable-functions" id="toc-measurable-functions" class="nav-link" data-scroll-target="#measurable-functions"><span class="header-section-number">1.3.1</span> Measurable Functions</a></li>
+  </ul></li>
+  <li><span class="header-section-number">1.4</span> Backlinks</li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="real-analysis" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Real Analysis</h1>
+<p><strong>Real analysis</strong> is the rigorous study of functions, sequences, and series defined on the real numbers, built on the foundational property of completeness of <span class="math inline">\(\mathbb{R}\)</span>. It begins with limits of sequences and functions, convergence tests, and continuity, and then develops differentiation and integration from an <span class="math inline">\(ε–δ\)</span> perspective. A central theme is understanding how infinite processes (limits, series, integrals) behave, with distinctions between pointwise and uniform convergence. Real analysis also extends classical calculus through topics such as metric spaces, compactness, connectedness, and measure theory, culminating in the Lebesgue integral. These tools provide the framework for modern analysis, probability theory, and the rigorous treatment of differential equations and functional spaces.</p>
+<section id="preliminary-material" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="preliminary-material"><span class="header-section-number">1.1</span> Preliminary Material</h2>
+<section id="the-real-numbers" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="the-real-numbers"><span class="header-section-number">1.1.1</span> The Real Numbers</h3>
+<p>The reals are a <strong>field</strong> and thus satisfy the <strong>field axioms</strong>, that is there exists operations addition and subtraction that are commutative, associative and have identities. The real numbers also have a <strong>natural order relation</strong> that is compatible with their algebraic structure. We visualize the real numbers as the real line, with smaller numbers to the left and larger numbers to the right.</p>
+<div class="definition" data-title="Real Number Order">
+<p>There is a <strong>strict linear order</strong> <span class="math inline">\(&lt;\)</span> on <span class="math inline">\(\mathbb{R}\)</span> such that for all <span class="math inline">\(x,y,z \in \mathbb{R}\)</span>: 1. either <span class="math inline">\(x&lt;y\)</span>, <span class="math inline">\(x=y\)</span> or <span class="math inline">\(x&gt;y\)</span>; 2. if <span class="math inline">\(x&lt;y\)</span> then <span class="math inline">\(x+z&lt;y+z\)</span>; 3. if <span class="math inline">\(x&lt;y\)</span> and <span class="math inline">\(z&gt;0\)</span>, then <span class="math inline">\(xz&lt;yz\)</span>.</p>
+</div>
+<p>The real numbers are also <strong>Dedekind Complete</strong>, that is they satisfy the <strong>least-upper-bound property</strong>. Completeness implies that there are no”gaps” or “missing points” in the real number line.</p>
+<div class="definition" data-title="Dedekind Complete">
+<p>The real numbers <span class="math inline">\(\mathbb{R}\)</span> are Dedekind complete since every nonempty subset of <span class="math inline">\(\mathbb{R}\)</span> that is bounded above has a least upper bound (supremum) in <span class="math inline">\(\mathbb{R}\)</span>.</p>
+</div>
+</section>
+<section id="real-sequences" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="real-sequences"><span class="header-section-number">1.1.2</span> Real Sequences</h3>
+<p>We typically consider the <strong>extended real numbers</strong> <span class="math inline">\(\overline{\mathbb{R}}=\mathbb{R}\cup \{ \pm \infty \}\)</span> such that every subset <span class="math inline">\(A\subset\overline{\mathbb{R}}\)</span> has a <strong>supremum</strong> and <strong>infimum</strong>. From completeness, it follows that every sequence <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\subset\overline{\mathbb{R}}\)</span> has a <strong>limit superior</strong> and a <strong>limit inferior</strong> given by <span class="math display">\[
+\limsup_{n\in \mathbb{N}}{x_{n}}=\inf_{k \geq 1}{\left( \sup_{n \geq k}{x_{n}} \right) }\quad \&amp;\quad\liminf_{n \in \mathbb{N}}{x_{n}}=\sup_{k \geq 1}{\left( \inf_{n \geq k}{x_{n}} \right) }.
+\]</span> :::{.definition data-title=“Convergence of Real Sequences”}</p>
+<p>A sequence <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\subset \overline{\mathbb{R}}\)</span> converges to limit <span class="math inline">\(x \in\overline{\mathbb{R}}\)</span>, denoted by <span class="math inline">\(\lim_{ n \to \infty }x_{n}=x\)</span> or <span class="math inline">\(x_{n}\to x\)</span>, as <span class="math inline">\(n\to \infty\)</span> if <span class="math display">\[
+\forall \epsilon &gt;0, \exists N_{\epsilon}\in \mathbb{N} : \forall n &gt; N_{\epsilon}, \lvert x_{n}-x \rvert &lt;\epsilon.
+\]</span></p>
+<p>:::</p>
+<p>This is a special case of a more general type of functional, or indeed topological convergence, known as <span class="math inline">\(\epsilon\)</span>-<span class="math inline">\(\delta\)</span> convergence discussed in later sections.</p>
+<p>The sequence <span class="math inline">\(\{ x_{n} \}\)</span> converges iff <span class="math inline">\(\limsup_{}{x_{n}=\liminf_{}{x_{n}}}\)</span> and in this case the limit is given by <span class="math display">\[
+\lim_{ n \to \infty } x_{n}=\limsup_{}{x_{n}}=\liminf_{}{x_{n}}.
+\]</span> :::{.definition data-title=“Cauchy Sequence”}</p>
+<p>A real sequence <span class="math inline">\(\{  x_{n} \}\)</span> is <strong>Cauchy</strong> if <span class="math display">\[\forall \epsilon &gt;0, \exists N=N_{\epsilon}~s.t.~|x_{n}-x_{m}|&gt;\epsilon ,\forall n,m&gt;N,\]</span>or in other words <span class="math inline">\(x_{n}-x_{m}\to 0\)</span> as <span class="math inline">\(n,m \to \infty\)</span> independently.</p>
+<p>:::</p>
+<p>A real sequence <span class="math inline">\(\{ x_{n} \}\)</span> is convergent in the reals if and only if it is Cauchy.</p>
+</section>
+<section id="topology" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="topology"><span class="header-section-number">1.1.3</span> Topology</h3>
+<p>In this section we highlight some important results from our study of <strong>Topology</strong>.</p>
+<div class="definition" data-title="Topology">
+<p>A <strong>topology</strong> <span class="math inline">\(\tau\)</span> on general set <span class="math inline">\(X\)</span> is a collection of subsets of <span class="math inline">\(X\)</span> satisfying the following propoerties: 1. <span class="math inline">\(\emptyset \in \tau\)</span> and <span class="math inline">\(X \in \tau\)</span>; 2. <span class="math inline">\(\{ U_{i} \}_{i \in \mathcal{I}}\subset X\implies \bigcup_{i \in\mathcal{I}}U_{i}\subset X\)</span> (closed under arbitrary unions); and 3. <span class="math inline">\(\{ U_{i} \}_{i=1}^N\subset X \implies \bigcap_{i=1}^N U_{i}\subset X\)</span> (closed under finite intersections).</p>
+<p>All elements <span class="math inline">\(E\in \tau\)</span> are called <strong>open sets</strong>.</p>
+</div>
+<p>A couple consisting of a set and an assigned topology <span class="math inline">\((X,\tau)\)</span> is known as a <strong>topological space</strong>. Note that a topological space need not have a formal definition of distance or size and so we are limited to considering subsets called neighborhoods.</p>
+<div class="definition" data-title="Neighborhood">
+<p>For a point <span class="math inline">\(x \in X\)</span> a neighborhood is a subset <span class="math inline">\(V\subset X\)</span> that contains an open set <span class="math inline">\(U\)</span> such that <span class="math inline">\(x \in U\)</span>.</p>
+</div>
+</section>
+<section id="metric-spaces" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" class="anchored" data-anchor-id="metric-spaces"><span class="header-section-number">1.1.4</span> Metric Spaces</h3>
+<p><a href="../topics/probability-spaces.html">Probability Spaces</a></p>
+<p>In real analysis we need not be so general and typically work with specific types of topological spaces known as <strong>metric spaces</strong> upon which we have defined some function describing distance between points.</p>
+<div class="definition" data-title="Metric">
+<p>A <strong>metric</strong> <span class="math inline">\(d:X\times X \to \mathbb{R}^+\)</span>, a function that satisfies the following for all <span class="math inline">\(x,y,z\in X\)</span>: 1. <span class="math inline">\(d(x,x)=0\)</span><br>
+2. <span class="math inline">\(x \neq y\implies d(x,y)\neq 0\)</span> 3. <span class="math inline">\(d(x,y)=d(y,x)\)</span> 4. <span class="math inline">\(d(x,z)\leq d(x,y)+d(y,z)\)</span></p>
+</div>
+<p>A <strong>metric space</strong> is an ordered pair <span class="math inline">\((X,d)\)</span> consisting of a set <span class="math inline">\(X\)</span> and a metric <span class="math inline">\(d\)</span>.</p>
+<p>The standard metric for the reals <span class="math inline">\(\mathbb{R}^n\)</span> is the <strong>Euclidean metric</strong> which is given by <span class="math display">\[
+d(x,y)=\left( \sum_{n}^{}(x_{n}+y_{n})^2 \right)^{1/2}.
+\]</span> The <strong>open ball</strong> at point <span class="math inline">\(c \in X\)</span> of diameter <span class="math inline">\(\epsilon\)</span> is defined as <span class="math display">\[
+B_{\epsilon}(c):=\{ x \in X:d(x,c)&lt;\epsilon \}.
+\]</span> ### Real Functions</p>
+<p>Let <span class="math inline">\(X,Y\subset \overline{\mathbb{R}}\)</span>. A <strong>real function</strong> is a mapping <span class="math inline">\(f:X \to Y\)</span>. Recall that a function is <strong>injective</strong> (one-to-one) when <span class="math display">\[
+x_{1}\neq x_{2} \implies f(x_{1})\neq f(x_{2}),
+\]</span> and <strong>surjective</strong> (onto) if <span class="math display">\[
+\forall y \in Y, \exists x \in X:f(x)=y.
+\]</span> A function which is both injective and surjective is said to be <strong>bijective</strong>. A bijection is invertible, that is there exists function <span class="math inline">\(f^{-1}\)</span> called the <strong>inverse</strong> such that <span class="math display">\[
+\forall x \in X, f\circ f^{-1}(x)=f^{-1}(f(x))=x.
+\]</span> A function is <strong>increasing</strong> if <span class="math inline">\(x \leq y \implies f(x) \leq f(y)\)</span> and <strong>decreasing</strong> if <span class="math inline">\(x\leq y\implies f(x)\geq f(y)\)</span>. These become strict should we drop the equality. A function that is either increasing or decreasing is called <strong>monotone</strong>.</p>
+<p>A function is <strong>continuous</strong> when a small variation of the argument induces a small variation of the value of the function.</p>
+<div class="definition" data-title="Continuous Function">
+<p>A function <span class="math inline">\(f:X \to Y\)</span> is continuous at point <span class="math inline">\(c\)</span> if <span class="math display">\[
+\forall\epsilon&gt;0,\exists \delta&gt;0:\forall x \in B_{\delta}(c), f(x)\in B_{\epsilon}(f(c)).
+\]</span></p>
+</div>
+<p>This is equivalent to writing that <span class="math inline">\(\lim_{ x \to c }f(x)=f(c)\)</span>. Simplifying to considering the real functions with the standard Euclidean metric <span class="math inline">\(d(x,y) = \lvert x-y \rvert\)</span> we obtain the familiar definition given below.</p>
+<div class="definition" data-title="Continuous Real Functions (Real numbers with standard metric)">
+<p>A real function <span class="math inline">\(f:X \to Y\)</span> is continuous at point <span class="math inline">\(c\)</span> if <span class="math display">\[
+\forall \epsilon&gt;0, \exists \delta&gt;0 : (\forall x \in S: \lvert x-c \rvert &lt;\delta), \lvert f(x)-f(c) \rvert &lt;\epsilon.
+\]</span></p>
+</div>
+<p>Intuitively, no matter how small we make <span class="math inline">\(\epsilon\)</span> we can find a neighborhood such that for all points within the region (called interior points), the distance between points in their image is less than <span class="math inline">\(\epsilon\)</span>.</p>
+<div class="definition" data-title="Properties of Continuous Functions">
+<p>Assuming that the functions <span class="math inline">\(f,g\)</span> are both continuous at <span class="math inline">\(c\)</span> the following combinations are continuous: 1. <span class="math inline">\((f+g)(x)=f(x)+g(x)\)</span>; 2. <span class="math inline">\((f-g)(x)=f(x)-g(x)\)</span>; 3. <span class="math inline">\((f\cdot g)(x)=f(x)\cdot g(x)\)</span>; 4. <span class="math inline">\(\left( \frac{f}{g} \right)(x)=\frac{f(x)}{g(x)}\)</span> if <span class="math inline">\(g(c)\neq 0\)</span>; 5. <span class="math inline">\(\lambda f(x)\)</span> for constant <span class="math inline">\(\lambda\)</span>; and 6. <span class="math inline">\((f \circ g)=f(g(x))\)</span> if <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(g(c)\)</span>.</p>
+</div>
+<p>We say that the function <span class="math inline">\(f\)</span> is <strong>right-continuous</strong> and <strong>left-continuous</strong> respectively when <span class="math display">\[
+\lim_{ x \to c^+ }  f(x)=f(c)\quad \&amp;\quad \lim_{ x \to c^-}  f(x)=f(c),
+\]</span> that is, the limit is obtained when <span class="math inline">\(x\)</span> approaches <span class="math inline">\(c\)</span> from the right or the left respectively.</p>
+<p>Another important property of functions is upper semicontinuity (usc) and lower semicontinuity (lsc).</p>
+<div class="definition" data-title="Upper and Lower Semicontinuity">
+<p>A function <span class="math inline">\(f:X\to \mathbb{R}\)</span> is upper semicontinuous at <span class="math inline">\(c\)</span> if <span class="math display">\[
+\forall\epsilon&gt;0,\exists \delta&gt;0:\forall x \in B_{\delta}(c),f(x)-f(c)&lt;\epsilon.
+\]</span> A function <span class="math inline">\(f:X\to \mathbb{R}\)</span> is lower semicontinuous at if <span class="math display">\[
+\forall\epsilon&gt;0,\exists \delta&gt;0:\forall x \in B_{\delta}(c),-\epsilon&lt;f(x)-f(c).
+\]</span></p>
+</div>
+<p>Notice that these definitions are two halves of the condition of continuity, namely that we have taken <span class="math display">\[
+\lvert f(x)-f(c) \rvert&lt;\epsilon \implies -\epsilon&lt;f(x)-f(c)&lt;\epsilon,
+\]</span> where the left inequality goes to lsc and the right inequality goes to usc. Clearly therefore a function is continuous if and only if it is both upper and lower semicontinuous.</p>
+<p><img src="Images/semicontinuity.png" class="img-fluid" alt="Upper and Lower Semicontinuity"> We list some equivalent definitions of usc at point <span class="math inline">\(c\)</span> below: 1. <span class="math inline">\(\{ x:f(x)&lt;c \}\)</span> is open 2. <span class="math inline">\(f(c)\geq \limsup_{n \to \infty}{f(x_{n})}\)</span> for all <span class="math inline">\(x_{n}\to c\)</span></p>
+<p>We list some equivalent definitions of lsc at point <span class="math inline">\(c\)</span> below: 1. <span class="math inline">\(\{ x:f(x)&gt;c \}\)</span> is open 2. <span class="math inline">\(f(c)\leq \liminf_{n \to \infty}{f(x_{n})}\)</span> for all <span class="math inline">\(x_{n}\to c\)</span></p>
+<p>These alternative definitions are helpful in our study of measure theory, particularly for showing that lsc and usc functions are measurable with respect to the Borel <span class="math inline">\(\sigma\)</span>-algebra.</p>
+<div class="definition" data-title="Lower semicontinuous envelope">
+<p>Given a metric space <span class="math inline">\((X,d)\)</span> and a function <span class="math inline">\(f:X\to\overline {\mathbb{R}}\)</span> the lower semicontinuous envelope of <span class="math inline">\(f\)</span> is defined by <span class="math display">\[
+\begin{align}f_{*}(x):=  &amp; \lim_{\epsilon \to 0}\left(\inf\{ f(y):d(x,y)&lt;\epsilon \}\right) \\ = &amp; \lim_{ \epsilon \to 0 }(\inf_{}{f(B_{\epsilon}(x))}).\end{align}
+\]</span></p>
+</div>
+</section>
+<section id="homeomorphisms" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" class="anchored" data-anchor-id="homeomorphisms"><span class="header-section-number">1.1.5</span> Homeomorphisms</h3>
+<p>In topology, a homeomorphism is a bijective and continuous function between topological spaces that has a continuous inverse function. Speaking generally, a topological space is a geometric object and a homeomorphism results from a continuous deformation of the object into a new shape.</p>
+<div class="definition" data-title="Homeomorphism">
+<p>A function <span class="math inline">\(f:X\to Y\)</span> between topological spaces is a <strong>homeomorphism</strong> if: 1. <span class="math inline">\(f\)</span> is a bijection; 2. <span class="math inline">\(f\)</span> is continuous; and 3. <span class="math inline">\(f^{-1}\)</span> is continuous.</p>
+</div>
+<p>If such a function exists then spaces <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are said to be homeomorphic which is an equivalence relation on topological spaces. Thus, two homeomorphic spaces share the same topological properties e.g.&nbsp;compactness, connectedness, Hausdorff etc.</p>
+<div class="theorem" data-title="Intermediate Value Theorem">
+<p>Let <span class="math inline">\(f:[a,b]\to \mathbb{R}\)</span> be continuous on the closed interval <span class="math inline">\([a,b]\)</span>. If <span class="math inline">\(L\)</span> is any real number between <span class="math inline">\(f(a)\)</span> and <span class="math inline">\(f(b)\)</span> then there exists some <span class="math inline">\(c\in[a,b]\)</span> such that <span class="math display">\[
+f(c)=L.
+\]</span></p>
+</div>
+<p><em>Proof:</em> Defining <span class="math inline">\(S:=\{x\in[a,b]:f(x)\leq L\}\)</span> we note that <span class="math inline">\(a\in S\)</span> and <span class="math inline">\(S\subseteq[a,b]\)</span>, therefore <span class="math inline">\(S\)</span> is non-empty and bounded above. We define <span class="math inline">\(c:=\sup S\)</span> and claim that <span class="math inline">\(f(c)=L\)</span>. <span class="math inline">\((\leq)\)</span> Assuming that <span class="math inline">\(f(c)&gt;L\)</span>, by the continuity of <span class="math inline">\(f\)</span> at <span class="math inline">\(c\)</span>, there exists <span class="math inline">\(\delta &gt;0\)</span> such that <span class="math display">\[
+|x-c|&lt;\delta \implies f(x)&gt;L.
+\]</span> Thus for all <span class="math inline">\(x&lt;c\)</span> sufficiently close to <span class="math inline">\(c\)</span>, we have that <span class="math inline">\(f(x)&gt;L\)</span> contradicting the fact that <span class="math inline">\(c=\sup S\)</span> (since there must be points of <span class="math inline">\(S\)</span> arbitrarily close to <span class="math inline">\(c\)</span> from below). <span class="math inline">\((\geq)\)</span> Assuming that <span class="math inline">\(f(c)&lt;L\)</span>, by the continuity of <span class="math inline">\(f\)</span> at <span class="math inline">\(c\)</span> there exists <span class="math inline">\(\delta &gt; 0\)</span> such that <span class="math display">\[
+|x-c|&lt;\delta \implies f(x)&lt;L.
+\]</span> Thus for all <span class="math inline">\(x&gt;c\)</span> sufficiently close to <span class="math inline">\(c\)</span> we have that <span class="math inline">\(f(x)&lt;L\)</span> contradicting that <span class="math inline">\(c\)</span> is an upper bound of <span class="math inline">\(S\)</span>.<br>
+Combining both inequalities we conclude that <span class="math inline">\(f(c)=L\)</span>. <span class="math inline">\(\square\)</span></p>
+<div class="theorem" data-title="Sandwich Theorem">
+<p>Let <span class="math inline">\(a\in\mathbb{R}\)</span>. Suppose <span class="math inline">\(f,g,h\)</span> are functions defined on some punctured neighborhood of <span class="math inline">\(a\)</span> (i.e.&nbsp;for all <span class="math inline">\(x\)</span> with <span class="math inline">\(0&lt;|x-a|&lt;\delta\)</span> for some <span class="math inline">\(\delta&gt;0\)</span>). Assume that: 1. <span class="math inline">\(f(x)\leq g(x)\leq h(x)\)</span> for all <span class="math inline">\(x\)</span> sufficiently close to <span class="math inline">\(a\)</span> with <span class="math inline">\(x\neq a\)</span>. 2. <span class="math inline">\(\lim_{x\to a}f(x) = \lim_{x\to a}h(x)=L\)</span>.</p>
+<p>Then <span class="math inline">\(\lim_{x\to a}g(x)=L\)</span>.</p>
+</div>
+<p><em>Proof:</em> Let <span class="math inline">\(\varepsilon &gt; 0\)</span>. Since <span class="math inline">\(\lim_{x \to a} f(x) = L\)</span> there exists <span class="math inline">\(\delta_1 &gt; 0\)</span> such that <span class="math display">\[
+0 &lt; |x - a| &lt; \delta_1 \implies |f(x) - L| &lt; \varepsilon,
+\]</span> which implies <span class="math inline">\(L - \varepsilon &lt; f(x)\)</span>. Similarly, since <span class="math inline">\(\lim_{x \to a} h(x) = L\)</span> there exists <span class="math inline">\(\delta_2 &gt; 0\)</span> such that <span class="math display">\[
+0 &lt; |x - a| &lt; \delta_2 \implies |h(x) - L| &lt; \varepsilon,
+\]</span> which implies <span class="math inline">\(h(x) &lt; L + \varepsilon\)</span>. By assumption, there exists <span class="math inline">\(\delta_3 &gt; 0\)</span> such that <span class="math display">\[
+0 &lt; |x - a| &lt; \delta_3 \implies f(x) \le g(x) \le h(x).
+\]</span> Now let <span class="math inline">\(\delta := \min\{\delta_1, \delta_2, \delta_3\}\)</span>. Then for all <span class="math inline">\(x\)</span> with <span class="math inline">\(0 &lt; |x - a| &lt; \delta\)</span>, <span class="math display">\[
+L - \varepsilon &lt; f(x) \le g(x) \le h(x) &lt; L + \varepsilon.
+\]</span> Hence, <span class="math inline">\(|g(x) - L| &lt; \varepsilon\)</span>. Since <span class="math inline">\(\varepsilon &gt; 0\)</span> was arbitrary, it follows that <span class="math inline">\(\lim_{x \to a} g(x) = L\)</span>. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="reimann-integration" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" class="anchored" data-anchor-id="reimann-integration"><span class="header-section-number">1.1.6</span> Reimann Integration</h3>
+<div class="definition" data-title="Differentiability">
+<p>A function <span class="math inline">\(f(x)\)</span> is differentiable at point <span class="math inline">\(c\)</span> if the limit of the difference quotient exists and is finite, that is <span class="math display">\[
+f'(c)=\lim_{ n \to \infty } \frac{{f(x)-f(c)}}{x-c}\in \mathbb{R}.
+\]</span></p>
+</div>
+</section>
+</section>
+<section id="measure-theory" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="measure-theory"><span class="header-section-number">1.2</span> Measure Theory</h2>
+<p>In real analysis in order to handle complicated real functions we need to turn to Lebesgue integrals and Measure Theory. The primary aim of Measure Theory is to define the concept of <strong>measurability</strong> and ultimately assign a <strong>measure</strong> to measurable sets. That is, for general <span class="math inline">\(X\)</span> we wish to construct a function <span class="math inline">\(\mu:2^{X}\to[0,\infty]\)</span> that assigns each <span class="math inline">\(E\subset X\)</span> a number <span class="math inline">\(\mu(E)\in[0,\infty]\)</span>, the measure of <span class="math inline">\(E\)</span> where <span class="math inline">\(\mu\)</span> satisfies:</p>
+<ol type="1">
+<li>For disjoint <span class="math inline">\(E_{1}, E_{2}, \dots \in X\)</span> we have <span class="math inline">\(\mu\left( \bigcup_{j=1}^\infty E_{j} \right)=\sum_{j=1}^\infty \mu(E_{j})\)</span> (countably additive);</li>
+<li>For interval <span class="math inline">\([a,b]\)</span> we have <span class="math inline">\(\mu([a,b])=b-a\)</span>; and</li>
+<li>For set <span class="math inline">\(E\subset \mathbb{R}\)</span> and constant <span class="math inline">\(c\in \mathbb{R}\)</span> we have <span class="math inline">\(\mu(E+c)=\mu(E)\)</span> (translation invariance).</li>
+</ol>
+<section id="motivations-and-challenges" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="motivations-and-challenges"><span class="header-section-number">1.2.1</span> Motivations and Challenges</h3>
+<p>The <strong>Vitali Non-Measurability Theorem</strong> demonstrates that <strong>no such function exists</strong>. Indeed the closest mathematical generalization of mass is <strong>σ-additivity</strong> which gives rise to the <strong>Lebesgue measure</strong>, however not all sets have such a measure (for example, a Vitali set). The idea of the theorem can be extended to higher dimensions (see Banarch-Tarski Theorem) as well as similar results for other abstract sets although the form of the proof relies heavily on the nature of the set being considered.</p>
+<p>We preemptively prove the following lemma proving that we obtain monotonicity from countable additivity of functions.</p>
+<div class="definition" data-title="Monotonicity from Countable Additivity">
+<p>Given a set <span class="math inline">\(X\)</span> and countably additive function <span class="math inline">\(\mu:2^X\to[0,\infty]\)</span> then for all <span class="math inline">\(A,B\subseteq X\)</span> <span class="math display">\[
+A \subseteq B\implies \mu(A)\leq  \mu(B).
+\]</span></p>
+</div>
+<p><em>Proof:</em> Since <span class="math inline">\(A \subseteq B\)</span> we can write <span class="math inline">\(B =A\cup(B\setminus A)\implies \mu(B)=\mu(A)+\mu(B\setminus A)\geq \mu(A)\)</span> since measures are non-negative. <span class="math inline">\(\square\)</span></p>
+<div class="theorem" data-title="Vitali non-measurability theorem">
+<p>There exists no function <span class="math inline">\(\mu :2^\mathbb{R}\to[0,+\infty]\)</span> that is countably additive, translation invariant and satisfies <span class="math inline">\(\mu([a,b])=b-a\)</span> for all <span class="math inline">\(a\leq b\)</span>.</p>
+</div>
+<p><em>Proof:</em> Assume for the sake of contradiction that such a <span class="math inline">\(\mu\)</span> exists. We define an equivalence relation <span class="math inline">\(\sim\)</span> on <span class="math inline">\(\mathbb{R}\)</span> <span class="math display">\[
+x\sim y\iff x-y \in \mathbb{Q}.
+\]</span> The equivalence class of <span class="math inline">\(\sim\)</span> to which <span class="math inline">\(x\)</span> belongs is therefore given by <span class="math display">\[
+[x]_{\sim}:=\{  y \in \mathbb{R} : x\sim y \}.
+\]</span> We make the claim that every such equivalence class contains an element in <span class="math inline">\([0,1]\)</span>. Assuming the claim is false then <span class="math inline">\(\exists x \in \mathbb{R}\)</span> s.t. <span class="math inline">\([x]_{\sim}\cap[0,1]=\emptyset \implies \forall a \in [0,1],~x-a\not\in \mathbb{Q}\)</span> i.e.&nbsp;<span class="math inline">\([x-1,x]\)</span> contains no rational numbers which is impossible since the rationals are dense in the reals, giving the contradiction. Using the [[axiom-of-choice]], for each equivalence class we choose one element in <span class="math inline">\([0,1]\)</span> belonging to that class and call the resulting set <span class="math inline">\(A\)</span>. Then we define <span class="math display">\[
+A_{q}=\{ A+q \}_{q \in \mathbb{Q}\cap [-1,1]}=\{ a+q:a\in A,q\in \mathbb{Q}\cap[-1,1] \},
+\]</span> hence each <span class="math inline">\(A_{q}\)</span> contains the elements of <span class="math inline">\(A\)</span> shifted by rational <span class="math inline">\(q \in [-1,1]\)</span>. We assume these are not disjoint i.e. <span class="math inline">\(\exists x \in A_{q}\cap A_{p}~s.t.~p \neq q\)</span>. This gives that <span class="math display">\[
+\begin{cases}
+x = a+p\quad\therefore\quad a=x-p \in A \\
+x = a+q\quad \therefore\quad a = x-q \in A,
+\end{cases}
+\]</span> <span class="math inline">\(\implies x-p\)</span> and <span class="math inline">\(x-q\)</span> are distinct elements of <span class="math inline">\(A\)</span> from the same equivalence class giving the contradiction <span class="math inline">\(\rightarrow\leftarrow\)</span>. We therefore define the disjoint union <span class="math inline">\(B = \bigcup_{q \in\mathbb{Q}\cap [-1,1]}A_{q}\)</span> and claim that <span class="math display">\[
+[0,1]\stackrel{(i)}{\subseteq} B \stackrel{(ii)}{\subseteq} [-1,2].
+\]</span> (i) Since <span class="math inline">\(\forall x \in \mathbb{R}\)</span> we have <span class="math inline">\(x \in [a]\)</span> for some <span class="math inline">\(a \in A\)</span>, in particular <span class="math inline">\(\forall x \in [0,1]\)</span>, <span class="math inline">\(x -a\in \mathbb{Q}\)</span> for some <span class="math inline">\(a \in A\)</span>, i.e. <span class="math inline">\(x = a+q\)</span> for some <span class="math inline">\(a \in A\)</span> and <span class="math inline">\(q \in \mathbb{Q}\)</span>. Since <span class="math inline">\(x \in[0,1]\)</span> and <span class="math inline">\(a \in A \subseteq [0,1]\)</span>, <span class="math inline">\(q = x-a\in[-1,1]\)</span> and thus <span class="math inline">\(x \in B\)</span>. (ii) If <span class="math inline">\(b \in B\)</span>, then <span class="math inline">\(b = a+q\)</span> for <span class="math inline">\(a \in A \subseteq [0,1]\)</span>, <span class="math inline">\(q \in [-1,1]\)</span> and so <span class="math inline">\(b \in [-1,2]\)</span>. By monotonicity of countably additive functions <span class="math display">\[
+1 = \mu([0,1])\leq  \mu(B)\leq  \mu([-1,2])=3.
+\]</span> However, we also note that <span class="math display">\[
+\mu(B)=\sum_{q\in\mathbb{Q}\cap [-1,1]}\mu(A+q)=\sum_{q \in \mathbb{Q}\cap [-1,1]}\mu(A).
+\]</span> Since <span class="math inline">\(\mu(B)\leq 3\)</span> we must have that <span class="math inline">\(\mu(A)=0\)</span>, however this implies <span class="math inline">\(\mu(B)=0\)</span> which contradicts our previous conclusion that <span class="math inline">\(\mu(B)\geq 1\)</span>. <span class="math inline">\(\rightarrow\leftarrow\)</span> <span class="math inline">\(\square\)</span></p>
+<p>To overcome this problem we turn to some standard approaches for mathematicians, either (1) weaken the criteria; or (2) restrict the domain of the function to the family of <strong>well-behaved</strong> sets. Both options are valid and we will see that (1) leads us to the concept of <strong>outer-measure</strong>, and (2) leads to the concept of <strong>measure spaces</strong> and <strong>measures</strong>.</p>
+<p>Let us consider how we might restrict the domain of the function and what kind of family of subsets we should restrict to. The answer is a non-empty collection of subsets that is both closed under compliments and closed under countable unions (i.e.&nbsp;sets that preserve the properties we wish our measure to have) also known as a <em><span class="math inline">\(\sigma\)</span>-algebra</em>, a specific type of <strong>algebra</strong>.</p>
+</section>
+<section id="algebra" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="algebra"><span class="header-section-number">1.2.2</span> Algebra</h3>
+<p>An algebra is a collection of sets that is non-empty, and closed under finite unions and compliments.</p>
+<div class="definition" data-title="Algebra">
+<p>Let <span class="math inline">\(X\)</span> be a non-empty set. An <strong>algebra</strong> of sets on <span class="math inline">\(X\)</span> is a collection <span class="math inline">\(\mathcal{A}\subseteq 2^X\)</span> of subsets of <span class="math inline">\(X\)</span> that satisfies: 1. <span class="math inline">\(X \in \mathcal{A}\)</span> 2. <span class="math inline">\(A,B\in \mathcal{A} \implies A\cup B\in \mathcal{A}\)</span> (closed under finite unions); and 3. <span class="math inline">\(A\in \mathcal{A}\implies A^c:=X\setminus A\in \mathcal{A}\)</span> (closed under compliments).</p>
+</div>
+<p>Some examples of algebra include: (1) the trivial sigma algebra <span class="math inline">\(\{  \emptyset,X \}\)</span>; (2) the power set <span class="math inline">\(2^X\)</span>; and (3) the set of all finite and cofinite subsets of <span class="math inline">\(X\)</span> defined <span class="math inline">\(\mathcal{A}:=\{ E\subseteq X:\#E&lt;\infty~\text{or}~\#X\setminus E &lt; \infty \}\)</span>.</p>
+<div class="theorem" data-title="$~$">
+<p>If <span class="math inline">\(\mathcal{A}\)</span> is an algebra then: (1) <span class="math inline">\(\emptyset \in\mathcal{A}\)</span>, <span class="math inline">\(X\in \mathcal{A}\)</span>; and (2) <span class="math inline">\(E_{1}, \dots, E_{n}\in \mathcal{A}\implies \bigcap_{i=1}^nE_{i}\in\mathcal{A}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> (1) Since <span class="math inline">\(\mathcal{A}\)</span> is non-empty we have set <span class="math inline">\(A\in\mathcal{A}\implies A^c\in\mathcal{A}\)</span> <span class="math inline">\(\implies X:=A\cup A^c\in\mathcal{A}\)</span> <span class="math inline">\(\implies \emptyset=X^c\in\mathcal{A}\)</span>. (2) <span class="math inline">\(E_{1}, \dots, E_{n}\in \mathcal{A}\)</span> <span class="math inline">\(\implies E_{1}^c, \dots, E_{n}^c\in \mathcal{A}\)</span> <span class="math inline">\(\implies \bigcup_{i=1}^nE_{i}^c\in\mathcal{A}\)</span> <span class="math inline">\(\implies \bigcap_{i=1}^nE_{i}=\left(\bigcup_{i=1}^n E_{i}^c\right)^c\in \mathcal{A}\)</span>. <span class="math inline">\(\square\)</span></p>
+<p><em>Note:</em> In mathematical etymology we typically use the prefix σ to denote that the object is closed with respect to countable unions.</p>
+<div class="definition" data-title="σ-Algebra">
+<p>A <strong>σ-algebra</strong> <span class="math inline">\(\mathcal{F}\)</span> on <span class="math inline">\(X\)</span> is an algebra that is closed under countable unions, that is <span class="math display">\[
+\{ A_{n} \}_{n=1}^\infty \subseteq \mathcal{F} \implies \bigcup_{n} A_{n}\in \mathcal{F}_{n}.
+\]</span></p>
+</div>
+<p>We say that the pair <span class="math inline">\((X, \mathcal{F})\)</span> consisting of a non-empty set <span class="math inline">\(X\)</span> and a <span class="math inline">\(\sigma\)</span>-algebra is a <strong>measurable space</strong> and that any set <span class="math inline">\(E\in \mathcal{F}\)</span> is <strong>measurable</strong>.</p>
+<div class="theorem" data-title="$~$">
+<p>A <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{F}\)</span> is closed under countable intersections.</p>
+</div>
+<p><em>PROOF:</em> The result follows using a methodology identical to (2) in the previous result for algebra. <span class="math inline">\(\square\)</span></p>
+<div class="theorem" data-title="$~$">
+<p>Any algebra that is closed under countable disjoint unions must be a <span class="math inline">\(\sigma\)</span>-algebra.</p>
+</div>
+<p><em>PROOF:</em> For countable (possibly non-disjoint) sets <span class="math inline">\(\{ A_{n} \}_{n=1}^\infty \subseteq \mathcal{A}\)</span> we can define the sets <span class="math inline">\(B_{1}=A_{1}\)</span> and <span class="math inline">\(B_{n}=A_{n}\setminus B_{n-1}\)</span> such that <span class="math inline">\(\{  B_{n}\}_{n=1}^\infty\)</span> are disjoint and <span class="math inline">\(\cup_{n} A_{n}=\cup_{n}B_{n}\in\mathcal{A}\)</span>. <span class="math inline">\(\square\)</span></p>
+<div class="theorem" data-title="Set Generated σ-Algebra">
+<p>Given any <span class="math inline">\(\mathcal{E}\subseteq 2^X\)</span> there exists a smallest <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{E}\)</span> denoted <span class="math inline">\(\sigma(\mathcal{E})\)</span> known as the <span class="math inline">\(\sigma\)</span>-algebra generated by <span class="math inline">\(\mathcal{E}\)</span>. That is, for all <span class="math inline">\(\mathcal{F}\)</span> containing <span class="math inline">\(\mathcal{E}\)</span> then <span class="math inline">\(\sigma(\mathcal{E})\subseteq \mathcal{F}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> Naturally, the intersection of all <span class="math inline">\(\sigma\)</span>-algebra that contain <span class="math inline">\(\mathcal{E}\)</span> will infimum of all such <span class="math inline">\(\sigma\)</span>-algebra and so it suffices to show that the intersection of <span class="math inline">\(\sigma\)</span>-algebra is itself a <span class="math inline">\(\sigma\)</span>-algebra. For set <span class="math inline">\(X\)</span> consider the collection of <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\{ \mathcal{F}_{n} \}_{n=1}^\infty\)</span> and denote the intersection <span class="math inline">\(\mathcal{F}:=\bigcap_{n=1}^\infty \mathcal{F}_{n}\)</span>. Clearly <span class="math inline">\(\emptyset \in \mathcal{F}_{n},~\forall n\)</span> hence <span class="math inline">\(\emptyset \in \mathcal{F}\)</span> is non-empty. Additionally, if <span class="math inline">\(A\in \mathcal{F}\)</span> then <span class="math inline">\(A\in \mathcal{F}_{n},~\forall n\)</span> hence <span class="math inline">\(A^c \in \mathcal{F}_{n},~\forall n\)</span> and so <span class="math inline">\(A^c\in \mathcal{F}\)</span>. Finally, let <span class="math inline">\(\{ A_{m} \}_{m=1}^\infty \in \mathcal{F}\)</span> therefore <span class="math inline">\(A_{m}\in \mathcal{F}_{n},\forall n.m\)</span> hence <span class="math inline">\(\bigcup_{m}A_{m}\in \mathcal{F}_{n},~\forall n\)</span> and so <span class="math inline">\(\bigcup_{m}A_{m}\in \mathcal{F}\)</span>, completing the proof. <span class="math inline">\(\square\)</span></p>
+<p>Intuitively, <span class="math inline">\(\sigma(\mathcal{E})\)</span> creates a <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{E}\)</span> by going from the outside in, that is, starting with too big <span class="math inline">\(\sigma\)</span>-algebra and going inwards by seeing where they overlap.</p>
+<div class="theorem" data-title="$~$">
+<p>For <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{F}\)</span>, if <span class="math inline">\(\mathcal{E}\subset \mathcal{F}\)</span> then <span class="math inline">\(\sigma(\mathcal{E})\subseteq \mathcal{F}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> Since <span class="math inline">\(\mathcal{F}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{E}\)</span> it must contain the smallest <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{E}\)</span> since <span class="math display">\[
+\sigma(\mathcal{E})=\bigcap_{i \in I}\mathcal{F}_{i},
+\]</span> where <span class="math inline">\(\mathcal{F}_{i}\)</span> are the collection of <span class="math inline">\(\sigma\)</span>-algebra that contain <span class="math inline">\(\mathcal{E}\)</span>. <span class="math inline">\(\square\)</span></p>
+<p>The following definition is built upon definitions from [<a href="#topology">topology</a>] which we have included in the [[]].</p>
+<div class="definition" data-title="Borel σ-Algebra">
+<p>Let <span class="math inline">\((X,\tau)\)</span> be a topological space. The <strong>Borel σ-algebra</strong> of <span class="math inline">\(X\)</span>, <span class="math inline">\(\mathcal{B}_{X}\)</span> is the <span class="math inline">\(\sigma\)</span>-algebra generated by <span class="math inline">\(\tau\)</span>. Its members are known as <strong>Borel sets</strong>.</p>
+</div>
+<p>The Borel <span class="math inline">\(\sigma\)</span>-algebra of <span class="math inline">\(\mathbb{R}\)</span> denoted <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> is the <span class="math inline">\(\sigma\)</span>-algebra generated from the standard topology which is the collection of open real intervals.</p>
+<div class="theorem" data-title="Borel σ-Algebra Generating Sets">
+<p>The Borel <span class="math inline">\(\sigma\)</span>-algebra of <span class="math inline">\(\mathbb{R}\)</span>, <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> is generated by: 1. Open intervals <span class="math inline">\(\mathcal{E}_{1}:=\{ (a,b):a&lt;b \}\)</span>; 2. Closed intervals <span class="math inline">\(\mathcal{E}_{2}:=\{ [a,b]:a&lt;b \}\)</span>; 3. Half-open intervals <span class="math inline">\(\mathcal{E}_{3}:=\{ (a,b]:a&lt;b \}\)</span>; 4. Open rays <span class="math inline">\(\mathcal{E}_{4}:=\{ (a, \infty):a\in \mathbb{R} \}\)</span>; 5. Closed rays <span class="math inline">\(\mathcal{E}_{5}:=\{ [a,\infty):a\in \mathbb{R} \}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> The Borel <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}_{\mathbb{R}}:=\sigma(\mathcal{E}_{1})\)</span> is generated from the set of open intervals <span class="math display">\[
+\mathcal{E}_{1}:=\{ (a,b):a&lt;b \}.
+\]</span> (1) Considering arbitrary <span class="math inline">\((a,b]\in\mathcal{E}_{3}\)</span> we note that since open sets are in <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> and <span class="math inline">\(\sigma\)</span>-algebra are closed under countable intersection we have that <span class="math display">\[
+(a,b]=\bigcap_{n=1}^\infty \left( a,b+\frac{1}{n} \right)\in\mathcal{B}_{\mathbb{R}}\implies \mathcal{E}_{3}\subseteq\mathcal{B}_{\mathbb{R}\implies}\sigma(\mathcal{E}_{3})\subseteq \mathcal{B}_{\mathbb{R}}.
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in\mathcal{E}_{1}\)</span><br>
+<span class="math display">\[
+(a,b)=\bigcup_{n=1}^\infty \left(a,b-\frac{1}{n}\right]\in \sigma(\mathcal{E}_{3})\implies\mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{3})\implies\mathcal{B}_{\mathbb{R}}\subseteq \mathcal{E}_{3}.
+\]</span> (2) Considering arbitrary <span class="math inline">\((a,+\infty)\in \mathcal{E}_{5}\)</span> we note that <span class="math display">\[
+(a,+\infty)=\bigcup_{n=1}^\infty (a,n)\in \mathcal{B}_{\mathbb{R}}\implies\mathcal{E}_{5}\subseteq\mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{5})\subseteq\mathcal{B}_{\mathbb{R}}.
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in\mathcal{E}_{1}\)</span> since <span class="math inline">\(\sigma\)</span>-algebra are closed under countable intersections <span class="math display">\[
+\begin{align}
+(a,b)&amp;=(a,+\infty)\cap[b,+\infty)=(a,+\infty)\cap \bigcap_{n=1}^\infty \left( b-\frac{1}{n},+\infty \right)\in\sigma(\mathcal{E}_{5}) \\
+\implies &amp; \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{5})\implies \mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{5}).
+\end{align}
+\]</span> (3) Considering arbitrary <span class="math inline">\([a,+\infty)\in\mathcal{E}_{7}\)</span> we note that <span class="math display">\[
+\begin{align}
+[a,+\infty)&amp;=\bigcap_{n=1}^\infty[a,n)=\bigcap_{n=1}^\infty \bigcap_{m=1}^\infty\left( a-\frac{1}{m}, n \right)\in \mathcal{B}_{\mathbb{R}} \\
+\implies &amp; \mathcal{E}_{7}\subseteq \mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{7})\subseteq\mathcal{B}_{\mathbb{R}}.
+\end{align}
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in \mathcal{E}_{1}\)</span>, since <span class="math inline">\(\sigma\)</span>-algebra are closed under countable unions and complements we have that <span class="math display">\[
+\begin{align}
+(a,b)&amp;=(-\infty,b)\cap(-\infty,a)=([b,+\infty)^c\cup[a,+\infty)^c)^c\subseteq \sigma(\mathcal{E}_{7}) \\
+\implies &amp; \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{7})\implies\mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{7}).
+\end{align}
+\]</span> <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="measure" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="measure"><span class="header-section-number">1.2.3</span> Measure</h3>
+<div class="definition" data-title="Measure">
+<p>Given a measurable space <span class="math inline">\((X,\mathcal{F})\)</span> a <em>measure</em> <span class="math inline">\(\mu:\mathcal{F}\to[0,+\infty]\)</span> is a mapping frm the collection of measurable sets to <span class="math inline">\([0,+\infty]\)</span> such that: 1. <span class="math inline">\(\mu(\emptyset)=0\)</span> 2. <span class="math inline">\(\{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}~\&amp;~\text{disjoint}\implies \mu(\cup_{i=1}^\infty E_{i})=\sum_{i=1}^\infty \mu(E_{i})\)</span>.</p>
+</div>
+<p>We call the triple <span class="math inline">\((X, \mathcal{F}, \mu)\)</span> a <strong>measure space</strong>. ###### Example (Dirac Measure): For <span class="math inline">\((X,\mathcal{F})=(X, 2^X)\)</span> we fix <span class="math inline">\(x_{0}\in X\)</span> and define <span class="math display">\[
+\mu(A)=\delta_{x_{0}}(A)=\begin{cases}
+1&amp;x_{0}\in A \\
+0&amp; \text{o.w.}
+\end{cases}
+\]</span> known as the <strong>Dirac measure</strong>.</p>
+<div class="theorem" data-title="Measure Properties">
+<p>For any measure space <span class="math inline">\((X,\mathcal{F},\mu)\)</span> and <span class="math inline">\(A,B\in \mathcal{F}\)</span>, <span class="math inline">\(\{ A_{i} \}_{i=1}^n\subseteq \mathcal{F}\)</span> we have the following properties: 1. <span class="math inline">\(A \subseteq B\implies \mu(A)\leq \mu(B)\)</span> (Monotonicity) 2. <span class="math inline">\(A \subseteq B\implies \mu(B\setminus A)=\mu(B)-\mu(A)\)</span> 3. <span class="math inline">\(\mu(\cup_{i=1}^\infty A_{i})\leq \sum_{i=1}^\infty \mu(A_{i})\)</span> (Subadditivity) 4. <span class="math inline">\(A_{i}\subseteq A_{i+1},~\forall i\implies \mu(\cup_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})\)</span> (Continuity from below) 5. <span class="math inline">\(A_{i}\supseteq A_{i+1}~\&amp;~\mu(A_{1})&lt;\infty,~\forall i\implies \mu(\cap_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})\)</span> (Continuity from above)</p>
+</div>
+<p><em>PROOF:</em> (1) + (2) Assume there exists <span class="math inline">\(A\subseteq B\)</span> then we can partition <span class="math inline">\(B=A\cup(B\setminus A)\)</span> and so <span class="math display">\[
+\mu(B)=\mu(A)+\mu(B\setminus A)\geq  \mu(A).
+\]</span> (3) Similarly, we can define <span class="math inline">\(A_{1}=B_{1}\)</span> and <span class="math inline">\(B_{n}=A_{n}\setminus \cup_{i=1}^{n-1}A_{i}\)</span> then we have that <span class="math display">\[
+\mu(\cup_{i=1}^\infty A_{i})=\mu(\cup_{i=1}^\infty B_{i})=\sum_{i=1}^\infty \mu(B_{i})=\sum_{i=1}^\infty \mu(A_{i})-\mu(\cup_{i=1}^{n-1}A_{i})\leq \sum_{i=1}^\infty \mu(A_{i}).
+\]</span> (4) Defining <span class="math inline">\(B_{1}=A_{1}\)</span> and <span class="math inline">\(B_{i}=A_{i}\setminus A_{i-1}\)</span> for <span class="math inline">\(i \geq 2\)</span>. By definition <span class="math inline">\(\cup_{i=1}^n B_{i}=A_{n}\)</span> hence <span class="math display">\[
+\cup_{i=1}^\infty B_{i}=\cup_{n=1}^\infty A_{n}\implies \mu(A_{n})=\mu(\cup_{i=1}^nB_{i})=\sum_{i=1}^n\mu(B_{i}).
+\]</span> Consequently taking the limit as <span class="math inline">\(n \to \infty\)</span> we find <span class="math display">\[
+\lim_{n \to \infty}\mu(A_{n})=\sum_{i=1}^\infty \mu(B_{i})=\mu\left( \bigcup_{i=1}^\infty B_{i} \right) =\mu\left(\bigcup_{i=1}^n A_{i}\right)
+\]</span> (5) Define <span class="math inline">\(B_{i}=A_{1}\setminus A_{i}\)</span>. By constraint <span class="math inline">\(B_{i}\subseteq B_{i+1}\)</span> and so <span class="math display">\[
+\begin{align}
+\bigcup_{i=1}^\infty B_{i} &amp; =\bigcup_{i=1}^\infty(A_{1}\setminus A_{i})=\bigcup_{i=1}^\infty(A_{i}\cap A_{i}^c)=A_{1}\cap\left( \bigcup_{i=1}^\infty A_{i}^c \right) \\
+&amp; = A_{1}\cap \left( \bigcap_{i=1}^\infty A_{i} \right)^c=A_{1}\setminus \left( \bigcap_{i=1}^\infty A_{i} \right).
+\end{align}
+\]</span> Therefore we have that <span class="math display">\[
+\begin{align}
+\mu(A_{1}) &amp; =\mu\left( A_{1}\cap\left( \bigcap_{i=1}^\infty A_{i} \right) \right)+\mu\left( A_{1}\setminus \bigcap_{i=1}^\infty A_{i} \right)  =\mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty} \mu(B_{i}) \\
+&amp; = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty}\mu(A_{i})-\mu(A_{i} ) = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\mu(A_{1})-\lim_{i \to \infty}\mu(A_{i}),
+\end{align}
+\]</span> and rearranging gives the result. <span class="math inline">\(\square\)</span></p>
+<div class="definition" data-title="Finite, Sigma-Finite, Null Set, Almost Everywhere, Complete">
+<p>Given a measure space <span class="math inline">\((X,\mathcal{F}, \mu)\)</span> we define the following terminology: 1. the measure is <strong>finite</strong> if <span class="math inline">\(\mu(X)&lt;+\infty\)</span> 2. the measure is <span class="math inline">\(\sigma\)</span><strong>-finite</strong> if <span class="math inline">\(\exists \{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}\)</span> such that <span class="math inline">\(\cup_{i=1}^\infty E_{i}=X\)</span> and <span class="math inline">\(\mu(E_{i})&lt; \infty\)</span> for all <span class="math inline">\(i \in \mathbb{N}\)</span> 3. <span class="math inline">\(E \in S^X\)</span> is a <strong>null set</strong> (of <span class="math inline">\(\mu\)</span>) if <span class="math inline">\(E\in \mathcal{F}\)</span> and <span class="math inline">\(\mu(E)=0\)</span> 4. a property holds (<span class="math inline">\(\mu\)</span>-) <strong>almost everywhere</strong> if the set of points where it fails is a null set 5. a measure whose domain includes all subsets of null sets is called <strong>complete</strong>.</p>
+</div>
+<p>The next theorem defines a <strong>complete measure space</strong>, a measure space in which every subset of every null set is measurable (with measure zero).</p>
+<div class="theorem" data-title="Completions">
+<p>Suppose that <span class="math inline">\((X,\mathcal{F}, \mu)\)</span> is a measure space. Let <span class="math inline">\(\mathcal{N}=\{ N \in \mathcal{F}:\mu(N)=0 \}\)</span> and <span class="math inline">\(\overline{\mathcal{F}}=\{ E \cup F:E \in\mathcal{F},~F\subset N~\text{for some }N \in\mathcal{N} \}\)</span>. Then <span class="math inline">\(\overline{\mathcal{F}}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra known as the <strong>completion</strong> of <span class="math inline">\(\mathcal{F}\)</span> with respect to <span class="math inline">\(\mu\)</span>, and there is a unique extension <span class="math inline">\(\overline\mu\)</span> of <span class="math inline">\(\mu\)</span> to a <strong>complete measure</strong> on <span class="math inline">\(\overline{\mathcal{F}}\)</span>, known as the <strong>completion</strong> of <span class="math inline">\(\mu\)</span>. The resulting measure space <span class="math inline">\((X,\overline{F}, \overline{\mu})\)</span> is called a <strong>complete measure space</strong>.</p>
+</div>
+<p><em>PROOF:</em> Firstly, we show that <span class="math inline">\(\overline{\mathcal{F}}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra. Note that since <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{N}\)</span> are both closed under countable unions, so to is <span class="math inline">\(\overline{\mathcal{F}}\)</span> and further, since <span class="math inline">\(\emptyset \in \mathcal{F},\mathcal{N}\)</span> then we have that <span class="math inline">\(\emptyset \in\overline{\mathcal{F}}\)</span>, hence we need only show that <span class="math inline">\(\overline{\mathcal{F}}\)</span> is closed under compliments.<br>
+<span class="math inline">\(\square\)</span> ## Constructing Measures</p>
+<p>Naturally you might ask whether there exists a measure <span class="math inline">\(\mu\)</span> on the <strong>measurable real space</strong> <span class="math inline">\((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\)</span> where <span class="math inline">\(\mu((a,b))=b-a\)</span> and <span class="math inline">\(\mu\)</span> is translation invariant. In this section we outline the process whereby we can construct such measures using functions called <strong>pre-measures</strong> <span class="math inline">\(\mu_{0}\)</span> and <strong>outer-measures</strong> <span class="math inline">\(\mu^*\)</span>. We begin by presenting an overview of the process before proceeding to give context and further details in the subsequent sections:</p>
+<ol type="1">
+<li>Start by defining an increasing, right-continuous function <span class="math inline">\(F\)</span> commonly known as a distribution function.</li>
+<li>From <span class="math inline">\(F\)</span> we can construct a premeasure <span class="math inline">\(\mu_{0}\)</span> defined on a small collection of simple sets in <span class="math inline">\(X\)</span>, for example the real intervals for <span class="math inline">\(X=\mathbb{R}\)</span>.</li>
+<li>Extend this premeasure to an outer-measure <span class="math inline">\(\mu^*\)</span> which by definition is defined on all subsets of <span class="math inline">\(X\)</span>, <span class="math inline">\(2^X\)</span>.</li>
+<li>Use the Caratheodory extension theorem to define the collection of outer-measurable sets <span class="math inline">\(\mathcal{M}\subset 2^X\)</span>.</li>
+<li>Restricting this outer-measure to have domain <span class="math inline">\(\mathcal{M}\)</span>, <span class="math inline">\(\mu^*|_{\mathcal{M}}\)</span> results in a full measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{M}\)</span>.</li>
+</ol>
+</section>
+<section id="outer-measures" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="outer-measures"><span class="header-section-number">1.2.4</span> Outer-Measures</h3>
+<p>An <strong>outer (exterior) measure</strong> is a function defined on all subsets of a given set taking values in the extended real numbers satisfying some additional technical conditions</p>
+<div class="definition" data-title="Outer Measure">
+<p>An outer measure on non-empty <span class="math inline">\(X\)</span> is a function <span class="math inline">\(\mu^*:2^X\to[0,+\infty]\)</span> s.t.: 1. <span class="math inline">\(\mu^*(\emptyset)=0\)</span> (null-empty), 2. <span class="math inline">\(A \subseteq B\implies \mu^*(A)\leq \mu^*(B)\)</span> (monotonic) 3. <span class="math inline">\(\mu^*\left( \cup_{i=1}^\infty A_{i} \right)\leq \sum_{i=1}^\infty \mu^*(A_{i})\)</span> (countably subadditive).</p>
+</div>
+<p><em>Note:</em> We often prove (2) and (3) simultaneously since they both hold iff if <span class="math inline">\(E \subseteq \cup_{i=1}^\infty A_{i}\)</span> then <span class="math inline">\(\mu^*(E)\leq \sum_{i=1}^\infty \mu^*(A_{i})\)</span>.</p>
+<div class="definition" data-title="Outer-Measurable">
+<p>Given any outer-measure <span class="math inline">\(\mu^*\)</span>, a set <span class="math inline">\(E \subseteq X\)</span> is <strong>(outer) <span class="math inline">\(\mu^*\)</span>-measurable</strong> if <span class="math inline">\(\forall A \subseteq X\)</span> we have <span class="math display">\[
+\mu^*(A)=\mu^*(A \cap E)+\mu^*(A \cap E^c).
+\]</span> We denote the set of outer-measurable sets <span class="math inline">\(\mathcal{F}_{\mu^*}:=\{ E\subseteq X:E\text{ is }\mu^*\text{-measurable} \}\)</span>. Intuitively, we say <span class="math inline">\(E\)</span> breaks apart any set nicely.</p>
+</div>
+<p><em>Remark:</em> Note that by countable subadditivity <span class="math inline">\(\leq\)</span> holds for all <span class="math inline">\(A \subseteq X\)</span> hence we need only show <span class="math inline">\(\geq\)</span> for equality.</p>
+<p>The most common way of obtaining outer measures is to start with a family <span class="math inline">\(\mathcal{E}\)</span> of elementary sets on which a notion of measure is defined (such as rectangles in the plane) and then to approximate arbitrary sets “from the outside” by countable unions of members of <span class="math inline">\(\mathcal{E}\)</span>. We state this more precisely in the following proposition.</p>
+<div class="theorem" data-title="Constructing Outer Measures">
+<p>Let <span class="math inline">\(\mathcal{E}\subset 2^X\)</span> and <span class="math inline">\(\mu_{0}:\mathcal{E}\to[0,\infty]\)</span> be such that <span class="math inline">\(\emptyset \in\mathcal{E}\)</span>, <span class="math inline">\(X\in\mathcal{E}\)</span> and <span class="math inline">\(\mu_{0}(\emptyset)=0\)</span>. For any <span class="math inline">\(A\subset X\)</span> we can define an outer measure by <span class="math display">\[
+\mu^*(A)=\inf\left\{ \sum_{j=1}^\infty \mu_{0}(E_{j}):E_{j}\in\mathcal{E},~A\subset \bigcup_{j=1}^\infty E_{j}\right\}.\tag{$\star$}
+\]</span></p>
+</div>
+<p><em>PROOF:</em> For any <span class="math inline">\(A \subset X\)</span> there exists <span class="math inline">\(\{ E_{j} \}_{j=1}^\infty \subset\mathcal{E}\)</span> such that <span class="math inline">\(A\subset \bigcup_{j=1}^\infty E_{j}\)</span> (take <span class="math inline">\(E_{j}=X\)</span> for all <span class="math inline">\(j\)</span>) and so the definition of <span class="math inline">\(\mu^*\)</span> makes sense. We proceed to show this satisfies the properties of outer measure. <strong>(1)</strong> Firstly note that clearly <span class="math inline">\(\mu^*(\emptyset)=0\)</span> by taking <span class="math inline">\(E_{j}=\emptyset\)</span> for all <span class="math inline">\(j\)</span>.<br>
+<strong>(2)</strong> Next for <span class="math inline">\(A\subset B\)</span> we have that <span class="math inline">\(\mu^*(A)\leq \mu^*(B)\)</span> since the set over which the infimum is taken in the definition of <span class="math inline">\(\mu^*(A)\)</span> includes the corresponding set in the definition of <span class="math inline">\(\mu^*(B)\)</span>. <strong>(3)</strong> To prove countable subadditivity, suppose <span class="math inline">\(\{ A_{j} \}_{j=1}^\infty \subset2^X\)</span> and fix <span class="math inline">\(\varepsilon&gt;0\)</span>. For each <span class="math inline">\(j\)</span> there exists <span class="math inline">\(\{ E_{j}^k \}_{k=1}^\infty \subset\mathcal{E}\)</span> such that <span class="math inline">\(A_{j}\subset \bigcup_{k=1}^\infty E_{j}^k\)</span> and <span class="math inline">\(\sum_{k=1}^\infty \mu_{0}(E_{j}^k)\leq \mu^*(A_{j})+\varepsilon{2}^{-j}\)</span>. But then, if <span class="math inline">\(A=\bigcup_{i=1}^\infty A_{j}\)</span>, we have <span class="math inline">\(A\subset \bigcup_{j,k=1}^\infty E_{j}^k\)</span> and <span class="math inline">\(\sum_{j,k}\mu_{0}(E_{j}^k)\leq \sum_{j}\mu^*(A_{j})+\varepsilon\)</span> whence <span class="math inline">\(\mu^*(A)\leq \sum_{j}\mu^*(A_{j})+\varepsilon\)</span>. Since <span class="math inline">\(\varepsilon\)</span> is arbitrary, we are done. <span class="math inline">\(\square\)</span></p>
+<p>Intuitively, we are defining the outer measure of the set <span class="math inline">\(A\)</span> to be the infimum of all sums of collections of sets that cover <span class="math inline">\(A\)</span>.</p>
+<div class="theorem" data-title="$~$">
+<p>For any outer measure <span class="math inline">\(\mu^*\)</span> if <span class="math inline">\(\mu^*(B)=0\)</span> then <span class="math inline">\(B \in \mathcal{F}_{\mu^*}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> We very quickly see that <span class="math display">\[
+\mu^*(E)\geq  \mu^*\left( E \cap B\right)+\mu ^*(E \cap B^c)=\mu^*(E\cap B^c).
+\]</span> <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="pre-measures" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" class="anchored" data-anchor-id="pre-measures"><span class="header-section-number">1.2.5</span> Pre-measures</h3>
+<p>A pre-measure is a set function that acts as a pre-cursor to a <em>bona fide</em> <a href="../topics/measure.html">measure</a> through the <a href="../topics/caratheodory-extension-theorem.html">Carathéodory Extension Theorem</a>.</p>
+<div class="definition" data-title="Premeasure">
+<p>For algebra <span class="math inline">\(\mathcal{A}\subset 2^X\)</span> then a function <span class="math inline">\(\mu_{0}:\mathcal{A}\to[0,\infty]\)</span> is called a <em>premeasure</em> if is satisfies both: 1. <span class="math inline">\(\mu_{0}(\emptyset)=0\)</span>; and 2. For disjoint <span class="math inline">\(\{ A_{j} \}_{i=1}^\infty \subset\mathcal{A}\)</span> such that <span class="math inline">\(\cup_{i=1}^\infty A_{i}\in \mathcal{A}\)</span> then <span class="math inline">\(\mu_{0}(\cup_{i=1}^\infty A_{i})=\sum_{i=1}^\infty \mu_{0}(A_{i})\)</span>.</p>
+</div>
+<p>In particular, a premeasure is finitely additive since one can take <span class="math inline">\(A_{j}=\emptyset\)</span> for large <span class="math inline">\(j\)</span>.</p>
+<div class="theorem" data-title="Extending Premeasures">
+<p>If <span class="math inline">\(\mu_{0}\)</span> is a premeasure on <span class="math inline">\(\mathcal{A}\)</span> and <span class="math inline">\(\mu^*\)</span> is given by <span class="math inline">\((\star)\)</span> as <span class="math display">\[
+\mu^*(A)=\inf\left\{ \sum_{j=1}^\infty \mu_{0}(E_{j}):E_{j}\in\mathcal{E},~A\subset \bigcup_{j=1}^\infty E_{j}\right\},
+\]</span> then: 1. <span class="math inline">\(\mu^*|_{\mathcal{A}}=\mu_{0}\)</span>; and 2. Every set <span class="math inline">\(A\in\mathcal{A}\)</span> is <span class="math inline">\(\mu^*\)</span>-measurable.</p>
+</div>
+<p><em>PROOF:</em> <strong>(1)</strong> Letting <span class="math inline">\(E \in\mathcal{A}\)</span>, if <span class="math inline">\(E \subset \bigcup_{j=1}^\infty A_{j}\)</span> with <span class="math inline">\(A_{j}\in\mathcal{A}\)</span> we define <span class="math display">\[
+B_{n}=E \cap \left( A_{n}\setminus\bigcup_{j=1}^{n-1}A_{j} \right).
+\]</span> Then <span class="math inline">\(B_{n}\)</span> are disjoint members of <span class="math inline">\(\mathcal{A}\)</span> whose union is <span class="math inline">\(E\)</span> thus <span class="math display">\[
+\mu_{0}(E)=\sum_{j=1}^{\infty}\mu_{0}(B_{j})\leq \sum_{j=1}^{\infty}\mu_{0}(A_{j}).
+\]</span> It follows that <span class="math inline">\(\mu_{0}(E)\leq \mu^*(E)\)</span> and the reverse inequality is clear since <span class="math inline">\(E\subset \bigcup_{j=1}^\infty A_{j}\)</span> where <span class="math inline">\(A_{1}=E\)</span> and <span class="math inline">\(A_{j}=\emptyset\)</span> for <span class="math inline">\(j&gt;1\)</span>. <strong>(2)</strong> If <span class="math inline">\(A \in\mathcal{A}\)</span>, <span class="math inline">\(E \subset X\)</span> and <span class="math inline">\(\epsilon&gt;0\)</span>, there is a sequence <span class="math inline">\(\{ B_{j} \}_{j=1}^\infty \subset \mathcal{A} \mathcal{}\)</span> with <span class="math inline">\(E \subset \bigcup_{j=1}^\infty B_{j}\)</span> and <span class="math inline">\(\sum_{j=1}^{\infty}\mu_{0}(B_{j})\leq \mu^*(E)+\epsilon\)</span>. Since <span class="math inline">\(\mu_{0}\)</span> is additive on <span class="math inline">\(\mathcal{A}\)</span> we have <span class="math display">\[
+\begin{align}
+\mu^*(E)+\epsilon  &amp; \geq \sum_{j=1}^{\infty}\mu_{0}(B_{j}\cap A) + \sum_{j=1}^{\infty} \mu_{0}(B_{j}\cap A^c) \\
+&amp; \geq \mu^*(E \cap A) + \mu^*(E \cap A^c).
+\end{align}
+\]</span> Since <span class="math inline">\(\epsilon\)</span> is arbitrary, <span class="math inline">\(A\)</span> is <span class="math inline">\(\mu^*\)</span>-measurable. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="carathéodory-extension-theorem" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" class="anchored" data-anchor-id="carathéodory-extension-theorem"><span class="header-section-number">1.2.6</span> Carathéodory Extension Theorem</h3>
+<p>The next key theory from Carathéodory shows that if we are given an outer-measure <span class="math inline">\(\mu^*\)</span> then the set of outer-measurable sets <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra and when restricted to this <span class="math inline">\(\sigma\)</span>-algebra, <span class="math inline">\(\mu^*\)</span> becomes a measure.</p>
+<div class="theorem" data-title="Carathéodory Extension Theorem">
+<p>Given and outer measure <span class="math inline">\(\mu^*\)</span> then 1. <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra; and 2. <span class="math inline">\(\mu^*\)</span> is a measure on <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span>.</p>
+</div>
+<p><em>Note:</em> We can show that this is in general not the largest <span class="math inline">\(\sigma\)</span>-algebra on which <span class="math inline">\(\mu^*\)</span> is a measure.</p>
+<p><em>PROOF:</em> Since <span class="math inline">\(\mu^*(\emptyset)=0\implies \emptyset \in \mathcal{F}_{\mu^*}\)</span> by the proposition above, hence <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is non-empty; and by definition of an outer-measurable set <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is closed under compliments. Next, if <span class="math inline">\(A,B \in \mathcal{F}_{\mu^*}\)</span> and <span class="math inline">\(E\subset X\)</span> we have that <span class="math display">\[
+\begin{align}
+\mu^*(E) &amp; = \mu^*(E \cap A)+\mu^*(E \cap A^c) \\
+&amp; = \mu^*(E \cap A \cap B)+\mu^*(E \cap A \cap B^c)+\mu^*(E \cap A^c \cap B)+\mu^*(E \cap A^c \cap B^c) \\
+&amp; \geq  \mu^*(E \cap(A\cup B))+\mu^*(E \cap(A \cup B)^c),
+\end{align}
+\]</span> where the final inequality holds from subadditivity since <span class="math inline">\(A\cup B=(A \cap B)\cup(A \cap B^c)\cup (A^c\cap B)\)</span>. It follows that <span class="math inline">\(A \cup B\in \mathcal{F}_{\mu^*}\)</span> and so it is an algebra. Moreover, if <span class="math inline">\(A,B \in \mathcal{F}_{\mu^*}\)</span> and <span class="math inline">\(A \cap B=\emptyset\)</span> then <span class="math display">\[
+\mu^*(A \cup B)=\mu^*((A\cup B)\cap A)+\mu^*((A \cup B)\cap A^c)=\mu^*(A)+\mu^*(B),
+\]</span> hence <span class="math inline">\(\mu^*\)</span> is finitely additive on <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span>. To prove <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra it suffices to show <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span> is closed under countable disjoint unions. If we consider disjoint <span class="math inline">\(\{ A_{j} \}_{j=1}^\infty \subseteq \mathcal{F}_{\mu^*}\)</span> and define <span class="math inline">\(B_{n}:=\bigcup_{j=1}^nA_{{j}}\)</span> and <span class="math inline">\(B :=\bigcup_{j=1}^\infty A_{j}\)</span>. Then, for any <span class="math inline">\(E \subset X\)</span> we have <span class="math display">\[
+\mu^*(E \cap B_{n})=\mu^*(E \cap B_{n}\cap A_{n})+\mu^*(E \cap B_{n}\cap A_{n}^c)=\mu^*(E \cap A_{n})+\mu^*(E \cap B_{n-1}),
+\]</span> hence, by induction we have that <span class="math inline">\(\mu^*(E \cap B_{n})=\sum_{j=1}^n\mu^*(E \cap A_{j})\)</span>. Therefore <span class="math display">\[
+\begin{align}
+\mu^*(E) &amp; =\mu^*(E \cap B_{n})+\mu^*(E \cap B_{n}^c)\geq  \sum_{j=1}^n\mu^*(E\cap A_{j})+\mu^*(E \cap B^c) \\
+&amp; \stackrel{n \to \infty}{\geq }\sum_{j=1}^\infty \mu^*(E \cap A_{j})+\mu^*(E \cap B^c)\geq \mu^*\left( \bigcup_{j=1}^\infty (E\cap A_{j}) \right)+\mu^*(E \cap B^c) \\
+&amp; = \mu^*(E \cap B)+\mu^*(E\cap B^c)\geq  \mu^*(E),
+\end{align}
+\]</span> and so all the inequalities become equalities thus <span class="math inline">\(B\in \mathcal{F}_{\mu^*}\)</span> as required. Furthermore, taking <span class="math inline">\(E=B\)</span> we have <span class="math inline">\(\mu^*(B)=\sum_{j=1}^\infty \mu^*(A_{j})\)</span> and so <span class="math inline">\(\mu^*\)</span> is countable additive on <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span>. Finally, if <span class="math inline">\(\mu^*(A)=0\)</span>, for any <span class="math inline">\(E \subset X\)</span> <span class="math display">\[
+\mu^*(E)\leq  \mu^*(E \cap A)+\mu^*(E \cap A^c)=\mu^*(E \cap A^c)\leq \mu^*(E),
+\]</span> so that <span class="math inline">\(A \in \mathcal{F}_{\mu^*}\)</span>, hence <span class="math inline">\(\mu^*\)</span> is a complete measure on <span class="math inline">\(\mathcal{F}_{\mu^*}\)</span>. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="lebesgue-measures" class="level3" data-number="1.2.7">
+<h3 data-number="1.2.7" class="anchored" data-anchor-id="lebesgue-measures"><span class="header-section-number">1.2.7</span> Lebesgue Measures</h3>
+<p>Now let us turn our focus to the real measurable space <span class="math inline">\((\mathbb{R},\mathcal{B}_{\mathbb{R}})\)</span> and the most important measure in Real Analysis, namely the <strong>Lebesgue measure</strong> which is a type of <strong>Borel measure</strong>. A <strong>Borel measure</strong> is any measure defined on <span class="math inline">\((\mathbb{R},\mathcal{B}_{\mathbb{R}})\)</span>. To motivate the following section, if we consider a finite Borel measure <span class="math inline">\(\mu\)</span> and define the <strong>distribution function</strong> <span class="math display">\[
+F(x)=\mu((-\infty,x])
+\]</span> we note that by construction: (1) <span class="math inline">\(F\)</span> is <em>increasing</em>; and (2) <span class="math inline">\(F\)</span> is <em>right-continuous</em>. Our aim is to invert this process, namely to start with an increasing and right-continuous function and use it to construct a measure through the steps outlines at the start of [[]].</p>
+<p>Sets of the form <span class="math inline">\((a,b]\)</span>, <span class="math inline">\((a,\infty)\)</span> or <span class="math inline">\(\emptyset\)</span> for <span class="math inline">\(-\infty \leq a&lt;b&lt;\infty\)</span> are known as <span class="math inline">\(h\)</span>-<strong>intervals</strong> . The collection <span class="math inline">\(\mathcal{A}\)</span> of finite disjoint unions of <span class="math inline">\(h\)</span>-intervals is an algebra and <span class="math inline">\(\sigma(\mathcal{A})=\mathcal{B}_{\mathbb{R}}\)</span>.</p>
+<div class="theorem" data-title="Pre-measure from increasing, right-continuous functions">
+<p>For increasing and right-continuous <span class="math inline">\(F:\mathbb{R} \to \mathbb{R}\)</span> for disjoint <span class="math inline">\(h\)</span>-intervals <span class="math inline">\((a_{j},b_{j}]\)</span> for <span class="math inline">\(j=1, \dots, n\)</span> the function defined by <span class="math display">\[
+\begin{cases}\mu_{0}\left(\bigcup_{j=1}^n (a_{j}, b_{j}]\right)=\sum_{j=1}^{n} [F(b_{j})-F(a_{j})] \\ \mu_{0}(\emptyset)=0\end{cases}
+\]</span> is a premeasure on the algebra <span class="math inline">\(\mathcal{{A}}\)</span>.</p>
+</div>
+<p>An important outer-measure in <strong>real analysis</strong> and <a href="../topics/stochastic-processes.html">Stochastic Process</a> is the Lebesgue outer-measure <span class="math inline">\(\lambda^*\)</span>.</p>
+<div class="definition" data-title="Lebesgue Outer Measure">
+<p>The <strong>Lebesgue outer measure</strong> <span class="math inline">\(\lambda^*:2^\mathbb{R}\to [0,+\infty]\)</span> is defined <span class="math display">\[
+\lambda^*(A)=\inf\left\{  \sum_{i=1}^\infty \lvert b_{i}-a_{i} \rvert :A \subseteq \bigcup_{i=1}^\infty (a_{i},b_{i}]   \right\}.
+\]</span></p>
+</div>
+<p>Clearly from the previous result the function is an outer measure. We can also show: (1) <span class="math inline">\(\lambda^*((a,b])=b-a\)</span>, <span class="math inline">\(a\leq b\)</span>; and (2) <span class="math inline">\(\lambda^*\)</span> is translation invariant. Importantly, it is not countable additive however, we will how that it becomes countably additive when restricted to “nice enough” sets.</p>
+</section>
+<section id="borel-measures" class="level3" data-number="1.2.8">
+<h3 data-number="1.2.8" class="anchored" data-anchor-id="borel-measures"><span class="header-section-number">1.2.8</span> Borel Measures</h3>
+<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Lebesgue-Stieltjes Measure">
+<p>If <span class="math inline">\(F:\mathbb{R}\to \mathbb{R}\)</span> is any increasing, right-continuous function, there is a unique Borel measure <span class="math inline">\(\mu_{F}\)</span> on <span class="math inline">\(\mathbb{R}\)</span> such that for all <span class="math inline">\(a,b\)</span> we have <span class="math display">\[
+\mu_{F}((a,b])=F(b)-F(a).
+\]</span> If <span class="math inline">\(G\)</span> is another such function, we have <span class="math inline">\(\mu_{F}=\mu_{G}\)</span> iff <span class="math inline">\(F-G\)</span> is constant. Conversely, if <span class="math inline">\(\mu\)</span> is a Borel measure on <span class="math inline">\(\mathbb{R}\)</span> that is finite on all bounded Borel sets and we define <span class="math display">\[
+F(x)=\begin{cases}\mu((0,x]) &amp; x&gt;0\\ 0 &amp; x=0 \\ -\mu((-x,0]) &amp; x&lt;0\end{cases},
+\]</span> then <span class="math inline">\(F\)</span> is increasing and right-continuous, and <span class="math inline">\(\mu=\mu_{F}\)</span>.</p>
+<p>The completion <span class="math inline">\(\overline{\mu}_{F}\)</span> (which is often also denoted <span class="math inline">\(\mu_{F}\)</span>) is called the <strong>Lebesgue-Stieltjes measure</strong> associated to <span class="math inline">\(F\)</span>.</p>
+</div>
+<p><em>PROOF:</em></p>
+<p>The theory of this section gives, for each increasing and right continuous <span class="math inline">\(F\)</span>, not only the Borel measure <span class="math inline">\(\mu_{F}\)</span> but a complete measure <span class="math inline">\(\overline{\mu}_{F}\)</span> whose domain includes <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span>. In fact, <span class="math inline">\(\overline{\mu}_{F}\)</span> is just the completion of <span class="math inline">\(\mu_{F}\)</span> and one can show that its domain is always strictly larger than <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span>. We shall usually denote this complete measure also by <span class="math inline">\(\mu_{F}\)</span> and call it the <strong>Lebesgue-Stieltjes measure</strong> associated to <span class="math inline">\(F\)</span>.</p>
+<p>Fix a complete Lebesgue-Stieltjes measure <span class="math inline">\(\mu\)</span> on <span class="math inline">\(\mathbb{R}\)</span> associated to the increasing, right continuous function <span class="math inline">\(F\)</span> and denote by <span class="math inline">\(\mathcal{M}_{\mu}\)</span> the domain of <span class="math inline">\(\mu\)</span>.</p>
+<div class="theorem" data-title="Properties of Lebesgue-Stieltjes Measure I">
+<p>For any <span class="math inline">\(E \in \mathcal{M}_{\mu}\)</span> <span class="math display">\[
+\mu(E)=\inf_{}{\left\{  \sum_{j=1}^{\infty}\mu((a_{j},b_{j})):E\subset \bigcup_{j=1}^\infty (a_{j},b_{j})  \right\}}.
+\]</span></p>
+</div>
+<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Properties of Lebesgue-Stieltjes Measure II">
+<p>If <span class="math inline">\(E \in \mathcal{M}_{\mu}\)</span> then <span class="math display">\[
+\begin{align}\mu(E) &amp; =\inf_{}{\{ \mu(U):E\supset E,~E\text{ is open} \}} \\ &amp; = \sup_{}{\{ \mu(K):K \subset E,~K \text{ is compact} \}}.\end{align}
+\]</span></p>
+</div>
+<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Properties of Lebesgue-Stieltjes Measure III">
+<p>If <span class="math inline">\(E \subset \mathbb{R}\)</span> the following are equivalent: 1. <span class="math inline">\(E \in \mathcal{M}_{\mu}\)</span>, 2. <span class="math inline">\(E=V-N_{1}\)</span> where <span class="math inline">\(V\)</span> is a <span class="math inline">\(G_{\delta}\)</span> set and <span class="math inline">\(\mu(N_{1})=0\)</span>, 3. <span class="math inline">\(E=H \cup N_{2}\)</span> where <span class="math inline">\(H\)</span> is a <span class="math inline">\(F_{\sigma}\)</span> set and <span class="math inline">\(\mu(N_{2})=0\)</span>.</p>
+</div>
+<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Properties of Lebesgue-Stieltjes Measure IV">
+<p>If <span class="math inline">\(E \in \mathcal{M}_{\mu}\)</span> and <span class="math inline">\(\mu(E)&lt;\infty\)</span> then for every <span class="math inline">\(\epsilon&gt;0\)</span> there is a set <span class="math inline">\(A\)</span> that is a finite union of open intervals such that <span class="math inline">\(\mu(E \triangle A)&lt;\epsilon\)</span>.</p>
+</div>
+<p><em>PROOF:</em></p>
+<div class="definition" data-title="Lebesgue Measure">
+<p>The complete measure <span class="math inline">\(\mu_{F}\)</span> associated to the function <span class="math inline">\(F(x)=x\)</span> is the <strong>Lebesgue measure</strong> which we denote by <span class="math inline">\(\lambda\)</span>. The domain of <span class="math inline">\(\lambda\)</span> is the class of <strong>Lebesgue measurable sets</strong> which we denote <span class="math inline">\(\mathcal{L}\)</span>.</p>
+</div>
+<p>We note that we shall also refer to the restriction of <span class="math inline">\(\lambda\)</span> to <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> as the Lebesgue measure.</p>
+<div class="theorem">
+<p>If <span class="math inline">\(E\in \mathcal{L}\)</span> then <span class="math inline">\(E+s \in \mathcal{L}\)</span> and <span class="math inline">\(rE \in \mathcal{L}\)</span> for all <span class="math inline">\(s,r \in \mathbb{R}\)</span>. Moreover <span class="math inline">\(\lambda(E+s)=\lambda(E)\)</span> and <span class="math inline">\(\lambda(rE) =\lvert r \rvert \lambda(E)\)</span>.</p>
+</div>
+<p><em>PROOF:</em></p>
+</section>
+</section>
+<section id="lebesgue-integrals" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="lebesgue-integrals"><span class="header-section-number">1.3</span> Lebesgue Integrals</h2>
+<section id="measurable-functions" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="measurable-functions"><span class="header-section-number">1.3.1</span> Measurable Functions</h3>
+<p>We recall that any mapping <span class="math inline">\(f:X \to Y\)</span> between two sets induces a mapping <span class="math inline">\(f^{-1}:2^Y\to 2^X\)</span> defined by <span class="math display">\[
+f^{-1}(E)=\{ x \in X:f(x)\in E \},
+\]</span> which preserves unions, intersections and complements, i.e. <span class="math display">\[
+\begin{align}
+f^{-1}\left( \bigcup_{{\alpha}}^{}{E_{\alpha}} \right) &amp; =\bigcup_{\alpha}f^{-1}(E_{\alpha}) \\
+f^{-1}(E^c) &amp; =(f^{-1}(E))^c \\
+f^{-1}\left( \bigcap_{\alpha}E_{\alpha} \right) &amp; =\bigcap_{\alpha}f^{-1}(E_{\alpha}).
+\end{align}
+\]</span> Supposing <span class="math inline">\((X,\mathcal{M})\)</span> and <span class="math inline">\((Y,\mathcal{N})\)</span> are measurable spaces then the <strong>pull-back</strong> and <strong>push-forward</strong> of <span class="math inline">\(\mathcal{N}\)</span> respectively defined as <span class="math display">\[
+\begin{align}
+\{ f^{-1}(E):E\in \mathcal{N} \} \quad \&amp;\quad\{ E:f^{-1}(E)\in \mathcal{N} \},
+\end{align}
+\]</span> are <span class="math inline">\(\sigma\)</span>-algebra.</p>
+<div class="definition" data-title="Measurable Function">
+<p>For measurable spaces <span class="math inline">\((X,\mathcal{M})\)</span> and <span class="math inline">\((Y,\mathcal{N})\)</span>, a mapping <span class="math inline">\(f:X \to Y\)</span> is said to be <strong><span class="math inline">\((\mathcal{M}, \mathcal{N})\)</span>-measurable</strong> if $$ <span class="math display">\[\begin{align}\forall E \in\mathcal{N},&amp;~~f^{-1}(E):=\{ E \in X:f(x) \in E \}\in\mathcal{M}, \\  
+
+:::
+\iff &amp; \{ \text{The preimage of every measurable set is measurable.} \}\\
+\iff&amp; \{ f^{-1}(E):E \in \mathcal{N} \}\subset \mathcal{M}, \\ \iff&amp;
+\{ E:f^{-1}(E) \in \mathcal{M} \}\supset \mathcal{N}.\end{align}\]</span> $$</p>
+<p><em>Note:</em> This is very closely related to the definition of continuity of [[topological-functions]], i.e.&nbsp;for topological spaces <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, every continuous function <span class="math inline">\(f:X \to Y\)</span> is Borel measurable.</p>
+<p>We say that a real function <span class="math inline">\(f:\mathbb{R}\to \mathbb{R}\)</span> is <strong>Lebesgue measurable</strong> if it is <span class="math inline">\((\mathcal{F}_{\lambda^*},\mathcal{B}_{\mathbb{R}})\)</span>-measurable. Also, given topological spaces <span class="math inline">\(X,Y\)</span> we say that <span class="math inline">\(f:X \to Y\)</span> is <strong>Borel measurable</strong> if it is <span class="math inline">\((\mathcal{B}_{X},\mathcal{B}_{Y})\)</span>-measurable. We will see that for functions <span class="math inline">\(f:\mathbb{R} \to \mathbb{R}\)</span> we have that Borel measurability implies Lebesgue measurability since <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\subsetneq \mathcal{F}_{\lambda^*}\)</span>.</p>
+<div class="theorem" data-title="$~$">
+<p>Given measurable spaces <span class="math inline">\((X,\mathcal{M})\)</span> and <span class="math inline">\((Y,\mathcal{N})\)</span> where <span class="math inline">\(\mathcal{N}\)</span> is generated by <span class="math inline">\(\mathcal{E}\)</span>, then <span class="math inline">\(f:X \to Y\)</span> is <span class="math inline">\((\mathcal{N},\mathcal{M})\)</span>-measurable if and only if <span class="math inline">\(\forall E\in \mathcal{E}\)</span>, <span class="math inline">\(f^{-1}(E)\in\mathcal{N}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> The only if implication is trivial. For the converse we observe that <span class="math display">\[
+\{ E \subset Y:f^{-1}(E)\in \mathcal{F} \},
+\]</span> is a <span class="math inline">\(\sigma\)</span>-algebra that contains <span class="math inline">\(\mathcal{E}\)</span>; it therefore contains <span class="math inline">\(\mathcal{G}\)</span>. <span class="math inline">\(\square\)</span></p>
+<div class="theorem" data-title="Properties of Measurable Functions I">
+<p>For measurable space <span class="math inline">\((X,\mathcal{F})\)</span> and function <span class="math inline">\(f:X \to \mathbb{R}\)</span> the following are equivalent: 1. <span class="math inline">\(f\)</span> is <span class="math inline">\(\mathcal{F}\)</span>-measurable; 2. <span class="math inline">\(f^{-1}((a,\infty))\in \mathcal{F}\)</span> for all <span class="math inline">\(a\in \mathbb{R}\)</span>; 3. <span class="math inline">\(f^{-1}([a,\infty))\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>; 4. <span class="math inline">\(f^{-1}((-\infty,a))\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>; 5. <span class="math inline">\(f^{-1}((-\infty,a])\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>.</p>
+</div>
+<p><em>PROOF:</em> We have previously shown that the open and closed rays generate the Borel σ-Algebra. Thus from previous results we have the result. <span class="math inline">\(\square\)</span> ###### Example (Measurability of constant real functions): We show that constant functions are always measurable, that is <span class="math inline">\(f:X \to \overline{\mathbb{R}}\)</span> given by <span class="math inline">\(f(x)=c\)</span> for all <span class="math inline">\(x \in X\)</span> for <span class="math inline">\(c\in \overline{\mathbb{R}}\)</span> if <span class="math inline">\(f\)</span> is measurable? For any <span class="math inline">\(E \in \mathcal{{B}}_{\mathbb{R}}\)</span><br>
+<span class="math display">\[
+f^{-1}(E)=\begin{cases}
+\emptyset &amp; c \not\in E, \\
+X &amp; c \in E.
+\end{cases}
+\]</span> Thus, any <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{M}\)</span> contains <span class="math inline">\(\emptyset\)</span> and <span class="math inline">\(X\)</span>. ###### Example (Measurability of indicator functions): We show that indicator functions <span class="math inline">\(\mathbb{1}_{}:X \to \mathbb{R}\)</span> are always measurable. For function <span class="math display">\[
+\mathbb{1}_{E}(x):=\begin{cases}
+1 &amp; x \in E, \\
+0 &amp; x \not\in E,
+\end{cases}
+\]</span> with measurable <span class="math inline">\(E\)</span>, taking intervals <span class="math inline">\((a,b]\in \mathbb{R}\)</span> <span class="math display">\[
+\mathbb{1}_{E}^{-1}((a,b])=\begin{cases}
+X &amp; 0,1 \in(a,b], \\
+X-E &amp; 0 \in(a,b], \\
+E &amp; 1 \in(a,b], \\
+\emptyset &amp; 0,1 \not\in (a,b].
+\end{cases}
+\]</span> Since these sets are all measurable the function is measurable.</p>
+<div class="theorem" data-title="Properties of Measurable Functions II">
+<p>For measurable functions <span class="math inline">\(f,g:X \to \mathbb{R}\)</span>, then the following are also measurable: 1. <span class="math inline">\(f+g\)</span> (with convention <span class="math inline">\(+\infty+(-\infty)=0\)</span>), 2. <span class="math inline">\(fg\)</span> (with convention <span class="math inline">\(0\cdot\pm \infty=0\)</span>), 3. <span class="math inline">\(f \wedge g\)</span>, 4. <span class="math inline">\(f \vee g\)</span>, 5. <span class="math inline">\(f\circ g\)</span>.</p>
+</div>
+<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Properties of sequences of measurable functions">
+<p>For sequences of measurable function <span class="math inline">\(f_{i};X \to \mathbb{R}\)</span> for <span class="math inline">\(i \in \mathbb{N}\)</span> then the following are also measurable: 1. <span class="math inline">\(\sup_{i}{f_{i}}\)</span>, 2. <span class="math inline">\(\inf_{i}{f_{i}}\)</span>, 3. <span class="math inline">\(\limsup_{i}{f_{i}}\)</span>, 4. <span class="math inline">\(\liminf_{i}{f_{i}}\)</span>, 5. <span class="math inline">\(\lim_{ i \to \infty }f_{i}\)</span> as long as the limit exists pointwise.</p>
+</div>
+<p><em>PROOF:</em></p>
+<section id="integral-construction" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="integral-construction"><span class="header-section-number">1.3.2</span> Integral Construction</h3>
+
+
+</section>
+</div>
+</section>
+</section>
+<section class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id=""><span class="header-section-number">1.4</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/infimum-and-supremum.html">Infimum and Supremum</a></li>
+<li><a href="../topics/limits-of-stochastic-processes.html">Limits of Stochastic Processes</a></li>
+<li><a href="../topics/mathematics.html">Mathematics</a></li>
+<li><a href="../topics/probability-theory.html">Probability Theory</a></li>
+<li><a href="../topics/random-variable-transformations.html">Random Variable Transformations</a></li>
+</ul>
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

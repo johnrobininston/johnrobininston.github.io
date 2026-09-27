@@ -1,0 +1,109 @@
+---
+title: Cholesky Decomposition
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Cholesky Decomposition
+
+In linear algebra, the **Cholesky decomposition** (Cholesky factorization) is a
+decomposition of a Hermitian, positive-definite matrix into the product of a
+lower triangular matrix and its conjugate transpose, which is useful for
+efficient numerical solutions, e.g., Monte Carlo simulations. When it is
+applicable, the Cholesky decomposition is roughly twice as efficient as the LU
+decomposition for solving systems of linear equations.
+
+:::{.theorem data-title="Cholesky Decomposition"}
+
+The **Cholesky decomposition** of a Hermitian positive-definite matrix $A$, is
+a decomposition of the form
+$$
+A=LL^*,
+$$
+where $L$ is a lower triangular matrix with real and positive diagonal entries,
+and $L^*$ denotes the **conjugate transpose** of $L$.
+
+:::
+
+Every Hermitian positive-definite matrix (and thus also every real-valued
+symmetric positive-definite matrix) has a unique Cholesky decomposition.
+
+Conversely, if A can be written as $LL^*$ for some invertible $L$, lower
+triangular or otherwise, then $A$ is Hermitian and positive definite.
+
+:::{.theorem data-title="Cholesky Decomposition (Real Matrices)"}
+
+When $A$ is a real matrix (hence symmetric positive-definite), the
+factorization may be written
+$$
+A=LL^T
+$$
+where $L$ is a real lower triangular matrix with positive diagonal entries.
+
+:::
+
+**Example:** 
+Consider the real, symmetric positive-definite matrix
+$$
+A=\begin{bmatrix}
+3 & 2 \\ 2 & 3
+\end{bmatrix}.
+$$
+The Cholesky Decomposition gives that $\exists$ lower triangular
+$$
+L=\begin{bmatrix}
+l_{11} & 0 \\
+l_{12} & l_{22}
+\end{bmatrix}
+$$
+such that 
+$$
+\begin{bmatrix}
+3 & 2 \\
+2 & 3
+\end{bmatrix} = \begin{bmatrix}
+l_{11} & 0  \\
+l_{12} & l_{22}
+\end{bmatrix} \begin{bmatrix}
+l_{11} & l_{12} \\
+0 & l_{22}
+\end{bmatrix}=\begin{bmatrix}
+l_{11}^2 & l_{11}l_{12}  \\
+l_{12}l_{11} & l_{12}^2+l_{22}^2
+\end{bmatrix}.
+$$
+Then clearly $l_{11}=\sqrt{ 3 }$ which gives $l_{12}=\frac{2}{\sqrt{ 3 }}$
+which gives $l_{22}=\frac{\sqrt{ 5 }}{3}$ giving
+$$
+L=\begin{bmatrix}
+\sqrt{ 3 } & 0 \\
+\frac{2}{\sqrt{ 3 }} & \frac{\sqrt{ 5 }}{\sqrt{ 3 }}
+\end{bmatrix}.
+$$
+**Example:**
+Consider two correlated random variables $X,Y$ with correlation matrix
+$$
+C=\begin{bmatrix}
+1 & \rho \\
+\rho & 1
+\end{bmatrix}.
+$$
+The Cholesky decomposition theorem gives that there exists matrix $L$ such that
+$$
+\begin{bmatrix}
+1 & \rho \\
+\rho & 1
+\end{bmatrix} = \begin{bmatrix}
+l_{11} & 0 \\
+l_{12} & l_{22}
+\end{bmatrix}\begin{bmatrix}
+l_{11} & l_{12} \\
+0 & l_{22} 
+\end{bmatrix} = \begin{bmatrix}
+l_{11}^2 & l_{11}l_{12} \\
+l_{12}l_{11} & l_{12}^2+l_{22}^2
+\end{bmatrix}.
+$$
+Thus $l_{11}=1$, $l_{12}=\rho$ and $l_{22}=\sqrt{ 1-\rho^2 }$.

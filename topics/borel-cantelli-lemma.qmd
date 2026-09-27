@@ -1,0 +1,61 @@
+---
+title: Borel-Cantelli Lemma
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+The **Borel-Cantelli Lemma** is a key result showing that random variables
+[[convergence-almost-surely|convergence almost surely]]. Intuitively, the
+result is linked to the concept of events occurring **infinitely often**, i.e.
+for some event $A_n$ in $(\Omega, \mathcal{F}, \mathbb{P})$ we have
+$$
+\forall k>0,\exists n>k~s.t.~\omega \in A_{n}.
+$$
+Recall from the definition of **[[limit-supremum-limit-infimum]]** that for an
+infinite sequence of events $A_{1}, A_{2}, \dots$ on
+$(\Omega,\mathcal{F}, \mathbb{P})$,
+$$
+\omega \in A^\infty\equiv\limsup_{n \to \infty }A_{n}=\bigcap_{n=1}^\infty \bigcup_{m=n}^\infty A_{m}= \omega \in A_{n}\text{ for infinitely many values }n=A_{n}\text{ occurs i.o.}
+$$
+The idea of limsup is that we are considering a **smaller and smaller portion
+of the tail** of the sequence.
+
+:::{.theorem data-title="Borel-Cantelli Lemma"}
+
+Let $\{A_{n}, n \geq 1\}$ be an infinite sequence of events from some
+probability space $(\Omega, \mathcal{F}, \mathbb{P})$.
+1. If $\sum_{n=1}^\infty \mathbb{P}(A_{n})<\infty$. then
+   $\mathbb{P}(A_{n}~i.o.)=0$.
+2. If the events $A_{n}$ are independent and
+   $\sum_{n=1}^\infty \mathbb{P}(A_{n})=\infty$ then
+   $\mathbb{P}(A_{n}~i.o.)=1$.
+
+:::
+
+*Proof:*
+	For (1), we have that $\{B_{n}=\cup_{k=n}^\infty A_{k}\}\searrow A^\infty$ as
+ $n \to \infty$, thus
+ $$
+ 0\leq \mathbb{P}(A^\infty)\leq \mathbb{P}(\cup_{k=n}^\infty A_{k})\leq \sum_{k=n}^\infty \mathbb{P}(A_{k})\to 0\quad (n\to \infty).
+ $$
+ For (2) we recall that
+ $\{ A_{n}~i.o. \}=\cap_{n=1}\cup_{k=n}^\infty A_{k}=\cap_{n=1}B_{n}$. To show
+ that $\mathbb{P}(\{  A_{n}~i.o. \})=\mathbb{P}(\cap_{n=1}B_{n})=1$ we
+ equivalently show the converse, i.e.
+ $\mathbb{P}(\cup_{n=1}B_{n}^c)=1-\mathbb{P}(\cap_{n=1}B_{n})=0$, but we note
+ that
+ $0\leq \mathbb{P}(\cup_{n=1}B_{n}^c)\leq \sum_{n=1} ^\infty \mathbb{P}(B_{n}^c)$.
+ To complete the proof, we take $N>n$ (to have a finite intersection) and
+ consider
+ $$
+ \mathbb{P}(\cap_{k=n}^NA_{k}^c)=\prod_{k=n}^N\mathbb{P}(A_{k}^c)=\prod_{k=n}^N(1-\mathbb{P}(A_{k})).
+ $$
+ Using the inequality $1-x\leq e^{-x}$ and the identity $e^ae^b=e^{a+b}$ we
+ write
+ $$
+ \mathbb{P}(\cap_{k=n}^NA_{k}^c)\leq \prod_{k=n}^Ne^{-\mathbb{P}(A_{k})}=e^{-\sum_{k=n}^N\mathbb{P}(A_{k})}\stackrel{N \to \infty}{\to}e^{-\sum_{k=n}^\infty \mathbb{P}(A_{k})}=e^{-\infty}=0,
+ $$
+ by condition of the lemma. $\square$
+

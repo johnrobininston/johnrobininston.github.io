@@ -1,18 +1,56 @@
 ---
-title: Krasnoselskii-Mann Iteration
-author: John Robin Inston
+id: km-iteration
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-06
 number-sections: true
+title: "Krasnoselskii-Mann Iteration"
 ---
 
-## Introduction
+## Picard Iterations
 
-The Krasnoselskii-Mann (KM) iteration is a method for finding fixed points of
-non-expansive mappings in Hilbert spaces.  It is a generalization of the
-Picard iteration and is particularly useful for solving problems in optimization
-and variational inequalities.
+:::{.definition data-title="Picard Iteration"}
 
-## Definition
+Given a mapping $T:D\to D$ on some space $D$ (usually a Hilbert space or a 
+Banach space) and a starting point $x_0\in D$, the Picard iteration is defined
+as
+
+$$
+x_{n+1}=T(x_n).
+$$
+
+:::
+
+A **fixed-point (FP)** of a mapping $T$ is a point $x\in D$ such that $T(x)=x$.
+A map $T:D\to D$ is called a **Picard operator** if it has a unique FP $x^*$ 
+and the Picard iteration converges to $x^*$ for any starting point $x_0\in D$.
+
+Denoting metric $d$ on $D$, a mapping $T:D\to D$ is called a **contraction 
+mapping** if there exists a constant $0\leq k<1$ such that 
+
+$$
+d(T(x),T(y))\leq k d(x,y) \quad \forall x,y\in D.
+$$
+
+If $0\leq k \leq 1$ the mapping is said to be **non-expansive**, otherwise 
+it is called **expansive**.  The following theorem gives conditions under 
+which the Picard iteration converges to a unique fixed point of a 
+contraction mapping.
+
+:::{.theorem data-title="Picard Contraction Mapping Principle"}
+
+Any map $T:D\to D$ on a complete metric space $(D,d)$ that is a
+contraction mapping is a Picard operator
+
+:::
+
+## Krasnoselskii-Mann (KM) Iterations 
+
+If $T$ is only non-expansive, the Picard iteration can fail to reach a 
+FP even is one exists.  The Krasnoselskii-Mann (KM) iteration is a 
+generalization of the Picard iteration that can converge to a FP of a 
+non-expansive mapping.
 
 :::{.definition data-title="Krasnoselskii-Mann Iteration Theorem"}
 
@@ -34,11 +72,9 @@ a weight $\lambda_n$ that can vary with each iteration.  The following
 theorem gives conditions under which the KM iteration converges to a fixed
 point of $T$.
 
-## KM Iteration Convergence
+:::{.theorem data-title="Reich's Theorem"}
 
-:::{.theorem data-title="KM Iteration Convergence Theorem"}
-
-If $\text{Fix}(T)=\empty$ and 
+If $\text{Fix}(T)=\emptyset$ and 
 
 $$
 \sum_{n=0}^{\infty}\lambda_n(1-\lambda_n)=\infty,

@@ -1,0 +1,81 @@
+---
+title: Minimax and Maximin
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Minimax and Maximin Rules
+
+Recall that a decision rule is a rule designed to aid in decision making based
+on incoming future information. *Minimax* is a decision rule used for
+*minimizing the possible loss for the worst case scenario*. Originally
+formulated for several-player [[zero-sum-games|zero-sum games]] for both
+sequential and simultaneous moves but has since been extended to more complex
+games.
+
+## Maximin Rule
+
+Consider a general finite-player game with agents $j\in\{1, \dots, J\}$ and
+denote all players but $j$ by $-j$. The *maximin* value is the highest value
+that the player can be sure to get whatever the actions of the other players.
+Equivalently, it is the lowest value the other players can force the player to
+receive when they know the player's action. Mathematically, this is written
+$$
+\underline{v_{j}}=\max_{a_{j}}\min_{a_{-j}}v_{j}(a_{j},a_{-j}),
+$$
+where: (1) $a_{j}$ is the *action taken* by player $j$; and (2) $v_{j}$ is the
+*value function* of player $j$.
+
+## Minimax Rule
+
+The *minimax* value of a player is the lowest value that the other players can
+force the players to receive, without knowing the player's actions.
+Equivalently, it is the highest value the other players can force the player to
+receive when they know the player's action. Mathematically, this is written
+$$
+\overline{v_{j}}:=\min_{a_{-j}}\max_{a_{j}}v_{j}(a_{j},a_{-j}).
+$$
+For every player$j$, the maximin is at most the minimax
+$$
+\underline{v_{j}}\leq\overline{v_{j}}.
+$$
+### Example
+
+Consider the [[zero-sum-games|zero-sum game]] where players $s,t$ make
+simultaneous moves selected from decision spaces
+$\mathscr{S}:=\{s_{1}, s_{2}, s_{3}\}$ and
+$\mathscr{T}:=\{ t_{1}, t_{2}, t_{3} \}$ with payoff matrix for $s$ given by
+$$
+\boldsymbol{P}:=(p_{i,j})_{i,j\in \{ 1,\dots,3 \}}=\left[ \begin{matrix}
+3 & -2 & 2 \\ 
+-1 & 0 & 4  \\
+-4 & -3 & 1
+\end{matrix} \right],
+$$
+where $p_{i,j}$ corresponds to the outcome with $s_{i}$ and $t_{j}$ decisions.
+The payoff matrix for $t$ is $-\boldsymbol{P}$ since the game is zero-sum.
+
+Then, the maximin choice for $s$ is $s_2$ since the worst possible result is
+then having to pay $1$, while the simple maximin choice for $t$ is $t_2$ since
+the worst possible result is then no payment. However, this solution is not
+stable, since if $t$ believes $s$ will choose $s_2$ then $t$ will choose $t_1$
+to gain $1$; then if $s$ believes $t$ will choose $t_1$ then $s$ will choose
+$s_1$ to gain $3$; and then $t$ will choose $t_2$; and eventually both players
+will realize the difficulty of making a choice.
+
+Some choices are _dominated_ by others and can be eliminated: $s$ will not
+choose $s_3$ since either $s_1$ or $s_2$ will produce a better result, no
+matter what $t$ chooses; $t$ will not choose $t_3$ since some mixtures of $t_1$
+and $t_2$ will produce a better result, no matter what $s$ chooses.
+
+Player **A** can avoid having to make an expected payment of more than ⁠1/ 3 ⁠
+by choosing $s_1$ with probability ⁠$1/ 6$ ⁠ and $s_2$ with probability $⁠5/ 6$
+⁠: The expected payoff for $s$ would be
+$3 \times ⁠1/ 6 ⁠ − 1 \times ⁠5/ 6 ⁠ = ⁠-1/ 3$ ⁠ in case $t$ choses $t_1$ and
+$−2 \times ⁠1/6 ⁠ + 0 \times ⁠5/ 6 ⁠ = ⁠- 1/ 3$ ⁠in case $t$ chose $t_2$.
+Similarly, $t$ can ensure an expected gain of at least $⁠1/ 3$ ⁠, no matter
+what s chooses, by using a randomized strategy of choosing $t_1$ with
+probability ⁠$1/ 3$ ⁠and $t_2$ with probability ⁠$2/ 3 $. These *mixed minimax
+strategies* cannot be improved and are now stable.

@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>SDE Simulation – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">SDE Simulation</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sde-simulation" id="toc-sde-simulation" class="nav-link active" data-scroll-target="#sde-simulation"><span class="header-section-number">1</span> SDE Simulation</a>
+  <ul class="collapse">
+  <li><a href="#euler-maruyama-method" id="toc-euler-maruyama-method" class="nav-link" data-scroll-target="#euler-maruyama-method"><span class="header-section-number">1.1</span> Euler-Maruyama Method</a></li>
+  <li><a href="#milstein-method" id="toc-milstein-method" class="nav-link" data-scroll-target="#milstein-method"><span class="header-section-number">1.2</span> Milstein Method</a></li>
+  <li><a href="#sde-simulation-error" id="toc-sde-simulation-error" class="nav-link" data-scroll-target="#sde-simulation-error"><span class="header-section-number">1.3</span> SDE Simulation Error</a>
+  <ul class="collapse">
+  <li><a href="#weak-error" id="toc-weak-error" class="nav-link" data-scroll-target="#weak-error"><span class="header-section-number">1.3.1</span> Weak Error</a></li>
+  <li><a href="#strong-error" id="toc-strong-error" class="nav-link" data-scroll-target="#strong-error"><span class="header-section-number">1.3.2</span> Strong Error</a></li>
+  </ul></li>
+  <li><a href="#sde-simulation-examples" id="toc-sde-simulation-examples" class="nav-link" data-scroll-target="#sde-simulation-examples"><span class="header-section-number">1.4</span> SDE Simulation Examples</a>
+  <ul class="collapse">
+  <li><a href="#multiple-black-scholes-sde-simulation" id="toc-multiple-black-scholes-sde-simulation" class="nav-link" data-scroll-target="#multiple-black-scholes-sde-simulation"><span class="header-section-number">1.4.1</span> Multiple Black-Scholes SDE Simulation</a></li>
+  <li><a href="#heston-model-sde-simulation" id="toc-heston-model-sde-simulation" class="nav-link" data-scroll-target="#heston-model-sde-simulation"><span class="header-section-number">1.4.2</span> Heston Model SDE Simulation</a></li>
+  <li><a href="#jump-diffusion-processes-sde-simulation" id="toc-jump-diffusion-processes-sde-simulation" class="nav-link" data-scroll-target="#jump-diffusion-processes-sde-simulation"><span class="header-section-number">1.4.3</span> Jump Diffusion Processes SDE Simulation</a></li>
+  </ul></li>
+  <li><span class="header-section-number">1.5</span> Backlinks</li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="sde-simulation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> SDE Simulation</h1>
+<p>In Financial Mathematics when pricing derivatives we often wish to simulate continuous time stochastic price processes to in turn simulate derivative payoffs and hence estimate option prices using <strong>SDE Monte-Carlo Methods</strong>. In this note we will detail some of the methodologies employed to perform these simulations as well as quantifying their error and work requirements.</p>
+<p>Consider the general SDE with differential form <span class="math display">\[
+d X_{t} = f(t, X_{t})dt + g(t, X_{t})dW_{t},
+\]</span> with Lipschitz <span class="math inline">\(f,g\)</span> and <a href="../topics/brownian-motion.html">Brownian Motion</a> <span class="math inline">\(W_{t}\)</span>. The integral form is the exact solution <span class="math display">\[
+X_{t}=X_{t_{0}}+\int_{t_{0}}^{t}{f(s, X_{s})}~d{s}+ \int_{t_{0}}^{t}{g(s,X_{s})}~d{W_{s}}.
+\]</span> Supposing that no explicit solution exists we pose the problem of how can we discretize and simulate the two integrals on the RHS of the expression?</p>
+<p>We introduce two methodologies for simulating this process, first the simple but flawed <strong>Euler-Maruyama Method</strong> followed by the more robust and commonly used <strong>Milstein Method</strong>. We define the <strong>weak</strong> and <strong>strong errors</strong> of convergence of SDE simulation and compute both error orders for each method. We include several key examples including applications to option pricing, jump processes, multiple correlated Brownian drivers and Brownian Bridges.</p>
+<section id="euler-maruyama-method" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="euler-maruyama-method"><span class="header-section-number">1.1</span> Euler-Maruyama Method</h2>
+<p>The <strong>Euler-Maruyama Method</strong> is a SDE Simulation method with dynamics given by stochastic differential equations. The <a href="../topics/ito-formula.html">Itô Formula</a> for a scalar-valued function <span class="math inline">\(U(t, X_{t})\)</span> of the solution <span class="math inline">\(X_{t}\)</span> of the scalar Itô SDE has the integral representation <span class="math display">\[
+U(t,X_{t}) = U(t_{0}, X_{t_{0}})+ \int_{t_{0}}^{t}{L^0U(s,X_{s})}~d{s} + \int_{t_{0}}^{t}{L^1U(s, X_{s})}~d{W_{s}},
+\]</span> where the differential operators <span class="math inline">\(L^0\)</span> and <span class="math inline">\(L^1\)</span> are defined by <span class="math display">\[
+L^0 = \frac{\partial}{\partial t}+f \frac{\partial}{\partial x}+ \frac{1}{2}g^2 \frac{\partial^2}{\partial x^2}\quad \&amp; \quad L^1 = g \frac{\partial}{\partial x}.
+\]</span> This differs from the deterministic chain rule by the additional third term in the <span class="math inline">\(L^0\)</span> operator, which is essentially due to the fact that <span class="math inline">\(\mathbb{E}[\Delta W^2]=\Delta t\)</span>. When <span class="math inline">\(U(t,x)=x\)</span> the Itô formula above is simply <span class="math display">\[
+X_{t}=X_{t_{0}}+\int_{t_{0}}^{t}{f(s,X_{s})}~d{s} + \int_{t_{0}}^{t}{g(s,X_{s})}~d{}W_{s}.
+\]</span> Applying the Itô formula to <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> we obtain <span class="math display">\[
+\begin{align}
+X_{t} &amp; =X_{0}  \\
+&amp; \qquad+ \int_{t_{0}}^{t}{\left[ f(t_{0}X_{t_{0}})+\int_{t_{0}}^{s}{L^0f(u,X_{u})}~d{u}+\int_{t_{0}}^{s}{L^1 f(u, X_{u})}~d{W_{u}} \right]}~d{s}  \\
+&amp; \qquad +\int_{t_{0}}^{t}{\left[ g(t_{0}, X_{t_{0}})+\int_{t_{0}}^{s}{L^0g(u, X_{u})}~d{u}+\int_{t_{0}}^{s}{L^1g(u, X_{u})}~d{W_{u}} \right]}~d{W_{s}} \\
+&amp; =X_{t_{0}}+f(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{s}+g(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{W_{s}}+R_{1}(t,t_{0}),
+\end{align}
+\]</span> where the remainder is <span class="math display">\[
+\begin{align}
+R_{1}(t,t_{0}) &amp; =\int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^0f(u, X_{u})}~d{u}}~d{s} + \int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^1f(u, X_{u})}~d{W_{u}}}~d{s} \\
+&amp; + \int_{t_{0}}^{t}{\int_{t_{0}}^{s}{L^0g(u, X_{u})}~d{u}}~d{W_{s}} + \int_{t_{0}}^{t}{\int_{t_{0}}^{s}{L^1 g(u, X_{u})}~d{W_{u}}}~d{W_{s}}.
+\end{align}
+\]</span> Replacing <span class="math inline">\(t_{0}\)</span> by <span class="math inline">\(t_{n}\)</span>, <span class="math inline">\(t\)</span> by <span class="math inline">\(t_{n+1}\)</span> and discarding the remainder be obtain the <strong>Euler-Maruyama Method</strong> which we summarize in the definition below. This is the simplest stochastic <a href="../topics/taylor-series.html">Taylor expansion</a>.</p>
+<div class="definition" data-title="Euler-Maruyama Method">
+<p>The <strong>Euler-Maruyama Method</strong> discretizes the continuous time dynamics by defining a step-size <span class="math inline">\(\Delta t=\frac{T}{N}\)</span> for <span class="math inline">\(N \in \mathbb{Z}\)</span> and computing the approximate solutions at times <span class="math inline">\(t_{i}=i\Delta t\)</span> using simple left-endpoint Riemann sums in place of the integrals <span class="math display">\[
+\widehat{X}_{t_{n+1}}=\widehat{X}_{t_{n}}+\Delta tf(t_{n},\widehat{X}_{t_{n}})+\underbrace{\Delta W_{n}}_{=\sqrt{\Delta t}\cdot\xi_{n}}g(t_{n},\widehat{X}_{t_{n}}),
+\]</span> where <span class="math inline">\(\Delta W_{n}=W(t_{n+1})-W(t_{n})\sim\mathcal{N}(0,\Delta t)\)</span> (or equivalently with <span class="math inline">\(\xi_{n}\sim\mathcal{N}(0,1)\)</span> for all <span class="math inline">\(n\)</span>).</p>
+</div>
+<p><strong>Example: BS Model EM Method and Error</strong> Consider the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> which consists of two assets, a risk free asset <span class="math inline">\(B\)</span> and a stock <span class="math inline">\(S\)</span> with price dynamics given by <span class="math display">\[
+\begin{align}dB_{t}&amp;=rB_{t}dt \\dS_{t}&amp; =\alpha S_{t}dt+\sigma S_{t}dW_{t},\end{align}
+\]</span> on filtered probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{F}, \mathbb{P})\)</span> where <span class="math inline">\(r, \alpha\)</span> and <span class="math inline">\(\sigma\)</span> are deterministic constants and <span class="math inline">\(W_{t}\)</span> is BM in <span class="math inline">\(\mathbb{P}\)</span>. Under the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> the dynamics of <span class="math inline">\(S_t\)</span> are instead given by <span class="math display">\[
+dS_{t}=rS_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q},
+\]</span> and the <strong>true solution</strong> under the risk-free measure is <span class="math display">\[
+S_{T}=S_{0}e^{(r-\frac{\sigma^2}{2})T+\sigma W_{T}}.
+\]</span> for some future time <span class="math inline">\(T\)</span>. Suppose we wish to simulate this process on the interval <span class="math inline">\([0,T]\)</span>. We can apply Euler’s algorithm by considering a discretized mesh <span class="math inline">\(0=t_{0}, t_{1}, \dots, t_{n}=T\)</span> where <span class="math inline">\(t_{n}=t_{n-1}+\Delta t\)</span> for <span class="math inline">\(\Delta t=\frac{T}{n}\)</span> and then writing <span class="math display">\[
+S_{t+\Delta t}=S_{t}+rS_{t}\Delta t + \sigma S_{t}\underbrace{(W_{t+\Delta t}-W_{t})}_{=\sqrt{ \Delta t }X_{t}},
+\]</span> where <span class="math inline">\(X_{t}\stackrel{iid}\sim\mathcal{N}(0,1)\)</span>. This is easy to simulate, for example the following <code>R</code> code using a <code>for</code> loop:</p>
+<pre><code>## Euler's Algorithm
+bs_euler &lt;- function(r, alpha, sigma, S0, t0=0, T, n=1000){
+    dt = T/n
+    S &lt;- numeric(n)
+    S[1] &lt;- S0
+    for(i in 2:n){
+        S[i] &lt;- S[i-1] + r*S[i-1]*dt + sigma*S[i-1]*sqrt(dt)*rnorm(1,0,1)
+    }
+    return(S)
+}</code></pre>
+<p>We have clearly made some kind of discretization error. To determine how bad this error is we turn back to the true solution and we consider the Taylor expansion <span class="math display">\[
+\begin{align}
+S_{t+\Delta t} &amp; =S_{t}e^{\left( r-\frac{1}{2}\sigma^2 \right)\Delta t+\sigma \sqrt{ \Delta t }\xi}  \\
+&amp; =S_{t}\left\{ \underbrace{1+\left(r-\frac{1}{2}\sigma^2\right)\Delta t+\sigma \sqrt{ \Delta t }\xi}_{\text{Euler's Approximation}}+\frac{1}{2}\left[ \left( r- \frac{1}{2}\sigma^2\right)\Delta t+\sigma \sqrt{ \Delta t }\xi \right]^2 + \dots  \right\}  \\
+&amp; =S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ \left( r- \frac{1}{2}\sigma^2 \right)+\frac{1}{2}\sigma^2\xi^2 \right]+(\Delta t)^{\frac{3}{2}}\left[ \dots \right]+\dots   \right\},
+\end{align}
+\]</span> where we have replaced <span class="math inline">\(W_{t+\Delta t}-W_{t}\sim \sqrt{ \Delta t }\xi\)</span> where <span class="math inline">\(\xi\sim\mathcal{N}(0,1)\)</span>. From this we see that Euler’s approximation might seem reasonable from the SDE perspective but it is actually rather strange in its use of various orders of <span class="math inline">\(\Delta t\)</span>.</p>
+<p>It seems reasonable to suggest that the approximation improves as <span class="math inline">\(N \to \infty\)</span>. To test this presumption, we consider the two standard approaches for measuring the error <span class="math inline">\(X_{n}\to X(t_{n})\)</span>, leading to the concepts of <strong>weak error</strong> and <strong>strong error</strong>.</p>
+</section>
+<section id="milstein-method" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="milstein-method"><span class="header-section-number">1.2</span> Milstein Method</h2>
+<p>The <strong>Milstein Method</strong> applies a similar methodology to the <a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a> but provides a greater degree of accuracy as it also includes additional terms from the remainder in the stochastic Taylor expansion above. We apply the <a href="../topics/ito-formula.html">Itô Formula</a> to the integrand <span class="math inline">\(L^1g\)</span> in the fourth double integral of the remainder <span class="math inline">\(R_{1}(t, t_{0})\)</span> we obtain the stochastic Taylor expansion <span class="math display">\[
+\begin{align}
+X_{t}=X_{0}+f(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{s}+g(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{W_{s}}+L^1 &amp; g(t_{0}, X_{t_{0}})\int_{{t_{0}}}^{t}{\int_{t_{0}}^{s}{}~d{W_{u}}}~d{W_{s}}+R_{2}(t, t_{0}),
+\end{align}
+\]</span> where the remainder is <span class="math display">\[
+\begin{align}
+R_{2}(t, t_{0}) &amp; =\int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^0f(u, X_{u})}~d{u}}~d{s} + \int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^1f(u, X(u))}~d{W_{u}}}~d{s}+\int_{t_{0}}^{t}{\int_{t_{0}}^{s}{L^0g(u, X_{u})}~d{u}}~d{W_{s}}  \\
+&amp; \quad+ \int_{t_{0}}^{t}{\int_{t_{0}}^{s}{\int_{t_{0}}^{u}{L^0L^1g(v, X_{v})}~d{v}}~d{W_{u}}}~d{W_{s}}+\int_{t_{0}}^{t}{\int_{t_{0}}^{s}{\int_{t_{0}}^{u}{L^1L^1g(v, X_{v})}~d{W_{v}}}~d{W_{u}}}~d{W_{s}}.
+\end{align}
+\]</span> Making the same replacements as above and once again discarding the remainder we obtain the Milstein Method which we summarize in the definition below.</p>
+<div class="definition" data-title="Milstein Method">
+<p>The <strong>Milstein method</strong> is <span class="math display">\[
+X_{n+1}=X_{n}+\Delta t f(t_{n}, X_{n})+\Delta W_{n}g(t_{n}, X_{n})+L^1g(t_{n}, X_{t_{n}})\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{s}{}~d{W_{u}}}~d{W_{s}},
+\]</span> where the double integral is given by <span class="math display">\[
+\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{t}~d{W_{s}}}{}~d{W_{t}}=\frac{1}{2}((\Delta W_{n})^2-\Delta t).
+\]</span></p>
+</div>
+<p><strong>Example: BM Model Milstein Algorithm</strong> An alternative approach could be to instead use the Milstein Algorithm <span class="math display">\[
+S_{t+\Delta t}=S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ r+ \frac{1}{2}\left( \sigma^2(\xi^2-1) \right) \right] \right\},\tag{6}
+\]</span> which has improved on Euler’s approximation by grouping terms based on powers of <span class="math inline">\(\Delta t\)</span> and removed all terms with powers <span class="math inline">\(&gt;1\)</span>. This is again very easy to simulate with a <code>for</code> loop:</p>
+<pre><code>## Milstein's Algorithm
+S &lt;- S0
+for(i in 2:length(t)){
+    xi &lt;- rnorm(1,0,1)
+    S[i] &lt;- S[i-1]*(1+sigma*h^(1/2)*xi + h*(r+(1/2)*(sigma^2*(xi^2 - 1))))
+}</code></pre>
+</section>
+<section id="sde-simulation-error" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sde-simulation-error"><span class="header-section-number">1.3</span> SDE Simulation Error</h2>
+<section id="weak-error" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="weak-error"><span class="header-section-number">1.3.1</span> Weak Error</h3>
+<p>Given a function <span class="math inline">\(\Phi\)</span> from some class (e.g.&nbsp;polynomials with degree <span class="math inline">\(d\leq k\)</span>) we define the weak error by <span class="math display">\[
+e_{\Delta t}^\text{weak}:=\sup_{0\leq t_{n}\leq T}\lvert \mathbb{E}[\Phi(X_{n})]-\mathbb{E}[\Phi(X(t_{n}))] \rvert .
+\]</span> The weak error measures how well the given methodology can approximate the mean of <span class="math inline">\(\Phi(X(t))\)</span> (weak convergence measures the error of the means). We say that the method <strong>converges weakly</strong> if, for any <span class="math inline">\(\Phi\)</span> in this class <span class="math display">\[
+e_{\Delta t}^\text{weak}\to 0~~\text{as}~~\Delta t \to 0.
+\]</span> Further, we say that a method has <strong>weak order of convergence</strong> <span class="math inline">\(p\)</span> if there exists a constant <span class="math inline">\(K\)</span> and a step size level <span class="math inline">\(\Delta t^*\)</span> (both dependent on <span class="math inline">\(\Phi\)</span>) such that <span class="math display">\[
+e_{\Delta t}^\text{weak}\leq K\Delta t^p;~~\forall~ 0 &lt; \Delta t\leq \Delta t^*,
+\]</span> more specifically, we take <span class="math inline">\(p\)</span> to be the largest value for which this holds.</p>
+<div class="theorem" data-title="EM Weak Convergence">
+<p>For a wide class of problems the EM method converges with weak order one.</p>
+</div>
+<p><em>Proof Outline:</em> Update from Higham and Kloeden §9.3.</p>
+<p>It turns out that it is not necessary to compute exact Brownian paths to obtain weak order equal to one. It is sufficient for the increments <span class="math inline">\(\Delta W_{n}\)</span> to have the correct low-order moments, hence we may us the <strong>weak EM</strong> method <span class="math display">\[
+X_{n+1}=X_{n}+\Delta tf(X_{n})+\overline{\Delta W_{n}} g(X_{n}),
+\]</span> where <span class="math inline">\(\overline{\Delta W_{n}}\)</span> are i.i.d. uniform random variables taking value <span class="math inline">\(\pm \sqrt{ \Delta t }\)</span>.</p>
+</section>
+<section id="strong-error" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="strong-error"><span class="header-section-number">1.3.2</span> Strong Error</h3>
+<p>At each time <span class="math inline">\(t_{n}\)</span> the absolute value of the error <span class="math inline">\(\lvert X_{n}-X(t_{n}) \rvert\)</span> is a random variable. The strong error is defined as <span class="math display">\[
+e_{\Delta t}^\text{strong}:=\sup_{0\leq t_{n}\leq T}\mathbb{E}[\lvert X_{n}-X(t_{n}) \rvert ],
+\]</span> i.e.&nbsp;the path-wise error averaged over all paths. Further, we say that a method converges strongly if <span class="math display">\[
+e_{\Delta t}^\text{strong}\to 0 ~~\text{as}~~ \Delta t \to 0,
+\]</span> and we say that a method has <strong>strong order <span class="math inline">\(p\)</span></strong> on a class of SDEs if there exists <span class="math inline">\(K\)</span> and <span class="math inline">\(\Delta t^*\)</span> such that <span class="math display">\[
+e_{\Delta t}^\text{strong}\leq K \Delta t^p;~~\forall~0&lt;\Delta t \leq\Delta t^*.
+\]</span></p>
+<div class="theorem" data-title="EM Strong Convergence">
+<p>In general the EM method has strong order <span class="math inline">\(p=\frac{1}{2}\)</span>.</p>
+</div>
+<p><em>Proof:</em> Update from proof outline given in Chapter 9.</p>
+<p>The definition of strong convergence has important implications for individual paths, namely if we have that <span class="math display">\[
+\mathbb{E}\lvert X_{n}-X(t_{n}) \rvert \leq K\Delta t^{1/2},
+\]</span> then by the <a href="../topics/markov-inequality.html">Markov Inequality</a> we have that <span class="math display">\[
+\mathbb{P}(\lvert X_{n}-X(t_{n}) \rvert \geq \Delta t^{1/4})\leq K\Delta t^{1/4},
+\]</span> or in other words, along any path the error with be small with probability close to 1.</p>
+</section>
+</section>
+<section id="sde-simulation-examples" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sde-simulation-examples"><span class="header-section-number">1.4</span> SDE Simulation Examples</h2>
+<section id="multiple-black-scholes-sde-simulation" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="multiple-black-scholes-sde-simulation"><span class="header-section-number">1.4.1</span> Multiple Black-Scholes SDE Simulation</h3>
+<p>Suppose we wish to use the Euler scheme to simulate the following system of SDEs <span class="math display">\[
+\begin{cases}
+dS_{t}^1 = rS_{t}^1dt+\sigma_{1}S_{t}^1dW_{t}^1 \\
+dS_{t}^2=rS_{t}^2dt+\sigma_{2}S_{t}^2dW_{t}^2,
+\end{cases}
+\]</span> where we have that <span class="math inline">\(d\left&lt; W^1, W^1 \right&gt;_{t}=\rho~dt\)</span>. For discretized time step <span class="math inline">\(\Delta t\)</span> we have <span class="math display">\[
+\begin{cases}
+\check{S}_{n+1}^1=\check{S}_{n}^1+r\check{S}_{n}^1\Delta t+\sigma_{1}\check{S}_{n}^1\Delta W_{n+1}^1 \\
+\check{S}_{n+1}^2=\check{S}_{n}^2+r\check{S}_{n}^2\Delta t+\sigma_{1}\check{S}_{n}^2 \underbrace{\Delta W_{n+1}^2}_{\rho\Delta W_{n+1}^1+\sqrt{ 1-\rho^2 }\Delta \tilde{W}_{n+1}}, \\
+\end{cases}
+\]</span> where <span class="math inline">\(\tilde{W}_{n}\perp W_{n}^1\)</span>. The idea is that to avoid simulating the correlated Weiner processes we instead represent <span class="math inline">\(W_{n}^2\)</span> in terms of <span class="math inline">\(W^1_{n}\)</span> and some independent Weiner process <span class="math inline">\(\tilde{W}_{n}\)</span>. If we write the correlation matrix of <span class="math inline">\(W_{n}^1\)</span> and <span class="math inline">\(W_{n}^2\)</span> the <a href="../topics/cholesky-decomposition.html">Cholesky decomposition theorem</a> states there exists a lower triangular matrix <span class="math inline">\(A\)</span> such that <span class="math display">\[
+\begin{bmatrix}
+1 &amp; \rho \\
+\rho &amp; 1
+\end{bmatrix} = AA^T=\begin{bmatrix}
+a_{11}  &amp; 0 \\
+a_{12} &amp; a_{22}
+\end{bmatrix} \begin{bmatrix}
+a_{11} &amp; a_{12} \\
+0 &amp; a_{22}
+\end{bmatrix}=\begin{bmatrix}
+a_{11}^2 &amp; a_{11}a_{12} \\
+a_{12}a_{11} &amp; a_{11}^2 + a_{12}^2
+\end{bmatrix},
+\]</span> which gives that <span class="math inline">\(a_{11}=1\)</span>, <span class="math inline">\(a_{12}=\rho\)</span> and <span class="math inline">\(a_{22}=\sqrt{ 1-\rho^2 }\)</span>. Then we have that <span class="math display">\[
+\begin{bmatrix}
+W^1 \\
+W^2
+\end{bmatrix} \stackrel{\mathcal{L}}{=}A\cdot \begin{bmatrix}
+W^1  \\
+\tilde{W}
+\end{bmatrix},
+\]</span> leading to our definition of our independent process and our new system <span class="math display">\[
+\begin{cases}
+\check{S}_{n+1}^1 = S_{n}^1 + r\check{S}_{n}^1\Delta t+\sigma_{1}\check{S}_{n}^1 \Delta W_{n+1}^1 \\
+\check{S}_{n+1}^2=S_{n}^2+r\check{S}_{n}^2\Delta t +\sigma_{2}\check{S}_{n}^2\left( \rho \Delta W_{n+1}^1 + \sqrt{ 1-\rho^2 }\Delta \tilde{W}_{n+1} \right).
+\end{cases}
+\]</span></p>
+</section>
+<section id="heston-model-sde-simulation" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="heston-model-sde-simulation"><span class="header-section-number">1.4.2</span> Heston Model SDE Simulation</h3>
+<p>A famous example of Multi-Dimenstional SDE simulation is the <a href="../topics/heston-model.html">Heston Model</a> for stochastic volatility whereby an asset price process <span class="math inline">\((S_{t})\)</span> and corresponding volatility process <span class="math inline">\((V_{t})\)</span> have dynamics under the risk-neutral measure given b <span class="math display">\[
+\begin{cases}
+dS_{t}=rS_{t}dt+S_{t}\sqrt{V_{t}}dW_{t}^1 \\
+dV_{t}=\kappa(\theta-V_{t})dt+\eta \sqrt{ V_{t} }dW_{t}^2,
+\end{cases}
+\]</span> where <span class="math inline">\(W^1, W^2\)</span> are dependent Wiener processes with constant <span class="math inline">\(d\left&lt; W^{1},W^2 \right&gt;_{t}=\rho\)</span>. Suppose we wish to simulate these processes using the Euler scheme. Then for discretized step <span class="math inline">\(\Delta t\)</span> we would simulate <span class="math display">\[
+\begin{cases}
+\check{S}_{n+1} = \check{S}_{n} + r\check{S}_{n}^1\Delta t+\check{S}_{n}\sqrt{ \check{V}_{n}} \Delta W_{n+1}^1 \\
+\check{V}_{n+1}=\check{V}_{n}+\kappa (\theta-\check{V}_{n})\Delta t +\eta \sqrt{\check{V}_{n}}\left( \rho \Delta W_{n+1}^1 + \sqrt{ 1-\rho^2 }\Delta \tilde{W}_{n+1} \right).
+\end{cases}
+\]</span> We can define the following function in R that simulates stochastic volatility via the Euler scheme:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stochastic Volatility (Euler's Scheme)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>stoch_vol_Euler <span class="ot">&lt;-</span> <span class="cf">function</span>(S0, V0, t0, T, delta_t, r, kappa, theta, eta, rho) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    time <span class="ot">&lt;-</span> <span class="fu">seq</span>(t0, T, <span class="at">by=</span>delta_t)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    S <span class="ot">&lt;-</span> <span class="fu">c</span>(S0, <span class="fu">rep</span>(<span class="cn">NA</span>, T<span class="sc">/</span>delta_t))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">c</span>(V0, <span class="fu">rep</span>(<span class="cn">NA</span>, T<span class="sc">/</span>delta_t))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    W1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(T<span class="sc">/</span>delta_t, <span class="dv">0</span>, delta_t)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    W2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(T<span class="sc">/</span>delta_t, <span class="dv">0</span>, delta_t)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(n <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(time)<span class="sc">-</span><span class="dv">1</span>)){</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        V[n<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> V[n] <span class="sc">+</span> kappa <span class="sc">*</span> (theta <span class="sc">-</span> V[n]) <span class="sc">*</span> delta_t <span class="sc">+</span> eta <span class="sc">*</span> <span class="fu">sqrt</span>(V[n]) <span class="sc">*</span> (rho <span class="sc">*</span> W1[n] <span class="sc">+</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>rho<span class="sc">^</span><span class="dv">2</span>)<span class="sc">*</span>W2[n])</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        S[n<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> S[n] <span class="sc">+</span> r <span class="sc">*</span> S[n] <span class="sc">+</span> S[n]<span class="sc">*</span><span class="fu">sqrt</span>(V[n])<span class="sc">*</span>W1[n]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">Price =</span> S,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">Volatility =</span> V  </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(results)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><em>We note that there are some subtle challenges to consider if we attempt the same applying the Milstein scheme and this is something we covered in assignment 1.</em></p>
+</section>
+<section id="jump-diffusion-processes-sde-simulation" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="jump-diffusion-processes-sde-simulation"><span class="header-section-number">1.4.3</span> Jump Diffusion Processes SDE Simulation</h3>
+<p>The [[merton-jump-diffusion-model]] for stock price process <span class="math inline">\((S_{t})\)</span> allows the process to jump by incorporating a <a href="../topics/poisson-process.html">Poisson process</a> <span class="math inline">\((Nt)\)</span> with rate <span class="math inline">\(\lambda\)</span> that is independent of the driving standard Weiner process <span class="math inline">\((W_{t})\)</span> <span class="math display">\[
+dS_{t}=rS_{t}dt+\sigma S_{t}dW_{t}+\eta S_{t}dN_{t}.
+\]</span> First assume that the jump diffusion has <strong>homogeneous rate</strong>. To simulate such a process we would:</p>
+<ol type="1">
+<li>Simulate the jump times; and then</li>
+<li>Simulate the process (e.g.&nbsp;with Euler or Milstein) between the jump points.</li>
+</ol>
+<p>With a Poisson process times between jumps are exponentially distributed and so we can first simulate a collection of jump times that span over the time interval using exponential random variables and <code>while</code> loops.</p>
+<p>We then need to discretize the interval <span class="math inline">\([t_{0},T]\)</span> with time step <span class="math inline">\(\Delta t\)</span> and proceed to apply Euler’s method between jumps (accounting for the fact that the jump points will intersect the discretization steps) and adding our jump impact at the correct points.</p>
+<p>Below we include an example function generating a jump diffusion process with time homogeneous rate <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Jump Diffusion Process (Euler's Scheme)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>jump_diff_Euler <span class="ot">&lt;-</span> <span class="cf">function</span>(S0, t0, T, delta_t, r, sigma, eta, lambda){</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate jumps on the interval</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    t <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>, lambda)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    jump_times <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span>(t<span class="sc">&lt;</span>T){</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        jump_times <span class="ot">&lt;-</span> <span class="fu">append</span>(jump_times, t)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        t <span class="ot">&lt;-</span> t <span class="sc">+</span> <span class="fu">rexp</span>(<span class="dv">1</span>, lambda)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply Eulers scheme between jumps</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    times <span class="ot">&lt;-</span> <span class="fu">append</span>(<span class="fu">seq</span>(t0, T, delta_t), jump_times) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    S <span class="ot">&lt;-</span> S0</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(n <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(times)<span class="sc">-</span><span class="dv">1</span>)){</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        delta_times <span class="ot">&lt;-</span> times[n<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> times[n]</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        jump_component <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(times[n] <span class="sc">%in%</span> jump_times, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        S[n<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> S[n] <span class="sc">+</span> r<span class="sc">*</span>S[n]<span class="sc">*</span>delta_times <span class="sc">+</span> sigma<span class="sc">*</span>S[n]<span class="sc">*</span><span class="fu">rnorm</span>(<span class="dv">1</span>,<span class="dv">0</span>,delta_times) <span class="sc">+</span> eta<span class="sc">*</span>S[n]<span class="sc">*</span>jump_component</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">Time =</span> times,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">Price =</span> S</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(results)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Next we consider the case of a <strong>process dependent rate</strong> <span class="math inline">\(\lambda(S_{t})\)</span> which raises the question of whether we are still able pre-simulate the jump times. The answer is yes if there is some upper bound <span class="math display">\[
+\lambda(S_{t})\leq \overline{\lambda},
+\]</span> through the use of <a href="../topics/poisson-process.html">thinned Poisson processes</a>. The idea is that we can simulate the jumps for this maximum rate <span class="math inline">\(\overline\lambda\)</span> and then at each proposed jump point <span class="math inline">\(j_{i}\)</span> we can accept or reject the joint with probabilities <span class="math display">\[
+f(\tau_{i})=\begin{cases}
+1 &amp; \text{w.p.} \quad \frac{\lambda (S_{t})\tau_{i}}{\overline\lambda} \\
+0 &amp; \text{o.w.}
+\end{cases}
+\]</span> ### Brownian Bridges SDE Simulation</p>
+<p>The <a href="../topics/brownian-bridge.html">Brownian Bridge</a> is an SDE <span class="math inline">\((X_{t})\)</span> characterized by the dynamics <span class="math display">\[
+\begin{cases}dX_{t}=\frac{b-X_{t}}{1-t}dt+dB_{t}\\ X_{0}=a,\end{cases}
+\]</span> for <span class="math inline">\(a,b \in \mathbb{R}\)</span> and <span class="math inline">\(0 \leq t &lt; 1\)</span>. The solution to this SDE is given by <span class="math display">\[
+X_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
+\]</span> Suppose we have some skeletal process (e.g.&nbsp;end of day prices) and we wish to estimate intraday price movements assuming they have Brownian motion dynamics. In this case we can simulate a Brownian bridge (e.g.&nbsp;using Euler’s scheme) <span class="math display">\[
+\check{X}_{n+1} = \check{X}_{n}+\frac{b-\check{X}_{n}}{1-n}\Delta t + \Delta W_{n+1}
+\]</span> where we specify <span class="math inline">\(\check{X}_0=a\)</span>, updating <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> for each new estimation interval.</p>
+
+
+</section>
+</section>
+<section class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id=""><span class="header-section-number">1.5</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a></li>
+<li><a href="../topics/heston-model.html">Heston Model</a></li>
+<li><a href="../topics/milstein-method.html">Milstein Method</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Numerical Methods in Financial Mathematics</a></li>
+</ul>
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

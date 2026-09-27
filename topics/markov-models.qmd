@@ -1,0 +1,170 @@
+---
+title: Markov Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Markov Models
+###### Lecture Notes
+~~January 11th 2025~~
+~~John Inston~~
+
+## Markov Models
+
+In probability theory, a **Markov Model** is a stochastic model assuming the
+[[markov-property|Markov property]] used to model pseudo-randomly changing
+systems with discrete equal time increments. There are four common Markov
+models used in different situations, depending on whether every sequential
+state is observable or note, and whether the system is to be adjusted on the
+basis of the observations made.  
+
+| System State   | System state is fully observable | System state is partially observable             |
+| -------------- | -------------------------------- | ------------------------------------------------ |
+| **Automonous** | [[markov-chains]]                | [[hidden-markov-models]]                         |
+| **Controlled** | [[markov-decision-process]]      | [[partially-observable-markov-decision-process]] |
+~~Table 1: Markov Models~~
+
+## Markov Chains
+
+The simplest Markov Model is a (discrete) homogenous (time invariant)
+[[markov-chains|Markov Chain (MC)]] whereby the state process is observed and
+we wish to estimate suitable parameters (i.e. the **transition probabilities**)
+such that the statistical properties of the system are suitably replicated by
+the chain.  
+### Problem Formulation
+
+Suppose we are interested in fitting a Markov Model for weather data in a
+specified location where days are noted as being either wet $0$ or dry $1$. We
+observe the following sequence of wet and dry days
+$$
+\{ 0,0,0,1,1,1,1,0,0,1,0,0,1,0,1,1,1,0,0,0,0,1,1,1,0 \}
+$$
+What would a suitable Markov Model for this observation and how might we
+determine the accuracy of our model fit (i.e. how might we measure the error of
+our parameter estimates)? Further, what underlying process properties might we
+expect to find (stationarity, autocorrelation) might we expect and how could we
+test for the presence of these properties using our fitted model?
+### Markov Chain Likelihood Inference
+
+#### Single Observation Case
+
+Following the outline provided by Professor Shalizi ssume that we have a single
+observation sequence $\{ x_{0}, x_{1}, \dots, x_{T} \}$ and suppose that we are
+interested in fitting a homogeneous MC with $\mathcal{X}:=\{1, \dots, M\}$
+states. Recall that a MC is homogeneous if the transition probabilities satisfy
+$$
+p_{i,j}^{(t)}(n)=p_{i,j}(n);\quad \forall t,\tag{1}
+$$
+where we have used the notation
+$p_{i,j}^{(t)}(n)=\mathbb{P}(X_{t+n}=j|X_{t}=i)$ where $i,j\in\mathcal{X}$. We
+therefore are looking to estimate $M\times M$ transition probabilities.  
+
+We proceed to compute the parameters by constructing and maximizing the
+likelihood function. Define the parameter vector $\boldsymbol{\theta}$
+containing the transition probabilities. From the **Finite Dimensional
+Distribution (FDD)** of a [[markov-chains|MC]] we have that
+$$
+L(\boldsymbol{\theta}) = \mathbb{P}(X_{0 : T}=x_{0 : T})=\mu^{(0)}(x_{0})p_{x_{0}, x_{1}}\cdots p_{x_{T-1}, x_{T}}\propto \prod_{t=0}^{T-1}p_{x_{t}, x_{t+1}}.\tag{2}
+$$
+Here we introduce the transition count random variable
+$$
+N_{i,j}=\# \text{ individuals who transition from state }i\text{ to state }j\text{ in one step},
+$$
+with realizations $n_{i,j}$.  Then our likelihood becomes
+$$
+\begin{align}
+L(\boldsymbol{\theta})  & \propto \prod_{i,j\in\mathcal{X}}p_{i,j}^{n_{i,j}} \\
+\implies l(\boldsymbol{\theta}) & \propto \sum_{i,j\in\mathcal{X}}n_{i,j}\log(p_{i,j}).\tag{3}
+\end{align}
+$$
+Here note that we have the additional condition
+$\sum_{j\in\mathcal{X}}p_{i,j}=1$ and so can eliminate one parameter by
+definiting
+$$
+p_{i,1}=1-\sum_{j=2}^Mp_{i,j}.\tag{4}
+$$
+In this case, differentiating the log-likelihood with respect to each remaining
+transition probability gives
+$$
+\frac{\partial l(\boldsymbol{\theta})}{\partial p_{i,j}}\propto \frac{n_{i,j}}{p_{i,j}}-\frac{n_{i,1}}{p_{i,1}}.\tag{5}
+$$
+Setting to zero we find that
+$$
+\frac{n_{i,j}}{n_{i,1}}=\frac{\hat{p}_{i,j}}{p_{i,1}},\tag{6}
+$$
+and since this holds for all $j \neq 1$ we conclude that
+$\hat{p}_{i,j}\propto n_{i,j}$ or more specifically, that
+$$
+\hat{p}_{i,j}=\frac{n_{i,j}}{\sum_{j\in\mathcal{X}}n_{i,j}}.\tag{7}
+$$
+#### Multiple Observation Case
+
+Now consider we have $n$ observations of the process
+$\boldsymbol{x}_{0:T}:=(x^1_{0:T}, \dots, x_{0:T}^n)$. Following the
+methodology provided by [[andersonstatisticalinferencemarkov1957]] we introduce
+the following notations:
+
+1. $n_{i,j}(t)$ - # individuals in state $i$ at time $t-1$ and $j$ at time $t$
+2. $n_{x_{0}:x_{T}}$ - # individuals whose sequence of states is $x_{0}:x_{T}$
+
+Then we have that
+$$
+n_{gj}(t)=\sum_{\{ x~\text{s.t.}~x_{t-1}=g ~\&~x_{t}=j\}}n_{x_{0}:x_{T}}.\tag{8}
+$$
+The probability describing all sequences for all $n$ individuals of a given
+ordered set of sequences for the $n$ individuals is
+$$
+\begin{align}
+\prod[p_{x_{0},x_{1}}^{(1)}p_{x_{1},x_{2}}^{(2)}\cdots p_{x_{T-1}, x_{T}}^{(T)}]^{n_{x_{0} : x_{T}}} & = \left( \prod[p_{x_{0},x_{1}}^{(1)}]^{n_{x_{0}:x_{T}}} \right)\cdots \left( \prod[p_{x_{T-1},x_{T}}^{(T)}]^{n_{x_{0}:x_{T}}} \right)  \\
+ & = \left( \prod_{x_{0}, x_{1}}[p_{x_{0}x_{1}}^{(1)}]^{n_{x_{0}, x_{1}}(1)} \right)\cdots \left( \prod_{x_{T-1}, x_{T}}[p_{x_{T-1}x_{T}}^{(T)}]^{n_{x_{T-1}, x_{T}}(T)} \right) \\
+ & =\prod_{t=1}^T \prod_{g,j}[p_{g,j}^{(t)}]^{n_{g,j}(t)},\tag{9}
+\end{align}
+$$
+where the initial products are over all values of the $T+1$ indices. When the
+chain is homogenous the result in $(9)$ can be written
+$$
+\prod_{t=1}^T \prod_{g,j}[p_{g,j}]^{n_{g,j}(t)}=\prod_{i,j}p_{i,j}^{\sum_{t=1}^T n_{i,j}(t)}.\tag{10}
+$$
+To obtain estimates of the transition probabilities for homogenous MCs we
+maximize this likelihood in $(10)$ with respect to $p_{i,j}$ subject to the
+restrictions $p_{i,j}\geq 0$ and $\sum_{j=1}^M p_{i,j}=1$ for $i=1,\dots,M$.
+This probability is equivalent up to a proportionality constant as that
+obtained for $M$ independent samples each of which consists of
+$\sum_{j}n_{i,j}$ multinomial trials with probabilities $p_{i,j}$ with
+$i,j\in\mathcal{X}$. For such samples, the maximum likelihood estimates for
+$p_{i,j}$ are
+$$
+\hat{p}_{i,j}=\frac{\sum_{t=1}^Tn_{i,j}(t)}{\sum_{k=1}^m\sum_{t=1}^Tn_{i,k}(t)}=\frac{\sum_{t=1}^Tn_{i,i}(t)}{\sum_{t=0}n_{i}(t)}.
+$$
+When the transition probabilities are not stationary (i.e. non-homogenous
+chains), by the same approach as above the maximum likelihood estimates for
+$p_{i,j}(t)$ are
+$$
+\hat{p}_{i,j}(t)=\frac{n_{i,j}(t)}{\sum_{k=1}^M n_{i,k}(t)}.
+$$
+### Parameter Accuracy & Hypothesis Tests
+
+This next section summarizes the key results from
+@andersonStatisticalInferenceMarkov1957 regarding the asymptotic behavior of
+the transition probabilities and useful hypothesis tests.
+
+We assume that
+$$
+
+$$
+
+Firstly, it can be should that 
+$$
+\sqrt{ n }(\hat{p}_{i,j}-p_{i,j}) \to \mathcal{N},
+$$
+with means $0$, variances $\frac{p_{i,j}(1-p_{i,j})}{\phi_{i}}$ and covariances
+$-\frac{\delta_{i,g}p_{i,j}p_{gh}}{\phi_{i}}$ where we have used the notation
+$$
+\delta_{i,g}=\begin{cases}
+0 & \text{if }i \neq g \\
+1 & \text{o.w.}
+\end{cases}\qquad \& \qquad \phi_{i}=\sum_{k=1}^M \sum_{t=1}^T\eta_{k}p_{k,i}^{[t-1]}
+$$
+where 

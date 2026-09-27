@@ -1,0 +1,92 @@
+---
+title: "Markov Chain Excursions & State Visits"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+#### Excursions
+
+Intuitively, an excursion of a Markov chain $X=\{X_{n}\}_{n=0}^\infty$ can be
+thought of the path and time spent by the chain in some pre-specified region.
+
+More formally, assume $X_{0}=j$ and define the following:
+
+1. The time of first return to state $j$ as:
+   $T_{j}=T_{j}(1):=\min \{ m \geq 1 :X_{m}=j\}$.
+2. The $n$-th return to state $j$ as:
+   $T_{j}(n):=\min \{ m>T_{j}(n-1):X_{m}=j \}$.
+
+The [[stopping-time|stopping times]] $T_{j}(n)$ are therefore random times when
+the chain hits point $X_{m}=j$.
+<!-- TODO: image "Pasted image 20240621192725.png" not found in vault -->
+The *$n$-th excursion* of $X$ starting from $j$ is therefore given by the block
+$$
+(X_{T_{j}(n-1)+1}, \dots, X_{T_{j}(n)}).
+$$
+The *excursion length* is given by
+$$
+\alpha_{n}:= T_{j}(n)-T_{j}(n-1);\quad \alpha_{0}=0;\quad \alpha_{1}=T_{j}.
+$$
+
+#### State Visits
+
+Define the *number of visits to a state* $j$ after time $0$ by
+$$
+N_{j}=\sum_{n=1}^\infty \mathbb{1}_{X_{n}=j}.
+$$
+From the simple computation
+$$
+\mathbb{E}[N_{j}|X_{0}=i]=\sum_{n=1}^\infty \mathbb{E}[\mathbb{1}_{X_{n}=j}|X_{0}=i]=\sum_{n=1}^\infty \mathbb{P}(X_{n}=j|X_{0}=i)=\sum_{n=1}^\infty p_{i,j}(n),
+$$
+we obtain the following result regarding state
+[[markov-chain-state-classification|state classification]].
+
+:::{.theorem data-title="State Classification and Expected Visits"}
+
+State $j$ is persistent iff $\mathbb{E}[N_{j}|X_{0}=i]=\infty$ i.e. if the
+expected number of visits to state $j$ is infinite starting from $j$ or any
+state $i$ that communicates with $j$. Equivalently state $j$ is transient iff
+$\mathbb{E}[N_{j}|X_{0}=i]<\infty$.
+
+:::
+
+In fact we have the more robust result following from properties of the
+Geometric distribution.
+
+For all $i,j\in S$ and $k\geq 0$ we have that
+$$
+\mathbb{P}(N_{j}=k|X_{0}=i)=\begin{cases}
+1-f_{ij} & \text{if }k=0, \\
+f_{i,j}f_{j,j}^{k-1}(1-f_{j,j}) & \text{if }k\geq 1.
+\end{cases}
+$$
+From this we can make the following conclusions:
+
+1. If $j$ is transient ($f_{j,j}<1$) then:
+	- $\mathbb{P}(N_{j}=k|X_{0}=j)=f_{j,j}^k(1-f_{j,j})$, $k\geq 0$ i.e. $N_j$ is
+   a Geometric ($f_{j,j}$) random variable.
+	- For all $i$,
+   $\mathbb{E}[N_{j}|X_{0}=i]=\sum_{n=1}^\infty p_{i,j}(n)= \frac{{f_{i,j}}}{1-f_{j,j}}<\infty$
+   (mean of Geometric random variable).
+	- For all $i$, $\mathbb{P}(N_{j}<\infty|X_{0}=i)=1$ and
+   $\mathbb{P}(N_{j}=\infty|X_{0}=i)=0$ i.e. the chain visits transient state
+   $j$ finitely often.
+2. If $j$ is persistent ($f_{j,j}=1$) then:
+	- $\mathbb{P}(N_{j}=k|X_{0}=j)=0$ for $k=0,1,2,\dots$ and
+   $\mathbb{P}(N_{j}=\infty|X_{0}=j)=1$, that is
+	- $\mathbb{P}(\{ X_{n}=j \}~i.o.|X_{0}=j)=1$.
+	- For all $i$, $\mathbb{P}(N_{j}=k|X_{0}=i)=0$ for $j=0,1,2,\dots$,
+   $\mathbb{P}(N_{j}=\infty|X_{0}=i)=f_{{i,j}}$ and
+   $\mathbb{P}(N_{j}=0|X_{0}=i)=1-f_{i,j}$.
+
+To understand the appearance of the Geometric distribution consider a Markov
+chain starting from the state $j$, $X_{0}=j$. Following the movements of the
+chain until it returns to $j$ with probability $f_{j,j}$, that is until it
+completes its first excursion. Completing an excursion is labelled as a
+Failure, leaving excursion incomplete as a Success. $N_{j}=k$ means that
+starting from $j$, the chain completed $k$ excursions, i.e. returned to state
+$j$ exactly $k$ times. The $(k+1)$-st excursion was not completed, a Success,
+with probability $1-f_{j,j}$. This happened because the chain left state $j$ at
+time $T_{j}(n)$ and never returned.

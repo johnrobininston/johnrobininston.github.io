@@ -1,0 +1,44 @@
+---
+title: Breeden-Litzenberger Formula
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+For a European call option with payoff function $h(S_{T})=(S_{T}-K)_{+}$ we are
+able to recover the density of the stock price using the information on the
+option price $C(T,K)$, which is defined as the price of the European call
+option at time 0 with maturity $T$ and strike $K$.
+
+:::{.theorem data-title="Breeden-Litzenberger Formula"}
+
+The Breeden-Litzenberger Formula relates the option price $C(T,K)$ to the
+density of the underlying stock price $S_t$ under risk neutral measure
+$\mathbb{Q}$, denoted as $p(t,\cdot)$, as follows
+$$
+p(T,x)=e^{-rT} \frac{{\partial^2C}}{\partial K^2}(T,x).
+$$
+
+:::
+
+`\begin{proof}`
+
+Assume that the density of stock price $S_{t}$ under risk-neutral measure
+$\mathbb{Q}$ is denoted as $p(t,\cdot)$, then from risk-neutral pricing
+$$
+C(T,K)=e^{-rT}\mathbb{E}^\mathbb{Q}(S_{T}-K)_{+}=e^{-rT}\int _{K}^\infty (X-K)\cdot p(T,x) \, dx .
+$$
+Taking the derivative with respect to $K$ (assuming its admissible) we find
+$$
+\begin{align}
+\frac{{\partial C}}{\partial K} & =e^{-rT}\left[ -Kp(T,K)-\int _{K}^\infty p(T,x)\, dx  +Kp(T,K) \right] \\
+ & -e^{-rT}\int _{K}^\infty p(T,x) \, dx .
+\end{align}
+$$
+Taking the derivative again with respect to $K$ gives the B-L formula.
+`\end{proof}`
+*Note: This formula is restrictive in practice since it requires us to know a
+continuum of European call prices with respect to different strikes $K$.
+However, it is not model specific and will help us build up more useful
+results.*

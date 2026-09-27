@@ -461,16 +461,22 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="markov-property">Markov Property</h3>
 <p>In probability theory a stochastic process is said to satisfy the <em>Markov property</em> if its future evolution is <em>independent of its history</em>, that is, the process is <em>memoryless</em>. Consider a discrete time stochastic process <span class="math inline">\(\{X_t\}_{t\in\mathbb{N}}\)</span> defined in the probability space <span class="math inline">\((\Omega,\mathcal{F}, \mathbb{P})\)</span>.</p>
 <div class="definition" data-title="Markov Property">
-<p>The discrete time stochastic process <span class="math inline">\(\{X_t\}_{t\in\mathbb{N}}\)</span> is said to satisfy the <em>Markov property</em> if <span class="math display">\[\mathbb{P}(X_{n+1}=x_{n+1}|X_n=x_n, ..., X_1=x_1)=\mathbb{P}(X_{n+1}=x_{n+1}|X_n=x_n).\]</span></p>
+<p>The discrete time stochastic process <span class="math inline">\(\{X_t\}_{t\in\mathbb{N}}\)</span> is said to satisfy the <em>Markov property</em> if</p>
+<p><span class="math display">\[
+\mathbb{P}(X_{n+1}=x_{n+1}|X_n=x_n, ..., X_1=x_1)
+=\mathbb{P}(X_{n+1}=x_{n+1}|X_n=x_n).
+\]</span></p>
 </div>
 <p>Intuitively, we see that we gain no additional information about the probability of the next value of the process by conditioning on the entire history rather than the latest value. Any process satisfying the markov property is called a <strong>Markov process</strong>.</p>
 </section>
 <section id="markov-chains-1" class="level3">
 <h3 class="anchored" data-anchor-id="markov-chains-1">Markov Chains</h3>
-<p>A Markov process with a discrete state space is known as a <strong>Markov chain (MC)</strong>. Assume that <span class="math inline">\(\{X_t\}_{t\in\mathbb{N}}\)</span> is a Markov chain with finite state space <span class="math inline">\(\mathcal{X}:=\{1, ..., M\}\)</span>. The evolution of the chain in time is described by <strong>transition probabilities</strong> <span class="math inline">\(p_{i,j}^{(n)}(t)\)</span> which give the probability that the chain is in state <span class="math inline">\(j\)</span> at time <span class="math inline">\(t+n\)</span> given that the chain was in <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span> <span class="math display">\[
+<p>A Markov process with a discrete state space is known as a <strong>Markov chain (MC)</strong>. Assume that <span class="math inline">\(\{X_t\}_{t\in\mathbb{N}}\)</span> is a Markov chain with finite state space <span class="math inline">\(\mathcal{X}:=\{1, ..., M\}\)</span>. The evolution of the chain in time is described by <strong>transition probabilities</strong> <span class="math inline">\(p_{i,j}^{(n)}(t)\)</span> which give the probability that the chain is in state <span class="math inline">\(j\)</span> at time <span class="math inline">\(t+n\)</span> given that the chain was in <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></p>
+<p><span class="math display">\[
 p_{i,j}^{(n)}(t)=\mathbb{P}(X_{t+n}=j|X_{t}=i).
 \]</span></p>
-<p>We summarize the transition probabilities in an <span class="math inline">\(M\times M\)</span> <strong>transition probability matrix</strong> denoted by <span class="math display">\[
+<p>We summarize the transition probabilities in an <span class="math inline">\(M\times M\)</span> <strong>transition probability matrix</strong> denoted by</p>
+<p><span class="math display">\[
 P^{(n)}(t)=(p_{i,j}^{(n)}(t))_{i,j\in\mathcal{X}}.
 \]</span></p>
 <p>The transition probability matrix is <em>stochastic</em> which means that for all <span class="math inline">\(n,t\in\mathbb{N}\)</span> we have:</p>
@@ -478,17 +484,21 @@ P^{(n)}(t)=(p_{i,j}^{(n)}(t))_{i,j\in\mathcal{X}}.
 <li><span class="math inline">\(0\leq p_{i,j}^{(n)}(t)&lt;1\)</span> for all <span class="math inline">\(i,j\in \mathcal{X}\)</span>,</li>
 <li><span class="math inline">\(\sum_{{j\in S}}p_{{i,j}}^{(n)}(t)=1\)</span> for all <span class="math inline">\(i\in \mathcal{X}\)</span> (the rows sum to 1).</li>
 </ol>
-<p>To simplify notation we denote the <em>one-step transition probablity matrix</em> <span class="math display">\[
+<p>To simplify notation we denote the <em>one-step transition probablity matrix</em></p>
+<p><span class="math display">\[
 P(t)=(p_{i,j}(t))_{i,j\in\mathcal{X}}.
 \]</span></p>
-<p>The transition probabilities are <em>stationary</em> when they are invariant in time, that is <span class="math display">\[
+<p>The transition probabilities are <em>stationary</em> when they are invariant in time, that is</p>
+<p><span class="math display">\[
 p_{i,j}^{(n)}(t)=p_{i,j}^{(n)}(s);~~\forall s,t\in\mathbb{N}.
 \]</span></p>
-<p>We say that a MC is <strong>homogenous</strong> if it has stationary transition probabilities. For homogenous MCs we are often interested in the one-step transition probabilities and so again to clarify notation we denote the one-step transition probability matrix for homogenous MCs as <span class="math display">\[
+<p>We say that a MC is <strong>homogenous</strong> if it has stationary transition probabilities. For homogenous MCs we are often interested in the one-step transition probabilities and so again to clarify notation we denote the one-step transition probability matrix for homogenous MCs as</p>
+<p><span class="math display">\[
 P=(p_{i,j})_{i,j\in\mathcal{X}}.
 \]</span></p>
 <div class="example" data-title="Transition Matrix">
-<p>Consider a homogenous MC <span class="math inline">\(\{X_t\}\)</span> with finite state space <span class="math inline">\(\mathcal{S}:=\{1,2,3\}\)</span> with transition probability matrix <span class="math display">\[
+<p>Consider a homogenous MC <span class="math inline">\(\{X_t\}\)</span> with finite state space <span class="math inline">\(\mathcal{S}:=\{1,2,3\}\)</span> with transition probability matrix</p>
+<p><span class="math display">\[
 P = \begin{bmatrix}
 0 &amp; 0.6 &amp; 0.2 &amp; 0.2 \\
 0.75 &amp; 0 &amp; 0.25 &amp; 0 \\
@@ -507,7 +517,8 @@ P = \begin{bmatrix}
 <figcaption>Transition probability diagram.</figcaption>
 </figure>
 </div>
-<p>There are several alternate versions of this diagram including the <em>integer weighted diagram</em>. To construct the integer-weighted diagram we compute the inter-weighted matrix by multiplying elements of each row by the lowest common multiple for that row. The integer weighted matrix for our example is <span class="math display">\[
+<p>There are several alternate versions of this diagram including the <em>integer weighted diagram</em>. To construct the integer-weighted diagram we compute the inter-weighted matrix by multiplying elements of each row by the lowest common multiple for that row. The integer weighted matrix for our example is</p>
+<p><span class="math display">\[
 P = \begin{bmatrix}
 0 &amp; 3 &amp; 1 &amp; 1 \\
 3 &amp; 0 &amp; 1 &amp; 0 \\
@@ -532,7 +543,8 @@ P = \begin{bmatrix}
 </section>
 <section id="state-distributions" class="level3">
 <h3 class="anchored" data-anchor-id="state-distributions">State Distributions</h3>
-<p>The <strong>state distribution</strong> <span class="math inline">\(\mu_i(t)\)</span> gives the probability that the chain is in state <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span> <span class="math display">\[
+<p>The <strong>state distribution</strong> <span class="math inline">\(\mu_i(t)\)</span> gives the probability that the chain is in state <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span></p>
+<p><span class="math display">\[
 \mu_i(t)=\mathbb{P}(X_{t}=i).
 \]</span></p>
 <p>For convenience we summarize the state distributions in vector notation <span class="math display">\[
@@ -547,23 +559,33 @@ X_{1:t} = (X_1, ..., X_t),
 <p>where similarly <span class="math inline">\(X_{1:t}=x_{1:t}\)</span> is equivalent to <span class="math inline">\(X_1=x_1, ..., X_t=x_t\)</span>.</p>
 <p><em>Finite-dimensional distributions</em> allow us to evaluate the behavior of the distribution of infinite length processes by selecting some sub-sequence of index values to evaluate their joint distribution.</p>
 <div class="theorem" data-title="Finite-Dimensional Distributions">
-<p>The <em>finite-dimensional distributions</em> of <span class="math inline">\(X=(X_{n})_{n}\)</span> are determined by the initial mass <span class="math inline">\(\mu^{(0)}\)</span> and transition matrix <span class="math inline">\(P\)</span> where <span class="math display">\[P(X_{0}=i_{0}, \dots, X_{n}=i_{n})=\mu_{{x_{0}}}^{(0)}p_{x_{0}, x_{1}}(0)p_{x_{1}, x_{2}}(1)\cdots p_{x_{n-1}, x_{n}}(n-1).\]</span></p>
+<p>The <em>finite-dimensional distributions</em> of <span class="math inline">\(X=(X_{n})_{n}\)</span> are determined by the initial mass <span class="math inline">\(\mu^{(0)}\)</span> and transition matrix <span class="math inline">\(P\)</span> where</p>
+<p><span class="math display">\[
+P(X_{0}=i_{0}, \dots, X_{n}=i_{n})=
+\mu_{{x_{0}}}^{(0)}p_{x_{0}, x_{1}}(0)p_{x_{1}, x_{2}}(1)\cdots
+p_{x_{n-1}, x_{n}}(n-1).
+\]</span></p>
 </div>
 <div class="proof">
 <p><span class="proof-title"><em>Proof</em>. </span>From application of the Chain Rule and the Markov Property we see that <span class="math display">\[
 \begin{align}
 \mathbb{P}&amp;(X_{1 : n}=x_{1: n}) &amp; \\
-&amp; = \mathbb{P}(X_{0}=x_{0}) \mathbb{P}(X_{1}=x_{1}|X_{0}=x_{0})\mathbb{P}(X_{2}=x_{2}|X_{0 : 1}=x_{0 : 1})\cdots \\
+&amp; = \mathbb{P}(X_{0}=x_{0}) \mathbb{P}(X_{1}=x_{1}|X_{0}=x_{0})
+\mathbb{P}(X_{2}=x_{2}|X_{0 : 1}=x_{0 : 1})\cdots \\
 &amp; \quad \cdots \mathbb{P}(X_{n}=x_{n}|X_{0 : n-1}=x_{0: n-1})  \\
-  &amp; =\mathbb{P}(X_{0}=x_{0})\mathbb{P}(X_{1}=x_{1}|X_{0}=x_{0})\mathbb{P}(X_{2}=x_{2}|X_{1}=x_{1})\cdots \\
+  &amp; =\mathbb{P}(X_{0}=x_{0})\mathbb{P}(X_{1}=x_{1}|X_{0}=x_{0})
+  \mathbb{P}(X_{2}=x_{2}|X_{1}=x_{1})\cdots \\
   &amp; \quad \cdots \mathbb{P}(X_{n}=x_{n}|X_{n-1}=x_{n-1})  \\
-&amp; = \mu_{{x_{0}}}^{(0)}p_{x_{0}, x_{1}}(0)p_{x_{1}, x_{2}}(1)\cdots p_{x_{n-1}, x_{n}}(n-1),
+&amp; = \mu_{{x_{0}}}^{(0)}p_{x_{0}, x_{1}}(0)p_{x_{1}, x_{2}}(1)
+\cdots p_{x_{n-1}, x_{n}}(n-1),
 \end{align}
 \]</span></p>
 <p>as required.</p>
 </div>
-<div class="theorem" data-title="Multi-Step Transition Probabilities for Homogenous MCs">
-<p>Let <span class="math inline">\(\{ X_{n} \}\)</span> be a homogenous MC with one-step transition probability matrix <span class="math inline">\(P\)</span>. The <span class="math inline">\(m\)</span>-step transition probabilities are given by raising the one-step transition probability matrix to the <span class="math inline">\(m\)</span>-th power <span class="math display">\[P^{(m)}=(\mathbb{P}(X_{m}=j|X_{0}=i))_{i,j}=P^m.\]</span></p>
+<div class="theorem" data-title="Multi-Step Transition Probabilities for  Homogenous MCs">
+<p>Let <span class="math inline">\(\{ X_{n} \}\)</span> be a homogenous MC with one-step transition probability matrix <span class="math inline">\(P\)</span>. The <span class="math inline">\(m\)</span>-step transition probabilities are given by raising the one-step transition probability matrix to the <span class="math inline">\(m\)</span>-th power <span class="math display">\[
+P^{(m)}=(\mathbb{P}(X_{m}=j|X_{0}=i))_{i,j}=P^m.
+\]</span></p>
 </div>
 <div class="proof">
 <p><span class="proof-title"><em>Proof</em>. </span>The result follows immediately from the Markov property since <span class="math display">\[
@@ -593,7 +615,7 @@ P:=\begin{bmatrix}
 </figure>
 </div>
 <p>Suppose we wish to determine the <span class="math inline">\(3\)</span>-step transition probabilities. Applying the multi-step transition result we can compute <span class="math inline">\(\mathbb{P}(X_3|X_0)\)</span> as <span class="math inline">\(P^3\)</span>:</p>
-<div id="faca79c3" class="cell" data-execution_count="2">
+<div id="6589cb9e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> np.array([</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">.4</span>, <span class="fl">.6</span>, <span class="dv">0</span>],</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">.7</span>, <span class="fl">.3</span>, <span class="dv">0</span>],</span>
@@ -613,7 +635,7 @@ P:=\begin{bmatrix}
 \end{aligned}
 \]</span></p>
 <p>Thus we can compute:</p>
-<div id="2a57b84c" class="cell" data-execution_count="3">
+<div id="104d7b65" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mu <span class="op">=</span> np.array([</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.7</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>])</span>
@@ -639,10 +661,12 @@ P:=\begin{bmatrix}
 <p>Alternatively, if a state <span class="math inline">\(j\)</span> is not persistent it must be <em>transient</em>, that is, the probability that the process will return to <span class="math inline">\(j\)</span> given that it started at <span class="math inline">\(j\)</span> eventually is 0 i.e.&nbsp;the processes structure prevents it from returning. This is equivalent to writing <span class="math display">\[\mathbb{P}(X_{n}=i~\text{for some}~n\geq 1|X_{0}=i)&lt;1.\]</span></p>
 </div>
 <div class="definition" data-title="Periodic States">
-<p>The <em>period</em> of a state <span class="math inline">\(j\)</span> is the greatest common divider of all <span class="math inline">\(n\)</span> for which <span class="math inline">\(p_{{i,i}}(n)&gt;0\)</span> i.e. <span class="math display">\[d(i)=gcd\{n:p_{i,i}(n)&gt;0\}.\]</span> If <span class="math inline">\(d(i)=1\)</span> then the state <span class="math inline">\(j\)</span> is <em>aperiodic</em> and otherwise, the state is said to be <em>periodic</em>.</p>
+<p>The <em>period</em> of a state <span class="math inline">\(j\)</span> is the greatest common divider of all <span class="math inline">\(n\)</span> for which <span class="math inline">\(p_{{i,i}}(n)&gt;0\)</span> i.e. <span class="math display">\[
+d(i)=gcd\{n:p_{i,i}(n)&gt;0\}.
+\]</span> If <span class="math inline">\(d(i)=1\)</span> then the state <span class="math inline">\(j\)</span> is <em>aperiodic</em> and otherwise, the state is said to be <em>periodic</em>.</p>
 </div>
 <div class="definition" data-title="Ergodic States">
-<p>A state <span class="math inline">\(j\)</span> is <em>ergodic</em> if it is positive persistent and aperiodic i.e.&nbsp;<span class="math inline">\(\mu_{i,i}&lt;\infty\)</span> and <span class="math inline">\(d(i)=1\)</span>.</p>
+<p>A state <span class="math inline">\(j\)</span> is <em>ergodic</em> if it is positive persistent and aperiodic i.e. <span class="math inline">\(\mu_{i,i}&lt;\infty\)</span> and <span class="math inline">\(d(i)=1\)</span>.</p>
 </div>
 <div class="definition" data-title="Absorbing States">
 <p>A state <span class="math inline">\(j\)</span> is <em>absorbing</em> if <span class="math inline">\(p_{j,j}=1\)</span>, that is the probability of leaving state <span class="math inline">\(j\)</span> once the process has entered is 0.</p>
@@ -682,7 +706,11 @@ P:=\begin{bmatrix}
 <h2 class="anchored" data-anchor-id="chapman-kolmogorov-equations">Chapman Kolmogorov Equations</h2>
 <p>The <em>Chapman-Kolmogorov Equations (CKE)</em> relate the joint probability distributions of different sets of coordinates on a stochastic process.</p>
 <div class="theorem" data-title="Chapman-Kolmogorov Equations">
-<p>For a discrete time countable state homogeneous Markov chain the Chapman-Kolmogorov equations state that <span class="math display">\[P_{n+m}=P_{n}\cdot P_{m},\]</span> or equivalently <span class="math display">\[p^{(n+m)}_{i,j}=\sum_{k\in S}p^{(n)}_{i,k}p^{(m)}_{k,j}.\]</span></p>
+<p>For a discrete time countable state homogeneous Markov chain the Chapman-Kolmogorov equations state that <span class="math display">\[
+P_{n+m}=P_{n}\cdot P_{m},
+\]</span> or equivalently <span class="math display">\[
+p^{(n+m)}_{i,j}=\sum_{k\in S}p^{(n)}_{i,k}p^{(m)}_{k,j}.
+\]</span></p>
 </div>
 <p>A similar result holds for distributions <span class="math display">\[
 \mu_{j}^{(n+m)}=\sum_{i \in S}\mu_{i}^{(n)}p_{i,j}(m),
@@ -697,7 +725,9 @@ P:=\begin{bmatrix}
 <h3 class="anchored" data-anchor-id="limiting-distribution">Limiting Distribution</h3>
 <p>Consider the long-term behavior of a MC <span class="math inline">\(\{ X_{n} \}_{n=0}^\infty\)</span> when <span class="math inline">\(n \to \infty\)</span>. It is possible for the chain to converge to a particular state (e.g.&nbsp;a Galton-Watson-Bienaymé (GWB) Branching Process can converge to 0). Additionally, it is possible for a MC to converge to some random variable <span class="math inline">\(X~a.s.\)</span> as <span class="math inline">\(n\to \infty\)</span>. Intuitively, if a Markov chain runs for a long time it generally doesn’t converge because it is always jumping around but its distribution can settle down.</p>
 <div class="definition" data-title="Limiting Distribution">
-<p>The <em>limiting distribution</em> of a homogenous MC with initial distribution <span class="math inline">\(\boldsymbol{\mu}\)</span> and TP matrix <span class="math inline">\(P\)</span> is the distribution vector <span class="math display">\[\lambda:=\lim_{n\to\infty}\mu\cdot P^n.\]</span></p>
+<p>The <em>limiting distribution</em> of a homogenous MC with initial distribution <span class="math inline">\(\boldsymbol{\mu}\)</span> and TP matrix <span class="math inline">\(P\)</span> is the distribution vector <span class="math display">\[
+\lambda:=\lim_{n\to\infty}\mu\cdot P^n.
+\]</span></p>
 </div>
 <p>This is often a challenging limit to find analytically and even numerically often requires Monte-Carlo simulations.</p>
 <div class="example" data-title="Limiting Behaviour">
@@ -719,7 +749,9 @@ P:=\begin{bmatrix}
 <h3 class="anchored" data-anchor-id="stationary-distribution">Stationary Distribution</h3>
 <p>A process is <strong>strictly stationary</strong> if its distribution does not change under translations, i.e.&nbsp;over time. More formally we give the following definition.</p>
 <div class="definition" data-title="Strictly Stationary Process">
-<p>A process <span class="math inline">\(\{ X_{n},~n\geq 0 \}\)</span> is <em>strictly stationary</em> if for any integers <span class="math inline">\(m\geq 0\)</span> and <span class="math inline">\(k&gt;0\)</span>, we have <span class="math display">\[(Y_{0}, Y_{1}, \dots Y_{m})\stackrel{\mathcal{D}}{=}(Y_{k}, Y_{k+1}, \dots, Y_{k+m})\]</span> that is, the distribution does not change under translations.</p>
+<p>A process <span class="math inline">\(\{ X_{n},~n\geq 0 \}\)</span> is <em>strictly stationary</em> if for any integers <span class="math inline">\(m\geq 0\)</span> and <span class="math inline">\(k&gt;0\)</span>, we have <span class="math display">\[
+(Y_{0}, Y_{1}, \dots Y_{m})\stackrel{\mathcal{D}}{=}(Y_{k}, Y_{k+1}, \dots, Y_{k+m})
+\]</span> that is, the distribution does not change under translations.</p>
 </div>
 <p>This is often a challenging condition to show and so we also define a <strong>weak stationarity</strong> of the mean and covariance being invariant to changes in time. See oour discussion of Time Series Anaysis for more detailed noted on stationarity.</p>
 <div class="definition" data-title="Stationary Distribution">
@@ -811,7 +843,7 @@ P=\begin{bmatrix}
 \end{bmatrix}.
 \]</span></p>
 <p>We can numerically confirm our result by iteratively applying the transition probability matrix:</p>
-<div id="798f5440" class="cell" data-fig-height="6" data-fig-width="12" data-execution_count="4">
+<div id="2fd1ab6a" class="cell" data-fig-height="6" data-fig-width="12" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> np.array([</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">.2</span>, <span class="fl">.6</span>, <span class="fl">.2</span>],</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">.3</span>, <span class="dv">0</span>, <span class="fl">.7</span>],</span>
@@ -866,7 +898,18 @@ P=\begin{bmatrix}
 <section class="level2">
 <h2 class="anchored" data-anchor-id="">Backlinks</h2>
 <ul>
+<li><a href="../topics/ergodic-theorems.html">Ergodic Theorems</a></li>
+<li><a href="../topics/hidden-markov-models.html">Hidden Markov Models</a></li>
+<li><a href="../topics/jump-process-fundamentals.html">Jump Process Fundamentals</a></li>
+<li><a href="../topics/jump-process-generator-backwards-equations.html">Jump Process Generator &amp; Backwards Equations</a></li>
+<li><a href="../topics/jump-processes.html">Jump Processes</a></li>
+<li><a href="../topics/kolmogorov-equations.html">Kolmogorov Equations</a></li>
+<li><a href="../topics/markov-chain-monte-carlo-mcmc-methods.html">Markov Chain Monte Carlo (MCMC) Methods</a></li>
+<li><a href="../topics/markov-models.html">Markov Models</a></li>
+<li><a href="../topics/mathematics.html">Mathematics</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
+<li><a href="../topics/regime-switching-models.html">Regime-Switching Models</a></li>
+<li><a href="../topics/stochastic-control.html">Stochastic Control</a></li>
 </ul>
 </section>
 

@@ -1,0 +1,129 @@
+---
+title: Convergence Almost Surely
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Convergence Almost Surely
+
+The concept of something being true almost surely in probability theory is
+equivalent to the concept of something being true almost everywhere in
+analysis. The idea is that on some probability space, something is true almost
+surely if the probability of the set of outcomes where it is not true is zero.
+
+:::{.definition data-title="Convergence Almost Surely"}
+
+A sequence of random variables $\{X_n\}_{n\in\mathbb{N}}$ on probability space
+$(\Omega, \mathcal{F}, \mathbb{P})$ is said to **converge almost surely** to
+$X$, denoted $X_n\stackrel{a.s.}{\rightarrow}X$ $(n\rightarrow\infty)$ if
+$$
+\mathbb{P}\left(\lim_{n\rightarrow\infty}X_n=X\right)=\mathbb{P}\left(\left\{\omega\in\Omega:\lim_{n\rightarrow\infty}X_n(\omega)=X(\omega)\right\}\right)=1.
+$$
+
+:::
+###### Example (Direct Almost Surely Convergence Proof)
+
+Consider the sample space $\Omega=[0,1]$ with uniform probability measure
+defined by
+$$
+\mathbb{P}([a,b])=b-a;\quad (0 \leq  a \leq  b \leq  1).
+$$
+Define the sequence of random variables $\{ X_{n} \}_{n \in \mathbb{N}}$ and
+random variable $X$ by
+$$
+X_{n}(\omega) = \begin{cases}1 & \text{if } 0 \leq  \omega < \frac{{n+1}}{2n} \\0 & \text{otherwise},\end{cases}\quad\&\quad X(\omega)= \begin{cases}1 & \text{if }0 < \omega< \frac{1}{2} \\0&\text{otherwise}.\end{cases}
+$$
+We can show that $X_{n} \stackrel{a.s.}{\to}X$ by first defining the set $A$ as
+$$
+A:= \{  \omega \in \Omega :\lim_{n \to \infty}X_{n}(\omega)=X(\omega) \},
+$$
+and showing that $\mathbb{P}(A)=1$. We can specifically find $A$ by noting:
+- For $0\leq \omega < \frac{1}{2}< \frac{{n+1}}{2n}$ we have that
+  $X_{n}(\omega)= X(\omega)=1$ and so
+  $\left[ 0, \frac{1}{2} \right) \subset A$;
+- For $\omega> \frac{1}{2} \implies 2\omega-1>0$ we have $X(\omega)=0$ and
+  $X_{n}(\omega)=0$ for all $n > \frac{1}{2\omega-1}$ and so
+  $\left( \frac{1}{2},1 \right] \subset A$.
+Since $\mathbb{P}\left( X_{n}=\frac{1}{2} \right)=0$ we have that
+$\mathbb{P}\left( X_{n} \in\left[ 0, \frac{1}{2} \right) \cup \left( \frac{1}{2}\cup 1 \right] \right)=1$
+and since
+$\left[ 0, \frac{1}{2} \right) \cup \left( \frac{1}{2}\cup 1 \right] \subset A$
+we have $\mathbb{P}(A)=1$.
+
+### Convergence Almost Surely Results
+
+In most problems, proving convergence almost surely directly is challenging,
+thus it is desirable to know some sufficient conditions.
+
+:::{.theorem data-title="Sufficient Condition for Convergence Almost Surely"}
+
+For sequence of random variables $\{  X_{n} \}n \in \mathbb{N}$, if for all $\epsilon >0$ we have $$\sum_{n=1}^\infty \mathbb{P}(|X_{n}-X|>\varepsilon)<\infty,$$then $X_{n}\stackrel{a.s.}{\to}X$.
+
+:::
+
+This result is a direct application of the [[borel-cantelli-lemma]] since the
+condition implies that $\{ |X_{n} - X|>\varepsilon \}$ finitely often almost
+surely and so eventually $|X_{n}-X|<\varepsilon$ for all $n$ large enough
+almost surely.
+### Random Variable Convergence Hierarchy
+
+Random variables can also converge
+[[convergence-in-probability|in probability]],
+[[convergence-in-lp-norm|in norm]] and [[convergence-in-law|in law]] and the
+relationships between all types of convergence can be found in the note:
+[[convergence-of-random-variables]].  
+
+<!-- TODO: image "Note Jun 3, 2024.jpeg" not found in vault -->
+#### Convergence Almost Surely & Convergence in Probability
+
+:::{.theorem data-title="$X_{n}\stackrel{a.s}{\to}X \implies X_{n} \stackrel{\mathbb{P}}{\to}X$"}
+
+If $X_{n}\stackrel{a.s}{\to}X$ as $n \to \infty$ then
+$X_{n}\stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$.
+
+:::
+
+`\begin{proof}`
+We fix $\varepsilon>0$ and define the event
+$A_{n}=\{ |X_{n}-X| \geq \epsilon \}$. We can then define the decreasing set
+$B_{m}=\bigcup_{k=m}^\infty A_{k}$ i.e. $B_{m}\supseteq B_{m+1}\supseteq\dots$
+and since decreasing sequences have limits we have that
+$$
+B_{m}=\bigcup_{k=m}^\infty A_{k}\downarrow B_{\infty}=\bigcap_{m=0}^\infty \bigcup_{k=m}^\infty A_{k}=\limsup_{n\to \infty}A_{n}.
+$$
+We consider the limit
+$$
+\lim_{n \to \infty}\mathbb{P}(|X_{n}-X|>\varepsilon)=\lim_{n \to \infty}\mathbb{P}(A_{n})\leq \lim_{{n \to \infty}}\mathbb{P}(B_{n})\stackrel{m.c.t}{=}\mathbb{P}\left(\lim_{n\to \infty}B_{n}\right)\leq  \mathbb{P}(X_{n}\not\to X)=0.
+$$
+`\end{proof}`
+*Note: The converse is not true in general, however we can show that for every
+sequence of random variables that converges in probability, there exists a
+subsequence that converges almost surely.*
+
+:::{.theorem data-title="$X_{n}\stackrel{\mathbb{P}}{\to}X\implies \exists$ subsequence $X_{n_{k}}\stackrel{a.s.}{\to}X ~~(k \to \infty)$"}
+
+If $X_{n}\stackrel{\mathbb{P}}{\to}X$, then there exists a non-random
+subsequence $\{ n_{1}, n_{2}, \dots, n_{k}, \dots \}\nearrow \infty$ such that
+$X_{n_{k}}\stackrel{a.s.}{\to}X$ as $k \to \infty$.
+
+:::
+
+`\begin{proof}`
+Assuming $X_{n}\stackrel{\mathbb{P}}{\to}X$ we fix integer $k>0$ and choose
+$\varepsilon = \frac{1}{k}$ such that by definition
+$$
+\lim_{n \to \infty}\mathbb{P}\left( \left\{  \omega \in \Omega:|X_{n}(\omega)-X(\omega)|> \frac{1}{k}  \right\} \right) =0.
+$$
+Thus, there exists $n_{k}$ such that
+$\mathbb{P}\left( \left\{  \omega \in \Omega:|X_{n_{k}}(\omega)-X(\omega)|> \frac{1}{k}  \right\} \right)=\mathbb{P}(A_{k})\leq \frac{1}{k}^2$.
+From results for [[geometric-series]] we have that
+$$
+\sum_{i=1}^\infty\mathbb{P}(A_{k})=\sum_{i=1}^\infty \frac{1}{k^2}<\infty,
+$$
+and so from the [[borel-cantelli-lemma]] we have that $\mathbb{P}(A_{k}~i.o)=0$
+and so there exists $n_{0}$ such that
+$A_{k}^c=\left\{  \omega \in \Omega:\lvert X_{n_{k}}(\omega)-X(\omega) \rvert \leq \frac{1}{k}  \right\}$
+happens for all $k \geq n_{0}$ with probability 1.`\end{proof}`
+

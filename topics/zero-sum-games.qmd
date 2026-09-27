@@ -1,0 +1,293 @@
+---
+title: Zero-Sum Games
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Zero-Sum Games
+
+## Fundamentals of Zero-Sum Games
+
+The simplest kind of game utility structure is a **zero sum game** in which
+players can only gain at the equal cost to other players.  
+
+:::{.definition data-title="Zero-Sum Game"}
+
+A **zero-sum game** requires for finite agents $j=\{1, \dots, J\}=:\mathcal{J}$
+with decision variables $\boldsymbol{d}=(d^j)_\mathcal{J}$ and utility function
+$U^j$ we have
+$$
+\sum_{j=1}^{J}U^j(\boldsymbol{d})=0.
+$$
+
+:::
+
+
+
+Games where this sum is equal to a nonzero constant (independent of decision
+variables) are known as **constant sum game** which can easily transformed to a
+zero-sum game.
+
+Zero-sum games are often called *strictly competitive games* and are most often
+solved with the *minimax theorem* or with *Nash equilibrium*.  
+
+The zero-sum property means that any result of a zero-sum situation is
+[[pareto-optimal]] (no players position can be improved without making another
+players worse).
+
+
+- **Definition of Zero-Sum Game**
+    
+    - Two-player game where one player’s gain is the other’s loss:
+      u1+u2=0u1​+u2​=0
+        
+- **Game Representations**
+    
+    - **Normal-form (Matrix) Games**
+        
+        - Payoff matrix for player 1; player 2's payoffs are the negation
+            
+    - **Extensive-form Games**
+        
+        - Game tree with sequential moves and perfect/imperfect information
+            
+- **Basic Concepts**
+    
+    - **Strategies**
+        
+        - Pure vs. mixed strategies
+            
+    - **Expected Payoff**
+        
+        - Payoff under mixed strategies computed using bilinear forms
+            
+- **Dominance and Simplification**
+    
+    - Dominated strategies can be eliminated
+        
+    - Best response correspondences
+        
+
+
+### Foundational Theorems and Results
+
+- **Minimax Theorem (von Neumann, 1928)**
+    
+    max⁡x∈Δmmin⁡y∈ΔnxTAy=min⁡y∈Δnmax⁡x∈ΔmxTAyx∈Δm​max​y∈Δn​min​xTAy=y∈Δn​min​x∈Δm​max​xTAy
+    - Existence of equilibrium in mixed strategies
+        
+    - Value of the game is unique
+        
+- **Duality in Linear Programming**
+    
+    - Connection between zero-sum games and LP duality
+        
+    - Game value as LP optimum
+        
+    - Dual variables represent optimal strategies
+        
+
+
+### Solution Concepts
+
+- **Saddle Point**
+    
+    - Strategy pair (x∗,y∗)(x∗,y∗) such that
+      x∗Ay∗=min⁡ymax⁡xxAy=max⁡xmin⁡yxAyx∗Ay∗=miny​maxx​xAy=maxx​miny​xAy
+        
+- **Value of the Game**
+    
+    - Common expected payoff to both players at equilibrium
+        
+
+
+### Algorithms for Computing Strategies
+
+- **Linear Programming Formulation**
+    
+- **Simplex Method**
+    
+- **Iterated Best Response**
+    
+- **Fictitious Play (Brown, 1951)**
+    
+- **Regret Minimization and Online Learning (e.g., Follow the Regularized
+  Leader)**
+    
+
+
+### Extensions and Advanced Topics
+
+- **Zero-Sum Games with Infinite Strategy Sets**
+    
+    - Measurable strategy spaces, Glicksberg’s generalization
+        
+- **Differential Games**
+    
+    - Continuous-time control interpretation of zero-sum interactions
+        
+- **Stochastic Games (Shapley, 1953)**
+    
+    - Markov decision process with two players and transition dynamics
+        
+- **Repeated Games**
+    
+    - Zero-sum repeated games with finite/infinite horizon
+        
+    - Folk theorems and the emergence of cooperation
+        
+- **Mean Field Games (in zero-sum settings)**
+    
+    - Large population limits with antagonistic interactions
+        
+
+
+### Connections to Other Fields
+
+- **Optimization & Convex Analysis**
+    
+    - Saddle point theory
+        
+- **Control Theory**
+    
+    - Differential and dynamic zero-sum games
+        
+- **Economics**
+    
+    - Competitive equilibria in markets with strategic antagonism
+        
+- **Machine Learning**
+    
+    - Adversarial training, GANs as a zero-sum game
+
+
+
+## Zero-Sum Games
+
+The simplest kind of game utility structure is a zero sum game in which players
+can only gain utility at the equal cost to another players utility, for example
+chess. They naturally describe any head to head competition with reward for
+only a single winner at the end.
+
+:::{.definition data-title="Zero-Sum Game"}
+
+A **zero-sum game** is defined by the requirement that the sum of all player
+cost / reward functions is zero. Written mathematically, for finite agents
+$j=\{1, \dots, J\}=:\mathcal{J}$ with decision variables
+$\boldsymbol{u}=(u^j)_\mathcal{J}$ and cost / reward function $L^i$ we have
+$$
+\sum_{j=1}^{J}L^i(\boldsymbol{u})=0.\tag{1}
+$$
+Games where this sum is equal to a nonzero constant (independent of decision
+variables) are known as **constant sum game** which can easily transformed to a
+zero-sum game.
+
+:::
+
+Zero-sum games are often called *strictly competitive games* and are most often
+solved with the *minimax theorem* or with *Nash equilibrium*.  
+
+The zero-sum property means that any result of a zero-sum situation is
+[[pareto-optimal]] (no players position can be improved without making another
+players worse).  
+
+## 2-Player Zero-Sum Games
+
+Two-person zero-sum games **do not allow for any cooperation between the
+players** since what one player gains incurs an equivalent loss in the other.
+This is not the case in other games, such as two-player non-zero-sum games or
+games with three or more players, as cooperation between two or more players
+can result in their mutual advantage.
+
+**Definition (Saddle Point):** In a zero-sum game, a *saddle point* represents
+a stable solution where the maximin value (highest row minimum) equals the
+[[minimax-and-maximin|minimax]] value (lowest column maximum). This point
+indicates an equilibrium where neither player can improve their outcome by
+unilaterally changing their strategy.
+
+*Example:* Consider players $p_{1}, p_{2}$ who are directing unit forces on a
+point mass in $\mathbb{R}^2$ at the origin $(x,y)=(0,0)$ at time $t=0$. At
+$t=1$ player $p_{1}$ has aim to maximize the $y$ coordinate and $p_{2}$ has aim
+to minimize the $y$-coordinate. This is a zero-sum game with solution following
+immediately, both players will act their force in their preferred direction,
+cancel each other out, resulting in no net force and equilibrium.
+
+## Matrix Games
+
+Elementary two-person zero-sum games are **matrix games** in which players
+$p_1, p_{2}$ have game outcomes summarized in the $n \times m$ matrix
+$$
+A=(a_{i,j});\quad i=1, .., m; ~j=1, \dots, n,\tag{2}
+$$
+where each outcome corresponds to a particular pair of decisions made by the
+players. The matrix rows and columns correspond to the strategies for players
+$p_{1}, p_{2}$ respectively. We interpret positive outcomes as $p_{1}$ paying
+$p_{2}$ and vice versa, generally thought of as relative change of **utility**.  
+
+First considering a single round, a reasonable strategy for $p_1$ might be to
+minimize her losses against any strategy of $p_{2}$ (rational or irrational).
+Similarly, $p_{2}$ will want to secure his gains against any behavior of
+$p_{1}$. These are known as *security strategies*.
+
+:::{.definition data-title="Loss Ceilings & Security Strategy"}
+
+The *security strategy* $i^*$ is the strategy of $p_{1}$ (matrix row) such that
+$$
+\overline{V}(A)\stackrel{\Delta}{=}\max_{j}a_{i^*j}\leq \max_{j}a_{i,j};\quad i=1, \dots, m.\tag{3}
+$$
+If selected then her losses will be no greater than $\overline{V}$ which we
+call the *loss ceiling* of $p_{1}$. Similarly, the *security strategy* $j^*$ is
+the strategy of $p_{2}$ (matrix column) such that
+$$
+\underline{V}(A)\stackrel{\Delta}{=}\min_{i}a_{i,j^*}\geq \min_{i}a_{ij};\quad j = 1, \dots, n.\tag{4}
+$$
+If selected then her gains will be no less than $\underline{V}$ which we call
+the *gain floor* of $p_{2}$.
+
+:::
+
+
+
+:::{.theorem data-title="$~$"}
+
+In every matrix game $A=(a_{ij})$ the following hold:
+1. The security level of each player is unique;
+2. There exists at least one security strategy for each player; and
+3. The security level of $p_{1}$ (the minimizer) never falls below the security
+   level of $p_{2}$ (the maximizer)
+   $$
+   \min_{i}a_{ij^*}=\underline{V}(A)\leq \overline{V}(A)=\max_{j}a_{i^*j}\tag{5}
+   $$
+   for security strategies $i^*,j^*$.
+
+:::
+
+*Proof:* 
+Properties 1 and 2 follow directly from equations $(3)$ and $(4)$, since in
+every matrix game there is only a finite number of alternatives for each player
+to chose from. To proce 3 we note
+$$
+\min_{i}a_{i,l}\leq a_{kl}\leq \max_{j}a_{kj};\quad \forall k,l.\tag{6}
+$$
+Letting $k=i^*$ and $l=j^*$ the result follows. 
+$\square$
+
+:::{.definition data-title="Saddle-Point Strategies"}
+
+For matrix game $A=(a_{ij})$ with security strategies $i^*, j^*$. If the paif
+og inequalities
+$$
+a_{i^*j} \leq a_{i^*j^*}\leq a_{ij^*};\quad \forall i,j,
+$$
+the strategies are said to be *saddle-point strategies*, and the game is said
+to have a saddle point in pure strategies. The corresponding outcome
+$a_{i^*j^*}$ is called the saddle-point value and is denoted $V(A)$.
+
+:::
+
+ 
+
+
+ 

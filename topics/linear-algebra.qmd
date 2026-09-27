@@ -1,0 +1,726 @@
+---
+title: Linear Algebra
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Linear Algebra
+
+- [[fields]]
+- [[vector-spaces]]
+- [[span-and-bases]]
+- 
+
+
+
+
+
+### Norms and Metrics
+
+For a given vector space $(\mathcal{V},F)$ we are typically interested in
+constructing measures of *size* and *distance* (i.e. how big is a vector, how
+far apart are two vectors etc.) and this is accomplished through the
+introduction of **norms** and **metrics**.  
+
+:::{.definition data-title="Definition (Norm)"}
+
+For vector space $(\mathcal{V},F)$ a **norm** on $\mathcal{V}$ is a real-valued
+function $p:\mathcal{V}\to \mathbb{R}$ that satisfies the following properties:
+1. $p(x+y)\leq p(x)+p(y)$ for all $x,y\in\mathcal{V}$ (subadditivity);
+2. $p(\alpha x)=\lvert \alpha \rvert p(x)$ for all $x \in\mathcal{V}$ and
+   $\alpha \in F$ (absolute homogeneity); and
+3. $p(x)=0 \iff x=0$ for all $x \in\mathcal{V}$ (positive definiteness).
+
+:::
+
+**Example (Euclidean Norm):**
+For a euclidean vector $\vec{v}\in \mathbb{R}^n$ we define the standard norm as
+$$
+\lvert \vec{v} \rvert =\left( \sum_{i=1}^{n}v_{i} \right)^{1/n}.
+$$
+**Metrics** are defined for general sets but often we consider the case where
+these are vector spaces and so we include the definition specifically for
+vector spaces.
+
+:::{.definition data-title="Definition (Metric)"}
+
+For vector space $\mathcal{V}$ a metric is a function
+$d:\mathcal{V}\times \mathcal{V}\to \mathbb{R}$ satisfying the following:
+1. $d(x,x)=0$ for all $x \in \mathcal{V}$;
+2. $x\neq y \implies d(x,y)>0$ (positivity);
+3. $d(x,y)=d(y,x)$ (symmetry); and
+4. $d(x,z)\leq d(x,y)+d(y,z)$ (triangle inequality).
+
+:::
+
+Vector spaces upon which we have defined a norm or metric are known as
+[[norm-spaces]] and [[metric-spaces]] which are explored in detail in their own
+topics.
+
+## Matrices
+
+### Matrices
+
+Matrices are fundamental mathematic objects consisting of a rectangular array
+of numbers (more generally elements of some field) that typically satisfy
+certain properties of addition and multiplication.
+
+:::{.definition data-title="Definition (Matrix)"}
+
+A **matrix** (typically denoted by capital letters) is a 2-dimensional ordered
+array of elements of a field $F$
+$$
+A:=\begin{bmatrix}a_{1,1} & a_{1,2}&\cdots&a_{1,m} \\a_{2,1} & a_{2,2} & \cdots & a_{2,m} \\ \vdots & \vdots & \ddots & \vdots  \\ a_{n,1} & a_{n,2} & \cdots & a_{n,m} \end{bmatrix}\in M_{n \times m}(F),
+$$
+where $a_{i,j}\in F$ for all $i=1,\dots,n$ and $j = 1,\dots,m$.  
+
+:::
+
+We use the index notation $i,j$ to mean the $i$-th row and the $j$-th column,
+and $M_{n \times m}(F)$ to denote the collection of $n$-row, $m$-column
+matrices with elements in field $F$.
+
+The transpose of a matrix
+$A:=\{ a_{ij} \}_{i \in 1, \dots n,j \in 1, \dots, m}\in M_{n \times m}(F)$ is
+the matrix
+$A^\top := \{ a_{ji} \}_{j \in_{1}, \dots,m, i \in 1, .., n} \in M_{m \times n}(F)$.
+
+### Matrix Arithmetic
+
+We can **add matrices** $A,B \in M_{n \times m}(F)$ as follows
+
+$$
+A+B:=\begin{bmatrix}
+a_{1,1}+b_{1,1} & a_{1,2}+b_{1,2}&\cdots&a_{1,m}+b_{1,m} \\
+a_{2,1}+b_{2,1} & a_{2,2}+b_{2,2} & \cdots & a_{2,m}+b_{2,m} \\
+\vdots & \vdots & \ddots & \vdots  \\
+a_{n,1}+b_{n,1} & a_{n,2}+b_{n,2} & \cdots & a_{n,m} + b_{n,m}
+\end{bmatrix}\in M_{n \times m}(F).
+$$
+
+We can also perform **scalar multiplication** with $\alpha \in F$ by
+
+$$
+\alpha A:=\begin{bmatrix}
+\alpha a_{1,1} & \alpha a_{1,2}&\cdots&\alpha a_{1,m} \\
+\alpha a_{2,1} & \alpha a_{2,2} & \cdots & \alpha a_{2,m} \\
+\vdots & \vdots & \ddots & \vdots  \\
+\alpha a_{n,1} & \alpha a_{n,2} & \cdots & \alpha a_{n,m}
+\end{bmatrix}\in M_{n \times m}(F).
+$$
+
+We can show that matrix spaces $M_{n\times m}(F)$ define vector spaces with
+these operations. For **matrix multiplication** we are restricted to
+considering two matrices where the first has the same number of columns as the
+second has rows, that is $A\in M_{n \times m}(F)$ and
+$B \in M_{m \times o}(F)$. Specifically, we have that
+
+$$
+AB= \left[ \sum_{k=1}^{n}a_{ik}b_{kj} \right].
+$$
+
+For two matrices of the same dimension $A,B\in M_{n \times m}(F)$ the
+**Hadamard product** $A\odot B \in M_{n \times m}(F)$ is given by the
+element-wide products
+
+$$
+(A \odot B)_{ij}=(A)_{ij}\cdot(B)_{ij}.
+$$
+
+For two matrices of different dimension $A\in M_{n \times m}(F)$ and
+$B \in M_{k \times l}(F)$ the **Kronecker product**
+$A\otimes B\in M_{nk\times ml}$ is the $nk \times ml$ block matrix given by
+
+$$
+A \otimes B =
+\begin{bmatrix}
+a_{11}B & a_{12}B & \cdots & a_{1m}B \\
+a_{21}B & a_{22}B & \cdots & a_{2m}B \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+a_{n1}B & a_{n2}B & \cdots & a_{nm}B
+\end{bmatrix}
+\in M_{nk \times ml}(F).
+$$
+
+### Elementary Operations
+
+Elementary operations are operations specific to matrices specifically used in
+**Gaussian elimination** to reduce a matrix to **row echelon form**.
+
+:::{.definition data-title="Definition (Elementary Row / Column Operations)"}
+
+Consider a matrix $A\in M_{n \times m}(F)$ whose elements are from field $F$.
+The **elementary row operations** are defined as:
+1. $R_{i}=r_{i}+\lambda r_{j}$ for some $\lambda \in F$;
+2. $R_{i}=\lambda r_{i}$ for $0 \neq \lambda \in F$;
+3. $R_{i}\leftrightarrow R_{j}$,
+   
+where we use the convention that $r_{i}$ is the row value before the
+transformation and $R_{i}$ is the row value after. The **elementary column
+operations** are defined similarly for columns.
+
+:::
+
+We say that a matrix $B$ is **row-equivalent** to the matrix $A$ if one can be
+obtained from the other using only elementary operations.  
+
+:::{.definition data-title="Definition (Reduced Row Echelon Form)"}
+
+A matrix is said to be in **reduced row echelon form** if the following
+conditions are satisfied:
+1. The leading coefficient in each non-zero row is 1;
+2. Each leading coefficient is the only non-zero entry in its column;
+3. The matrix is in **echelon form**, that is all of the zero rows are in the
+   bottom rows, and as the row numbers increase, the column numbers of the
+   leading coefficients also (strictly) increase.
+
+:::
+
+Any matrix can be put into reduced echelon form by a sequence of elementary
+operations.
+
+**Example (Reduced Row Echelon Form):**
+We put the following matrix in reduced row echelon form
+
+$$
+A=\begin{bmatrix}
+1 & 3 & 3 & 8 & 5 \\
+0 & 1 & 3 & 10 & 8 \\
+0 & 0 & 0 & -1 & -4 \\
+0 & 0 & 0 & 2 & 8
+\end{bmatrix}.
+$$
+
+Keeping track of our operations we have
+
+$$
+\begin{bmatrix}
+1 & 3 & 3 & 8 & 5 \\
+0 & 1 & 3 & 10 & 8 \\
+0 & 0 & 0 & -1 & -4 \\
+0 & 0 & 0 & 2 & 8
+\end{bmatrix}\begin{matrix}
+R_{3}=-1\cdot r_{3} \\
+R_{4}=r_{4}-2\cdot r_{3} \\
+\longrightarrow
+\end{matrix}
+\begin{bmatrix}
+1 & 3 & 3 & 8 & 5 \\
+0 & 1 & 3 & 10 & 8 \\
+0 & 0 & 0 & 1 & 4 \\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}
+\begin{matrix}
+R_{1}=-3\cdot r_{2} \\
+R_{2}=r_{2}-10\cdot r_{3} \\
+\longrightarrow
+\end{matrix}
+\begin{bmatrix}
+1 & 0 & -6 & 0 & 69 \\
+0 & 1 & 3 & 0 & -32 \\
+0 & 0 & 0 & 1 & 4 \\
+0 & 0 & 0 & 0 & 0
+\end{bmatrix}.
+$$
+
+### Matrix Inverse
+
+:::{.definition data-title="Definition (Determinant)"}
+
+The determinant $\det(A)$ of a matrix $A \in M_{n}(F)$ is defined as
+$$
+\det(A) = \sum_{\sigma \in S_n} \operatorname{sgn}(\sigma) \prod_{i=1}^n a_{i,\sigma(i)},
+$$
+
+:::
+where $\text{sgn}(\alpha)$ gives the sign of $\alpha$.  
+
+For example, for a $3\times 3$ matrix $A\in M_{3}(F)$ we have that
+
+$$
+A:= \begin{bmatrix}
+a & b & c\\ 
+d & e & f\\ 
+g & h & i\\
+\end{bmatrix} \implies \det(A)=a(ei-fh)-b(di-gf)+c(dh-ge).
+$$
+
+:::{.definition data-title="Definition (Matrix Inverse)"}
+
+The **inverse** of a square matrix $A \in M_{n}(F)$ is another unique square
+matrix $A^{-1} \in M_{n}(F)$ such that
+$$
+A\cdot A^{-1}=A^{-1} \cdot A=I_{n},
+$$
+
+:::
+where $I_{n}$ is the **identity matrix** with elements $i_{i,j}=1$ when $i=j$
+and $0$ otherwise. The inverse of matrix $A$ exists iff and only if
+$\det(A)\neq 0$.
+
+To find the inverse for invertible $A\in M_{n}(F)$ we apply the **augmented
+matrix method** whereby we apply elementary operations to transform
+
+$$
+[A|I_{n}]\longrightarrow[I_{n}|A^{-1}].
+$$
+
+For matrix $A\in M_{n\times m}(F)$ the elements $a_{i,i}$ are known as the
+**diagonal elements**. If the matrix is square it is said to be a **diagonal
+matrix** if all other elements $a_{{i,j}}=0$ when $i \neq j$. A matrix is
+called **upper triangular** if all elements below the diagonal are zero. A
+matrix is called **lower triangular** is all elements above the diagonal are
+zero. The **transpose** of a matrix is the matrix reflected across its diagonal
+i.e. $A^T=[a_{j,i}]_{\forall i,j}$.
+
+A matrix $A\in M_{n}(F)$ is said to be **symmetric** if $a_{i,j}=a_{j,i}$ for
+all $i,j$, i.e. $A=A^T$.
+
+### Matrix Trace
+
+:::{.definition data-title="Definition (Trace)"}
+
+The **trace** of an $n \times n$ square matrix $A$ is given by the sum of the
+diagonal elements, namely
+$$
+\mathrm{Tr}(A)=\sum_{i=1}^{n}a_{ii}.
+$$
+
+:::
+
+The trace has several interesting properties including:
+
+1. The trace is a linear mapping thus:
+   $\mathrm{Tr}(cA+B)=c\mathrm{Tr}(A)+\mathrm{Tr}(B)$ for scalar $c$.
+2. A matrix and its transpose have the same trace:
+   $\mathrm{Tr}(A)=\mathrm{Tr}(A^\top)$.
+3. The trace of a square matrix that is the product of two matrices can be
+   written as the Hadamard product. Precisely, if $A,B\in M_{n \times m}(F)$
+   then
+   $\mathrm{Tr}(A^\top B)=\mathrm{Tr}(AB^\top)= \mathrm{Tr}(B^\top A) = \mathrm{Tr}(BA^\top)=\sum_{i=1}^{m}\sum_{j=1}^{n}a_{ij}b_{ij}$.
+
+## Linear Operators & Change of Basis Matrices
+
+### Matrices of Linear Operators
+
+A **(vector) operator** (or **transformation**) is a mapping between vectors
+spaces (sometimes required to be the same space). An important type of operator
+is a **linear operator**.  
+
+:::{.definition data-title="Definition (Linear Operator)"}
+
+For vector spaces $\mathcal{V},\mathcal{W}$ a **linear operator** is a mapping
+$P:\mathcal{V}\to\mathcal{W}$ that takes the form
+$$
+P(\alpha_{1}\vec{v}_{1}+\alpha_{2} \vec{v}_{2})=\alpha_{1}P(\vec{v}_{1})+\alpha_{2}P(\vec{v}_{2}).
+$$
+
+:::
+
+A linear operator is therefore one that preserves vector space operations, in
+the sense that it does not matter whether you apply the linear operator before
+or after the operations of addition and scalar multiplication. In more
+technical words, linear operators are morphisms between vector spaces. In the
+finite-dimensional case linear operators can be represented by matrices in the
+following way.
+
+Selecting a basis $(\vec{v}_{1}, \dots, \vec{v}_{n})$ in $\mathcal{V}$ and
+$(\vec{w}_{1},\dots,\vec{w}_{n})$ in $\mathcal{W}$, let
+$\vec{x}=x^i \vec{v}_{i}$ be an arbitrary vector in $\mathcal{V}$ (assuming
+Einstein Convention) and linear operator $P:\mathcal{V}\to\mathcal{W}$. Then
+
+$$
+A\vec{v}=x^iA\vec{v}_{i}=x^i(A \vec{v_{i}})\vec{w}_{j}.
+$$
+
+Then $a_{i}^j\equiv (A\vec{v}_{i})^j$ with all $a_{i}^j\in F$ is the matrix
+form of the operator $A$ in the fixed basis $\{ \vec{v}_{i} \}_{i=1}^n$. The
+tensor $a_{i}^j$ does not depend on the choice of $x$, and $\vec{A}x=\vec{y}$
+if $a_{i}^jx^i=y^i$. Thus in fixed bases $n \times m$ matrices are in
+**bijective** correspondence to linear operators from $U$ to $V$.
+
+:::{.definition data-title="Definition (Linear Operator Matrix)"}
+
+Assume that vector space $(\mathcal{V},F)$ has basis
+$\mathcal{B}:=(\vec{b}_{1}, \dots, \vec{b}_{n})$. For linear operator
+$P:\mathcal{V}\to\mathcal{V}$ the operator matrix $A$ of $P$ with respect to
+basis $\mathcal{B}$ is defined as
+$$
+[P]_{\mathcal{B}}=\begin{bmatrix}[P(\vec{b}_{1})]_{\mathcal{B}} & \cdots & [P(\vec{b}_{n})]_{\mathcal{B}}\end{bmatrix}.
+$$
+
+:::
+
+Intuitively, each column is the $n\times 1$ coordinate matrix of
+$P(\vec{b}_{i})$ in the basis $\mathcal{B}$.  
+
+### Eigenvalues and Eigenvectors
+
+Ideally, one would like to choose a basis in which the matrix of $P$ is
+diagonal. This requires us to introduce the concept of **Eigenvalues** and
+**Eigenvectors**.
+
+:::{.definition data-title="Definition (Eigenvalues and Eigenvectors)"}
+
+For a linear operator $P:\mathcal{V}\to\mathcal{V}$ an **eigenvector** is a
+non-zero vector $\vec{0}\neq \vec{x}\in\mathcal{V}$ such that
+$$
+P\vec{x}=\lambda \vec{x},
+$$
+for some scalar $\lambda \in F$ called an **eigenvalue**.
+
+:::
+
+To find the eigenvectors and corresponding eigenvalues for a real square matrix
+$A$ we define the **characteristic polynomial** as
+
+$$
+c_{A}(\lambda):=\det(A-\lambda I_{n}).
+$$
+
+We are then able to apply the following theorem.
+
+:::{.definition data-title="Finding Eigenvalues"}
+
+If a vector space $(\mathcal{V})$ has a basis
+$\mathcal{B}:=(\vec{x}_{1}, \dots \vec{x}_{n})$ consisting of eigenvectors of
+linear operator $P$ then
+$$
+[P]_{\mathcal{B}}=\text{diag}(\lambda_{1}, \dots, \lambda_{n}),
+$$
+where $\lambda_{i}$ is the eigenvalue of $\vec{x}_{i}$.
+
+:::
+
+*Proof* \
+Since $P\vec{x}_{i}=\lambda_{i}\vec{x}_{i}$ the $i$-th column of the matrix
+$[P]_{\mathcal{B}}$ is
+
+$$
+[P \vec{x}_{i}]_{\mathcal{B}}=\begin{bmatrix}0  & \cdots  & 0 & \lambda_{i} & 0 & \cdots & 0\end{bmatrix},
+$$
+
+where $\lambda_{i}$ is in the $i$-th position.
+$\square$
+
+### Matrix Image, Kernel and Rank
+
+:::{.definition data-title="Definition (Image)"}
+
+The **image** of a linear transformation $P:\mathcal{V}\to\mathcal{W}$ (and
+indeed for any function) is given as
+$$
+\text{im}(P):=\{ P(\vec{x})\in\mathcal{W} :\vec{x}\in\mathcal{V}\}.
+$$
+
+:::
+
+The **matrix image** of $A \in M_{n \times m}(F)$ is defined to be the image of
+the associated **linear operator** $\vec{v}\mapsto A \vec{v}$ (using the
+standard basis unless stated otherwise).
+
+:::{.definition data-title="Definition (Kernel)"}
+
+Similarly, the **kernel** of a linear transformation $P$ is defined 
+$$
+\text{ker}(P):=\{  \vec{ x}\in\mathcal{V}:P(\vec{ x})=\vec{ 0} \}.
+$$
+
+:::
+ 
+The **matrix kernel** of $A \in M_{n \times m}(F)$ is the kernel of the
+associated linear operator.
+
+:::{.theorem data-title="Proposition (Images, Kernels and Elementary Row Operations)"}
+
+For a matrix $A\in M_{n \times m}(F)$ row operations do not change the kernel
+and column operations do not change the image.
+
+:::
+
+:::{.definition data-title="Definition (Rank)"}
+
+The **rank** of a matrix $A\in M_{n \times m}(F)$ is defined as
+$$
+\text{dim}(\text{im}(A)).
+$$
+
+:::
+
+### Dimension Theorem
+
+The following Dimension Theorem (sometimes known as the **Rank-Nullity
+Theorem**) shows that if we know the dimension of either the image or the
+kernel of the linear operator $P$ then we immediately know the dimension of the
+remaining one.
+
+:::{.theorem data-title="Dimension Theorem"}
+
+For linear operator $P:\mathcal{V}\to\mathcal{W}$ where $\mathcal{V}$ is
+finite-dimensional we have that
+$$
+\text{dim}(\text{im}(P))+\text{dim}(\text{ker}(P))=\text{dim}(\mathcal{V}).
+$$
+
+:::
+
+*Proof:* \
+Needs updating.
+
+
+## Inner Products
+
+### Inner Products
+
+An inner product is a type of linear mapping on a vector space, one that
+specifically creates a norm.
+
+:::{.definition data-title="Definition (Inner Product)"}
+
+Given vector space $\mathcal{V}$ an **inner product**
+$\left< \cdot, \cdot \right>:\mathcal{V}\times\mathcal{V} \to \mathbb{R}$ is a
+mapping satisfying the following properties for all
+$v_{1}, v_{2}, v_{3} \in \mathcal{V}$:
+1. Symmetry: $\left< v_{1}, v_{2} \right> = \left< v_{2}, v_{1} \right>$;
+2. Non-negativity: $\left< v_{1}, v_{1} \right> \geq 0$;
+3. Non-Degeneracy: $\left< v_{1}, v_{1} \right> =0 \iff v_{1}=0$; and
+4. Linearity:
+   $\left<  \alpha v_{1}, v_{2} + v_{3} \right> = \alpha \left<  v_{1}, v_{2} \right> + \alpha \left< v_{1}, v_{3} \right> = \alpha \left<  v_{1}, v_{2} + v_{3} \right>.$
+
+:::
+
+*Note:* Every **inner product** creates a **norm** satisfying:
+$\lVert v \rVert = \sqrt{ \left< v, v \right> }.$
+
+A vector space with a corresponding inner product is known as an **inner
+product space**. Some important inner-product space results include:
+1. The **Cauchy-Schwartz inequality**:
+   $\lvert \left< v_{1}, v_{2} \right> \rvert\leq \lVert v_{1} \rVert \cdot \lVert v_{2} \rVert$.
+2. The **triangle inequality**:
+   $\lVert  v_{1}+v_{2} \rVert \leq \lVert v_{1} \rVert + \lVert  v_{2} \rVert$.
+
+### Bilinear Form
+
+:::{.definition data-title="Definition (Bilinear Form)"}
+
+Consider vector space $(\mathcal{V}, F)$. A function
+$\left< \cdot, \cdot \right>:\mathcal{V}\times \mathcal{V}\to F$ is a
+**bilinear form** if the following conditions are satisfied for all
+$\alpha \in F$ and $\vec{x}, \vec{y}, \vec{z}\in\mathcal{V}$:
+1. $\left< \alpha  \vec{x}+ \vec{ y}, \vec{ z} \right>=\alpha \left< \vec{ x}, \vec{ z} \right>+\left<  \vec{ y}, \vec{ z} \right>$
+   (linearity in the first argument);
+2. $\left< \vec{ x}, \alpha  \vec{y}+ \vec{ z} \right>=\alpha \left<  \vec{ x}, \vec{ y} \right>+\left< \vec{ x}, \vec{ z} \right>$
+   (linearity in the second argument).
+
+:::
+
+Consider a bilinear form on $\mathcal{V}:=\mathbb{R}^n$ where
+$\left< \cdot, \cdot \right>:\mathcal{V},\times  \mathcal{V} \to \mathbb{R}$.
+Then there is a unique matrix $A \in M_{n}(\mathbb{R})$ such that
+
+$$
+\left< \vec{x}, \vec{ y} \right> =\vec{x}^TA \vec{ y}.
+$$
+
+Conversely, for any $A \in M_{n}(\mathbb{R})$, this formula defines a bilinear
+form $\left< \cdot, \cdot \right>_{A}$.
+
+A bilinear form is **symmetric** if for all $\vec{ x}, \vec{ y}\in\mathcal{V}$
+$$
+\left< \vec{ x}, \vec{ y} \right> =\left< \vec{y}, \vec{ z} \right> 
+$$
+
+The bilinear form $\left< \cdot, \cdot \right>_{A}$ on $\mathbb{R}^n$ is
+symmetric if and only if the matrix $A$ is symmetric.
+
+A bilinear form is **positive definite** if for all
+$\vec{ 0}\neq\vec{x}\in\mathcal{V}$
+$$
+\left< \vec{x}, \vec{x} \right> >0.
+$$
+
+:::{.definition data-title="Definition (Inner Product)"}
+
+A bilinear form that is both symmetric and positive definite is known as an
+**inner product** of $\mathcal{V}$.
+
+:::
+
+An **inner product space** is a vector space with an associated inner product.
+An inner product ensures we have the properties required to define intuitive
+measurements such as length, angle and distance.
+
+**Example (Euclidean Space)**
+Within the vector space $\mathcal{V}:=\mathbb{R}^n$ the **scalar product** of
+vectors $\vec{x}, \vec{y}\in \mathcal{V}$ is defined as
+$$
+\left< \vec{x},\vec{y} \right> =\sum_{i=1}^n x_{i}y_{i}.
+$$
+From this we define the **Euclidean norm** (length) of a vector $\vec{x}$ as
+$$
+\lVert \vec{x} \rVert :=\sqrt{ \left< \vec{ x}, \vec{ x} \right>  },
+$$
+and the **angle** $\theta$ between vectors as
+$$
+\cos \theta= \frac{\left< \vec{ x}, \vec{y} \right>}{\lVert \vec{ x} \rVert \cdot \lVert \vec{ y} \rVert }.
+$$
+Furthermore, from this norm we can define the **metric** (distance) between
+vectors as
+$$
+d(\vec{ x}, \vec{ y})=\lVert \vec{x}-\vec{y} \rVert .
+$$
+
+:::{.theorem data-title="Theorem (Cauchy-Schwarz Inequality)"}
+
+For inner product space $(\mathcal{V})$ for any
+$\vec{x}, \vec{ y}\in\mathcal{V}$ we have
+$$
+\lvert \left< \vec{x}, \vec{ y} \right>\rvert \leq \lVert \vec{ x} \rVert\cdot \lVert \vec{ y} \rVert   .
+$$
+
+:::
+
+*PROOF:*
+If $\lVert \vec{x} \rVert=0$ then $\vec{x}=0$ by positive definiteness and we
+obtain equality. Assuming that $\lVert \vec{x} \rVert>0$ we define the
+vector...
+
+### Orthogonality
+
+Two vectors in $\vec{ x}, \vec{ y}\in\mathcal{V}$ are said to be **orthogonal**
+(perpendicular, right angles) if
+$$
+\left< \vec{x}, \vec{y} \right> =0.
+$$
+
+:::{.definition data-title="Definition (Orthogonal and Orthonormal Vectors)"}
+
+A sequence of vectors $\vec{x}_{1}, \dots, \vec{x}_{n}\in\mathcal{V}$ in inner
+product space is said to be **orthogonal**, if they are **pairwise
+orthogonal**, that is
+$$
+\left< \vec{x}_{i}, \vec{x}_{j} \right> =0;\quad i \neq j.
+$$
+If these vectors also have unit norm
+$$
+\lVert \vec{x}_{i} \rVert =1;\quad \forall i,
+$$
+then the sequence is called **orthonormal**.
+
+:::
+
+If $\mathcal{W}\subset\mathcal{V}$ is a subspace of an inner product space,
+then we define the **orthogonal complement** of $\mathcal{W}$ in $\mathcal{V}$
+as follows
+$$
+\mathcal{W}^\perp := \{ \vec{x}\in \mathcal{V}:\left< \vec{ x}, \vec{ y} \right>=0,~\forall  \vec{y}\in\mathcal{W}  \}.
+$$
+
+:::{.theorem data-title="Inner Product Identities"}
+
+For (possibly infinite dimensional) inner product space $\mathcal{V}$ the
+following identities hold:
+1. $\lVert \vec{ x}+\vec{ y} \rVert\leq \lVert \vec{ x} \rVert+\lVert  \vec{ y} \rVert$
+   for $\vec{ x},\vec{ y}\in \mathcal{V}$ (triangle inequality);
+2. For orthogonal
+   $\vec{x}_{1}, \dots, \vec{ x}_{n}\implies \sum_{i=1}^n\lVert \vec{ x}_{i} \rVert=\left\lVert  \sum_{i=1}^n \vec{x}_{i}  \right\rVert^2$
+   (generalized pythagorean theorem);
+3. $\lVert \vec{x}+\vec{ y} \rVert^2+\lVert \vec{ x}-\vec{ y} \rVert^2=2\lVert \vec{x} \rVert^2+2\lVert \vec{y} \rVert^2$
+   for any $\vec{x}, \vec{y}\in \mathcal{V}$ (parallelogram law).
+
+:::
+
+### Projections
+*References:
+[Wikipedia](https://en.wikipedia.org/wiki/Projection_(linear_algebra)).*
+
+:::{.definition data-title="Definition (Projection)"}
+
+On a vector space $(\mathcal{V},F)$ a **projection** is a linear operator
+$P:\mathcal{V}\to\mathcal{V}$ such that $P^2=P$.
+
+:::
+
+When $\mathcal{V}$ has an inner-product and is complete, i.e. when
+$\mathcal{V}$ is a [[hilbert-spaces|Hilbert space]], the concept of
+**orthogonality** can be applied. A projection $P$ on a Hilbert space
+$\mathcal{V}$ is called an **orthogonal projection** if it satisfies
+$$
+\left< P \vec{x}, \vec{ y} \right> =\left< \vec{x}, P \vec{y} \right>, 
+$$
+for all $\vec{x}, \vec{y}\in\mathcal{V}$. A projection on a Hilbert space that
+is not orthogonal is called an **oblique projection**. The concept of
+orthogonal projections are important in [[stochastic-processes]] where they are
+used to rigorously define [[conditional-expectation]].
+
+## Matrix Decomposition
+
+### Spectral Decomposition
+
+## Geometry of $\mathbb{R}^n$
+
+## Dot Product
+
+$$
+x \cdot y = \sum_{i=1}^n x_i y_i
+$$
+
+### Cauchy–Schwarz Inequality
+
+$$
+|x \cdot y| \le \|x\| \|y\|
+$$
+
+
+## Norm and Distance
+
+$$
+\|x\| = \sqrt{x \cdot x}
+$$
+
+$$
+d(x,y) = \|x-y\|
+$$
+
+
+## Orthogonality
+
+Vectors are orthogonal if
+
+$$
+x \cdot y = 0.
+$$
+
+
+## Projection
+
+$$
+\mathrm{proj}_u v
+=
+\frac{v \cdot u}{u \cdot u} u.
+$$
+
+
+## Level Sets
+
+For scalar field $f$, a level set is
+
+$$
+\{x \in \mathbb{R}^n : f(x) = c\}.
+$$
+
+If $\gamma(t)$ lies in the level set:
+
+$$
+f(\gamma(t)) = c.
+$$
+
+Differentiating:
+
+$$
+\nabla f(\gamma(t)) \cdot \gamma'(t) = 0.
+$$
+
+Thus $\nabla f$ is orthogonal to level sets.

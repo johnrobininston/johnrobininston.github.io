@@ -1,0 +1,59 @@
+---
+title: Unit Root Tests
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Unit Root Tests
+Before differencing (as in [[arima-processes|ARIMA]] modelling) or testing for
+[[cointegration]], we need a formal test for whether a series is non-stationary
+because $\phi(z)$ has a root at $z=1$ (a "unit root", $X_t \sim I(1)$) rather
+than stationary around a trend.
+
+:::{.definition data-title="Dickey-Fuller Test"}
+
+Consider $X_t = \rho X_{t-1} + Z_t$. The null $H_0: \rho = 1$ (unit root,
+non-stationary random walk) is tested against $H_1: |\rho|<1$ (stationary)
+using the regression
+$$
+\nabla X_t = \gamma X_{t-1} + Z_t, \qquad \gamma = \rho - 1,
+$$
+and the $t$-statistic for $\hat\gamma$. Under $H_0$ this statistic does **not**
+converge to a Student-$t$ distribution but to a nonstandard Dickey-Fuller
+distribution (functional of Brownian motion), requiring specialized critical
+values.
+
+:::
+
+:::{.definition data-title="Augmented Dickey-Fuller (ADF) Test"}
+
+Adds lagged differences to whiten residual autocorrelation:
+$$
+\nabla X_t = \alpha + \beta t + \gamma X_{t-1} + \sum_{j=1}^k \delta_j \nabla X_{t-j} + Z_t,
+$$
+testing $H_0: \gamma = 0$. Constant/trend terms and lag order $k$ (chosen via
+[[model-selection-criteria-aic-bic]] or sequential testing) must be specified.
+
+:::
+
+:::{.definition data-title="KPSS Test"}
+
+Reverses the null: $H_0$ is **stationarity** (trend- or level-stationary),
+tested against the alternative of a unit root, by testing whether the partial
+sums of OLS residuals from a trend regression behave like a stationary process.
+Used alongside ADF since the two tests have opposite null hypotheses —
+agreement between them strengthens conclusions about the true order of
+integration.
+
+:::
+
+**Other variants**: Phillips-Perron (non-parametric correction for serial
+correlation/heteroskedasticity instead of augmenting with lags), and
+Zivot-Andrews (allows for a structural break under the alternative).
+
+### References
+- [[arima-processes]]
+- [[cointegration]]
+- [[time-series-analysis]]

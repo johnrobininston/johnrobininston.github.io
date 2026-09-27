@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Financial Mathematics – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Financial Mathematics</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#financial-mathematics" id="toc-financial-mathematics" class="nav-link active" data-scroll-target="#financial-mathematics"><span class="header-section-number">1</span> Financial Mathematics</a>
+  <ul class="collapse">
+  <li><a href="#related-subjects" id="toc-related-subjects" class="nav-link" data-scroll-target="#related-subjects"><span class="header-section-number">1.1</span> Related Subjects</a></li>
+  <li><a href="#topics" id="toc-topics" class="nav-link" data-scroll-target="#topics"><span class="header-section-number">1.2</span> Topics</a></li>
+  <li><a href="#basic-concepts" id="toc-basic-concepts" class="nav-link" data-scroll-target="#basic-concepts"><span class="header-section-number">1.3</span> <strong>1. Basic Concepts</strong></a></li>
+  <li><a href="#risk-neutral-valuation" id="toc-risk-neutral-valuation" class="nav-link" data-scroll-target="#risk-neutral-valuation"><span class="header-section-number">1.4</span> <strong>2. Risk-Neutral Valuation</strong></a></li>
+  <li><a href="#the-black-scholes-framework" id="toc-the-black-scholes-framework" class="nav-link" data-scroll-target="#the-black-scholes-framework"><span class="header-section-number">1.5</span> <strong>3. The Black-Scholes Framework</strong></a></li>
+  <li><a href="#greeks-sensitivity-measures" id="toc-greeks-sensitivity-measures" class="nav-link" data-scroll-target="#greeks-sensitivity-measures"><span class="header-section-number">1.6</span> <strong>4. Greeks (Sensitivity Measures)</strong></a></li>
+  <li><a href="#beyond-black-scholes" id="toc-beyond-black-scholes" class="nav-link" data-scroll-target="#beyond-black-scholes"><span class="header-section-number">1.7</span> <strong>5. Beyond Black-Scholes</strong></a></li>
+  <li><a href="#exotic-options" id="toc-exotic-options" class="nav-link" data-scroll-target="#exotic-options"><span class="header-section-number">1.8</span> <strong>6. Exotic Options</strong></a></li>
+  <li><a href="#interest-rate-derivatives" id="toc-interest-rate-derivatives" class="nav-link" data-scroll-target="#interest-rate-derivatives"><span class="header-section-number">1.9</span> <strong>7. Interest Rate Derivatives</strong></a></li>
+  <li><a href="#credit-derivatives" id="toc-credit-derivatives" class="nav-link" data-scroll-target="#credit-derivatives"><span class="header-section-number">1.10</span> <strong>8. Credit Derivatives</strong></a></li>
+  </ul></li>
+  <li><span class="header-section-number">2</span> Backlinks</li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="financial-mathematics" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="financial-mathematics"><span class="header-section-number">1</span> Financial Mathematics</h2>
+<p>Mathematical finance (also known as quantitative finance and mathematical finance) is a branch of applied mathematics concerned with mathematical modeling in the financial field. It lies at the intersection of various subjects including pure mathematics, statistics and data science.</p>
+<section id="related-subjects" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="related-subjects"><span class="header-section-number">1.1</span> Related Subjects</h3>
+<ol type="1">
+<li><a href="../topics/probability-theory.html">Probability Theory</a>
+<ul>
+<li>Feynman-Kac Formula</li>
+<li>Girsanov’s Theorem</li>
+</ul></li>
+<li>[[knowledge-mathematics-analysis-probability-theory-stochastic-processes-stochastic-processes|Stochastic Processes]]
+<ul>
+<li>Brownian Motion</li>
+<li>Quadratic Variation</li>
+<li>Lévy Processes</li>
+</ul></li>
+<li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a>
+<ul>
+<li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
+<li>Mean-Reverting Process
+<ul>
+<li>[[ornstein-uhlenbeck-process]]</li>
+</ul></li>
+</ul></li>
+<li><a href="../topics/statistics.html">Statistics</a></li>
+<li>[[optimization-theory]]
+<ul>
+<li>[[optimal-stopping-theory]]</li>
+</ul></li>
+<li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a></li>
+</ol>
+</section>
+<section id="topics" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="topics"><span class="header-section-number">1.2</span> Topics</h3>
+<ol type="1">
+<li><strong>Market Models</strong>
+<ul>
+<li><a href="../topics/binomial-model.html">Binomial Model</a> &amp; Trinomial Model</li>
+<li><em>Constant Volatility Models</em>
+<ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>
+<ul>
+<li><a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a></li>
+<li><a href="../topics/breeden-litzenberger-formula.html">Breeden-Litzenberger Formula</a></li>
+</ul></li>
+</ul></li>
+<li><em>Local Volatility Models</em>
+<ul>
+<li>CEV Model</li>
+<li>Dupire’s Formula</li>
+</ul></li>
+<li><em>Stochastic Volatility Models</em>
+<ul>
+<li><span class="math inline">\(\exp(OU)\)</span> Model</li>
+<li>Cox-Ingersoll-Ross (CIR) Model</li>
+<li>Heston Model</li>
+</ul></li>
+<li>Diffusion Model</li>
+<li>Jump Diffusion Models
+<ul>
+<li>Merton Model</li>
+</ul></li>
+</ul></li>
+<li><strong><a href="../topics/derivatives-pricing.html">Derivatives Pricing</a></strong>
+<ul>
+<li>Arbitrage Theory
+<ul>
+<li>Risk-Neutral Measures</li>
+<li>Stochastic Discount Factors</li>
+<li>PDE Financial Models</li>
+</ul></li>
+<li>Stock Derivatives
+<ul>
+<li>Forwards</li>
+<li>Futures</li>
+<li>Options
+<ul>
+<li><a href="../topics/european-options.html">European Options</a></li>
+<li>[[american-options]]</li>
+<li>Exotic Options
+<ul>
+<li>Lookback Options</li>
+<li>Asian Options</li>
+<li>Barrier Options</li>
+<li>Compound Options</li>
+<li>Basket Options</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><em>Delta-Hedging</em></li>
+<li><a href="../topics/option-greeks.html">Option Greeks</a><br>
+</li>
+</ul></li>
+<li><strong>Interest Rate Models</strong>
+<ul>
+<li>Interest Rates
+<ul>
+<li>Yield Curve</li>
+<li>LIBOR Rates</li>
+<li>Instantaneous Rates</li>
+</ul></li>
+<li>Short-Rate Models
+<ul>
+<li>Vasiček Model</li>
+<li>CIR Model</li>
+<li>Hull-White Model</li>
+<li>Ho-Lee Model</li>
+</ul></li>
+<li>Heath-Jarrow-Morton (HJM) Framework</li>
+<li>Yield Curve Models</li>
+<li>LIBOR Market Models</li>
+<li>Bond Pricing and Term Structure Models</li>
+<li>Bond Derivatives</li>
+</ul></li>
+<li><strong>Risk-Management</strong>
+<ul>
+<li>Market, Credit and Operational Risk</li>
+<li>Value-at-Risk (VaR) and Conditional VaR</li>
+<li>Expected Shortfall</li>
+<li>Credit Risk CR Models
+<ul>
+<li>Structural CR Models</li>
+<li>Intensity Based CR Models</li>
+</ul></li>
+<li>Copulas and Tail Dependence</li>
+<li>Credit Default Swaps (CDS)</li>
+<li>Stress Testing and Scenario Analysis</li>
+<li>Basel and Regulatory Capital Models</li>
+</ul></li>
+<li><strong>Portfolio Theory</strong>
+<ul>
+<li>Markowitz mean-variance optimization</li>
+<li>CAPM (Capital Asset Pricing Model)</li>
+<li>Efficient Frontier and Utility Maximization</li>
+<li>Black-Litterman Model</li>
+<li>Kelly Criterion and Growth-Optimal Portfolios</li>
+</ul></li>
+<li><strong><a href="../topics/numerical-methods-in-financial-mathematics.html">Numerical Methods in Financial Mathematics</a></strong>
+<ul>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">SDE Simulation</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">MC Variance Reduction</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Multi-Level Monte-Carlo (MLMC)</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Finite Difference Methods</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Surrogate Methods</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">American Option Simulation</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Option Greek Simulation</a></li>
+<li>Fourier Transform Methods</li>
+<li>Optimization algorithms</li>
+</ul></li>
+<li><strong>Algorithmic and High-Frequency Trading</strong> (see PSTAT223C 2024)
+<ul>
+<li>Market Microstructure</li>
+<li>Limit Order Books and Execution Methods</li>
+<li>Alpha Generation and Signal Processes</li>
+<li>Latency, Slippage and Execution Algorithms</li>
+</ul></li>
+<li><strong>Statistical Methods</strong>
+<ul>
+<li>Time Series Analysis (see PSTAT274 2023)
+<ul>
+<li>ARIMA Model</li>
+<li>GARCH Model</li>
+<li>ARMA-GARCH Model</li>
+</ul></li>
+<li>MLE and Bayesian Inference</li>
+<li>Regression and Factor Models</li>
+<li>Cointegration and Error Correction Models</li>
+</ul></li>
+<li><strong>Statistical &amp; Machine Learning Methods</strong>
+<ul>
+<li>Deep Hedging</li>
+<li>Reinforcement Learning</li>
+<li>Game Theory</li>
+<li>Mean Field Games</li>
+</ul></li>
+</ol>
+<section id="topics-1" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="topics-1"><span class="header-section-number">1.2.1</span> 2.3.2 Topics</h4>
+<p><strong>Mathematics</strong></p>
+<ul>
+<li><a href="../topics/girsanovs-theorem.html">Girsanov's Theorem</a></li>
+<li><a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a></li>
+</ul>
+<p><strong>Financial Models</strong></p>
+<ul>
+<li><p><a href="../topics/binomial-model.html">Binomial Model</a></p></li>
+<li><p><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></p>
+<ul>
+<li><a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a></li>
+</ul></li>
+<li><p>Greeks</p></li>
+<li><p><a href="../topics/breeden-litzenberger-formula.html">Breeden-Litzenberger Formula</a></p></li>
+<li><p><a href="../topics/carr-madan-formula.html">Carr-Madan Formula</a></p></li>
+<li><p>Local Volatility Models</p></li>
+<li><p>Dupire Formula</p></li>
+<li><p>Stochastic Volatility Models</p></li>
+<li><p>Dividends</p></li>
+<li><p>Bonds and Interest Rates</p></li>
+<li><p>Forward Rates</p></li>
+<li><p>HJM Model</p></li>
+<li><p>Bond Options</p></li>
+<li><p>Forward Measure</p></li>
+<li><p>Credit Risk</p></li>
+<li><p>Structural Approach</p></li>
+<li><p>Intensity Based Models</p></li>
+<li><p>Systemic Risk</p></li>
+<li><p>Mean-Field Games</p></li>
+<li><p>Stochastic Control</p></li>
+<li><p>Background</p>
+<ul>
+<li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li><a href="../topics/girsanovs-theorem.html">Girsanov's Theorem</a></li>
+<li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
+<li>[[ornstein-uhlenbeck-process]]</li>
+</ul></li>
+<li><p><a href="../topics/binomial-model.html">Binomial Model</a></p></li>
+<li><p>Option Pricing</p>
+<ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>
+<ul>
+<li><a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a></li>
+<li><a href="../topics/breeden-litzenberger-formula.html">Breeden-Litzenberger Formula</a> - obtains stock price density from call option price</li>
+<li><a href="../topics/carr-madan-formula.html">Carr-Madan Formula</a> - price of euro call with any payoff function <span class="math inline">\(h(S_{T})\)</span></li>
+<li><a href="../topics/european-call-option-price.html">European Call Option Price</a></li>
+<li><a href="../topics/european-put-option-price.html">European Put Option Price</a>
+<ul>
+<li>Log Contract</li>
+</ul></li>
+<li>[[put-call-parity]]</li>
+<li>Path Dependent Options
+<ul>
+<li><a href="../topics/barrier-options.html">Barrier Options</a></li>
+<li>[[asian-options]]</li>
+<li>[[lookback-options]]</li>
+</ul></li>
+</ul></li>
+<li><a href="../topics/option-greeks.html">Option Greeks</a></li>
+</ul></li>
+<li><p><a href="../topics/black-scholes-model-with-dividends.html">Black Scholes Model with Dividends</a></p></li>
+<li><p><a href="../topics/volatility-models.html">Volatility Models</a></p>
+<ul>
+<li>Constant Volatility Models (Black Scholes)</li>
+<li><a href="../topics/time-dependent-volatility-model.html">Time-Dependent Volatility Model</a> (Adjusted Black Scholes)</li>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a> - volatility dependent of <span class="math inline">\(t\)</span> and <span class="math inline">\(S_t\)</span>
+<ul>
+<li><a href="../topics/dupires-formula.html">Dupire's Formula</a></li>
+</ul></li>
+<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Model</a> - volatility is random
+<ul>
+<li><span class="math inline">\(\exp(OU)\)</span> Model</li>
+<li><a href="../topics/heston-model.html">Heston Model</a></li>
+<li><a href="../topics/cox-ingersoll-ross-cir-model.html">Cox-Ingersoll-Ross (CIR) Model</a></li>
+</ul></li>
+</ul></li>
+<li><p>[[fixed-income-market]]</p>
+<ul>
+<li><a href="../topics/interest-rates.html">Interest Rates</a>
+<ul>
+<li><a href="../topics/yield-curve.html">Yield Curve</a></li>
+<li><a href="../topics/libor-rates.html">LIBOR Rates</a></li>
+<li><a href="../topics/instantaneous-rates.html">Instantaneous Rates</a></li>
+</ul></li>
+<li><a href="../topics/bond-market-model.html">Bond Market Model</a>
+<ul>
+<li><a href="../topics/vasicek-model.html">Vasiček Model</a> - rate modeled by OU process</li>
+<li><a href="../topics/ho-lee-model.html">Ho-Lee Model</a> - structure matched to empirical data</li>
+<li>Bond Derivatives
+<ul>
+<li>Pricing Bond Options</li>
+</ul></li>
+</ul></li>
+<li>Credit Risk
+<ul>
+<li>Structural Models</li>
+<li>Intensity Based Models</li>
+<li>Multi-Name Setting
+<ul>
+<li>Copulas</li>
+</ul></li>
+<li>Credit Default Swaps (CDS)</li>
+</ul></li>
+<li>Heath-Jarrow-Morton (HJM) Framework</li>
+</ul></li>
+<li><p><a href="../topics/binomial-model.html">Binomial Model</a></p>
+<ul>
+<li>One Period Model</li>
+<li>Multiperiod Model</li>
+<li>Contingent Claim</li>
+</ul></li>
+<li><p>Black-Scholes Model</p>
+<ul>
+<li>Self-Financing Portfolios</li>
+<li>No arbitrage pricing</li>
+</ul></li>
+<li><p>Week 3</p>
+<ul>
+<li>Put / Call Parity</li>
+<li>[[knowledge-finance-black-scholes-equation]]</li>
+<li><a href="../topics/option-greeks.html">Option Greeks</a>
+<ul>
+<li>Delta</li>
+<li>Gamma</li>
+<li>Rho</li>
+<li>Theta</li>
+<li>Vega</li>
+</ul></li>
+<li>Volatilities
+<ul>
+<li>Instantaneous Volatility</li>
+<li>Realized Volatility (Backwards Looking)</li>
+<li>Implied Volatility (Forward Looking)</li>
+</ul></li>
+<li>Breeden-Litzenberger Formula</li>
+<li>Carr-Madan Formula
+<ul>
+<li>Log Contract</li>
+<li>[[volatility-index-vix]]</li>
+<li><em>Relationship between PDE and SDE (particles, heat equation, physics vs finance)</em></li>
+</ul></li>
+</ul></li>
+<li><p>Week 4</p>
+<ul>
+<li>Local volatility models</li>
+<li>Dupire Formula
+<ul>
+<li>https://www.worldscientific.com/doi/pdf/10.1142/9789811212772_0001</li>
+<li>Criticisms:
+<ul>
+<li>You can get the implied volatility</li>
+</ul></li>
+</ul></li>
+<li>Stochastic volatility models</li>
+<li>Dividends</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="basic-concepts" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="basic-concepts"><span class="header-section-number">1.3</span> <strong>1. Basic Concepts</strong></h3>
+<ul>
+<li><p><strong>Derivative</strong>: A financial contract whose value is derived from an underlying asset.</p></li>
+<li><p><strong>Underlying asset</strong>: The asset (e.g., stock, bond, index) on which the derivative is based.</p></li>
+<li><p><strong>Payoff</strong>: The amount the holder receives at maturity or exercise.</p></li>
+<li><p><strong>No-arbitrage principle</strong>: Core pricing concept that prevents riskless profit.</p></li>
+<li><p><strong>Replication</strong>: Constructing a portfolio that mimics the derivative’s payoff.</p></li>
+</ul>
+</section>
+<section id="risk-neutral-valuation" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="risk-neutral-valuation"><span class="header-section-number">1.4</span> <strong>2. Risk-Neutral Valuation</strong></h3>
+<ul>
+<li><p>Key idea: Price derivatives by taking the expectation under a <strong>risk-neutral measure</strong>.</p></li>
+<li><p>Under risk-neutral measure&nbsp;QQ, discounted asset prices become martingales.</p></li>
+<li><p>Fair price of derivative&nbsp;=EQ[e−rTΦ(ST)]=EQ[e−rTΦ(ST​)]&nbsp;where:</p>
+<ul>
+<li><p>rr&nbsp;is the risk-free rate</p></li>
+<li><p>Φ(ST)Φ(ST​)&nbsp;is the payoff function</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-black-scholes-framework" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="the-black-scholes-framework"><span class="header-section-number">1.5</span> <strong>3. The Black-Scholes Framework</strong></h3>
+<ul>
+<li><p><strong>Model Assumptions</strong>:</p>
+<ul>
+<li><p>Asset follows geometric Brownian motion:</p>
+<p>dSt=μStdt+σStdWtdSt​=μSt​dt+σSt​dWt​</p></li>
+<li><p>Constant interest rate&nbsp;rr, volatility&nbsp;σσ</p></li>
+<li><p>No arbitrage, continuous trading, no transaction costs</p></li>
+</ul></li>
+<li><p><strong>Black-Scholes PDE</strong>:</p>
+<p>∂V∂t+rS∂V∂S+12σ2S2∂2V∂S2−rV=0∂t∂V​+rS∂S∂V​+21​σ2S2∂S2∂2V​−rV=0</p></li>
+<li><p><strong>Black-Scholes formula for a European call</strong>:</p>
+<p>C(S,t)=SΦ(d1)−Ke−r(T−t)Φ(d2)C(S,t)=SΦ(d1​)−Ke−r(T−t)Φ(d2​)</p>
+<p>where d1=ln⁡(S/K)+(r+σ2/2)(T−t)σT−td1​=σT−t​ln(S/K)+(r+σ2/2)(T−t)​, and d2=d1−σT−td2​=d1​−σT−t​</p></li>
+</ul>
+</section>
+<section id="greeks-sensitivity-measures" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="greeks-sensitivity-measures"><span class="header-section-number">1.6</span> <strong>4. Greeks (Sensitivity Measures)</strong></h3>
+<p>Used for&nbsp;<strong>risk management and hedging</strong>:</p>
+<ul>
+<li><p><strong>Delta</strong>: sensitivity to underlying price</p></li>
+<li><p><strong>Gamma</strong>: sensitivity of Delta to underlying price</p></li>
+<li><p><strong>Theta</strong>: time decay</p></li>
+<li><p><strong>Vega</strong>: sensitivity to volatility</p></li>
+<li><p><strong>Rho</strong>: sensitivity to interest rate</p></li>
+</ul>
+</section>
+<section id="beyond-black-scholes" class="level3" data-number="1.7">
+<h3 data-number="1.7" class="anchored" data-anchor-id="beyond-black-scholes"><span class="header-section-number">1.7</span> <strong>5. Beyond Black-Scholes</strong></h3>
+<p>For more realistic modeling:</p>
+<ul>
+<li><p><strong>Stochastic volatility models</strong>&nbsp;(e.g., Heston)</p></li>
+<li><p><strong>Jump-diffusion models</strong>&nbsp;(e.g., Merton)</p></li>
+<li><p><strong>Local volatility models</strong></p></li>
+<li><p><strong>Monte Carlo methods</strong>&nbsp;for path-dependent options</p></li>
+<li><p><strong>Finite difference methods</strong>&nbsp;for solving PDEs numerically</p></li>
+</ul>
+</section>
+<section id="exotic-options" class="level3" data-number="1.8">
+<h3 data-number="1.8" class="anchored" data-anchor-id="exotic-options"><span class="header-section-number">1.8</span> <strong>6. Exotic Options</strong></h3>
+<p>Options with more complex features than standard calls/puts:</p>
+<ul>
+<li><p><strong>Barrier options</strong>: payoffs depend on whether asset hits a barrier</p></li>
+<li><p><strong>Asian options</strong>: depend on average price</p></li>
+<li><p><strong>Lookback options</strong>: depend on maximum or minimum price</p></li>
+<li><p><strong>American options</strong>: exercisable at any time before maturity (require solving a free-boundary problem)</p></li>
+</ul>
+</section>
+<section id="interest-rate-derivatives" class="level3" data-number="1.9">
+<h3 data-number="1.9" class="anchored" data-anchor-id="interest-rate-derivatives"><span class="header-section-number">1.9</span> <strong>7. Interest Rate Derivatives</strong></h3>
+<ul>
+<li><p>Instruments: swaps, caps/floors, swaptions</p></li>
+<li><p>Models: Vasicek, Cox-Ingersoll-Ross (CIR), Heath-Jarrow-Morton (HJM), LIBOR Market Model</p></li>
+<li><p>Pricing involves modeling the term structure of interest rates</p></li>
+</ul>
+</section>
+<section id="credit-derivatives" class="level3" data-number="1.10">
+<h3 data-number="1.10" class="anchored" data-anchor-id="credit-derivatives"><span class="header-section-number">1.10</span> <strong>8. Credit Derivatives</strong></h3>
+<ul>
+<li><p>Includes credit default swaps (CDS), collateralized debt obligations (CDOs)</p></li>
+<li><p>Pricing involves modeling <strong>default probabilities</strong> and <strong>loss given default</strong></p></li>
+<li><p>May require intensity-based or structural models</p></li>
+</ul>
+
+
+</section>
+</section>
+<section class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id=""><span class="header-section-number">2</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/derivatives-pricing.html">Derivatives Pricing</a></li>
+<li><a href="../topics/finance.html">Finance</a></li>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
+<li><a href="../topics/peter-cotton.html">Peter Cotton</a></li>
+<li><a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a></li>
+<li><a href="../topics/index.html">Topics</a></li>
+</ul>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

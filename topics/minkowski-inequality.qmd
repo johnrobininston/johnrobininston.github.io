@@ -1,0 +1,69 @@
+---
+title: Minkowski Inequality
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Minkowski Inequality
+
+In mathematical analysis, the Minkowski inequality establishes that the $L^p$
+spaces are normed vector spaces.
+
+:::{.theorem data-title="Minkowski Inequality"}
+
+Let $S$ be a measure space, let $1\leq p\leq \infty$ and let $f$ and $g$ be elements of $L^p(S)$.  Then $f+g$ is in $L^p(S)$ and we have the Minkowski inequality $$\|f+g\|_{p}\leq \|f\|_{p}+\|g\|_{p}.$$
+
+:::
+
+*Proof:*
+Firstly, we prove that $f+g$ has finite $p$-norm if $f$ and $g$ both do, which
+follows by the fact that
+$$
+|f+g|^p\leq 2^{p-1}(|f|^p+|g|^p).
+$$
+Here we use the fact that $h(x)=|x|^p$ is [[convex-function|convex]] over
+$\mathbb{R}^+$ (for $p>1$) and so, by definition
+$$
+\left| \frac{1}{2}f+ \frac{1}{2}g\right|^p\leq \left| \frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p\leq \frac{1}{2}|f|^p+\frac{1}{2}|g|^p,
+$$
+which means that
+$$
+|f+g|^p \leq \frac{1}{2}|2f|^p+ \frac{1}{2}|2g|^p=2^{p-1}|f|^p+2^{p-1}|g|^p.
+$$
+Next, considering $\|f+g\|_{p}$. If it is zero, then Minkowski's inequality
+holds. Assuming that $\|f+g\|_p$ is not zero, using the
+[[triangle-inequality|triangle inequality]] and then [[holders-inequality]] we
+have that
+$$
+\begin{align}
+\|f+g\|_{p}^p & = \int |f+g|^p \, d\mu = \int |f+g|\cdot |f+g|^{p-1} \, d\mu\leq \int (|f|+|g|)|f+g|^{p-1} \, d\mu    \\
+& = \int |f\mid f+g|^{p-1} \, d\mu +\int |g\mid f+g|^{p-1} \, d\mu  \\
+& \leq \left( \left( \int |f|^p \, d\mu  \right)^{1/p} + \left( \int |g|^p \, d\mu  \right)^{1/p}\right) \left( \int |f+g|^{(p-1)( \frac{p}{p-1})} \, d\mu  \right)^{1-1/p} \tag{Holder}  \\
+& = (\|f\|_{p}+\|g\|_{p})\frac{\|f+g\|_{p}^p}{\|f+g\|_{p}}.
+\end{align}
+$$
+Multiplying both sides by $\frac{\|f+g\|_{p}}{\|f+g\|_{p}^p}$ we obtain the
+result.
+
+:::{.theorem data-title="Minkowski's Inequality for Random Variables"}
+
+For random variables $X,Y$ with $p \in   (1,\infty)$ then the above result can be interpreted in terms of expectations as $$(\mathbb{E}|X+Y|^p)^{1/p} \leq (\mathbb{E}|X|^p)^{1/p} + (\mathbb{E}|Y|^p)^{1/p}.$$
+
+:::
+
+*Proof:*
+First, we notice that
+$$
+\mathbb{E}|X+Y|^p = \mathbb{E}[|X+Y| |X+Y|^{p-1}]\leq \mathbb{E}[|X| |X+Y|^{p-1}]+\mathbb{E}[|Y| |X+Y|^{p-1}].
+$$
+Using [[holders-inequality]] on the right hand terms for $q$ selected to
+satisfy $\frac{1}{p}+\frac{1}{q}=1$ gives
+$$
+\begin{align}
+\mathbb{E}|X+Y|^p & \leq (\mathbb{E}|X|^p)^{1/p}(\mathbb{E}|X+Y|^{q(p-1)})^{1/q}+(\mathbb{E}|Y|^p)^{1/p}(\mathbb{E}|X+Y|^{q(p-1)})^{1/q} \\
+\implies\frac{\mathbb{E}|X+Y|^p}{(\mathbb{E}|X+Y|^{q(p-1)})^{1/q}} &\leq (\mathbb{E}|X|^p)^{1/p}+(\mathbb{E}|Y|^p)^{1/p},
+\end{align}
+$$
+which gives the result since $q(p-1)=p$ and $1-\frac{1}{q}=\frac{1}{p}$.

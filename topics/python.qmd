@@ -1,0 +1,83 @@
+---
+title: Python
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Python
+
+## Virtual Environments
+
+To create a virtual environment in a project folder use:
+
+```zsh
+python3 -m venv .venv-name
+```
+
+To activate this environment use:
+
+```python
+source .venv-name/bin/activate
+```
+
+To deactivate just type:
+```python
+deactivate
+```
+
+Once in the virtual environment you can install the packages using `pip`:
+```python
+pip install numpy jupyterlab ipykernel
+```
+
+These packages are now local to this environment.  
+
+To register a specific Jupyter kernel for this project use:
+```python
+python3 -m ipykernel install --user --name kernel-name --display-name "Python (kernel-name)"
+```
+
+You can check registration with:
+```python
+jupyter kernelspec list
+```
+
+It is recommended to add both a `requirements.txt` and a `.gitignore` file
+incase this folder is stored in Github. To create the `requirements.txt` file
+us:
+```python
+pip freeze > requirements.txt
+```
+
+To create the `.gitignore` we just use:
+```zsh
+touch .gitignore
+```
+
+Then we can open this file and list the `.venv` folder name. 
+
+## Quarto PDF Export
+
+To export using quarto (supposing you have the suitable $\LaTeX$ packages
+installed) you first have to add a yaml in a `raw` block at the top of the
+page:
+
+```raw
+--- 
+title: "Data Science Course — Lab 1" 
+author: "John Robin Inston" 
+date: today 
+format: 
+	pdf: 
+		toc: true 
+		number-sections: true 
+---
+```
+
+You can then render from the terminal with:
+```zsh
+quarto render notebook.ipynb --to pdf
+```
+

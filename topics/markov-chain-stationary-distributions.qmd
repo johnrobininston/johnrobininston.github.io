@@ -1,0 +1,214 @@
+---
+title: Markov Chain Stationary Distributions
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+Consider the long-term behavior of a Markov chain $\{ X_{n} \}_{n=0}^\infty$
+when $n \to \infty$. It is possible for the chain to converge to a particular
+state (e.g. a GWB branching process can converge to 0). Additionally, it is
+possible for a Markov chain to converge to some random variable $X~a.s.$ as
+$n\to \infty$. Intuitively, if a Markov chain runs for a long time it generally
+doesn't converge because it is always jumping around but its distribution can
+settle down.
+
+### Stationary Distributions
+
+A process is strictly stationary if its distribution does not change under
+translations, i.e. over time. More formally we give the following definition.
+
+:::{.definition data-title="Strictly Stationary Process"}
+
+A process $\{ X_{n},~n\geq 0 \}$ is *strictly stationary* if for any integers
+$m\geq 0$ and $k>0$, we have
+$(Y_{0}, Y_{1}, \dots Y_{m})\stackrel{\mathcal{D}}{=}(Y_{k}, Y_{k+1}, \dots, Y_{k+m})$
+that is, the distribution does not change under translations.
+
+:::
+
+This is often a challenging condition to show and so we also define a weak
+stationarity of the mean and covariance being invariant to changes in time. See
+the note on [[stationary-processes|stationary processes]] for more information.
+
+:::{.definition data-title="Stationary Distribution"}
+
+The vector $\pi=(\pi_{j},~j \in S)$ is called a *stationary distribution* of a
+Markov chain if:
+1. $\pi_{j}\geq 0$ and $\sum_{j\in S}\pi_{j}=1$.
+2. $\pi=\pi P$ i.e. $\pi_{j}=\sum_{i \in S}\pi_{i}p_{i,j}$ for all $j \in S$.
+ 
+Note that $\pi P^2=\pi P\cdot P=\pi P=\pi$ and similarly, for all $n>1$,
+$\pi P^n=\pi$, that is $\pi_{j}=\sum_{i\in S}\pi_{i}p_{i,j}(n)$ for all
+$j \in S$.
+
+:::
+
+Denote by $P_{\pi}$ the distribution of a Markov chain with initial
+distribution $\pi$: $\mu^{(0)}=\pi$. Thus $\{X_{n}\}\sim Markov(\pi,P)$ that
+is, for an event $A$,
+$\mathbb{P}_{\pi}(A)=\sum_{i\in S}\mathbb{P}(A|X_{0}=i)\pi_{i}$. With respect
+to $\mathbb{P}_{\pi}$, chain $\{X_{n}\}$ is a strictly stationary process
+$$
+\mathbb{P}_{\pi}(X_{n}=i_{0}, X_{n+1}=i_{1}, \dots, X_{n+k}=i_{k})=\pi_{i_{0}}p_{i_{0}, i_{1}}\dots p_{i_{k-1}i_{k}}=\mathbb{P}_{\pi}(X_{0}=i_{0}, X_{1}=i_{1}, \dots, X_{k}=i_{k}).
+$$
+In particular $\mu_{i}^{(n)}=\mathbb{P}_{\pi}(X_{n}=i)=\pi_{i}$ for all
+$i\in S$ and $n\geq 0$.
+
+Intuitively, if $\{  X_{n} \} \sim Markov(\pi,P)$ and its initial distribution
+is stationary, then for all $n$, $X_{n}\stackrel{\mathcal{D}}{\sim }\pi$ so
+that $X_{n}\stackrel{\mathcal{D}}{\to}X$ with
+$\mathbb{P}_{\pi}(X_{n}=j)=\pi_{j}\to \pi_{j}=\mathbb{P}(X=j)$.
+
+#### Example: Finding Stationary Distributions
+
+Consider a Markov chain describing the meals served by a restaurant with
+transition graph shown below in Figure 1 provided by helpful video on Markov
+chains by
+[Normalized Nerd](https://www.youtube.com/watch?v=i3AkTO9HLXo&t=110s).  
+
+<!-- TODO: image "Pasted image 20240622154411.png" not found in vault -->
+
+Taking state 1 to be hamburger, state 2 to be pizza and state 3 to be hotdog,
+the transition matrix $P$ can be written as
+$$
+P=\begin{bmatrix}
+0.2 & 0.6 & 0.2  \\
+0.3 & 0 & 0.7  \\
+0.5 & 0 & 0.5 
+\end{bmatrix}.
+$$
+Given the restaurant first serves pizza we can define the initial distribution
+$\pi_{0}=\begin{bmatrix}0 & 1 & 0\end{bmatrix}$. Applying the transition matrix
+$P$ we get
+$$
+\pi_{0}P=\begin{bmatrix}
+0 & 1 & 0
+\end{bmatrix}\cdot \begin{bmatrix}
+0.2 & 0.6 & 0.2  \\
+0.3 & 0 & 0.7  \\
+0.5 & 0 & 0.5 
+\end{bmatrix}=\begin{bmatrix}
+0.3 & 0 & 0.7
+\end{bmatrix}=\pi_{1},
+$$
+the second state future transition probabilities. Repeating this step for
+$\pi_{1}$ we have
+$$
+\pi_{0}P=\begin{bmatrix}
+0.3 & 0 & 0.7
+\end{bmatrix}\cdot \begin{bmatrix}
+0.2 & 0.6 & 0.2  \\
+0.3 & 0 & 0.7  \\
+0.5 & 0 & 0.5 
+\end{bmatrix}=\begin{bmatrix}
+0.41 & 0.18 & 0.41
+\end{bmatrix}=\pi_{2},
+$$
+If a stationary distribution $\pi$ exists it would mean that as
+$\pi_{0}, \pi_{1}, \dots$ continues, eventually it will reach a point where it
+doesn't change when $P$ is applied, hence using linear algebra we can write the
+expression
+$$
+\pi P=\pi,
+$$
+see Definition 2 above. Additionally, since $\pi$ is a vector of probabilities
+we have that $\pi(1)+\pi(2)+\pi(3)=1$ and solving this system gives the
+stationary distribution
+$$
+\pi=\begin{bmatrix}
+\frac{25}{71} & \frac{15}{71} & \frac{31}{71}
+\end{bmatrix}.
+$$
+:::{.theorem data-title="MC Strict Stationarity with Stationary Initial Distribution"}
+
+Denote by $\mathbb{P}_{\pi}$ the distribution of a Markov chain with initial
+distribution $\pi:\mu^{(0)}=\pi$. Thus, $(X_{n})\sim Markov(\pi, \mathbb{P})$,
+that is, for an event $A$,
+$\mathbb{P}_{\pi}(A)=\sum_{i \in S}\mathbb{P}(A|X_{0}=i)\pi_{i}$.
+With respect to $\mathbb{P}_{\pi}$, chain $(X_{n})$ is a strictly stationary
+process:
+$$
+\mathbb{P}_{\pi}(X_{n}=i_{o}, X_{n+1}=i_{1}, \dots, X_{n+k}=i_{k})=\pi_{i_{0}}p_{i_{0}, i_{1}}\dots p_{i_{k-1},i_{k}}=\mathbb{P}_{\pi}(X_{0}=i_{o}, X_{1}=i_{1}, \dots, X_{k}=i_{k}).
+$$
+In particular,
+$$
+\mu_{i}^{(n)}=\mathbb{P}_{\pi}(X_{n}=i)=\pi_{i}
+$$
+for all $i \in S$ and $n \geq 0$.
+
+:::
+#### Invariant Measure
+
+:::{.definition data-title="Invariant Measure"}
+
+A vector $\underline{\rho}=(\rho_{j}~j \in S)$ is an *invariant measure* if (1)
+$\rho_{j}\geq 0$ for all $j \in S$ and (b)
+$\underline{\rho}=\underline{\rho}P$.
+
+:::
+
+Note that if $\underline{\rho}$ is an invariant measure such that
+$\sum_{j\in S}\rho_{j}<\infty$, then
+$\pi=\left( \pi_{i}:= \rho_{i} / \sum_{j}\rho_{j},~i \in S \right)$ is the
+stationary distribution for this Markov chain. In general, invariant measure
+$\underline{\rho}$ does not have to be finite, it is possible to have
+$\sum_{j}\rho_{j}=\infty$.
+
+The following is a fundamental result on the existence and uniqueness of
+invariant measures and stationary distributions.
+
+:::{.theorem data-title="Existence & Uniqueness of Invariant Measures & Stationary Distributions"}
+
+An irreducible Markov chain has a stationary distribution $\pi$ iff all its
+states are non-null persistent. In this case, $\pi$ is the unique stationary
+distribution and is given by $\pi_j = \frac{1}{μ_{j}}$, for all $j \in S$,
+where $μ_j = \mathbb{E}(T_{j} |X_{0} = j)$ is the mean recurrence time of $j$.
+
+Also, in this case, the equation $\underline{x} = \underline{x}P$ has a
+positive root which is unique up to a multiplicative constant and for which
+$\sum_{j∈S} x_{j} < \infty$.
+
+If the chain is irreducible and null persistent, the previous statement holds,
+but $\sum_{j∈S} x_j = \infty$.
+
+:::
+
+The following results follow immediately from the previous theorem.
+
+1. An irreducible persistent chain always has an invariant measure unique up to
+   a multiplicative constant
+   $(\underline{\rho}=\underline{\rho}P)\implies(c \underline{p}=c \underline{\rho}P)$
+   for any constant $c>0$.
+2. If a chain is non-null persistent, then $\sum_{j}\rho_{j}<\infty$ and there
+   is a unique stationary distribution $\pi$:
+   $\pi_{i}=\rho_{i} / \sum_{j}\rho_{j}$.
+3. If a chain is **null persistent**, then $\sum_{j}\rho_{j}<\infty$, there is
+   **no stationary distribution**.
+4. If the chain is **transient irreducible**, there is **no stationary
+   distribution**.
+
+We consider only irreducible persistent chains because any chain can be
+decomposed into disjoint closed classes of these.  
+
+This theorem gives a new method to calculate mean recurrence times
+$\mu_{j}=\pi_{j}^{-1}$ where $\pi=\pi P$. For non-null persistent chain
+($\mu_{j}<\infty$) we are guaranteed existence of a unique solutions $\pi$ of
+this system of equations, this solution is the stationary distribution of the
+chain.
+
+Furthermore, this theorem provides a new method of deciding whether or not an
+irreducible chain is non-null persistent: check whether the system of equations
+$x=xP$ has a positive solution such that $\sum_{j}x_{j}<\infty$. If it does,
+the chain has stationary distribution and therefore is non-null persistent.
+
+:::{.theorem}
+
+Let $s \in S$ be any state of an irreducible chain. The chain is transient if
+and only if there exists a non-zero solution $\{  y_{j}:~j\neq s \}$,
+satisfying $|y_{j}|\leq 1$ for all $j$, to equations
+$y_{i}=\sum_{j: j\neq s}p_{i,j}y_{j}$, $i\neq s$.
+
+:::
+

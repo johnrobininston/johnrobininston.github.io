@@ -1,0 +1,144 @@
+---
+title: Expectation
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Integration and Expectation
+A measure $\mu$ on measure space $(\Omega, \mathcal{F}, \mu)$ is said to be
+finite when $\mu(\Omega)=1$ (hence all probability measures are finite). A
+measure is said to be $\sigma$-finite if the set $\Omega$ can be covered with
+at most countably many measurable disjoint sets with finite measure. All finite
+measures are naturally also $\sigma$-finite.  
+
+We say that an event occurs almost surely (a.s.) if the (probability) measure
+of the set of outcomes where the event does not occur has probability $0$.
+
+On a measure space $(\Omega, \mathcal{F}, \mu)$ with $\sigma$-finite $\mu$ we
+can define the Lebesgue integral of a measurable function
+$f:\Omega \to \mathbb{R}$. Since a probability measure is $\sigma$-finite, for
+probability space $(\Omega, \mathcal{F}, \mathbb{P})$ we can define the
+Lebesgue integral of a random variable (measurable map) with respect to
+probability measure $\mathbb{P}$ which we denote
+$$
+\int_{\Omega}Xd\mathbb{P}=\int_{\Omega}f(\omega)d\mathbb{P}(\omega).
+$$
+For the formal construction of this integral please see our notes on
+[[measure-theory]] or [[knowledge-mathematics-analysis-real-analysis]]. This
+integral satisfies the following important properties:
+
+1. If $X\geq 0~a.s.$  then $\int_{\Omega}Xd\mathbb{P}\geq 0$,
+2. If $a \in \mathbb{R}$ then
+   $\int_{\Omega}aXd\mathbb{P}=a\int_{\Omega}Xd\mathbb{P}$,
+3. $\int_{\Omega}X+Y d\mathbb{P}=\int Xd\mathbb{P}+\int Yd\mathbb{P}$,
+4. If $X \leq Y~a.s.$ then
+   $\int_{\Omega}Yd\mathbb{P}\geq \int_{\Omega}Xd\mathbb{P}$,
+5. If $X=Y~a.s.$ then $\int_{\Omega}Xd\mathbb{P}=\int_{\Omega}Yd\mathbb{P}$,
+6. $\left\lvert  \int_{\Omega}Xd\mathbb{P}  \right\rvert\leq \int_{\Omega}\lvert X \rvert d\mathbb{P}$.
+
+For ($\sigma$-) finite $\mathbb{P}$ with Stieltjes measure function $G$ on the
+real line, i.e. $\mu((a,b])=G(b)-G(a)$ we write
+$$
+\int_{\Omega}f(\omega)d\mu(\omega) = \int_{\mathbb{R}}f(x)dG(x).
+$$
+Particularly, when $\mu$ is the Lebesgue measure i.e. $G(x)=x$ then we write
+$\int_{\mathbb{R}}f(x)d(x)$.
+
+The measure $\mu$ is said to be the **counting measure** when 
+$$
+\mu(A)=\begin{cases}
+\lvert A \rvert  & \text{if }A\text{ is finite} \\
+0 & \text{otherwise}.
+\end{cases}
+$$
+For such a measure with a countable set $\Omega$ and corresponding
+$\sigma$-algebra $\mathcal{F}$ the Lebesgue integral is a summation
+$$
+\int_{\Omega}f(\omega)d\mu(\omega)=\sum_{\omega \in \Omega}f(\omega).
+$$
+Most importantly, for probability measure $\mathbb{P}$, the **expectation** of
+random variable $X$ is defined
+$$
+\mathbb{E}[X]:=\int_{\Omega}X(\omega)d\mathbb{P}(\omega).
+$$
+We introduce the notion of **$L^p$ spaces** as a useful tool for categorizing
+functions. For fixed $p \geq 1$ we denote by $L^p$ the collection of measurable
+functions such that
+$$
+\int_{\Omega}\lvert f(\omega) \rvert ^p d\mu(\omega)< \infty.
+$$
+We say that all functions $f\in L^1$ are **integrable**.
+
+## Integral Inequalities
+[[jensens-inequality]]: For [[convex-function|convex function]] $\varphi$ and
+[[random-variables-and-distribution-functions|random variable]] $X$ on a
+probability space $(\Omega, \mathcal{F}, \mathbb{P})$ we have
+$$
+\varphi(\mathbb{E} X)\leq\mathbb{E}\varphi(X).
+$$
+Rewriting the expectation in its integral form we get the probability measure
+theoretic form of the result
+$$
+\varphi\left(\int_{\Omega}Xd\mathbb{P}\right)\leq \int_{\Omega}\varphi(X)d\mathbb{P}.
+$$
+[[holders-inequality]]: Let $X$ and $Y$ be random variables,
+$p,q \in (1,\infty)$ and $\frac{1}{p}+\frac{1}{q}=1$. We have that
+$$
+|\mathbb{E}[XY]|\leq \mathbb{E}|XY|\leq (\mathbb{E}|X|^p)^{1/p}\cdot (\mathbb{E}|Y|^q)^{1/q}.
+$$
+
+[[cauchy-schwartz-inequality]]: From [[holders-inequality]] with values $Y=1$
+and $p=2$ and specifically states
+$$
+\mathbb{E}|X|\leq (\mathbb{E}|X|^2)^{1/2}.
+$$
+[[lyapunovs-inequality]]: This is a special case of [[holders-inequality]],
+replacing $\lvert  X \rvert$ by $\lvert X \rvert^r$ with $r>0$ and writing
+$s=rp$, which states
+$$
+(\mathbb{E}[\lvert X \rvert^r] )^{1/r}\leq  (\mathbb{E}[\lvert X \rvert ^s])^{1/s};\quad 0 < r < s < \infty.
+$$
+[[minkowski-inequality]]: Let $S$ be a measure space, let $1\leq p\leq \infty$
+and let $f$ and $g$ be elements of $L^p(S)$. Then $f+g$ is in $L^p(S)$ and we
+have the Minkowski inequality
+$$
+\|f+g\|_{p}\leq \|f\|_{p}+\|g\|_{p}.
+$$
+[[fatous-lemma]]: If $X_{n}\geq 0$ then
+$\liminf_{n \to \infty}\mathbb{E}[X_{n}] \geq  \mathbb{E}\left[\liminf_{n \to \infty}X_{n}\right]$.
+
+**Monotone Convergence Theorem:** Let $(X_{n})_{n \in \mathbb{N}}$ be a
+sequence of non-negative monotonically increasing random variables on
+$(\Omega, \mathcal{F}, \mathbb{P})$ where $X_{n}\stackrel{a.s}\to X$. Then we
+have that
+$$
+\lim_{n\to \infty}\mathbb{E}[X_{n}]=\mathbb{E}\left[\lim_{n \to \infty}X_{n}\right]=\mathbb{E}[X].
+$$
+[[chebychev-inequality]]: Assume that for some random variable $X$ we have that
+$\mathbb{E}X<\infty$. Then
+$$
+\mathbb{P}(|X-\mathbb{E}X|\geq \epsilon )\leq {\frac{\operatorname{Var}(X)}{\epsilon ^2}}.
+$$
+
+## Convergence Theorems
+[[monotone-convergence-theorem]]
+
+[[dominated-convergence-theorem]]: For sequence of random variables
+$\{ X_{n} \}$ such that the pointwise limit
+$X(\omega)=\lim_{n\to \infty}X_{n}(\omega)$ exists, assume there is an
+integrable random variable $Y$ with $\lvert X(\omega) \rvert\leq Y(\omega)$ for
+all $\omega \in \Omega$, then $X$ is integrable as in $X_n$ for all $n$ and
+$$
+\lim_{n \to \infty}\mathbb{E}[X_{n}]=\mathbb{E}\left[\lim_{n\to \infty} X_{n}\right]=\mathbb{E}[X].
+$$
+
+
+## Related Topics
+- [[conditional-expectation]]
+- [[tower-property]] (Law of Total Expectation)
+- [[change-of-variables]]
+
+
+

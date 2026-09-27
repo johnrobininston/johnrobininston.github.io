@@ -356,10 +356,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition"><span class="header-section-number">2</span> Definition</a></li>
-  <li><a href="#km-iteration-convergence" id="toc-km-iteration-convergence" class="nav-link" data-scroll-target="#km-iteration-convergence"><span class="header-section-number">3</span> KM Iteration Convergence</a></li>
-  <li><span class="header-section-number">4</span> Backlinks</li>
+  <li><a href="#picard-iterations" id="toc-picard-iterations" class="nav-link active" data-scroll-target="#picard-iterations"><span class="header-section-number">1</span> Picard Iterations</a></li>
+  <li><a href="#krasnoselskii-mann-km-iterations" id="toc-krasnoselskii-mann-km-iterations" class="nav-link" data-scroll-target="#krasnoselskii-mann-km-iterations"><span class="header-section-number">2</span> Krasnoselskii-Mann (KM) Iterations</a></li>
+  <li><span class="header-section-number">3</span> Backlinks</li>
   </ul>
 </nav>
     </div>
@@ -398,12 +397,27 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>The Krasnoselskii-Mann (KM) iteration is a method for finding fixed points of non-expansive mappings in Hilbert spaces. It is a generalization of the Picard iteration and is particularly useful for solving problems in optimization and variational inequalities.</p>
+<section id="picard-iterations" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="picard-iterations"><span class="header-section-number">1</span> Picard Iterations</h2>
+<div class="definition" data-title="Picard Iteration">
+<p>Given a mapping <span class="math inline">\(T:D\to D\)</span> on some space <span class="math inline">\(D\)</span> (usually a Hilbert space or a Banach space) and a starting point <span class="math inline">\(x_0\in D\)</span>, the Picard iteration is defined as</p>
+<p><span class="math display">\[
+x_{n+1}=T(x_n).
+\]</span></p>
+</div>
+<p>A <strong>fixed-point (FP)</strong> of a mapping <span class="math inline">\(T\)</span> is a point <span class="math inline">\(x\in D\)</span> such that <span class="math inline">\(T(x)=x\)</span>. A map <span class="math inline">\(T:D\to D\)</span> is called a <strong>Picard operator</strong> if it has a unique FP <span class="math inline">\(x^*\)</span> and the Picard iteration converges to <span class="math inline">\(x^*\)</span> for any starting point <span class="math inline">\(x_0\in D\)</span>.</p>
+<p>Denoting metric <span class="math inline">\(d\)</span> on <span class="math inline">\(D\)</span>, a mapping <span class="math inline">\(T:D\to D\)</span> is called a <strong>contraction mapping</strong> if there exists a constant <span class="math inline">\(0\leq k&lt;1\)</span> such that</p>
+<p><span class="math display">\[
+d(T(x),T(y))\leq k d(x,y) \quad \forall x,y\in D.
+\]</span></p>
+<p>If <span class="math inline">\(0\leq k \leq 1\)</span> the mapping is said to be <strong>non-expansive</strong>, otherwise it is called <strong>expansive</strong>. The following theorem gives conditions under which the Picard iteration converges to a unique fixed point of a contraction mapping.</p>
+<div class="theorem" data-title="Picard Contraction Mapping Principle">
+<p>Any map <span class="math inline">\(T:D\to D\)</span> on a complete metric space <span class="math inline">\((D,d)\)</span> that is a contraction mapping is a Picard operator</p>
+</div>
 </section>
-<section id="definition" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="definition"><span class="header-section-number">2</span> Definition</h2>
+<section id="krasnoselskii-mann-km-iterations" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="krasnoselskii-mann-km-iterations"><span class="header-section-number">2</span> Krasnoselskii-Mann (KM) Iterations</h2>
+<p>If <span class="math inline">\(T\)</span> is only non-expansive, the Picard iteration can fail to reach a FP even is one exists. The Krasnoselskii-Mann (KM) iteration is a generalization of the Picard iteration that can converge to a FP of a non-expansive mapping.</p>
 <div class="definition" data-title="Krasnoselskii-Mann Iteration Theorem">
 <p>Let <span class="math inline">\(T:D\to D\)</span> be a non-expansive mapping on a closed convex subset <span class="math inline">\(D\neq \emptyset\)</span> of a <a href="../topics/hilbert-space.html">Hilbert Space</a> <span class="math inline">\(\mathcal{H}\)</span>. Letting <span class="math inline">\(x_0\in D\)</span> we define the Krasnoselskii-Mann (KM) iterations as</p>
 <p><span class="math display">\[
@@ -412,11 +426,8 @@ x_{n+1}=G_{KM}(x_n, \lambda_n)=(1-\lambda_n)x_n+\lambda_nTx_n.
 <p>where <span class="math inline">\(\lambda_n\in[0,1]\)</span>.</p>
 </div>
 <p>This is just a convex combination of the current iterate <span class="math inline">\(x_n\)</span> and the image of the current iterate under the non-expansive mapping <span class="math inline">\(T\)</span> with a weight <span class="math inline">\(\lambda_n\)</span> that can vary with each iteration. The following theorem gives conditions under which the KM iteration converges to a fixed point of <span class="math inline">\(T\)</span>.</p>
-</section>
-<section id="km-iteration-convergence" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="km-iteration-convergence"><span class="header-section-number">3</span> KM Iteration Convergence</h2>
-<div class="theorem" data-title="KM Iteration Convergence Theorem">
-<p>If <span class="math inline">\(\text{Fix}(T)=\empty\)</span> and</p>
+<div class="theorem" data-title="Reich's Theorem">
+<p>If <span class="math inline">\(\text{Fix}(T)=\emptyset\)</span> and</p>
 <p><span class="math display">\[
 \sum_{n=0}^{\infty}\lambda_n(1-\lambda_n)=\infty,
 \]</span></p>
@@ -491,8 +502,8 @@ T(x_{n_k})-x_{n_k} \to 0.
 
 
 </section>
-<section class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id=""><span class="header-section-number">4</span> Backlinks</h2>
+<section class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id=""><span class="header-section-number">3</span> Backlinks</h2>
 <ul>
 <li><a href="../topics/optimization.html">Optimization</a></li>
 </ul>

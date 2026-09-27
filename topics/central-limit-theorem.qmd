@@ -1,0 +1,126 @@
+---
+title: Central Limit Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+The *Central Limit Theorem* is a fundamental result in statistics which states
+that the distribution of sample means approximates a normal distribution as the
+sample size gets larger, regardless of the population's distribution.
+
+:::{.theorem data-title="Central Limit Theorem"}
+
+Let $X_{1}, X_{2}, \dots$ be a sequence of i.i.d. random variables with finite
+second moments $\mathbb{E}X_{i}=\mu$ and $\operatorname{Var}(X_{i})=\sigma^2>0$
+for every $i$. Let us define
+$$
+Y_{i}:=\frac{X_{i}-\mu}{\sigma};\quad \forall i,
+$$
+then the scaled sample averages converge to the standard normal distribution,
+i.e.
+$$
+\sqrt{ n }\bar{Y}_{n}=\frac{Y_{1}+\dots+Y_{n}}{\sqrt{ n }}=\frac{(X_{1}+\dots+X_{n})-n\mu}{\sqrt{ n\sigma^2 }}=\frac{S_{n}-n\mu}{\sqrt{ n\sigma^2 }}\stackrel{d}{\to}\xi,
+$$
+where $\xi \sim \mathcal{N}(0,1)$. In terms of probability this is written
+$$
+\lim_{ n \to \infty } \mathbb{P}(\sqrt{ n }\bar{Y}_{n}\leq x)=\mathbb{P}(\xi \leq x)=\int _{-\infty}^x \frac{e^{-u^2/2}}{\sqrt{ 2\pi }} \, du =: \Phi(x);\quad x \in \mathbb{R} .
+$$
+
+:::
+
+*Proof:*
+We denote $X_j':= \frac{{X_{j}-\mu}}{\sigma}$ and
+$Z_{n}:= \frac{1}{\sqrt{ n }}\sum_{j=1}^nX_{j}'$. Furthermore, we let
+$Z \sim \mathcal{N}(0,1)$ and therefore we have the
+[[characteristic-functions|characteristic function]] of $Z$ as
+$\phi_{Z}(t)=\exp\left( -\frac{t^2}{2} \right)$. Our goal is to show that
+$Z_{n}\stackrel{\mathcal{D}}{\to}Z$ and by the [[continuity-theorem]] it
+suffices to show that
+$\phi_{Z_{n}}(t)\to \phi_{Z}(t)=\exp\left( -\frac{t^2}{2} \right)$ for all $t$.
+We compute
+$$
+\begin{align}\phi_{Z_{n}}(t) & =\mathbb{E}[\exp(itZ_{n})]=\mathbb{E}\left[ \exp\left(it\cdot \frac{1}{\sqrt{ n }}\sum_{j=1}^n X_{j}'\right) \right]  \\ & = \mathbb{E}\left[ \prod_{j=1}^n \exp\left( it\cdot \frac{1}{\sqrt{ n }}X_{j}' \right) \right]  \\& \stackrel{\text{i.i.d.}}= \left[ \phi_{X_{j}'}\left( \frac{t}{\sqrt{  n }} \right) \right]^n.\end{align}
+$$
+Next we expand $\phi_{X_{1}'}(s)$ by noting that $X_{1}'$ has the finite
+moments $\mathbb{E}[X_{1}']=0$ and $\mathbb{E}[(X_{1}')^2]=1$. From the moments
+and derivatives of characteristic functions we have
+$$
+\phi_{X_{1}'(s)}=1+is\cdot 0+ {\frac{(is)^2}{2!}}\cdot 1+o(s^2),~\forall s.
+$$
+We expand $\phi_{Z_{n}}(t)$ as $t \to \infty$
+$$
+\phi_{Z_{n}}(t)=\left(  \phi_{X_{1}'}\left(  \frac{t}{\sqrt{  n }} \right)  \right)^n\stackrel{n \to \infty}{\to}e^{-t^2 /2}.
+$$
+This last limit follows because $\left( 1+ \frac{a}{n} \right)^n \to e^a$ as
+$n \to \infty$, taking $a=-\frac{t^2}{2}$. $\square$
+
+The **Lindeberg-Feller CLT** provides a generalization of the
+[[central-limit-theorem]] to the case of **independent** $X_{j}$'s but not
+identically distributed.
+
+:::{.theorem data-title="Lindeberg-Feller CLT"}
+
+Let $X_{1}, X_{2}, \dots$ be independent $\mathbb{E}X_{k}=\mu_{k}=0$ and
+$\text{Var}(X_{k})=\sigma_{k}^2>0$, finite. Let $S_{n}=X_{1}+\dots+X_{n}$. Then
+$\mathbb{E}S_{n}=0$,
+$sd(S_{n})=\sqrt{  \text{Var}(S_{n})}=\sqrt{ \sum_{k=1}^n \sigma_{k}^2 }:= s_{n}$.
+Then the CLT holds:
+$$
+\frac{S_{n}}{s_{n}}\equiv \sum_{k=1}^n \frac{X_{k}}{s_{n}}\stackrel{\mathcal{D}}{\to}\mathcal{N}(0,1),
+$$
+under the following **Lindeberg-Feller condition**:
+$$
+\forall t>0,~~ \frac{1}{s_{n}^2}\sum_{k=1}^n\mathbb{E}\left[ X_{k}^2\mathbb{1}_{\left\lvert   \frac{X_{k}}{s_{n}}  \right\rvert>t } \right]\stackrel{n\to \infty}{\to}0.
+$$
+
+:::
+
+*Proof:* 
+	The proof of the Lindeberg-Feller CLT can be found in
+ [[adventures-in-stochastic-processes-resnick-pdf]]§9.8.
+
+The L-F condition implies condition of **uniform asymptotic negligibility
+(u.a.n.)** which is that all $\varepsilon>0$
+$$
+\max_{1 \leq  k \leq n} \mathbb{P}\left( \lvert X_{k,n} \rvert \equiv  \frac{\lvert X_{n}\rvert}{s_{n}}>\varepsilon  \right)\to 0 ~~\text{as}~~n \to \infty.
+$$
+Thus, intuitively the CLT says that a sum of a large number of small
+independent r.v.s with finite second moment is approximately normal. The u.a.n.
+condition roughly says that none of the terms dominate, all are small.
+
+:::{.theorem data-title="LF Sufficient Conditions"}
+
+Let $X_{k}$'s be independent mean zero r.v.s with
+$\mathbb{E}X_{k}^2=\sigma_{k}^2<\infty$. Then the Lindeberg-Feller condition
+holds iff and only if
+$$
+\left( \frac{S_{n}}{s_{n}}\stackrel{\mathcal{D}}{\to} \mathcal{N}(0,1) \right)\& \left( \left( X_{k,n}=\frac{X_{k}}{s_{n}} \right)\text{ is u.a.n.} \right).
+$$
+
+:::
+
+*Proof:*
+
+We also state Lyapunov's sufficient conditions for the CLT.
+
+:::{.theorem data-title="Lyapunov's Sufficient Condition for CLT"}
+
+The CLT holds if there exists $\delta > 0$ such that
+$$
+\frac{{\sum_{k=1}^n\mathbb{E}[\lvert X_{k} \rvert ^{2+\delta}]}}{s_{n}^{2+\delta}}\stackrel{n \to \infty}{\to}0.
+$$
+When $\delta=1$, Lyapunov's condition says that if
+$$
+\frac{{\sum_{k=1}^n \mathbb{E}\lvert X_{k} \rvert ^3}}{s_{n}^3}\stackrel{n \to \infty}{\to}0,
+$$
+then the CLT holds.
+
+:::
+
+*Proof:*
+
+
+
+

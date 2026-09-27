@@ -1,0 +1,60 @@
+---
+title: Local Volatility Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Local Volatility Models
+
+In [[financial-mathematics|mathematical finance]] **Local Volatility Models**
+are option pricing models that treat volatility as a function of both asset
+price $S_{t}$ and time $t$. The asset price process $(S_{t})$ is assumed to
+have dynamics given by the [[stochastic-differential-equations|SDE]]
+$$
+dS_{t}=(r_{t}-d_{t})S_{t}dt+\sigma(S_{t}, t)S_{t}dW_{t}.
+$$
+A simple derivation of the [[black-scholes-pde-bspde]] tells us that if
+$V_{t}=u(t,S_{t})$ denotes the value of the replicating portfolio at time $t$,
+then
+$$
+\partial _{t }u+rx\partial _{x}u+ \frac{1}{2}\sigma^2(t,x)x^2\partial_{x x}u-ru=0.
+$$
+We see that BS is quite inefficient in solving option prices since it requires
+the knowledge at all $(t,x)$ just to solve out a single number.
+
+A special example of the local volatility model is the
+[[constant-elasticity-of-variance-cev-model]] which has dynamics given by
+$$
+S_{t}= \mu S_{t}+\sigma S_{t}^\gamma dW_{t}.
+$$
+
+### Dupire's PDE
+However, in the local volatility model, there is a model dependent result
+called [[dupires-formula]] that efficiently solves out option price. The
+formula is
+$$
+\frac{{\partial C}}{\partial T}(T,K)=-rK\frac{{\partial C}}{\partial K}(T,K)+ \frac{1}{2}\sigma^2(T,K)K^2 \frac{{\partial^2C}}{\partial K^2}(T,K)
+$$
+with natural initial condition
+$$
+C(0,K)=(S_{0}-K)_{+},
+$$
+since when $T=0$ option price is just the immediate payoff.
+
+Dupire's PDE provides an explicit formula for implied volatility in the local
+volatility model.
+
+### Problems
+The local volatility model is expected to produce implied volatility surface
+$I(T,K)$ not flat in $T$ or in $K$ however it is still not perfect. The model
+suffers from the so-called $(t,T,K)$-problem.
+
+In the setting of local volatility $\sigma=\sigma(t,x)$ so the volatility is
+always the same given that the time and stock price is the same. As a result,
+at time 0 if we calibrate and get the surface $I(0,T,K)$ using options sold at
+time 0 and maturing at time $T$, we expect to see the same surface
+$I(t,T+t, K)$ based on options sold at $t$ and maturing at time $T+t$. However,
+empirical data implies that those two implied volatility surfaces are not the
+same under time translation which is a contradiction to the model.

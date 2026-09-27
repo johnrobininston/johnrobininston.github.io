@@ -1,0 +1,68 @@
+---
+title: Filtrations and Adapted Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is a Filtration?
+Consider a [[stochastic-process|stochastic process]] $(X_{t})$ defined on a
+probability space $(\Omega, \mathcal{F}, \mathbb{P})$.  
+
+:::{.definition data-title="Filtration"}
+
+A **filtration** $\mathbb{F}:=(\mathcal{F}_{t})$ is a collection of
+$\sigma$-algebra that is increasing over time, that is
+$\mathcal{F}_{s}\subseteq \mathcal{F}_{t}$ for all $s \leq t$.  
+
+:::
+
+Intuitively, a filtration is the mathematical way of describing growing
+information as we move forwards in time. If the filtration contains information
+about a certain SP then we say that process is **adapted**.
+
+:::{.definition data-title="Adapted Processes"}
+
+We say that the process $(X_{t})$ is **adapted** to filtration $\mathbb{F}$ if
+$X_{t}\in \mathcal{F}_{t}$ for all $t$.  
+
+:::
+
+That is, at time $t$ we know $X_{t}$ given $\mathcal{F}_{t}$.
+
+The **natural filtration** of a stochastic process is one which is generated
+from the process, e.g. $\sigma((X_{t})_{t\in[0,T]})$, and can be understood
+intuitively as the information revealed specifically about the stochastic
+process up to present time $T$.
+
+In most rigorous treatments, particularly for continuous-time processes,
+filtrations are assumed to satisfy the **usual conditions**:
+
+1. **Completeness:** $\mathcal{F}_{0}$ contains all $\mathbb{P}$-null sets
+2. **Right-continuity:** $\mathcal{F}_{t} = \bigcap_{s>t} \mathcal{F}_{s}$
+   (filtration is right-continuous in time)
+
+These conditions ensure nice properties for processes and integrals, though
+they're sometimes relaxed depending on context.
+
+## Examples
+**Adapted process:** [[brownian-motion]] $(B_{t})$ with its natural filtration
+$\mathcal{F}_{t} = \sigma(B_{s} : s \leq t)$ is adapted because you know
+$B_{t}$ at time $t$. The information revealed so far includes all past and
+present values of the path.
+
+**Non-adapted process:** If $X_{t}$ depends on a future value like
+$X_{t} = B_{t+1}$, it is not adapted to $\mathcal{F}_{t}$ because you don't
+have information about $B_{t+1}$ at time $t$ (you cannot know the future).
+
+## Why This Matters
+- **[[martingale-theory]]:** Adapted processes are essential—martingales are
+  defined with respect to a filtration and must be adapted to meaningfully
+  capture "fair games."
+- **Predictability & no-arbitrage:** Adaptedness ensures processes only depend
+  on current and past information, not future information. This is fundamental
+  to no-arbitrage conditions in finance.
+- **[[stochastic-calculus]]:** The Itô integral requires the integrand to be
+  adapted, you cannot use future information in trading strategies.
+

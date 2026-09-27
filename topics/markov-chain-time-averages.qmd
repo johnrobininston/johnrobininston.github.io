@@ -1,0 +1,58 @@
+---
+title: Markov Chain Time Averages
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+Let us consider the behavior of a Markov chain $X$ in the limit in
+distribution.
+
+:::{.theorem data-title="SLLN for Markov Chains"}
+
+Let $X$ be irreducible non-null persistent Markov chain with a state space $S$
+and with unique stationary distribution $\pi$. Let function $f:S\to \mathbb{R}$
+be bounded (i.e. $|f(k)|\leq M<\infty$) for all $k \in S$ for some constant
+$M$) or non-negative (i.e. $f(k)\geq 0$ for all $k \in S$). Then, for any
+initial distribution we have the following result
+$$
+\lim_{ N \to \infty } \frac{1}{N}\sum_{n=0}^N f(X_{n})=\pi(f):=\sum_{k\in S}f(k)\pi_{k}~a.s..
+$$
+
+:::
+
+*Proof:*
+
+We think of $f(k)$ as a reward (or cost) for the process to be in state $k$.
+Then, the expression $\lim_{ N \to \infty }\frac{1}{N}\sum_{n=0}^N f(X_{n})$
+represents the average long-run reward (or cost) rate.
+
+Fix, a state $j \in S$ and take function
+$$
+f(k)=\mathbb{1}_{j}(k)=\begin{cases}
+1 & \text{if }k=j \\
+0 & \text{if }k\neq j,
+\end{cases}
+$$
+so that $f(X_{n})=\mathbb{1}_{j}(X_{n})$. In this case
+$\lim_{ N \to \infty } \frac{1}{N}\sum_{n=0}^N \mathbb{1}_{j}(X_{n})$ is
+equivalent to each of the following:
+- $\frac{1}{N}\times$ number of visits to state $j$ on steps $0,1,\dots,N$
+- proportion of time the chain spends in state $j$
+- relative frequency of visiting $j$.
+
+Since the Markov chain $X$ is irreducible non-null persistent, so eventually,
+it gets into a steady-state with stationary distribution $\pi$. The result
+above says that at equilibrium $N \to \infty$, the sample mean
+$\frac{1}{N} \sum_{i=0}^N f(X_{i})$ becomes the mean value of
+$X_{\infty}\sim \pi$ such that
+$\mathbb{E}_{\pi}f(X_{\infty})=\sum_{k \in S}f(k)\pi_{k}$.
+
+The result can be phrased as *the time average is equal to the ensemble
+average* and therefore is known as *the ergodic theorem*. Here the time average
+$= \frac{1}{N}\sum_{n=0}^N f(X_{n})$ since we are averaging values of
+$f(X_{n})$ taken over times $0,1,\dots,N$; and the ensemble average
+$=\mathbb{E}X_{\infty}=\sum_{k \in S}f(k)\pi_{k}=\int _{\Omega}X_{\infty}(\omega) \, \mathbb{P}(d\omega)$
+is the average over values $X_{\infty}(\omega)$ where $X_{\omega}$ has the
+steady-state distribution $\pi$.

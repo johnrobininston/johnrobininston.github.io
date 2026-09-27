@@ -1,0 +1,53 @@
+---
+title: Doob Decomposition Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Doob Decomposition Theorem
+
+In the theory of
+[[knowledge-mathematics-analysis-probability-theory-stochastic-processes-stochastic-processes|stochastic processes]]
+in discrete time, the **Doob Decomposition Theorem** gives a unique
+decomposition of every adapted and integrable stochastic process as the sum of
+a [[martingale-theory|martingale]] and a predictable process (or "drift")
+starting at zero.
+
+The analogous theorem in the continuous-time case is the
+[[doob-meyer-decomposition-theorem]].
+
+:::{.theorem data-title="Doob Decomposition Theorem"}
+
+For integrable discrete-time process $\{ X_{n} \}_{n\in\mathbb{N}}$ adapted to
+[[filtration|filtration]] $\{ \mathcal{F}_{n} \}_{n\in\mathbb{N}}$ then the
+Doob decomposition theorem states that we can express $X_n$ as
+$$
+\begin{align}X_{n}=M_{n}+A_{n}\end{align}
+$$
+where $M_{n}$ is a martingale and $A_{n}$ is an integrable predictable process,
+in the sense that $A_{n}$ is $\mathcal{F}_{{n-1}}$-measurable for each $n>0$.
+Furthermore, $X$ is a submartingale if and only if
+$\mathbb{E}[X_{n}-X_{{n-1}}|\mathcal{F}_{{n-1}}]\geq 0$ or, equivalently, if
+$A$ is increasing a.s.
+
+:::
+
+*Proof:*
+	For submartingale $X_{n},~n\geq 0$ define an increasing sequence $A_{n},~n\geq 0$ by $$A_{n+1} := \sum_{k=0}^n (\mathbb{E}[X_{k+1}|\mathcal{F}_{k}]-X_{k});\quad n\geq 0,~A_{0}:=0,$$and define a martingale $M_{n},~n \geq  0$ by $$M_{n+1}:=X_{n+1}-A_{n+1}\quad n\geq 0.$$Note that $M_n$ is $\mathcal{F}_{n}$-measurable, $M_{n+1}-M_{n}=X_{n+1}-\mathbb{E}[X_{n+1}|\mathcal{F}_{n}];~n\geq 1$ and that $A_{n+1}$ is $\mathcal{F}_{n}$-measurable (or predictable), $n\geq 0$. $\square$
+
+Next we will look at how we apply this theorem, or more specifically how we can
+construct the processes $M_{n}, A_{n}$ for general process $X_{n}$.
+
+Consider an adapted process $(X_{n}, \mathcal{F}_{n})$. To construct
+$(M_{n}, \mathcal{F}_{n})$ and $(A_{n}, \mathcal{F}_{n})$ satisfying the
+conditions of **Doob Decomposition Theorem** we apply the following algorithm:
+
+1. **Constructing $A_{n}$:** Set: $A_{0}=0$. Define:
+   $A_{n}=A_{n-1}+\mathbb{E}[(X_{n}-X_{n-1})|\mathcal{F}_{n-1}]$ which is by
+   design predictable.
+2. **Constructing $M_{n}$:** Set $M_{0}=0$. Define:
+   $M_{n}=M_{n-1}+(X_{n}-\mathbb{E}[X_{n}|\mathcal{F}_{n-1}])$ which is by
+   design a martingale.
+

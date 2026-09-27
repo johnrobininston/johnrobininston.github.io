@@ -1,0 +1,179 @@
+---
+title: Stopping Times
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What are Stopping Times?
+In probability theory, a **stopping time** is a specific type of random
+variable whose value is interpreted as the **time at which a given stochastic
+process exhibits a certain behavior of interest**.  
+
+A stopping time is often defined by a **stopping rule**, which determines
+whether to continue or stop a process on the basis of the present position and
+past events, and which will almost always lead to a decision to stop at some
+finite time.
+
+The key property of a stopping rule is that is must be **measurable with
+respect to the [[filtrations-and-adapted-processes|filtration]]** i.e. we must
+know whether the rule is satisfied or not with information available at the
+present time $n$.
+
+:::{.definition data-title="Stopping Time"}
+
+Let $\tau$ be a random variable which is defined on the probability space
+$(\Omega, \mathcal{F}, \mathbb{P})$ with filtration
+$(\mathcal{F}_{t})_{t \in T}$ with values in $T$ - where in most cases
+$T=[0,+\infty)$. Then $\tau$ is a **stopping time with respect to filtration
+$\mathbb{F}=(\mathcal{F}_{t})_{t \in T}$** if the following condition holds
+$$
+\{ \tau\leq t \}\in\mathcal{F}_{t},
+$$
+for all $t \in T$.
+
+:::
+
+Intuitively, we know whether or not the stopping time $\tau$ has occurred
+before or at $t$ using only the information available at $t$. For example:
+
+- *Turn off the freeway at the exit after the airport* - This is a stopping
+  time because the rule is based on information available at present time $t$.
+- *Turn off the freeway at the exit before the airport* - This is not a
+  stopping time because the rule is based on future information, we only know
+  the exit was before the airport when we get to the airport exit.
+
+For discrete stochastic processes $(X_{n})$ then we have equivalent definitions
+for $\{ \tau \leq n \}=\{ \tau \geq n \}^c$ and
+$\{ \tau >n \}=\{ \tau \leq n \}^c$. This can easily be shown, for example for
+$\{ \tau \leq t \}$ since
+$$
+\{ \tau \leq n \}=\bigcup_{s=1}^n\{ \tau=s \}\in \mathcal{F}_{n},
+$$
+since $\mathcal{F}_{n}$ is closed under countable unions. However we note that
+in continuous time this generally doesn't hold since
+$$
+\{ \tau \leq t \}=\bigcup_{s \in [0,t]}\{ \tau=s \}\not\in \mathcal{F}_{t}
+$$
+generally since the union might be uncountable. However, under the additional
+assumption that the filtration $\mathbb{F}$ is **right-continuous**, that is
+$$
+\mathcal{F}_{t}=\bigcap_{s>t}\mathcal{F}_{s},
+$$
+one can show that the standard definition is equivalent to:
+
+- $\{ \tau<t \}\in F_{t-}:=\sigma\left( \bigcup_{s<t}\mathcal{F}_{s} \right)$
+- and sometimes to conditions involving $\{ \tau=t \}$ but with extra care.
+
+## ⏱ Stopping Time σ-Algebra
+Next we define the $\sigma$-algebra for a stopping time, i.e. the information
+about whether a stopping time has occurred or not.
+
+:::{.definition data-title="$\sigma$-Algebra for Stopping Times"}
+
+The $\sigma$-algebra for a stopping time $\tau$ is defined by
+$$
+\mathcal{F}_{\tau}=\left\{A \in \mathcal{F}: A \cap \{\tau \leq t\} \in \mathcal{F}_{t} \text{ for all } t\right\}.
+$$
+This represents the information available up to the (random) stopping time
+$\tau$.
+
+:::
+
+## Stopped Processes
+Once we have a stopping time $\tau$, we can construct a **stopped process** by
+"killing" the original process at time $\tau$.
+
+:::{.definition data-title="Stopped Process"}
+
+Given a stochastic process $(X_t)_{t \in T}$ and a stopping time $\tau$, the
+**stopped process** is defined as:
+$$
+X_t^{\tau} = X_{t \wedge \tau}
+$$
+where $t \wedge \tau = \min(t, \tau)$. 
+
+:::
+
+In other words, the process evolves normally until time $\tau$, then remains
+constant afterward.
+
+**Key property**: If $(X_n)$ is a [[martingale-theory|martingale]], then the
+stopped process $(X_n^{\tau})$ is also a martingale. This is essential for
+applying the [[optional-stopping-theorem|Optional Stopping Theorem]].
+
+**Example**: For a [[simple-random-walk]], $X_n^{\tau} = X_{n \wedge \tau}$
+tracks the walk until it first hits a boundary, then freezes at that value.
+
+Stopped processes are central to:
+
+- Proving the [[optional-stopping-theorem|Optional Stopping Theorem]]
+- Martingale inequalities and concentration bounds
+- Optimal stopping and sequential decision-making
+
+## Examples of Stopping Times
+Suppose that $T$ and $S$ are stopping times with respect to filtration
+$\mathbb{F}:=(\mathcal{F}_{n})$. We can show that the following are stopping
+times: (1) $T+S$; (2) $T\wedge S$; and (3) $T \vee S$.
+
+Firstly, note that 
+$$
+\{ T+S\leq t\} = \{ T \leq t-S \}\in \mathcal{F}_{t-S}\subseteq \mathcal{F}_{t},
+$$
+thus $T+s$ is a stopping time.  Secondly, we clearly have
+$$
+\{ T\wedge S\leq t \}=\{ T\leq t  \} \cup \{ S\leq t \}\in\mathcal{F}_{t},
+$$
+since $\sigma$-algebra are closed under countable unions, thus $T \wedge S$ is
+a stopping time. Finally
+$$
+\{ T\vee S\leq t \}=\{ T \leq t \}\cap \{ S \leq t \}\in \mathcal{F}_{t},
+$$
+since $\sigma$-algebra are closed under countable intersections, thus
+$T \vee S$ is a stopping time.
+
+## Sequences of Stopping Times
+Assume for the following section that the filtration $\mathbb{F}$ is complete
+and right-continuous. Consider the sequence of stopping times $(\tau_{n})$.
+Then we can show that $\sup_{n}\tau_{n}$, $\inf_{n}\tau_{n}$,
+$\liminf_{n}{\tau_{n}}$ and $\limsup_{n}{\tau_{n}}$ are also stopping times.  
+
+The following link on
+[stack exchange](https://math.stackexchange.com/questions/3944628/in-the-definition-of-a-stopping-time-how-important-are-the-conditions-on-the-fi)
+contains proof of these results.
+
+## Bounded vs Unbounded Stopping Times
+An important distinction in stopping time theory is whether the stopping time
+is **bounded** or **unbounded**.
+
+- **Bounded stopping time**: $\tau \leq N$ a.s. for some finite constant $N$.
+  All bounded stopping times satisfy the
+  [[optional-stopping-theorem|Optional Stopping Theorem]] without additional
+  conditions.
+
+- **Unbounded stopping time**: No finite upper bound. Unbounded stopping times
+  require additional regularity conditions (e.g., $\mathbb{E}[\tau] < \infty$,
+  uniform integrability) for the Optional Stopping Theorem to apply.
+
+This distinction matters because many theorems in probability have weaker
+assumptions for bounded stopping times. For instance, the Optional Stopping
+Theorem is automatic for bounded $\tau$, but requires careful justification for
+unbounded $\tau$.
+
+## Applications of Stopping Times
+Stopping times appear across probability theory and applications:
+
+- **[[optional-stopping-theorem|Optional Stopping Theorem]]** - Fundamental
+  theorem connecting stopping times to martingales
+- **[[first-passage-times|First Passage Times / Hitting Times]]** - When a
+  process reaches a target set
+- **[[optimal-stopping-theory]]** - Finding the best time to act (e.g., when to
+  sell an asset)
+- **Sequential Analysis** - Hypothesis testing with a random stopping rule
+- **Change-point Detection** - Detecting when a process changes behavior
+- **Gambler's Ruin & Exit Times** - Analysis of random walks with boundaries
+- **Martingale Inequalities** - Proving maximal inequalities and concentration
+  bounds
+
+

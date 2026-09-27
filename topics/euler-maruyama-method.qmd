@@ -1,0 +1,123 @@
+---
+title: Euler-Maruyama Method
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Euler-Maruyama Method
+
+The [[euler-maruyama-method]] is a [[sde-simulation]] method with dynamics
+given by stochastic differential equations. The [[ito-formula]] for a
+scalar-valued function $U(t, X_{t})$ of the solution $X_{t}$ of the scalar Itô
+SDE has the integral representation
+$$
+U(t,X_{t}) = U(t_{0}, X_{t_{0}})+ \int_{t_{0}}^{t}{L^0U(s,X_{s})}~d{s} + \int_{t_{0}}^{t}{L^1U(s, X_{s})}~d{W_{s}},
+$$
+where the differential operators $L^0$ and $L^1$ are defined by
+$$
+L^0 = \frac{\partial}{\partial t}+f \frac{\partial}{\partial x}+ \frac{1}{2}g^2 \frac{\partial^2}{\partial x^2}\quad \& \quad L^1 = g \frac{\partial}{\partial x}.
+$$
+This differs from the deterministic chain rule by the additional third term in
+the $L^0$ operator, which is essentially due to the fact that
+$\mathbb{E}[\Delta W^2]=\Delta t$. When $U(t,x)=x$ the Itô formula above is
+simply
+$$
+X_{t}=X_{t_{0}}+\int_{t_{0}}^{t}{f(s,X_{s})}~d{s} + \int_{t_{0}}^{t}{g(s,X_{s})}~d{}W_{s}.
+$$
+Applying the Itô formula to $f$ and $g$ we obtain
+$$
+\begin{align}
+X_{t} & =X_{0}  \\
+ & \qquad+ \int_{t_{0}}^{t}{\left[ f(t_{0}X_{t_{0}})+\int_{t_{0}}^{s}{L^0f(u,X_{u})}~d{u}+\int_{t_{0}}^{s}{L^1 f(u, X_{u})}~d{W_{u}} \right]}~d{s}  \\
+ & \qquad +\int_{t_{0}}^{t}{\left[ g(t_{0}, X_{t_{0}})+\int_{t_{0}}^{s}{L^0g(u, X_{u})}~d{u}+\int_{t_{0}}^{s}{L^1g(u, X_{u})}~d{W_{u}} \right]}~d{W_{s}} \\
+ & =X_{t_{0}}+f(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{s}+g(t_{0}, X_{t_{0}})\int_{t_{0}}^{t}{}~d{W_{s}}+R_{1}(t,t_{0}),
+\end{align}
+$$
+where the remainder is
+$$
+\begin{align}
+R_{1}(t,t_{0}) & =\int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^0f(u, X_{u})}~d{u}}~d{s} + \int_{t_{0}}^{s}{\int_{t_{0}}^{s}{L^1f(u, X_{u})}~d{W_{u}}}~d{s} \\
+ & + \int_{t_{0}}^{t}{\int_{t_{0}}^{s}{L^0g(u, X_{u})}~d{u}}~d{W_{s}} + \int_{t_{0}}^{t}{\int_{t_{0}}^{s}{L^1 g(u, X_{u})}~d{W_{u}}}~d{W_{s}}.
+\end{align}
+$$
+Replacing $t_{0}$ by $t_{n}$, $t$ by $t_{n+1}$ and discarding the remainder be
+obtain the **Euler-Maruyama Method** which we summarize in the definition
+below. This is the simplest stochastic [[taylor-series|Taylor expansion]].
+
+:::{.definition data-title="Euler-Maruyama Method"}
+
+The **Euler-Maruyama Method** discretizes the continuous time dynamics by
+defining a step-size $\Delta t=\frac{T}{N}$ for $N \in \mathbb{Z}$ and
+computing the approximate solutions at times $t_{i}=i\Delta t$ using simple
+left-endpoint Riemann sums in place of the integrals
+$$
+\widehat{X}_{t_{n+1}}=\widehat{X}_{t_{n}}+\Delta tf(t_{n},\widehat{X}_{t_{n}})+\underbrace{\Delta W_{n}}_{=\sqrt{\Delta t}\cdot\xi_{n}}g(t_{n},\widehat{X}_{t_{n}}),
+$$
+where $\Delta W_{n}=W(t_{n+1})-W(t_{n})\sim\mathcal{N}(0,\Delta t)$ (or
+equivalently with $\xi_{n}\sim\mathcal{N}(0,1)$ for all $n$).
+
+:::
+
+**Example: BS Model EM Method and Error**
+Consider the [[black-scholes-merton-model]] which consists of two assets, a
+risk free asset $B$ and a stock $S$ with price dynamics given by
+$$
+\begin{align}dB_{t}&=rB_{t}dt \\dS_{t}& =\alpha S_{t}dt+\sigma S_{t}dW_{t},\end{align}
+$$
+on filtered probability space $(\Omega, \mathcal{F}, \mathbb{F}, \mathbb{P})$
+where $r, \alpha$ and $\sigma$ are deterministic constants and $W_{t}$ is BM in
+$\mathbb{P}$. Under the risk-neutral measure $\mathbb{Q}$ the dynamics of $S_t$
+are instead given by
+$$
+dS_{t}=rS_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q},
+$$
+and the **true solution** under the risk-free measure is
+$$
+S_{T}=S_{0}e^{(r-\frac{\sigma^2}{2})T+\sigma W_{T}}.
+$$
+for some future time $T$. Suppose we wish to simulate this process on the
+interval $[0,T]$. We can apply Euler's algorithm by considering a discretized
+mesh $0=t_{0}, t_{1}, \dots, t_{n}=T$ where $t_{n}=t_{n-1}+\Delta t$ for
+$\Delta t=\frac{T}{n}$ and then writing
+$$
+S_{t+\Delta t}=S_{t}+rS_{t}\Delta t + \sigma S_{t}\underbrace{(W_{t+\Delta t}-W_{t})}_{=\sqrt{ \Delta t }X_{t}},
+$$
+where $X_{t}\stackrel{iid}\sim\mathcal{N}(0,1)$. This is easy to simulate, for
+example the following `R` code using a `for` loop:
+
+```
+## Euler's Algorithm
+bs_euler <- function(r, alpha, sigma, S0, t0=0, T, n=1000){
+	dt = T/n
+	S <- numeric(n)
+	S[1] <- S0
+	for(i in 2:n){
+		S[i] <- S[i-1] + r*S[i-1]*dt + sigma*S[i-1]*sqrt(dt)*rnorm(1,0,1)
+	}
+	return(S)
+}
+```
+
+We have clearly made some kind of discretization error. To determine how bad
+this error is we turn back to the true solution and we consider the Taylor
+expansion
+$$
+\begin{align}
+S_{t+\Delta t} & =S_{t}e^{\left( r-\frac{1}{2}\sigma^2 \right)\Delta t+\sigma \sqrt{ \Delta t }\xi}  \\
+ & =S_{t}\left\{ \underbrace{1+\left(r-\frac{1}{2}\sigma^2\right)\Delta t+\sigma \sqrt{ \Delta t }\xi}_{\text{Euler's Approximation}}+\frac{1}{2}\left[ \left( r- \frac{1}{2}\sigma^2\right)\Delta t+\sigma \sqrt{ \Delta t }\xi \right]^2 + \dots  \right\}  \\
+ & =S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ \left( r- \frac{1}{2}\sigma^2 \right)+\frac{1}{2}\sigma^2\xi^2 \right]+(\Delta t)^{\frac{3}{2}}\left[ \dots \right]+\dots   \right\},
+\end{align}
+$$
+where we have replaced $W_{t+\Delta t}-W_{t}\sim \sqrt{ \Delta t }\xi$ where
+$\xi\sim\mathcal{N}(0,1)$. From this we see that Euler's approximation might
+seem reasonable from the SDE perspective but it is actually rather strange in
+its use of various orders of $\Delta t$.  
+
+It seems reasonable to suggest that the approximation improves as
+$N \to \infty$. To test this presumption, we consider the two standard
+approaches for measuring the error $X_{n}\to X(t_{n})$, leading to the concepts
+of **weak error** and **strong error**.  
+
+

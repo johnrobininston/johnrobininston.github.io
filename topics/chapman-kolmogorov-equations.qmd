@@ -1,0 +1,68 @@
+---
+title: Chapman-Kolmogorov Equations
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+#### Chapman-Kolmogorov Equations
+
+In probability theory, the Chapman-Kolmogorov equation (CKE) is an identity
+relating the joint probability distributions of different sets of coordinates
+on a stochastic process.
+
+:::{.theorem data-title="Chapman-Kolmogorov Equation"}
+
+Suppose $\{ f_{i} \}$ is an indexed collection of
+[[random-variables-and-distribution-functions|random variables]] (i.e. a
+[[stochastic-process|stochastic process]]). Let
+$$
+p_{i_{1}, \dots, i_{n}}(f_{1}, \dots, f_{n})
+$$
+be the joint probability density function of the values of the random variables
+$f_{1}$ to $f_{n}$. Then the **Chapman-Kolmogorov equation** is
+$$
+p_{i_{1}, \dots, i_{n-1}}(f_{1}, \dots, f_{n-1})=\int _{-\infty}^\infty p_{i_{1}, \dots, i_{n}}(f_{1}, \dots, f_{n}) \, df_{n},
+$$
+i.e. a [[marginalization|marginalization]] over the nuisance variable.
+
+:::
+
+When the stochastic process under consideration is
+[[markov-process|markovian]], the Chapman-Kolmogorov equation is equivalent to
+an identity on transition densities. Under a Markov process setting, one
+assumes $i_{1}< \dots<i_{n}$ and then from the [[markov-property]]
+$$
+p_{i_{1}, \dots, i_{n}}(f_{1}, \dots, f_{n})=p_{i_{1}}(f_{1})p_{i_{2};i_{1}}(f_{2}|f_{1}) \cdots p_{i_{n};i_{n-1}}(f_{n}|f_{n-1}),
+$$
+where the conditional probability $p_{i;j}(f_{i}|f_{j})$ is the transition
+probability between the times $i>j$. So, the Chapman-Kolmogorov equations take
+the form
+$$
+p_{i_{3}; i_{1}}(f_{3}|f_{1})=\int _{-\infty}^\infty p_{i_{3}; i_{2}}(f_{3}|f_{2})p_{i_{2}; i_{1}}(f_{2}|f_{1}) \, df_{2}. 
+$$
+*Intuitively, this states that the probability of going from state 1 to state 3
+can be found from the probabilities from 1 to an intermediate state 2 and then
+from 2 to 3, by adding up over all the possible intermediate states 2.*
+
+#### Result: Homogeneous Discrete Time Markov Chains
+
+:::{.theorem data-title="Chapman-Kolmogorov Equations"}
+
+For a discrete time countable state homogeneous Markov chain the
+Chapman-Kolmogorov equations state that
+$$
+P_{n+m}=P_{n}\cdot P_{m},
+$$
+or equivalently
+$$
+p_{i,j}(n+m)=\sum_{k\in S}p_{i,k}(n)p_{k,j}(m).
+$$
+
+:::
+
+A similar result holds for distributions:
+$\mu_{j}^{(n+m)}=\sum_{i \in S}\mu_{i}^{(n)}p_{i,j}(m)$, or in matrix form
+$\underline{\mu}^{(n+m)}=\underline{\mu}^{(n)}P_{m}=\underline{\mu}^{(n)}P^m$
+and $\underline{\mu}^{(n)}=\underline{\mu}^{(0)}P^n$.

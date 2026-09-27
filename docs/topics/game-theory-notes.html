@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Game Theory Notes – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Game Theory Notes</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#game-theory" id="toc-game-theory" class="nav-link active" data-scroll-target="#game-theory"><span class="header-section-number">1</span> Game Theory</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">1.1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#maximin-rule" id="toc-maximin-rule" class="nav-link" data-scroll-target="#maximin-rule"><span class="header-section-number">1.1.1</span> Maximin Rule</a></li>
+  <li><a href="#minimax-rule" id="toc-minimax-rule" class="nav-link" data-scroll-target="#minimax-rule"><span class="header-section-number">1.1.2</span> Minimax Rule</a></li>
+  </ul></li>
+  <li><a href="#nash-equilibrium" id="toc-nash-equilibrium" class="nav-link" data-scroll-target="#nash-equilibrium"><span class="header-section-number">1.2</span> Nash Equilibrium</a></li>
+  <li><a href="#notes-to-add" id="toc-notes-to-add" class="nav-link" data-scroll-target="#notes-to-add"><span class="header-section-number">1.3</span> Notes to add</a></li>
+  <li><a href="#pareto-optimal" id="toc-pareto-optimal" class="nav-link" data-scroll-target="#pareto-optimal"><span class="header-section-number">1.4</span> Pareto Optimal</a></li>
+  </ul></li>
+  <li><a href="#zero-sum-games" id="toc-zero-sum-games" class="nav-link" data-scroll-target="#zero-sum-games"><span class="header-section-number">2</span> Zero-Sum Games</a>
+  <ul class="collapse">
+  <li><a href="#fundamentals-of-zero-sum-games" id="toc-fundamentals-of-zero-sum-games" class="nav-link" data-scroll-target="#fundamentals-of-zero-sum-games"><span class="header-section-number">2.1</span> Fundamentals of Zero-Sum Games</a>
+  <ul class="collapse">
+  <li><a href="#foundational-theorems-and-results" id="toc-foundational-theorems-and-results" class="nav-link" data-scroll-target="#foundational-theorems-and-results"><span class="header-section-number">2.1.1</span> Foundational Theorems and Results</a></li>
+  <li><a href="#solution-concepts" id="toc-solution-concepts" class="nav-link" data-scroll-target="#solution-concepts"><span class="header-section-number">2.1.2</span> Solution Concepts</a></li>
+  <li><a href="#algorithms-for-computing-strategies" id="toc-algorithms-for-computing-strategies" class="nav-link" data-scroll-target="#algorithms-for-computing-strategies"><span class="header-section-number">2.1.3</span> Algorithms for Computing Strategies</a></li>
+  <li><a href="#extensions-and-advanced-topics" id="toc-extensions-and-advanced-topics" class="nav-link" data-scroll-target="#extensions-and-advanced-topics"><span class="header-section-number">2.1.4</span> Extensions and Advanced Topics</a></li>
+  <li><a href="#connections-to-other-fields" id="toc-connections-to-other-fields" class="nav-link" data-scroll-target="#connections-to-other-fields"><span class="header-section-number">2.1.5</span> Connections to Other Fields</a></li>
+  </ul></li>
+  <li><a href="#zero-sum-games-1" id="toc-zero-sum-games-1" class="nav-link" data-scroll-target="#zero-sum-games-1"><span class="header-section-number">2.2</span> Zero-Sum Games</a></li>
+  <li><a href="#player-zero-sum-games" id="toc-player-zero-sum-games" class="nav-link" data-scroll-target="#player-zero-sum-games"><span class="header-section-number">2.3</span> 2-Player Zero-Sum Games</a></li>
+  <li><a href="#matrix-games" id="toc-matrix-games" class="nav-link" data-scroll-target="#matrix-games"><span class="header-section-number">2.4</span> Matrix Games</a></li>
+  <li><a href="#types-of-game" id="toc-types-of-game" class="nav-link" data-scroll-target="#types-of-game"><span class="header-section-number">2.5</span> Types of Game</a></li>
+  <li><span class="header-section-number">2.6</span> Backlinks</li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="game-theory" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Game Theory</h1>
+<section id="introduction" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.1</span> Introduction</h2>
+<p>Informally, a game is a system of interacting decision making agents with conflicting aims. The flexibility of this definition has lead to a wide variety of different games depending on their underlying structure. For example, games can be:</p>
+<ul>
+<li><strong>Cooperative or Non-cooperative:</strong> A game in which players are able to mutually benefit through cooperation is said to be cooperative. Otherwise, the games are said to be con-cooperative.</li>
+<li><strong>Static vs Dynamic:</strong> A game</li>
+<li>Deterministic vs Stochastic</li>
+<li>Simultaneous vs Sequential vs Continuous Time</li>
+<li>Symmetric vs Asymmetric</li>
+<li>Perfect Information vs Imperfect Information</li>
+<li>Zero-Sum vs Non-Zero-Sum</li>
+<li>Monotone</li>
+<li>Super-modular</li>
+<li>Potential</li>
+</ul>
+<p>The <strong>solution</strong> to games from a mathematical perspective is to find <strong>equilibriums</strong>, i.e.&nbsp;states that the game will move into if left to run.</p>
+<p>Denote agents <span class="math inline">\(j\in \{ 1, \dots, J \}:=\mathcal{J}\)</span> gather in <strong>agent space</strong> <span class="math inline">\(\mathcal{J}\)</span>. The fundamental underpinnings of game theory are studied in <strong>Decision Theory</strong> which involves the study of single agent decision making under uncertainty.</p>
+<div class="definition" data-title="Decision Space">
+<p>Each agent can select from set of possible <strong>strategy</strong> <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> (also called <strong>actions</strong> or <strong>decisions</strong>) called the <strong>strategy space</strong>.</p>
+</div>
+<p>We denote the agent wide strategy space by the Cartesian product <span class="math inline">\(\mathcal{S}:=\mathcal{S}_{1}\times\cdots\times \mathcal{S}_{J}\)</span>. Typically strategies are driven by <strong>decision rules</strong> which are functions mapping from an observation to an appropriate strategy.</p>
+<div class="definition" data-title="Pure and Mixed Strategy">
+<p>A strategy is said to be <strong>pure</strong> if it is deterministic i.e.&nbsp;there is no randomness to the strategy. Otherwise the strategy is said to be <strong>mixed</strong>.</p>
+</div>
+<p>All elements of the strategy spaces <span class="math inline">\(\mathcal{S}_{j}\)</span> are pure. The space of mixed strategies for agent <span class="math inline">\(j\)</span> is the simplex over <span class="math inline">\(\mathcal{S}_{j}\)</span>.</p>
+<div class="definition" data-title="Simplex">
+<p>The <strong>simplex</strong> <span class="math inline">\(\Delta \mathcal{S}_{j}\)</span> of pure decision space <span class="math inline">\(\mathcal{S}_{j}\)</span> is the <strong>set of probability distributions</strong> over <span class="math inline">\(\mathcal{S}_{j}\)</span>. A <strong>mixed strategy</strong> for player <span class="math inline">\(j\)</span> is an element <span class="math inline">\(\sigma_{j}\in\Delta\mathcal{S}_{j}\)</span> so that <span class="math inline">\(\sigma_{j}\)</span> is a probability distribution over <span class="math inline">\(\mathcal{S}_{j}\)</span>. We denote by <span class="math inline">\(\sigma(s_{j})\)</span> the probability that player <span class="math inline">\(j\)</span> employs <span class="math inline">\(s_{j}\)</span>.</p>
+</div>
+<p><strong>Example (Pure vs Mixed Strategy):</strong> Suppose we are playing poker and we construct a strategy on how to handle strong hands. A pure strategy could be “for 3-of-a-kind or stronger go all in”. Although the game itself is random, the strategy is deterministic, if this then that. Alternatively, a mixed strategy could be “for a 3-of-a-kind or stronger go all in 75% of the time”. Now we have introduced a stochastic component to our strategy.</p>
+<div class="definition" data-title="Utility Function">
+<p>Each agent has a <strong>utility function</strong> (also called <strong>payoff</strong> or <strong>profit</strong>) <span class="math display">\[
+U_{j}:\mathcal{S}\to \mathbb{R},
+\]</span> which describes their utility gain (or loss) based on an <strong>strategy profile</strong> <span class="math inline">\(s\in\mathcal{S}\)</span>. We denote the combined agent utility function space by the Cartesian product <span class="math inline">\(\mathcal{U}:=\prod_{j\in \mathcal{J}}U_{j}\)</span>. The game is therefore mathematically represented by the tuple <span class="math inline">\((\mathcal{J},\mathcal{S},\mathcal{U})\)</span>.</p>
+</div>
+<p>Given that the game involved only pure strategies each agent <span class="math inline">\(j\)</span> chooses strategy <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> to <strong>maximize her utility</strong> <span class="math display">\[
+\max_{s_{j}\in \mathcal{S}_{j}}U_{j}(s_{j},s_{{-j}}),
+\]</span> where <span class="math inline">\(s_{-j}\)</span> denotes the strategies of all players except <span class="math inline">\(j\)</span>. For games with mixed strategies an agent chooses mixed strategy <span class="math inline">\(\sigma_{j}\in \Delta \mathcal{S}_{j}\)</span> to <strong>maximize her expected utility</strong> <span class="math display">\[
+\max_{\sigma_{j}\in \Delta\mathcal{S}_{j}}\mathbb{E}[U_{j}(s_{j},s_{-j})].
+\]</span> ## Minimax and Maximin Rules</p>
+<p>Recall that a decision rule is a rule designed to aid in decision making based on incoming future information. <em>Minimax</em> is a decision rule used for <em>minimizing the possible loss for the worst case scenario</em>. Originally formulated for several-player <strong>zero-sum games</strong> for both sequential and simultaneous moves but has since been extended to more complex games.</p>
+<section id="maximin-rule" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="maximin-rule"><span class="header-section-number">1.1.1</span> Maximin Rule</h3>
+<p>Consider a general finite-player game with agents <span class="math inline">\(j\in\{1, \dots, J\}\)</span> and denote all players but <span class="math inline">\(j\)</span> by <span class="math inline">\(-j\)</span>. The <em>maximin</em> value is the highest value that the player can be sure to get whatever the actions of the other players. Equivalently, it is the lowest value the other players can force the player to receive when they know the player’s action. Mathematically, this is written <span class="math display">\[
+\underline{v_{j}}=\max_{a_{j}}\min_{a_{-j}}v_{j}(a_{j},a_{-j}),
+\]</span> where: (1) <span class="math inline">\(a_{j}\)</span> is the <em>action taken</em> by player <span class="math inline">\(j\)</span>; and (2) <span class="math inline">\(v_{j}\)</span> is the <em>value function</em> of player <span class="math inline">\(j\)</span>.</p>
+</section>
+<section id="minimax-rule" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="minimax-rule"><span class="header-section-number">1.1.2</span> Minimax Rule</h3>
+<p>The <em>minimax</em> value of a player is the lowest value that the other players can force the players to receive, without knowing the player’s actions. Equivalently, it is the highest value the other players can force the player to receive when they know the player’s action. Mathematically, this is written <span class="math display">\[
+\overline{v_{j}}:=\min_{a_{-j}}\max_{a_{j}}v_{j}(a_{j},a_{-j}).
+\]</span> For every player<span class="math inline">\(j\)</span>, the maximin is at most the minimax <span class="math display">\[
+\underline{v_{j}}\leq\overline{v_{j}}.
+\]</span> #### Example</p>
+<p>Consider the <strong>zero-sum game</strong> where players <span class="math inline">\(s,t\)</span> make simultaneous moves selected from decision spaces <span class="math inline">\(\mathscr{S}:=\{s_{1}, s_{2}, s_{3}\}\)</span> and <span class="math inline">\(\mathscr{T}:=\{ t_{1}, t_{2}, t_{3} \}\)</span> with payoff matrix for <span class="math inline">\(s\)</span> given by <span class="math display">\[
+\boldsymbol{P}:=(p_{i,j})_{i,j\in \{ 1,\dots,3 \}}=\left[ \begin{matrix}
+3 &amp; -2 &amp; 2 \\
+-1 &amp; 0 &amp; 4  \\
+-4 &amp; -3 &amp; 1
+\end{matrix} \right],
+\]</span> where <span class="math inline">\(p_{i,j}\)</span> corresponds to the outcome with <span class="math inline">\(s_{i}\)</span> and <span class="math inline">\(t_{j}\)</span> decisions. The payoff matrix for <span class="math inline">\(t\)</span> is <span class="math inline">\(-\boldsymbol{P}\)</span> since the game is zero-sum.</p>
+<p>Then, the maximin choice for <span class="math inline">\(s\)</span> is <span class="math inline">\(s_2\)</span> since the worst possible result is then having to pay <span class="math inline">\(1\)</span>, while the simple maximin choice for <span class="math inline">\(t\)</span> is <span class="math inline">\(t_2\)</span> since the worst possible result is then no payment. However, this solution is not stable, since if <span class="math inline">\(t\)</span> believes <span class="math inline">\(s\)</span> will choose <span class="math inline">\(s_2\)</span> then <span class="math inline">\(t\)</span> will choose <span class="math inline">\(t_1\)</span> to gain <span class="math inline">\(1\)</span>; then if <span class="math inline">\(s\)</span> believes <span class="math inline">\(t\)</span> will choose <span class="math inline">\(t_1\)</span> then <span class="math inline">\(s\)</span> will choose <span class="math inline">\(s_1\)</span> to gain <span class="math inline">\(3\)</span>; and then <span class="math inline">\(t\)</span> will choose <span class="math inline">\(t_2\)</span>; and eventually both players will realize the difficulty of making a choice.</p>
+<p>Some choices are <em>dominated</em> by others and can be eliminated: <span class="math inline">\(s\)</span> will not choose <span class="math inline">\(s_3\)</span> since either <span class="math inline">\(s_1\)</span> or <span class="math inline">\(s_2\)</span> will produce a better result, no matter what <span class="math inline">\(t\)</span> chooses; <span class="math inline">\(t\)</span> will not choose <span class="math inline">\(t_3\)</span> since some mixtures of <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span> will produce a better result, no matter what <span class="math inline">\(s\)</span> chooses.</p>
+<p>Player <strong>A</strong> can avoid having to make an expected payment of more than ⁠1/ 3 ⁠ by choosing <span class="math inline">\(s_1\)</span> with probability ⁠<span class="math inline">\(1/ 6\)</span> ⁠ and <span class="math inline">\(s_2\)</span> with probability <span class="math inline">\(⁠5/ 6\)</span> ⁠: The expected payoff for <span class="math inline">\(s\)</span> would be <span class="math inline">\(3 \times&nbsp;⁠1/ 6 ⁠&nbsp;− 1 \times&nbsp;⁠5/ 6 ⁠&nbsp;=&nbsp;⁠-1/ 3\)</span> ⁠ in case <span class="math inline">\(t\)</span> choses <span class="math inline">\(t_1\)</span> and <span class="math inline">\(−2 \times&nbsp;⁠1/6 ⁠&nbsp;+ 0 \times&nbsp;⁠5/ 6 ⁠&nbsp;=&nbsp;⁠- 1/ 3\)</span> ⁠in case <span class="math inline">\(t\)</span> chose <span class="math inline">\(t_2\)</span>. Similarly, <span class="math inline">\(t\)</span> can ensure an expected gain of at least <span class="math inline">\(⁠1/ 3\)</span> ⁠, no matter what s chooses, by using a randomized strategy of choosing <span class="math inline">\(t_1\)</span> with probability ⁠<span class="math inline">\(1/ 3\)</span> ⁠and <span class="math inline">\(t_2\)</span> with probability ⁠<span class="math inline">\(2/ 3 \)</span>. These <em>mixed minimax strategies</em> cannot be improved and are now stable.</p>
+</section>
+</section>
+<section id="nash-equilibrium" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="nash-equilibrium"><span class="header-section-number">1.2</span> Nash Equilibrium</h2>
+<p>In game theory, a <em>Nash equilibrium</em> is a situation where no player could gain by changing their own strategy holding all other player’s strategies as fixed. The famous John Nash showed that there exists a Nash equilibrium, possibly in <em>mixed strategies</em> (those with stochastic decisions) for every <em>finite game</em>.</p>
+<p><strong>Definition (Nash Equilibrium):</strong> Formally, consider a game with players <span class="math inline">\(j=1, \dots, J\)</span> and let <span class="math inline">\(\mathscr{S}_{j}\)</span> denote the set of all possible strategies for player <span class="math inline">\(j\)</span>. Let <span class="math inline">\(s^*=(s_{j}^*, s_{-j}^*)\)</span> be a strategy profile that is, a set consisting of one strategy for each player where <span class="math inline">\(s_{-j}^*\)</span> denotes the <span class="math inline">\(J-1\)</span> strategies of all the players besides <span class="math inline">\(j\)</span>. Let <span class="math inline">\(u_{j}(s_{j},s^*_{-j})\)</span> be player <span class="math inline">\(j\)</span>’s payoff function of the strategies. The strategy profile <span class="math inline">\(s^*\)</span> is a Nash equilibrium if <span class="math display">\[
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j}.
+\]</span> A game can have more than one Nash equilibrium. Even if the equilibrium is unique, it might be <em>weak</em> whereby a player might be indifferent among several strategies given the other player’s choices. The equilibrium is unique and called a <em>strict Nash equilibrium</em> if the inequality if the inequality is strict so one strategy is the unique best response <span class="math display">\[
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j};~s_{j}\neq s_{j^*}.
+\]</span> The strategy set <span class="math inline">\(\mathscr{S}_{j}\)</span> can be different for different players, and its elements can be a variety of mathematical objects.</p>
+<p><strong>Example (One-Period Sequential ):</strong> Consider the following example from page 6 of Textbook - Başar and Olsder - Dynamic Noncooperative Game Theory considering a <em>one-period sequential game</em> between two companies <span class="math inline">\(P_{1}, P_{2}\)</span> deciding whether to advertise (spend money) based on their resulting customer numbers and profit.</p>
+<p>The Nash equilibrium is deduced as follows: no matter what <span class="math inline">\(P_{1}\)</span> decides, <span class="math inline">\(P_{2}\)</span> will decide to advertise since they will be better off; thus assuming <span class="math inline">\(P_{2}\)</span> is a smart player, <span class="math inline">\(P_1\)</span> knows this and picks their own ideal case which is to also advertise.</p>
+<p>Some Nash equilibrium variants include:</p>
+<ul>
+<li>Pure Equilibrium vs Mixed Equilibrium</li>
+<li>Strict Equilibrium vs Non-Strict Equilibrium</li>
+<li>Equilibria for coalitions</li>
+</ul>
+</section>
+<section id="notes-to-add" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="notes-to-add"><span class="header-section-number">1.3</span> Notes to add</h2>
+<ul>
+<li>Proof of Nash’s result</li>
+<li>Discussion of Fixed Point Theorems</li>
+</ul>
+</section>
+<section id="pareto-optimal" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="pareto-optimal"><span class="header-section-number">1.4</span> Pareto Optimal</h2>
+<p>In welfare economics, a Pareto improvement formalizes the idea of outcomes being better in <em>every possible way</em>. An improvement is Pareto if at least one person in the system is better off without anybody else being worse off.</p>
+<p>A situation is called <strong>Pareto optimal (efficient)</strong> is all possible Pareto improvements have already been made, that is all <em>win-win</em> improvements have already been applied.</p>
+<div class="definition" data-title="Pareto Optimality">
+<p>Formally, let <span class="math inline">\(X\)</span> be the set of all feasible allocations and define <strong>utility functions</strong> <span class="math inline">\(u_{i}:X \to \mathbb{R}\)</span> of agent <span class="math inline">\(i=1,\dots,n\)</span>. An allocation <span class="math inline">\(x^*\in X\)</span> is <strong>Pareto optimal</strong> if there is no other allocation <span class="math inline">\(x \in X\)</span> such that <span class="math inline">\(u_{i}(x)\geq u_{i}(x^*);\quad \forall i\)</span> and <span class="math inline">\(u_{j}(x)&gt;u_{j}(x^*)\)</span> for at least one <span class="math inline">\(j\)</span>.</p>
+</div>
+<p>In other words, you cannot improve someones utility without lowering someone else’s.</p>
+</section>
+</section>
+<section id="zero-sum-games" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Zero-Sum Games</h1>
+<section id="fundamentals-of-zero-sum-games" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="fundamentals-of-zero-sum-games"><span class="header-section-number">2.1</span> Fundamentals of Zero-Sum Games</h2>
+<p>The simplest kind of game utility structure is a <strong>zero sum game</strong> in which players can only gain at the equal cost to other players.</p>
+<div class="definition" data-title="Zero-Sum Game">
+<p>A <strong>zero-sum game</strong> requires for finite agents <span class="math inline">\(j=\{1, \dots, J\}=:\mathcal{J}\)</span> with decision variables <span class="math inline">\(\boldsymbol{d}=(d^j)_\mathcal{J}\)</span> and utility function <span class="math inline">\(U^j\)</span> we have <span class="math display">\[
+\sum_{j=1}^{J}U^j(\boldsymbol{d})=0.
+\]</span></p>
+</div>
+<p>Games where this sum is equal to a nonzero constant (independent of decision variables) are known as <strong>constant sum game</strong> which can easily transformed to a zero-sum game.</p>
+<p>Zero-sum games are often called <em>strictly competitive games</em> and are most often solved with the <em>minimax theorem</em> or with <em>Nash equilibrium</em>.</p>
+<p>The zero-sum property means that any result of a zero-sum situation is <a href="../topics/pareto-optimal.html">Pareto Optimal</a> (no players position can be improved without making another players worse).</p>
+<ul>
+<li><p><strong>Definition of Zero-Sum Game</strong></p>
+<ul>
+<li>Two-player game where one player’s gain is the other’s loss: u1+u2=0u1​+u2​=0</li>
+</ul></li>
+<li><p><strong>Game Representations</strong></p>
+<ul>
+<li><p><strong>Normal-form (Matrix) Games</strong></p>
+<ul>
+<li>Payoff matrix for player 1; player 2’s payoffs are the negation</li>
+</ul></li>
+<li><p><strong>Extensive-form Games</strong></p>
+<ul>
+<li>Game tree with sequential moves and perfect/imperfect information</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Basic Concepts</strong></p>
+<ul>
+<li><p><strong>Strategies</strong></p>
+<ul>
+<li>Pure vs.&nbsp;mixed strategies</li>
+</ul></li>
+<li><p><strong>Expected Payoff</strong></p>
+<ul>
+<li>Payoff under mixed strategies computed using bilinear forms</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Dominance and Simplification</strong></p>
+<ul>
+<li><p>Dominated strategies can be eliminated</p></li>
+<li><p>Best response correspondences</p></li>
+</ul></li>
+</ul>
+<section id="foundational-theorems-and-results" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="foundational-theorems-and-results"><span class="header-section-number">2.1.1</span> Foundational Theorems and Results</h3>
+<ul>
+<li><p><strong>Minimax Theorem (von Neumann, 1928)</strong></p>
+<p>max⁡x∈Δmmin⁡y∈ΔnxTAy=min⁡y∈Δnmax⁡x∈ΔmxTAyx∈Δm​max​y∈Δn​min​xTAy=y∈Δn​min​x∈Δm​max​xTAy</p>
+<ul>
+<li><p>Existence of equilibrium in mixed strategies</p></li>
+<li><p>Value of the game is unique</p></li>
+</ul></li>
+<li><p><strong>Duality in Linear Programming</strong></p>
+<ul>
+<li><p>Connection between zero-sum games and LP duality</p></li>
+<li><p>Game value as LP optimum</p></li>
+<li><p>Dual variables represent optimal strategies</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="solution-concepts" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="solution-concepts"><span class="header-section-number">2.1.2</span> Solution Concepts</h3>
+<ul>
+<li><p><strong>Saddle Point</strong></p>
+<ul>
+<li>Strategy pair (x∗,y∗)(x∗,y∗) such that x∗Ay∗=min⁡ymax⁡xxAy=max⁡xmin⁡yxAyx∗Ay∗=miny​maxx​xAy=maxx​miny​xAy</li>
+</ul></li>
+<li><p><strong>Value of the Game</strong></p>
+<ul>
+<li>Common expected payoff to both players at equilibrium</li>
+</ul></li>
+</ul>
+</section>
+<section id="algorithms-for-computing-strategies" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="algorithms-for-computing-strategies"><span class="header-section-number">2.1.3</span> Algorithms for Computing Strategies</h3>
+<ul>
+<li><p><strong>Linear Programming Formulation</strong></p></li>
+<li><p><strong>Simplex Method</strong></p></li>
+<li><p><strong>Iterated Best Response</strong></p></li>
+<li><p><strong>Fictitious Play (Brown, 1951)</strong></p></li>
+<li><p><strong>Regret Minimization and Online Learning (e.g., Follow the Regularized Leader)</strong></p></li>
+</ul>
+</section>
+<section id="extensions-and-advanced-topics" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="extensions-and-advanced-topics"><span class="header-section-number">2.1.4</span> Extensions and Advanced Topics</h3>
+<ul>
+<li><p><strong>Zero-Sum Games with Infinite Strategy Sets</strong></p>
+<ul>
+<li>Measurable strategy spaces, Glicksberg’s generalization</li>
+</ul></li>
+<li><p><strong>Differential Games</strong></p>
+<ul>
+<li>Continuous-time control interpretation of zero-sum interactions</li>
+</ul></li>
+<li><p><strong>Stochastic Games (Shapley, 1953)</strong></p>
+<ul>
+<li>Markov decision process with two players and transition dynamics</li>
+</ul></li>
+<li><p><strong>Repeated Games</strong></p>
+<ul>
+<li><p>Zero-sum repeated games with finite/infinite horizon</p></li>
+<li><p>Folk theorems and the emergence of cooperation</p></li>
+</ul></li>
+<li><p><strong>Mean Field Games (in zero-sum settings)</strong></p>
+<ul>
+<li>Large population limits with antagonistic interactions</li>
+</ul></li>
+</ul>
+</section>
+<section id="connections-to-other-fields" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="connections-to-other-fields"><span class="header-section-number">2.1.5</span> Connections to Other Fields</h3>
+<ul>
+<li><p><strong>Optimization &amp; Convex Analysis</strong></p>
+<ul>
+<li>Saddle point theory</li>
+</ul></li>
+<li><p><strong>Control Theory</strong></p>
+<ul>
+<li>Differential and dynamic zero-sum games</li>
+</ul></li>
+<li><p><strong>Economics</strong></p>
+<ul>
+<li>Competitive equilibria in markets with strategic antagonism</li>
+</ul></li>
+<li><p><strong>Machine Learning</strong></p>
+<ul>
+<li>Adversarial training, GANs as a zero-sum game</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="zero-sum-games-1" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="zero-sum-games-1"><span class="header-section-number">2.2</span> Zero-Sum Games</h2>
+<p>The simplest kind of game utility structure is a zero sum game in which players can only gain utility at the equal cost to another players utility, for example chess. They naturally describe any head to head competition with reward for only a single winner at the end.</p>
+<div class="definition" data-title="Zero-Sum Game">
+<p>A <strong>zero-sum game</strong> is defined by the requirement that the sum of all player cost / reward functions is zero. Written mathematically, for finite agents <span class="math inline">\(j=\{1, \dots, J\}=:\mathcal{J}\)</span> with decision variables <span class="math inline">\(\boldsymbol{u}=(u^j)_\mathcal{J}\)</span> and cost / reward function <span class="math inline">\(L^i\)</span> we have <span class="math display">\[
+\sum_{j=1}^{J}L^i(\boldsymbol{u})=0.\tag{1}
+\]</span> Games where this sum is equal to a nonzero constant (independent of decision variables) are known as <strong>constant sum game</strong> which can easily transformed to a zero-sum game.</p>
+</div>
+<p>Zero-sum games are often called <em>strictly competitive games</em> and are most often solved with the <em>minimax theorem</em> or with <em>Nash equilibrium</em>.</p>
+<p>The zero-sum property means that any result of a zero-sum situation is <a href="../topics/pareto-optimal.html">Pareto Optimal</a> (no players position can be improved without making another players worse).</p>
+</section>
+<section id="player-zero-sum-games" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="player-zero-sum-games"><span class="header-section-number">2.3</span> 2-Player Zero-Sum Games</h2>
+<p>Two-person zero-sum games <strong>do not allow for any cooperation between the players</strong> since what one player gains incurs an equivalent loss in the other. This is not the case in other games, such as two-player non-zero-sum games or games with three or more players, as cooperation between two or more players can result in their mutual advantage.</p>
+<p><strong>Definition (Saddle Point):</strong> In a zero-sum game, a <em>saddle point</em> represents a stable solution where the maximin value (highest row minimum) equals the <a href="../topics/minimax-and-maximin.html">minimax</a> value (lowest column maximum). This point indicates an equilibrium where neither player can improve their outcome by unilaterally changing their strategy.</p>
+<p><em>Example:</em> Consider players <span class="math inline">\(p_{1}, p_{2}\)</span> who are directing unit forces on a point mass in <span class="math inline">\(\mathbb{R}^2\)</span> at the origin <span class="math inline">\((x,y)=(0,0)\)</span> at time <span class="math inline">\(t=0\)</span>. At <span class="math inline">\(t=1\)</span> player <span class="math inline">\(p_{1}\)</span> has aim to maximize the <span class="math inline">\(y\)</span> coordinate and <span class="math inline">\(p_{2}\)</span> has aim to minimize the <span class="math inline">\(y\)</span>-coordinate. This is a zero-sum game with solution following immediately, both players will act their force in their preferred direction, cancel each other out, resulting in no net force and equilibrium.</p>
+</section>
+<section id="matrix-games" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="matrix-games"><span class="header-section-number">2.4</span> Matrix Games</h2>
+<p>Elementary two-person zero-sum games are <strong>matrix games</strong> in which players <span class="math inline">\(p_1, p_{2}\)</span> have game outcomes summarized in the <span class="math inline">\(n \times m\)</span> matrix <span class="math display">\[
+A=(a_{i,j});\quad i=1, .., m; ~j=1, \dots, n,\tag{2}
+\]</span> where each outcome corresponds to a particular pair of decisions made by the players. The matrix rows and columns correspond to the strategies for players <span class="math inline">\(p_{1}, p_{2}\)</span> respectively. We interpret positive outcomes as <span class="math inline">\(p_{1}\)</span> paying <span class="math inline">\(p_{2}\)</span> and vice versa, generally thought of as relative change of <strong>utility</strong>.</p>
+<p>First considering a single round, a reasonable strategy for <span class="math inline">\(p_1\)</span> might be to minimize her losses against any strategy of <span class="math inline">\(p_{2}\)</span> (rational or irrational). Similarly, <span class="math inline">\(p_{2}\)</span> will want to secure his gains against any behavior of <span class="math inline">\(p_{1}\)</span>. These are known as <em>security strategies</em>.</p>
+<div class="definition" data-title="Loss Ceilings &amp; Security Strategy">
+<p>The <em>security strategy</em> <span class="math inline">\(i^*\)</span> is the strategy of <span class="math inline">\(p_{1}\)</span> (matrix row) such that <span class="math display">\[
+\overline{V}(A)\stackrel{\Delta}{=}\max_{j}a_{i^*j}\leq \max_{j}a_{i,j};\quad i=1, \dots, m.\tag{3}
+\]</span> If selected then her losses will be no greater than <span class="math inline">\(\overline{V}\)</span> which we call the <em>loss ceiling</em> of <span class="math inline">\(p_{1}\)</span>. Similarly, the <em>security strategy</em> <span class="math inline">\(j^*\)</span> is the strategy of <span class="math inline">\(p_{2}\)</span> (matrix column) such that <span class="math display">\[
+\underline{V}(A)\stackrel{\Delta}{=}\min_{i}a_{i,j^*}\geq \min_{i}a_{ij};\quad j = 1, \dots, n.\tag{4}
+\]</span> If selected then her gains will be no less than <span class="math inline">\(\underline{V}\)</span> which we call the <em>gain floor</em> of <span class="math inline">\(p_{2}\)</span>.</p>
+</div>
+<div class="theorem" data-title="$~$">
+<p>In every matrix game <span class="math inline">\(A=(a_{ij})\)</span> the following hold: 1. The security level of each player is unique; 2. There exists at least one security strategy for each player; and 3. The security level of <span class="math inline">\(p_{1}\)</span> (the minimizer) never falls below the security level of <span class="math inline">\(p_{2}\)</span> (the maximizer) <span class="math display">\[
+   \min_{i}a_{ij^*}=\underline{V}(A)\leq \overline{V}(A)=\max_{j}a_{i^*j}\tag{5}
+   \]</span> for security strategies <span class="math inline">\(i^*,j^*\)</span>.</p>
+</div>
+<p><em>Proof:</em> Properties 1 and 2 follow directly from equations <span class="math inline">\((3)\)</span> and <span class="math inline">\((4)\)</span>, since in every matrix game there is only a finite number of alternatives for each player to chose from. To proce 3 we note <span class="math display">\[
+\min_{i}a_{i,l}\leq a_{kl}\leq \max_{j}a_{kj};\quad \forall k,l.\tag{6}
+\]</span> Letting <span class="math inline">\(k=i^*\)</span> and <span class="math inline">\(l=j^*\)</span> the result follows. <span class="math inline">\(\square\)</span></p>
+<div class="definition" data-title="Saddle-Point Strategies">
+<p>For matrix game <span class="math inline">\(A=(a_{ij})\)</span> with security strategies <span class="math inline">\(i^*, j^*\)</span>. If the paif og inequalities <span class="math display">\[
+a_{i^*j} \leq a_{i^*j^*}\leq a_{ij^*};\quad \forall i,j,
+\]</span> the strategies are said to be <em>saddle-point strategies</em>, and the game is said to have a saddle point in pure strategies. The corresponding outcome <span class="math inline">\(a_{i^*j^*}\)</span> is called the saddle-point value and is denoted <span class="math inline">\(V(A)\)</span>.</p>
+</div>
+</section>
+<section id="types-of-game" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="types-of-game"><span class="header-section-number">2.5</span> Types of Game</h2>
+<ol type="1">
+<li><strong>Cournot Game</strong>
+<ul>
+<li>The canonical model of quantity competition in oligopoly. Each firm chooses how much to produce at some cost with profit given by market price which is dependent on total output.</li>
+<li>Formally, a Cournot game is a static noncooperative game with continuous strategy sets and payoff functions determined by inverse demand and costs, whose equilibria are Nash equilibria in quantities.</li>
+<li></li>
+</ul></li>
+</ol>
+
+
+</section>
+<section class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id=""><span class="header-section-number">2.6</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/control-theory-fundamentals.html">Control Theory Fundamentals</a></li>
+</ul>
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

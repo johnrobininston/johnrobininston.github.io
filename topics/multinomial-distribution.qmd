@@ -1,0 +1,44 @@
+---
+title: Multinomial Distribution
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Multinomial Distribution
+
+For experiment extracting $n$ balls of $k$ colors from a bag with replacement.
+Denote the variable describing the number of balls extracted of colors
+$i=1,\dots,k$ by $X_{i}$ with probability $p_{i}$ that a given extraction will
+be in color $i$. In vector notation these are denoted $\boldsymbol{X}$ and
+$\boldsymbol{p}$.
+#### Probability Mass Function
+
+The **probability mass function** of the multinomial distribution is
+$$
+p_{\boldsymbol{X}}(\boldsymbol{x})=p_{X_{1}, \dots, X_{k}}(x_{1}, \dots, x_{k})= \begin{cases}
+\frac{n!}{\prod_{i=1}^kx_{i}!}\prod_{i=1}^k p_{i}^{x_{i}} & \text{if }\sum_{i=1}^kx_{i}=n; \\
+0&\text{o.w.}.
+\end{cases}
+$$
+This can be expressed using the gamma function as
+$$
+p_{\boldsymbol{X}}(\boldsymbol{x})=p_{X_{1}, \dots, X_{k}}(x_{1}, \dots, x_{k})= \frac{{\Gamma\left( \sum_{i}x_{i}+1 \right)}}{\prod_{i}\gamma(x_{i}+1)}\prod_{i=1}^k p_{i}^{x_{i}}.
+$$
+#### Moments
+
+The expectation and variance are given by
+$$
+\begin{align}
+\mathbb{E}[\boldsymbol{X}] & =n\boldsymbol{p}=\begin{bmatrix}
+np_{1}\\ \vdots \\ np_{k}
+\end{bmatrix} \\
+\text{Var}(\boldsymbol{X}) & =n(\text{diag}(\boldsymbol{p})-\boldsymbol{pp}^T)=\begin{bmatrix}
+np_{1}(1-p_{1}) & -np_{1}p_{2}& -np_{1}p_{3} & \cdots & -np_{1}p_{k}  \\
+-np_{2}p_{1} & np_{2}(1-p_{2}) & -np_{2}p_{3} & \cdots & -np_{2}p_{k} \\
+\vdots & \vdots & \ddots & \vdots & \vdots  \\
+-np_{k}p_{1} & -np_{k}p_{2}& -np_{k}p_{3} & \cdots & np_{k}(1-p_{k})
+\end{bmatrix}.
+\end{align}
+$$

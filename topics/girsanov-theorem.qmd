@@ -1,0 +1,169 @@
+---
+title: Girsanov Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is Girsanov's Theorem?
+The **Girsanov theorem** states that if we change the **drift** coefficient of
+a given [Itô Process](Stochastic%20Differential%20Equations.md) (with a
+non-degenerate diffusion coefficient), then the law of the process will not
+change dramatically. In fact, the law of the new process will be absolutely
+continuous with respect to the law of the original process and we can compute
+explicitly the **Radon-Nikodym derivative**.
+
+:::{.theorem data-title="Girsanov's Theorem"}
+
+Let $B(t) = (B_1(t), \ldots, B_n(t))$ be an $n$-dimensional Brownian motion on
+a filtered probability space
+$(\Omega, \mathcal{F}, \{\mathcal{F}_t\}, \mathbb{P})$. Let
+$\theta(t) = (\theta_1(t), \ldots, \theta_n(t))$ be an adapted process such
+that the **Novikov condition** holds:
+$$\mathbb{E}_{\mathbb{P}}\left[\exp\left(\frac{1}{2}\int_0^T \|\theta(t)\|^2 dt\right)\right] < \infty.$$
+
+Define the **Radon-Nikodym derivative**:
+$$\begin{align}\frac{d\mathbb{Q}}{d\mathbb{P}}\bigg|_{\mathcal{F}_T} & = Z(T) \\ Z(t) & = \exp\left(-\int_0^t \theta(s) \cdot dB(s) - \frac{1}{2}\int_0^t \|\theta(s)\|^2 ds\right).\end{align}$$
+Then under the measure $\mathbb{Q}$, the process
+$$
+\widetilde{B}(t) = B(t) + \int_0^t \theta(s) ds
+$$
+is an $n$-dimensional Brownian motion.
+
+:::
+
+Before sketching the proof we first introduce two crucial building blocks, the
+Lévy characterization of BM and Bayes' Rule.
+
+## Lévy Characterization of BM
+The **Lévy characterization** provides the key verification tool in the proof.
+When we want to show that $\tilde{B}(t)$ is a Brownian motion under the new
+measure $\mathbb{Q}$, we _could_ try to verify all the original properties of a
+BM directly (continuity, independent increments with the right distribution,
+etc.). That would be very difficult.
+
+Instead, the Lévy characterization gives us a much easier path! We only need to
+verify two things:
+
+1. $\tilde{B}(t)$ is a martingale under $\mathbb{Q}$, and
+2. Its [[p-variation|quadratic variation]] is
+   $\left< \tilde{B}_{i}, \tilde{B}_{j} \right>_{t} = \delta_{ij}t$.
+
+:::{.definition data-title="Lévy Characterization of BM"}
+
+Let $X(t)$ be an $n$-dimensional SP on probability space
+$(\Omega, \mathcal{H}, \mathbb{Q})$ taking values in $\mathbb{R}^n$. Then the
+following are equivalent:
+1. $X(t)$ is BM w.r.t. $\mathbb{Q}$ i.e. the law of $X(t)$ w.r.t. $\mathbb{Q}$
+   is the same as the law of an $n$-dimensional BM.
+2. Both:
+	1. $X(t)$ is a **martingale** w.r.t. $\mathbb{Q}$ (and w.r.t. its own
+    filtration); and
+	2. $X_{i}(t)X_{j}(t)-\delta_{ij}t$ is a martingale w.r.t. $\mathbb{Q}$ (and
+    w.r.t. its own filtration) for all $i,j\in\{1,2,\dots,n\}$.
+
+:::
+
+One may replace condition 2.2 with the following:
+
+The cross-variation processes $\left< X_{i}, X_{j} \right>_{t}$ satisfy the
+identity
+$$
+\left< X_{i},X_{j} \right> _{t}(\omega) = \delta_{ij}(t)\quad\text{a.s.}\quad 1\leq i,j\leq n
+$$
+where
+$$
+\left< X_{i},X_{j} \right> _{t} = \frac{1}{4}[\left< X_{i}+X_{j}, X_{i}+X_{j} \right> _{t}-\left< X_{i}-X_{j}, X_{i}-X_{j} \right> _{t}],
+$$
+$\left< Y,Y \right>_{t}$ being the **quadratic variation process**.
+
+## Bayes' Rule
+The Bayes' rule handles the mechanism of changing probability measures. When we
+switch from $\mathbb{P}$ to $\mathbb{Q}$, conditional expectations change.
+Girsanov's proof needs to show that certain properties hold *under the new
+measure* $\mathbb{Q}$, but we have more information about what happens *under
+the original measure* $\mathbb{P}$.
+
+Bayes' rule is the bridge, it tells us how to relate
+$\mathbb{E}_{\mathbb{Q}}[\cdot|\mathcal{F}_{t}]$ in terms of
+$\mathbb{E}_{\mathbb{P}}[\cdot|\mathcal{F}_{t}]$ and the Radon-Nikodym
+derivative.
+
+:::{.definition data-title="Bayes' Rule"}
+
+Let $\mu$ and $\nu$ be two probability measures on a measurable space $(\Omega, \mathcal{G})$ such that $$d\nu(\omega)=f(\omega)d\mu(\omega),$$for some $f \in L^1(\mu)$.  Let $X$ be a random variable on $(\Omega,\mathcal{G})$ such that $$\mathbb{E}_{\nu}[\lvert X \rvert ] = \int_{\Omega}\lvert X(\omega) \rvert f(\omega)~d\mu(\omega)<\infty.$$Let $\mathcal{H}$ be a $\sigma$-algebra, $\mathcal{H}\subset \mathcal{G}$.  Then $$\mathbb{E}_{\nu}[X|\mathcal{H}]\cdot\mathbb{E}[f|\mathcal{H}]=\mathbb{E}_{\mu}[fX|\mathcal{H}]\quad\text{a.s.}.$$
+
+:::
+
+*Proof:*
+From the definition of [Conditional Expectation](Conditional%20Expectation.md)
+we have that if $H \in \mathcal{H}$ then
+$$
+\begin{align}
+\int_{H}\mathbb{E}_{\nu}[X|\mathcal{H}] ~fd\mu & = \int_{H}\mathbb{E}_{\nu}[X|\mathcal{H}] ~d\nu  \\
+ & = \int_{H}X~d\nu \\
+ & =  \int_{H}X ~fd\mu \\
+ & = \int_{H}\mathbb{E}_{\mu}[fX|\mathcal{H}]~d\mu.
+\end{align}
+$$
+Now, since both
+$\mathbb{E}_{\nu}[X|\mathcal{H}] \cdot \mathbb{E}_{\mu}[f|\mathcal{H}]$ and
+$\mathbb{E}_{\mu}[fX|\mathcal{H}]$ are $\mathcal{H}$-measurable (as
+products/conditional expectations of $\mathcal{H}$-measurable random
+variables), and for any $H \in \mathcal{H}$:
+
+$$\int_{H} \mathbb{E}_{\nu}[X|\mathcal{H}] \cdot \mathbb{E}_{\mu}[f|\mathcal{H}] ~d\mu = \int_{H}\mathbb{E}_{\nu}[X|\mathcal{H}] ~fd\mu = \int_{H}\mathbb{E}_{\mu}[fX|\mathcal{H}]~d\mu,$$
+
+by the definition of conditional expectation, we have $$\mathbb{E}_{\nu}[X|\mathcal{H}]\cdot\mathbb{E}_{\mu}[f|\mathcal{H}]=\mathbb{E}_{\mu}[fX|\mathcal{H}]\quad\text{a.s.}.$$ $\square$
+
+## Girsanov's Theorem Proof Sketch
+By the Novikov Condition, $Z(t)$ is a positive martingale with
+$\mathbb{E}[Z(T)] = 1$, so we can define a probability measure $\mathbb{Q}$ by
+$d\mathbb{Q} = Z(T) d\mathbb{P}$ on $\mathcal{F}_T$.
+
+For $t \leq T$, define $\widetilde{\mathcal{F}}_t = \sigma(B(s) : s \leq t)$
+and consider $\widetilde{B}(t) = B(t) + \int_0^t \theta(s) ds$.
+
+By Itô's lemma applied to $Z(t)$:
+$$
+dZ(t) = -Z(t)\theta(t) \cdot dB(t),
+$$
+so $Z(t)$ is a local martingale under $\mathbb{P}$.
+
+To verify that $\widetilde{B}(t)$ is a Brownian motion under $\mathbb{Q}$, we
+use the Lévy characterization. It suffices to show:
+
+1. $\widetilde{B}(t)$ is a martingale under $\mathbb{Q}$ with respect to
+   $\{\widetilde{\mathcal{F}}_t\}$
+2. $\widetilde{B}_i(t)\widetilde{B}_j(t) - \delta_{ij}t$ is a martingale under
+   $\mathbb{Q}$
+
+For the first property, by Bayes' rule, we need to show that for any bounded
+$\widetilde{\mathcal{F}}_t$-measurable $X$:
+$$\mathbb{E}_{\mathbb{Q}}[\widetilde{B}(t) | \widetilde{\mathcal{F}}_0] = \widetilde{B}(0) = 0.$$
+
+This follows because $\widetilde{B}(t)$ is a martingale under $\mathbb{P}$ plus
+a drift term that gets absorbed by the change of measure. The second property
+follows similarly by noting that the quadratic variation is preserved under
+measure change.
+
+Thus $\widetilde{B}(t)$ is a Brownian motion under $\mathbb{Q}$. $\square$
+
+## Key Consequences and Applications
+**Change of drift in SDEs:** If $X(t)$ satisfies 
+$$
+dX(t) = \mu(t) dt + \sigma(t) dB(t),
+$$
+and we set $\theta(t) = \sigma(t)^{-1}\mu(t)$, then under $\mathbb{Q}$ the
+process becomes
+$$
+dX(t) = \sigma(t) d\widetilde{B}(t),
+$$
+i.e., a martingale. This is why Girsanov's theorem is essential for removing
+drift in stochastic models.
+
+**Measure-theoretic interpretation:** The theorem shows that changing the drift
+of a diffusion corresponds to a change of measure via an absolutely continuous
+transformation. This is crucial in mathematical finance for arbitrage-free
+pricing and risk-neutral measure change.

@@ -1,0 +1,1395 @@
+---
+title: Real Analysis
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Real Analysis
+
+**Real analysis** is the rigorous study of functions, sequences, and series
+defined on the real numbers, built on the foundational property of completeness
+of $\mathbb{R}$. It begins with limits of sequences and functions, convergence
+tests, and continuity, and then develops differentiation and integration from
+an $ε–δ$ perspective. A central theme is understanding how infinite processes
+(limits, series, integrals) behave, with distinctions between pointwise and
+uniform convergence. Real analysis also extends classical calculus through
+topics such as metric spaces, compactness, connectedness, and measure theory,
+culminating in the Lebesgue integral. These tools provide the framework for
+modern analysis, probability theory, and the rigorous treatment of differential
+equations and functional spaces.
+
+## Preliminary Material
+
+### The Real Numbers
+
+The reals are a **field** and thus satisfy the **field axioms**, that is there
+exists operations addition and subtraction that are commutative, associative
+and have identities. The real numbers also have a **natural order relation**
+that is compatible with their algebraic structure. We visualize the real
+numbers as the real line, with smaller numbers to the left and larger numbers
+to the right.
+
+:::{.definition data-title="Real Number Order"}
+
+There is a **strict linear order** $<$ on $\mathbb{R}$ such that for all
+$x,y,z \in \mathbb{R}$:
+1. either $x<y$, $x=y$ or $x>y$;
+2. if $x<y$ then $x+z<y+z$;
+3. if $x<y$ and $z>0$, then $xz<yz$.
+
+:::
+
+The real numbers are also **Dedekind Complete**, that is they satisfy the
+**least-upper-bound property**. Completeness implies that there are no"gaps" or
+"missing points" in the real number line.  
+
+:::{.definition data-title="Dedekind Complete"}
+
+The real numbers $\mathbb{R}$ are Dedekind complete since every nonempty subset
+of $\mathbb{R}$ that is bounded above has a least upper bound (supremum) in
+$\mathbb{R}$.
+
+:::
+
+### Real Sequences
+
+We typically consider the **extended real numbers**
+$\overline{\mathbb{R}}=\mathbb{R}\cup \{ \pm \infty \}$ such that every subset
+$A\subset\overline{\mathbb{R}}$ has a **supremum** and **infimum**. From
+completeness, it follows that every sequence
+$\{ x_{n} \}_{n \in \mathbb{N}}\subset\overline{\mathbb{R}}$ has a **limit
+superior** and a **limit inferior** given by
+$$
+\limsup_{n\in \mathbb{N}}{x_{n}}=\inf_{k \geq 1}{\left( \sup_{n \geq k}{x_{n}} \right) }\quad \&\quad\liminf_{n \in \mathbb{N}}{x_{n}}=\sup_{k \geq 1}{\left( \inf_{n \geq k}{x_{n}} \right) }.
+$$
+:::{.definition data-title="Convergence of Real Sequences"}
+
+A sequence $\{ x_{n} \}_{n \in \mathbb{N}}\subset \overline{\mathbb{R}}$
+converges to limit $x \in\overline{\mathbb{R}}$, denoted by
+$\lim_{ n \to \infty }x_{n}=x$ or $x_{n}\to x$, as $n\to \infty$ if
+$$
+\forall \epsilon >0, \exists N_{\epsilon}\in \mathbb{N} : \forall n > N_{\epsilon}, \lvert x_{n}-x \rvert <\epsilon.
+$$
+
+:::
+
+This is a special case of a more general type of functional, or indeed
+topological convergence, known as $\epsilon$-$\delta$ convergence discussed in
+later sections.
+
+The sequence $\{ x_{n} \}$ converges iff $\limsup_{}{x_{n}=\liminf_{}{x_{n}}}$
+and in this case the limit is given by
+$$
+\lim_{ n \to \infty } x_{n}=\limsup_{}{x_{n}}=\liminf_{}{x_{n}}.
+$$
+:::{.definition data-title="Cauchy Sequence"}
+
+A real sequence $\{  x_{n} \}$ is **Cauchy** if $$\forall \epsilon >0, \exists N=N_{\epsilon}~s.t.~|x_{n}-x_{m}|>\epsilon ,\forall n,m>N,$$or in other words $x_{n}-x_{m}\to 0$ as $n,m \to \infty$ independently.
+
+:::
+
+A real sequence $\{ x_{n} \}$ is convergent in the reals if and only if it is
+Cauchy.
+
+### Topology
+
+In this section we highlight some important results from our study of
+**Topology**.
+
+:::{.definition data-title="Topology"}
+
+A **topology** $\tau$ on general set $X$ is a collection of subsets of $X$
+satisfying the following propoerties:
+1. $\emptyset \in \tau$ and $X \in \tau$;
+2. $\{ U_{i} \}_{i \in \mathcal{I}}\subset X\implies \bigcup_{i \in\mathcal{I}}U_{i}\subset X$
+   (closed under arbitrary unions); and
+3. $\{ U_{i} \}_{i=1}^N\subset X \implies \bigcap_{i=1}^N U_{i}\subset X$
+   (closed under finite intersections).
+
+All elements $E\in \tau$ are called **open sets**.
+
+:::
+
+A couple consisting of a set and an assigned topology $(X,\tau)$ is known as a
+**topological space**. Note that a topological space need not have a formal
+definition of distance or size and so we are limited to considering subsets
+called neighborhoods.
+
+:::{.definition data-title="Neighborhood"}
+
+For a point $x \in X$ a neighborhood is a subset $V\subset X$ that contains an
+open set $U$ such that $x \in U$.
+
+:::
+
+### Metric Spaces
+
+[[probability-spaces]]
+
+In real analysis we need not be so general and typically work with specific
+types of topological spaces known as **metric spaces** upon which we have
+defined some function describing distance between points.
+
+:::{.definition data-title="Metric"}
+
+A **metric** $d:X\times X \to \mathbb{R}^+$, a function that satisfies the
+following for all $x,y,z\in X$:
+1. $d(x,x)=0$    
+2. $x \neq y\implies d(x,y)\neq 0$
+3. $d(x,y)=d(y,x)$
+4. $d(x,z)\leq d(x,y)+d(y,z)$
+
+:::
+
+A **metric space** is an ordered pair $(X,d)$ consisting of a set $X$ and a
+metric $d$.
+
+The standard metric for the reals $\mathbb{R}^n$ is the **Euclidean metric**
+which is given by
+$$
+d(x,y)=\left( \sum_{n}^{}(x_{n}+y_{n})^2 \right)^{1/2}.
+$$
+The **open ball** at point $c \in X$ of diameter $\epsilon$ is defined as
+$$
+B_{\epsilon}(c):=\{ x \in X:d(x,c)<\epsilon \}.
+$$
+### Real Functions
+
+Let $X,Y\subset \overline{\mathbb{R}}$. A **real function** is a mapping
+$f:X \to Y$. Recall that a function is **injective** (one-to-one) when
+$$
+x_{1}\neq x_{2} \implies f(x_{1})\neq f(x_{2}),
+$$
+ and **surjective** (onto) if
+$$
+\forall y \in Y, \exists x \in X:f(x)=y.
+$$
+A function which is both injective and surjective is said to be **bijective**.
+A bijection is invertible, that is there exists function $f^{-1}$ called the
+**inverse** such that
+$$
+\forall x \in X, f\circ f^{-1}(x)=f^{-1}(f(x))=x.
+$$
+A function is **increasing** if $x \leq y \implies f(x) \leq f(y)$ and
+**decreasing** if $x\leq y\implies f(x)\geq f(y)$. These become strict should
+we drop the equality. A function that is either increasing or decreasing is
+called **monotone**.
+
+A function is **continuous** when a small variation of the argument induces a
+small variation of the value of the function.  
+
+:::{.definition data-title="Continuous Function"}
+
+A function $f:X \to Y$ is continuous at point $c$ if
+$$
+\forall\epsilon>0,\exists \delta>0:\forall x \in B_{\delta}(c), f(x)\in B_{\epsilon}(f(c)).
+$$
+
+:::
+
+This is equivalent to writing that $\lim_{ x \to c }f(x)=f(c)$. Simplifying to
+considering the real functions with the standard Euclidean metric
+$d(x,y) = \lvert x-y \rvert$ we obtain the familiar definition given below.
+
+:::{.definition data-title="Continuous Real Functions (Real numbers with standard metric)"}
+
+A real function $f:X \to Y$ is continuous at point $c$ if
+$$
+\forall \epsilon>0, \exists \delta>0 : (\forall x \in S: \lvert x-c \rvert <\delta), \lvert f(x)-f(c) \rvert <\epsilon.
+$$
+
+:::
+
+Intuitively, no matter how small we make $\epsilon$ we can find a neighborhood
+such that for all points within the region (called interior points), the
+distance between points in their image is less than $\epsilon$.
+
+:::{.definition data-title="Properties of Continuous Functions"}
+
+Assuming that the functions $f,g$ are both continuous at $c$ the following
+combinations are continuous:
+1. $(f+g)(x)=f(x)+g(x)$;
+2. $(f-g)(x)=f(x)-g(x)$;
+3. $(f\cdot g)(x)=f(x)\cdot g(x)$;
+4. $\left( \frac{f}{g} \right)(x)=\frac{f(x)}{g(x)}$ if $g(c)\neq 0$;
+5. $\lambda f(x)$ for constant $\lambda$; and
+6. $(f \circ g)=f(g(x))$ if $f$ is continuous at $g(c)$.
+
+:::
+
+We say that the function $f$ is **right-continuous** and **left-continuous**
+respectively when
+$$
+\lim_{ x \to c^+ }  f(x)=f(c)\quad \&\quad \lim_{ x \to c^-}  f(x)=f(c),
+$$
+that is, the limit is obtained when $x$ approaches $c$ from the right or the
+left respectively.
+
+Another important property of functions is upper semicontinuity (usc) and lower
+semicontinuity (lsc).
+
+:::{.definition data-title="Upper and Lower Semicontinuity"}
+
+A function $f:X\to \mathbb{R}$ is upper semicontinuous at $c$ if
+$$
+\forall\epsilon>0,\exists \delta>0:\forall x \in B_{\delta}(c),f(x)-f(c)<\epsilon.
+$$
+A function $f:X\to \mathbb{R}$ is lower semicontinuous at if
+$$
+\forall\epsilon>0,\exists \delta>0:\forall x \in B_{\delta}(c),-\epsilon<f(x)-f(c).
+$$
+
+:::
+
+Notice that these definitions are two halves of the condition of continuity,
+namely that we have taken
+$$
+\lvert f(x)-f(c) \rvert<\epsilon \implies -\epsilon<f(x)-f(c)<\epsilon,
+$$
+where the left inequality goes to lsc and the right inequality goes to usc.
+Clearly therefore a function is continuous if and only if it is both upper and
+lower semicontinuous.
+
+![Upper and Lower Semicontinuity](Images/semicontinuity.png)
+We list some equivalent definitions of usc at point $c$ below:
+1. $\{ x:f(x)<c \}$ is open 
+2. $f(c)\geq \limsup_{n \to \infty}{f(x_{n})}$ for all $x_{n}\to c$
+
+We list some equivalent definitions of lsc at point $c$ below:
+1. $\{ x:f(x)>c \}$ is open 
+2. $f(c)\leq \liminf_{n \to \infty}{f(x_{n})}$ for all $x_{n}\to c$
+
+These alternative definitions are helpful in our study of measure theory,
+particularly for showing that lsc and usc functions are measurable with respect
+to the Borel $\sigma$-algebra.
+
+:::{.definition data-title="Lower semicontinuous envelope"}
+
+Given a metric space $(X,d)$ and a function $f:X\to\overline {\mathbb{R}}$ the
+lower semicontinuous envelope of $f$ is defined by
+$$
+\begin{align}f_{*}(x):=  & \lim_{\epsilon \to 0}\left(\inf\{ f(y):d(x,y)<\epsilon \}\right) \\ = & \lim_{ \epsilon \to 0 }(\inf_{}{f(B_{\epsilon}(x))}).\end{align}
+$$
+
+:::
+
+### Homeomorphisms
+
+In topology, a homeomorphism is a bijective and continuous function between
+topological spaces that has a continuous inverse function. Speaking generally,
+a topological space is a geometric object and a homeomorphism results from a
+continuous deformation of the object into a new shape.
+
+:::{.definition data-title="Homeomorphism"}
+
+A function $f:X\to Y$ between topological spaces is a **homeomorphism** if:
+1. $f$ is a bijection;
+2. $f$ is continuous; and
+3. $f^{-1}$ is continuous.
+
+:::
+
+If such a function exists then spaces $X$ and $Y$ are said to be homeomorphic
+which is an equivalence relation on topological spaces. Thus, two homeomorphic
+spaces share the same topological properties e.g. compactness, connectedness,
+Hausdorff etc.
+
+:::{.theorem data-title="Intermediate Value Theorem"}
+
+Let $f:[a,b]\to \mathbb{R}$ be continuous on the closed interval $[a,b]$. If
+$L$ is any real number between $f(a)$ and $f(b)$ then there exists some
+$c\in[a,b]$ such that
+$$
+f(c)=L.
+$$
+
+:::
+
+*Proof:*
+Defining $S:=\{x\in[a,b]:f(x)\leq L\}$ we note that $a\in S$ and
+$S\subseteq[a,b]$, therefore $S$ is non-empty and bounded above. We define
+$c:=\sup S$ and claim that $f(c)=L$.
+$(\leq)$ Assuming that $f(c)>L$, by the continuity of $f$ at $c$, there exists
+$\delta >0$ such that
+$$
+|x-c|<\delta \implies f(x)>L.
+$$
+Thus for all $x<c$ sufficiently close to $c$, we have that $f(x)>L$
+contradicting the fact that $c=\sup S$ (since there must be points of $S$
+arbitrarily close to $c$ from below).
+$(\geq)$ Assuming that $f(c)<L$, by the continuity of $f$ at $c$ there exists
+$\delta > 0$ such that
+$$
+|x-c|<\delta \implies f(x)<L.
+$$
+Thus for all $x>c$ sufficiently close to $c$ we have that $f(x)<L$
+contradicting that $c$ is an upper bound of $S$.  
+Combining both inequalities we conclude that $f(c)=L$.
+$\square$
+
+:::{.theorem data-title="Sandwich Theorem"}
+
+Let $a\in\mathbb{R}$. Suppose $f,g,h$ are functions defined on some punctured
+neighborhood of $a$ (i.e. for all $x$ with $0<|x-a|<\delta$ for some
+$\delta>0$). Assume that:
+1. $f(x)\leq g(x)\leq h(x)$ for all $x$ sufficiently close to $a$ with
+   $x\neq a$.
+2. $\lim_{x\to a}f(x) = \lim_{x\to a}h(x)=L$.
+
+Then $\lim_{x\to a}g(x)=L$.
+
+:::
+
+*Proof:*
+Let $\varepsilon > 0$. Since $\lim_{x \to a} f(x) = L$ there exists
+$\delta_1 > 0$ such that
+$$
+0 < |x - a| < \delta_1 \implies |f(x) - L| < \varepsilon,
+$$
+which implies $L - \varepsilon < f(x)$. Similarly, since
+$\lim_{x \to a} h(x) = L$ there exists $\delta_2 > 0$ such that
+$$
+0 < |x - a| < \delta_2 \implies |h(x) - L| < \varepsilon,
+$$
+which implies $h(x) < L + \varepsilon$. By assumption, there exists
+$\delta_3 > 0$ such that
+$$
+0 < |x - a| < \delta_3 \implies f(x) \le g(x) \le h(x).
+$$
+Now let $\delta := \min\{\delta_1, \delta_2, \delta_3\}$. Then for all $x$ with
+$0 < |x - a| < \delta$,
+$$
+L - \varepsilon < f(x) \le g(x) \le h(x) < L + \varepsilon.
+$$
+Hence, $|g(x) - L| < \varepsilon$. Since $\varepsilon > 0$ was arbitrary, it
+follows that $\lim_{x \to a} g(x) = L$.
+$\square$
+
+### Reimann Integration
+
+
+
+:::{.definition data-title="Differentiability"}
+
+A function $f(x)$ is differentiable at point $c$ if the limit of the difference
+quotient exists and is finite, that is
+$$
+f'(c)=\lim_{ n \to \infty } \frac{{f(x)-f(c)}}{x-c}\in \mathbb{R}.
+$$
+
+:::
+
+## Measure Theory
+
+In real analysis in order to handle complicated real functions we need to turn
+to Lebesgue integrals and Measure Theory. The primary aim of Measure Theory is
+to define the concept of **measurability** and ultimately assign a **measure**
+to measurable sets. That is, for general $X$ we wish to construct a function
+$\mu:2^{X}\to[0,\infty]$ that assigns each $E\subset X$ a number
+$\mu(E)\in[0,\infty]$, the measure of $E$ where $\mu$ satisfies:
+
+1. For disjoint $E_{1}, E_{2}, \dots \in X$ we have
+   $\mu\left( \bigcup_{j=1}^\infty E_{j} \right)=\sum_{j=1}^\infty \mu(E_{j})$
+   (countably additive);
+2. For interval $[a,b]$ we have $\mu([a,b])=b-a$; and
+3. For set $E\subset \mathbb{R}$ and constant $c\in \mathbb{R}$ we have
+   $\mu(E+c)=\mu(E)$ (translation invariance).
+
+### Motivations and Challenges
+
+The **Vitali Non-Measurability Theorem** demonstrates that **no such function
+exists**. Indeed the closest mathematical generalization of mass is
+**σ-additivity** which gives rise to the **Lebesgue measure**, however not all
+sets have such a measure (for example, a Vitali set). The idea of the theorem
+can be extended to higher dimensions (see Banarch-Tarski Theorem) as well as
+similar results for other abstract sets although the form of the proof relies
+heavily on the nature of the set being considered.
+
+We preemptively prove the following lemma proving that we obtain monotonicity
+from countable additivity of functions.
+
+:::{.definition data-title="Monotonicity from Countable Additivity"}
+
+Given a set $X$ and countably additive function $\mu:2^X\to[0,\infty]$ then for
+all $A,B\subseteq X$
+$$
+A \subseteq B\implies \mu(A)\leq  \mu(B).
+$$
+
+:::
+
+*Proof:*
+Since $A \subseteq B$ we can write
+$B =A\cup(B\setminus A)\implies \mu(B)=\mu(A)+\mu(B\setminus A)\geq \mu(A)$
+since measures are non-negative.
+$\square$
+
+:::{.theorem data-title="Vitali non-measurability theorem"}
+
+There exists no function $\mu :2^\mathbb{R}\to[0,+\infty]$ that is countably
+additive, translation invariant and satisfies $\mu([a,b])=b-a$ for all
+$a\leq b$.
+
+:::
+
+*Proof:*
+Assume for the sake of contradiction that such a $\mu$ exists. We define an
+equivalence relation $\sim$ on $\mathbb{R}$
+$$
+x\sim y\iff x-y \in \mathbb{Q}.
+$$
+The equivalence class of $\sim$ to which $x$ belongs is therefore given by
+$$
+[x]_{\sim}:=\{  y \in \mathbb{R} : x\sim y \}.
+$$
+We make the claim that every such equivalence class contains an element in
+$[0,1]$. Assuming the claim is false then $\exists x \in \mathbb{R}$ s.t.
+$[x]_{\sim}\cap[0,1]=\emptyset \implies \forall a \in [0,1],~x-a\not\in \mathbb{Q}$
+i.e. $[x-1,x]$ contains no rational numbers which is impossible since the
+rationals are dense in the reals, giving the contradiction. Using the
+[[axiom-of-choice]], for each equivalence class we choose one element in
+$[0,1]$ belonging to that class and call the resulting set $A$. Then we define
+$$
+A_{q}=\{ A+q \}_{q \in \mathbb{Q}\cap [-1,1]}=\{ a+q:a\in A,q\in \mathbb{Q}\cap[-1,1] \},
+$$
+hence each $A_{q}$ contains the elements of $A$ shifted by rational
+$q \in [-1,1]$. We assume these are not disjoint i.e.
+$\exists x \in A_{q}\cap A_{p}~s.t.~p \neq q$. This gives that
+$$
+\begin{cases}
+x = a+p\quad\therefore\quad a=x-p \in A \\
+x = a+q\quad \therefore\quad a = x-q \in A,
+\end{cases}
+$$
+$\implies x-p$ and $x-q$ are distinct elements of $A$ from the same equivalence
+class giving the contradiction $\rightarrow\leftarrow$. We therefore define the
+disjoint union $B = \bigcup_{q \in\mathbb{Q}\cap [-1,1]}A_{q}$ and claim that
+$$
+[0,1]\stackrel{(i)}{\subseteq} B \stackrel{(ii)}{\subseteq} [-1,2].
+$$
+(i) Since $\forall x \in \mathbb{R}$ we have $x \in [a]$ for some $a \in A$, in
+particular $\forall x \in [0,1]$, $x -a\in \mathbb{Q}$ for some $a \in A$, i.e.
+$x = a+q$ for some $a \in A$ and $q \in \mathbb{Q}$. Since $x \in[0,1]$ and
+$a \in A \subseteq [0,1]$, $q = x-a\in[-1,1]$ and thus $x \in B$. (ii) If
+$b \in B$, then $b = a+q$ for $a \in A \subseteq [0,1]$, $q \in [-1,1]$ and so
+$b \in [-1,2]$. By monotonicity of countably additive functions
+$$
+1 = \mu([0,1])\leq  \mu(B)\leq  \mu([-1,2])=3.
+$$
+However, we also note that 
+$$
+\mu(B)=\sum_{q\in\mathbb{Q}\cap [-1,1]}\mu(A+q)=\sum_{q \in \mathbb{Q}\cap [-1,1]}\mu(A).
+$$
+Since $\mu(B)\leq 3$ we must have that $\mu(A)=0$, however this implies
+$\mu(B)=0$ which contradicts our previous conclusion that $\mu(B)\geq 1$.
+$\rightarrow\leftarrow$
+$\square$
+
+To overcome this problem we turn to some standard approaches for
+mathematicians, either (1) weaken the criteria; or (2) restrict the domain of
+the function to the family of **well-behaved** sets. Both options are valid and
+we will see that (1) leads us to the concept of **outer-measure**, and (2)
+leads to the concept of **measure spaces** and **measures**.
+
+Let us consider how we might restrict the domain of the function and what kind
+of family of subsets we should restrict to. The answer is a non-empty
+collection of subsets that is both closed under compliments and closed under
+countable unions (i.e. sets that preserve the properties we wish our measure to
+have) also known as a *$\sigma$-algebra*, a specific type of **algebra**.
+
+### Algebra
+
+An algebra is a collection of sets that is non-empty, and closed under finite
+unions and compliments.  
+
+:::{.definition data-title="Algebra"}
+
+Let $X$ be a non-empty set. An **algebra** of sets on $X$ is a collection
+$\mathcal{A}\subseteq 2^X$ of subsets of $X$ that satisfies:
+1. $X \in \mathcal{A}$
+2. $A,B\in \mathcal{A} \implies A\cup B\in \mathcal{A}$ (closed under finite
+   unions); and
+3. $A\in \mathcal{A}\implies A^c:=X\setminus A\in \mathcal{A}$ (closed under
+   compliments).
+
+:::
+
+Some examples of algebra include: (1) the trivial sigma algebra
+$\{  \emptyset,X \}$; (2) the power set $2^X$; and (3) the set of all finite
+and cofinite subsets of $X$ defined
+$\mathcal{A}:=\{ E\subseteq X:\#E<\infty~\text{or}~\#X\setminus E < \infty \}$.
+
+:::{.theorem data-title="$~$"}
+
+If $\mathcal{A}$ is an algebra then: (1) $\emptyset \in\mathcal{A}$,
+$X\in \mathcal{A}$; and (2)
+$E_{1}, \dots, E_{n}\in \mathcal{A}\implies \bigcap_{i=1}^nE_{i}\in\mathcal{A}$.
+
+:::
+
+*PROOF:* 
+(1) Since $\mathcal{A}$ is non-empty we have set
+$A\in\mathcal{A}\implies A^c\in\mathcal{A}$
+$\implies X:=A\cup A^c\in\mathcal{A}$ $\implies \emptyset=X^c\in\mathcal{A}$.
+(2) $E_{1}, \dots, E_{n}\in \mathcal{A}$
+$\implies E_{1}^c, \dots, E_{n}^c\in \mathcal{A}$
+$\implies \bigcup_{i=1}^nE_{i}^c\in\mathcal{A}$
+$\implies \bigcap_{i=1}^nE_{i}=\left(\bigcup_{i=1}^n E_{i}^c\right)^c\in \mathcal{A}$.
+$\square$
+
+*Note:* In mathematical etymology we typically use the prefix σ to denote that
+the object is closed with respect to countable unions.
+
+:::{.definition data-title="σ-Algebra"}
+
+A **σ-algebra** $\mathcal{F}$ on $X$ is an algebra that is closed under
+countable unions, that is
+$$
+\{ A_{n} \}_{n=1}^\infty \subseteq \mathcal{F} \implies \bigcup_{n} A_{n}\in \mathcal{F}_{n}.
+$$
+
+:::
+
+We say that the pair $(X, \mathcal{F})$ consisting of a non-empty set $X$ and a
+$\sigma$-algebra is a **measurable space** and that any set $E\in \mathcal{F}$
+is **measurable**.
+
+:::{.theorem data-title="$~$"}
+
+A $\sigma$-algebra $\mathcal{F}$ is closed under countable intersections.
+
+:::
+
+*PROOF:*
+The result follows using a methodology identical to (2) in the previous result
+for algebra.
+$\square$
+
+:::{.theorem data-title="$~$"}
+
+Any algebra that is closed under countable disjoint unions must be a
+$\sigma$-algebra.
+
+:::
+
+*PROOF:*
+For countable (possibly non-disjoint) sets
+$\{ A_{n} \}_{n=1}^\infty \subseteq \mathcal{A}$ we can define the sets
+$B_{1}=A_{1}$ and $B_{n}=A_{n}\setminus B_{n-1}$ such that
+$\{  B_{n}\}_{n=1}^\infty$ are disjoint and
+$\cup_{n} A_{n}=\cup_{n}B_{n}\in\mathcal{A}$.
+$\square$
+
+:::{.theorem data-title="Set Generated σ-Algebra"}
+
+Given any $\mathcal{E}\subseteq 2^X$ there exists a smallest $\sigma$-algebra
+containing $\mathcal{E}$ denoted $\sigma(\mathcal{E})$ known as the
+$\sigma$-algebra generated by $\mathcal{E}$. That is, for all $\mathcal{F}$
+containing $\mathcal{E}$ then $\sigma(\mathcal{E})\subseteq \mathcal{F}$.
+
+:::
+
+*PROOF:*
+Naturally, the intersection of all $\sigma$-algebra that contain $\mathcal{E}$
+will infimum of all such $\sigma$-algebra and so it suffices to show that the
+intersection of $\sigma$-algebra is itself a $\sigma$-algebra. For set $X$
+consider the collection of $\sigma$-algebra
+$\{ \mathcal{F}_{n} \}_{n=1}^\infty$ and denote the intersection
+$\mathcal{F}:=\bigcap_{n=1}^\infty \mathcal{F}_{n}$. Clearly
+$\emptyset \in \mathcal{F}_{n},~\forall n$ hence $\emptyset \in \mathcal{F}$ is
+non-empty. Additionally, if $A\in \mathcal{F}$ then
+$A\in \mathcal{F}_{n},~\forall n$ hence $A^c \in \mathcal{F}_{n},~\forall n$
+and so $A^c\in \mathcal{F}$. Finally, let
+$\{ A_{m} \}_{m=1}^\infty \in \mathcal{F}$ therefore
+$A_{m}\in \mathcal{F}_{n},\forall n.m$ hence
+$\bigcup_{m}A_{m}\in \mathcal{F}_{n},~\forall n$ and so
+$\bigcup_{m}A_{m}\in \mathcal{F}$, completing the proof.
+$\square$
+
+Intuitively, $\sigma(\mathcal{E})$ creates a $\sigma$-algebra containing
+$\mathcal{E}$ by going from the outside in, that is, starting with too big
+$\sigma$-algebra and going inwards by seeing where they overlap.
+
+:::{.theorem data-title="$~$"}
+
+For $\sigma$-algebra $\mathcal{F}$, if $\mathcal{E}\subset \mathcal{F}$ then
+$\sigma(\mathcal{E})\subseteq \mathcal{F}$.
+
+:::
+
+*PROOF:*
+Since $\mathcal{F}$ is a $\sigma$-algebra containing $\mathcal{E}$ it must
+contain the smallest $\sigma$-algebra containing $\mathcal{E}$ since
+$$
+\sigma(\mathcal{E})=\bigcap_{i \in I}\mathcal{F}_{i},
+$$
+where $\mathcal{F}_{i}$ are the collection of $\sigma$-algebra that contain
+$\mathcal{E}$.
+$\square$
+
+The following definition is built upon definitions from [[topology]] which we
+have included in the [[]].  
+
+:::{.definition data-title="Borel σ-Algebra"}
+
+Let $(X,\tau)$ be a topological space. The **Borel σ-algebra** of $X$,
+$\mathcal{B}_{X}$ is the $\sigma$-algebra generated by $\tau$. Its members are
+known as **Borel sets**.
+
+:::
+
+The Borel $\sigma$-algebra of $\mathbb{R}$ denoted $\mathcal{B}_{\mathbb{R}}$
+is the $\sigma$-algebra generated from the standard topology which is the
+collection of open real intervals.  
+
+:::{.theorem data-title="Borel σ-Algebra Generating Sets"}
+
+The Borel $\sigma$-algebra of $\mathbb{R}$, $\mathcal{B}_{\mathbb{R}}$ is
+generated by:
+1. Open intervals $\mathcal{E}_{1}:=\{ (a,b):a<b \}$;
+2. Closed intervals $\mathcal{E}_{2}:=\{ [a,b]:a<b \}$;
+3. Half-open intervals $\mathcal{E}_{3}:=\{ (a,b]:a<b \}$;
+4. Open rays $\mathcal{E}_{4}:=\{ (a, \infty):a\in \mathbb{R} \}$;
+5. Closed rays $\mathcal{E}_{5}:=\{ [a,\infty):a\in \mathbb{R} \}$.
+
+:::
+
+*PROOF:*
+The Borel $\sigma$-algebra $\mathcal{B}_{\mathbb{R}}:=\sigma(\mathcal{E}_{1})$
+is generated from the set of open intervals
+$$
+\mathcal{E}_{1}:=\{ (a,b):a<b \}.
+$$
+(1) Considering arbitrary $(a,b]\in\mathcal{E}_{3}$ we note that since open
+sets are in $\mathcal{B}_{\mathbb{R}}$ and $\sigma$-algebra are closed under
+countable intersection we have that
+$$
+(a,b]=\bigcap_{n=1}^\infty \left( a,b+\frac{1}{n} \right)\in\mathcal{B}_{\mathbb{R}}\implies \mathcal{E}_{3}\subseteq\mathcal{B}_{\mathbb{R}\implies}\sigma(\mathcal{E}_{3})\subseteq \mathcal{B}_{\mathbb{R}}.
+$$
+Similarly, considering arbitrary $(a,b)\in\mathcal{E}_{1}$  
+$$
+(a,b)=\bigcup_{n=1}^\infty \left(a,b-\frac{1}{n}\right]\in \sigma(\mathcal{E}_{3})\implies\mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{3})\implies\mathcal{B}_{\mathbb{R}}\subseteq \mathcal{E}_{3}.
+$$
+(2) Considering arbitrary $(a,+\infty)\in \mathcal{E}_{5}$ we note that
+$$
+(a,+\infty)=\bigcup_{n=1}^\infty (a,n)\in \mathcal{B}_{\mathbb{R}}\implies\mathcal{E}_{5}\subseteq\mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{5})\subseteq\mathcal{B}_{\mathbb{R}}.
+$$
+Similarly, considering arbitrary $(a,b)\in\mathcal{E}_{1}$ since
+$\sigma$-algebra are closed under countable intersections
+$$
+\begin{align}
+(a,b)&=(a,+\infty)\cap[b,+\infty)=(a,+\infty)\cap \bigcap_{n=1}^\infty \left( b-\frac{1}{n},+\infty \right)\in\sigma(\mathcal{E}_{5}) \\
+\implies & \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{5})\implies \mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{5}).
+\end{align}
+$$
+(3) Considering arbitrary $[a,+\infty)\in\mathcal{E}_{7}$ we note that
+$$
+\begin{align}
+[a,+\infty)&=\bigcap_{n=1}^\infty[a,n)=\bigcap_{n=1}^\infty \bigcap_{m=1}^\infty\left( a-\frac{1}{m}, n \right)\in \mathcal{B}_{\mathbb{R}} \\
+\implies & \mathcal{E}_{7}\subseteq \mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{7})\subseteq\mathcal{B}_{\mathbb{R}}.
+\end{align}
+$$
+Similarly, considering arbitrary $(a,b)\in \mathcal{E}_{1}$, since
+$\sigma$-algebra are closed under countable unions and complements we have that
+$$
+\begin{align}
+(a,b)&=(-\infty,b)\cap(-\infty,a)=([b,+\infty)^c\cup[a,+\infty)^c)^c\subseteq \sigma(\mathcal{E}_{7}) \\
+\implies & \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{7})\implies\mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{7}).
+\end{align}
+$$
+$\square$
+
+### Measure
+
+:::{.definition data-title="Measure"}
+
+Given a measurable space $(X,\mathcal{F})$ a *measure*
+$\mu:\mathcal{F}\to[0,+\infty]$ is a mapping frm the collection of measurable
+sets to $[0,+\infty]$ such that:
+1. $\mu(\emptyset)=0$
+2. $\{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}~\&~\text{disjoint}\implies \mu(\cup_{i=1}^\infty E_{i})=\sum_{i=1}^\infty \mu(E_{i})$.
+
+:::
+
+We call the triple $(X, \mathcal{F}, \mu)$ a **measure space**. 
+###### Example (Dirac Measure):
+For $(X,\mathcal{F})=(X, 2^X)$ we fix $x_{0}\in X$ and define
+$$
+\mu(A)=\delta_{x_{0}}(A)=\begin{cases}
+1&x_{0}\in A \\
+0& \text{o.w.}
+\end{cases}
+$$
+known as the **Dirac measure**.
+
+:::{.theorem data-title="Measure Properties"}
+
+For any measure space $(X,\mathcal{F},\mu)$ and $A,B\in \mathcal{F}$,
+$\{ A_{i} \}_{i=1}^n\subseteq \mathcal{F}$ we have the following properties:
+1. $A \subseteq B\implies \mu(A)\leq \mu(B)$ (Monotonicity)
+2. $A \subseteq B\implies \mu(B\setminus A)=\mu(B)-\mu(A)$
+3. $\mu(\cup_{i=1}^\infty A_{i})\leq \sum_{i=1}^\infty \mu(A_{i})$
+   (Subadditivity)
+4. $A_{i}\subseteq A_{i+1},~\forall i\implies \mu(\cup_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from below)
+5. $A_{i}\supseteq A_{i+1}~\&~\mu(A_{1})<\infty,~\forall i\implies \mu(\cap_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from above)
+
+:::
+
+*PROOF:*
+(1) + (2) Assume there exists $A\subseteq B$ then we can partition
+$B=A\cup(B\setminus A)$ and so
+$$
+\mu(B)=\mu(A)+\mu(B\setminus A)\geq  \mu(A).
+$$
+(3) Similarly, we can define $A_{1}=B_{1}$ and
+$B_{n}=A_{n}\setminus \cup_{i=1}^{n-1}A_{i}$ then we have that
+$$
+\mu(\cup_{i=1}^\infty A_{i})=\mu(\cup_{i=1}^\infty B_{i})=\sum_{i=1}^\infty \mu(B_{i})=\sum_{i=1}^\infty \mu(A_{i})-\mu(\cup_{i=1}^{n-1}A_{i})\leq \sum_{i=1}^\infty \mu(A_{i}).
+$$
+(4) Defining $B_{1}=A_{1}$ and $B_{i}=A_{i}\setminus A_{i-1}$ for $i \geq 2$.
+By definition $\cup_{i=1}^n B_{i}=A_{n}$ hence
+$$
+\cup_{i=1}^\infty B_{i}=\cup_{n=1}^\infty A_{n}\implies \mu(A_{n})=\mu(\cup_{i=1}^nB_{i})=\sum_{i=1}^n\mu(B_{i}).
+$$
+Consequently taking the limit as $n \to \infty$ we find
+$$
+\lim_{n \to \infty}\mu(A_{n})=\sum_{i=1}^\infty \mu(B_{i})=\mu\left( \bigcup_{i=1}^\infty B_{i} \right) =\mu\left(\bigcup_{i=1}^n A_{i}\right)
+$$
+(5) Define $B_{i}=A_{1}\setminus A_{i}$. By constraint $B_{i}\subseteq B_{i+1}$
+and so
+$$
+\begin{align}
+\bigcup_{i=1}^\infty B_{i} & =\bigcup_{i=1}^\infty(A_{1}\setminus A_{i})=\bigcup_{i=1}^\infty(A_{i}\cap A_{i}^c)=A_{1}\cap\left( \bigcup_{i=1}^\infty A_{i}^c \right) \\
+ & = A_{1}\cap \left( \bigcap_{i=1}^\infty A_{i} \right)^c=A_{1}\setminus \left( \bigcap_{i=1}^\infty A_{i} \right).
+\end{align}
+$$
+Therefore we have that
+$$
+\begin{align}
+\mu(A_{1}) & =\mu\left( A_{1}\cap\left( \bigcap_{i=1}^\infty A_{i} \right) \right)+\mu\left( A_{1}\setminus \bigcap_{i=1}^\infty A_{i} \right)  =\mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty} \mu(B_{i}) \\
+& = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty}\mu(A_{i})-\mu(A_{i} ) = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\mu(A_{1})-\lim_{i \to \infty}\mu(A_{i}),
+\end{align}
+$$
+and rearranging gives the result.
+$\square$
+
+:::{.definition data-title="Finite, Sigma-Finite, Null Set, Almost Everywhere, Complete"}
+
+Given a measure space $(X,\mathcal{F}, \mu)$ we define the following
+terminology:
+1. the measure is **finite** if $\mu(X)<+\infty$
+2. the measure is $\sigma$**-finite** if
+   $\exists \{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}$ such that
+   $\cup_{i=1}^\infty E_{i}=X$ and $\mu(E_{i})< \infty$ for all
+   $i \in \mathbb{N}$
+3. $E \in S^X$ is a **null set** (of $\mu$) if $E\in \mathcal{F}$ and
+   $\mu(E)=0$
+4. a property holds ($\mu$-) **almost everywhere** if the set of points where
+   it fails is a null set
+5. a measure whose domain includes all subsets of null sets is called
+   **complete**.
+
+:::
+
+The next theorem defines a **complete measure space**, a measure space in which
+every subset of every null set is measurable (with measure zero).  
+
+:::{.theorem data-title="Completions"}
+
+Suppose that $(X,\mathcal{F}, \mu)$ is a measure space. Let
+$\mathcal{N}=\{ N \in \mathcal{F}:\mu(N)=0 \}$ and
+$\overline{\mathcal{F}}=\{ E \cup F:E \in\mathcal{F},~F\subset N~\text{for some }N \in\mathcal{N} \}$.
+Then $\overline{\mathcal{F}}$ is a $\sigma$-algebra known as the **completion**
+of $\mathcal{F}$ with respect to $\mu$, and there is a unique extension
+$\overline\mu$ of $\mu$ to a **complete measure** on $\overline{\mathcal{F}}$,
+known as the **completion** of $\mu$. The resulting measure space
+$(X,\overline{F}, \overline{\mu})$ is called a **complete measure space**.
+
+:::
+
+*PROOF:*
+Firstly, we show that $\overline{\mathcal{F}}$ is a $\sigma$-algebra. Note that
+since $\mathcal{F}$ and $\mathcal{N}$ are both closed under countable unions,
+so to is $\overline{\mathcal{F}}$ and further, since
+$\emptyset \in \mathcal{F},\mathcal{N}$ then we have that
+$\emptyset \in\overline{\mathcal{F}}$, hence we need only show that
+$\overline{\mathcal{F}}$ is closed under compliments.  
+$\square$
+## Constructing Measures
+
+Naturally you might ask whether there exists a measure $\mu$ on the
+**measurable real space** $(\mathbb{R}, \mathcal{B}_{\mathbb{R}})$ where
+$\mu((a,b))=b-a$ and $\mu$ is translation invariant. In this section we outline
+the process whereby we can construct such measures using functions called
+**pre-measures** $\mu_{0}$ and **outer-measures** $\mu^*$. We begin by
+presenting an overview of the process before proceeding to give context and
+further details in the subsequent sections:
+
+1. Start by defining an increasing, right-continuous function $F$ commonly
+   known as a distribution function.
+2. From $F$ we can construct a premeasure $\mu_{0}$ defined on a small
+   collection of simple sets in $X$, for example the real intervals for
+   $X=\mathbb{R}$.
+3. Extend this premeasure to an outer-measure $\mu^*$ which by definition is
+   defined on all subsets of $X$, $2^X$.
+4. Use the Caratheodory extension theorem to define the collection of
+   outer-measurable sets $\mathcal{M}\subset 2^X$.
+5. Restricting this outer-measure to have domain $\mathcal{M}$,
+   $\mu^*|_{\mathcal{M}}$ results in a full measure $\mu$ on $\sigma$-algebra
+   $\mathcal{M}$.
+
+### Outer-Measures
+
+An **outer (exterior) measure** is a function defined on all subsets of a given
+set taking values in the extended real numbers satisfying some additional
+technical conditions
+
+:::{.definition data-title="Outer Measure"}
+
+An outer measure on non-empty $X$ is a function $\mu^*:2^X\to[0,+\infty]$ s.t.:
+1. $\mu^*(\emptyset)=0$ (null-empty),
+2. $A \subseteq B\implies \mu^*(A)\leq \mu^*(B)$ (monotonic)
+3. $\mu^*\left( \cup_{i=1}^\infty A_{i} \right)\leq \sum_{i=1}^\infty \mu^*(A_{i})$
+   (countably subadditive).
+
+:::
+
+*Note:* We often prove (2) and (3) simultaneously since they both hold iff if
+$E \subseteq \cup_{i=1}^\infty A_{i}$ then
+$\mu^*(E)\leq \sum_{i=1}^\infty \mu^*(A_{i})$.
+
+:::{.definition data-title="Outer-Measurable"}
+
+Given any outer-measure $\mu^*$, a set $E \subseteq X$ is **(outer)
+$\mu^*$-measurable** if $\forall A \subseteq X$ we have
+$$
+\mu^*(A)=\mu^*(A \cap E)+\mu^*(A \cap E^c).
+$$
+We denote the set of outer-measurable sets
+$\mathcal{F}_{\mu^*}:=\{ E\subseteq X:E\text{ is }\mu^*\text{-measurable} \}$.
+Intuitively, we say $E$ breaks apart any set nicely.
+
+:::
+
+*Remark:* Note that by countable subadditivity $\leq$ holds for all
+$A \subseteq X$ hence we need only show $\geq$ for equality.
+
+The most common way of obtaining outer measures is to start with a family
+$\mathcal{E}$ of elementary sets on which a notion of measure is defined (such
+as rectangles in the plane) and then to approximate arbitrary sets "from the
+outside" by countable unions of members of $\mathcal{E}$. We state this more
+precisely in the following proposition.
+
+:::{.theorem data-title="Constructing Outer Measures"}
+
+Let $\mathcal{E}\subset 2^X$ and $\mu_{0}:\mathcal{E}\to[0,\infty]$ be such
+that $\emptyset \in\mathcal{E}$, $X\in\mathcal{E}$ and $\mu_{0}(\emptyset)=0$.
+For any $A\subset X$ we can define an outer measure by
+$$
+\mu^*(A)=\inf\left\{ \sum_{j=1}^\infty \mu_{0}(E_{j}):E_{j}\in\mathcal{E},~A\subset \bigcup_{j=1}^\infty E_{j}\right\}.\tag{$\star$}
+$$
+
+:::
+
+*PROOF:*
+For any $A \subset X$ there exists
+$\{ E_{j} \}_{j=1}^\infty \subset\mathcal{E}$ such that
+$A\subset \bigcup_{j=1}^\infty E_{j}$ (take $E_{j}=X$ for all $j$) and so the
+definition of $\mu^*$ makes sense. We proceed to show this satisfies the
+properties of outer measure.
+**(1)** Firstly note that clearly $\mu^*(\emptyset)=0$ by taking
+$E_{j}=\emptyset$ for all $j$.  
+**(2)** Next for $A\subset B$ we have that $\mu^*(A)\leq \mu^*(B)$ since the
+set over which the infimum is taken in the definition of $\mu^*(A)$ includes
+the corresponding set in the definition of $\mu^*(B)$.
+**(3)** To prove countable subadditivity, suppose
+$\{ A_{j} \}_{j=1}^\infty \subset2^X$ and fix $\varepsilon>0$. For each $j$
+there exists $\{ E_{j}^k \}_{k=1}^\infty \subset\mathcal{E}$ such that
+$A_{j}\subset \bigcup_{k=1}^\infty E_{j}^k$ and
+$\sum_{k=1}^\infty \mu_{0}(E_{j}^k)\leq \mu^*(A_{j})+\varepsilon{2}^{-j}$. But
+then, if $A=\bigcup_{i=1}^\infty A_{j}$, we have
+$A\subset \bigcup_{j,k=1}^\infty E_{j}^k$ and
+$\sum_{j,k}\mu_{0}(E_{j}^k)\leq \sum_{j}\mu^*(A_{j})+\varepsilon$ whence
+$\mu^*(A)\leq \sum_{j}\mu^*(A_{j})+\varepsilon$. Since $\varepsilon$ is
+arbitrary, we are done.
+$\square$
+
+Intuitively, we are defining the outer measure of the set $A$ to be the infimum
+of all sums of collections of sets that cover $A$.  
+
+:::{.theorem data-title="$~$"}
+
+For any outer measure $\mu^*$ if $\mu^*(B)=0$ then $B \in \mathcal{F}_{\mu^*}$.
+
+:::
+
+*PROOF:*
+We very quickly see that
+$$
+\mu^*(E)\geq  \mu^*\left( E \cap B\right)+\mu ^*(E \cap B^c)=\mu^*(E\cap B^c).
+$$
+$\square$
+
+### Pre-measures
+
+A pre-measure is a set function that acts as a pre-cursor to a *bona fide*
+[[measure|measure]] through the [[caratheodory-extension-theorem]].  
+
+:::{.definition data-title="Premeasure"}
+
+For algebra $\mathcal{A}\subset 2^X$ then a function
+$\mu_{0}:\mathcal{A}\to[0,\infty]$ is called a *premeasure* if is satisfies
+both:
+1. $\mu_{0}(\emptyset)=0$; and
+2. For disjoint $\{ A_{j} \}_{i=1}^\infty \subset\mathcal{A}$ such that
+   $\cup_{i=1}^\infty A_{i}\in \mathcal{A}$ then
+   $\mu_{0}(\cup_{i=1}^\infty A_{i})=\sum_{i=1}^\infty \mu_{0}(A_{i})$.
+
+:::
+
+In particular, a premeasure is finitely additive since one can take
+$A_{j}=\emptyset$ for large $j$.  
+
+:::{.theorem data-title="Extending Premeasures"}
+
+If $\mu_{0}$ is a premeasure on $\mathcal{A}$ and $\mu^*$ is given by $(\star)$
+as
+$$
+\mu^*(A)=\inf\left\{ \sum_{j=1}^\infty \mu_{0}(E_{j}):E_{j}\in\mathcal{E},~A\subset \bigcup_{j=1}^\infty E_{j}\right\},
+$$
+then:
+1. $\mu^*|_{\mathcal{A}}=\mu_{0}$; and
+2. Every set $A\in\mathcal{A}$ is $\mu^*$-measurable.
+
+:::
+
+*PROOF:*
+**(1)** Letting $E \in\mathcal{A}$, if $E \subset \bigcup_{j=1}^\infty A_{j}$
+with $A_{j}\in\mathcal{A}$ we define
+$$
+B_{n}=E \cap \left( A_{n}\setminus\bigcup_{j=1}^{n-1}A_{j} \right).
+$$
+Then $B_{n}$ are disjoint members of $\mathcal{A}$ whose union is $E$ thus
+$$
+\mu_{0}(E)=\sum_{j=1}^{\infty}\mu_{0}(B_{j})\leq \sum_{j=1}^{\infty}\mu_{0}(A_{j}).
+$$
+It follows that $\mu_{0}(E)\leq \mu^*(E)$ and the reverse inequality is clear
+since $E\subset \bigcup_{j=1}^\infty A_{j}$ where $A_{1}=E$ and
+$A_{j}=\emptyset$ for $j>1$.
+**(2)** If $A \in\mathcal{A}$, $E \subset X$ and $\epsilon>0$, there is a
+sequence $\{ B_{j} \}_{j=1}^\infty \subset \mathcal{A} \mathcal{}$ with
+$E \subset \bigcup_{j=1}^\infty B_{j}$ and
+$\sum_{j=1}^{\infty}\mu_{0}(B_{j})\leq \mu^*(E)+\epsilon$. Since $\mu_{0}$ is
+additive on $\mathcal{A}$ we have
+$$
+\begin{align}
+\mu^*(E)+\epsilon  & \geq \sum_{j=1}^{\infty}\mu_{0}(B_{j}\cap A) + \sum_{j=1}^{\infty} \mu_{0}(B_{j}\cap A^c) \\
+ & \geq \mu^*(E \cap A) + \mu^*(E \cap A^c).
+\end{align}
+$$
+Since $\epsilon$ is arbitrary, $A$ is $\mu^*$-measurable.
+$\square$
+
+### Carathéodory Extension Theorem
+
+The next key theory from Carathéodory shows that if we are given an
+outer-measure $\mu^*$ then the set of outer-measurable sets
+$\mathcal{F}_{\mu^*}$ is a $\sigma$-algebra and when restricted to this
+$\sigma$-algebra, $\mu^*$ becomes a measure.
+
+:::{.theorem data-title="Carathéodory Extension Theorem"}
+
+Given and outer measure $\mu^*$ then
+1. $\mathcal{F}_{\mu^*}$ is a $\sigma$-algebra; and
+2. $\mu^*$ is a measure on $\mathcal{F}_{\mu^*}$.
+
+:::
+
+*Note:* We can show that this is in general not the largest $\sigma$-algebra on
+which $\mu^*$ is a measure.
+
+*PROOF:*
+Since $\mu^*(\emptyset)=0\implies \emptyset \in \mathcal{F}_{\mu^*}$ by the
+proposition above, hence $\mathcal{F}_{\mu^*}$ is non-empty; and by definition
+of an outer-measurable set $\mathcal{F}_{\mu^*}$ is closed under compliments.
+Next, if $A,B \in \mathcal{F}_{\mu^*}$ and $E\subset X$ we have that
+$$
+\begin{align}
+\mu^*(E) & = \mu^*(E \cap A)+\mu^*(E \cap A^c) \\
+& = \mu^*(E \cap A \cap B)+\mu^*(E \cap A \cap B^c)+\mu^*(E \cap A^c \cap B)+\mu^*(E \cap A^c \cap B^c) \\
+ & \geq  \mu^*(E \cap(A\cup B))+\mu^*(E \cap(A \cup B)^c),
+\end{align}
+$$
+where the final inequality holds from subadditivity since
+$A\cup B=(A \cap B)\cup(A \cap B^c)\cup (A^c\cap B)$. It follows that
+$A \cup B\in \mathcal{F}_{\mu^*}$ and so it is an algebra. Moreover, if
+$A,B \in \mathcal{F}_{\mu^*}$ and $A \cap B=\emptyset$ then
+$$
+\mu^*(A \cup B)=\mu^*((A\cup B)\cap A)+\mu^*((A \cup B)\cap A^c)=\mu^*(A)+\mu^*(B),
+$$
+hence $\mu^*$ is finitely additive on $\mathcal{F}_{\mu^*}$. To prove
+$\mathcal{F}_{\mu^*}$ is a $\sigma$-algebra it suffices to show
+$\mathcal{F}_{\mu^*}$ is closed under countable disjoint unions. If we consider
+disjoint $\{ A_{j} \}_{j=1}^\infty \subseteq \mathcal{F}_{\mu^*}$ and define
+$B_{n}:=\bigcup_{j=1}^nA_{{j}}$ and $B :=\bigcup_{j=1}^\infty A_{j}$. Then, for
+any $E \subset X$ we have
+$$
+\mu^*(E \cap B_{n})=\mu^*(E \cap B_{n}\cap A_{n})+\mu^*(E \cap B_{n}\cap A_{n}^c)=\mu^*(E \cap A_{n})+\mu^*(E \cap B_{n-1}),
+$$
+hence, by induction we have that
+$\mu^*(E \cap B_{n})=\sum_{j=1}^n\mu^*(E \cap A_{j})$. Therefore
+$$
+\begin{align}
+\mu^*(E) & =\mu^*(E \cap B_{n})+\mu^*(E \cap B_{n}^c)\geq  \sum_{j=1}^n\mu^*(E\cap A_{j})+\mu^*(E \cap B^c) \\
+& \stackrel{n \to \infty}{\geq }\sum_{j=1}^\infty \mu^*(E \cap A_{j})+\mu^*(E \cap B^c)\geq \mu^*\left( \bigcup_{j=1}^\infty (E\cap A_{j}) \right)+\mu^*(E \cap B^c) \\
+& = \mu^*(E \cap B)+\mu^*(E\cap B^c)\geq  \mu^*(E),
+\end{align}
+$$
+and so all the inequalities become equalities thus $B\in \mathcal{F}_{\mu^*}$
+as required. Furthermore, taking $E=B$ we have
+$\mu^*(B)=\sum_{j=1}^\infty \mu^*(A_{j})$ and so $\mu^*$ is countable additive
+on $\mathcal{F}_{\mu^*}$. Finally, if $\mu^*(A)=0$, for any $E \subset X$
+$$
+\mu^*(E)\leq  \mu^*(E \cap A)+\mu^*(E \cap A^c)=\mu^*(E \cap A^c)\leq \mu^*(E),
+$$
+so that $A \in \mathcal{F}_{\mu^*}$, hence $\mu^*$ is a complete measure on
+$\mathcal{F}_{\mu^*}$.
+$\square$
+
+### Lebesgue Measures
+
+Now let us turn our focus to the real measurable space
+$(\mathbb{R},\mathcal{B}_{\mathbb{R}})$ and the most important measure in Real
+Analysis, namely the **Lebesgue measure** which is a type of **Borel measure**.
+A **Borel measure** is any measure defined on
+$(\mathbb{R},\mathcal{B}_{\mathbb{R}})$. To motivate the following section, if
+we consider a finite Borel measure $\mu$ and define the **distribution
+function**
+$$
+F(x)=\mu((-\infty,x])
+$$
+we note that by construction: (1) $F$ is *increasing*; and (2) $F$ is
+*right-continuous*. Our aim is to invert this process, namely to start with an
+increasing and right-continuous function and use it to construct a measure
+through the steps outlines at the start of [[]].
+
+Sets of the form $(a,b]$, $(a,\infty)$ or $\emptyset$ for
+$-\infty \leq a<b<\infty$ are known as $h$-**intervals** . The collection
+$\mathcal{A}$ of finite disjoint unions of $h$-intervals is an algebra and
+$\sigma(\mathcal{A})=\mathcal{B}_{\mathbb{R}}$.
+
+:::{.theorem data-title="Pre-measure from increasing, right-continuous functions"}
+
+For increasing and right-continuous $F:\mathbb{R} \to \mathbb{R}$ for disjoint
+$h$-intervals $(a_{j},b_{j}]$ for $j=1, \dots, n$ the function defined by
+$$
+\begin{cases}\mu_{0}\left(\bigcup_{j=1}^n (a_{j}, b_{j}]\right)=\sum_{j=1}^{n} [F(b_{j})-F(a_{j})] \\ \mu_{0}(\emptyset)=0\end{cases}
+$$
+is a premeasure on the algebra $\mathcal{{A}}$.
+
+:::
+
+
+
+
+
+
+
+
+
+
+
+An important outer-measure in **real analysis** and [[stochastic-processes]] is
+the Lebesgue outer-measure $\lambda^*$.
+
+:::{.definition data-title="Lebesgue Outer Measure"}
+
+The **Lebesgue outer measure** $\lambda^*:2^\mathbb{R}\to [0,+\infty]$ is
+defined
+$$
+\lambda^*(A)=\inf\left\{  \sum_{i=1}^\infty \lvert b_{i}-a_{i} \rvert :A \subseteq \bigcup_{i=1}^\infty (a_{i},b_{i}]   \right\}.
+$$
+
+:::
+
+Clearly from the previous result the function is an outer measure. We can also
+show: (1) $\lambda^*((a,b])=b-a$, $a\leq b$; and (2) $\lambda^*$ is translation
+invariant. Importantly, it is not countable additive however, we will how that
+it becomes countably additive when restricted to "nice enough" sets.
+
+
+
+
+
+
+
+
+
+### Borel Measures
+
+
+
+*PROOF:*
+
+
+:::{.theorem data-title="Lebesgue-Stieltjes Measure"}
+
+If $F:\mathbb{R}\to \mathbb{R}$ is any increasing, right-continuous function,
+there is a unique Borel measure $\mu_{F}$ on $\mathbb{R}$ such that for all
+$a,b$ we have
+$$
+\mu_{F}((a,b])=F(b)-F(a).
+$$
+If $G$ is another such function, we have $\mu_{F}=\mu_{G}$ iff $F-G$ is
+constant. Conversely, if $\mu$ is a Borel measure on $\mathbb{R}$ that is
+finite on all bounded Borel sets and we define
+$$
+F(x)=\begin{cases}\mu((0,x]) & x>0\\ 0 & x=0 \\ -\mu((-x,0]) & x<0\end{cases},
+$$
+then $F$ is increasing and right-continuous, and $\mu=\mu_{F}$.  
+
+The completion $\overline{\mu}_{F}$ (which is often also denoted $\mu_{F}$) is
+called the **Lebesgue-Stieltjes measure** associated to $F$.
+
+:::
+
+*PROOF:*
+
+The theory of this section gives, for each increasing and right continuous $F$,
+not only the Borel measure $\mu_{F}$ but a complete measure
+$\overline{\mu}_{F}$ whose domain includes $\mathcal{B}_{\mathbb{R}}$. In fact,
+$\overline{\mu}_{F}$ is just the completion of $\mu_{F}$ and one can show that
+its domain is always strictly larger than $\mathcal{B}_{\mathbb{R}}$. We shall
+usually denote this complete measure also by $\mu_{F}$ and call it the
+**Lebesgue-Stieltjes measure** associated to $F$.
+
+Fix a complete Lebesgue-Stieltjes measure $\mu$ on $\mathbb{R}$ associated to
+the increasing, right continuous function $F$ and denote by $\mathcal{M}_{\mu}$
+the domain of $\mu$.
+
+:::{.theorem data-title="Properties of Lebesgue-Stieltjes Measure I"}
+
+For any $E \in \mathcal{M}_{\mu}$
+$$
+\mu(E)=\inf_{}{\left\{  \sum_{j=1}^{\infty}\mu((a_{j},b_{j})):E\subset \bigcup_{j=1}^\infty (a_{j},b_{j})  \right\}}.
+$$
+
+:::
+
+*PROOF:*
+
+
+:::{.theorem data-title="Properties of Lebesgue-Stieltjes Measure II"}
+
+If $E \in \mathcal{M}_{\mu}$ then
+$$
+\begin{align}\mu(E) & =\inf_{}{\{ \mu(U):E\supset E,~E\text{ is open} \}} \\ & = \sup_{}{\{ \mu(K):K \subset E,~K \text{ is compact} \}}.\end{align}
+$$
+
+:::
+
+*PROOF:*
+
+
+:::{.theorem data-title="Properties of Lebesgue-Stieltjes Measure III"}
+
+If $E \subset \mathbb{R}$ the following are equivalent:
+1. $E \in \mathcal{M}_{\mu}$,
+2. $E=V-N_{1}$ where $V$ is a $G_{\delta}$ set and $\mu(N_{1})=0$,
+3. $E=H \cup N_{2}$ where $H$ is a $F_{\sigma}$ set and $\mu(N_{2})=0$.
+
+:::
+
+*PROOF:*
+
+:::{.theorem data-title="Properties of Lebesgue-Stieltjes Measure IV"}
+
+If $E \in \mathcal{M}_{\mu}$ and $\mu(E)<\infty$ then for every $\epsilon>0$
+there is a set $A$ that is a finite union of open intervals such that
+$\mu(E \triangle A)<\epsilon$.
+
+:::
+
+*PROOF:*
+
+
+:::{.definition data-title="Lebesgue Measure"}
+
+The complete measure $\mu_{F}$ associated to the function $F(x)=x$ is the
+**Lebesgue measure** which we denote by $\lambda$. The domain of $\lambda$ is
+the class of **Lebesgue measurable sets** which we denote $\mathcal{L}$.
+
+:::
+
+We note that we shall also refer to the restriction of $\lambda$ to
+$\mathcal{B}_{\mathbb{R}}$ as the Lebesgue measure.  
+
+
+:::{.theorem}
+
+If $E\in \mathcal{L}$ then $E+s \in \mathcal{L}$ and $rE \in \mathcal{L}$ for
+all $s,r \in \mathbb{R}$. Moreover $\lambda(E+s)=\lambda(E)$ and
+$\lambda(rE) =\lvert r \rvert \lambda(E)$.
+
+:::
+
+*PROOF:*
+
+## Lebesgue Integrals
+
+### Measurable Functions
+
+We recall that any mapping $f:X \to Y$ between two sets induces a mapping
+$f^{-1}:2^Y\to 2^X$ defined by
+$$
+f^{-1}(E)=\{ x \in X:f(x)\in E \},
+$$
+which preserves unions, intersections and complements, i.e.
+$$
+\begin{align}
+f^{-1}\left( \bigcup_{{\alpha}}^{}{E_{\alpha}} \right) & =\bigcup_{\alpha}f^{-1}(E_{\alpha}) \\
+f^{-1}(E^c) & =(f^{-1}(E))^c \\
+f^{-1}\left( \bigcap_{\alpha}E_{\alpha} \right) & =\bigcap_{\alpha}f^{-1}(E_{\alpha}).
+\end{align}
+$$
+Supposing $(X,\mathcal{M})$ and $(Y,\mathcal{N})$ are measurable spaces then
+the **pull-back** and **push-forward** of $\mathcal{N}$ respectively defined as
+$$
+\begin{align}
+\{ f^{-1}(E):E\in \mathcal{N} \} \quad \&\quad\{ E:f^{-1}(E)\in \mathcal{N} \},
+\end{align}
+$$
+are $\sigma$-algebra.
+
+:::{.definition data-title="Measurable Function"}
+
+For measurable spaces $(X,\mathcal{M})$ and $(Y,\mathcal{N})$, a mapping
+$f:X \to Y$ is said to be **$(\mathcal{M}, \mathcal{N})$-measurable** if
+$$
+\begin{align}\forall E \in\mathcal{N},&~~f^{-1}(E):=\{ E \in X:f(x) \in E \}\in\mathcal{M}, \\  
+
+:::
+ \iff & \{ \text{The preimage of every measurable set is measurable.} \}\\
+\iff& \{ f^{-1}(E):E \in \mathcal{N} \}\subset \mathcal{M}, \\ \iff&
+\{ E:f^{-1}(E) \in \mathcal{M} \}\supset \mathcal{N}.\end{align}
+$$
+
+*Note:* This is very closely related to the definition of continuity of
+[[topological-functions]], i.e. for topological spaces $X$ and $Y$, every
+continuous function $f:X \to Y$ is Borel measurable.
+
+We say that a real function $f:\mathbb{R}\to \mathbb{R}$ is **Lebesgue
+measurable** if it is
+$(\mathcal{F}_{\lambda^*},\mathcal{B}_{\mathbb{R}})$-measurable. Also, given
+topological spaces $X,Y$ we say that $f:X \to Y$ is **Borel measurable** if it
+is $(\mathcal{B}_{X},\mathcal{B}_{Y})$-measurable. We will see that for
+functions $f:\mathbb{R} \to \mathbb{R}$ we have that Borel measurability
+implies Lebesgue measurability since
+$\mathcal{B}_{\mathbb{R}}\subsetneq \mathcal{F}_{\lambda^*}$.
+
+:::{.theorem data-title="$~$"}
+
+Given measurable spaces $(X,\mathcal{M})$ and $(Y,\mathcal{N})$ where
+$\mathcal{N}$ is generated by $\mathcal{E}$, then $f:X \to Y$ is
+$(\mathcal{N},\mathcal{M})$-measurable if and only if
+$\forall E\in \mathcal{E}$, $f^{-1}(E)\in\mathcal{N}$.
+
+:::
+
+*PROOF:*
+The only if implication is trivial.  For the converse we observe that 
+$$
+\{ E \subset Y:f^{-1}(E)\in \mathcal{F} \},
+$$
+is a $\sigma$-algebra that contains $\mathcal{E}$; it therefore contains
+$\mathcal{G}$.
+$\square$
+
+:::{.theorem data-title="Properties of Measurable Functions I"}
+
+For measurable space $(X,\mathcal{F})$ and function $f:X \to \mathbb{R}$ the
+following are equivalent:
+1. $f$ is $\mathcal{F}$-measurable;
+2. $f^{-1}((a,\infty))\in \mathcal{F}$ for all $a\in \mathbb{R}$;
+3. $f^{-1}([a,\infty))\in \mathcal{F}$ for all $a \in \mathbb{R}$;
+4. $f^{-1}((-\infty,a))\in \mathcal{F}$ for all $a \in \mathbb{R}$;
+5. $f^{-1}((-\infty,a])\in \mathcal{F}$ for all $a \in \mathbb{R}$.
+
+:::
+
+*PROOF:*
+We have previously shown that the open and closed rays generate the Borel
+σ-Algebra. Thus from previous results we have the result.
+$\square$
+###### Example (Measurability of constant real functions):
+We show that constant functions are always measurable, that is
+$f:X \to \overline{\mathbb{R}}$ given by $f(x)=c$ for all $x \in X$ for
+$c\in \overline{\mathbb{R}}$ if $f$ is measurable? For any
+$E \in \mathcal{{B}}_{\mathbb{R}}$  
+$$
+f^{-1}(E)=\begin{cases}
+\emptyset & c \not\in E, \\
+X & c \in E.
+\end{cases}
+$$
+Thus, any $\sigma$-algebra $\mathcal{M}$ contains $\emptyset$ and $X$.
+###### Example (Measurability of indicator functions):
+We show that indicator functions $\mathbb{1}_{}:X \to \mathbb{R}$ are always
+measurable. For function
+$$
+\mathbb{1}_{E}(x):=\begin{cases}
+1 & x \in E, \\
+0 & x \not\in E,
+\end{cases}
+$$
+with measurable $E$, taking intervals $(a,b]\in \mathbb{R}$ 
+$$
+\mathbb{1}_{E}^{-1}((a,b])=\begin{cases}
+X & 0,1 \in(a,b], \\
+X-E & 0 \in(a,b], \\
+E & 1 \in(a,b], \\
+\emptyset & 0,1 \not\in (a,b].
+\end{cases}
+$$
+Since these sets are all measurable the function is measurable.
+
+:::{.theorem data-title="Properties of Measurable Functions II"}
+
+For measurable functions $f,g:X \to \mathbb{R}$, then the following are also
+measurable:
+1. $f+g$ (with convention $+\infty+(-\infty)=0$),
+2. $fg$ (with convention $0\cdot\pm \infty=0$),
+3. $f \wedge g$,
+4. $f \vee g$,
+5. $f\circ g$.
+
+:::
+
+*PROOF:*
+
+
+
+:::{.theorem data-title="Properties of sequences of measurable functions"}
+
+For sequences of measurable function $f_{i};X \to \mathbb{R}$ for
+$i \in \mathbb{N}$ then the following are also measurable:
+1. $\sup_{i}{f_{i}}$,
+2. $\inf_{i}{f_{i}}$,
+3. $\limsup_{i}{f_{i}}$,
+4. $\liminf_{i}{f_{i}}$,
+5. $\lim_{ i \to \infty }f_{i}$ as long as the limit exists pointwise.
+
+:::
+
+*PROOF:*
+
+### Integral Construction
+
+
+
+
+

@@ -1,0 +1,50 @@
+---
+title: Realized Volatility
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Realized Volatility
+Where [[garch-models|GARCH]] and
+[[stochastic-volatility-model|stochastic volatility]] models *infer* latent
+volatility from daily returns, **realized volatility (RV)** instead *measures*
+volatility nonparametrically from high-frequency (intraday) data, exploiting
+quadratic-variation theory from [[stochastic-calculus]].
+
+:::{.definition data-title="Realized Variance"}
+
+Partition day $t$ into $n$ intraday intervals with log returns $r_{t,i}$,
+$i=1,\dots,n$. The **realized variance** is
+$$
+RV_t = \sum_{i=1}^n r_{t,i}^2.
+$$
+If the log-price follows an [[ito-process|Itô process]]
+$d\log S_u = \mu_u\,du + \sigma_u\,dW_u$, then as $n\to\infty$ (sampling
+frequency $\to 0$), $RV_t \xrightarrow{p} \int_{t-1}^t \sigma_u^2\,du$ — the
+**quadratic variation**/integrated variance over the day. RV is thus a
+consistent, model-free estimator of latent integrated volatility.
+
+:::
+
+**Practical issues.**
+- **Microstructure noise**: at very high frequencies, bid-ask bounce and
+  discreteness bias $RV_t$ upward; addressed via sparse/optimal sampling,
+  realized kernels, or pre-averaging estimators.
+- **Jumps**: $RV_t$ estimates *total* quadratic variation, including price
+  jumps. **Bipower variation** (using products of adjacent absolute returns) is
+  robust to jumps and estimates only the continuous component, so $RV_t - BV_t$
+  isolates the jump contribution.
+
+**Use in forecasting.** Realized volatility is far more informative and less
+noisy than squared daily returns as a volatility proxy, and is the input series
+for reduced-form volatility-forecasting models such as the
+[[har-rv-model|HAR-RV model]], as well as for evaluating/backtesting GARCH and
+stochastic volatility forecasts.
+
+### References
+- [[har-rv-model]]
+- [[garch-models]]
+- [[stochastic-volatility-model]]
+- [[stochastic-calculus]]

@@ -13,7 +13,8 @@ execute:
 
 ::: {.callout-important title="Learning Objectives"}
 - Understand what data preparation is and why it is necessary.
-- Diagnose and handle missing data, including the MCAR / MAR / MNAR classification.
+- Diagnose and handle missing data, including the MCAR / MAR / MNAR
+  classification.
 - Identify and remove or aggregate duplicate records.
 - Fix inconsistent and mixed data types, including dates and booleans.
 - Detect and resolve invalid values and labelling inconsistencies.
@@ -45,18 +46,26 @@ For data to be tidy it must satisfy the following three rules:
 3. Each type of observational unit forms a table.
 :::
 
-In practice, raw data almost never arrives in this form. Beyond structure, real datasets routinely contain:
+In practice, raw data almost never arrives in this form. Beyond structure, real
+datasets routinely contain:
 
-- **Missing values** — entries that were never collected, lost, or recorded incorrectly.
-- **Duplicate records** — rows that represent the same observation more than once.
-- **Inconsistent or incorrect data types** — dates stored as strings, numbers encoded as text.
-- **Invalid values** — entries that appear real but break domain rules (e.g. a negative age).
-- **Labelling issues** — the same category written in multiple ways across rows or files.
+- **Missing values** — entries that were never collected, lost, or recorded
+  incorrectly.
+- **Duplicate records** — rows that represent the same observation more than
+  once.
+- **Inconsistent or incorrect data types** — dates stored as strings, numbers
+  encoded as text.
+- **Invalid values** — entries that appear real but break domain rules (e.g. a
+  negative age).
+- **Labelling issues** — the same category written in multiple ways across rows
+  or files.
 
-Data preparation is the process of systematically identifying and resolving these problems before analysis.
+Data preparation is the process of systematically identifying and resolving
+these problems before analysis.
 
 ::: {.callout-important title="Data Preparation"}
-**Data preparation** is the process of cleaning and transforming data to make it suitable for analysis.
+**Data preparation** is the process of cleaning and transforming data to make
+it suitable for analysis.
 :::
 
 The workflow for each problem follows the same pattern:
@@ -69,21 +78,34 @@ The workflow for each problem follows the same pattern:
 
 ### Causes and consequences
 
-Missing data can arise for many reasons: a field was never collected, data was collected but subsequently lost, or a value was recorded incorrectly and then nullified. Understanding *why* data is missing is important because it determines what treatment is appropriate.
+Missing data can arise for many reasons: a field was never collected, data was
+collected but subsequently lost, or a value was recorded incorrectly and then
+nullified. Understanding *why* data is missing is important because it
+determines what treatment is appropriate.
 
 ### Classifying missingness
 
 There are three standard classifications:
 
-1. **Missing Completely at Random (MCAR)** — missingness is independent of both observed and unobserved data. Deleting missing rows introduces no bias.
-2. **Missing at Random (MAR)** — missingness can be fully accounted for by other observed variables. Imputation using those variables is justified.
-3. **Missing Not at Random (MNAR)** — missingness depends on the missing value itself or on unobserved factors. This is the most problematic case and requires careful modelling.
+1. **Missing Completely at Random (MCAR)** — missingness is independent of both
+   observed and unobserved data. Deleting missing rows introduces no bias.
+2. **Missing at Random (MAR)** — missingness can be fully accounted for by
+   other observed variables. Imputation using those variables is justified.
+3. **Missing Not at Random (MNAR)** — missingness depends on the missing value
+   itself or on unobserved factors. This is the most problematic case and
+   requires careful modelling.
 
-Missingness is often informative in its own right. A blank income field may mean the respondent preferred not to disclose it (biasing a sample toward lower earners). Missing follow-up appointments in a clinical trial may indicate patients who became too ill to return (biasing an efficacy estimate upward). Ignoring these patterns leads to biased analysis.
+Missingness is often informative in its own right. A blank income field may
+mean the respondent preferred not to disclose it (biasing a sample toward lower
+earners). Missing follow-up appointments in a clinical trial may indicate
+patients who became too ill to return (biasing an efficacy estimate upward).
+Ignoring these patterns leads to biased analysis.
 
 ### Practice data
 
-We will use a synthetic student academic records dataset throughout this section. It has enough columns and varied missingness patterns to illustrate the key tools.
+We will use a synthetic student academic records dataset throughout this
+section. It has enough columns and varied missingness patterns to illustrate
+the key tools.
 
 ```{python}
 #| code-fold: true
@@ -179,7 +201,8 @@ print(f"Overall missingness: {total_missing / total_cells * 100:.1f}%")
 
 ### Visualising missingness with `missingno`
 
-The `missingno` library provides four complementary views of missing data patterns.
+The `missingno` library provides four complementary views of missing data
+patterns.
 
 **Bar chart** — shows the count of non-null values per column at a glance.
 
@@ -190,7 +213,8 @@ plt.tight_layout()
 plt.show()
 ```
 
-**Matrix** — plots a random sample of rows; white streaks mark missing entries. Aligned streaks across columns indicate that variables are missing together.
+**Matrix** — plots a random sample of rows; white streaks mark missing entries.
+Aligned streaks across columns indicate that variables are missing together.
 
 ```{python}
 #| fig-cap: "Missing data matrix for 200 randomly sampled rows."
@@ -198,7 +222,9 @@ msno.matrix(students.sample(200, random_state=1), figsize=(11, 4))
 plt.show()
 ```
 
-**Heatmap** — shows the correlation between missingness indicators across pairs of columns. A positive value means the two columns tend to be missing at the same time; a negative value means they are missing at opposite times.
+**Heatmap** — shows the correlation between missingness indicators across pairs
+of columns. A positive value means the two columns tend to be missing at the
+same time; a negative value means they are missing at opposite times.
 
 ```{python}
 #| fig-cap: "Missingness correlation heatmap."
@@ -206,7 +232,8 @@ msno.heatmap(students, figsize=(10, 4))
 plt.show()
 ```
 
-**Dendrogram** — clusters variables by the similarity of their missingness patterns. Variables linked at distance 0 fully predict one another's presence.
+**Dendrogram** — clusters variables by the similarity of their missingness
+patterns. Variables linked at distance 0 fully predict one another's presence.
 
 ```{python}
 #| fig-cap: "Missingness dendrogram."
@@ -215,11 +242,15 @@ plt.tight_layout()
 plt.show()
 ```
 
-From these plots we can see that `scholarship` and `financial_aid` have highly correlated missingness (they were missing together by design), while `thesis_score` and `exit_survey_score` are missing as a structural consequence of student year — a clear MNAR pattern.
+From these plots we can see that `scholarship` and `financial_aid` have highly
+correlated missingness (they were missing together by design), while
+`thesis_score` and `exit_survey_score` are missing as a structural consequence
+of student year — a clear MNAR pattern.
 
 ### Handling missing data
 
-**Deletion** is appropriate when data is MCAR. It is simple but loses information.
+**Deletion** is appropriate when data is MCAR. It is simple but loses
+information.
 
 ```{python}
 # Drop rows with any missing value
@@ -235,9 +266,13 @@ print(f"Original columns:    {students.shape[1]}")
 print(f"After col deletion:  {students_col_dropped.shape[1]}")
 ```
 
-Row deletion eliminates almost every record here because nearly every row has at least one missing field. Column deletion removes any column with even one null. In practice, targeted deletion — dropping only columns or rows above a missingness threshold — is more useful.
+Row deletion eliminates almost every record here because nearly every row has
+at least one missing field. Column deletion removes any column with even one
+null. In practice, targeted deletion — dropping only columns or rows above a
+missingness threshold — is more useful.
 
-**Imputation** replaces missing values with plausible substitutes. The `fillna` method covers the most common strategies:
+**Imputation** replaces missing values with plausible substitutes. The `fillna`
+method covers the most common strategies:
 
 ```{python}
 # Mean imputation for study_hours_wk (MCAR — plausibly random non-response)
@@ -254,16 +289,21 @@ students_imputed.isnull().sum().sum()
 ```
 
 ::: {.callout-important title="Important"}
-Imputation is a deep topic in its own right. The right strategy depends on why data is missing and on the downstream analysis. Always ask: *would imputing this value introduce bias?*
+Imputation is a deep topic in its own right. The right strategy depends on why
+data is missing and on the downstream analysis. Always ask: *would imputing
+this value introduce bias?*
 :::
 
 ## Duplicate Values
 
 ### Why duplicates arise
 
-Well-structured data should have a unique identifier for each observation. Duplicates typically arise from data entry errors, merging datasets without deduplication, or system migrations.
+Well-structured data should have a unique identifier for each observation.
+Duplicates typically arise from data entry errors, merging datasets without
+deduplication, or system migrations.
 
-We create a small customer dataset that contains both exact duplicates and near-duplicates arising from inconsistent capitalisation.
+We create a small customer dataset that contains both exact duplicates and
+near-duplicates arising from inconsistent capitalisation.
 
 ```{python}
 customers = pd.DataFrame({
@@ -294,7 +334,9 @@ print(f"Exact duplicates: {dup_count}  (rows {dup_rows})")
 
 ### Near-duplicates from formatting inconsistency
 
-Exact duplicate detection misses rows that differ only in case or whitespace — `"bob smith"` and `"Bob Smith"` are the same person. Normalising strings first reveals the full extent of the problem.
+Exact duplicate detection misses rows that differ only in case or whitespace —
+`"bob smith"` and `"Bob Smith"` are the same person. Normalising strings first
+reveals the full extent of the problem.
 
 ```{python}
 customers['name']  = customers['name'].str.strip().str.title()
@@ -315,7 +357,9 @@ customers_clean = customers.drop_duplicates()
 print(f"Rows after deduplication: {len(customers_clean)}")
 ```
 
-When we want to maximise information, we can **aggregate** rather than delete. Here we sum spend across duplicate customer IDs and take the first value for all other fields.
+When we want to maximise information, we can **aggregate** rather than delete.
+Here we sum spend across duplicate customer IDs and take the first value for
+all other fields.
 
 ```{python}
 customers_agg = (
@@ -329,7 +373,11 @@ customers_agg
 
 ## Inconsistent Data Types
 
-Pandas infers column types when loading a file, but inference is not always correct. Wrong types break operations silently — averaging a column of numbers stored as strings produces an error, and comparing dates stored as text gives alphabetical rather than chronological ordering. The goal is for every column to have a type that matches its meaning.
+Pandas infers column types when loading a file, but inference is not always
+correct. Wrong types break operations silently — averaging a column of numbers
+stored as strings produces an error, and comparing dates stored as text gives
+alphabetical rather than chronological ordering. The goal is for every column
+to have a type that matches its meaning.
 
 Useful inspection tools: `dtypes`, `info()`, `head()`, and `unique()`.
 
@@ -342,7 +390,8 @@ example_df = pd.DataFrame({
 print(example_df.dtypes)
 ```
 
-All three columns are read as `object` (string). Each needs to be coerced to its correct type.
+All three columns are read as `object` (string). Each needs to be coerced to
+its correct type.
 
 ### Dates stored as strings
 
@@ -374,7 +423,8 @@ print(f"After:  {example_df['in_stock'].dtype}")
 
 ### Mixed date formats
 
-Hand-prepared data often contains dates written in multiple formats within the same column.
+Hand-prepared data often contains dates written in multiple formats within the
+same column.
 
 ```{python}
 mixed_df = pd.DataFrame({
@@ -391,7 +441,11 @@ mixed_df['active'] = (
 mixed_df
 ```
 
-When loading CSVs you can direct pandas to parse date columns at load time with `parse_dates=[...]`, or specify exact formats via `pd.to_datetime(..., format='...')`. Use `errors='coerce'` to turn unparseable entries into `NaT` rather than raising an exception — this makes it easy to spot remaining problems.
+When loading CSVs you can direct pandas to parse date columns at load time with
+`parse_dates=[...]`, or specify exact formats via
+`pd.to_datetime(..., format='...')`. Use `errors='coerce'` to turn unparseable
+entries into `NaT` rather than raising an exception — this makes it easy to
+spot remaining problems.
 
 ```{python}
 # Day-first strings; invalid entries silently become NaT
@@ -404,7 +458,11 @@ pd.to_datetime(
 
 ## Invalid Values
 
-Invalid values are not missing: they appear as real entries but violate domain constraints — an age of 200, a negative count, a temperature of −999 (a common sentinel). They differ from outliers, which may be legitimate extremes. Invalid values are especially dangerous because they do not produce errors; they propagate silently through calculations.
+Invalid values are not missing: they appear as real entries but violate domain
+constraints — an age of 200, a negative count, a temperature of −999 (a common
+sentinel). They differ from outliers, which may be legitimate extremes. Invalid
+values are especially dangerous because they do not produce errors; they
+propagate silently through calculations.
 
 ```{python}
 ages = pd.Series([34, 200, 28, -1, 45, 130])
@@ -412,7 +470,9 @@ invalid_mask = (ages < 0) | (ages > 120)
 print("Invalid entries:\n", ages[invalid_mask])
 ```
 
-To handle them: define rules from a data dictionary or domain knowledge, flag rows using boolean masks, then drop, replace, or convert to `NaN` and treat as missing. Document every rule — the *why* matters as much as the code.
+To handle them: define rules from a data dictionary or domain knowledge, flag
+rows using boolean masks, then drop, replace, or convert to `NaN` and treat as
+missing. Document every rule — the *why* matters as much as the code.
 
 ```{python}
 ages_clean = ages.where(~invalid_mask, other=np.nan)
@@ -421,9 +481,13 @@ print("After cleaning:\n", ages_clean)
 
 ## Labelling Issues
 
-The same category can appear under multiple labels: `"NYC"`, `"nyc"`, and `"New York"` all refer to the same city. Column names can differ across files (`customerID` vs `customer_id`), which silently breaks joins and merges.
+The same category can appear under multiple labels: `"NYC"`, `"nyc"`, and
+`"New York"` all refer to the same city. Column names can differ across files
+(`customerID` vs `customer_id`), which silently breaks joins and merges.
 
-The fix involves: normalising text with `str.strip()`, `str.lower()` / `str.title()`; building a mapping dictionary from raw labels to canonical ones; and applying it with `map()` or `replace()`.
+The fix involves: normalising text with `str.strip()`, `str.lower()` /
+`str.title()`; building a mapping dictionary from raw labels to canonical ones;
+and applying it with `map()` or `replace()`.
 
 ```{python}
 city_raw = pd.Series(["  nyc ", "NYC", "New York", "new york", "N.Y.C."])
@@ -431,11 +495,13 @@ city_clean = city_raw.str.strip().str.title().replace({"Nyc": "New York", "N.Y.C
 city_clean
 ```
 
-For analysis, maintain a single canonical vocabulary per variable and keep a small "codebook" you can reuse across scripts.
+For analysis, maintain a single canonical vocabulary per variable and keep a
+small "codebook" you can reuse across scripts.
 
 ## Data Preparation Workflow
 
-The nine-step guide below is a useful starting point for any new dataset. It is not a rigid recipe — the order and depth of each step depend on the data.
+The nine-step guide below is a useful starting point for any new dataset. It is
+not a rigid recipe — the order and depth of each step depend on the data.
 
 | Step | Action |
 |---|---|
@@ -451,7 +517,9 @@ The nine-step guide below is a useful starting point for any new dataset. It is 
 
 A few principles to keep in mind:
 
-- Thoroughly understand the data *before* touching it. Read the documentation and data dictionaries.
+- Thoroughly understand the data *before* touching it. Read the documentation
+  and data dictionaries.
 - Document every decision — not just *what* you changed but *why*.
-- Being thorough up front saves far more time than fixing a corrupted analysis later.
+- Being thorough up front saves far more time than fixing a corrupted analysis
+  later.
 - Expect to iterate: data preparation is rarely a linear, one-pass process.

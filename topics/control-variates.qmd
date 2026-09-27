@@ -1,0 +1,75 @@
+---
+title: Control Variates
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Control Variates
+
+
+
+
+
+Suppose $X$ is a random variable and that we want to evaluate
+$$
+A=\mathbb{E}[V(X)].
+$$
+We may estimate $A$ by generating $L$ independent samples of $X$ and taking
+$$
+\widehat{A}=\frac{1}{L}\sum_{k=1}^{L}V(X_{k}),\tag{$\star$}
+$$
+in which case the error is of the order
+$$
+\widehat{A}-A\sim \frac{\sigma_{V}}{\sqrt{ L }},\qquad \sigma_{V}^2=\mathbb{E}[(V(X)-A)^2].
+$$
+Thus, the number of samples and the run time needed to achieve a given accuracy
+is inversely proportional to the variance.  
+
+A **control variate** is an easily evaluated random variable $W(X)$ so that
+$B=\mathbb{E}[W(X)]$ is known. If $W(X)$ is correlated with $V(X)$ with
+covariance
+$$
+C_{VW}:=\text{Cov}(V,W) = \mathbb{E}[(V-A)(W-B)],
+$$
+then the random variable 
+$$
+Z=V(X)-\alpha(W(X)-B)\tag{$\star\star$}
+$$
+can have less variance than $V(X)$. This will make the control variate
+estimator
+$$
+\widehat{A}=\frac{1}{L}\sum_{k=1}^{L}(V(X_{k})-\alpha W(X_{k}))+\alpha B,
+$$
+more accurate than the simple $(\star)$ (often dramatically so). We choose
+$\alpha$ to minimize the variance of $Z$ in $(\star \star)$. The variance is
+given by
+$$
+\sigma_{Z}^2 = \sigma_{V}^2-2\alpha C_{V,W}+\alpha^2 \sigma_{W}^2,
+$$
+hence the optimal $\alpha$ is
+$$
+\alpha^* = \frac{C_{VW}}{\sigma^2_{W}},
+$$
+and the corresponding optimal variance is
+$$
+\sigma_{Z}^2 = \sigma_{V}^2 - \frac{C_{VW}^2}{\sigma_{W}^2}=\sigma_{V}^2(1-\rho_{VW}^2),
+$$
+which is written in terms of the correlation coefficient
+$$
+\rho _{VW}=\text{Cor}(V,W)=\frac{C_{VW}}{\sigma_{V}\sigma_{W}}.
+$$
+Thus, the quality of $W$ as a control variate depends on the correlation
+between $V$ and $W$. In practice, it is not likely that one would know the
+optimal $\alpha$ in advance, but it can be estimated frm Monte-Carlo data. From
+the samples $X_{k}$ we can evaluate $V_{k}=V(X_{k})$ and $W_{k}=W(X_{k})$, then
+$$
+\begin{align}
+\widehat{\sigma}_{W}^2  & = \frac{1}{L}\sum_{k=1}^{L}(W_{k}-B)^2  \\
+\widehat{A}^{(1)}  & = \frac{1}{L}\sum_{k=1}^{L}V_{k} \\
+\widehat{C}_{VW} & = \frac{1}{L}\sum_{k=1}^{L}(V_{k}-\widehat{A}^{(1)})(W_{k}-B) \\
+\widehat{\alpha}^*  & = \frac{\widehat{C}_{VW}}{\widehat{\sigma}^2_{W}} \\
+\widehat{A}  & = \widehat{A}^{(1)}-\widehat{\alpha}^* \frac{1}{L}\sum_{k=1}^{L}(W_{k}-B).
+\end{align}
+$$

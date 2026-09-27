@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Groundwater Market Model – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Groundwater Market Model</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#groundwater-market-model" id="toc-groundwater-market-model" class="nav-link active" data-scroll-target="#groundwater-market-model"><span class="header-section-number">1</span> 1 Groundwater Market Model</a></li>
+  <li><a href="#one-period-fixed-parameter-market-model" id="toc-one-period-fixed-parameter-market-model" class="nav-link" data-scroll-target="#one-period-fixed-parameter-market-model"><span class="header-section-number">2</span> 2 One-Period Fixed Parameter Market Model</a></li>
+  <li><a href="#one-period-agent-continuum-model" id="toc-one-period-agent-continuum-model" class="nav-link" data-scroll-target="#one-period-agent-continuum-model"><span class="header-section-number">3</span> 3 One Period Agent Continuum Model</a>
+  <ul class="collapse">
+  <li><a href="#one-period-agent-continuum---productivity" id="toc-one-period-agent-continuum---productivity" class="nav-link" data-scroll-target="#one-period-agent-continuum---productivity"><span class="header-section-number">3.1</span> 3.1 One Period Agent Continuum - Productivity</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="groundwater-market-model" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="groundwater-market-model"><span class="header-section-number">1</span> 1 Groundwater Market Model</h2>
+<p>In Cialenco &amp; Ludkovski [[cialencogroundwatermarketmodel2025]] the authors describe a groundwater market model defined on filtered probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P}, \mathbb{F}:=(\mathcal{F}_{t})_{t=0}^T)\)</span> assuming that <span class="math inline">\(J\)</span> agents trade groundwater among themselves within one basin. Throughout, all processes are assumed <span class="math inline">\(\mathbb{F}\)</span>-adapted and we use boldface to denote vectors <span class="math inline">\(\boldsymbol{\varphi}=(\varphi_{1}, \dots, \varphi_{J})\)</span> and Fraktur letter to denote sums of quantities across agents <span class="math inline">\(\mathfrak{W}=\sum_{j=1}^J W_{j}\)</span>.</p>
+<p>The <strong>profit and loss</strong> of the <span class="math inline">\(j\)</span>-th agent is given by <span class="math display">\[
+L_{j}(t):=\sum_{k=1}^K \overline{f}_{j}^k(t, \varphi_{j}^k)\cdot \varphi_{j}^k(t)+\psi_{j}(t)\cdot p(t),
+\]</span> where: 1. <span class="math inline">\(K\)</span> denotes the <strong>types of goods</strong> that can be produced; 2. <span class="math inline">\(\varphi_{j}^k\)</span> denotes the <strong>units of good</strong> <span class="math inline">\(k\)</span> for individual <span class="math inline">\(j\)</span>; 3. <span class="math inline">\(\overline{f}_{j}^k(t, \varphi_{j}^k)\)</span> is a function (assumed continuous) denoting <strong>net profit in dollars ($) per <span class="math inline">\(\varphi_{j}^k\)</span> units of good <span class="math inline">\(k\)</span> at time <span class="math inline">\(t\)</span></strong>; 4. <span class="math inline">\(\psi_{j}(t)\)</span> denotes the <strong>amount of water traded</strong> in acre-feet (ac-ft) at time <span class="math inline">\(t\)</span> with the convention that <span class="math inline">\(\psi_{j}&gt;0\)</span> means selling and <span class="math inline">\(\psi_{j}&lt;0\)</span> means buying; 5. <span class="math inline">\(p(t)\)</span> denotes the <strong>price of traded water</strong> in $/ac-ft at time <span class="math inline">\(t\)</span>.</p>
+<p>The <strong>agents control</strong> <span class="math inline">\(\pi_{j}(t)\)</span> consists of the type of goods to produce, the quantity of goods to produce, and the amount of water to trade, hence <span class="math display">\[
+\pi_{j}(t):=(\boldsymbol{\varphi}_{j}(t), \psi_{j}(t)),
+\]</span> subject to the additional production constraints <span class="math display">\[
+0 \leq n_{j}^k(t)\leq \varphi_{j}^k(t)\leq N_{j}^k(t)\quad(\forall k,t),
+\]</span> where the lower bound <span class="math inline">\(n_{j}^k(t)\)</span> represents <strong>agricultural constraints</strong>. The processes <span class="math inline">\(\boldsymbol{n}(t)\)</span> and <span class="math inline">\(\boldsymbol{N}(t)\)</span> are taken as inputs to the model and can be either deterministic or stochastic.</p>
+<p>The production of one unit of good <span class="math inline">\(k\)</span> requires <span class="math inline">\(a^k(t)\)</span> ac-ft of water and so we denote the <span class="math inline">\(j\)</span>-th agent’s water needs for producing goods at time <span class="math inline">\(t\)</span> by <span class="math display">\[
+C_{j}(t):=\sum_{k=1}^K\varphi_{j}^k(t)a^k(t).
+\]</span> The water availability for agent <span class="math inline">\(j\)</span> <span class="math inline">\(\{W_{j}(t)\}\)</span> has dynamics described by <span class="math display">\[
+W_{j}(t+1)=W_{j}(t)+\theta_{j}R(t+1)-C_{j}(t)-\psi_{j}(t)\quad (t=0, \dots, T-1),
+\]</span> with <span class="math inline">\(W_{j}(0) = \theta_{j}H(0)\)</span> where: 1. <span class="math inline">\(R(t)\)</span> denotes the water recharge process (primarily from surface precipitation) from <span class="math inline">\(t\)</span> to <span class="math inline">\(t+1\)</span>. 2. <span class="math inline">\(\theta_{j}\)</span> denotes the fixed proportion of recharge for agent <span class="math inline">\(j\)</span> allocated by regulators where we assume <span class="math inline">\(\theta_{j}&gt;0\)</span> such that <span class="math inline">\(\sum_{j}\theta_{j}=1\)</span>.</p>
+<p>The recharge process <span class="math inline">\(R(t)\)</span> is given exogenously and follows a Markovian structure. The dynamics of the water table height <span class="math inline">\(H(t)\)</span> is given by <span class="math display">\[
+H(t+1)=H(t)+R(t+1)-\mathfrak{C}(t)\quad (t=0,1\dots,T-1),
+\]</span> and for simplicity we equate this with available water for all <span class="math inline">\(J\)</span> agents <span class="math display">\[
+H(t)=\mathfrak{W}(t).
+\]</span> We assume that agents cannot use more water than total available to them for that period, namely, imposing the water budget constraints <span class="math display">\[
+-\sum_{i \neq j}W_{i}(t)\leq C_{j}(t)+\psi_{j}(t)\leq W_{j}(t).
+\]</span> The agents have the opportunity for groundwater banking, that is <span class="math display">\[
+C_{j}(t)+\psi_{j}(t)&lt;W_{j}(t),
+\]</span> yielding an inter-temporal shift in water consumption. Moreover, the traded water amounts must balance out via the market clearing condition <span class="math display">\[
+\sum_{j}\psi_{j}(t)=0.
+\]</span> Denote by <span class="math inline">\(\mathscr{S}_{j}\)</span> the set of all feasible controls <span class="math inline">\(\pi_{j}\)</span> of agent <span class="math inline">\(j\)</span> i.e.&nbsp;stochastic processes satisfying (1.3) and (1.4). Considering only Markovian policies <span class="math inline">\(\pi_{j}\in\mathscr{S}_{j}\)</span>, the process <span class="math inline">\((\boldsymbol{W}(t), R(t))\)</span> is Markov and the agents solve <span class="math display">\[
+\sup_{\pi_{j}\in\mathscr{S}_{j}}\mathbb{E}\left[ \sum_{s=t}^T U_{j}(L_{j}(s))\middle|\boldsymbol{W}(t)=\boldsymbol{w}, R(t)=r \right],
+\]</span> where the functions <span class="math inline">\(U_{j}\)</span> account for each agent’s idiosyncratic utility, as well as the temporal discount factor, and are required to be monotone increasing and concave.</p>
+</section>
+<section id="one-period-fixed-parameter-market-model" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="one-period-fixed-parameter-market-model"><span class="header-section-number">2</span> 2 One-Period Fixed Parameter Market Model</h2>
+<p>We consider the one-period model consisting of two agents <span class="math inline">\(j=1,2\)</span> each able to plant two crop types <span class="math inline">\(k=1,2\)</span>. Each agent is looking to maximize profit <span class="math display">\[
+A_{j}(\pi_{j}, \boldsymbol{\pi}_{-j}, p)=\mathbb{E}\left[ U_{j}(L_{j}( \pi_{j}, p) \right]=L_{j}(\pi_{j}, p)
+\]</span> with respect to <span class="math inline">\(\pi_{j}\in\mathscr{S}_{j}\)</span> where we are considering the linear utility function <span class="math inline">\(U_{j}(x)=x\)</span>. We note that in the one-period case we are taking everything as fixed, hence nothing is stochastic and we can drop the expectation. Each agent’s profit is given by <span class="math display">\[
+L_{j}(\pi_{j}, p):=\sum_{k}^{}\overline{f}_{j}^k(\varphi_{j}^k)\cdot \varphi_{j}^k + \varphi_{j}\cdot p
+\]</span> which we rewrite as <span class="math display">\[
+L_{j}(\pi_{j},p)=G_{j}(C_{j})+\varphi_{j}p=G_{j}(C_{j})+(W_{j}-C_{j})p,
+\]</span> where we have some assumed agents good production given her constraints <span class="math inline">\(G_{j}\)</span> and that self-sufficient farmers will treat trading as a bonus or a necessity (i.e.&nbsp;<span class="math inline">\(\varphi_{j}=W_{j}-C_{j}\)</span>). We consider the net profit function <span class="math display">\[
+\overline{f}_{j}^k(\varphi_{j}^k)=f_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k-1}-q_{j}^k\varphi_{j}^k,
+\]</span> for constants <span class="math inline">\(f_{j}^k, q_{j}^k\geq 0\)</span> and <span class="math inline">\(\alpha_{j}^k \in (0,1)\)</span>. The <a href="../topics/lagrange-multipliers.html">Lagrangian</a> for agent <span class="math inline">\(j=1,\dots,J\)</span> assuming no production constraints and for fixed price <span class="math inline">\(p\)</span> becomes <span class="math display">\[
+\mathcal{L}(\boldsymbol{\varphi}_{j}; \lambda_{j}) = \sum_{k}^{}(f_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k}-q_{j}\varphi_{j}^k)+\left( W_{j}-\sum_{k}^{}a^k\varphi_{j}^k \right)p+\lambda_{j}\left( R-\sum_{i,k}^{}a^k \varphi_{i}^k \right),
+\]</span> and the combined first-order conditions for agents <span class="math inline">\(j=1, \dots, J\)</span> are <span class="math display">\[
+\begin{cases}
+f_{j}^k\alpha_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k-1}-q_{j}^k-a^kp\lambda_{j}=0 \\
+R-\sum_{i,k}^{} a^k \varphi_{i}^k = 0,\quad \varphi_{j}^k \geq 0 \,\quad k = 1, \dots, K.
+\end{cases}
+\]</span> Letting <span class="math display">\[
+d_{j}^k:=\left( \frac{a^k}{\alpha_{j}^k f_{j}^k} \right)^{\frac{1}{\alpha_{j}^k-1}} ~~\&amp;~~e_{j}^k:=\frac{q_{j}^k}{a_{k}},
+\]</span> then for any <span class="math inline">\(\lambda_{j}\geq -p - e_{j}^k\)</span> <span class="math display">\[
+\begin{align}
+\varphi_{j}^k &amp;  = (p + \lambda_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k - 1}}d_{j}^k,~~k=1, \dots, K \\
+R  &amp; =  \sum_{k,j}^{}(p+\lambda_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}a^k d_{j}^k
+\end{align}
+\]</span> Clearly, for any <span class="math inline">\(p\geq 0\)</span> there exists <span class="math inline">\(\lambda_{j}\in \mathbb{R}\)</span> for <span class="math inline">\(j = 1, \dots, J\)</span> such that this expression for <span class="math inline">\(R\)</span> holds and so our expression for <span class="math inline">\(\varphi_{j}^k\)</span> is satisfied. Moreover, since the optimization problem at hand is convex with affine constraints, these conditions are sufficient for <span class="math inline">\(\boldsymbol{\varphi}\)</span> to be the joint maximizer.</p>
+<p>For a fixed price <span class="math inline">\(p&gt;0\)</span> announced by the price setter, assuming that agent <span class="math inline">\(j\)</span> has no constraints on available water to buy/sell, her optimal production is given by <span class="math display">\[
+\varphi_{j}^k=(p+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k,
+\]</span> which decreases as a function of <span class="math inline">\(p\)</span>, i.e.&nbsp;lower price will yield larger production and hence larger consumption. To meet these optimal production rates, agent <span class="math inline">\(j\)</span> would buy water if <span class="math display">\[
+W_{j}\leq \sum_{k}^{}a^k \varphi_{j}^k=\sum_{k}^{}a^k(p+e_{j}^k)^{\frac{1}{\alpha_{j}^k - 1}}d_{j}^k.
+\]</span> Due to the monotonicity of the power function, there exists unique price <span class="math inline">\(\tilde{p}_{j}\)</span> such that the above inequality becomes an equality. Thus, for any <span class="math inline">\(p \leq \underline{p}=\min_{j} \tilde{p}_{j}\)</span> no agent would be willing to sell the water. The agent will consume all the allocated water <span class="math inline">\(W_{j}\)</span> and by direct calculations we obtain the optimal production rates <span class="math display">\[
+\varphi_{j}^k=(\tilde{p}_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k.
+\]</span> This implies that the agent <span class="math inline">\(k\)</span> chooses the Lagrange multiplier <span class="math inline">\(\lambda_{j}\)</span> corresponding to the NE such that <span class="math inline">\(p+\lambda_{j}=\tilde{p}_{j}\)</span>, hence <span class="math inline">\(\lambda_{j}&gt;0\)</span> making the agent <span class="math inline">\(j\)</span> artificially boost profit from producing the goods. Similarly, if <span class="math inline">\(p&gt;\overline{p}=\max_{j}\tilde{p}_{j}\)</span> each agent prefers to sell water, thus no water is traded, and the multipliers are chosen so that <span class="math inline">\(\lambda_{j}&lt;0\)</span> which can be interpreted as the agent <span class="math inline">\(j\)</span> produces goods pretending that the water price is the indifferent price.</p>
+<p>From here, to reach the maximum profit for a fixed price <span class="math inline">\(p\)</span>, each agent <span class="math inline">\(j\)</span> should choose <span class="math inline">\(\lambda_{j}=0\)</span>. Taking <span class="math inline">\(\lambda_{j}=0\)</span> for all <span class="math inline">\(j\)</span>, we get the unique price <span class="math inline">\(p^\circ\)</span> that clears the market <span class="math display">\[
+\sum_{j,k}^{}(p^\circ+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}a^kd_{j}^k = R.
+\]</span> Clearly, this price <span class="math inline">\(p^\circ\)</span> is Pareto optimal. We also note that if there were a central planner who would implement the cooperative solution of maximizing the total production revenue of all farmers <span class="math inline">\(\sum_{j}^{}G_{j}(C_{j})\)</span> subject to <span class="math inline">\(\sum_{j}^{}C_{j}=R\)</span> this yields the same f.o.c. <span class="math display">\[
+\varphi_{j}^k = (\lambda^{SO}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k,\quad \sum_{j,k}^{}a^k\varphi_{j}^k=R,
+\]</span> and hence the same optimal production rates <span class="math inline">\(\varphi_{j}^k\)</span> corresponding to <span class="math inline">\(p^\circ\)</span>. Moreover, we can interpret <span class="math inline">\(p^\circ\)</span> as the shadow cost of water (i.e.&nbsp;the Lagrange multiplier for the budget constraint) from the central planners perspective. Note that the social optimum is driven by the total available water <span class="math inline">\(\mathfrak{W}\)</span> and agent specific allocations <span class="math inline">\(W_{j}\)</span> play no role beyond cash transfers within the <em>subsidiary</em> farmers in the community.</p>
+<p>Similar computations and arguments can be extended to the case with nontrivial production bound <span class="math inline">\(n_{j}^k, N_{j}^k\)</span>. For example, assuming that <span class="math inline">\(\sum_{j}^{}\underline{c}_{j}&lt;R&lt;\sum_{j}^{}\overline{c}_{j}\)</span> the social optimum exists and is computed from KKT conditions <span class="math display">\[
+\varphi_{j}^k=n_{j}^k \vee (\lambda^{SO}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k \wedge N_{j}^k,\quad \sum_{j,k}^{}a^k\varphi_{j}^k=R.
+\]</span> Correspondingly, the max profit function <span class="math inline">\(C_{j}(C)\)</span> are computed through <span class="math inline">\(\varphi_{j}^k=n_{j}^k \vee (\lambda_{j}(C)+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k\wedge N_{j}^k\)</span> where <span class="math inline">\(\lambda_{j}(C)\)</span> are the Lagrange multipliers such that <span class="math inline">\(\sum_{j,k}^{}a^k\varphi_{j}^k=R.\)</span></p>
+</section>
+<section id="one-period-agent-continuum-model" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="one-period-agent-continuum-model"><span class="header-section-number">3</span> 3 One Period Agent Continuum Model</h2>
+<p>We now look to modify our one period finite agent model to instead consider a continuum of infinitesimally small agents. We assume that agents in the continuum are characterized by some selection of model parameters, for example <span class="math inline">\(f^k\)</span>, and that all remaining parameters are constant across the continuum for each crop <span class="math inline">\(k\)</span>. On our abstract player space <span class="math inline">\(\mathcal{J}\)</span> there is some measure <span class="math inline">\(\mu\)</span> describing the distribution of aggregate agent behavior. We denote the distribution induced by <span class="math inline">\(\mu\)</span>, of for example by <span class="math inline">\(f^k\)</span>, by <span class="math display">\[
+G_{f}^k(x)=\mu(f^k &lt; x),
+\]</span> with the corresponding density given by <span class="math inline">\(g_{f}^k\)</span> assuming that <span class="math inline">\(G_{f}^k\)</span> is differentiable. We are particularly interested in resulting continuum distribution of optimal agent production <span class="math inline">\(G_{\varphi}^k\)</span> and resulting water consumption <span class="math inline">\(G_{C}{}^k\)</span> given by <span class="math display">\[
+\begin{cases}
+\varphi^k:= n^k \vee \Phi^k \wedge N^k  \\
+\Phi^k := \left( \frac{{pa^k+q^k}}{\alpha^kf^k} \right)^{\frac{1}{\alpha^k-1}}.
+\end{cases}
+\]</span> Intuitively we can think of the continuum case as the target that the finite <span class="math inline">\(J\)</span> player model should tend towards asymptotically as we take <span class="math inline">\(J\to \infty\)</span>. Note that our existing model has <strong>no parameter scaling</strong> and relies on the input parameters to determine the convergence of the final productivity. We attempt to construct a scalable model requiring an in-built dependence on the total number of players <span class="math inline">\(J\)</span> scaling production <span class="math inline">\(\varphi_{j}\to 0\)</span> as <span class="math inline">\(J \to \infty\)</span>.</p>
+<p>To clarify notation we write <span class="math inline">\(^*\varphi_{j}^k\)</span> for our scalable model parameters and we note that our aim is to have <span class="math display">\[
+\lim_{ J \to \infty } ~\sum_{j=1}^{J}~^*\varphi_{j}^k = m^k
+\]</span> where <span class="math inline">\(m^k\)</span> is the population optimal average production for the continuum <span class="math display">\[
+m^k=\int_{\mathcal{J}}^{}{x}~d{G_{\varphi}^k(x)}.
+\]</span> To construct this scalable model we need to consider the following points: (1) the agent characterization model components; (2) the distribution of agents across each characterizing components; (3) the discretization of continuous parameter spaces.</p>
+<section id="one-period-agent-continuum---productivity" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="one-period-agent-continuum---productivity"><span class="header-section-number">3.1</span> 3.1 One Period Agent Continuum - Productivity</h3>
+<p>As a starting point assume that agents are characterized by productivity <span class="math inline">\(f^k\)</span> across the continuum and that all other model parameters are constant across the continuum for each crop <span class="math inline">\(k\)</span>. To simplify our analysis we our expression for <span class="math inline">\(\Phi^k\)</span> as <span class="math display">\[
+\Phi^k=\left( \frac{\alpha^k}{pa^k+q^k} \cdot f^k \right)^{\frac{1}{1-\alpha^k}}=(\xi^{k}\cdot f^k)^{\frac{1}{\beta^k}}=h(f^k),
+\]</span> where we have defined <span class="math display">\[
+h(x) = (\xi^k\cdot x)^{\frac{1}{\beta^k}},\quad\xi(p) = \frac{\alpha}{pa + q}\quad\&amp;\quad \beta={1-\alpha}.
+\]</span> From the non-negativity of all terms and since <span class="math inline">\(\beta^k&lt;1\)</span> we have that <span class="math inline">\(h\)</span> is one-to-one, hence we can write the density of <span class="math inline">\(\Phi^k\)</span> as <span class="math display">\[
+g_{\Phi}^k(y)=g_{f}^k(h^{-1}(y))\cdot \left|  \frac{d}{dy} h^{-1}(y) \right| =g_{f}^k\left( \frac{y^{\beta^k}}{\xi^k} \right)\cdot \frac{\beta^k}{\xi^k} x^{\beta^k-1}.
+\]</span> From this the density of <span class="math inline">\(g_{\varphi}^k\)</span> includes a weighting and point masses due to the production bounds <span class="math inline">\(n^k, N^k\)</span> and so <span class="math display">\[
+g_{\varphi}^k(x)=\begin{cases}
+\mu(\Phi^k \leq n^k) &amp; x=n^k \\
+g_{\Phi}^k(x) &amp; x \in [n^k, N^k]  \\
+\mu(\Phi^k \geq N^k) &amp; x = N^k.
+\end{cases}
+\]</span> Thus the population average optimal production can be computed from the integral <span class="math display">\[
+m^k = \int_\mathcal{J} x g_\varphi^k(x)dx = n^k \mu(\Phi^k\leq n^k) + \int_{n_k}^{N^k}x\Phi^k(x)dx+N^k\mu(\Phi^k\geq N^k).
+\]</span> <strong><em>Note: It should be possible to compute the spread of the distribution of optimal agent production. It should also be simple to verify the result numerically.</em></strong></p>
+<p>We</p>
+<p>We proceed to consider several cases each of which considers <span class="math inline">\(f^k\)</span> to follow a standard non-negative distribution. family such as the continuous uniform, the two-parameter gamma and the scaled two-parameter beta.<br>
+#### 3.1.1 Case 1 - Uniform Productivity</p>
+<p>Assume that <span class="math inline">\(\mu\)</span> induces a <strong>uniform distribution</strong> <span class="math inline">\(f^k\sim\mathcal{U}([A^k, B^k])\)</span> for some <span class="math inline">\(0\leq A^k&lt;B^k\)</span> with <span class="math display">\[
+g_f^k(x)=\frac{1}{B^k-A^k}\mathbb{1}_{\{x\in[A^k, B^k]\}}.
+\]</span> The density of <span class="math inline">\(\Phi^k=h(f^k)\)</span> is given by <span class="math display">\[
+g_\Phi^k(x) = \frac{1}{B^k-A^k}\mathbb{1}_{h^{-1}(x)\in[A^k, B^k]}\cdot \left|\frac{\beta^k x^{\beta^k-1}}{\xi^k}\right|  = \frac{\beta^k x^{\beta^k-1}}{\xi^k(B^k-A^k)}\mathbb{1}_{\{x\in[h(A^k), h(B^k)]\}}.
+\]</span> Noting that in this case productivity is bounded on <span class="math inline">\([A^k, B^k]\)</span> we define <span class="math inline">\(\lambda_1^k := (n^k\vee h(A^k))\wedge h(B^k)\)</span> and <span class="math inline">\(\lambda_2^k := (N^k\wedge h(B^k))\vee h(A^k)\)</span> so that we can write the player average of <span class="math inline">\(\varphi^k\)</span> as <span class="math display">\[
+\begin{aligned}
+m^k &amp; = \int x dG_\varphi(x) = n^k\cdot\mathbb{P}(\Phi^k\leq \lambda_1^k) + \int x\mathbb{1}_{\Phi^k\in[\lambda_1^k, \lambda_2^k]}g_\Phi^k(x)dx + N^k\cdot\mathbb{P}(\Phi^k\geq \lambda_2^k) \\
+&amp; = \frac{n^k(h^{-1}(\lambda_1^k)-A^k)}{B^k-A^k} + \frac{\beta^k[(\lambda_2^k)^{\beta^k+1}-(\lambda_1^k)^{\beta^k+1}]}{\xi^k(B^k-A^k)(\beta^k+1)} + \frac{N^k[B^k-h^{-1}(\lambda_2^k)]}{B^k-A^k}.
+\end{aligned}
+\]</span> From this we can look to construct a finite model for <span class="math inline">\(^*\varphi^k_{j}\)</span>. First considering the case for unbounded production we have that <span class="math display">\[
+\lim_{ J \to \infty } \sum_{j=1}^{J}~^*\varphi_{j}^k=
+\]</span></p>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

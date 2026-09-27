@@ -1,0 +1,53 @@
+---
+title: Long Memory Processes (ARFIMA)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Long Memory Processes (ARFIMA)
+Standard stationary [[arma-processes|ARMA]] processes have ACF decaying
+geometrically ($\rho(h) \sim c\,r^h$), while [[arima-processes|ARIMA]] with
+$d\in\{1,2,\dots\}$ is fully non-stationary. Many empirical series — notably
+absolute/squared asset returns, realized volatility, and river-flow/hydrology
+data — show ACF decaying much more slowly, hyperbolically
+($\rho(h)\sim c\,h^{2d-1}$), a signature of **long memory (long-range
+dependence)** intermediate between short-memory stationarity and unit-root
+non-stationarity.
+
+:::{.definition data-title="Fractional Differencing and ARFIMA(p,d,q)"}
+
+Extend the differencing operator $(1-B)^d$ to non-integer $d$ via the binomial
+series
+$$
+(1-B)^d = \sum_{k=0}^\infty \binom{d}{k}(-B)^k, \qquad \binom{d}{k} = \frac{d(d-1)\cdots(d-k+1)}{k!}.
+$$
+$\{X_t\}$ is $ARFIMA(p,d,q)$ if $\phi(B)(1-B)^dX_t = \theta(B)Z_t$ for a
+stationary invertible $ARMA(p,q)$ driving equation. Key regimes:
+- $d \in (0, 0.5)$: stationary with **long memory** (ACF not summable,
+  $\sum_h|\rho(h)|=\infty$, spectral density diverges at frequency $0$),
+- $d=0$: short memory ($ARMA$),
+- $d \in (-0.5,0)$: stationary "anti-persistent"/intermediate memory,
+- $d \geq 0.5$: non-stationary (nests integer-$d$ [[arima-processes|ARIMA]] at
+  $d=1$).
+
+:::
+
+**Estimation of $d$.** Semi-parametric log-periodogram (Geweke-Porter-Hudak)
+regression using the low-frequency behavior of the
+[[periodogram-and-spectral-estimation|periodogram]]; or parametric (Whittle)
+maximum likelihood jointly with $ARMA$ parameters.
+
+**Connection to volatility.** Squared/absolute return series typically show
+long memory empirically (slowly decaying ACF), motivating both direct
+$ARFIMA$/FIGARCH models of volatility and reduced-form approximations that
+mimic long memory with parsimonious short-memory structure, notably the
+[[har-rv-model|HAR-RV model]] (which stacks daily/weekly/monthly averages
+rather than fractionally differencing).
+
+### References
+- [[arima-processes]]
+- [[har-rv-model]]
+- [[periodogram-and-spectral-estimation]]
+- [[garch-models]]

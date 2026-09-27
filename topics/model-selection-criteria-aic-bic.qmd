@@ -1,0 +1,42 @@
+---
+title: Model Selection Criteria (AIC BIC)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Model Selection Criteria (AIC, BIC)
+Increasing the order of an [[arma-processes|ARMA]],
+[[vector-autoregression-var|VAR]], or [[garch-models|GARCH]] model always
+weakly improves in-sample fit (log-likelihood), so order selection needs a
+penalized criterion trading off fit against parsimony/overfitting.
+
+:::{.definition data-title="Information Criteria"}
+
+For a model with $k$ parameters fit by [[maximum-likelihood-estimation|MLE]] to
+$n$ observations with maximized log-likelihood $\hat\ell$:
+$$
+AIC = -2\hat\ell + 2k, \qquad BIC = -2\hat\ell + k\log n, \qquad AICc = AIC + \frac{2k(k+1)}{n-k-1}.
+$$
+The model minimizing the criterion is selected. $BIC$ penalizes additional
+parameters more heavily for $n>7$ (since $\log n > 2$), so it is **consistent**
+(selects the true order with probability $\to 1$ as $n\to\infty$, when the true
+model is finite-dimensional) while $AIC$ is not consistent but is **efficient**
+(asymptotically minimizes mean-squared prediction error), tending to prefer
+larger models. $AICc$ corrects $AIC$'s small-sample bias.
+
+:::
+
+**Use in practice.** For $ARMA(p,q)$ order selection, fit a grid of $(p,q)$
+pairs and compare $AIC$/$BIC$ (jointly with residual diagnostics like the
+[[ljung-box-test]]); for [[unit-root-tests|ADF test]] lag-augmentation and
+[[vector-autoregression-var|VAR]] lag order, the same criteria are standard.
+Because $AIC$ and $BIC$ can disagree, it is common to report both and prefer
+$BIC$ when parsimony/interpretability matters, $AIC$ when forecast accuracy is
+the priority.
+
+### References
+- [[maximum-likelihood-estimation]]
+- [[arma-processes]]
+- [[ljung-box-test]]

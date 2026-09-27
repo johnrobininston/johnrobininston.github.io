@@ -1,0 +1,433 @@
+---
+title: Lebesgue Integral
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Almost Surely
+For two measurable functions $\varphi, \psi: \Omega \to \mathbb{R}$, we say
+$\varphi$ is **less than or equal to $\psi$ almost everywhere** (a.e.) if
+$\mu(\{\varphi > \psi\}) = 0$. We say $\varphi = \psi$ a.e. if
+$\mu(\varphi \neq \psi) = 0$.
+
+For probability measures, the term **almost surely** (a.s.) is also used. For
+two random variables $X, Y$ on a probability space, we say $X = Y$ a.s. if
+$\mathbb{P}(\{\omega: X(\omega) = Y(\omega)\}) = 1$.
+
+The distinction between a.e. and pointwise equality is crucial: a.e. allows for
+a set of measure zero where the equality fails, which is negligible in measure
+theory.
+
+## Constructing the Lebesgue Integral
+### **Step 1: Lebesgue Integrals for Simple Functions**
+
+:::{.definition data-title="Definition: Simple Function and Integration"}
+
+A **simple function** is a finite linear combination
+$\varphi(\omega) = \sum_{i=1}^n a_i \cdot \mathbf{1}_{A_i}(\omega)$ where
+$a_i \in \mathbb{R}$ and $A_i \in \mathcal{F}$ are disjoint sets with
+$\Omega = \bigcup_{i=1}^n A_i$.
+
+The **integral** of a simple function $\varphi$ with respect to measure $\mu$
+is defined as:
+$$
+\int_\Omega \varphi \, d\mu = \sum_{i=1}^n a_i \cdot \mu(A_i)
+$$
+
+:::
+
+The key insight is that simple functions allow us to reduce integration to a
+finite sum of weighted measures—the integral is essentially a weighted average
+of the measure values.
+
+We denote by $\mathcal{S}$ the collection of all simple functions. This step is
+fundamental because it defines integration in the simplest, most intuitive way
+before extending to more complex functions.
+
+:::{.theorem data-title="Proposition 1.3: Properties of Simple Function Integration"}
+
+For simple functions $\varphi, \psi \in \mathcal{S}$ with respect to a
+$\sigma$-finite measure $\mu$:
+
+1. **Non-negativity:** If $\varphi \geq 0$ a.e., then
+   $\int_\Omega \varphi \, d\mu \geq 0$.
+2. **Homogeneity:** For $a \in \mathbb{R}$,
+   $\int_\Omega a\varphi \, d\mu = a \int_\Omega \varphi \, d\mu$.
+3. **Additivity:**
+   $\int_\Omega (\varphi + \psi) \, d\mu = \int_\Omega \varphi \, d\mu + \int_\Omega \psi \, d\mu$.
+4. **Monotonicity:** If $\varphi \leq \psi$ a.e., then
+   $\int_\Omega \psi \, d\mu \geq \int_\Omega \varphi \, d\mu$.
+5. **Invariance under a.e. equality:** If $\varphi = \psi$ a.e., then
+   $\int_\Omega \psi \, d\mu = \int_\Omega \varphi \, d\mu$.
+6. **Absolute value inequality:**
+   $|\int_\Omega \varphi \, d\mu| \leq \int_\Omega |\varphi| \, d\mu$.
+
+:::
+
+These properties establish that the integral is well-defined (independent of
+representation), linear, and respects the measure-theoretic notion of "almost
+everywhere" equality.
+
+The most important consequence is that integration is **well-defined** despite
+multiple representations of the same simple function—different representations
+yield the same integral value.
+
+### **Step 2: Lebesgue Integrals for Bounded Functions**
+
+:::{.definition data-title="Step 2: Integration of Bounded Functions"}
+
+For a measurable set $E$ with finite measure $\mu(E) < \infty$, consider the
+integration of a bounded function $f$ that vanishes outside $E$. That is, there
+exists $M$ such that $|f(\omega)| \leq M$ for all $\omega \in \Omega$ and
+$f(\omega) = 0$ for $\omega \in E^c$.
+
+:::
+
+The strategy is to approximate bounded functions by simple functions from above
+and below.
+
+Define $\mathcal{S}_E^f$ as the set of simple functions $\varphi$ satisfying
+$\varphi \leq f(\omega)$ on $\Omega$ and $\varphi = 0$ outside $E$. For such
+simple functions:
+
+$$
+\int_E f \, d\mu := \int_\Omega f \cdot \mathbf{1}_E \, d\mu
+$$
+
+The integral is defined as:
+$$
+\int_E f \, d\mu := \sup_{\varphi \in \mathcal{S}_E, \varphi \leq f} \int_\Omega \varphi \, d\mu = \inf_{\varphi \in \mathcal{S}_E, \varphi \geq f} \int_\Omega \psi \, d\mu
+$$
+
+The equality holds because the set of simple functions below $f$ and above $f$
+are ordered appropriately.
+
+**Key insight:** The integral of a bounded function is the supremum of
+integrals of simple functions below it (and equivalently, the infimum of
+integrals of simple functions above it). This "squeezing" between simple
+functions is the central technique for extending the integral.
+
+The integral of bounded functions inherits the same properties as simple
+functions: **non-negativity, linearity, monotonicity, and absolute value
+inequality**.
+
+The crucial verification is that the supremum and infimum definitions coincide.
+This follows from:
+1. **Monotonicity of simple function integration:** If
+   $\varphi \leq f \leq \psi$ for simple functions $\varphi, \psi$, then
+   $\int \varphi \, d\mu \leq \int \psi \, d\mu$.
+2. **Density of simple functions:** For any $\epsilon > 0$, we can find simple
+   functions $\varphi, \psi$ with $\varphi \leq f \leq \psi$ and
+   $\int (\psi - \varphi) \, d\mu < \epsilon$.
+
+This construction ensures the integral is **independent of the choice of
+representation** - two different ways of computing the integral as a
+supremum/infimum yield the same value.
+### **Step 3: Lebesgue Integrals for Nonnegative Functions**
+
+:::{.definition data-title="Step 3: Integration of Nonnegative Functions"}
+
+For a nonnegative measurable function $f: \Omega \to \mathbb{R}_+$, define the
+collection
+$\mathcal{B}_f := \{h \in \mathcal{B} : 0 \leq h(\omega) \leq f(\omega), \omega \in \Omega \text{ and } \mu(\{h > 0\}) < \infty\}$
+of bounded, nonnegative functions dominated by $f$ and vanishing outside a set
+of finite measure.
+
+The integral of $f$ is defined as:
+$$
+\int_\Omega f(\omega) d\mu(\omega) = \sup_{h \in \mathcal{B}_f} \int_\Omega h(\omega) d\mu(\omega)
+$$
+
+:::
+
+This step extends the integral to all nonnegative measurable functions by
+taking the supremum over bounded functions dominated by $f$.
+
+:::{.theorem data-title="Lemma 1: Approximation of Nonnegative Functions"}
+
+Suppose $E_n \uparrow \Omega$ as $n \to \infty$, and $\mu(E_n) < \infty$ for
+every $n$. For every nonnegative function $f$, we have the approximation:
+$$
+\lim_{n \to \infty} \uparrow \int_{E_n} (f(\omega) \wedge n) d\mu(\omega) = \lim_{n \to \infty} \uparrow \int_\Omega (f(\omega) \wedge n) \cdot \mathbf{1}_{E_n}(\omega) d\mu(\omega) = \int_\Omega f(d\omega)
+$$
+
+:::
+
+The key insight is that nonnegative functions can be approximated from below by
+bounded functions vanishing outside sets of finite measure. Taking the limit of
+these bounded approximations yields the integral.
+
+:::{.theorem data-title="Theorem 3: Well-Definedness of the Lebesgue Integral"}
+
+For a measurable function $f$ and a $\sigma$-finite measure $\mu$, the integral
+$\int_\Omega f(\omega) d\mu(\omega)$ is well-defined and satisfies the
+properties 1-6 of Proposition 1.3.
+
+:::
+
+The construction proceeds in four steps—simple functions, bounded functions,
+nonnegative functions, and general functions—each extending the integral to a
+larger class while preserving the fundamental properties. At each step, the
+integral is well-defined because the supremum/infimum definitions are
+independent of the choice of approximating sequences.
+
+### **Step 4: Lebesgue Integrals for General Measurable Functions**
+
+:::{.definition data-title="Step 4: Integration of General Measurable Functions"}
+
+For a general measurable function $f$, consider the decomposition
+$f(\omega)=f^+(\omega) - f^-(\omega)$ where $f^+(\omega):=f(\omega)\vee 0$ and
+$f^-(\omega)=-f(\omega)\vee 0$ and define the integration of $f$
+$$
+\int_{\Omega}f(\omega)d\mu(\omega) = \int_{\Omega}f^+(\omega)d\mu(\omega) - \int_{\Omega}f^-(\omega)d\mu(\omega).
+$$
+This integral is well defined because of step 3 and satisfies the same
+properties.
+
+:::
+
+### Lebesgue Integral Properties
+
+:::{.theorem data-title="Proposition 1.3: Properties of Lebesgue Integration"}
+
+For general measurable functions $\varphi, \psi$ with respect to a
+$\sigma$-finite measure $\mu$:
+1. **Non-negativity:** If $\varphi \geq 0$ a.e., then
+   $\int_\Omega \varphi \, d\mu \geq 0$.
+2. **Homogeneity:** For $a \in \mathbb{R}$,
+   $\int_\Omega a\varphi \, d\mu = a \int_\Omega \varphi \, d\mu$.
+3. **Additivity:**
+   $\int_\Omega (\varphi + \psi) \, d\mu = \int_\Omega \varphi \, d\mu + \int_\Omega \psi \, d\mu$.
+4. **Monotonicity:** If $\varphi \leq \psi$ a.e., then
+   $\int_\Omega \psi \, d\mu \geq \int_\Omega \varphi \, d\mu$.
+5. **Invariance under a.e. equality:** If $\varphi = \psi$ a.e., then
+   $\int_\Omega \psi \, d\mu = \int_\Omega \varphi \, d\mu$.
+6. **Absolute value inequality:**
+   $|\int_\Omega \varphi \, d\mu| \leq \int_\Omega |\varphi| \, d\mu$.
+
+:::
+
+
+## What is an $L^p$ space?
+
+
+:::{.definition data-title="Definition 1.11: $L^p$ Space"}
+
+For a fixed $p \geq 1$, we denote by $L^p$ the collection of measurable
+functions $f$ such that
+$\|f\|_p^p := \int_\Omega |f(\omega)|^p d\mu(\omega) < \infty$. We say $f$ is
+**integrable** if $f \in L^1$.
+
+:::
+
+The $L^p$ spaces are fundamental function spaces in analysis and probability.
+Functions in $L^p$ have $p$-th moment finite, which controls tail behavior. The
+quantity $\|f\|_p$ defines a seminorm on the space of measurable functions.
+
+%%+++%%
+
+## What is Jensen's inequality?
+
+:::{.theorem data-title="Proposition 1.4: Jensen's Inequality"}
+
+For every convex function $\varphi$ and random variable $X$ on a probability
+space $(\Omega, \mathcal{F}, \mathbb{P})$, we have:
+$$
+\varphi(\mathbb{E}[X]) \leq \mathbb{E}[\varphi(X)]
+$$
+
+:::
+
+Jensen's inequality states that the value of a convex function at the expected
+value is less than or equal to the expected value of the function. This is a
+cornerstone inequality in probability theory with applications to variance
+bounds and concentration inequalities.
+
+%%+++%%
+
+## What is Hölder's inequality?
+
+:::{.theorem data-title="Proposition 1.5: Hölder and Cauchy-Schwarz Inequality"}
+
+For a conjugate pair $p, q \in (1, \infty)$ with $1/p + 1/q = 1$ and measurable
+functions $f, g$, we have:
+$$\int_\Omega f(\omega)g(\omega) d\mu(\omega) \leq \|f\|_p \|g\|_q$$
+
+If $p = q = 2$, this is called the **Cauchy-Schwarz inequality**.
+
+:::
+
+Hölder's inequality is a fundamental result controlling products of functions
+in different $L^p$ spaces. It generalizes the Cauchy-Schwarz inequality and is
+essential for proving properties of $L^p$ spaces.
+
+%%+++%%
+
+## What is the Minkowski inequality?
+
+:::{.theorem data-title="Proposition 1.6: Minkowski Inequality"}
+
+For every $p \in [1, \infty)$ and $f, g \in L^p$, we have the triangle
+inequality:
+$$\|f + g\|_p \leq \|f\|_p + \|g\|_p$$
+
+Hence $\|\cdot\|_p$ is a norm on the $L^p$ space.
+
+:::
+
+The Minkowski inequality establishes that $L^p$ is a normed vector space. This
+is crucial for understanding the geometric structure of function spaces used in
+analysis and probability.
+
+%%+++%%
+
+## What does convergence in measure mean?
+
+:::{.definition data-title="Definition 1.12: Convergence in Measure"}
+
+For measurable functions $\{f_n\}, f$ on $(\Omega, \mathcal{F}, \mu)$, we say
+$f_n$ converges to $f$ **in measure** $\mu$ as $n \to \infty$ if, for every
+$\varepsilon > 0$:
+$$\lim_{n \to \infty} \mu(\{\omega \in \Omega : |f_n(\omega) - f(\omega)| > \varepsilon\}) = 0$$
+
+We write $f_n \xrightarrow{\mu} f$. When $\mu$ is a probability measure
+$\mathbb{P}$, we say the sequence of random variables $\{X_n\}$ **converges to
+$X$ in probability** as $n \to \infty$, written
+$X_n \xrightarrow{\mathbb{P}} X$.
+
+:::
+
+Convergence in measure captures the idea that $f_n$ becomes close to $f$ on
+sets of large measure, allowing for deviations on small sets.
+
+%%+++%%
+
+When $\mu(\Omega) < \infty$, convergence almost surely implies convergence in
+measure.
+
+## What is the bounded convergence theorem?
+
+:::{.theorem data-title="Theorem 4: Bounded Convergence Theorem"}
+
+Suppose that for every $n$, a measurable function $f_n$ vanishes on $E^c$
+(where $E$ is a set with $\mu(E) < \infty$), is bounded by a common constant
+$M > 0$ (i.e., $|f_n| \leq M$ a.e.), and converges to a measurable function $f$
+in measure $\mu$, where $f$ vanishes outside $E$. Then the interchange of limit
+and integration is allowed:
+$$
+\lim_{n \to \infty} \int_\Omega f_n d\mu = \lim_{n \to \infty} \int_E f_n d\mu = \int_E f d\mu = \int_\Omega f d\mu
+$$
+
+:::
+
+The bounded convergence theorem allows us to exchange limits and integrals when
+functions are uniformly bounded on a set of finite measure. This is the weakest
+convergence result.
+
+%%+++%%
+
+## What is Fatou's lemma?
+
+:::{.theorem data-title="Lemma 2: Fatou's Lemma"}
+
+For nonnegative measurable functions $f_n : \Omega \to \mathbb{R}_+$,
+$n \geq 1$, we have:
+$$
+\int_\Omega \liminf_{n \to \infty} f_n(\omega) d\mu(\omega) \leq \liminf_{n \to \infty} \int_\Omega f_n(\omega) d\mu(\omega)
+$$
+
+:::
+
+Fatou's lemma provides a lower bound for the integral of the liminf in terms of
+the liminf of the integrals. It is weaker than monotone convergence but applies
+to any nonnegative sequence.
+
+%%+++%%
+
+## What is the monotone convergence theorem?
+
+:::{.theorem data-title="Theorem 5: Monotone Convergence Theorem"}
+
+For any monotonically increasing sequence $\{f_n\}_{n=1}^\infty$ of nonnegative
+measurable functions that converges to $f$ a.e. (i.e.,
+$0 \leq f_n \leq f_{n+1}$ a.e. for every $n$ and
+$\lim_{n \to \infty} \uparrow f_n = f$ a.e.), we have:
+$$
+\lim_{n \to \infty} \uparrow \int_\Omega f_n(\omega) d\mu(\omega) = \int_\Omega f(\omega) d\mu(\omega)
+$$
+
+:::
+
+The monotone convergence theorem is the most powerful convergence result for
+nonnegative functions, requiring no boundedness assumption. It allows
+unrestricted interchange of limits and integration.
+
+%%+++%%
+
+## What is the dominated convergence theorem?
+
+:::{.theorem data-title="Theorem 6: Dominated Convergence Theorem"}
+
+For any sequence $\{f_n\}_{n=1}^\infty$ of measurable functions that converges
+to a measurable function $f$ almost everywhere and is dominated by an
+integrable function $g$ for every $n \geq 1$ (i.e.,
+$|f_n(\omega)| \leq g(\omega)$ a.e. and
+$\int_\Omega g(\omega) d\mu(\omega) < \infty$), we have:
+$$
+\lim_{n \to \infty} \int_\Omega f_n(\omega) d\mu(\omega) = \int_\Omega f(\omega) d\mu(\omega)
+$$
+
+:::
+
+The dominated convergence theorem is the most practical convergence result,
+applying to sequences that converge pointwise almost everywhere and are
+dominated by an integrable bound. It handles both positive and negative
+functions.
+
+%%+++%%
+
+## What is Chebyshev's inequality?
+
+:::{.theorem data-title="Proposition 1.7: Chebyshev's Inequality"}
+
+For any nonnegative function $\varphi$, a Borel set $A$, and a random variable
+$X$, we have:
+$$
+\inf_{y \in A} \varphi(y) \cdot \mathbb{P}(X \in A) \leq \mathbb{E}[\varphi(X); X \in A] \leq \mathbb{E}[\varphi(X)]
+$$
+
+:::
+
+Chebyshev's inequality bounds the probability that a random variable falls in a
+set $A$ in terms of the expected value of functions of that variable. It is
+foundational for concentration inequalities.
+
+%%+++%%
+
+## What is the change of variables formula?
+
+:::{.theorem data-title="Proposition 1.8: Change of Variables"}
+
+For every $S$-valued measurable map $X$ with distribution
+$\mu(·) = \mathbb{P}(X \in ·) = \mathbb{P} \circ X^{-1}(·)$ and for
+$g: (S, \mathcal{S}) \to (\mathbb{R}, \mathcal{R})$ with $g \geq 0$ or
+$\mathbb{E}[|g(X)|] < \infty$, we have the **change-of-variables formula**:
+$$
+\mathbb{E}[g(X)] = \int_\Omega g(X(\omega)) d\mathbb{P}(\omega) = \int_S g(y) d\mu(y)
+$$
+
+:::
+
+The change of variables formula is fundamental for computing expectations: we
+can compute $\mathbb{E}[g(X)]$ either directly from the probability
+distribution on $\Omega$ or by pushing forward to the induced distribution on
+$S$. This allows us to work with the marginal distribution of $X$ rather than
+the full probability space.
+
+%%+++%%
+
+This formula demonstrates that expectations of functions of random variables
+depend only on the distribution of $X$, not on the underlying probability
+space.

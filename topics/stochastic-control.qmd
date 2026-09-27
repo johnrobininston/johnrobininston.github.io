@@ -1,0 +1,118 @@
+---
+title: Stochastic Control
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is Stochastic Control?
+
+Stochastic control is the study of how a decision-maker (a **controller**)
+should act over time to optimize a cumulative objective when the system
+dynamics are driven by randomness. The controller observes the current
+**state** of the system, selects a **control action**, receives a **reward**
+(or incurs a cost), and the state evolves according to a stochastic law — a
+Markov kernel in discrete time, or an SDE in continuous time. The goal is to
+find a **policy** (a mapping from states and times to actions) that maximizes
+the expected cumulative reward, or minimizes expected cost, over a finite or
+infinite horizon.
+
+Stochastic control is the single-agent special case of [[stochastic-games]],
+and the dynamic, uncertain generalization of classical optimal control. Its two
+central theoretical pillars are **dynamic programming** (Bellman's principle)
+in discrete time, and the **Hamilton–Jacobi–Bellman (HJB) equation** in
+continuous time.
+
+## Topics in Stochastic Control
+
+- ***Preliminaries***
+	- [[stochastic-processes]]
+		- [[markov-chains]]
+		- [[martingales]]
+		- [[stopping-times]]
+	- [[stochastic-differential-equations]]
+		- Itô calculus and Itô's lemma
+		- Strong vs. weak solutions
+	- [[measure-theoretic-probability]]
+- ***Markov Decision Processes (Discrete Time)***
+	- [[markov-decision-processes]] - *Formal model: state space, action space,
+   transition kernel, reward, horizon.*
+	- Policies: deterministic, stochastic, Markov, history-dependent
+	- Finite-horizon MDPs and backward induction
+	- Infinite-horizon discounted MDPs
+		- Bellman equations and contraction mapping
+		- Value iteration
+		- Policy iteration
+		- Linear programming formulation
+	- Infinite-horizon average-reward (ergodic) MDPs
+	- Partial observability: POMDPs
+- Continuous-Time Stochastic Control
+	- Controlled SDEs and their well-posedness
+	- Dynamic programming principle (Bellman)
+	- Hamilton–Jacobi–Bellman equation
+		- Verification theorems
+		- Classical vs. viscosity solutions
+	- Linear-Quadratic-Gaussian (LQG) control
+		- Riccati equations
+		- Kalman filter and separation principle
+	- Optimal stopping and free-boundary problems
+		- American options as a canonical example
+	- Singular and impulse control
+- Reinforcement Learning
+	- Model-based vs. model-free RL
+	- Temporal difference learning (TD, Q-learning, SARSA)
+	- Deep Q-networks and function approximation
+	- Policy gradient methods
+		- REINFORCE
+		- Actor–critic architectures
+		- Proximal Policy Optimization (PPO)
+	- Exploration vs. exploitation (multi-armed bandits, UCB, Thompson sampling)
+	- Approximate dynamic programming
+- Risk-Sensitive and Robust Control
+	- Expected utility vs. risk-sensitive criteria
+	- Entropic risk measures and exponential utility
+	- Distributionally robust MDPs
+	- Worst-case (H∞) control
+- Stochastic Control with Constraints
+	- Constrained MDPs and Lagrangian methods
+	- Chance constraints
+	- Safe reinforcement learning
+- Applications
+	- Mathematical finance: portfolio optimization, option pricing, execution
+	- Engineering: robotics, autonomous vehicles, network control
+	- Operations research: inventory, queueing, revenue management
+	- Energy systems: grid control, storage dispatch
+
+%%Add above here%%
+
+
+
+We begin by outlining **Markov Decision Processes (MDP)** for the discrete time
+case. A MDP is defined by the tuple $(S,A,N_{T}, \mu^0,P,r)$ where:
+1. $S$ is the state space,
+2. $A$ is the action space,
+3. $N_{T}>0$ is the total number of time steps,
+4. $\mu_{0}\in\mathscr{P}(S)$ is an initial state distribution,
+5. $r_{n}(s,a)$ is the immediate reward when using action $a$ in state $s$ at
+   time $n$, and
+6. $\mathbb{P}_{n}(s,a)\in\mathscr{P}(S)$ is the probability distribution of
+   the next state when using action $a$ in state $s$ at time $n$.
+
+Denoting the set of times $\mathcal{T}=\{ 0,1,\dots,N_{T} \}$ a **policy** is a
+function
+$$
+\pi:\mathcal{T}\times S \to\mathscr{P}(A),
+$$
+that gives the probability distribution on the actions that can be taken while
+being at a specific state $s$ at a given time. This policy is called **pure**
+when this distribution is a Dirac distribution.
+
+The **cumulative expected reward** is defined as
+$$
+J(\pi)=\mathbb{E}\left[ \sum_{n=0}^{N_{T}}r_{n}(s_{n},a_{n}) \right]
+$$
+where $a_{n}\sim \pi_{n}(s_{n})$, $s_{n+1}\sim \mathbb{P}_{n}(s_{n},a_{n})$ for
+$n \geq 0$, and $s_{0}\sim \mu_{0}$.  
+
+T

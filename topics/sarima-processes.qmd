@@ -1,0 +1,45 @@
+---
+title: SARIMA Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### SARIMA(p,d,q)(P,D,Q)$_s$ Processes
+Many time series (e.g. monthly sales, quarterly GDP) exhibit both ordinary
+(short-lag) dependence and **seasonal** dependence at a fixed periodicity $s$
+(e.g. $s=12$ for monthly data). The **seasonal ARIMA** model extends
+[[arima-processes|ARIMA(p,d,q)]] by adding a seasonal ARMA polynomial acting on
+lag-$s$ multiples.
+
+:::{.definition data-title="SARIMA(p,d,q)(P,D,Q)$_s$"}
+
+$$
+\Phi(B^s)\phi(B)(1-B^s)^D(1-B)^d X_t = \Theta(B^s)\theta(B)Z_t,
+$$
+where:
+- $\phi(B), \theta(B)$ are the ordinary AR/MA polynomials of orders $p,q$,
+- $\Phi(B^s), \Theta(B^s)$ are the seasonal AR/MA polynomials of orders $P,Q$
+  in $B^s$,
+- $(1-B)^d$ is ordinary differencing, $(1-B^s)^D$ is **seasonal differencing**
+  of order $D$ at period $s$.
+
+:::
+
+Seasonal differencing $(1-B^s)X_t = X_t - X_{t-s}$ removes deterministic (or
+slowly evolving) seasonal patterns, analogous to how ordinary differencing
+removes trend.
+
+Model identification proceeds as for $ARMA$, but examining the ACF/PACF at the
+*seasonal* lags $s, 2s, 3s,\dots$ in addition to the low lags, since seasonal
+AR/MA orders manifest there.
+
+An alternative to differencing out seasonality is explicit decomposition into
+trend + seasonal + remainder components — see [[time-series-decomposition]] —
+which is often preferred for interpretability or when the seasonal pattern is
+closer to deterministic than stochastic.
+
+### References
+- [[time-series-analysis]]
+- [[arima-processes]]

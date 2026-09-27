@@ -1,0 +1,174 @@
+---
+title: Limits of Sequences
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Limits of Sequences
+
+## Convergence of Sequences
+
+An important property of [[sequences|sequences]] is **convergence**. If a
+sequences converges to some particular value then we say that value is the
+**limit** and that the sequence is **convergent**. A sequence that is not
+convergent is said to be **divergent**.
+
+Informally, a sequence $\{ x_{n} \}$ has a limit $x$ if the elements of a
+sequence become arbitrarily close to the limit $x$ eventually. Clearly, this
+definition is vague and requires us to specify what we mean by *close* which in
+turn requires us to specifically define *distance* more concretely.
+
+:::{.definition data-title="Standard Euclidean Metric (Distance)"}
+
+The **distance** between two real numbers $a,b\in \mathbb{R}$ is given by the
+**standard Euclidean metric**, i.e. the **modulus** of the difference
+$$
+d(a,b):=\lvert b-a \rvert.
+$$
+
+:::
+
+This is a specific type of [[metric]], a function generalizing the concept of
+distance in sets, studied in [[metric-spaces]]. The most general concept of
+distance however is that of **neighborhoods**, which is a concept we study in
+[[topology]].
+
+:::{.definition data-title="$\epsilon,N$-Convergence of Real Sequences"}
+
+The real sequence $\{ x_{n} \}\subset \mathbb{R}$ is said to converge to limit
+$x \in \mathbb{R}$ if for all $\epsilon>0$ we can find $N$ such that for all
+$n \geq N$ we have $\lvert x_{n}-x \rvert<\epsilon$. More succinctly, we write
+$$
+\forall n>0,\exists N : \forall n \geq N, \lvert x_{n}-x \rvert <\epsilon.
+$$
+
+:::
+
+**Example:** Define real sequence $\{ x_{n} \}_{n \in \mathbb{N}}$ by
+$x_{n}=\frac{1}{n}$. We show that this sequence converges to $x=0$ as
+$n \to \infty$. Consider arbitrary $\epsilon>0$. We wish to find $N$ such that
+$$
+\begin{align}
+\left\lvert  \frac{1}{N}  -0\right\rvert <\epsilon \implies \frac{1}{N}<\epsilon \implies N> \frac{1}{\epsilon}.
+\end{align}
+$$
+Thus we can select $N=\lceil \frac{1}{\epsilon} \rceil+1$ and the proof is
+complete. $\square$
+
+If a sequence $\{ x_{n} \}$ becomes arbitrarily large as $n \to \infty$ we
+write $\lim_{ n \to \infty }x_{n}=\infty$ and say that the sequence
+**diverges** or equivalently, **converges to infinity**. Similarly if
+$\{  x_{n} \}$ becomes arbitrarily negatively large as $n \to \infty$ we write
+$\lim_{ n \to \infty }x_{n}=-\infty$ and say again that the sequence
+**diverges** of equivalently, **converges to negative infinity**.
+
+## Sequence Limit Results
+
+:::{.theorem data-title="Limit Uniqueness"}
+
+The limit $\lim_{ n \to \infty }x_{n}=x$ of a real sequence $\{ x_{n} \}$ is
+unique.
+
+:::
+
+*PROOF:* 
+Assume that there exists $x^{(1)}\neq x^{(2)}$ thus
+$\lvert x^{(1)}-x^{(2)} \rvert=\delta$. By definition $\forall n \geq N$ we
+have that $\lvert x_{n}-x^{(2)} \rvert<\epsilon$
+
+
+:::{.theorem data-title="Real Sequence Limit Results"}
+
+Let $\{ x_{n} \}_{n \in \mathbb{N}}$ and $\{ y_{n} \}_{n \in \mathbb{N}}$ be
+convergence real sequences. Then the following limits exist:
+1. $\lim_{ n \to \infty }(a_{n}\pm b_{n})=\lim_{ n \to \infty }a_{n}\pm \lim_{ n \to \infty }b_{n}$,
+2. $\lim_{ n \to \infty }ca_{n}=c\lim_{ n \to \infty }a_{n}$ for all
+   $c\in \mathbb{R}$,
+3. $\lim_{ n \to \infty }(a_{n}b_{n})=\frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}$,
+4. $\lim_{ n \to \infty } \frac{a_{n}}{b_{n}}= \frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}$
+   given that $\lim_{ n \to \infty }b_{n}neq 0$, and
+5. $\lim_{ n \to \infty }a_{n}^p=(\lim_{ n \to \infty }a_{n})^p$ for all $p>0$
+   and $a_{n>0}$.
+
+:::
+
+*PROOF:*
+
+:::{.theorem data-title="Dominated Sequences"}
+
+For dominated sequence $x_{n}\leq y_{n}$ for all $n>N$ then
+$\lim_{ n \to \infty }x_{n}\leq \lim_{ n \to \infty }y_{n}$.
+
+:::
+
+*PROOF:*
+
+:::{.theorem data-title="Squeeze Theorem"}
+
+For some sequence $\{ z_{n} \}_{n \in \mathbb{N}}$ such that
+$x_{n}\leq z_{n}\leq y_{n}$ for all $n>N$ and
+$\lim_{ n \to \infty }x_{n}=\lim_{ n \to \infty }y_{n}=z$ then $\{ z_{n} \}$ is
+convergent and
+$$
+\lim_{ n \to \infty } z_{n}=z.
+$$
+
+:::
+
+*PROOF:*
+
+:::{.theorem data-title="Limits of Bounded Monotonic Sequences"}
+
+If a sequence is bounded and monotonic then it is convergent.
+
+:::
+
+*PROOF:*
+
+:::{.theorem data-title="Convergence from Subsequences"}
+
+A sequence is convergent if and only if all of its subsequences are convergent.
+
+:::
+
+*PROOF:*
+
+## Rate of Convergence
+
+The **asymptotic error** is a measure of the **rate of convergence** of a
+sequence. Specifically, given a sequence $\{ x_{n} \}$ we are able to compute
+the asymptotic error constant $\lambda$ which provides information on the
+differences between the terms of the sequence and the sequence limit $x$.
+
+:::{.definition data-title="Asymptotic Error Constant"}
+
+ If the limit exists and is finite then we can compute the **asymptotic error
+ constant** $\lambda$ as
+$$
+\lambda=\lim_{ n \to \infty } \frac{{\lVert x_{n+1}-x \rVert }}{\lVert x_{n}-x \rVert ^p},
+$$
+where $p$ is the **order of convergence**.
+
+:::
+
+When $p=1$ we say that the order of convergence is **linear**, when $p=2$ it is
+**quadratic**, $p=3$ cubic etc. More generally when $0<p<1$ we say it is
+**suberlinear** and when $1<p<2$ we say it is **superlinear**. Intuitively, the
+order tells you the polynomial rate at which the errors shrink.
+
+**Example:** Consider the sequences $\{ x_{n} \}$ and $\{ y_{n} \}$ defined by
+$$
+x_{n}=5+\frac{1}{2^n}\quad \&\quad y_{n}=5+\frac{1}{2^{2^n-1}}.
+$$
+We first compute the rate of convergence for $x_n$ as
+$$
+\lambda_{x}=\lim_{ n \to \infty } {\frac{\lvert\frac{1}{2^{n+1}}\rvert}{\lvert\frac{1}{2^n}\rvert}} = \frac{2^n}{2^{n+1}}=\frac{1}{2}
+$$
+with linear order $p=1$.  Next for $y_{n}$ we have that
+$$
+\lambda_{y}=\lim_{ n \to \infty } \frac{{\left\lvert  \frac{1}{2^{2^{n+1}}}  \right\rvert }}{\left\lvert  \frac{1}{2^{2^n}}  \right\rvert }=\frac{2^{2^{n}}}{2^{2^{n+1}}}=\frac{1}{2^2},
+$$
+with quadratic order $p=2$.
+

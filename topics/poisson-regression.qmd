@@ -41,13 +41,19 @@ sns.set_palette('Set2')
 
 ## Poisson Regression
 
-Poisson regression is the GLM for **count data**: responses $Y_i \in \{0, 1, 2, \ldots\}$. A natural model is $Y_i \sim \text{Poisson}(\lambda_i)$, with $\mathbb{E}[Y_i] = \lambda_i > 0$ and — crucially — $\text{Var}(Y_i) = \lambda_i$ (variance equals mean).
+Poisson regression is the GLM for **count data**: responses
+$Y_i \in \{0, 1, 2, \ldots\}$. A natural model is
+$Y_i \sim \text{Poisson}(\lambda_i)$, with $\mathbb{E}[Y_i] = \lambda_i > 0$
+and — crucially — $\text{Var}(Y_i) = \lambda_i$ (variance equals mean).
 
 We use the **log link** to ensure $\lambda_i > 0$:
 
-$$\log \lambda_i = \mathbf{x}_i^\top\boldsymbol{\beta}, \quad \text{so} \quad \lambda_i = e^{\mathbf{x}_i^\top\boldsymbol{\beta}}.$$
+$$
+\log \lambda_i = \mathbf{x}_i^\top\boldsymbol{\beta}, \quad \text{so} \quad \lambda_i = e^{\mathbf{x}_i^\top\boldsymbol{\beta}}.
+$$
 
-Coefficients are interpreted multiplicatively via the **incidence rate ratio (IRR)** $e^{\hat{\beta}_j}$, the Poisson analogue of the odds ratio:
+Coefficients are interpreted multiplicatively via the **incidence rate ratio
+(IRR)** $e^{\hat{\beta}_j}$, the Poisson analogue of the odds ratio:
 
 | Coefficient | Interpretation |
 |---|---|
@@ -158,7 +164,9 @@ plt.show()
 
 ### Application: Daily Bike Rentals
 
-We simulate a dataset of daily bicycle rental counts with weather and calendar predictors — the structure mirrors real bike-sharing data and allows us to verify that the model recovers the known coefficients.
+We simulate a dataset of daily bicycle rental counts with weather and calendar
+predictors — the structure mirrors real bike-sharing data and allows us to
+verify that the model recovers the known coefficients.
 
 ```{python}
 rng_b = np.random.default_rng(2024)
@@ -315,14 +323,17 @@ plt.tight_layout(); plt.show()
 
 ## GLM Diagnostics and Assumptions
 
-In OLS, residuals $e_i = y_i - \hat{y}_i$ have constant variance. In GLMs the **variance of $Y_i$ depends on the mean**, so raw residuals are not comparable across observations. Two standardised alternatives are used:
+In OLS, residuals $e_i = y_i - \hat{y}_i$ have constant variance. In GLMs the
+**variance of $Y_i$ depends on the mean**, so raw residuals are not comparable
+across observations. Two standardised alternatives are used:
 
 | Residual | Formula | Use |
 |---|---|---|
 | **Pearson** | $r_i = (y_i - \hat{\mu}_i)/\sqrt{\hat{V}(\hat{\mu}_i)}$ | Variance-standardised; detect outliers |
 | **Deviance** | $d_i = \text{sign}(y_i - \hat{\mu}_i)\sqrt{2[y_i\log(y_i/\hat{\mu}_i) - (y_i - \hat{\mu}_i)]}$ | Contribution to total deviance |
 
-Under a well-fitting GLM, both should look approximately $\mathcal{N}(0,1)$ with no pattern against fitted values. Core assumptions and how to check them:
+Under a well-fitting GLM, both should look approximately $\mathcal{N}(0,1)$
+with no pattern against fitted values. Core assumptions and how to check them:
 
 | Assumption | How to check |
 |---|---|
@@ -332,15 +343,23 @@ Under a well-fitting GLM, both should look approximately $\mathcal{N}(0,1)$ with
 | **Independence of observations** | Study design; check for clusters or time structure |
 | **No influential observations** | Cook's distance; leverage |
 
-GLMs do **not** require constant error variance or normally distributed errors — the exponential family framework handles both explicitly.
+GLMs do **not** require constant error variance or normally distributed errors
+— the exponential family framework handles both explicitly.
 
 ### Overdispersion in Poisson Regression
 
 ::: {.callout-important title="Overdispersion"}
-**Overdispersion** occurs when the observed variance **exceeds** the variance assumed by the model. For Poisson regression the model assumes $\text{Var}(Y_i) = \lambda_i$. If the true variance is $\phi \lambda_i$ with $\phi > 1$, the data are overdispersed.
+**Overdispersion** occurs when the observed variance **exceeds** the variance
+assumed by the model. For Poisson regression the model assumes
+$\text{Var}(Y_i) = \lambda_i$. If the true variance is $\phi \lambda_i$ with
+$\phi > 1$, the data are overdispersed.
 :::
 
-Overdispersion leads to underestimated standard errors and $p$-values that are too small. Diagnose it with the dispersion statistic $\hat{\phi} = \chi^2_P / (n - p - 1)$, where $\chi^2_P = \sum r_i^2$ is the Pearson chi-squared. Remedies include the **quasi-Poisson** model (which estimates $\phi$ from the data) or the **negative binomial** distribution.
+Overdispersion leads to underestimated standard errors and $p$-values that are
+too small. Diagnose it with the dispersion statistic
+$\hat{\phi} = \chi^2_P / (n - p - 1)$, where $\chi^2_P = \sum r_i^2$ is the
+Pearson chi-squared. Remedies include the **quasi-Poisson** model (which
+estimates $\phi$ from the data) or the **negative binomial** distribution.
 
 ```{python}
 pearson_chi2 = np.sum(
@@ -353,7 +372,8 @@ print("Overdispersed" if phi_hat > 1.5 else "Dispersion OK")
 
 ## Summary
 
-Linear regression is itself a GLM — Normal family, identity link. The framework unifies what might otherwise appear to be separate methods:
+Linear regression is itself a GLM — Normal family, identity link. The framework
+unifies what might otherwise appear to be separate methods:
 
 | Feature | Linear Regression | GLM |
 |---|---|---|

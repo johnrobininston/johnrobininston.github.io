@@ -1,0 +1,49 @@
+---
+title: Independent Mixture Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Independent Mixture Models
+
+Assume that we observe $X_{1}, \dots, X_{n}$ and that each $X_{i}$ is sampled
+from one of $K$ **mixture components** with the components belonging to the
+same parametric family of distributions (e.g. all normal, all Gamma) but with
+different parameters.
+
+To add some mathematical rigor, we can imagine that the process
+$\{ X_{i} \}_{i=1}^n$ is governed by some latent (hidden) state process
+$\{ Z_{i} \}_{i=1}^n$ which takes values in some $K$-dimensional state space
+$\mathcal{Z}:=\{  1, \dots, K \}$. Specifically, the observed process values
+$X_{t}$ are interpreted as emissions from the conditional distribution
+$X_{t}|Z_{t}=k$ for some $k \in \mathcal{Z}$.
+
+The probability that $\{ Z_{i} \}_{i=1}^n$ takes any value in $\mathcal{Z}$ is
+governed by the set of $K$ **mixture weights** $\pi_{k}=\mathbb{P}(Z_{t}=k)$
+which are invariant in time and independent of the current state and all past
+states taken.  
+
+Mathematically, the model can be summarized as
+$$
+\begin{align}
+\mathbb{P}(Z_{t}=k) & = \pi_{k}\\ 
+\mathbb{P}(X_{t}=x_{t}|Z_{t}=k) & = \mathcal{D}(\boldsymbol{\theta}_{k}),
+\end{align}
+$$
+where $\mathcal{D}$ represents the common distribution family and
+$\boldsymbol{\theta}_{k}$ the parameter vector for the family corresponding to
+the $k$-th state.
+## Key Examples
+
+A key example is the Gaussian mixture model whereby we specify that
+$\mathcal{D}=\mathcal{N}$ and then
+$\boldsymbol{\theta}_{k}=(\mu_{k},\sigma_{k})$.  
+
+## Parameter Estimation and System Identification
+
+[[expectation-maximization-algorithm|Expectation maximization (EM)]] is the
+most popular technique used to determine the parameters of a mixture with an a
+priori given number of components. EM is of particular appeal for finite normal
+mixtures where closed-form expressions are possible as we shall see.

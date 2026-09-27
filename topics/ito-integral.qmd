@@ -1,0 +1,58 @@
+---
+title: Itô Integral
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### The Itô Integral
+
+Suppose $X_{t}$ is a diffusion process on the filtered probability space
+$(\Omega, F, (\mathcal{F}_{n}), \mathbb{P})$ and that $f_{t}$ is another
+stochastic process that is adapted to the same filtration. Then the general Itô
+integral is defined as
+$$
+Y_{t}=\int_{0}^t f_{s}dX_{s}.
+$$
+We are primarily interested in Itô integrals with respect to
+[[brownian-motion|Brownian motion]] used in [[ksendal]] which have the integral
+form
+$$
+X_{t+s}-X_{t}=\int_{t}^{t+s} \mu(X_{u}, u)du+\int_{t}^{t+s}\sigma(X_{u},u)dB_{u},
+$$
+where our Itô integral is
+$$
+\int_{t}^{t+s}\sigma(X_{u}, u) dB_{u},
+$$
+where $\sigma(X_{t}, t)$ is some function of time and the diffusion $X_{t}$ and
+$B_{t}$ is [[brownian-motion|Brownian motion]].
+
+The construction of the Itô integral is detailed in
+[[ito-integral-construction]] but is omitted from this note for efficiency. For
+clarity we do note the class of functions for which the Itô integral is defined
+$\mathcal{V}=\mathcal{V}(S,T)$ which contains functions (random variables)
+$f(t,\omega):[0, \infty)\times \Omega \to \mathbb{R}$ such that
+
+1. $(t,\omega)\to f(t,\omega)$ is $\mathcal{B}\times \mathcal{F}$-measurable,
+   where $\mathcal{B}$ denotes the [[borel-sigma-algebra]] on $[0,\infty)$,
+2. $f(t,\omega)$ is $\mathcal{F}_{t}$-adapted, and
+3. $\mathbb{E}\left[ \int_{S}^T f(t,\omega)^2~dt \right]<\infty$.
+### Itô Isometry
+
+The most important result for Itô integrals is the Itô isometry which states
+that for all $f \in \mathcal{V}(S,T)$ we have
+$$
+\mathbb{E}\left[ \left(\int_{S}^T f(t,\omega)~dB_{t}\right)^2 \right]=\mathbb{E}\left[ \int_{S}^T f^2(t,\omega)dt \right].
+$$
+### Itô Integral Properties
+
+Let $f,g\in \mathcal{V}(0,T)$ and let $0 \leq S < U < T$, then the following
+hold:
+
+1. $\int_{S}^T fdB_{t}=\int_{S}^U fdB_{t}+\int_{U}^T fdB_{t}$ for almost all
+   $\omega$,
+2. $\int_{S}^T (cf+g)dB_{t}=c \cdot \int_{S}^T fdB_{t}+\int_{S}^T gdB_{t}$
+   where $c$ is constant for almost all $\omega$,
+3. $\mathbb{E}\left[ \int_{S}^T fdB_{t} \right]=0$
+4. $\int_{S}^T fdB_{t}$ is $\mathcal{F}_{T}$-measurable.

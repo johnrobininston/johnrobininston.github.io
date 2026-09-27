@@ -1,0 +1,52 @@
+---
+title: Measure Space
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+:::{.definition data-title="Measure Space"}
+
+A measure space $(X,\mathcal{M},\mu)$ is a triple consisting of a set $X$, a
+[[sigma-algebra|$\sigma$-algebra]] $\mathcal{M}$ and a [[measure|measure]]
+$\mu$.
+
+:::
+
+A measure space is finite if $\mu(X)<\infty$.
+A measure space is $\sigma$-finite if we can write $X=\cup_{n\in\mathbb{N}}E_n$
+where $\mu(E_n)<\infty$ for all $n$.
+
+:::{.theorem data-title="Measure Space Properties"}
+
+A measure space $(X,\mathcal{M}, \mu)$ has the following useful properties:
+1. If $E,F\in\mathcal{M}, E\subseteq F\implies \mu(E)\leq \mu(F)$
+   *(monotonicity)*
+2. If
+   $\{E_n\}_{n\in\mathbb{N}}\subseteq\mathcal{M}\implies\mu(\cup_{n\in\mathbb{N}}E_n)\leq\sum_{n\in\mathbb{N}}\mu(E_n)$
+   *(countable subadditivity)*
+3. If $\{E_n\}_{n\in\mathbb{N}}\subseteq\mathcal{M}$ and
+   $E_1\subseteq E_2\subseteq ...\implies \mu(\cup_{n\in\mathbb{N}}E_n)=\lim_{n\rightarrow\infty}\mu(E_n)$
+   *(continuity from below)*
+4. If $\{E_n\}_{n\in\mathbb{N}}\subseteq\mathcal{M}$ and
+   $E_1\supseteq E_2\supseteq ...\implies \mu(\cap_{n\in\mathbb{N}}E_n)=\lim_{n\rightarrow\infty}\mu(E_n)$
+   *(continuity from above)*
+
+:::
+
+`\begin{proof}`
+1. Since $E\subseteq F$ we have that
+   $\mu(F)=\mu(E\cup E\setminus F)=\mu(E) +\mu(E\setminus F)\geq \mu(E)$ using
+   both the fact that $\mu(E\setminus F)\geq 0$ and that $E$ and $E\setminus F$
+   are disjoint.
+2. We can define $F_1=E_{1}$ and $F_n=E_n\setminus \cup_{k=1}^{n-1}E_k$ such
+   that $F_n$ are all disjoint and $\cup_{k=1}^nE_k=\cup_{k=1}^nF_k$ for all
+   $n\in\mathbb{N}$. Then
+   $\mu(\cup_{n\in\mathbb{N}}E_n)=\mu(\cup_{n\in\mathbb{N}}F_n)=\sum_{n\in\mathbb{N}}\mu(F_n)\leq\sum_{n\in\mathbb{N}}\mu(E_n)$
+   since $\mu(F_n)\leq\mu(E_n)$ for all $n\in\mathbb{N}$.  
+3. We can define $F_1=E_1$ and $F_n=E_n\setminus E_{n-1}$ such that $F_n$ are
+   all disjoint and $\cup_{k=1}^{n}E_k=\cup_{k=1}^{n}F_k$ for all
+   $n\in\mathbb{N}$. Then
+   $\mu(\cup_{n\in\mathbb{N}} E_n)=\mu(\cup_{n\in\mathbb{N}}F_n)=\sum_{n\in\mathbb{N}}\mu(F_n)=\lim_{n\rightarrow\infty}\sum_{k=1}^n\mu(F_k)=\lim_{n\rightarrow\infty}\mu(E_n)$.  
+`\end{proof}`

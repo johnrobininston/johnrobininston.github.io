@@ -1,0 +1,49 @@
+---
+title: "Jump Process Generator & Backwards Equations"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+A [[jump-processes]] $(X_{t})$ is a homogeneous [[markov-chains|Markov chain]]
+with transition probabilities
+$$
+p_{i,j}(s,t):=\mathbb{P}(X_{t}=j|X_{s}=i)=p_{i,j}(t-s);\quad(s<t),
+$$
+if for all $n>1$, for all $t_{1}<t_{2}<\dots<t_{n}$ and for all
+$j,i_{1}, \dots, i_{n-1}\in S$ holds
+$$
+\mathbb{P}(X(t_{n})j|X(t_{1})=i_{1}, \dots , X(t_{n-1})=i_{n-1})=\mathbb{P}(X(t_{n})=j|X(t_{n-1})=i_{n-1})=p_{i_{n-1},j}(t_{n}-t_{n-1}).
+$$
+In [[jump-process-fundamentals|previous notes]] we constructed a Markov chain
+via holding rates $\{ q_{i},~i \in S \}$ and transition matrix
+$P=(p_{i,j})_{i,j \in S}$ for an imbedded jump chain $(X_{n})$.  
+
+**Assumptions:** We now make the following assumptions:
+
+1. The Markov chain $(X_{t}, t\geq 0)$ is
+   [[jump-process-stability-regularity|regular]] ($S_{\infty}=\infty$); and
+2. All states are [[jump-process-stability-regularity|stable]]
+   ($0<q_{i}<\infty$).
+
+### Integral Equation for Transition Probabilities
+
+:::{.theorem data-title="Integral Equation for Transition Probabilities"}
+
+The following integral equation holds for transition probabilities $p_{i,j}(t)$
+$$
+p_{i,j}(t)=\delta_{i,j}e^{-q_{i}t}+\int_{0}^tq_{i}e^{-q_{i}s}\sum_{k \neq i}p_{i,k}\cdot p_{k,j}(t-s)ds,
+$$
+for all $t>0$ and $i,j \in S$.
+
+:::
+
+To provide an interpretation of this result, the LHS of the equation is
+$\mathbb{P}(X_{t}=j|X_{0}=i)$ and the RHS depends on $(P,(q_{i}))$, parameters
+in construction of the chain.
+### The Generator and Backward Equations
+
+Firstly we note that $P_{t}\searrow I$ when $t \to 0$ since the integral
+$\int_{0}^t$ converges to $0$ when $t \to 0$, hence $P_{t}$ is standard.
+

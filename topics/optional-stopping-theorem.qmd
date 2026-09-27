@@ -1,0 +1,213 @@
+---
+title: Optional Stopping Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is the Optional Stopping Theorem?
+The **Optional Stopping Theorem** (OST) is a fundamental result in probability
+theory that establishes when the expected value of a
+[[martingale-theory|martingale]] at a [[stopping-times|stopping time]] equals
+its initial value.
+
+In informal terms: if you "stop" watching a fair game at a random time
+(determined by the game's history), the expected payout remains fair under
+certain conditions.
+
+:::{.theorem data-title="Optional Stopping Theorem (Bounded Case)"}
+
+Let $(X_n)_{n \geq 0}$ be a martingale with respect to filtration
+$\mathbb{F}=(\mathcal{F}_n)$, and let $\tau$ be a stopping time. Then
+$\mathbb{E}[X_{\tau}] = \mathbb{E}[X_0]$ if one of the following conditions
+holds:
+
+1. **Bounded stopping time**: $\tau$ is almost surely bounded, i.e.,
+   $\tau \leq N$ a.s. for some constant $N$
+2. **Integrable increment**: $\mathbb{E}[\tau] < \infty$ and
+   $|X_{n+1} - X_n| \leq c$ a.s. for some constant $c$
+3. **Uniform integrability**: $(X_{\tau \wedge n})_{n \geq 0}$ is uniformly
+   integrable
+
+:::
+
+## Why Conditions Matter
+Without restrictions, the theorem can fail. A classic counterexample is a
+**gambler's ruin** scenario where a player stops when they either double their
+money or lose everything. Without conditions on $\tau$, the expected value can
+change even if each individual bet is fair.
+
+## Related Concepts
+
+- [[stopping-times|Stopping Times]] - The random times at which we may stop
+- [[martingales|Martingales]] - Fair games to which OST applies
+- Stopped Processes - The martingale $X_{\tau \wedge n}$ formed by stopping
+- [[uniform-integrability|Uniform Integrability]] - A key regularity condition
+
+
+## Technical Development
+
+### Optional Sampling Theorem
+
+The **Optional Sampling Theorem** is closely related to OST and states that a
+subsequence of a [[martingale-theory|submartingale]] defined by stopping times
+is itself a submartingale.
+
+:::{.theorem data-title="Optional Sampling Theorem"}
+
+Let $(X_{n}, \mathcal{F}_{n})$ be a submartingale.
+1. If $T$ is a [[stopping-time|stopping time]] with respect to
+   $(\mathcal{F}_{n})$ and $\mathbb{P}(T \leq N)=1$ for some deterministic $N$,
+   then $\mathbb{E}|X_{T}|< \infty$ and
+   $\mathbb{E}[X_{T}|\mathcal{F}_{0}]\geq X_{0}$.
+2. If $T_{1}\leq T_{2}\leq \dots \leq \infty$ is a sequence of stopping times
+   with respect to $(\mathcal{F}_{n})$ such that
+   $\mathbb{P}(T_{j} \leq N_{j})=1$ for some deterministic sequence
+   $\{  N_{j} \}$ then $(Z_{n}, \mathcal{H}_{n})$ defined by
+   $$
+   Z_{0}=X_{0},~\mathcal{H}_{0}=\mathcal{F}_{0}, Z_{n}=X_{T_{n}}, \mathcal{H}_{n}=\mathcal{F}_{T_{n}},
+   $$
+   is a submartingale.
+
+:::
+
+An alternative formulation of (1) is: (1)' Let $S$ and $T$ be stopping times
+such that $\mathbb{P}(0 \leq S \leq T \leq N)=1$ for some deterministic $N$. If
+$(X_{n}, \mathcal{F}_{n})$ is a submartingale, then
+$\mathbb{E}[X_{T}|\mathcal{F}_{S}]\geq X_{S}$ where equality is reached when
+$(X_{n}, \mathcal{F}_{n})$ is a martingale.
+
+*Proof:*
+
+(1) We wish to show that
+$\mathbb{E}[X_{T}|\mathcal{F}_{m}]\geq X_{T \wedge m},~\forall m \leq N$. From
+martingale results we have that $Z_{n}:= X_{T \wedge n}$ is a submartingale.
+Taking $n = N$ we have that $n \wedge T$ and
+$$
+\mathbb{E}[X_{T}|\mathcal{F}_{m}]\geq  X_{T\wedge m},~~m \leq  N.
+$$
+Let $S$ take values $0 \leq m_{1}< m_{2}<\dots<m_{k}\leq N$.  Then
+$$
+\begin{align}
+\mathbb{E}[X_{T}|\mathcal{F}_{m_{i}}] & \geq  X_{T \wedge m_{i}},~i=1,2,\dots ,k \\ \iff \int_{B}X_{T}d\mathbb{P} & \geq  \int_{B}X_{T \wedge m_{i}}d\mathbb{P}~\forall B \in \mathcal{F}_{m_{i}}.
+\end{align}
+$$
+Let $A \in F_{S}$. By definition,
+$A \cap \{  S=m \} \in \mathcal{F}_{m}~\forall m$. We now show that
+$$
+\mathbb{E}[X_{T}|\mathcal{F}_{S}]\geq  X_{S}\iff \int_{A}X_{T}d\mathbb{P} \geq  \int_{A}X_{S}d\mathbb{P}.
+$$
+For all $m_{i}$, let $B_{i}:= A \cap \{  S=m_{i} \}\in \mathcal{F}_{m_{i}}$.
+Note that $B_i$'s are disjoint and $A=\cup_{i=1}^k B_{i}$. Then
+$$
+\begin{align}
+\int_{A}X_{T}d\mathbb{P} & =\sum_{i=1}^k \int_{B_{i}}X_{T}d\mathbb{P} \\
+ & \geq  \sum_{i=1}^k\int_{B_{i}}X_{T \wedge m_{i}}d\mathbb{P} \\
+ & =\sum_{i=1}^k \int_{A \cap \{  S=m_{i} \}}X_{T \wedge m_{i}}d\mathbb{P} \\
+ &  = \int_{A}X_{s}d\mathbb{P}.
+\end{align}
+$$
+(2) For a sequence of bounded stopping times, show that
+$Z_{0}=X_{0},~\mathcal{H}_{0}=\mathcal{F}_{0}, Z_{n}=X_{T_{n}}, \mathcal{H}_{n}=\mathcal{F}_{T_{n}}$
+is a submartingale. In (1)' take
+$S=0,~T=T_{1}\leq N_{1}:\mathbb{E}[Z_{1}|\mathcal{F}_{0}]\geq X_{0}=Z_{0}$.
+Then by (1)'
+$$
+\mathbb{E}[Z_{n+1}|\mathcal{H}_{n}]=\mathbb{E}[X_{T_{n+1}}|\mathcal{F}_{T_{n}}]\geq  X_{T_{n}}=Z_{n}
+$$
+with $T=T_{n+1}\geq S=T_{n}$, both unbounded.
+$\square$
+
+### Optional Stopping Theorem (Bounded Case)
+
+:::{.theorem data-title="Optional Stopping Theorem"}
+
+Let $(X_{n},\mathcal{F}_{n})$ be a submartingale and $T$ a stopping time with
+respect to $(\mathcal{F}_{n})$ and $\mathbb{P}(T \leq N)=1$ for some
+deterministic $N>0$. Then
+$$
+\mathbb{E}X_{0}\leq  \mathbb{E}X_{T}\leq  \mathbb{E} X_{N}
+$$
+with equality for martingales.
+
+:::
+
+*Proof:*
+Take expectations in (1) above giving 
+$$
+\mathbb{E}X_{0}\leq  \mathbb{E}X_{S}\leq  \mathbb{E}X_{T},\quad \forall S \leq  T \leq  N,
+$$
+taking $T=N$.
+$\square$
+
+### Extending to Unbounded Stopping Times
+
+Optional stopping / sampling theorems for unbounded stopping times require more
+sophisticated regularity conditions involving
+[[uniform-integrability|uniform integrability]].
+
+:::{.theorem data-title="Stopped u.i. submartingale remains u.i."}
+
+Let $(X_{n})$ be a u.i. submartingale. Then, for any stopping time $T$,
+$(Z_{n}:=X_{T \wedge n})_{n}$ is u.i..
+
+:::
+
+`\begin{proof}`
+For the proof please see
+[[files-notes-pstat213bc-lecture-notes-raya-pdf|PSTAT213BC Lecture Notes (Raya), page 98]].
+`\end{proof}`
+
+:::{.theorem data-title="Sufficient conditions for u.i. of a stopped submartingale"}
+
+Let $(X_{n})$ be a submartingale and $T$ a stopping time, so that:
+1. $\mathbb{E}|X_{T}|< \infty$; and
+2. $(X_{n}\mathbb{1}_{T>n})$ is u.i.
+
+then the stopped submartingale $(X_{T \wedge n})_{n}$ is
+[[uniform-integrability|uniformly integrable]].
+
+:::
+
+:::{.theorem data-title="Optional Stopping Theorem for u.i. Submartingale"}
+
+If $(X_{n})$ is a u.i. submartingale, then for any stopping time
+$T \leq \infty$,
+$$
+\mathbb{E}X_{0}\leq  \mathbb{E}X_{T}\leq  \mathbb{E} X_{\infty},
+$$
+where $X_{\infty}=\lim_{n \to \infty}X_{n}$ almost surely and in $L_{1}$.
+
+:::
+
+:::{.theorem data-title="Optional Stopping Theorem for stopped u.i. submartingales"}
+
+If $S \leq T$ are stopping times and $(X_{T\wedge n})$ is a
+[[uniform-integrability|uniformly integrable]] submartingale, then
+$\mathbb{E}X_{S}\leq \mathbb{E}X_{T}$ and
+$$\mathbb{E}[X_{T}|\mathcal{F}_{S}]\geq  X_{S}.$$
+
+:::
+
+:::{.theorem data-title="Sufficient Conditions for Optional Sampling / Stopping Theorem"}
+
+Let $(X_{n}, \mathcal{F}_{n})$ be a submartingale such that
+$\mathbb{E}[\lvert X_{n+1}-X_{n} \rvert|\mathcal{F}_{n}]\leq C$ a.s. for some
+constant $C$ uniformly in $n$. If $\mathbb{E}T<\infty$ then $(X_{T\wedge n})$
+is u.i. and $\mathbb{E}X_{T}\geq \mathbb{E}X_{0}$.
+
+:::
+
+
+## Applications
+
+- [[walds-identity]]
+- Hitting Times of [[random-walks]]
+- [[doob-kolmogorov-inequality]]
+- **Optimal Stopping Problems**: Finding the best time to sell an asset or make
+  a decision
+- **Sequential Analysis**: Hypothesis testing where you stop sampling once
+  evidence is strong enough
+- **Martingale Inequalities**: Proving bounds on martingale behavior
+- **Change-point Detection**: Determining when a process regime changes

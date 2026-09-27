@@ -12,8 +12,10 @@ execute:
 ---
 
 ::: {.callout-important title="Learning Objectives"}
-- Understand the bias-variance tradeoff and why model complexity must be managed.
-- Describe best subset selection, forward stepwise, backward stepwise, and hybrid stepwise algorithms.
+- Understand the bias-variance tradeoff and why model complexity must be
+  managed.
+- Describe best subset selection, forward stepwise, backward stepwise, and
+  hybrid stepwise algorithms.
 - Implement forward and backward stepwise selection in Python.
 - Use AIC, BIC, and adjusted $R^2$ to compare models of different sizes.
 :::
@@ -37,7 +39,8 @@ sns.set_palette('Set2')
 
 ## What Does "Optimal" Model Mean?
 
-There is no single definition of an optimal model — the right criterion depends entirely on the goal.
+There is no single definition of an optimal model — the right criterion depends
+entirely on the goal.
 
 | Goal | What matters | Implication |
 |---|---|---|
@@ -46,22 +49,29 @@ There is no single definition of an optimal model — the right criterion depend
 | **Inference validity** | Correct standard errors | Need well-specified, parsimonious model |
 | **Parsimony** | Fewest predictors possible | Occam's razor; generalisability |
 
-The criterion used to select a model should match the criterion that matters for the problem at hand.
+The criterion used to select a model should match the criterion that matters
+for the problem at hand.
 
 ## The Bias-Variance Tradeoff
 
-For any estimator $\hat{f}$ of $f$, the expected test error at a point $x_0$ decomposes as:
+For any estimator $\hat{f}$ of $f$, the expected test error at a point $x_0$
+decomposes as:
 
-$$\mathbb{E}\!\left[(Y - \hat{f}(x_0))^2\right]
+$$
+\mathbb{E}\!\left[(Y - \hat{f}(x_0))^2\right]
 = \underbrace{\left(\mathbb{E}[\hat{f}(x_0)] - f(x_0)\right)^2}_{\text{Bias}^2}
 + \underbrace{\mathrm{Var}(\hat{f}(x_0))}_{\text{Variance}}
-+ \underbrace{\sigma^2}_{\text{Irreducible error}}.$$
++ \underbrace{\sigma^2}_{\text{Irreducible error}}.
+$$
 
-- **Bias** is the systematic error from using the wrong model class — underfitting.
+- **Bias** is the systematic error from using the wrong model class —
+  underfitting.
 - **Variance** is sensitivity to the particular training sample — overfitting.
 - $\sigma^2$ is noise inherent in the data; it cannot be reduced by any model.
 
-Adding predictors **reduces bias** (the model fits more patterns) but **inflates variance** (the model memorises the training data). The bias-variance tradeoff is managed by choosing model complexity wisely.
+Adding predictors **reduces bias** (the model fits more patterns) but
+**inflates variance** (the model memorises the training data). The
+bias-variance tradeoff is managed by choosing model complexity wisely.
 
 ```{python}
 #| fig-cap: "The bias-variance tradeoff. As model complexity grows, bias falls but variance rises. The optimal complexity minimises total test error."
@@ -116,24 +126,37 @@ plt.show()
 
 ## The Subset Selection Problem
 
-With $p$ candidate predictors there are $2^p$ possible subsets — including the intercept-only model and the full model. Four strategies are used in practice:
+With $p$ candidate predictors there are $2^p$ possible subsets — including the
+intercept-only model and the full model. Four strategies are used in practice:
 
-1. **Best subset** — evaluate all $2^p$ subsets, pick the one minimising an information criterion.
-2. **Forward stepwise** — start from the null model, add one predictor at a time.
-3. **Backward stepwise** — start from the full model, drop one predictor at a time.
+1. **Best subset** — evaluate all $2^p$ subsets, pick the one minimising an
+   information criterion.
+2. **Forward stepwise** — start from the null model, add one predictor at a
+   time.
+3. **Backward stepwise** — start from the full model, drop one predictor at a
+   time.
 4. **Hybrid** — allow both additions and removals at each step.
 
-For $p \leq 20$ or so, best subset selection is feasible. For $p \gtrsim 30$, stepwise or regularization is preferred.
+For $p \leq 20$ or so, best subset selection is feasible. For $p \gtrsim 30$,
+stepwise or regularization is preferred.
 
 ### Best Subset Selection
 
-For each $k = 0, 1, \ldots, p$, best subset selection fits all $\binom{p}{k}$ models with exactly $k$ predictors and saves the best (lowest RSS) as $\mathcal{M}_k$. It then selects among $\mathcal{M}_0, \ldots, \mathcal{M}_p$ using a criterion such as AIC, BIC, or adjusted $R^2$.
+For each $k = 0, 1, \ldots, p$, best subset selection fits all $\binom{p}{k}$
+models with exactly $k$ predictors and saves the best (lowest RSS) as
+$\mathcal{M}_k$. It then selects among $\mathcal{M}_0, \ldots, \mathcal{M}_p$
+using a criterion such as AIC, BIC, or adjusted $R^2$.
 
-The computational cost grows exponentially: $p = 40$ requires $2^{40} \approx 10^{12}$ model fits — completely infeasible. Best subset is the gold standard for small $p$ but stepwise or regularization is needed for moderate to large $p$.
+The computational cost grows exponentially: $p = 40$ requires
+$2^{40} \approx 10^{12}$ model fits — completely infeasible. Best subset is the
+gold standard for small $p$ but stepwise or regularization is needed for
+moderate to large $p$.
 
 ### Forward Stepwise Selection
 
-The forward stepwise algorithm starts with the null model (intercept only) and at each step adds the predictor that most improves a chosen criterion. It stops when no further addition improves the criterion.
+The forward stepwise algorithm starts with the null model (intercept only) and
+at each step adds the predictor that most improves a chosen criterion. It stops
+when no further addition improves the criterion.
 
 ```{python}
 def forward_stepwise(y, X_candidates, criterion='aic'):
@@ -169,7 +192,9 @@ def forward_stepwise(y, X_candidates, criterion='aic'):
 
 ### Backward Stepwise Selection
 
-The backward stepwise algorithm starts with the full model (all $p$ predictors) and at each step drops the predictor whose removal most improves the criterion. It stops when no removal helps.
+The backward stepwise algorithm starts with the full model (all $p$ predictors)
+and at each step drops the predictor whose removal most improves the criterion.
+It stops when no removal helps.
 
 ```{python}
 def backward_stepwise(y, X_candidates, criterion='aic'):
@@ -210,24 +235,40 @@ def backward_stepwise(y, X_candidates, criterion='aic'):
 | Can re-include dropped predictors? | No | No |
 | Can drop previously added predictors? | No | No |
 
-**Hybrid stepwise** alternates between forward and backward passes, allowing both additions and removals at each step. It is more flexible but still greedy — it is not guaranteed to find the globally optimal subset.
+**Hybrid stepwise** alternates between forward and backward passes, allowing
+both additions and removals at each step. It is more flexible but still greedy
+— it is not guaranteed to find the globally optimal subset.
 
 ::: {.callout-important title="Caution"}
-Stepwise selection inflates Type I error and produces overoptimistic $p$-values. It should be used for **model building**, not for inference. Report final model uncertainty honestly.
+Stepwise selection inflates Type I error and produces overoptimistic
+$p$-values. It should be used for **model building**, not for inference. Report
+final model uncertainty honestly.
 :::
 
 ## Information Criteria
 
-RSS always decreases as predictors are added, so using it alone always selects the full model. Information criteria add a **penalty for model complexity** to discourage overfitting.
+RSS always decreases as predictors are added, so using it alone always selects
+the full model. Information criteria add a **penalty for model complexity** to
+discourage overfitting.
 
 ::: {.callout-important title="AIC and BIC"}
-$$\text{AIC} = -2\ell(\hat{\boldsymbol{\beta}}) + 2k$$
-$$\text{BIC} = -2\ell(\hat{\boldsymbol{\beta}}) + k\ln n$$
+$$
+\text{AIC} = -2\ell(\hat{\boldsymbol{\beta}}) + 2k
+$$
+$$
+\text{BIC} = -2\ell(\hat{\boldsymbol{\beta}}) + k\ln n
+$$
 
-where $\ell(\hat{\boldsymbol{\beta}})$ is the maximised log-likelihood, $k$ is the number of free parameters (including $\sigma^2$), and $n$ is the sample size. **Lower is better.**
+where $\ell(\hat{\boldsymbol{\beta}})$ is the maximised log-likelihood, $k$ is
+the number of free parameters (including $\sigma^2$), and $n$ is the sample
+size. **Lower is better.**
 :::
 
-**AIC** (Akaike, 1974) is derived from information-theoretic arguments and estimates out-of-sample prediction error. **BIC** (Schwarz, 1978) is derived from Bayesian arguments and penalises complexity more heavily for large $n$ — for $n \geq 8$, $\ln n > 2$, so BIC penalises each extra parameter harder than AIC and tends to favour sparser models.
+**AIC** (Akaike, 1974) is derived from information-theoretic arguments and
+estimates out-of-sample prediction error. **BIC** (Schwarz, 1978) is derived
+from Bayesian arguments and penalises complexity more heavily for large $n$ —
+for $n \geq 8$, $\ln n > 2$, so BIC penalises each extra parameter harder than
+AIC and tends to favour sparser models.
 
 ```{python}
 #| fig-cap: "AIC vs BIC penalty per parameter as a function of sample size. BIC penalises more heavily and grows without bound as n increases."
@@ -246,15 +287,22 @@ plt.show()
 
 ### Adjusted $R^2$
 
-Ordinary $R^2 = 1 - \text{RSS}/\text{TSS}$ increases whenever a predictor is added, even if irrelevant. **Adjusted $R^2$** corrects for this:
+Ordinary $R^2 = 1 - \text{RSS}/\text{TSS}$ increases whenever a predictor is
+added, even if irrelevant. **Adjusted $R^2$** corrects for this:
 
-$$\bar{R}^2 = 1 - \frac{\text{RSS}/(n - p - 1)}{\text{TSS}/(n-1)}.$$
+$$
+\bar{R}^2 = 1 - \frac{\text{RSS}/(n - p - 1)}{\text{TSS}/(n-1)}.
+$$
 
-Adding a predictor increases $\bar{R}^2$ **only if** it reduces the residual variance more than expected by chance. Asymptotically, maximising $\bar{R}^2$ is equivalent to minimising AIC.
+Adding a predictor increases $\bar{R}^2$ **only if** it reduces the residual
+variance more than expected by chance. Asymptotically, maximising $\bar{R}^2$
+is equivalent to minimising AIC.
 
 ## Comparing Models: California Housing
 
-We illustrate how these criteria behave in practice using the California housing dataset — a regression problem with 8 predictors and over 20,000 observations.
+We illustrate how these criteria behave in practice using the California
+housing dataset — a regression problem with 8 predictors and over 20,000
+observations.
 
 ```{python}
 #| fig-cap: "Model comparison table: AIC and BIC decrease as predictors are added up to a point, then stabilise. Adjusted R² rises then levels off, reflecting diminishing returns."
@@ -287,4 +335,6 @@ cmp = pd.DataFrame(rows)
 print(cmp.to_string(index=False))
 ```
 
-The full model achieves the highest $\bar{R}^2$ and lowest AIC/BIC here because all 8 predictors contribute meaningfully. In noisier datasets with more candidate predictors, the criteria would clearly select a smaller model.
+The full model achieves the highest $\bar{R}^2$ and lowest AIC/BIC here because
+all 8 predictors contribute meaningfully. In noisier datasets with more
+candidate predictors, the criteria would clearly select a smaller model.

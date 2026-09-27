@@ -1,0 +1,49 @@
+---
+title: Black Scholes Model with Dividends
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Intuition
+
+#### Risk-Neutral Pricing Approach
+
+Continuous-time dividend yield is always denotes as $\delta$, meaning that in
+an infinitesimal time interval $[t,t+dt]$, one gets $\delta S_{t}dt$ dividend
+payment from the stock and so stock value decreases as dividends are paid. This
+is equivalent to stating that the number of shares investors hold increases at
+rate $\delta$ continuous in time - i.e. if one is holding 1 share of stock at
+time 0 and the stock has dividend yield $\delta$, then one is actually holding
+$e^{\delta t}$ shares of stock at time $t$.
+
+Clearly, the dividend payment is discounting the price of the stock as time
+goes forward and so has the opposite effect compared to that of the interest
+rate. In the risk-neutral setting we would expect to see
+$\{e^{-(r-\delta)t}S_{t}\}$ as a martingale, so the dynamics under risk-neutral
+measure $\mathbb{Q}$ is
+$$
+dS_{t}=(r-\delta)S_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q}
+$$
+just replacing $r$ with $r-\delta$ in the dynamics.
+#### PDE Approach
+
+The [[black-scholes-pde-bspde]] is given by
+$$
+\partial _{t}u+rx\partial _{x}u+ \frac{1}{2}\sigma^2x^2\partial_{x x}u-ru=0.
+$$
+We do not simply replace $r$ with $r-\delta$ as above and we must be careful to
+understand the meaning of the $r$ values.  
+
+- The term $ru$ comes from the fact that $\{e^{-rt}V_{t}\}$ is a martingale
+  under $\mathbb{Q}$ which still holds in the dividend paying situation hence
+  this **doesn't change**.
+- The term $rx\delta_{x}u$ comes from the Ito formula expansion of $dV_{t}$
+  which is directly related to $dS_{t}$ under $\mathbb{Q}$ hence this **does
+  change**.
+
+The result is the **Black-Scholes Equation with Dividends** 
+$$
+\partial_{t}u+(r-\delta)x\partial_{x}u+ \frac{1}{2}\sigma^2x^2\partial_{x x}u-ru=0.
+$$

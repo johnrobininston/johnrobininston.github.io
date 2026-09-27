@@ -465,7 +465,7 @@ window.Quarto = {
 </ul>
 </div>
 </div>
-<div id="be517b8f" class="cell" data-execution_count="1">
+<div id="051dde58" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Libraries and Styling</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries</span></span>
@@ -529,7 +529,7 @@ window.Quarto = {
 </tbody>
 </table>
 <p>As a concrete example, suppose we want to predict whether a Titanic passenger survived (<span class="math inline">\(Y_i \in \{0,1\}\)</span>) from their characteristics. We want to model <span class="math inline">\(P(Y_i = 1 \mid \mathbf{x}_i)\)</span>, but fitting OLS directly produces predictions outside <span class="math inline">\([0,1]\)</span> and clearly non-normal residuals.</p>
-<div id="dc984766" class="cell" data-execution_count="2">
+<div id="4df79788" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -609,7 +609,7 @@ f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y,
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Identity (Normal)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Logit (Bernoulli)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Log (Poisson)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="39e4e51c" class="cell" data-execution_count="3">
+<div id="d777fb87" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -621,7 +621,7 @@ f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y,
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="e2786e04" class="cell" data-execution_count="4">
+<div id="7a63b8f6" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -633,7 +633,7 @@ f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y,
 </div>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<div id="2a4fe8c2" class="cell" data-execution_count="5">
+<div id="56106d6c" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -686,7 +686,9 @@ f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y,
 </tbody>
 </table>
 <p>It then solves the weighted least squares problem</p>
-<p><span class="math display">\[\boldsymbol{\beta}^{(t+1)} = \left(\mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{X}\right)^{-1} \mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{z}^{(t)},\]</span></p>
+<p><span class="math display">\[
+\boldsymbol{\beta}^{(t+1)} = \left(\mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{X}\right)^{-1} \mathbf{X}^\top \mathbf{W}^{(t)} \mathbf{z}^{(t)},
+\]</span></p>
 <p>repeating until convergence. When applied to the Normal family with the identity link, <span class="math inline">\(w_i = 1\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(z_i = y_i\)</span> — IRLS reduces to a single step of ordinary least squares. <code>statsmodels</code> handles this automatically.</p>
 </section>
 <section id="deviance-and-model-comparison" class="level3">
@@ -701,12 +703,16 @@ f(y \mid \theta, \phi) = \exp\!\left\{\frac{y\theta - b(\theta)}{a(\phi)} + c(y,
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <strong>deviance</strong> of a fitted GLM is: <span class="math display">\[D = 2\left[\ell(\text{saturated model}) - \ell(\hat{\boldsymbol{\beta}})\right],\]</span> where the <strong>saturated model</strong> fits each observation perfectly.</p>
+<p>The <strong>deviance</strong> of a fitted GLM is: <span class="math display">\[
+D = 2\left[\ell(\text{saturated model}) - \ell(\hat{\boldsymbol{\beta}})\right],
+\]</span> where the <strong>saturated model</strong> fits each observation perfectly.</p>
 </div>
 </div>
 <p>Deviance is the GLM analogue of the residual sum of squares. The <strong>null deviance</strong> (<span class="math inline">\(D_0\)</span>) measures fit of the intercept-only model; the <strong>residual deviance</strong> (<span class="math inline">\(D\)</span>) measures fit of the fitted model. A large drop <span class="math inline">\(D_0 - D\)</span> indicates the predictors are useful.</p>
 <p>To test whether <span class="math inline">\(q\)</span> additional parameters significantly improve fit, we use the <strong>likelihood ratio test (LRT)</strong>:</p>
-<p><span class="math display">\[G^2 = D_\text{reduced} - D_\text{full} = 2[\ell(\hat{\boldsymbol{\mu}}_\text{full}) - \ell(\hat{\boldsymbol{\mu}}_\text{reduced})] \;\underset{H_0}{\sim}\; \chi^2_q.\]</span></p>
+<p><span class="math display">\[
+G^2 = D_\text{reduced} - D_\text{full} = 2[\ell(\hat{\boldsymbol{\mu}}_\text{full}) - \ell(\hat{\boldsymbol{\mu}}_\text{reduced})] \;\underset{H_0}{\sim}\; \chi^2_q.
+\]</span></p>
 <p>Reject <span class="math inline">\(H_0: \beta_{p-q+1} = \cdots = \beta_p = 0\)</span> at level <span class="math inline">\(\alpha\)</span> if <span class="math inline">\(G^2 &gt; \chi^2_{q,\,1-\alpha}\)</span>. This is the GLM analogue of the partial <span class="math inline">\(F\)</span>-test; for <span class="math inline">\(q=1\)</span> it is asymptotically equivalent to the Wald <span class="math inline">\(z\)</span>-test but preferred in small samples.</p>
 </section>
 </section>

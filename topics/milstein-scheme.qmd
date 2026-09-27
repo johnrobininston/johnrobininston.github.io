@@ -1,0 +1,49 @@
+---
+title: Milstein Scheme
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Milstein Scheme
+*References: [[higham-kloeden]] §17.4.*
+
+The **Milstein Scheme** is a methodology for simulating continuous time
+stochastic processes with dynamics given by some SDE, improving upon the
+[[euler-maruyama-method]].  
+
+
+improves upon the [[euler-maruyama-method]] approach by considering this Taylor
+expansion, grouping terms based on powers of $\Delta t$ and removing all terms
+with powers $>1$. The general form of the Milstein method is given by
+$$
+\begin{align}
+X_{n+1} = X_{n}+\Delta t f(t_{n}, X_{n}) + \Delta W_{n}g(t_{n},X_{n})+L^1g(t_{n}, X(t_{n}))\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{s}{}~d{W(u)}}~d{W(s)},
+\end{align}
+$$
+where $L_{1}=g \frac{\partial}{\partial x}$ and
+$\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{t}{}~d{W(s)}}~d{W(t)}= \frac{1}{2}((\Delta W_{n})^2 - \Delta t)$.
+Again returning to our simple BSM model example we can write our approximation
+as
+$$
+S_{t+\Delta t}=S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ r+ \frac{1}{2}\left( \sigma^2(\xi^2-1) \right) \right] \right\}.\tag{11}
+$$
+This is again very easy to simulate with a `for` loop:
+
+```
+## Milstein's Algorithm
+S <- S0
+for(i in 2:length(t)){
+	xi <- rnorm(1,0,1)
+	S[i] <- S[i-1]*(1+sigma*h^(1/2)*xi + 
+		h*(r+(1/2)*(sigma^2*(xi^2 - 1))))
+}
+```
+
+For both the Euler-Maruyama method and the Milstein method it seems natural to
+suggest that the approximation improves as $N \to \infty$ and to test this
+presumption we must consider the two standard approached for measuring the
+error $X_{n}\to X(t_{n})$, leading to the concepts of weak and strong
+convergence. This will also allow us to more concretely quantify the
+improvement over the Euler-Maruyama method that the Milstein method provides.

@@ -12,11 +12,14 @@ execute:
 ---
 
 ::: {.callout-important title="Learning Objectives"}
-- Understand the limitations of subset selection and why they motivate regularization.
+- Understand the limitations of subset selection and why they motivate
+  regularization.
 - Describe $k$-fold cross-validation and the LOOCV shortcut via the hat matrix.
-- Define and compare Ridge ($L_2$), Lasso ($L_1$), and Elastic Net regularization.
+- Define and compare Ridge ($L_2$), Lasso ($L_1$), and Elastic Net
+  regularization.
 - Understand the geometric intuition for why Lasso induces sparsity.
-- Implement regularized regression in Python with cross-validated hyperparameter selection.
+- Implement regularized regression in Python with cross-validated
+  hyperparameter selection.
 :::
 
 ```{python}
@@ -43,7 +46,8 @@ sns.set_palette('Set2')
 
 ## Limitations of Subset Selection
 
-Subset selection methods are powerful, but carry important limitations that become severe as $p$ grows.
+Subset selection methods are powerful, but carry important limitations that
+become severe as $p$ grows.
 
 | Limitation | Detail |
 |---|---|
@@ -53,31 +57,50 @@ Subset selection methods are powerful, but carry important limitations that beco
 | **Instability** | Small changes in data can produce very different selected subsets |
 | **Fails when $p \geq n$** | The full model cannot be estimated when predictors outnumber observations |
 
-**Regularization** overcomes all of these: it is computationally cheap, globally optimised, produces continuous coefficient values, is stable, and works when $p \gg n$.
+**Regularization** overcomes all of these: it is computationally cheap,
+globally optimised, produces continuous coefficient values, is stable, and
+works when $p \gg n$.
 
 ## Cross-Validation
 
 ### Why cross-validate?
 
-RSS, $R^2$, and the likelihood are computed on the **training data** — the same data used to fit the model. The model has already seen these observations, so in-sample fit is optimistic. **Cross-validation** (CV) evaluates error on observations the model has *not* seen during fitting, giving an honest estimate of **out-of-sample (generalisation) error**.
+RSS, $R^2$, and the likelihood are computed on the **training data** — the same
+data used to fit the model. The model has already seen these observations, so
+in-sample fit is optimistic. **Cross-validation** (CV) evaluates error on
+observations the model has *not* seen during fitting, giving an honest estimate
+of **out-of-sample (generalisation) error**.
 
 ::: {.callout-important title="$k$-Fold Cross-Validation"}
 1. Randomly partition the $n$ observations into $k$ roughly equal **folds**.
-2. For each fold $j = 1, \ldots, k$: fit the model on the other $k-1$ folds, predict on fold $j$.
+2. For each fold $j = 1, \ldots, k$: fit the model on the other $k-1$ folds,
+   predict on fold $j$.
 3. Report the average test error:
-$$\text{CV}_{(k)} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i^{(-\kappa(i))})^2,$$
-where $\hat{y}_i^{(-\kappa(i))}$ is the prediction for observation $i$ from the model fit without its fold.
+$$
+\text{CV}_{(k)} = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i^{(-\kappa(i))})^2,
+$$
+where $\hat{y}_i^{(-\kappa(i))}$ is the prediction for observation $i$ from the
+model fit without its fold.
 :::
 
-**$k = 5$ or $k = 10$** are standard choices. **Leave-one-out CV (LOOCV)** sets $k = n$ — it has low bias but high variance and is computationally expensive for most methods.
+**$k = 5$ or $k = 10$** are standard choices. **Leave-one-out CV (LOOCV)** sets
+$k = n$ — it has low bias but high variance and is computationally expensive
+for most methods.
 
 ### The LOOCV shortcut for OLS
 
-For ordinary least squares there is a closed-form shortcut that avoids refitting $n$ times:
+For ordinary least squares there is a closed-form shortcut that avoids
+refitting $n$ times:
 
-$$\text{LOOCV} = \frac{1}{n}\sum_{i=1}^n \left(\frac{e_i}{1 - h_{ii}}\right)^2,$$
+$$
+\text{LOOCV} = \frac{1}{n}\sum_{i=1}^n \left(\frac{e_i}{1 - h_{ii}}\right)^2,
+$$
 
-where $e_i = y_i - \hat{y}_i$ is the ordinary residual and $h_{ii}$ is the $i$-th diagonal of the hat matrix $\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$. Observations with high leverage $h_{ii}$ have large influence on the LOOCV score. This formula is computationally free once $\mathbf{H}$ is computed.
+where $e_i = y_i - \hat{y}_i$ is the ordinary residual and $h_{ii}$ is the
+$i$-th diagonal of the hat matrix
+$\mathbf{H} = \mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$.
+Observations with high leverage $h_{ii}$ have large influence on the LOOCV
+score. This formula is computationally free once $\mathbf{H}$ is computed.
 
 ```{python}
 #| output-location: fragment
@@ -110,24 +133,40 @@ for name, X_sub in feature_sets.items():
     print(f"{name:<30} {-scores.mean():>16.4f}")
 ```
 
-Cross-validation is also our main tool for **choosing the regularization hyperparameter** $\lambda$.
+Cross-validation is also our main tool for **choosing the regularization
+hyperparameter** $\lambda$.
 
 ## Why Regularize?
 
-When $p$ is large relative to $n$, or when predictors are highly correlated, $(\mathbf{X}^\top\mathbf{X})^{-1}$ becomes ill-conditioned. OLS coefficients have **high variance** — tiny changes in the data lead to large changes in $\hat{\boldsymbol{\beta}}$.
+When $p$ is large relative to $n$, or when predictors are highly correlated,
+$(\mathbf{X}^\top\mathbf{X})^{-1}$ becomes ill-conditioned. OLS coefficients
+have **high variance** — tiny changes in the data lead to large changes in
+$\hat{\boldsymbol{\beta}}$.
 
-Regularization adds a **penalty on the size of $\boldsymbol{\beta}$** to the least squares objective, trading a little bias for a large reduction in variance. The two equivalent formulations are:
+Regularization adds a **penalty on the size of $\boldsymbol{\beta}$** to the
+least squares objective, trading a little bias for a large reduction in
+variance. The two equivalent formulations are:
 
-- **Penalty form**: $\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|_q$
-- **Constraint form**: $\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 \;\text{ subject to }\; \|\boldsymbol{\beta}\|_q \leq t$
+- **Penalty form**:
+  $\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|_q$
+- **Constraint form**:
+  $\min_{\boldsymbol{\beta}}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 \;\text{ subject to }\; \|\boldsymbol{\beta}\|_q \leq t$
 
-For every $\lambda \geq 0$ there is a corresponding budget $t \geq 0$ that produces the same solution. At $\lambda = 0$ the OLS solution is recovered; at $\lambda \to \infty$ all coefficients are driven to zero.
+For every $\lambda \geq 0$ there is a corresponding budget $t \geq 0$ that
+produces the same solution. At $\lambda = 0$ the OLS solution is recovered; at
+$\lambda \to \infty$ all coefficients are driven to zero.
 
 ### Why standardise predictors?
 
-The penalty $\lambda \sum_j \beta_j^2$ penalises coefficients by their magnitude. If predictors are measured in very different units, the penalty falls disproportionately on the predictors with larger natural scales. The fix is to standardise every predictor to zero mean and unit variance before fitting:
+The penalty $\lambda \sum_j \beta_j^2$ penalises coefficients by their
+magnitude. If predictors are measured in very different units, the penalty
+falls disproportionately on the predictors with larger natural scales. The fix
+is to standardise every predictor to zero mean and unit variance before
+fitting:
 
-$$X_j \leftarrow \frac{X_j - \bar{X}_j}{s_j}.$$
+$$
+X_j \leftarrow \frac{X_j - \bar{X}_j}{s_j}.
+$$
 
 The intercept $\beta_0$ is **never penalised**.
 
@@ -137,10 +176,17 @@ The intercept $\beta_0$ is **never penalised**.
 $$\hat{\boldsymbol{\beta}}_{\text{ridge}} = \underset{\boldsymbol{\beta}}{\arg\min}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\|\boldsymbol{\beta}\|^2_2.$$
 
 Closed-form solution:
-$$\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}.$$
+$$
+\hat{\boldsymbol{\beta}}_{\text{ridge}} = (\mathbf{X}^\top\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top\mathbf{y}.
+$$
 :::
 
-Adding $\lambda\mathbf{I}$ shifts every eigenvalue of $\mathbf{X}^\top\mathbf{X}$ up by $\lambda$, making the matrix invertible for any $\lambda > 0$ regardless of multicollinearity. Ridge shrinks all coefficients **toward zero** but **never sets them exactly to zero** — all predictors are retained. It is particularly useful when predictors are correlated.
+Adding $\lambda\mathbf{I}$ shifts every eigenvalue of
+$\mathbf{X}^\top\mathbf{X}$ up by $\lambda$, making the matrix invertible for
+any $\lambda > 0$ regardless of multicollinearity. Ridge shrinks all
+coefficients **toward zero** but **never sets them exactly to zero** — all
+predictors are retained. It is particularly useful when predictors are
+correlated.
 
 ## Lasso ($L_1$ Penalty)
 
@@ -150,11 +196,19 @@ $$\hat{\boldsymbol{\beta}}_{\text{lasso}} = \underset{\boldsymbol{\beta}}{\arg\m
 where $\|\boldsymbol{\beta}\|_1 = \sum_j |\beta_j|$.
 :::
 
-The $L_1$ penalty induces **sparsity**: for large enough $\lambda$, some $\hat{\beta}_j$ are set **exactly to zero**, so Lasso simultaneously shrinks and selects predictors. There is no closed-form solution — fitting requires coordinate descent.
+The $L_1$ penalty induces **sparsity**: for large enough $\lambda$, some
+$\hat{\beta}_j$ are set **exactly to zero**, so Lasso simultaneously shrinks
+and selects predictors. There is no closed-form solution — fitting requires
+coordinate descent.
 
 ### Why does sparsity happen?
 
-In the constraint form, the $L_1$ constraint region is a **diamond** with sharp corners on the coordinate axes. The RSS contours are ellipses expanding outward from the OLS solution. As the constraint tightens, the first contact between the ellipse and the diamond most often occurs at a **corner** — where one or more $\beta_j = 0$ exactly. The $L_2$ constraint region (a smooth sphere) has no corners, which is why Ridge never produces exact zeros.
+In the constraint form, the $L_1$ constraint region is a **diamond** with sharp
+corners on the coordinate axes. The RSS contours are ellipses expanding outward
+from the OLS solution. As the constraint tightens, the first contact between
+the ellipse and the diamond most often occurs at a **corner** — where one or
+more $\beta_j = 0$ exactly. The $L_2$ constraint region (a smooth sphere) has
+no corners, which is why Ridge never produces exact zeros.
 
 ```{python}
 #| fig-cap: "Constraint regions for Ridge (L₂ ball, left) and Lasso (L₁ diamond, right). RSS contours are shown as ellipses centred at the OLS solution. The Lasso solution touches a corner, setting β₁ = 0 exactly."
@@ -205,10 +259,13 @@ plt.show()
 ::: {.callout-important title="Elastic Net"}
 $$\hat{\boldsymbol{\beta}}_{\text{EN}} = \underset{\boldsymbol{\beta}}{\arg\min}\; \|\mathbf{y} - \mathbf{X}\boldsymbol{\beta}\|^2_2 + \lambda\!\left[\alpha\|\boldsymbol{\beta}\|_1 + \frac{1-\alpha}{2}\|\boldsymbol{\beta}\|^2_2\right],$$
 
-where $\alpha \in [0, 1]$ controls the mix: $\alpha = 1$ is pure Lasso, $\alpha = 0$ is pure Ridge.
+where $\alpha \in [0, 1]$ controls the mix: $\alpha = 1$ is pure Lasso,
+$\alpha = 0$ is pure Ridge.
 :::
 
-Elastic Net combines the sparsity of Lasso with the grouping property of Ridge. When predictors are correlated, Lasso tends to arbitrarily select one from a group; Elastic Net tends to select the group together.
+Elastic Net combines the sparsity of Lasso with the grouping property of Ridge.
+When predictors are correlated, Lasso tends to arbitrarily select one from a
+group; Elastic Net tends to select the group together.
 
 ### Practical guidance
 
@@ -225,7 +282,9 @@ Elastic Net combines the sparsity of Lasso with the grouping property of Ridge. 
 
 ## Regularization Paths
 
-The regularization path shows how coefficients change as $\lambda$ increases. Ridge shrinks all coefficients smoothly; Lasso sets some to exactly zero at a specific threshold.
+The regularization path shows how coefficients change as $\lambda$ increases.
+Ridge shrinks all coefficients smoothly; Lasso sets some to exactly zero at a
+specific threshold.
 
 ```{python}
 #| fig-cap: "Coefficient paths for Ridge (left) and Lasso (right) on California housing. Ridge shrinks all coefficients smoothly; Lasso zeroes some out, performing variable selection. The dashed red line marks the CV-selected λ."
@@ -264,7 +323,10 @@ plt.show()
 
 ## Implementation: Diabetes Dataset
 
-We demonstrate the full workflow on `sklearn`'s diabetes dataset: $n = 442$ patients, $p = 10$ predictors (age, sex, BMI, blood pressure, and six serum measurements), and a continuous response measuring disease progression one year after baseline. The predictors are already mean-centred and scaled.
+We demonstrate the full workflow on `sklearn`'s diabetes dataset: $n = 442$
+patients, $p = 10$ predictors (age, sex, BMI, blood pressure, and six serum
+measurements), and a continuous response measuring disease progression one year
+after baseline. The predictors are already mean-centred and scaled.
 
 ### Train-test split
 
@@ -331,4 +393,7 @@ for name, mdl in models.items():
     print(f"{name:<28} {mse:>10.2f} {n_feat:>12}")
 ```
 
-CV-tuned Ridge and Lasso consistently outperform the arbitrary $\alpha = 1$ choice and are competitive with OLS on a problem where all 10 predictors are informative. On datasets where only a few predictors are truly relevant, Lasso's variable selection advantage becomes more pronounced.
+CV-tuned Ridge and Lasso consistently outperform the arbitrary $\alpha = 1$
+choice and are competitive with OLS on a problem where all 10 predictors are
+informative. On datasets where only a few predictors are truly relevant,
+Lasso's variable selection advantage becomes more pronounced.

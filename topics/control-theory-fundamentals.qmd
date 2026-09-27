@@ -1,0 +1,93 @@
+---
+title: Control Theory Fundamentals
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Control Theory Fundamentals
+
+## What is Control Theory?
+
+In [[control-theory]] we are generally looking to optimize some controlled
+deterministic dynamic system described by [[partial-differential-equations]]
+relative to some specified payoff functional. We note the distinction from
+[[game-theory-notes]] in that control theory is an individual player problem
+without the complications of competing strategies. Further, this is related to
+[[stochastic-control-theory]] in which the system dynamics have random
+components and thus we aim to optimize an **expected payoff**.  
+
+## General Problem Formulation
+
+In control theory we define the set of **admissible controls** containing all
+control inputs that satisfy the constraints of the given problem.  
+
+:::{.definition data-title="Control Functional"}
+
+A **control function** $\alpha(t)$ maps time $t \in[0,+\infty)$ to a set $A$ of
+**admissible controls**.
+
+:::
+
+A **controlled dynamical system** is characterized by dynamics
+$$
+\begin{cases}
+\dot{\boldsymbol{x}}(t)=\boldsymbol{f}(\boldsymbol{x}(t), \alpha(t), t) \\
+\boldsymbol{x(0)}=x_{0},
+\end{cases}\tag{1}
+$$
+where $\boldsymbol{x}\in \mathbb{R}^n$ and the function
+$\boldsymbol{f}:\mathbb{R}^n\times A\times[0,+\infty)\to \mathbb{R}^n$. The
+system is **autonomous** when we can drop our dependence on time.
+
+:::{.definition data-title="Payoff Functional"}
+
+The **payoff [[functional|functional]]** of a dynamical system takes the form
+$$
+\boldsymbol{P}[\alpha]=\int_{0}^{T}{r(\boldsymbol{x}(t),\alpha(t))}~d{t} + g(\boldsymbol{x}(T)),
+$$
+where $r$ defines *running payoffs* and $g$ defines *terminal payoffs*.
+
+:::
+
+**PROBLEM:** How do we find the control $\alpha$ that maximizes the system
+payoff functional?
+
+Written mathematically, given a controlled dynamical system $(1)$ we wish to
+find $\alpha^*(t)$ such that
+$$
+P[\alpha^*(t)]\geq P[\alpha(t)].
+$$
+*Note:* Practically we typically also require that $\boldsymbol{f}$, $r$ and
+$g$ satisfy stricter regularity conditions like being
+[[lipschitz-continuity|Lipschitz continuous]].
+
+### Simple Example
+
+Suppose an individual is at the origin on a number line and this person is
+rewarded if she is still close to the origin in a minute. Assuming this
+individual has a maximal speed of 1m/s, what is her strategy to maximize her
+payoff?
+
+Formulating this problem we have that
+$$
+\begin{cases}
+\dot{x}(t)=\alpha(t) \\
+x(0)=0,
+\end{cases}
+$$
+where set of admissible controls is $\boldsymbol{A}=B_{1}(0)$, running payoff
+is $r(x,a)=0$ and terminal payoff is $g(x)=-\lvert x \rvert$. Thus the payoff
+functional is
+$$
+\boldsymbol{P}[\alpha]=-\lvert x(1) \rvert ,
+$$
+and this is a functional that we wish to maximize.
+
+
+Thus, the key idea of optimal control theory is to find a function that
+maximizes a certain functional i.e. an infinite dimensional optimization
+problem. Usually this type of problem can be resolved using the
+[[calculus-of-variations]] which includes; (1) [[euler-lagrange-equation]]; (2)
+[[hamilton-equation]], and (3) Hamilton-Jacobi equations.

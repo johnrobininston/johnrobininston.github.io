@@ -1,0 +1,87 @@
+---
+title: Chain Rule
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Chain Rule
+
+## Chain Rule for Composition of Functions
+
+In [[calculus]] the **chain rule** provides a formula for the **derivative of
+the composition of two differentiable real functions**.  
+
+:::{.theorem data-title="Chain Rule"}
+
+Consider differentiable real functions $f(x)$ and $g(x)$, where $g$ is defined
+on an open interval containing $a$ and $f$ is defined on an open interval
+containing $g(a)$. The derivative of the composite function
+$h(x)=(f\circ g)(x)=f(g(x))$ is given by the chain rule
+$$
+h'(x)=f'(g(x))\cdot g'(x).
+$$
+Written in an alternate but equivalent form, if we have $y=f(u)$ and $u=g(x)$
+then the derivative of $y$ is given by
+$$
+\frac{dy}{dx}=\frac{dy}{du}\cdot \frac{du}{dx}.
+$$
+
+:::
+
+*PROOF:*
+	Without loss of generality we assume $f,g:\mathbb{R} \to \mathbb{R}$. We first
+ define an auxiliary function $\phi:\mathbb{R} \to \mathbb{R}$ as follows:
+ $$
+ \phi(t)=\begin{cases}\frac{{f(t)-f(g(a))}}{t-g(a)} & \text{if }t \neq g(a) \\f'(g(a)) & \text{if }t=g(a).\end{cases}
+ $$
+ By construction, $\phi$ is continuous at $g(a)$. Moreover $g$ is continuous at
+ $a$ because it is differentiable at $a$. Hence $\phi \circ g$ is continuous at
+ $a$. Note that for all $x \neq a$
+ $$
+ \frac{{f(g(x))-f(g(a))}}{x-a}=\phi(g(x))\cdot \frac{{g(x)-g(a)}}{x-a}.
+ $$
+ Hence we have that
+ $$
+ \begin{align}(f\circ g)'(a) & =\lim_{ x \to a } \frac{{f(g(x))-f(g(a))}}{x-a} \\&  = \lim_{ x \to a } \phi(g(x))\cdot \lim_{ x \to a } \frac{{g(x)-g(a)}}{x-a} \\& = \phi(g(a))\cdot g'(a) \\& = f'(g(a))\cdot g'(a).\end{align}
+ $$
+ $\square$
+
+## Chain Rule for Higher Order Compositions
+
+The chain rule can be easily applied to higher-order compositions by iterative
+application. For example, we consider the function $y = e^{\sin(x^2)}$ which
+can be expressed as $y=(f\circ g\circ h)(x)$ where  
+$$
+\begin{align}
+ &  f(x)=e^x,\quad g(x)=\sin(x)\quad \&\quad h(x)=x^2 \\
+\implies  & f'(x)=e^x,\quad g'(x)=\cos(x)\quad \& \quad h'(x)=2x.
+\end{align}
+$$
+From recursive application of the chain rule we have that
+$$
+\begin{align}
+(f\circ g\circ h)'(x) & =(f'\circ g\circ h)(x)\cdot (g\circ h)'(x) \\
+ & = (f'\circ g \circ h)(x)\cdot (g'\circ h)(x)\cdot h'(x).
+\end{align}
+$$
+Thus our final result is
+$$
+(f\circ g\circ h)'(x)=e^{\sin(x^2)}\cdot \cos(x^2)\cdot 2x.
+$$
+For $n$-length compositions of functions $f_{1}, \dots, f_{n}$ we can summarize
+the above result as
+$$
+(f_{1}\circ\dots\circ f_{n})=f'_{n}(x)\cdot\prod_{i=1}^{n-1}(f_{i}'\circ f_{i+1}\circ \dots \circ f_{n})(x).
+$$
+
+## Quotient Rule
+[[quotient-rule]]
+
+
+
+
+$$
+
+$$

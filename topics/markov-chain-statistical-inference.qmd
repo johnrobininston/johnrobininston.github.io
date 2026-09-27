@@ -1,0 +1,153 @@
+---
+title: Markov Chain Statistical Inference
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Markov Chain Statistical Inference
+
+In this note we summarize the statistical inference of Markov chains. We use
+results from several helpful notes and articles:
+- [[andersonstatisticalinferencemarkov1957]]; 
+- [[billingsleystatisticalmethodsmarkov1961]];
+- [[lecture-6-mc-inference-pdf]]
+- http://bactra.org/notebooks/inference-markov.html
+#### Sufficient Statistics
+
+We consider a discrete time (order 1) Markov chain
+$\{ X_{t} \}_{t \in \mathbb{N}_{0}}$ with countable (orderless) state space
+$\mathcal{S}:=\{ 1, \dots, m \}$ with transition probabilities given by
+$$
+p_{i,j}^{(n)}(t)=\mathbb{P}(X_{t}=j|X_{t-n}=i);\qquad p_{i,j}(t)=p_{i,j}^{(1)}(t);\qquad i,j\in \mathcal{S},~t\in \mathbb{N}_{0},
+$$
+which are summarized in the transition matrix
+$P_{t}^{(n)}=(p_{i,j}^{(n)}(t))_{i,j \in \mathcal{S}}$. We say that the the
+chain is ergodic when all states inter-communicate and the chain is aperiodic.
+Further, the chain is stationary when
+$$
+p_{i,j}^{(n)}(t)=p_{i,j}^{(n)};\qquad t\in \mathbb{N}_{0}.
+$$
+Denote the number of individuals in state $i$ at time $t$ by  $n_{i}(t)$.
+
+A single realization of the chain from $t=0,1,\dots,T$ consists of a sequence
+of states $\{ i(0), i(1), \dots, i(T) \}$. The probability of the realization
+is given by
+$$
+\begin{align}
+& \mathbb{P}(X_{0}=i(0), X_{1}=i(1), \dots, X_{T}=i_{T}) \\
+& \qquad = \mathbb{P}(X_{0}=i(0))\mathbb{P}(X_{1}=i(1), \dots, X_{T}=i_{T}|X_{0}=i_{0}) \\
+& \qquad = \quad\vdots \\
+& \qquad = \mathbb{P}(X_{0}=i(0))\mathbb{P}(X_{1}=i(1)|X_{0}=i(0))\cdots \mathbb{P}(X_{T}=i(T)|X_{T-1}=i(T-1)) \\
+& \qquad = \mu^{(0)}(i(0))p_{i(0),i(1)}(1)\cdots p_{i(T-1)i(T)}(T),
+\end{align}
+$$
+where we have use the [[markov-property|Markov property]] and the definition of
+conditional probability.  
+
+Let $n_{i,j}(t)$ denote the number of individuals in state $i$ at $t-1$ and $j$
+at $t$ and further, let $n_{i(0),i(1), \dots, i(T)}$ denote the number of
+individuals whose sequence of states is $i(0), i(1), \dots, i(T)$. Then
+$$
+n_{g,j}(t)=\sum n_{i(0),i(1), \dots, i(T)},
+$$
+where the sum is over all values of the $i$'s with $i(t-1)=g$ and $i(t)=j$.
+
+Assuming first that the initial position is known, the probability describing
+all sequences for $n$ realizations of the process is
+$$
+\begin{align}
+ & \prod [p_{i(0)i(1)}(1)p_{i(1),i(2)}(2)\cdots p_{i(T-1),i(T)}(T)]^{n_{i(0), i(1), \dots, i(T)}} \\
+& \qquad = \left( \prod[p_{i(0), i(1)}(1)]^{n_{i(0), i(1), \dots, i(T)}} \right) \cdots \left( \prod[p_{i(T-1)i(T)}(T)]^{n_{i(0),i(1), \dots, i(T)}} \right)  \\
+& \qquad = \left( \prod_{i(0),i(1)}p_{i(0),i(1)}(1)^{n_{i(0), i(1)}(1)} \right) \cdots \left( \prod_{i(T-1),i(T)}p_{i(T-1)i(T)(T)^{n_{i(T-1), i(T)}}}(T)^{n_{i(T-1),i(T)}(T)} \right)  \\
+& \qquad = \prod_{t=1}^T\prod_{g,j}p_{g,j}(t)^{n_{g,j}(t)},\tag{$\star$}
+\end{align}
+$$
+where the products in the first two lines are over all values of the $T+1$
+indices, hence the set of numbers $n_{i,j}(t)$ form a set of
+[[sufficient-statistics|sufficient statistics]].
+
+For a Markov chain with stationary transition probabilities we have the
+stronger result that the set $n_{i,j}=\sum_{t=1}^Tn_{i,j}(t)$ form a set of
+sufficient statistics since we can write the above result as
+$$
+\prod_{t=1}^T\prod_{g,j}p_{g,j}^{n_{g,i}(t)}=\prod_{i,j}p_{i,j}^{n_{i,j}}.\tag{$\star\star$}
+$$
+For not necessarily stationary transition probabilities, $p_{i,j}(t)$ and
+$n_{i,j}(t)$ form a set of
+[[sufficient-statistics|minimal sufficient statistics]].
+#### Distribution
+
+The actual distribution of $n_{i,j}(t)$ is $(\star)$ multiplied by an
+appropriate function of factorials as a constant of proportionality. Let
+$n_{i}(t-1)=\sum_{j=1}^mn_{i,j}(t)$. Then the conditional distribution of
+$n_{i,j}(t),~j\in\mathcal{S}$ given $n_{i}(t-1)$ (or given
+$n_{k}(s),~k\in \mathcal{S};~s = 0, \dots, t-1$) is
+$$
+\frac{n_{i}(t-1)!}{\prod_{j=1}^mn_{i,j}(t)!}\prod_{j=1}^mp_{i,j}(t)^{n_{i,j}(t)},
+$$
+which is the same distribution one would obtain if one had $n_{i}(t-1)$
+observations on a [[multinomial-distribution|multinomial distribution]] with
+probabilities $p_{i,j}(t)$ and with resulting numbers $n_{i,j}(t)$. The
+distribution of $n_{i,j}(t)$ (conditional on the $n_{i}(0)$) is
+$$
+\prod_{t=1}^T\left\{ \prod_{i=1}^m \left[ \frac{n_{i}(t-1)!}{\prod_{j=1}^m n_{i,j}(t)!}\prod_{j=1}^m p_{i,j}(t)^{n_{i,j}(t)} \right]  \right\} .
+$$
+#### Maximum Likelihood Estimation
+
+The stationary transition probabilities $p_{i,j}$ can be estimated by
+maximizing the probability $(\star\star)$ with respect to $p_{i,j}$ subject to
+the restrictions
+$$
+\begin{cases}
+p_{i,j}\geq 0,&\forall i,j\in \mathcal{S};~~\text{and} \\
+\sum_{j=1}^m p_{i,j}=1 & i \in \mathcal{S},
+\end{cases}
+$$
+when $n_{i,j}$ are the actual observations. This is, up to a factor independent
+of $p_{i,j}$, precisely that obtained for $m$ independent samples, where the
+$i$th sample $(i\in \mathcal{S})$ consists of $n_{i}^*=\sum_{j}n_{i,j}$
+multinomial trials with probabilities $p_{i,j},~i,j \in \mathcal{S}$. For such
+samples the maximum likelihood estimates for $p_{i,j}$ are
+$$
+\begin{align}
+\hat{p}_{i,j}=\frac{n_{i,j}}{n_{i}^*}=\frac{\sum_{t=1}^Tn_{i,j}(t)}{\sum_{k=1}^m \sum_{t=1}^T n_{i,k}(t)}=\frac{\sum_{t=1}^T n_{i,j}(t)}{\sum_{t=0}^{T-1}n_{i}(t)},
+\end{align}
+$$
+and hence this is also true for our estimates from $(\star\star)$.
+
+When the transition probabilities are not necessarily stationary, this general
+approach can still be applied, and the maximum likelihood estimates for the
+$p_{i,j}(t)$ are found to be
+$$
+\hat{p}_{i,j}(t)=\frac{n_{i,j}(t)}{n_{i}(t-1)}=\frac{n_{i,j}(t)}{\sum_{k=1}^mn_{i,k}(t)}.
+$$
+The same maximum likelihood estimates for the $p_{i,j}(t)$ are obtained when we
+consider the conditional distribution of $n_{i,j}(t)$ given $n_{i}(t-1)$ as
+when the joint distribution of the $n_{i,j}(1), \dots, n_{i,j}(T)$ is used.
+Formally, these estimates are the same as one would obtain if for each $i$ and
+$t$ one had $n_{i}(t-1)$ observations on a multinomial distribution with
+probabilities $p_{i,j}(t)$ and with resulting numbers $n_{i,j}(t)$.
+
+#### Asymptotic Behavior
+
+To find the asymptotic behavior of the probabilities $p_{i,j}$ we first
+consider the behavior of $n_{i,j}(t)$. We shall assume that
+$$
+\frac{n_{k}(0)}{\sum n_{j}(0)} \stackrel{\sum  n_{j}(0)\to \infty}{\to} \eta_{k}
+$$
+where $\eta_{k}>0, ~\sum \eta_{k}=1$.
+
+For each $i(0)$, the set $n_{i(0), i(1), \dots, i(T)}$ are multinomial
+variables with sample size $n_{i(0)}(0)$ and parameters
+$p_{i(0),i(1)}p_{i(1)i(2)}\cdots p_{i(T-1)i(T)}$ and hence are asymptotically
+normally distributed as the sample size increases. The $n_{i,j}(t)$ are linear
+combinations of these multinomial variables and hence are also asymptotically
+normally distributed.
+
+The transition matrix elements $(p_{i,j}^{[t]})_{i,j\in \mathcal{S}}=:P^t$
+denote the probability of state $j$ at time $t$ given initial state $i$. Let
+$n_{k;i,j}(t)$ be the number of sequences including state $k$ at time $0$, $i$
+at time $t-1$ and $j$ at time $t$.  
+

@@ -1,0 +1,216 @@
+---
+title: Conditional Expectation
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Conditional Expectation
+
+When we first study [Stochastic Processes](Stochastic%20Processes.md) we define
+the conditional expectation of a random variable $X$ as the expectation of $X$
+taken with respect to the conditional probability distribution. In this note we
+provide the precise measure theoretic definition of conditional expectation as
+the **orthogonal projection** between [[hilbert-spaces]].
+
+## Conditional Expectation Fundamentals
+
+Below we remind ourselves of the definition of conditional expectation with
+respect to events and other random variables. Although introduced before we
+establish the formal concept of a probability space we note that for each of
+the following definitions consider random variables $X,Y$ and events $A$
+defined on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$.
+
+We denote the conditional probability distribution of a random variable $X$
+with respect to event $A$ as
+$$
+F_{X|A}(x)=\mathbb{P}(X\leq x | A)=\frac{\mathbb{P}(X\leq x)}{\mathbb{P}(A)}.
+$$
+If this distribution is differentiable the corresponding density function is
+$$
+f_{X|A}(x)=\frac{f_{X,A}(x)}{\mathbb{P}(A)}.
+$$
+Additionally, it satisfies
+$$
+F_{X|A}(x)=\int_{-\infty}^{x}{f_{X|A}(u)}~d{u}.
+$$
+
+:::{.definition data-title="Conditional Expectation (w.r.t. events)"}
+
+For random variable $X$ and event $A$ the conditional expectation of $X$ with respect to $A$ is given by $$\mathbb{E}[X|A]=\int_{X}^{}{xf_{X|A}(x)}~d{x}.$$
+
+:::
+
+We denote the conditional probability distribution of $X$ with respect to a
+second random variable $Y$ as
+$$
+F_{X|Y}(x|y) = \mathbb{P}(X \leq x|Y = y).
+$$
+We note that this is a distribution function itself which is dependent on the
+value of $y$. If this distribution is differentiable and $X$, $Y$ have a joint
+distribution $f_{X,Y}(x,y)$ the corresponding density function is
+$$
+f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_{Y}(y)}.
+$$
+Additionally, it satisfies
+$$
+F_{X|Y}(x|y)=\int_{-\infty}^{x}{f_{X|Y}(u,y)}~d{u}.
+$$
+
+## Hilbert Spaces
+
+Recall from our study of [[linear-algebra]] that a **vector space**
+$\mathcal{V}$ over **scalar field** $\mathbb{R}$ is **linear** if
+$\forall v_{1}, v_{2}\in \mathcal{V}$ and $\alpha, \beta \in \mathbb{R}$ we
+have that
+$$
+\alpha v_{1}+\beta v_{2}\in \mathcal{V}.
+$$
+Given a linear vector space $\mathcal{V}$, we have a (real) **inner-product
+space** if we can define a real function
+$$
+\langle \cdot, \cdot \rangle:\mathcal{V}\times \mathcal{V} \to \mathbb{R},
+$$
+known as the **inner product** that satisfies the following properties for all
+$v_{1}, v_{2}, v_{3}\in\mathcal{V}$:
+
+1. Symmetry. $\left< v_{1}, v_{2} \right> =\left< v_{2}, v_{1} \right>$  .
+2. Non-negativity. $\left< v_{1}, v_{2} \right>\geq 0$.
+3. Non-degeneracy. $\left< v_{1}, v_{1} \right> = 0 \iff v_{1}=0$.
+4. Linearity.
+   $\left< \alpha_{1}v_{1}, v_{2}+v_{3} \right> = \alpha \left< v_{1}, v_{2} \right>+\alpha \left<  v_{1}, v_{3} \right>$.
+
+Every inner product creates a **Norm** by setting
+$\lVert v \rVert=\sqrt{ \left< v , v \right> }$. Further it can be shown that
+inner products satisfy both the:
+
+1. **Cauchy-Schwartz Inequality**.
+   $\lvert \left< v_{1}, v_{2} \right>  \rvert \leq \lVert v_{1} \rVert \cdot \lVert v_{2} \rVert$.
+2. **Triangle Inequality**.
+   $\lVert v_{1}+v_{2} \rVert \leq  \lVert v_{1} \rVert + \lVert v_{2} \rVert$.
+
+An inner product space $(\mathcal{V}, \lVert \cdot \rVert)$ is **complete** if
+every Cauchy sequence $\{ v_{n} \}\in \mathcal{V}$ converges to an element of
+$\mathcal{V}$ in norm defined by the inner product, i.e.
+$$
+\lVert v_{n}-v_{m} \rVert \stackrel{n,m\to \infty}{\longrightarrow} 0 \iff \lVert v_{n}-v \rVert \stackrel{n \to \infty}\longrightarrow 0\quad\text{where}\quad v \in \mathcal{V}.
+$$
+
+:::{.definition data-title="Hilbert Space"}
+
+A **Hilbert space** is a linear vector space with inner product such that it is
+complete in the norm defined by the inner product.
+
+:::
+
+## Orthogonal Projections
+
+A closed subspace of a Hilbert space is some subset
+$\mathcal{V}_{1}\subset\mathcal{V}$ that is complete in the same norm as
+$\mathcal{V}$. For an arbitrary element $v \in \mathcal{V}$, the **distance**
+from $v$ to any subspace $\mathcal{V}_{1}\subset \mathcal{V}$ is given by
+$$
+d = \inf_{v_{1}\in \mathcal{V}_{1}}\{ \lVert v - v_{1} \rVert  \}.
+$$
+The vector $v_{1}^*$ minimizing this distance $d = \lVert v-v_{1}^* \rVert$ is
+called the **orthogonal projection** of $v$ onto $\mathcal{V}_{1}$. In other
+words we get the next system of equations
+$$
+\forall v_{1}\in \mathcal{V}_{1}:\quad \lVert v-v_{1}^* \rVert \leq  \lVert v-v_{1} \rVert .
+$$
+
+:::{.theorem data-title="Projection Theorem"}
+
+Suppose $\mathcal{V}$ represents a closed linear vector space; and let
+$v \in \mathcal{V}+v_{1}^*\in \mathcal{V}_{1}\subset \mathcal{V}$. Then the
+following statements are equivalent:
+$$
+\lVert  v - v_{1}^* \rVert \leq  \lVert v - v_{1} \rVert;\quad \forall v_{1}\in \mathcal{V}_{1}\quad\quad \iff \quad\quad \left< v-v_{1}^* , v_{1} \right>  = 0;\quad\forall v_{1}\in \mathcal{V}_{1}.
+$$
+
+:::
+
+## Conditional Expectation
+
+ We recall our fixed underlying probability space
+ $(\Omega, \mathcal{F}, \mathbb{P})$. Suppose we have a random variable of
+ interest $Y$ that we know nothing about. Additionally, suppose we know
+ something about some other random variable $X$. Our objective is to estimate
+ the (unknown) $Y$ from (known) $X$.
+
+Lets look to apply some of the results that we established in the previous
+section. First, let $Y$ be any $\mathcal{F}$-measurable random variable and
+suppose
+$$
+\sigma(X)=: \mathcal{G}_{X}\subset \mathcal{F}.
+$$
+
+1. The space $L_{2}(\Omega, \mathcal{F}, \mathbb{P})$ (of all
+   $\mathcal{F}$-measurable random variables with finite second moments) is a
+   Hilbert space complete in the norm
+   $\lVert \cdot \rVert:=\sqrt{ \mathbb{E}[X^2] }$ (with inner product
+   $\left< X,Y \right> = \mathbb{E}[XY]$).
+   
+2. For any sub-$\sigma$-algebra $\mathcal{G}_{X}\subset \mathcal{F}$, the set
+   $$
+   A_{X}=\{ \text{all }\mathcal{G}_{X}\text{ measurable RVs with finite second moment} \}=\{ h(X):\mathbb{E}[h(X)^2]<\infty;~ h\text{ is Borel} \}
+   $$
+   is a closed linear subspace of $L_{2}(\Omega, \mathcal{F}, \mathbb{P})$ with
+   respect to $\lVert \cdot \rVert$.
+   
+3. The **existence theorem** and **projection theorem** above tell us that
+   there exists a (unique a.s.) random variable $Y^*\in A_{X}$ which minimizes
+   the distance between $Y$ and the subspace $A_X$. This $Y^*$ is given by and
+   must satisfy the following equations
+   $$
+   \mathbb{E}[(Y-Y^*)\cdot Z]=0\quad\quad\&\quad\quad \lVert Y-Y^* \rVert \leq  \lVert Y-Z \rVert;\quad \forall Z \in A_{X}.
+   $$
+
+:::{.theorem data-title="Conditional Expectation"}
+
+The **best prediction** of $Y$ (in terms of $X$) is the conditional expectation $\mathbb{E}[Y|X]$, or equivalently$$\lVert Y-\mathbb{E}[Y|X] \rVert =\min_{Z \in A_{X}}\lVert Y-Z \rVert .$$
+
+:::
+### Conditional Expectation Properties
+
+Assuming that $\mathbb{E}[X^2]<\infty$ and $\mathbb{E}[Y^2]<\infty$, all
+statements below hold almost surely:
+
+1. **Linearity.**
+   $\mathbb{E}[\alpha X+\beta Y|\mathcal{F}_{1}]=\alpha \mathbb{E}[X|\mathcal{F}_{1}]+\beta \mathbb{E}[Y|\mathcal{F}_{1}]$.
+
+2. If $X \in \mathcal{F}_{1}$ then $\mathbb{E}[X|\mathcal{F}_{1}]=X~a.s.$
+	- *(Special case)* If $X=C~a.s.\implies \mathbb{E}[X|\mathcal{F}_{1}]=C~a.s.$
+
+3. If $X$ is independent of $\mathcal{F}_{1}$ (i.e.
+   $\forall Z \in \mathcal{F}_{1}$ random variables $X$ and $Z$ are
+   independent), then $\mathbb{E}[X|\mathcal{F}_{1}]=\mathbb{E}[X]~a.s.$.
+
+4. **Monotonicity.** If $X \leq Y$, then
+   $\mathbb{E}[X|\mathcal{F}_{1}]\leq \mathbb{E}[Y|\mathcal{F}_{1}]$.
+
+5. $\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{1}]]=\mathbb{E}[X]$.
+
+6. Assuming $\mathbb{E}[(XY)^2]< \infty$, if $X \in \mathcal{F}_{1}$ then
+   $\mathbb{E}[XY|\mathcal{F}_{1}]=X\mathbb{E}[Y|\mathcal{F}_{1}]$.
+
+7. **Monotone Convergence Theorem.** If $X_{n}\geq 0$ and $X_{n}\uparrow X$
+   with $\mathbb{E}[X_{n}^2]<\infty$, $\mathbb{E}[X^2]< \infty$, then
+   $\mathbb{E}[X_{n}|\mathcal{F}_{1}]\uparrow \mathbb{E}[X|\mathcal{F}_{1}]$
+   a.s..
+
+8. **Dominated Convergence Theorem.** If $X_{n}\to X~a.s.$ and
+   $\lvert X_{n} \rvert \leq Y$ with $\mathbb{E}[Y]<\infty$, then
+   $\mathbb{E}[X_{n}|\mathcal{F}_{1}]\to \mathbb{E}[{X|\mathcal{F}_{1}}]~a.s.$.
+
+9. **Tower Property.** If
+   $\mathcal{F}_{2}\subset \mathcal{F}_{1}\subset \mathcal{F}$ are
+   sub-$\sigma$-algebra then
+   $\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{1}]|\mathcal{F}_{2}]=\mathbb{E}[X|\mathcal{F}_{2}]=\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{2}]|\mathcal{F}_{1}]=\mathbb{E}[X|\mathcal{F}_{2}]$
+   (smallest always wins)
+
+10. **Jensen's Inequality.** For convex function $g$ and
+    $\mathbb{E}[g^2(X)]< \infty$ then
+    $\mathbb{E}[g(X)|\mathcal{F}_{1}]\geq g(\mathbb{E}[X|\mathcal{F}_{1}])$.
+

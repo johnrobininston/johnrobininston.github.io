@@ -1,0 +1,70 @@
+---
+title: Doob's Submartingale Inequality
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Doob's Submartingale Inequality
+
+In mathematics, *Doob's martingale inequality*, also known as Kolmogorov’s
+submartingale inequality is a result in the study of stochastic processes. *It
+gives a bound on the probability that a submartingale exceeds any given value
+over a given interval of time*.  
+
+Informally, **Doob's inequality states that the expected value of the process
+at some final time controls the probability that a sample path will reach above
+any particular value beforehand**. As the proof uses very direct reasoning, it
+does not require any restrictive assumptions on the underlying filtration or on
+the process itself, unlike for many other theorems about stochastic processes.
+In the continuous-time setting, right-continuity (or left-continuity) of the
+sample paths is required, but only for the sake of knowing that the supremal
+value of a sample path equals the supremum over an arbitrary countable dense
+subset of times.
+
+
+:::{.theorem data-title="Doob Submartingale Inequality"}
+
+Suppose that $X_{n},~n\geq 0$ is a submartingale. Then, for every $\lambda>0$
+and $n\geq{0}$ we have
+$$
+\lambda\cdot \mathbb{P}\left( \max_{0\leq k\leq n}(X_{k})\geq  \lambda \right) \leq  \mathbb{E}\left[ X_{n} \cdot \mathbb{1}_{\{ \max_{0\leq k\leq n} X_{k}\geq  \lambda \}}  \right] \leq \mathbb{E}[X_{n}^+].
+$$
+
+:::
+
+Note that after some rearranging the result is very similar in form to the
+[[markov-inequality]]
+$$
+\mathbb{P}\left(  \max_{0\leq  k\leq  n}(X_{k})\geq  \lambda \right)\leq \frac{\mathbb{E}[X_{n}^+]}{\lambda} .
+$$
+
+`\begin{proof}`
+We define a [[stopping-time|stopping time]] 
+$$
+\tau:=\inf\{k \geq 0:X_{k}\geq \lambda\}
+$$
+(where $\tau= +\infty$ is $X_{k}<\lambda$ for all $k \geq 0$). Furthermore, we
+define event
+$$
+A:=\{ \max_{0\leq k\leq n}X_{k}\geq \lambda \}=\{ \tau\leq n \}\in\mathcal{F}_{\tau \wedge n}\subseteq \mathcal{F}_{\tau}.
+$$
+Then, for every $k=0,1,\dots,n$ we have
+$A\subset \{ \tau=k \}\in \mathcal{F}_{k}$ and also
+$A \cap \{ \tau\geq n+1 \}\in \mathcal{F}_{n}$. This implies
+$$
+\begin{align}
+\mathbb{E}[X_{\tau \wedge n}\cdot \mathbb{1}_{A}] & = \mathbb{E}\left[ \sum_{k=0}^\infty X_{\tau \wedge n}\cdot \mathbb{1}_{A\cap \{ \tau=k \}} \right] =\mathbb{E}\left[ \sum_{k=0}^\infty X_{k}\cdot \mathbb{1}_{A\cap \{ \tau=k \}}+X_{n}\cdot \mathbb{1}_{A \cap \{ \tau \geq n+1 \}} \right]  \\
+& \leq  \mathbb{E}\left[ \sum_{k=0}^n X_{n}\cdot \mathbb{1}_{A\cap \{ \tau=k \}}+X_{n}\cdot \mathbb{1}_{A\cap \{ \tau \geq n+1 \}} \right]=\mathbb{E}[X_{n}\cdot \mathbb{1}_{A}],
+\end{align}
+$$
+where the inequality follows from the submartingale property. Using this
+inequality, since $X_{\tau}\geq \lambda$ on the set $A$, we obtain
+$$
+\begin{align}
+\lambda \cdot \mathbb{P}\left( \max_{0\leq k\leq n} X_{k}\geq \lambda \right) & = \lambda \cdot \mathbb{P}(A) = \mathbb{E}[\lambda \mathbb{1}_{A}]\leq \mathbb{E}[X_{\tau}\cdot \mathbb{1}_{A}]=\mathbb{E}[X_{\tau \wedge n}\cdot \mathbb{1}_{\tau\leq  n}]  \\
+& \leq \mathbb{E}[X_{n}\cdot \mathbb{1}_{\tau \leq  n}] = \mathbb{E}[X_{n}\cdot \mathbb{1}_{\max_{0\leq k\leq n}(X_{k})\geq  \lambda}]\leq  \mathbb{E}[X_{n}^+].
+\end{align}
+$$
+`\end{proof}`

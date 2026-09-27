@@ -1,0 +1,46 @@
+---
+title: Periodogram and Spectral Estimation
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Periodogram and Spectral Estimation
+The [[spectral-distributions|spectral density]] $f(u)$ of a stationary process
+describes how variance is distributed across frequencies $u$. Given a finite
+sample $x_1,\dots,x_n$, we estimate $f$ empirically.
+
+:::{.definition data-title="Periodogram"}
+
+For frequencies $u_k = 2\pi k/n$ (Fourier frequencies), the **periodogram** is
+$$
+I_n(u_k) = \frac{1}{n}\left|\sum_{t=1}^n (x_t - \bar x)e^{-iu_kt}\right|^2 = \sum_{h=-(n-1)}^{n-1} \hat\gamma(h)e^{-iu_kh}.
+$$
+The periodogram is the discrete Fourier transform of the sample ACVF, and is
+the natural (though inconsistent) estimator of $2\pi f(u)$.
+
+:::
+
+**Inconsistency and smoothing.** $I_n(u_k)$ has asymptotic variance that does
+*not* vanish as $n\to\infty$ (it is asymptotically $\chi^2_2$-distributed at
+each frequency, independent across Fourier frequencies), so it is not a
+consistent estimator of the spectral density. Consistent estimators smooth the
+periodogram across neighboring frequencies:
+- **Discrete spectral averaging / kernel smoothing**:
+  $\hat f(u) = \sum_j W_n(j)I_n(u+\lambda_j)$ for a weight kernel $W_n$,
+- **Lag-window estimators**: truncating/tapering the ACVF sum with a window
+  $w(h/M)$ before transforming,
+- **Multitaper methods** (Thomson): averaging periodograms computed with
+  multiple orthogonal (Slepian/DPSS) tapers to reduce variance without
+  excessive bias.
+
+**Uses.** Spectral/periodogram methods detect hidden periodicities (peaks at
+the corresponding frequency), test for white noise (flat periodogram), and
+underlie frequency-domain estimation of $ARMA$ models (Whittle likelihood).
+They complement, rather than replace, [[wavelet-analysis]], which localizes
+frequency content in time for non-stationary series.
+
+### References
+- [[spectral-distributions]]
+- [[time-series-analysis]]

@@ -1,0 +1,37 @@
+---
+title: Brent's Method
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Brent's Method
+
+Brent's method is a root-finding algorithm that combines root bracketing,
+bisection, and inverse quadratic interpolation. The method uses **Lagrange
+interpolating polynomial of degree 2**.
+[Brent (1973)](https://epubs.siam.org/doi/abs/10.1137/0710031) claims that this
+method will always converge as long as the values of the function are
+computable within a given region containing a root.
+
+Given three points $x_{1}$, $x_{2}$ and $x_{3}$ Brent's method fits $x$ as a
+quadratic function of $y$, then uses the interpolation formula
+$$
+x = \frac{[y-f(x_{_{1}})][y-f(x_{2})]x_{3}}{[f(x_{3})-f(x_{1})][f(x_{3})-f(x_{2})]}+\frac{[y-f(x_{2})][y-f(x_{3})]x_{1}}{[f(x_{1})-f(x_{2})][f(x_{1})-f(x_{3})]}+\frac{[y-f(x_{3})][y-f(x_{1})]x_{2}}{[f(x_{2})-f(x_{3})][f(x_{2})-f(x_{1})]}.
+$$
+Subsequent root estimates are then obtained by setting $y=0$ which gives
+$$
+x=x_{2}+ \frac{P}{Q},
+$$
+where we have defined
+$$
+\begin{align}
+P & = S[T(R-T)(x_{3}-x_{2})-(1-R)(x_{2}-x_{1})] \\
+Q & =(T-1)(R-1)(S-1),
+\end{align}
+$$
+where we have further specified that
+$$
+ R  = \frac{f(x_{2})}{f(x_{3})};\quad S= \frac{f(x_{2})}{f(x_{1})}\quad \&\quad T= \frac{f(x_{1})}{f(x_{3})}.
+$$

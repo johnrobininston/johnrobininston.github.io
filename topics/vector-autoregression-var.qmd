@@ -1,0 +1,50 @@
+---
+title: Vector Autoregression (VAR)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Vector Autoregression (VAR)
+The [[autoregressive-processes|AR(p)]] model generalizes naturally to
+vector-valued series, allowing each variable to depend on lagged values of
+*itself and all other variables* in the system — the workhorse model of
+empirical macroeconomics and multivariate financial time series.
+
+:::{.definition data-title="VAR(p)"}
+
+For an $n$-dimensional series $\mathbf{X}_t = (X_{1t},\dots,X_{nt})'$,
+$$
+\mathbf{X}_t = \mathbf{c} + \Phi_1\mathbf{X}_{t-1} + \dots + \Phi_p\mathbf{X}_{t-p} + \boldsymbol{\varepsilon}_t, \qquad \boldsymbol{\varepsilon}_t \sim WN(0,\Sigma),
+$$
+with $n\times n$ coefficient matrices $\Phi_i$. Stationarity requires the roots
+of $\det(I - \Phi_1 z - \dots -\Phi_p z^p)=0$ to lie outside the unit circle,
+mirroring the univariate [[autoregressive-processes|AR]] condition.
+
+:::
+
+**Estimation.** Each equation can be estimated separately by OLS (equivalent to
+GLS/MLE here since regressors are identical across equations), making VAR
+simple to fit even in moderate dimension; overfitting/dimensionality is
+controlled via [[model-selection-criteria-aic-bic]] or shrinkage
+(Bayesian/"Minnesota" priors).
+
+**Granger causality.** Testing whether the lags of $X_j$ have jointly zero
+coefficients in the equation for $X_i$ gives a formal test of whether $X_j$
+"Granger-causes" $X_i$ — see [[granger-causality]].
+
+**Impulse response & variance decomposition.** Writing the VAR in its (causal)
+$VMA(\infty)$ form via the Wold representation lets one trace the dynamic
+effect of a one-time shock to one variable on the future path of all variables
+(impulse response functions), and decompose forecast-error variance by source.
+
+**Non-stationary extension.** When the component series are $I(1)$ and
+cointegrated, the VAR is reparametrized as a Vector Error Correction Model —
+see [[cointegration]].
+
+### References
+- [[autoregressive-processes]]
+- [[cointegration]]
+- [[granger-causality]]
+- [[time-series-analysis]]

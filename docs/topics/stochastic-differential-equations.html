@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Stochastic Differential Equations – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Stochastic Differential Equations</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link active" data-scroll-target="#preliminaries"><span class="header-section-number">1</span> Preliminaries</a>
+  <ul class="collapse">
+  <li><a href="#lebesgue-spaces" id="toc-lebesgue-spaces" class="nav-link" data-scroll-target="#lebesgue-spaces"><span class="header-section-number">1.1</span> Lebesgue Spaces</a></li>
+  </ul></li>
+  <li><a href="#brownian-motion" id="toc-brownian-motion" class="nav-link" data-scroll-target="#brownian-motion"><span class="header-section-number">2</span> Brownian Motion</a>
+  <ul class="collapse">
+  <li><a href="#bm-properties" id="toc-bm-properties" class="nav-link" data-scroll-target="#bm-properties"><span class="header-section-number">2.1</span> BM Properties</a></li>
+  <li><a href="#bm-transition-probabilities" id="toc-bm-transition-probabilities" class="nav-link" data-scroll-target="#bm-transition-probabilities"><span class="header-section-number">2.2</span> BM Transition Probabilities</a></li>
+  <li><a href="#variation-of-bm" id="toc-variation-of-bm" class="nav-link" data-scroll-target="#variation-of-bm"><span class="header-section-number">2.3</span> Variation of BM</a></li>
+  </ul></li>
+  <li><a href="#itô-integral" id="toc-itô-integral" class="nav-link" data-scroll-target="#itô-integral"><span class="header-section-number">3</span> Itô Integral</a>
+  <ul class="collapse">
+  <li><a href="#itô-integral-construction" id="toc-itô-integral-construction" class="nav-link" data-scroll-target="#itô-integral-construction"><span class="header-section-number">3.1</span> Itô Integral Construction</a></li>
+  <li><a href="#itô-integral-itôs-isometry" id="toc-itô-integral-itôs-isometry" class="nav-link" data-scroll-target="#itô-integral-itôs-isometry"><span class="header-section-number">3.2</span> Itô Integral &amp; Itô’s Isometry</a></li>
+  <li><a href="#itô-isometry" id="toc-itô-isometry" class="nav-link" data-scroll-target="#itô-isometry"><span class="header-section-number">3.3</span> Itô Isometry</a></li>
+  </ul></li>
+  <li><a href="#itô-processes" id="toc-itô-processes" class="nav-link" data-scroll-target="#itô-processes"><span class="header-section-number">4</span> Itô Processes</a>
+  <ul class="collapse">
+  <li><a href="#itô-process" id="toc-itô-process" class="nav-link" data-scroll-target="#itô-process"><span class="header-section-number">4.1</span> Itô Process</a></li>
+  <li><a href="#itô-formula" id="toc-itô-formula" class="nav-link" data-scroll-target="#itô-formula"><span class="header-section-number">4.2</span> Itô Formula</a></li>
+  <li><a href="#multi-dimensional-itô-formula" id="toc-multi-dimensional-itô-formula" class="nav-link" data-scroll-target="#multi-dimensional-itô-formula"><span class="header-section-number">4.3</span> Multi-dimensional Itô Formula</a></li>
+  <li><a href="#the-martingale-representation-theorem" id="toc-the-martingale-representation-theorem" class="nav-link" data-scroll-target="#the-martingale-representation-theorem"><span class="header-section-number">4.4</span> The Martingale Representation Theorem</a></li>
+  </ul></li>
+  <li><a href="#stochastic-differential-equations" id="toc-stochastic-differential-equations" class="nav-link" data-scroll-target="#stochastic-differential-equations"><span class="header-section-number">5</span> Stochastic Differential Equations</a>
+  <ul class="collapse">
+  <li><a href="#strong-and-weak-sde-solutions" id="toc-strong-and-weak-sde-solutions" class="nav-link" data-scroll-target="#strong-and-weak-sde-solutions"><span class="header-section-number">5.1</span> Strong and Weak SDE Solutions</a></li>
+  <li><a href="#sde-example-linear-sde" id="toc-sde-example-linear-sde" class="nav-link" data-scroll-target="#sde-example-linear-sde"><span class="header-section-number">5.2</span> SDE Example: Linear SDE</a></li>
+  <li><a href="#sde-example-black-scholes-model" id="toc-sde-example-black-scholes-model" class="nav-link" data-scroll-target="#sde-example-black-scholes-model"><span class="header-section-number">5.3</span> SDE Example: Black Scholes Model</a></li>
+  <li><a href="#sde-example-geometric-mean-reverting-process" id="toc-sde-example-geometric-mean-reverting-process" class="nav-link" data-scroll-target="#sde-example-geometric-mean-reverting-process"><span class="header-section-number">5.4</span> 5.6 SDE Example: Geometric Mean-Reverting Process</a></li>
+  </ul></li>
+  <li><a href="#diffusion-processes" id="toc-diffusion-processes" class="nav-link" data-scroll-target="#diffusion-processes"><span class="header-section-number">6</span> Diffusion Processes</a></li>
+  <li><a href="#diffusions" id="toc-diffusions" class="nav-link" data-scroll-target="#diffusions"><span class="header-section-number">7</span> Diffusions</a></li>
+  <li><span class="header-section-number">8</span> Backlinks</li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="preliminaries" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="preliminaries"><span class="header-section-number">1</span> Preliminaries</h2>
+<p>The study of stochastic differential equations and stochastic calculus builds upon strong foundational understanding in <a href="Stochastic Processes.md">Stochastic Processes</a> including: <em>Stochastic Processes</em>; Filtrations; <em>Martingales</em>; <em>Stopping Times</em>; <em>Lebesgue Integrals</em> and <em><span class="math inline">\(L_{p}\)</span>-Spaces</em> and <em><span class="math inline">\(p\)</span>-variation</em>.</p>
+<section id="lebesgue-spaces" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="lebesgue-spaces"><span class="header-section-number">1.1</span> Lebesgue Spaces</h3>
+<p>A <strong>Lebesgue space</strong> (<span class="math inline">\(L^p\)</span> space) is a space of space of measurable functions whose absolute value ### p-Variation</p>
+<div class="definition" data-title="$p$ -Variation">
+<p>The <span class="math inline">\(p\)</span> -variation of a real-valued stochastic process <span class="math inline">\((X_{t})\)</span> on <span class="math inline">\([0,T]\)</span> is a process <span class="math inline">\(\left\langle X,X \right\rangle_{t}^{(p)}\)</span> such that for all <span class="math inline">\(t&gt;0\)</span> and sequence of partitions <span class="math display">\[
+\Delta^{(n)}:=\{  0 = t_{0}^{(n)}&lt;t_{1}^{(n)}&lt;\dots&lt;t_{K_{n}}^{(n)}=t \},
+\]</span> of interval <span class="math inline">\([0,t]\)</span> such that <span class="math display">\[
+\delta^{(n)}:=\max_{1\leq i\leq K_{n}}\lvert t_{i}^{(n)}-t_{i-1}^{(n)} \rvert \to 0\quad \text{as}\quad n \to \infty,
+\]</span> the following holds <span class="math display">\[
+S_{n}^\Delta = \sup_{\Delta}\sum_{i=0}^{K_{n}-1} \lvert X_{t_{i}}-X_{t_{i-1}} \rvert ^p \stackrel{\mathcal{L}_{2}~\&amp;~\mathbb{P}}\to \left\langle X,X \right\rangle_{t}^{(p)}.
+\]</span></p>
+</div>
+<p>For <span class="math inline">\(p=1\)</span> we call this the <strong>total variation</strong>. For <span class="math inline">\(p=2\)</span> we call this the <strong>quadratic variation</strong> and often will drop the <span class="math inline">\(p\)</span> notation <span class="math inline">\(\left&lt; X,X \right&gt;_{t}\)</span>. We primarily deal with quadratic variance when we are working in the <span class="math inline">\(\mathcal{L}_{2}\)</span> space and is key to our construction of an integral in this space.</p>
+</section>
+</section>
+<section id="brownian-motion" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="brownian-motion"><span class="header-section-number">2</span> Brownian Motion</h2>
+<p>Recall that a random variable <span class="math inline">\(X\)</span> is said to be normally distributed or <em>Gaussian</em> with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> if for all <span class="math inline">\(x \in \mathbb{R}\)</span> <span class="math display">\[
+\mathbb{P}(X&gt;x)= \frac{1}{\sqrt{ 2\pi \sigma^2 }}\int_{x}^\infty \exp\left( - \frac{{(u-\mu)^2}}{2\sigma^2} \right)~du.
+\]</span></p>
+<div class="definition" data-title="Brownian Motion">
+<p>A <strong>Brownian motion</strong> (BM) or a <strong>Wiener process</strong> with variance parameter <span class="math inline">\(\sigma^2&gt;0\)</span> is a stochastic process <span class="math inline">\((B_{t})_{t \geq 0}\)</span> taking values in <span class="math inline">\(\mathbb{R}\)</span> that satisfies: 1. <span class="math inline">\(B_{0}=0~a.s.\)</span> (starts at zero); 2. <span class="math inline">\(\forall~0 &lt; t_{1}&lt;\dots&lt;t_{n},~B_{t_{1}}-B_{0}, B_{t_{2}}-B_{t_{1}}, \dots, B_{t_{n}}-B_{t_{n-1}}\)</span> are independent (independent increments); 3. <span class="math inline">\(\forall s &lt; t, B_{t}-B_{s}\sim\mathcal{N}(0,\sigma^2(t-s))\)</span> (normal stationary increments); 4. <span class="math inline">\(\omega\mapsto B_{t}(\omega)\)</span> is a continuous function of <span class="math inline">\(t\)</span> on <span class="math inline">\(\mathbb{R}_{+}\)</span> almost surely (continuous paths no jumps).</p>
+</div>
+<p>If <span class="math inline">\(\sigma^2=1\)</span> then <span class="math inline">\((B_{t})\)</span> is called the <strong>standard BM</strong>. Furthermore, we use the notation <span class="math inline">\(B_{t}^x=B_{t}+x\)</span> for BM starting from <span class="math inline">\(x\)</span>.</p>
+<section id="bm-properties" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="bm-properties"><span class="header-section-number">2.1</span> BM Properties</h3>
+<p>Here we have defined BM as a stochastic process, i.e.&nbsp;a family of (uncountably many) random variables <span class="math inline">\(\omega \mapsto B(t, \omega)\)</span> defined on a single probability space. Alternatively, we could interpret BM as a <strong>random function</strong> with the sample functions defined by <span class="math inline">\(t \mapsto B(t, \omega)\)</span>, in which case it is sometimes useful to assume that the mapping <span class="math inline">\((t, \omega)\mapsto B(t, \omega)\)</span> is measurable on the product space <span class="math inline">\([o, \infty)\times \Omega\)</span>.</p>
+<div class="definition" data-title="Brownian Motion Properties">
+<p>BM satisfies the following properties: 1. <span class="math inline">\(B_t\)</span> is a <strong>Gaussian Processes</strong>, i.e.&nbsp;for all <span class="math inline">\(0 \leq t_{1}\leq \dots \leq t_{k}\)</span> the random variable <span class="math inline">\(Z=(B_{t_{1}}, \dots, B_{t_{k}})\in \mathbb{R}^{nk}\)</span> has a Multivariate Normal Distribution. 2. <span class="math inline">\(B_{t}\)</span> is both <strong>Markov</strong> and a <strong>martingale</strong>. 3. <span class="math inline">\(B_{t}\)</span> satisfies the <strong>stronger Markov property</strong> whereby for any bounded real function <span class="math inline">\(f\)</span> we have <span class="math inline">\(\mathbb{E}[f(B_{t})|\mathcal{F}_{s}]=\mathbb{E}[f(B_{t})|B_{s}]\)</span>.</p>
+</div>
+<p>BM is the only <strong>Lévy Process</strong> (processes with independent stationary increments) with continuous paths. Although the process has continuous paths, it is not differentiable due its roughness. We summarize this and the other key path properties of BM in the following theorem.</p>
+<div class="definition" data-title="Brownian Motion Path Properties">
+<p>Brownian paths, considered to be functions of <span class="math inline">\(t\)</span>, have the following properties. Almost every sample path <span class="math inline">\(\{ B_{t}, t \in [0,T] \}\)</span>: 1. is a continuous function of <span class="math inline">\(t\)</span>; 2. is not monotone on any interval, no matter how small 3. is <strong>not differentiable</strong> at any point 4. has <strong>infinite total variation</strong> on any interval, no matter how small 5. has <strong>quadratic variation</strong> on <span class="math inline">\([0,t]\)</span> equal <span class="math inline">\(t\)</span>, for all <span class="math inline">\(t\)</span>.</p>
+</div>
+</section>
+<section id="bm-transition-probabilities" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="bm-transition-probabilities"><span class="header-section-number">2.2</span> BM Transition Probabilities</h3>
+<p>To find the transition density function for <span class="math inline">\(B_{t}\)</span> we consider Borel set <span class="math inline">\(A \in \mathcal{B}(\mathbb{R})\)</span> and compute <span class="math display">\[
+\begin{align}
+\mathbb{P}_{t}^B(x,A) &amp; = \mathbb{P}(B_{t+s}\in A|B_{s}=x) = \mathbb{P}(B_{t+s}\in A|B_{s}=x) \\
+&amp; = \mathbb{P}(B_{t+s}\in A|B_{s}=x) \\
+&amp; = \mathbb{P}(B_{t+s}-B_{s}\in A-x|B_{s}=x) \\
+&amp; = \mathbb{P}(B_{t+s}-B_{s}\in A-x),
+\end{align}
+\]</span> where the last line holds from independent increments. Then, using the fact that <span class="math inline">\(B_{t+s}-B_{s}\sim\mathcal{N}(0, \sigma^2t)\)</span> we have <span class="math display">\[
+\begin{align}
+\mathbb{P}_{t}^B(x,A) &amp; =\int_{A-x} \frac{1}{\sqrt{ 2\pi \sigma^2t }}\exp\left( -\frac{y^2}{2\sigma^2t} \right)~dy  \\
+&amp; = \int_{A} \frac{1}{\sqrt{ 2\pi \sigma^2t }}\exp\left(  -\frac{(z-x)^2}{2\sigma^2t} \right) ~dz,
+\end{align}
+\]</span> where we have used the substitution <span class="math inline">\(z=y+x\)</span>. Hence, the transition density function is <span class="math display">\[
+p_{t}^B(x,z)= \frac{1}{\sqrt{ 2\pi \sigma^2 t }}\exp\left(  -\frac{(z-x)^2}{2\sigma^2t} \right).
+\]</span> The transition probabilities of BM satisfy the <strong>Chapman-Kolmogorov Equations</strong> <span class="math display">\[
+p_{s+t}(x,y)= \int_{\mathbb{R}}p_{s}(x,z)p_{t}(z,y)~dz.
+\]</span></p>
+</section>
+<section id="variation-of-bm" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="variation-of-bm"><span class="header-section-number">2.3</span> Variation of BM</h3>
+<p>If a process is differentiable on <span class="math inline">\([0,T]\)</span> then its <strong>total variation</strong> will be finite. This is a crucial motivation for constructing stochastic intervals since we can show that BM is not differentiable by taking <span class="math inline">\(T=n\cdot\Delta t\)</span> and computing <span class="math display">\[
+\sum_{i}\lvert B_{t_{i}}-B_{t_{i-1}} \rvert \sim n\mathbb{E}\lvert B_{\Delta t} \rvert \sim \frac{T}{\Delta t}\sqrt{ \Delta t }\to \infty\quad \text{as}\quad n \to \infty,~\Delta t \to 0.
+\]</span> Hence BM has an infinite total variation. Intuitively, this means that BM is too rough for Reimann integral approximations to work (think like fractals, no matter how much we zoom in th surface doesn’t get smoother). However, BM does have a <strong>finite quadratic variation</strong> which explains the difference between the chain rule in stochastic calculus and the classical result.</p>
+<div class="definition" data-title="Quadratic Variation of BM">
+<p>For BM we have <span class="math inline">\(\left&lt; B,B \right&gt;_{t}=t\)</span>, that is, for partition <span class="math inline">\(\Delta^{(n)}\)</span> of an interval <span class="math inline">\([a,b]\)</span> such that <span class="math inline">\(\delta^{(n)}\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span> then <span class="math inline">\(S_{n}^\Delta \stackrel{\mathcal{L}_{2}~\&amp;~\mathbb{P}}\to b-a\)</span>.</p>
+</div>
+<p><em>Proof:</em> We wish to show that <span class="math inline">\(\mathbb{E}(S_{n}^\Delta)^2\to(b-a)^2\)</span> as <span class="math inline">\(n \to \infty\)</span>. First note that <span class="math display">\[
+\mathbb{E}S_{n}^\Delta = \mathbb{E}\left[ \sum_{i=0}^{K_{n}-1} \left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \right\rvert^2  \right]=\sum_{i=0}^{K_{n}-1}(t_{i+1}^{(n)}-t_{i}^{(n)})=b-a.
+\]</span> We proceed to compute <span class="math display">\[
+\begin{align}\mathbb{E}\left[(S_{n}^{\Delta})^2\right] &amp; =\mathbb{E}\left[ \left( \sum_{i=0}^{K_{n}-1}\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \rvert ^2 \right)^2 \right]  \\ &amp; =\sum_{i=0}^{K_{n}-1}\mathbb{E}\left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert ^4+2\sum_{i&lt;j}\mathbb{E}\left[ \left\lvert   B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert^2\cdot \left\lvert  B_{t_{j+1}^{(n)}}-B_{t_{j}}^{(n)}  \right\rvert   \right]  \\ &amp; = \sum_{i}3\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)^2+2\sum_{i&lt;j}\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)\cdot \left(t_{j+1}^{(n)}-t_{j}^{(n)}\right) \\ &amp; = 2\sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right) ^2+\left( \sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right)  \right) ^2 \\ &amp; \leq 2\delta^{(n)}(b-a)+(b-a)^2 \\  &amp; \to(b-a)^2\quad\text{as}\quad n \to \infty,\end{align}
+\]</span> where we have used <span class="math inline">\(\mathbb{E}X^4=3[(\sigma^2_{X})^2]\)</span> and the stationary independent increments of Brownian motion. We have showed that <span class="math display">\[
+\forall\varepsilon&gt;0,~\exists N:\forall n\geq N,~\mathbb{E}[(S_{n}^{\Delta})^2]\leq (b-a)^2+\varepsilon.
+\]</span> Additionally, we have shown that <span class="math inline">\(\mathbb{E}[(S_{n}^\Delta)^2]-(b-a)^2=\text{Var}(S_{n}^\Delta)\geq 0\)</span> i.e. <span class="math inline">\(\mathbb{E}[(S_{n}^\Delta)^2]\geq (b-a)^2\)</span> hence we obtain equality. Hence we have convergence in <span class="math inline">\(\mathcal{L}_{2}\)</span> which gives convergence in probability. <span class="math inline">\(\square\)</span></p>
+</section>
+</section>
+<section id="itô-integral" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="itô-integral"><span class="header-section-number">3</span> Itô Integral</h2>
+<p>Consider the probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> and let <span class="math inline">\((\boldsymbol{B}(t))=(B_{1}(t), \dots, B_{n}(t))\)</span> be <span class="math inline">\(n\)</span>-dimensional (standard) <a href="#Brownian%20Motion">Brownian Motion</a>. Define <span class="math inline">\(\boldsymbol{\mathcal{F}}(t)=\boldsymbol{\mathcal{F}}^{(n)}(t)\)</span> to be the filtration generated by <span class="math inline">\((B_{i}(s))_{{1\leq i \leq n}, 0 \leq s \leq t}\)</span>. Recall that we call the <strong>natural filtration</strong> of <span class="math inline">\((\boldsymbol{B}(t))\)</span> and interpret as the history of the process <span class="math inline">\(\boldsymbol{B}(t)\)</span> up to time <span class="math inline">\(t\)</span>.</p>
+<p>Our aim is to construct the integral <span class="math inline">\(I(f)=\int_{S}^{T}{f_{t}}~d{B_{t}}\)</span> for a general process <span class="math inline">\(f_{t}\)</span> in order to define an Itô process however this is somewhat challenging since <span class="math inline">\(B_{t}\)</span> can be shown to be nowhere differentiable and have infinite variation meaning that we cannot use a <a href="../topics/riemann-integral.html">Riemann Integral</a> or <a href="../topics/lebesgue-integral.html">Lebesgue Integral</a>. Instead we construct the <strong>Itô integral</strong> as the limit in mean square (or probability) of simple processes (akin to Riemann sums) where the integrand is evaluated at the left endpoint of each subinterval. This ensures the process is <strong>non-anticipating</strong> (adapted to the filtration) which preserves <strong>martingale properties</strong>.</p>
+<section id="itô-integral-construction" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="itô-integral-construction"><span class="header-section-number">3.1</span> Itô Integral Construction</h3>
+<p>We begin by defining the space of all <strong>measurable (actually progressive), adapted and <span class="math inline">\(\mathcal{L}_{2}\)</span> processes</strong> for which we can define the Itô integral. Let <span class="math inline">\(\mathcal{V}=\mathcal{V}(S,T)\)</span> be the class of functions <span class="math display">\[
+\mathcal{V}(S,T):=\{f(t,\omega):[0,\infty) \times \Omega \to \mathbb{R}\},
+\]</span> such that: 1. <span class="math inline">\((t, \omega)\to f(t, \omega)\)</span> is <span class="math inline">\(\mathcal{B}\times\mathcal{F}\)</span>-<strong>measurable</strong>, where <span class="math inline">\(\mathcal{B}\)</span> denotes the <strong>Borel σ-Algebra</strong> on <span class="math inline">\([0,\infty)\)</span>; 2. <span class="math inline">\(f(t,\omega)\)</span> is <span class="math inline">\(\mathcal{F}_{t}\)</span>-<strong>adapted</strong>; 3. <span class="math inline">\(\mathbb{E}[\int_{S}^T f(t,\omega)^2dt]&lt;\infty\)</span>.</p>
+<p>For (3) say <span class="math inline">\(f \in \mathcal{L}_{2}([S,T]\times \Omega)\)</span> since <span class="math inline">\(\left&lt; f_{t},g_{t} \right&gt; = \mathbb{E}\left[ \int_{S}^T f_{t}g_{t} ~dt \right]\)</span> is the inner product on such a space. Our goal is to define the <strong>stochastic integral</strong> <span class="math inline">\(I(f)=\int_{S}^T f_{t}dB_{t}\)</span> for a general process <span class="math inline">\(f\)</span> in such a <a href="../topics/hilbert-spaces.html">Hilbert space</a>.</p>
+<p>Our construction process is as follows, first consider defining such an integral for an elementary process and then extend it to general processes in <span class="math inline">\(\mathcal{V}\)</span>. The main thought is to find a <strong>dense subset</strong> of the Hilbert space and define the stochastic integral on it to prove that it is actually an <strong>isometry</strong>. We are then able to <strong>extend</strong> it as the isometry to the whole Hilbert space.</p>
+<div class="definition" data-title="Elementary Processes">
+<p>A process <span class="math inline">\((X_{t})\)</span> is called an <strong>elementary adapted process</strong> if it can be written in the form <span class="math display">\[
+\varphi_{t}(\omega)=\sum_{j \geq 0} e_{j}\mathbb{1}_{\left[\frac{j}{2^n}, \frac{{j+1}}{2^n}\right)}(t),
+\]</span> where <span class="math inline">\(n\in \mathbb{N}\)</span> and each <span class="math inline">\(e_{j}\in \mathcal{F}_{t}\)</span> and <span class="math inline">\(e_{j}\in\mathcal{L}_{2}\)</span>.</p>
+</div>
+<p>This is a slightly changed step function where <span class="math inline">\(e_j\)</span> are now a collection of <span class="math inline">\(\mathcal{F}\)</span> measurable random variables with finite over the <a href="https://en.wikipedia.org/wiki/Dyadic_rational">dyadic number</a> partition. For elementary functions we can define the stochastic integral <span class="math display">\[
+\int_{S}^T \varphi_{t}~dB_{t}=\sum_{j \geq 0}e_{j}[B_{t_{j+1}}-B_{t_{j}}],
+\]</span> where we specify <span class="math display">\[
+t_{k}=t_{k}^{(n)}=\begin{cases}
+\frac{k}{2^n} &amp; \text{if }S\leq \frac{k}{2^n}\leq T \\
+S &amp; \text{if } \frac{k}{2^n} &lt; S \\
+T &amp; \text{if } \frac{k}{2^n}&gt;T.
+\end{cases}
+\]</span> At this point it is natural to approximate a given function <span class="math inline">\(f(t,\omega)\)</span> by <span class="math display">\[
+\sum_{j}f_{t_{j}^*}(\omega)\cdot \mathbb{1}_{[t_{j},t_{j+1})}(t),
+\]</span> where the points <span class="math inline">\(t_{j}^*\in[t_{j}, t_{j+1}]\)</span> allowing us to define the integral <span class="math inline">\(\int_{S}^T f_{t}(\omega)dB_{t}(\omega)\)</span> as the limit (in <span class="math inline">\(\mathcal{L}_{2}\)</span>) of <span class="math inline">\(\sum_{j}f_{t_{j}^*}(\omega)[B_{t_{j+1}}-B_{t_{j}}](\omega)\)</span> as <span class="math inline">\(n \to \infty\)</span>. However, unlike with the Riemann-Stieltjes Integral our choice of <span class="math inline">\(t_{j}^*\)</span> impacts our final result, as shown with the following example.</p>
+<p><strong>Example (Choice of <span class="math inline">\(t^*\)</span> on interval)</strong> We define <span class="math display">\[
+\varphi^{(1)}_{t}(\omega)=\sum_{j \geq 0} B_{\frac{j}{2^n}}(\omega)\mathbb{1}_{[\frac{j}{2^n}, \frac{{j+1}}{2^n})}(t)\quad \&amp; \quad \varphi_{t}^{(2)}(\omega) = \sum_{j \geq 0} B_{\frac{j+1}{2^n}}(\omega)\mathbb{1}_{[\frac{j}{2^n}, \frac{{j+1}}{2^n})}(t).
+\]</span> Then from independent increments we have <span class="math display">\[
+\mathbb{E}\left[ \int_{0}^T \varphi _{t}^{(1)}(\omega)~dB_{t}(\omega)\right]=\sum_{j \geq 0 }\mathbb{E}[B_{t_{j}}(B_{t_{j+1}}-B_{t_{j}})]=0.
+\]</span> However <span class="math display">\[
+\mathbb{E}\left[ \int_{0}^T \varphi^{(2)}_{t}(\omega)~dB_{t}(\omega) \right]=\sum_{j \geq 0 }\mathbb{E}[B_{t_{j+1}}\cdot(B_{t_{j+1}}-B_{t_{j}})]=T.
+\]</span> The two most useful choices have been found to be the <em>left end point</em> <span class="math inline">\(t_{j}^* = t_{j}\)</span> leading to the Itô integral (the primary consideration in this note and throughout this topic) and the <em>mid point</em> <span class="math inline">\(t_{j}^*=(t_{j}+t_{j+1})/2\)</span> leading to the <em>Stratonovich integral</em>.</p>
+<p>To begin our extension from the elementary functions we make the following important observation.</p>
+<div class="theorem" data-title="Itô Isometry (Elementary Functions)">
+<p>If <span class="math inline">\(\varphi_{t}(\omega)\)</span> is bounded and elementary then we have <span class="math display">\[
+\mathbb{E}\left[ \left( \int_{S}^T \varphi_{t}(\omega )dB_{t} \right) ^2 \right] =\mathbb{E}\left[ \int_{S}^T \varphi_{t}^2(\omega )dt \right].
+\]</span></p>
+</div>
+<p><em>Proof:</em> Define <span class="math inline">\(\Delta B_{j}=B_{t_{j+1}}-B_{t_{j}}\)</span> and then note that <span class="math display">\[
+\mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\begin{cases}0 &amp; \text{if }i \neq j \\ \mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j}) &amp; \text{if }i = j, \end{cases}
+\]</span> from independent increments. Thus we have <span class="math display">\[
+\begin{align}\mathbb{E}\left[ \int_{S}^T \varphi_{t}~dB_{t} \right]=\sum_{i,j}\mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\sum_{j}\mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j})=\mathbb{E}\left[ \int_{S}^T \varphi_{t}^2~dt \right],\end{align}
+\]</span> completing the proof. <span class="math inline">\(\square\)</span></p>
+<section id="step-1-bounded-continuous-processes" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="step-1-bounded-continuous-processes"><span class="header-section-number">3.1.1</span> Step 1: Bounded Continuous Processes</h4>
+<p>Letting <span class="math inline">\(g \in \mathcal{V}\)</span> be bounded and <span class="math inline">\(g_{\cdot}(\omega)\)</span> continuous for each <span class="math inline">\(\omega\)</span>. Then there exist elementary functions <span class="math inline">\(\varphi^{(n)}\in \mathcal{V}\)</span> such that <span class="math display">\[
+\mathbb{E}\left[ \int_{S}^T (g_{t} - \varphi_{t})^2dt \right]\to 0\quad \text{as}\quad n \to \infty.
+\]</span> To see this define <span class="math inline">\(\varphi_{t}^{(n)}(\omega)=\sum_{j}g_{t_{j}}(\omega)\cdot \mathbb{1}_{[t_{j},t_{j+1})}(t)\)</span> which is elementary since <span class="math inline">\(g \in\mathcal{V}\)</span> and <span class="math display">\[
+\int_{S}^T(g-\varphi_{n})^2dt\to 0\quad \text{as}\quad n \to \infty,
+\]</span> for each <span class="math inline">\(\omega\)</span> (pointwise) since <span class="math inline">\(g_{\cdot}(\omega)\)</span> is pointwise continuous. Hence the result follows by bounded convergence.</p>
+</section>
+<section id="step-2-bounded-processes" class="level4" data-number="3.1.2">
+<h4 data-number="3.1.2" class="anchored" data-anchor-id="step-2-bounded-processes"><span class="header-section-number">3.1.2</span> Step 2: Bounded Processes</h4>
+<p>Let <span class="math inline">\(h \in \mathcal{V}\)</span> be bounded. Then there exist bounded functions <span class="math inline">\(g^{(n)} \in \mathcal{V}\)</span> such that <span class="math inline">\(g_{t}^{(n)}(\omega)\)</span> is continuous for all <span class="math inline">\(\omega\)</span> and <span class="math inline">\(n\)</span>, and <span class="math display">\[
+\mathbb{E}\left[ \int_{S}^T (h_{t} - g_{t}^{(n)})^2dt \right]\to 0.
+\]</span> To see this suppose <span class="math inline">\(\lvert h_{t}(\omega) \rvert\leq M\)</span> for all <span class="math inline">\((t, \omega)\)</span>. For each <span class="math inline">\(n\)</span> let <span class="math inline">\(\phi^{(n)}\)</span> be a non-negative, continuous function on <span class="math inline">\(\mathbb{R}\)</span> such that: 1. <span class="math inline">\(\phi^{(n)}(x)=0\)</span> for <span class="math inline">\(x \leq -\frac{1}{n}\)</span> and <span class="math inline">\(x \geq 0\)</span>; and 2. <span class="math inline">\(\int_{\mathbb{R}}\phi^{(n)}(x)~dx =1.\)</span> Define <span class="math display">\[
+g_{t}^{(n)}(\omega)=\int_{0}^t\phi^{(n)}_{t}(s-t)h_{s}(\omega)ds.
+\]</span> Then <span class="math inline">\(g_{\cdot}^{(n)}(\omega)\)</span> is continuous for each <span class="math inline">\(\omega\)</span> (pointwise) and <span class="math inline">\(\lvert g_{t}^{(n)}(\omega) \rvert\leq M\)</span>. Since <span class="math inline">\(h \in \mathcal{V}\)</span> we show that <span class="math inline">\(g^{(n)}_{t}(\cdot)\)</span> is adapted (e.g.&nbsp;Karatzas and Shreve (1991); pg 133). Moreover <span class="math display">\[
+\int_{S}^T(g^{(n)}_{s}(\omega)-h_{s}(\omega))^2ds\to 0 \quad \text{pointwise as}\quad n\to \infty,
+\]</span> since <span class="math inline">\(\{ \phi_{n} \}\)</span> constitutes an approximate identity (e.g.&nbsp;Hoffman (1962); pg 22). Hence, by bounded convergence we obtain the result.</p>
+</section>
+<section id="step-3-general-process" class="level4" data-number="3.1.3">
+<h4 data-number="3.1.3" class="anchored" data-anchor-id="step-3-general-process"><span class="header-section-number">3.1.3</span> Step 3: General Process</h4>
+<p>Let <span class="math inline">\(f \in\mathcal{V}\)</span>. Then there exists a sequence <span class="math inline">\(\{ h^{(n)} \}\subset\mathcal{V}\)</span> such that <span class="math inline">\(h_{n}\)</span> is bounded for each <span class="math inline">\(n\)</span> and <span class="math display">\[
+\mathbb{E}
+\left[ \int_{S}^T(f-h^{(n)})^2 dt \right]\to 0 ~~\text{as}~~ n \to \infty.
+\]</span> To see this we simply put <span class="math display">\[
+h^{(n)}_{t}(\omega) = \begin{cases}
+-n &amp; \text{if } f_{t}(\omega)&lt;-n \\
+f_{t}(\omega) &amp; \text{if } -n \leq f_{t}(\omega)\leq n \\
+n &amp; \text{if } f_{t}(\omega)&gt;n,
+\end{cases}
+\]</span> and the conclusion follows by the <strong>Dominated Convergence Theorem</strong>.</p>
+</section>
+</section>
+<section id="itô-integral-itôs-isometry" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="itô-integral-itôs-isometry"><span class="header-section-number">3.2</span> Itô Integral &amp; Itô’s Isometry</h3>
+<div class="definition" data-title="Itô Integral">
+<p>For <span class="math inline">\(f\in\mathcal{V}(S,T)\)</span> the Itô integral from <span class="math inline">\(S\)</span> to <span class="math inline">\(T\)</span> is defined by <span class="math display">\[
+\int_{S}^Tf(t, \omega)dB_{t}(\omega) =\lim_{ n \to \infty } \int_{S}^T \phi_{n}(t, \omega)dB_{t}(\omega),
+\]</span> where the limit is taken in <span class="math inline">\(L^2\)</span> and <span class="math inline">\(\{ \phi_{n} \}\)</span> is a sequence of elementary functions such that <span class="math display">\[
+\mathbb{E}\left[ \int_{S}^T (f(t, \omega)-\phi_{n}(t, \omega))^2dt \right] \to 0,
+\]</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
+</div>
+</section>
+<section id="itô-isometry" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="itô-isometry"><span class="header-section-number">3.3</span> Itô Isometry</h3>
+<div class="theorem" data-title="Itô's Isometry">
+<p>For <span class="math inline">\(f \in\mathcal{V}(S,T)\)</span> we have that <span class="math display">\[
+\mathbb{E}\left[ \left( \int_{S}^T f(t,\omega )dB_{t} \right) ^2 \right] =\mathbb{E}\left[ \int_{S}^T f^2(t,\omega )dt \right].
+\]</span></p>
+</div>
+<p>The Itô integral has many of the same properties as the classical integrals which allow for ease of manipulation.</p>
+<div class="definition" data-title="Itô Integral Properties">
+<p>Let <span class="math inline">\(f,g\in\mathcal{V}(0,T)\)</span> and let <span class="math inline">\(0\leq S&lt;U&lt;T\)</span>. Then we have that: 1. <span class="math inline">\(\int_{S}^Tf~dB_{t}=\int_{S}^U f~dB_{t}+\int_{U}^T f~dB_{t}\)</span> almost surely. 2. <span class="math inline">\(\int_{S}^T(cf+g)dB_{t}=c\int_{S}^Tf~dB_{t}+\int_{S}^Tg~dB_{t}\)</span> almost surely for constant <span class="math inline">\(c\)</span> 3. <span class="math inline">\(\mathbb{E}\left[\int_{S}^T f~dB_{t}\right]=0\)</span>. 4. <span class="math inline">\(\int_{S}^Tf~dB_{t}\)</span> is <span class="math inline">\(\mathcal{F}_{T}\)</span>-measurable.</p>
+</div>
+<p><em>Proof:</em> This clearly holds for elementary functions hence by taking limits we obtain this for all <span class="math inline">\(f,g\in\mathcal{V}(0,T)\)</span>. <span class="math inline">\(\square\)</span></p>
+<p>Another important property of the Itô integral is that it is a <strong>martingale</strong>, that is it does not drift on average over time.</p>
+</section>
+</section>
+<section id="itô-processes" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="itô-processes"><span class="header-section-number">4</span> Itô Processes</h2>
+<section id="itô-process" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="itô-process"><span class="header-section-number">4.1</span> Itô Process</h3>
+<p>Let <span class="math inline">\(B_{t}\)</span> be a 1-dimensional Brownian motion on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>. A (1-dimensional) <strong>Itô process</strong> (or stochastic integral) is a stochastic process <span class="math inline">\(X_{t}\)</span> on <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span> of the form <span class="math display">\[
+X_{t}=x+\int_{0}^{t}{u(s, \omega )}~d{s} + \int_{0}^{t}{v(s,\omega)}~d{B_{s}},
+\]</span> where we say that <span class="math inline">\(u\)</span> is the <strong>drift coefficient</strong> (controls the growth of the process) and <span class="math inline">\(v\)</span> is the <strong>diffusion coefficient</strong> (controls the size of the noise). Sometimes this is written in the shorter differential form <span class="math display">\[
+dX_{t}=udt+vdB_{t}.
+\]</span></p>
+</section>
+<section id="itô-formula" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="itô-formula"><span class="header-section-number">4.2</span> Itô Formula</h3>
+<p>Itô’s formula or Itô’s lemma is an identity used in Itô calculus to find the differential of a time-dependent function of a stochastic process. It serves as the stochastic calculus counterpart of the chain rule.</p>
+<div class="theorem" data-title="1-Dimensional Itô Formula">
+<p>Let <span class="math inline">\(X_{t}\)</span> be an Itô process given by <span class="math display">\[
+dX_{t}=udt+vdB_{t}.
+\]</span> Further, let <span class="math inline">\(g(t,x)\in C^2([0,\infty)\times \mathbb{R})\)</span> (i.e.&nbsp;twice differentiable on <span class="math inline">\([0,\infty)\times \mathbb{R}\)</span>). Then <span class="math display">\[
+Y_{t}=g(t,X_{t})
+\]</span> is again an Itô process and <span class="math display">\[
+dY_{t}=g_{t}(t, X_{t})dt+g_{x}(t, X_{t})dX_{t}+ \frac{1}{2}g_{x x}(t, X_{t})d\left&lt; X,X \right&gt;_{t}.
+\]</span></p>
+</div>
+<p>Here <span class="math inline">\(d\left&lt; X,X \right&gt;_{t}=(dX_{t})\cdot(dX_{t})\)</span> is computed according to the following: <span class="math display">\[
+dt\cdot dt=dt\cdot dB_{t}=dB_{t}\cdot dt=0,\quad dB_{t}\cdot dB_{t}=0.
+\]</span> <em>Proof:</em> Substituting <span class="math inline">\(dX_{t}=udt+vdB_{t}\)</span> into the Itô formula we get <span class="math display">\[
+\begin{align}
+g(t,X_{t}) &amp; = g(0,X_{0}) + \int_{0}^t\left(  \frac{{\partial g}}{\partial s}(s,X_{s})+u_{s}\frac{{\partial g}}{\partial x}(s,X_{s})+ \frac{1}{2} v_{s}^2 \frac{{\partial^2g}}{\partial x^2}(s,X_{s}) \right)ds \\
+&amp; + \int_{0}^t v_{s} \frac{{\partial g}}{\partial x}(s,X_{s})dB_{s}.
+\end{align}
+\]</span> We may assume that <span class="math inline">\(g, g_{t}, g_{x}, g_{x x}\)</span> are bounded for each <span class="math inline">\(n\)</span> and converge uniformly on compact subsets of <span class="math inline">\([0,\infty)\times \mathbb{R}\)</span> to <span class="math inline">\(g,g_{t},g_{x},g_{x x}\)</span> respectively. Moreover, we may assume that <span class="math inline">\(u,v\)</span> are elementary functions. Using Taylor’s theorem we get <span class="math display">\[
+\begin{align}
+g(t,X_{t}) &amp; = g(0,X_{0}) + \sum_{j}\Delta g(t_{j}, X_{j})  \\
+&amp; = g(0,X_{0})+\sum_{j} \frac{{\partial g}}{\partial t} \Delta t_{j}+\sum_{j} \frac{{\partial g}}{\partial x}\Delta X_{j}+ \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial t^2}(\Delta t_{j}^2)  \\
+&amp; \qquad + \sum_{j} \frac{{\partial^2g}}{\partial t\partial x}(\Delta t_{j})(\Delta X_{j}) + \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial x^2}(\Delta X_{j})^2 + \sum_{j}R_{j},
+\end{align}
+\]</span> where <span class="math inline">\(\frac{{\partial g}}{\partial t}, \frac{{\partial g}}{\partial x}\)</span> etc. are evaluated at the points <span class="math inline">\((t_{j}, X_{t_{j}})\)</span>, <span class="math display">\[
+\begin{align}
+\Delta t_{j} &amp; =t_{j+1}-t_{j} \\
+\Delta X_{j} &amp; = X_{t_{j+1}}-X_{t_{j}} \\
+\Delta g(t_{j},X_{j}) &amp; = g(t_{j+1},X_{t_{j+1}})-g(t_{j},X_{j}),
+\end{align}
+\]</span> and <span class="math inline">\(R_{j}=o(\lvert \Delta t_{j} \rvert^2+\lvert \Delta X_{j} \rvert^2)\)</span> for all <span class="math inline">\(j\)</span>. If <span class="math inline">\(\Delta t_{j}\to 0\)</span> then <span class="math display">\[
+\begin{align}
+\sum_{j} \frac{{\partial g}}{\partial t}\Delta t_{j} &amp; =\sum_{j} \frac{{\partial g}}{\partial t}(t_{j}, X_{j})\Delta t_{j} \to \int_{0}^t \frac{{\partial g}}{\partial t}(s,X_{s})~ds \\
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2} \Delta X_{j} &amp; = \sum_{j} \frac{{\partial g}}{\partial x}(t_{j}, X_{j})\Delta X_{j} \to \int_{0}^t \frac{{\partial g}}{\partial x}(s,X_{s})dX_{s}.
+\end{align}
+\]</span> Moreover, since <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are elementary we get <span class="math display">\[
+\begin{align}
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2}(\Delta X_{j})^2  &amp; = \underbrace{\sum_{j} \frac{{\partial^2g}}{\partial x^2}u_{j}^2 (\Delta t_{j})^2}_{\to 0\text{ as }\Delta t_{j}\to 0} + \underbrace{2 \sum_{j} \frac{{\partial^2g}}{\partial x^2} u_{j}v_{j}(\Delta t_{j})(\Delta B_{j})}_{\to 0\text{ as }\Delta t_{j}\to 0} +\sum_{j} \frac{{\partial^2g}}{\partial x^2}v_{j}^2 \cdot (\Delta B_{j})^2,
+\end{align}
+\]</span> where <span class="math inline">\(u_{j}=u(t_{j},\omega)\)</span> and <span class="math inline">\(v_{j}=v(t_{j},\omega)\)</span> and convergence in <span class="math inline">\(L_2\)</span>. We claim the third term tends to <span class="math display">\[
+\int_{0}^t \frac{{\partial^2g}}{\partial x^2}v^2~ds.
+\]</span> To prove this put <span class="math inline">\(a(t)= \frac{{\partial^2g}}{\partial x^2}(t,X_{t})v^2(t,\omega)\)</span>, <span class="math inline">\(a_{j}=a(t_{j})\)</span> and consider <span class="math display">\[
+\mathbb{E}\left[ \left( \sum_{j} a_{j}(\Delta B_{j})^2-\sum_{j}a_{j}\Delta t_{j} \right)^2 \right] = \sum_{i,j} \mathbb{E}[a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})((\Delta B_{j})^2 - \Delta t_{j})].
+\]</span> If <span class="math inline">\(i&lt;j\)</span> then <span class="math inline">\(a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})\)</span> and <span class="math inline">\((\Delta B_{j})^2-\Delta t_{j}\)</span> are independent so the terms vanish, and similarly if <span class="math inline">\(i&gt;j\)</span>. This leaves <span class="math display">\[
+\begin{align}
+\sum_{j}\mathbb{E}[a_{j}^2((\Delta B_{j})^2-\Delta t_{j})^2]  &amp; = \sum_{j}\mathbb{E}[a_{j}^2] \cdot \mathbb{E}[(\Delta B_{j})^4-2(\Delta B_{j})^2\Delta t_{j} + (\Delta t_{j})^2]  \\
+&amp; = \sum_{j}\mathbb{E}[a_{j}^2]\cdot (3(\Delta t_{j})^2 - 2(\Delta t_{j})^2+(\Delta t_{j})^2)  \\
+&amp; =2\sum_{j}\mathbb{E}[a_{j}^2]\cdot(\Delta t_{j})^2  \\
+&amp; \to 0\quad (\Delta t_{j}\to 0).
+\end{align}
+\]</span> Thus we have established that <span class="math display">\[
+\sum_{j}a_{j}(\Delta B_{j})^2 \to \int_{0}^t a(s)ds,
+\]</span> which is often expressed as <span class="math display">\[
+(dB_{t})^2=dt.
+\]</span> The argument above also proves that <span class="math inline">\(\sum R_{j}\to 0\)</span> as <span class="math inline">\(\Delta t_{j}\to_{0}\)</span>. <span class="math inline">\(\square\)</span></p>
+<p><strong>Example (Itô Formula Application I)</strong> Consider the integral <span class="math display">\[
+Y_{t}=\int_{0}^tB_{s}dB_{s}.
+\]</span> Assuming we can write <span class="math inline">\(Y_{t}=g(t, B_{t})\)</span> from Itô’s formula we have <span class="math display">\[
+dY_{t}=\left[ g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t,B_{t}) \right] dt+g_{B}(t,B_{t})dB_{t},
+\]</span> which written in integral form gives <span class="math display">\[
+Y_{t}-Y_{0}=\int_{0}^t\left[ g_{t}(s,B_{s})+\frac{1}{2}g_{B B}(s,B_{s}) \right]ds+\int_{0}^t g_{B}(s, B_{s})dB_{s}.
+\]</span> Hence we need some <span class="math inline">\(g(t,B_{t})\)</span> such that <span class="math display">\[
+(1)~~g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t, B_{t})=0\quad \&amp;\quad (2)~~ g_{B}(t,B_{t})=B_{t}.
+\]</span> Since <span class="math inline">\(g_{B}=B_{t}\implies g_{BB}=1\)</span> and so <span class="math inline">\(g_{t}=-\frac{1}{2}\)</span>. An obvious candidate therefore is <span class="math display">\[
+g(t,B_{t})=\frac{1}{2}B_{t}^2 - \frac{1}{2}t,
+\]</span> which in fact is the result, as can be verified by plugging into Itô’s formula.</p>
+<p><strong>Example (Itô Formula Application II)</strong> Consider the Itô process <span class="math display">\[
+g(t,B_{t})=\exp(bt+\sigma B_{t}),
+\]</span> where <span class="math inline">\(b,\sigma\)</span> are constants for drift and diffusion. To compute <span class="math inline">\(dg\)</span> we apply the Itô formula <span class="math display">\[
+\begin{align}
+dg(t,B_{t}) &amp; =b\exp(bt+\sigma B_{t})dt+\sigma \exp(bt+\sigma B_{t})dB_{t}+ \frac{1}{2} \sigma^2\exp(bt+\sigma B_{t})d\left&lt; B,B \right&gt;_{t}  \\
+&amp; = g(t,B_{t})\left\{ \left( b+ \frac{1}{2} \sigma^2 \right)dt+\sigma dB_{t} \right\}.
+\end{align}
+\]</span> The process <span class="math inline">\(X_{t}=g(t,B_{t})\)</span> defines <strong>geometric BM</strong> and is used to simulate the change of the stock price in the <strong>Black-Scholes-Merton Model</strong> (<span class="math inline">\(\mu\)</span> as mean return and <span class="math inline">\(\sigma\)</span> as volatility).</p>
+<div class="theorem" data-title="Itô Integration by Parts">
+<p>For a continuous function <span class="math inline">\(f(s,\omega)\)</span> that is of bounded variation with respect to <span class="math inline">\(s \in [0,t]\)</span> almost surely we have that <span class="math display">\[
+\int_{0}^t f(s)dB_{s}=f(t)B_{t}-\int_{0}^t B_{s}df_{s}.
+\]</span></p>
+</div>
+</section>
+<section id="multi-dimensional-itô-formula" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="multi-dimensional-itô-formula"><span class="header-section-number">4.3</span> Multi-dimensional Itô Formula</h3>
+<p>Considering the situation in higher dimensions we define a <span class="math inline">\(d\)</span>-dimensional Itô process as the integral with respect to the <span class="math inline">\(m\)</span>-dimensional BM as <span class="math display">\[
+X_{t}^i=x_{0}^i+\int_{0}^t\psi_{s}^ids+\sum_{k=1}^m \int_{0}^t \varphi_{s}^{i,k}dB_{s}^k,
+\]</span> for <span class="math inline">\(k = 1, \dots, m\)</span> and <span class="math inline">\(i = 1, \dots, d\)</span> where we note that such an Itô process exists in <span class="math inline">\(\mathbb{R}^d\)</span> and is constructed with respect to BM <span class="math inline">\(B_{s}=(B_{s}^1, \dots, B_{s}^m)\)</span>. To write this in a more compact form <span class="math display">\[
+X_{t}=x_{0}+\int_{0}^t \psi_{s}ds+\int_{0}^t\varphi_{s}\cdot dB_{s},
+\]</span> where <span class="math inline">\(X_{t}, x_{0},\psi_{s} \in \mathbb{R}^d\)</span> and <span class="math inline">\(\varphi_{s}\in \mathbb{R}^{d \times m}\)</span> and here <span class="math inline">\(\varphi_{s}^{i,k}\)</span> stands for the process <span class="math inline">\(\varphi\)</span> used to construct the <span class="math inline">\(i\)</span>-th coordinate of the Itô process as a stochastic integral with respect to the <span class="math inline">\(k\)</span>-th coordinate of the <span class="math inline">\(m\)</span>-dimensional BM.</p>
+<div class="theorem" data-title="Multi-Dimensional Itô Formula">
+<p>For some vector-valued function <span class="math inline">\(g:\mathbb{R}_{+}\times \mathbb{R}^d\to \mathbb{R}^p \in C^{1,2}\)</span>, then the multi-dimensional Itô formula holds <span class="math display">\[
+\begin{align}dg^i(t,X_{t}) &amp; =\partial_{t}g^i(t,X_{t})dt+\nabla_{x} g^i(t,X_{t})\cdot dX_{t}+ \frac{1}{2}\mathrm{Tr}(\varphi_{t}^T H \varphi_{t})dt \\ &amp; = \partial_{t}g^i(t,X_{t})dt+\sum_{k=1}^{d}\partial_{x_{k}}g^i(t,X_{t})dX_{t}^k+ \frac{1}{2}\sum_{j,k = 1}^{d}\partial_{x_{j},  x_{k}}g^i(t,X_{t})d\left&lt; X^j, X^k \right&gt; _{t},\end{align}
+\]</span> where <span class="math inline">\(\nabla _x f\)</span> denotes the gradient of <span class="math inline">\(f\)</span> with respect to vector <span class="math inline">\(x\)</span>, <span class="math inline">\(\varphi_{t}\in \mathbb{R}^{d \times m}\)</span> is a matrix and <span class="math inline">\(H_{d \times d}\)</span> is the Hessian of <span class="math inline">\(g\)</span> restricted on its action on <span class="math inline">\(x \in \mathbb{R}^d\)</span> at <span class="math inline">\((t, X_{t})\)</span>. The bracket <span class="math inline">\(d\left&lt; X^j, X^k \right&gt;_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt\)</span>.</p>
+</div>
+<p><em>Proof:</em> The structure of the proof is still exactly the same as the 1-dimensional case. We need only verify that <span class="math inline">\(dB_{t}^pdB_{t}^q=0\)</span> for <span class="math inline">\(p \neq q\)</span> and <span class="math inline">\(d\left&lt; X^j,X^k \right&gt;_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt\)</span>. <span class="math inline">\(\square\)</span></p>
+</section>
+<section id="the-martingale-representation-theorem" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="the-martingale-representation-theorem"><span class="header-section-number">4.4</span> The Martingale Representation Theorem</h3>
+<p>The <strong>martingale representation theorem</strong> states that a random variable that is measurable with respect to the filtration generated by a Brownian motion can be written in terms of an Itô integral with respect to this Brownian motion.</p>
+<div class="theorem" data-title="Martingale Representation Theorem">
+<p>Let <span class="math inline">\(B(t)\)</span> be <span class="math inline">\(n\)</span>-dimensional BM. Suppose <span class="math inline">\(M_{t}\)</span> is an <span class="math inline">\(\mathcal{F}_{t}^{(n)}\)</span>-martingale (w.r.t.) <span class="math inline">\(\mathbb{P}\)</span> and that <span class="math inline">\(M_{t}\in\mathcal{L}_{2}(\mathbb{P})\)</span> for all <span class="math inline">\(t \geq 0\)</span>. Then there exists a unique stochastic process <span class="math inline">\(g(s,\omega)\)</span> such that <span class="math inline">\(g \in \mathcal{V}^{(n)}(0,t)\)</span> for all <span class="math inline">\(t \geq 0\)</span> and <span class="math display">\[
+M_{t}(\omega)=\mathbb{E}[M_{0}]+\int_{0}^t g(s,\omega) dB(s),
+\]</span> almost surely for all <span class="math inline">\(g \geq 0\)</span>.</p>
+</div>
+<p>The proof of this result is involved and is omitted from this note. Details can be found in our note on this theorem [[martingale-representation-theorem|here]].</p>
+</section>
+</section>
+<section id="stochastic-differential-equations" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="stochastic-differential-equations"><span class="header-section-number">5</span> Stochastic Differential Equations</h2>
+<p>A general <strong>stochastic differential equation</strong> in <span class="math inline">\(\mathbb{R}^n\)</span> with initial condition has the form <span class="math display">\[
+\begin{cases}
+dX_{t}=b(t,X_{t})dt+\sigma(t, X_{t})dBt \\
+X_{0}=x,
+\end{cases}
+\]</span> where <span class="math inline">\(x,X_{t}\in \mathbb{R}^n\)</span>, <span class="math inline">\(b: \mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^n\)</span>, <span class="math inline">\(\sigma:\mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^{n \times m}\)</span> and <span class="math inline">\(B_{t}\)</span> is an <span class="math inline">\(m\)</span>-dimensional BM. Here <span class="math inline">\(b\)</span> is the <strong>drift</strong> coefficient and <span class="math inline">\(\sigma\)</span> is the <strong>volatility</strong> coefficient. We note the difference between SDEs and a general Itô process lies in the fact that <span class="math inline">\(b,\sigma\)</span> are functions of the unknown process <span class="math inline">\(X_{t}\)</span>.</p>
+<div class="theorem" data-title="Existence and Uniqueness of SDE Solutions">
+<p>Fixing time <span class="math inline">\(T&gt;0\)</span> and assuming <span class="math inline">\(b:[0,T]\times \mathbb{R}^n\to \mathbb{R}^n\)</span>, <span class="math inline">\(\sigma:[0,T]\times \mathbb{R}^n \to \mathbb{R}^{n \times m}\)</span> are deterministic functions with bounded time variable <span class="math inline">\(T\)</span> which satisfy the following conditions: 1. <span class="math inline">\(\exists c&gt;0,~\forall t \in [0,T],~\forall x \in \mathbb{R}^n,~\lvert b(t,x) \rvert + \lvert \sigma(t,x) \rvert\leq c(1+\lvert x \rvert)\)</span> (growth condition); 2. <span class="math inline">\(\exists D&gt;0,~\forall t \in[0,T],~\forall x,y \in \mathbb{R}^n,~\lvert b(t,x)-b(t,y) \rvert + \lvert \sigma(t,x)-\sigma(t,y) \rvert\leq D\lvert x-y \rvert\)</span> (Lipschitz condition),</p>
+<p>then the SDE has unique solution in <span class="math inline">\(L^2([0,T]\times \Omega)\)</span> that has continuous sample path.</p>
+</div>
+<p><em>NEED TO ADD PROOF.</em></p>
+<section id="strong-and-weak-sde-solutions" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="strong-and-weak-sde-solutions"><span class="header-section-number">5.1</span> Strong and Weak SDE Solutions</h3>
+<p>A strong solution to a stochastic differential equation is defined as the solution <span class="math inline">\(X_{t}\in \mathcal{F}_{t}\)</span> adapted to the filtration generated by Brownian Motion and the initial condition (if it is random) <span class="math display">\[
+\mathcal{F}_{t}=\sigma(B_{s}, 0 \leq s \leq t)\vee \sigma(X_{0}).
+\]</span> The uniqueness and global existence theorem stated for Stochastic Differential Equations is just proving that for strong solutions.</p>
+</section>
+<section id="sde-example-linear-sde" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="sde-example-linear-sde"><span class="header-section-number">5.2</span> SDE Example: Linear SDE</h3>
+<p><em>References: Linear Stochastic Differential Equations.</em></p>
+<div class="definition" data-title="Linear SDE">
+<p>Let <span class="math inline">\(W_t\)</span> be <span class="math inline">\(m\)</span>-dimensional BM, <span class="math inline">\(A\)</span> be an <span class="math inline">\(n \times n\)</span> matrix and <span class="math inline">\(B\)</span> an <span class="math inline">\(n \times m\)</span> matrix. Then a linear stochastic differential equation <span class="math inline">\(X_{t}\)</span> has dynamics given by <span class="math display">\[
+\begin{cases}dX_{t}=AX_{t}dt+BdW_{t},\\X_{0}=x.\end{cases}
+\]</span></p>
+</div>
+<p>To find the general solution of a linear SDE we first note that by setting the noise term <span class="math inline">\(B\)</span> to the <span class="math inline">\(0\)</span>-matrix we have the ODE <span class="math inline">\(dX_{t}=AX_{t}dt\)</span> which has the solution <span class="math inline">\(X_{t}=X_{0}e^{At}\)</span>. Setting this as our</p>
+<p>which are given explicitly by <span class="math display">\[
+X_{t}=e^{At}x+\int_{0}^{t}{e^A(t-s)B}~d{W_{s}}.
+\]</span></p>
+</section>
+<section id="sde-example-black-scholes-model" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="sde-example-black-scholes-model"><span class="header-section-number">5.3</span> SDE Example: Black Scholes Model</h3>
+<p>The Black-Scholes model provides the structure on which we are able to price contingency claims (specifically options). Specifically, the Black-Scholes model is a mathematical model for the dynamics of a financial market containing derivative investment instruments such as stock shares or futures contracts assumed to have a lognormal distribution of prices following a random walk with constant drift and volatility.</p>
+<div class="definition" data-title="Black-Scholes Model">
+<p>The Black-Scholes model consists of two assets, a risk free asset <span class="math inline">\(B\)</span> and a stock <span class="math inline">\(S\)</span> with price dynamics given by <span class="math display">\[
+\begin{align}dB_{t}&amp;=rB_{t}dt \\dX_{t}&amp; =\mu X_{t}dt+\sigma X_{t}dB_{t}\end{align}
+\]</span> where <span class="math inline">\(r,\mu,\sigma \in \mathbb{R}\)</span> are deterministic constants.</p>
+</div>
+<p>So in our notation we have <span class="math inline">\(b(t,x)=\mu x\)</span> and <span class="math inline">\(\sigma(t,x)=\sigma x\)</span> which are both Lipschitz in in <span class="math inline">\(x\)</span> and satisfy the growth condition.</p>
+<p>To solve this system we note that if we ignore the stochastic term <span class="math inline">\(dX_{t}=\mu X_{t}dt\)</span> is an ODE with solution <span class="math inline">\(X_{t}=X_{0}\cdot e^{\mu t}\)</span>. We therefore consider changing variables with <span class="math inline">\(Y_{t}=\log(X_{t})\)</span> and applying Itô’s formula we obtain <span class="math display">\[
+dY_{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2X_{t}^2}d\left&lt; X,X \right&gt; _{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2}\sigma^2dt,
+\]</span> where we have used that <span class="math inline">\(d\left&lt; X,X \right&gt;_{t}=\sigma^2X_{t}^2d\left&lt; B,B \right&gt;_{t}=\sigma^2X_{t}^2dt\)</span>. Substituting in our initial expression we have <span class="math display">\[
+\begin{align}
+dY_{t} &amp; =\mu dt+\sigma dB_{t}-\frac{1}{2}\sigma^2dt=\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\sigma dB_{t}  \\
+\implies Y_{t}-Y_{0} &amp; =\int_{0}^t\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\int_{0}^t\sigma dB_{t} \\
+&amp; =\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t} \\
+\implies X_{t} &amp; =X_{0}\cdot e^{\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t}}.
+\end{align}
+\]</span> ### SDE Example: OU Process</p>
+<p>An Ornstein-Uhlenbeck process is a mean reverting stochastic process that is a Gaussian process, is Markov and is temporally stationary. This process can be used to describe the fluctuation of interest rate around the mean interest rate <span class="math inline">\(M\)</span> with the speed of the regression described by <span class="math inline">\(\theta\)</span>.</p>
+<div class="definition" data-title="Ornstein-Uhlenbeck Process">
+<p>The Ornstein-Uhlenbeck process <span class="math inline">\((X_{t})\)</span> with drift has dynamics described by the stochastic differential equation <span class="math display">\[
+dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}
+\]</span> where <span class="math inline">\(\theta,\sigma&gt;0\)</span>, <span class="math inline">\(\mu \in \mathbb{R}\)</span> are all constant and <span class="math inline">\(B_{t}\)</span> is a BM.</p>
+</div>
+<p>Consider such a process with a deterministic starting value <span class="math inline">\(X_{0}\)</span>. To find a solution to this SDE we first change the variable to set the regression level to 0 with <span class="math inline">\(Y_{t}=X_{t}-\mu\)</span>. From Itô’s formula we have <span class="math display">\[
+dY_{t}=dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}=-\theta Y_{t}dt+\sigma dB_{t}.
+\]</span> Considering when <span class="math inline">\(\sigma=0\)</span> we have the ODE <span class="math inline">\(dY_{t}=-\theta Y_{t}dt\)</span> with the solution <span class="math inline">\(Y_{t}=Y_{0}\cdot e^{-\theta t}\)</span> and so replacing this constant <span class="math inline">\(Y_{0}\)</span> with some yet to define process <span class="math inline">\(C_{t}\)</span> we have <span class="math inline">\(Y_{t}=C_{t}e^{-\theta t}\)</span> and from Itô’s formula we have <span class="math display">\[
+dY_{t}=-\theta e^{-\theta t}C_{t}dt+e^{-\theta t}dC_{t}=-\theta Y_{t}dt+e^{-\theta t}dC_{t}.
+\]</span> We therefore can define <span class="math inline">\(dC_{t}=\sigma e^{\theta t}dB_{t}\)</span> and so <span class="math inline">\(C_{0}=Y_{0}=X_{0}-\mu\)</span> and <span class="math display">\[
+\begin{align}
+C_{t}-C_{0} &amp; = \int_{0}^t\sigma e^{\theta s}dB_{s} \\
+\implies C_{t} &amp; =X_{0}-\mu+\sigma \int_{0}^te^{\theta s}dB_{s} \\
+\implies Y_{t} &amp; = (X_{0}-\mu)e^{-\theta t}+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s} \\
+\implies X_{t} &amp; = (X_{0}-\mu)e^{-\theta t}+\mu+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s}.
+\end{align}
+\]</span> ### SDE Example: Brownian Bridge</p>
+<p>A Brownian bridge is a continuous-time gaussian process <span class="math inline">\((X_{t})\)</span> whose probability distribution is the conditional probability distribution of a standard Brownian Motion <span class="math inline">\(B_t\)</span> subject to the condition (when standardized) that <span class="math inline">\(W_{T} = 0\)</span>, so that the process is pinned to the same value at both t = 0 and t = T.</p>
+<blockquote class="blockquote">
+<p>[!definition] Brownian Bridge The <strong>Brownian Bridge</strong> is an SDE <span class="math inline">\((X_{t})\)</span> characterized by the dynamics <span class="math display">\[\begin{cases}dX_{t}=\frac{b-X_{t}}{1-t}dt+dB_{t}\\ X_{0}=a,\end{cases}\]</span> for <span class="math inline">\(a,b \in \mathbb{R}\)</span> and <span class="math inline">\(0 \leq t &lt; 1\)</span>.</p>
+</blockquote>
+<p>This is the Brownian bridge starting from <span class="math inline">\(a\)</span> and ending at <span class="math inline">\(b\)</span> that has the same finite-dimensional distribution as the BM conditioning on starting from <span class="math inline">\(a\)</span> at time <span class="math inline">\(0\)</span> and ending at <span class="math inline">\(b\)</span> at time <span class="math inline">\(1\)</span>. The Brownian bridge starting from <span class="math inline">\(0\)</span> at time <span class="math inline">\(0\)</span> and ending at <span class="math inline">\(0\)</span> at time <span class="math inline">\(1\)</span> has the simple form as <span class="math inline">\(B_t−tB_1\)</span>.</p>
+<p>We can verify that the solution is given by <span class="math display">\[
+Y_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
+\]</span> First note that since <span class="math display">\[
+G:=\int_{0}^t \frac{1}{1-s}sB_{s} \sim\mathcal{N}\left( 0, \frac{1}{1-t} \right),
+\]</span> its characteristic function is <span class="math display">\[
+\phi(p)=\phi_{G}(p(1-t))=e^{\frac{1}{2(1-t)}p^2(1-t)^2}=e^{\frac{1}{2}p^2(1-t)}\to 1~~\text{as}~~t \to 1.
+\]</span> Hence <span class="math inline">\((1-t)G\stackrel{\mathcal{L}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span> and since the limit is a constant <span class="math inline">\((1-t)G\stackrel{\mathbb{P}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span>. Finally, we notice that this stochastic integral is the sum of countably many independent random variables, hence from Durrett 2.5.10 we have <span class="math inline">\((1-t)G\stackrel{\text{a.s.}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span> and <span class="math inline">\(Y_{t}\stackrel{\text{a.s.}}{\to}b\)</span>.</p>
+</section>
+<section id="sde-example-geometric-mean-reverting-process" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="sde-example-geometric-mean-reverting-process"><span class="header-section-number">5.4</span> 5.6 SDE Example: Geometric Mean-Reverting Process</h3>
+<div class="definition" data-title="Geometric Mean-Reverting Process">
+<p>The <strong>geometric mean-reverting process</strong> <span class="math inline">\(X_{t}\)</span> is defined as the solution to the SDE <span class="math display">\[
+\begin{cases}dX_{t}=\kappa(\alpha-\log X_{t})X_{t}dt + \sigma X_{t}dB_{t}\\X_{0}=x&gt;0.\end{cases}
+\]</span></p>
+</div>
+<p>By using the substitution <span class="math inline">\(Y_{t}=\log X_{t}\)</span> we can verify that the solution to the SDE is <span class="math display">\[
+X_{t}=\exp \left\{ e^{-\kappa t}\log x+\left( \alpha- \frac{\sigma^2}{2\kappa} \right)(1-e^{-\kappa t})+\frac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}) \right\}.
+\]</span></p>
+</section>
+</section>
+<section id="diffusion-processes" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="diffusion-processes"><span class="header-section-number">6</span> Diffusion Processes</h2>
+</section>
+<section id="diffusions" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="diffusions"><span class="header-section-number">7</span> Diffusions</h2>
+<ul>
+<li>Itô Diffusion
+<ul>
+<li>Generator of an Itô Diffusion</li>
+</ul></li>
+<li>Dynkin Formula</li>
+<li>Characteristic Operator</li>
+<li>Kolmogorov’s Backward Equation</li>
+<li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li>Martingale Problem</li>
+<li>Random Time Change</li>
+<li>Girsanov Theorem</li>
+</ul>
+<div class="definition" data-title="Itô Diffusion">
+<p>A <strong>(time-homogeneous) Itô diffusion</strong> in <span class="math inline">\(\mathbb{R}^n\)</span> is a stochastic process <span class="math inline">\((X_{t})\)</span> defined on space <span class="math inline">\((\Omega, \mathcal{F},\mathbb{P})\)</span> that satisfies the stochastic differential equation <span class="math display">\[
+\begin{cases} dX_{t}=b(X_{t})dt+\sigma(X_{t})dB_{t} \\ X_{s}=x \end{cases}
+\]</span> where <span class="math inline">\(X_{t}\in \mathbb{R}^n\)</span>, <span class="math inline">\(B_{t}\in \mathbb{R}^m\)</span>, <span class="math inline">\(B:\mathbb{R}^n\to \mathbb{R}^n\)</span>, <span class="math inline">\(\sigma:\mathbb{R}^n\to \mathbb{R}^{n \times m}\)</span> where it is assumed that <span class="math inline">\(b,\sigma\)</span> are both <a href="../topics/lipschitz-continuity.html">Lipschitzs</a> on <span class="math inline">\(\mathbb{R}^n\)</span> (to ensure the existence and uniqueness of strong solutions).</p>
+</div>
+<p>The distinguishing feature of diffusions is that the drift and diffusion coefficients <span class="math inline">\(b,\sigma\)</span> are time independent and the Lipschitz condition is here to ensure the existence and uniqueness of the strong solution. Next we detail the results outlining the key properties of Itô diffusions.</p>
+<div class="theorem" data-title="Time Homogeneity of Itô DIffusions">
+<p>Denoting the solution to the SDE above with initial condition <span class="math inline">\(X_{s}=x\)</span> as an Itô diffusion by <span class="math inline">\(X_{s+h}^{s,x}\)</span> then <span class="math display">\[
+\forall s \geq 0,~x \in \mathbb{R}^n,~\{ X_{s+t}^{s,x} \}_{t \geq 0}\stackrel{\mathcal{L}}{=}\{  X_{t}^{0,x} \}_{t \geq 0}.
+\]</span></p>
+</div>
+<p><em>Proof:</em></p>
+<div class="theorem" data-title="Flow Property of Itô Diffusion">
+<p>For an Itô diffusion <span class="math inline">\(X\)</span> we have <span class="math display">\[
+\forall t,h \geq 0,~ X_{h}^{0,X_{t}^{0,x}}\stackrel{a.s.}{X_{t+h}^{0,x}}.
+\]</span></p>
+</div>
+<p><em>Proof:</em> By construction, both are strong solutions to the same SDE <span class="math display">\[
+X_{t+h}^{0,x}=X_{t}^{0,x}+\int_{t}^{t+h}{b(X_{s}^{0,x})}~d{s}+\int_{t}^{t+h}{\sigma(X_{s}^{0,x})}~d{B_{s}}.
+\]</span> By the uniqueness in modification we conclude</p>
+<p>Diffusion properties: 1. Time-homogeneity 2. Flow Property 3. Markov Property 4. Strong Markov Property</p>
+<p>Ito Diffusion Generators Semi-Group Generators Infinitesimal Generators (special and general cases) Infinitesimal Generator Examples Dynkin Formula Dynkin Formula Examples Backward Kolmogorov Equation (BKE) Forward Kolmogorov Equation (FKE, Fokker-Planck Equation) Feynman-Kac Formula Itô Process as DIffusion Time Changing Processes <a href="Girsanov Theorem.md">Girsanov Theorem</a></p>
+
+
+</section>
+<section class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id=""><span class="header-section-number">8</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
+<li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a></li>
+<li><a href="../topics/stochastic-control.html">Stochastic Control</a></li>
+<li><a href="../topics/stochastic-games.html">Stochastic Games</a></li>
+</ul>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,546 @@
+---
+title: Vector Calculus
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Vector Calculus
+
+## Overview
+
+- Preliminaries:
+  - Linear Algebra
+    - Geometry of $\mathbb{R}^n$:
+    - Dot product
+    - Norm and distance
+    - Orthogonality
+    - Projections
+    - Level sets and surfaces
+  - Calculus
+- [[]]
+- [[]]
+- [[]]
+- Hessian
+- Differential Operators:
+  - Divergence
+  - Curl
+  - Laplacian
+- Line and Surface Integrals
+- Fundamental Theorems:
+  - Fundamental Theorem for Line Integrals
+  - Green Theorem
+  - Stoke Theorem
+  - Divergence Theorem
+- Coordinate Systems
+  - Polar coordinates
+  - Cylindrical coordinates
+  - Spherical coordinates
+  - Jacobians of transformations
+- Vector Calculus in Physics
+  - Maxwell’s equations
+  - Fluid dynamics (divergence = incompressibility)
+  - Potential theory
+  - Heat and wave equations
+
+## Vector Fields in Euclidean Space
+
+A **vector field** assigns a vector to each point in space. In $\mathbb{R}^n$,
+a vector field is a function
+
+$$
+\mathbf{F} : \mathbb{R}^n \to \mathbb{R}^m
+$$
+
+commonly with $m = n$, so
+
+$$
+\mathbf{F}(x) =
+\begin{pmatrix}
+F_1(x) \\
+\vdots \\
+F_n(x)
+\end{pmatrix}.
+$$
+
+**Example:** In three dimensions,
+
+$$
+\mathbf{F}(x,y,z) =
+(F_1(x,y,z), F_2(x,y,z), F_3(x,y,z)).
+$$
+
+Intuitively, a vector field can be thought of as assigning a vector (objects 
+with both size and direction) to every point in space.  It describes the change
+of vectors as it moves through the space, or the flow.  Some common examples
+from physics include:
+
+- Velocity of a fluid.
+- Force acting at each point.
+- Wind direction and speed.
+- Wlectric or magnetic fields.
+
+Each location has both direction and magnitude.
+
+**Example:** A radial outward field in $\mathbb{R}^2$ is described  by
+
+$$
+\mathbf{F}(x,y) = (x,y).
+$$
+
+Vectors point away from the origin and grow in magnitude with distance.
+
+## Gradients of Vector Fields
+The **gradient** of a scalar-valued differentiable function $f$ of several
+variables is the vector field $\nabla f$ whose value at a point $p$ gives the
+direction and the rate of fastest increase.
+
+:::{.definition data-title="Definition (Euclidean Gradient)"}
+
+In $n$-dimensional Cartesian coordinates with Euclidean metric the gradient, if
+it exists, is given by
+$$
+\nabla f:=\sum_{i=1}^{n} \frac{{\partial f}}{\partial x_{i}}\boldsymbol{i}_{i},
+$$
+where $\boldsymbol{i}_{j}$ is the standard unit vector in the directions of the
+$x_{j}$ coordinate respectively.  
+
+:::
+
+This result is written in standard basis notation but alternatively could be
+written in column vector notation as
+$$
+\nabla f:=\begin{bmatrix}
+\frac{{\partial f}}{\partial x_{1}} \\
+\vdots  \\
+\frac{{\partial f}}{\partial x_{n}}
+\end{bmatrix}=\left[ \frac{{\partial f}}{\partial x_{i}} \right]_{i=1,..,n}.
+$$
+
+**Example (Cartesian Gradient):**
+We consider the function $f(x,y,z)=2x+3xy^2-\sin (z)$.  The gradient is
+$$
+\nabla f:=\begin{bmatrix}
+2+3y^2 \\
+6xy \\
+-\cos(z)
+\end{bmatrix}.
+$$
+
+Considering general coordinates in an $n$-dimensional space
+$x=(x^i)_{i=1,\dots,n}$ and let $f$ be a scalar-valued differentiable function
+$f(x):=f(x^1, \dots, x^n)$. The gradient of $f$ is given by
+
+$$
+\nabla f= \frac{{\partial f}}{\partial x^i}g^{ij}\boldsymbol{e}_{j},
+$$
+where $\boldsymbol{e}^i=dx^i$ and
+$\boldsymbol{e}_{i}=\frac{{\partial \boldsymbol{x}}}{\partial x^i}$ refer to
+the *unnormalized local covariant and contravariant bases* respectively,
+$g^{i,j}$ is the *inverse metric tensor*, and the Einstein summation convention
+implies summation over $i$ and $j$.
+
+### Gradient Results
+
+#### Relationship to Total Derivative
+The gradient is closely related to the **total derivative** $df$ in that they
+are transpose of one another
+$$
+\nabla f=df^T
+$$
+
+#### Conservative Vector Fields
+
+A <mark>**conservative vector field**</mark> is a vector field that is the 
+gradient of a scalar potential function $f$
+
+$$
+F = \nabla f
+$$
+
+Key properties include path-independent line integrals, zero circulation around
+closed loops
+
+$$
+\oint F\cdot dr = 0
+$$
+
+Furthermore, for 3D fields, conservative vector fields have a vanishing curl
+
+$$
+\nabla\times F = 0
+$$
+
+#### Directional Derivative
+
+$$
+D_v f = \nabla f \cdot v.
+$$
+
+#### Steepest Ascent
+
+$$
+\max_{\|v\|=1} D_v f = \|\nabla f\|.
+$$
+
+## Jacobian
+
+The <mark>**Jacobian**</mark> matrix is the natural generalization of the 
+derivative to vector functions.  
+
+:::{.definition data-title="Jacobian Matrix"}
+
+For $\mathbf{F} : \mathbb{R}^n \to \mathbb{R}^m$ the Jacobian is
+$$
+J_{\mathbf{F}}=\left(\frac{\partial F_i}{\partial x_j}\right)_{i,j}
+
+:::
+=\begin{bmatrix}\nabla^\top F_1 \\ \vdots \\ \nabla^\top F_m\end{bmatrix}
+=\begin{bmatrix}\frac{\partial F_1}{\partial x_1} & \cdots & \frac{\partial F_1}
+{\partial x_n} \\ \vdots & \ddots & \vdots \\ 
+\frac{\partial F_m}{\partial x_1} & \cdots & \frac{\partial F_m}{\partial x_n}
+\end{bmatrix}.
+$$
+ 
+Clearly we have the following relationship between the Jacobian and the 
+gradient
+
+$$
+J_F = (\nabla F)^{\top}.
+$$
+
+### Jacobian Results
+
+#### Linearization
+
+Linearization is the process of approximatin 
+
+$$
+\mathbf{F}(x+h)
+=
+\mathbf{F}(x)
++
+J_{\mathbf{F}}(x) h
++
+o(\|h\|).
+$$
+
+
+## Change of Variables
+
+If $T$ is invertible:
+
+$$
+\int_{T(U)} f(y)\, dy
+=
+\int_U
+f(T(x))
+\left|
+\det J_T(x)
+\right|
+dx.
+$$
+
+
+# 5. Hessian
+
+For scalar field $f$:
+
+$$
+H_f
+=
+\left(
+\frac{\partial^2 f}{\partial x_i \partial x_j}
+\right).
+$$
+
+
+## Second-Order Taylor Expansion
+
+$$
+f(x+h)
+=
+f(x)
++
+\nabla f(x)\cdot h
++
+\frac{1}{2}
+h^T H_f(x) h
++
+o(\|h\|^2).
+$$
+
+
+## Classification of Critical Points
+
+If
+
+$$
+\nabla f(x_0) = 0,
+$$
+
+then:
+
+- $H_f$ positive definite → local minimum  
+- $H_f$ negative definite → local maximum  
+- $H_f$ indefinite → saddle point  
+
+
+# 6. Differential Operators
+
+## Divergence
+
+$$
+\nabla \cdot \mathbf{F}
+=
+\sum_{i=1}^n
+\frac{\partial F_i}{\partial x_i}.
+$$
+
+
+## Curl (in $\mathbb{R}^3$)
+
+$$
+\nabla \times \mathbf{F}
+=
+\begin{vmatrix}
+\mathbf{i} & \mathbf{j} & \mathbf{k} \\
+\partial_x & \partial_y & \partial_z \\
+F_1 & F_2 & F_3
+\end{vmatrix}.
+$$
+
+
+## Laplacian
+
+$$
+\Delta f
+=
+\nabla \cdot \nabla f
+=
+\sum_{i=1}^n
+\frac{\partial^2 f}{\partial x_i^2}.
+$$
+
+Heat equation:
+
+$$
+u_t = \Delta u.
+$$
+
+Laplace equation:
+
+$$
+\Delta u = 0.
+$$
+
+
+# 7. Line and Surface Integrals
+
+## Line Integral
+
+If $\gamma : [a,b] \to \mathbb{R}^n$ parametrizes $C$:
+
+$$
+\int_C \mathbf{F} \cdot d\mathbf{r}
+=
+\int_a^b
+\mathbf{F}(\gamma(t))
+\cdot
+\gamma'(t)
+\, dt.
+$$
+
+
+## Surface Integral (Flux)
+
+$$
+\iint_S
+\mathbf{F} \cdot \mathbf{n}
+\, dS.
+$$
+
+If $\mathbf{r}(u,v)$ parametrizes $S$:
+
+$$
+\mathbf{n}\, dS
+=
+\partial_u \mathbf{r}
+\times
+\partial_v \mathbf{r}
+\, du dv.
+$$
+
+
+# 8. Fundamental Theorems
+
+## Fundamental Theorem for Line Integrals
+
+If $\mathbf{F} = \nabla f$:
+
+$$
+\int_C \mathbf{F} \cdot d\mathbf{r}
+=
+f(\text{end})
+-
+f(\text{start}).
+$$
+
+
+## Green’s Theorem
+
+$$
+\oint_C
+P\, dx
++
+Q\, dy
+=
+\iint_D
+\left(
+\frac{\partial Q}{\partial x}
+-
+\frac{\partial P}{\partial y}
+\right)
+dA.
+$$
+
+
+## Stokes’ Theorem
+
+$$
+\oint_{\partial S}
+\mathbf{F} \cdot d\mathbf{r}
+=
+\iint_S
+(\nabla \times \mathbf{F})
+\cdot
+\mathbf{n}
+\, dS.
+$$
+
+
+## Divergence Theorem
+
+$$
+\iiint_V
+\nabla \cdot \mathbf{F}
+\, dV
+=
+\iint_{\partial V}
+\mathbf{F}
+\cdot
+\mathbf{n}
+\, dS.
+$$
+
+
+# 9. Coordinate Systems
+
+## Polar Coordinates
+
+$$
+x = r \cos \theta
+$$
+
+$$
+y = r \sin \theta
+$$
+
+$$
+dA = r\, dr\, d\theta.
+$$
+
+
+## Cylindrical Coordinates
+
+$$
+x = r\cos\theta,
+\quad
+y = r\sin\theta,
+\quad
+z = z.
+$$
+
+$$
+dV = r\, dr\, d\theta\, dz.
+$$
+
+
+## Spherical Coordinates
+
+$$
+x = \rho \sin\phi \cos\theta
+$$
+
+$$
+y = \rho \sin\phi \sin\theta
+$$
+
+$$
+z = \rho \cos\phi
+$$
+
+$$
+dV
+=
+\rho^2
+\sin\phi
+\, d\rho
+\, d\phi
+\, d\theta.
+$$
+
+
+# 10. Vector Calculus in Physics
+
+## Maxwell’s Equations
+
+$$
+\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}
+$$
+
+$$
+\nabla \cdot \mathbf{B} = 0
+$$
+
+$$
+\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
+$$
+
+$$
+\nabla \times \mathbf{B}
+=
+\mu_0 \mathbf{J}
++
+\mu_0 \varepsilon_0
+\frac{\partial \mathbf{E}}{\partial t}.
+$$
+
+
+## Fluid Dynamics (Incompressibility)
+
+$$
+\nabla \cdot \mathbf{v} = 0.
+$$
+
+
+## Potential Theory
+
+$$
+\Delta u = 0.
+$$
+
+
+## Heat Equation
+
+$$
+u_t = \Delta u.
+$$
+
+
+## Wave Equation
+
+$$
+u_{tt} = c^2 \Delta u.
+$$

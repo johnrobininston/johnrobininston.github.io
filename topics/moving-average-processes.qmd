@@ -1,0 +1,43 @@
+---
+title: Moving Average Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Moving Average Processes
+:::{.definition data-title="MA(q) Process"}
+
+A time series $\{X_t\}$ is a **moving average process of order $q$**, $MA(q)$,
+if
+$$
+X_t = Z_t + \theta_1 Z_{t-1} + \dots + \theta_q Z_{t-q}, \qquad Z_t \sim [[white-noise|WN]](0,\sigma_Z^2).
+$$
+Using the backshift operator $B^kX_t = X_{t-k}$, this is $X_t = \theta(B)Z_t$
+with $\theta(B) = 1+\theta_1B+\dots+\theta_qB^q$.
+
+:::
+
+Every $MA(q)$ process is [[stationary-processes|stationary]] (regardless of the
+$\theta_i$) with ACF
+$$
+\rho_X(k) = \frac{\theta_k + \theta_1\theta_{k+1}+\dots+\theta_{q-k}\theta_q}{1+\theta_1^2+\dots+\theta_q^2}, \quad k=1,\dots,q, \qquad \rho_X(k) = 0,\ k>q.
+$$
+This sharp cutoff in the ACF at lag $q$ is the key diagnostic used to identify
+the order of an MA model from data.
+
+An $MA(q)$ model is always [[causality-and-invertibility|causal]] by
+construction, and is **invertible** iff the roots of $\theta(z)$ lie outside
+the unit circle, in which case $Z_t$ can be recovered as a convergent
+autoregressive-type series in past $X_t$'s (an $MA(\infty)$ process becomes an
+$AR(\infty)$ process).
+
+An $MA(\infty)$ representation $X_t = \sum_{j=0}^\infty \psi_j Z_{t-j}$ (with
+$\sum\psi_j^2<\infty$) is the generic form guaranteed for any purely
+non-deterministic stationary process by **Wold's Decomposition Theorem**.
+
+### References
+- [[time-series-analysis]]
+- [[autoregressive-processes]]
+- [[arma-processes]]

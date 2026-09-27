@@ -1,0 +1,64 @@
+---
+title: Interest Rates
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### [[yield-curve]]
+Assume that a zero-coupon bond that pays 1 at time $T$ has price $p(t,T)$
+contracted at time $t$. Naturally, for all $t$, $p(t,t)=1$ and $p(t,T)$ is
+well-defined for all $t\in \mathbb{R}$. Assume that $p(t,T)$ is also
+well-defined for all $T\in \mathbb{R}$ and is differentiable w.r.t $T$.  
+
+If the accumulation of interest can be described by a constant continuous-time
+interest rate on $[t,T]$ denoted $y(t,T)$, then
+$$
+p(t,T)e^{y(t,T)(T-t)}=1,
+$$
+solves
+$$
+y(t,T)=- \frac{1}{T-t}\log p(t,T),
+$$
+called the **yield curve** viewed as a function in $T$ after fixing $t$.  
+
+### [[libor-rates]]
+Consider time $t$ with two maturity dates $S<T$. We consider the forward
+interest rate of $[S,T]$ contracted at time $t$. A riskless portfolio can be
+constructed with no initial endowment that at time $t$ one can short 1 unit of
+bond that matures at $S$. This brings immediately cashflow $p(t,S)$ and a debt
+returning 1 at time $S$.  
+
+However, one can long $\frac{p(t,S)}{p(t,T)}$ unit of bond that matures at $T$
+using the $p(t,S)$ immediate cashflow, this brings a cashflow of
+$\frac{p(t,S)}{p(t,T)}$ at time $T$. In all, this portfolio has no immediate
+cashflow, but we have to pay 1 at time $S$ and receive $\frac{p(t,S)}{p(t,T)}$
+at time $T$. If there exists a constant simple interest rate on $[S,T]$ denoted
+$L(t;S,T)$, then
+$$
+1\cdot[1+L(t;S,T)(T-S)]= \frac{p(t,S)}{p(t,T)},
+$$
+solves 
+$$
+L(t;S,T)= \frac{1}{T-S}\left(  \frac{p(t,S)}{p(t,T)}-1 \right),
+$$
+called the simple forward rate on $[S,T]$ contracted at $t$, also called the
+**LIBOR Forward Rate**. If one uses the continuous-time compounded interest
+rate mode instead and denote the rate as $R(t;S,T)$ then
+$$
+1\cdot e^{R(t;S,T)(T-S)}= \frac{p(t,S)}{p(t,T)}
+$$
+solves 
+$$
+R(t;S,T)= \frac{1}{T-S}\log\left( \frac{p(t,S)}{p(t,T)}\right).
+$$
+The spot rates on $[S,T]$ is just the forward rate contracted at time $S$ i.e.
+by setting $t=S$, we get the spot rates
+$$
+\begin{align}
+L(S;S,T) & = \frac{1}{T-S}\left(  \frac{1}{p(S,T)} -1\right) \\
+R(S;S,T) & =  \frac{1}{T-S}\log\left(  \frac{1}{P(S,T)} \right)
+\end{align}
+$$
+where $L(S;S,T)$ is called the **LIBOR spot rate**.

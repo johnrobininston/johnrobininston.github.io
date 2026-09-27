@@ -1,0 +1,45 @@
+---
+title: ARCH Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### ARCH Models
+Classical linear models ([[arma-processes|ARMA]]) assume constant (conditional)
+variance. Financial returns instead show **volatility clustering** — large
+changes tend to be followed by large changes — motivating models where the
+conditional *variance*, not just the conditional mean, depends on the past.
+
+:::{.definition data-title="ARCH(q) (Engle, 1982)"}
+
+Let $r_t = \mu_t + \varepsilon_t$ with $\varepsilon_t = \sigma_t Z_t$,
+$Z_t \sim IID(0,1)$. The process is **ARCH(q)** if
+$$
+\sigma_t^2 = \omega + \alpha_1\varepsilon_{t-1}^2 + \dots + \alpha_q\varepsilon_{t-q}^2, \qquad \omega>0,\ \alpha_i \geq 0.
+$$
+Squaring shows $\varepsilon_t^2$ itself follows an $AR(q)$-like structure with
+noise $\eta_t = \varepsilon_t^2 - \sigma_t^2$:
+$\varepsilon_t^2 = \omega + \sum_i \alpha_i \varepsilon_{t-i}^2 + \eta_t$, so
+ARCH order can be diagnosed by inspecting the ACF/PACF of *squared* residuals
+(or via Engle's LM test for ARCH effects).
+
+:::
+
+**Properties.** $\varepsilon_t$ is unconditionally stationary with mean $0$ and
+variance $\omega/(1-\sum\alpha_i)$ when $\sum_i \alpha_i < 1$, but is
+unconditionally heavy-tailed (excess kurtosis) even when $Z_t$ is Gaussian —
+capturing the fat tails observed in asset returns.
+
+**Limitations.** Capturing realistic volatility persistence typically requires
+a large lag order $q$, which is parameter-inefficient; this motivated the
+[[garch-models|GARCH]] extension, which adds autoregressive terms in
+$\sigma_t^2$ itself (an $ARMA$-type generalization of ARCH's pure-$AR$
+structure).
+
+### References
+- [[garch-models]]
+- [[volatility-models]]
+- [[stochastic-volatility-model]]
+- [[time-series-analysis]]

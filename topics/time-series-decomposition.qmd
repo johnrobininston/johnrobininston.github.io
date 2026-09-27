@@ -1,0 +1,69 @@
+---
+title: Time Series Decomposition
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Time Series Decomposition
+In general, a [[time-series|time series]] is composed of a deterministic
+element (which we are interested in describing) and a random element (noise).
+The deterministic element of a time series can take numerous forms but in
+practice typically consists of a **trend component** (describing the tendency
+of the series to move consistently in a certain direction) and a **seasonal
+component** (describing the predictable oscillations of the series at a fixed
+period). This leaves the **remainder/irregular component**, ideally close to
+stationary [[white-noise|white noise]].
+
+:::{.definition data-title="Additive and Multiplicative Decomposition"}
+
+$$
+\text{Additive:}\quad X_t = m_t + s_t + Y_t, \qquad \text{Multiplicative:}\quad X_t = m_t \cdot s_t \cdot Y_t,
+$$
+where $m_t$ is the trend, $s_t$ the seasonal component ($s_{t+p}=s_t$ for
+period $p$), and $Y_t$ the (stationary) remainder. The multiplicative form is
+used when seasonal/noise fluctuations scale with the trend level, and reduces
+to the additive form under a log transform.
+
+:::
+
+### Estimating the Trend and Seasonal Components
+**Moving average smoothing.** The trend can be estimated by a symmetric moving
+average that averages out the seasonal and noise components, e.g. for period
+$p$ even,
+$$
+\hat m_t = \frac{1}{p}\left(\tfrac12 x_{t-p/2} + x_{t-p/2+1} + \dots + x_{t+p/2-1} + \tfrac12 x_{t+p/2}\right).
+$$
+This is closely related to the use of the backshift/differencing operators
+discussed for [[arima-processes|ARIMA]] models — seasonal differencing
+$(1-B^p)$ is an alternative, purely stochastic way to remove $s_t$ without ever
+estimating it explicitly.
+
+**Seasonal estimate.** Once detrended (e.g. $X_t - \hat m_t$), average the
+detrended values across each season/period position to obtain $\hat s_t$, then
+mean-center so $\sum_{t=1}^p \hat s_t = 0$.
+
+**STL (Seasonal-Trend decomposition using Loess).** A more flexible, robust,
+iterative decomposition using local regression (Loess) smoothing to estimate
+trend and (a potentially time-varying) seasonal component, handling any period
+length and outlier-robust remainder estimation. **X-11/X-13ARIMA-SEATS** are
+official-statistics-agency alternatives combining moving-average filters with
+model-based (ARIMA) extrapolation at the series ends.
+
+### Relation to Other Approaches
+- **[[sarima-processes|SARIMA]]** models seasonality stochastically via
+  seasonal differencing/ARMA terms rather than as a fixed deterministic
+  component.
+- **[[state-space-models-and-the-kalman-filter|Structural time-series models]]**
+  treat trend and seasonal components as their own latent stochastic processes
+  (e.g. local level + seasonal), estimated jointly via the Kalman filter — a
+  probabilistic generalization of classical decomposition.
+- **[[wavelet-analysis]]** offers a multiresolution decomposition when the
+  notion of a single fixed "trend" and "seasonal" scale is inadequate (e.g.
+  evolving cycles).
+
+### References
+- [[time-series-analysis]]
+- [[sarima-processes]]
+- [[state-space-models-and-the-kalman-filter]]

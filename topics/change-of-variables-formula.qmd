@@ -1,0 +1,136 @@
+---
+title: Change-of-Variables Formula
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Change-of-Variables Formula
+
+The **change-of-variables** (or **transformation**) formula is one of the
+central tools in multivariate calculus and probability theory. It tells us how
+integrals - and in particular probability densities - transform under smooth,
+invertible maps.
+
+It is the multivariate analogue of the familiar one-dimensional substitution
+rule
+$$
+\int_a^b f(x)\,dx = \int_{\phi(a)}^{\phi(b)} f(\phi^{-1}(y))\,\bigl|(\phi^{-1})'(y)\bigr|\,dy.
+$$
+In higher dimensions, the derivative is replaced by the determinant of the
+[Jacobian Matrix](Jacobian%20Matrix.md).
+
+The change-of-variables formula is the mechanism that makes all such
+transformations precise: it guarantees that probability mass and integrals are
+preserved under smooth, invertible maps, with the Jacobian encoding how volume
+is distorted.
+
+## Statement (Deterministic Form)
+
+Let $U, V \subset \mathbb{R}^d$ be open sets and let
+$$
+T : U \to V
+$$
+be a $C^1$ bijection with $C^1$ inverse. Write $y = T(x)$.
+
+For any integrable function $f : V \to \mathbb{R}$,
+$$
+\int_V f(y)\,dy =
+\int_U f(T(x))\,\bigl|\det J_{T}(x)\bigr|\,dx,
+$$
+where $J_{T}(x)$ is the [Jacobian Matrix](Jacobian%20Matrix.md) of $T$ at $x$.
+Equivalently,
+$$
+\int_U g(x)\,dx = \int_V g(T^{-1}(y))\,\bigl|\det J_{T}^{-1}(y)\bigr|\,dy.
+$$
+## Probabilistic Form
+
+:::{.definition data-title="Change-of-Variable Formula (Probability)"}
+
+Let $X$ be a random vector in $\mathbb{R}^d$ with density $f_X$, and let $$Y = T(X),$$where $T$ satisfies the assumptions above.  Then $Y$ has density$$f_Y(y) = f_X(T^{-1}(y))\,\bigl|\det J_{T}^{-1}(y)\bigr|.$$This ensures that probabilities are preserved:$$\mathbb{P}(Y \in A) = \mathbb{P}(X \in T^{-1}(A)).$$
+
+:::
+
+## Intuition
+
+Locally, a smooth map $T$ behaves like a **linear transformation**:
+$$
+T(x + h) \approx T(x) + J_{T}(x)h.
+$$
+A small volume element $dx$ near $x$ is sent to a distorted parallelepiped near
+$T(x)$ whose volume is
+$$
+|\det J_{T}(x)|\,dx.
+$$
+The Jacobian determinant is precisely the *local volume-scaling factor*.
+
+## Proof (Sketch)
+
+We prove the deterministic version.
+
+1. **Linear case.**  If $T(x) = Ax$ with $A \in \mathbb{R}^{d \times d}$ invertible, then for any measurable set $E$, $$\text{Vol}(A E) = |\det A|\,\text{Vol}(E).$$Hence, $$\int_{A U} f(y)\,dy=\int_U f(Ax)\,|\det A|\,dx,$$as required.
+
+2. **Local linearization.**  For general $C^1$ maps, near each $x$, $$T(x+h) = T(x) + DT(x)h + o(\|h\|).$$On a sufficiently fine partition of $U$ into small cells $C_k$, $T$ is well approximated on each $C_k$ by its linearization at some point $x_k \in C_k$.
+
+3. **Riemann sum argument.**  Writing the integral as a limit of Riemann sums, $$\int_V f(y)\,dy \approx \sum_k f(T(x_k))\,\text{Vol}(T(C_k)) \approx \sum_k f(T(x_k))\,|\det DT(x_k)|\,\text{Vol}(C_k).$$Taking the limit as the mesh goes to zero yields $$\int_V f(y)\,dy=\int_U f(T(x))\,|\det DT(x)|\,dx,$$as required.
+
+A fully rigorous proof uses measure-theoretic arguments and the inverse
+function theorem.
+
+## Examples
+
+### Polar Coordinates
+
+Let $T(r,\theta) = (r\cos\theta, r\sin\theta)$. Then 
+$$
+J_{T}(r,\theta) = \begin{pmatrix}
+\cos\theta & -r\sin\theta \\
+\sin\theta & r\cos\theta
+\end{pmatrix}, \qquad \det J_{T}(r,\theta) = r.
+$$
+Hence,
+$$
+\int_{\mathbb{R}^2} f(x,y)\,dx\,dy = \int_0^\infty \int_0^{2\pi} f(r\cos\theta, r\sin\theta)\, r\, d\theta\, dr.
+$$
+In probability, if $(R,\Theta)$ has joint density $g(r,\theta)$, then
+$$
+f_{X,Y}(x,y) = g(r,\theta)\,\frac{1}{r},
+\quad (x,y) = (r\cos\theta, r\sin\theta).
+$$
+### Linear Transformation of a Gaussian
+
+Let $X \sim \mathcal{N}(0, I_d)$ and define $Y = AX$ with $A$ invertible. Since
+$T(x)=Ax$, we have $T^{-1}(y)=A^{-1}y$ and
+$$
+|\det J_{T}^{-1}(y)| = |\det A^{-1}| = \frac{1}{|\det A|}.
+$$
+Thus,
+$$
+f_Y(y) = (2\pi)^{-d/2}
+\exp\!\left(-\tfrac12 \|A^{-1}y\|^2\right)
+\frac{1}{|\det A|},
+$$
+which is exactly the density of $\mathcal{N}(0, AA^\top)$.
+### Ratio of Two Independent Variables
+
+Let $X,Y$ be independent with joint density $f_{X,Y}(x,y)$. Define
+$$
+U = \frac{X}{Y}, \qquad V = Y.
+$$
+Then $T(x,y) = (x/y, y)$ and
+$$
+T^{-1}(u,v) = (uv, v).
+$$
+The Jacobian of $T^{-1}$ is
+$$
+J_{T}^{-1}(u,v) = \begin{pmatrix}
+v & u \\
+0 & 1
+\end{pmatrix}, \qquad \det = v.
+$$
+Hence,
+$$
+f_{U,V}(u,v) = f_{X,Y}(uv, v)\,|v|.
+$$
+Marginalizing over $v$ yields the density of $U = X/Y$.

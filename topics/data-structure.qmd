@@ -18,10 +18,12 @@ from pathlib import Path
 ```
 
 ::: {.callout-important title="Learning Objectives"}
-- Understand Python's built-in data types and the limitations of native data structures.
+- Understand Python's built-in data types and the limitations of native data
+  structures.
 - Work with NumPy arrays and Pandas DataFrames.
 - Load tabular data from `.csv` and `.xlsx` files.
-- Distinguish between wide and long data formats and convert between them using `pd.melt` and `pd.pivot`.
+- Distinguish between wide and long data formats and convert between them using
+  `pd.melt` and `pd.pivot`.
 - Apply the tidy data standard to assess and clean real-world datasets.
 :::
 
@@ -29,7 +31,8 @@ from pathlib import Path
 
 ## Python Variables
 
-Python is a general purpose [programming language]{.accent}. It natively stores data in [variables]{.accent} of different types:
+Python is a general purpose [programming language]{.accent}. It natively stores
+data in [variables]{.accent} of different types:
 
 - [Strings]{.accent} (`str`) — text data.
 - [Integers]{.accent} (`int`) — whole numbers.
@@ -40,7 +43,8 @@ Python is a general purpose [programming language]{.accent}. It natively stores 
 - [Tuples]{.accent} (`tuple`) — ordered, immutable collections of data.
 - [Sets]{.accent} (`set`) — unordered collections of unique data.
 
-[Packages]{.accent} such as `pandas` and `numpy` provide additional data types optimised for data analysis:
+[Packages]{.accent} such as `pandas` and `numpy` provide additional data types
+optimised for data analysis:
 
 - Pandas [DataFrames]{.accent} (`.DataFrame`) — tabular data.
 - NumPy [arrays]{.accent} (`.array`) — numerical data.
@@ -69,7 +73,8 @@ for item in item_list:
 Built-in data types have limitations for data analysis:
 
 - [Scalability]{.accent} — inefficient memory usage at scale.
-- [Functionality]{.accent} — no support for vector operations or tabular manipulation.
+- [Functionality]{.accent} — no support for vector operations or tabular
+  manipulation.
 
 For example, adding a scalar to a list raises a `TypeError`:
 
@@ -81,12 +86,16 @@ my_list + 2
 
 ## NumPy Arrays
 
-NumPy [arrays]{.accent} are $n$-dimensional arrays of homogeneous data. They support:
+NumPy [arrays]{.accent} are $n$-dimensional arrays of homogeneous data. They
+support:
 
-- [Vectorized operations]{.accent} — element-wise arithmetic without explicit loops.
-- [Efficient memory usage]{.accent} — stored as contiguous blocks of typed data.
+- [Vectorized operations]{.accent} — element-wise arithmetic without explicit
+  loops.
+- [Efficient memory usage]{.accent} — stored as contiguous blocks of typed
+  data.
 
-Make sure you are familiar with the basics of NumPy arrays: construction (`array`, `linspace`, `full`), indexing and slicing, and broadcasting.
+Make sure you are familiar with the basics of NumPy arrays: construction
+(`array`, `linspace`, `full`), indexing and slicing, and broadcasting.
 
 ```{python}
 #| echo: true
@@ -107,9 +116,13 @@ print(linspace_array[list_array > 2])
 
 ### What is Pandas?
 
-[Pandas]{.accent} is a library for data manipulation and analysis built on top of [NumPy]{.accent}. It provides data structures and functions for working with tabular data.
+[Pandas]{.accent} is a library for data manipulation and analysis built on top
+of [NumPy]{.accent}. It provides data structures and functions for working with
+tabular data.
 
-Pandas DataFrames are 2-dimensional tabular data structures with labeled rows and columns. They are similar to NumPy arrays but with labeled axes, and similar to dictionaries but with labeled columns.
+Pandas DataFrames are 2-dimensional tabular data structures with labeled rows
+and columns. They are similar to NumPy arrays but with labeled axes, and
+similar to dictionaries but with labeled columns.
 
 ```{python}
 #| echo: true
@@ -129,18 +142,22 @@ print(data)
 
 ### Data Formats
 
-In PSTAT100 we primarily use [tabular data]{.accent} stored in the following formats:
+In PSTAT100 we primarily use [tabular data]{.accent} stored in the following
+formats:
 
 - [Text files]{.accent} (`.txt`) — simplest format but with loading challenges.
 - [Comma Separated Values]{.accent} (`.csv`) — most common format.
-- [Tab Separated Values]{.accent} (`.tsv`) — similar to CSV but uses tabs as delimiters.
-- [Excel files]{.accent} (`.xlsx`) — spreadsheets with complex formulas and formatting.
+- [Tab Separated Values]{.accent} (`.tsv`) — similar to CSV but uses tabs as
+  delimiters.
+- [Excel files]{.accent} (`.xlsx`) — spreadsheets with complex formulas and
+  formatting.
 
 ![Example of a CSV file](../assets/images/csv-example.png)
 
 ### Loading `.csv` Files
 
-`.csv` files store tabular data as plain text with comma-separated values. Use `pd.read_csv` to load them.
+`.csv` files store tabular data as plain text with comma-separated values. Use
+`pd.read_csv` to load them.
 
 ```{python}
 #| echo: true
@@ -151,7 +168,8 @@ print(cats_data.head())
 
 ### Loading `.xlsx` Files
 
-`.xlsx` files are Excel spreadsheets. Use `pd.read_excel` to load them, specifying the sheet name where needed.
+`.xlsx` files are Excel spreadsheets. Use `pd.read_excel` to load them,
+specifying the sheet name where needed.
 
 ```{python}
 #| echo: true
@@ -170,7 +188,8 @@ There are many ways to **manipulate** DataFrames:
 
 - Finding information: `columns`, `index`, `shape`, `head`, `tail`.
 - **Indexing and filtering**: `.loc`, `.iloc`.
-- **Adding and removing** columns and rows: `.drop`, `.dropna`, `.insert`, `pd.concat`.
+- **Adding and removing** columns and rows: `.drop`, `.dropna`, `.insert`,
+  `pd.concat`.
 - **Sorting**: `.sort_values`, `.sort_index`.
 
 ```{python}
@@ -199,7 +218,8 @@ print(cats_data_dropped.columns)
 
 ## Wide and Long Formats
 
-Often two datasets can represent the same information in [different data structures]{.accent}. These can be broadly categorised as:
+Often two datasets can represent the same information in [different data
+structures]{.accent}. These can be broadly categorised as:
 
 :::{.columns}
 :::{.column width="50%"}
@@ -220,7 +240,9 @@ Often two datasets can represent the same information in [different data structu
 
 ## Wide Data Structure
 
-To build intuition, consider a dataset of points, assists, and rebounds for four basketball teams (adapted from [Luke Bennett](https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/)).
+To build intuition, consider a dataset of points, assists, and rebounds for
+four basketball teams (adapted from
+[Luke Bennett](https://www.thedataschool.co.uk/luke-bennett/long-vs-wide-data-tables/)).
 
 ```{python}
 #| echo: true
@@ -235,11 +257,13 @@ basketball_data = pd.DataFrame({
 basketball_data.set_index("team")
 ```
 
-Each observation (team) occupies its own row, and each measurement type is in a separate column — this is the [wide format]{.accent}.
+Each observation (team) occupies its own row, and each measurement type is in a
+separate column — this is the [wide format]{.accent}.
 
 ## Long Data Structure
 
-The same data in a long format places each individual measurement on its own row, with a column identifying which variable was measured.
+The same data in a long format places each individual measurement on its own
+row, with a column identifying which variable was measured.
 
 ```{python}
 #| echo: false
@@ -255,14 +279,16 @@ basketball_data_long.sort_values(by="team").iloc[0:6, :].set_index("team")
 
 ## Wide vs Long — Which Is Better?
 
-Neither format is universally better; the appropriate choice depends on context:
+Neither format is universally better; the appropriate choice depends on
+context:
 
 - [Wide]{.accent} data is more human-readable and common in spreadsheets.
 - [Long]{.accent} data is more computer-readable:
     - Required by most plotting libraries (`seaborn`, `ggplot` in R).
     - Easier to filter, group, and aggregate in `pandas`.
 
-It is therefore important to be able to [convert between the two formats]{.accent}.
+It is therefore important to be able to [convert between the two
+formats]{.accent}.
 
 ## `pd.melt` — Wide → Long
 
@@ -285,7 +311,8 @@ print(basketball_data_long)
 
 ## `pd.pivot` — Long → Wide
 
-`pd.pivot` converts a long DataFrame back to a wide DataFrame. Its key arguments are:
+`pd.pivot` converts a long DataFrame back to a wide DataFrame. Its key
+arguments are:
 
 - `index` — column to use as row identifiers.
 - `columns` — column whose values become the new column names.
@@ -304,14 +331,19 @@ print(basketball_data_wide)
 
 ## The Lack of a Standard Format
 
-Most data is stored in a layout that made [intuitive sense to the creator]{.accent} — idiosyncratic and unprincipled, with few widely used conventions and lots of variability in practice.
+Most data is stored in a layout that made [intuitive sense to the
+creator]{.accent} — idiosyncratic and unprincipled, with few widely used
+conventions and lots of variability in practice.
 
 This creates two interdependent choices for data scientists:
 
-- [Representation]{.accent}: how to encode information (e.g. dates as one variable or three? Ordinal values as numbers or labels?).
-- [Form]{.accent}: how to display information (wide or long? one table or many?).
+- [Representation]{.accent}: how to encode information (e.g. dates as one
+  variable or three? Ordinal values as numbers or labels?).
+- [Form]{.accent}: how to display information (wide or long? one table or
+  many?).
 
-The [tidy data standard]{.accent} was introduced to resolve this inconsistency by providing a principled set of rules for structuring datasets.
+The [tidy data standard]{.accent} was introduced to resolve this inconsistency
+by providing a principled set of rules for structuring datasets.
 
 # Tidy Data
 
@@ -361,7 +393,8 @@ To assess whether this is tidy, we compare semantics with structure:
 | **Variables:** | GDP growth and year | **Columns:** | Values of year |
 | **Observational units:** | Countries | **Tables:** | Just one |
 
-❌ Rules 1 and 2 are violated — column names are values (years), not variables. This dataset is **not tidy**.
+❌ Rules 1 and 2 are violated — column names are values (years), not variables.
+This dataset is **not tidy**.
 
 ## Making the GDP Data Tidy
 

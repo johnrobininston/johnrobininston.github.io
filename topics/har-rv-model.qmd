@@ -1,0 +1,59 @@
+---
+title: HAR-RV Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### HAR-RV Model
+True long-memory volatility models
+([[long-memory-processes-arfima|ARFIMA]]-type, with slowly decaying
+autocorrelation of squared/absolute returns) are accurate but awkward to
+estimate and forecast with. Corsi's (2009) **Heterogeneous Autoregressive model
+of Realized Volatility (HAR-RV)** approximates long memory with a simple,
+linear, OLS-estimable model — the standard practitioner benchmark for
+volatility forecasting from [[realized-volatility|realized volatility]] data.
+
+:::{.definition data-title="HAR-RV"}
+
+Let $RV_t$ be the daily realized variance. Define the (overlapping) weekly and
+monthly averages
+$$
+RV_t^{(w)} = \frac{1}{5}\sum_{i=1}^5 RV_{t-i}, \qquad RV_t^{(m)} = \frac{1}{22}\sum_{i=1}^{22} RV_{t-i}.
+$$
+The **HAR-RV** model regresses (typically on $\sqrt{RV}$ or $\log RV$ for
+better distributional behavior) next-day realized volatility on the daily,
+weekly, and monthly components:
+$$
+RV_{t+1} = c + \beta_d\, RV_t + \beta_w\, RV_t^{(w)} + \beta_m\, RV_t^{(m)} + \varepsilon_{t+1}.
+$$
+
+:::
+
+**Why it works.** The model is motivated by the **Heterogeneous Market
+Hypothesis**: different types of traders (high-frequency, daily,
+institutional/long-horizon) operate and react to volatility over different
+horizons. Cascading these three horizons in a simple linear-in-parameters
+regression generates an ACF for $RV_t$ that decays slowly, mimicking true
+long-memory behavior without needing a fractionally-integrated model.
+
+**Extensions.**
+- **HAR-RV-J / CHAR**: adds a separate jump component (from bipower variation,
+  see [[realized-volatility]]) since jumps and continuous volatility have
+  different persistence and forecasting implications.
+- **HAR-RV with leverage**: adds signed/asymmetric past returns to capture the
+  leverage effect (as in EGARCH).
+- **HARQ**: lets the coefficient on $RV_t$ vary with the estimated precision of
+  $RV_t$ (measurement-error-robust HAR).
+
+HAR-RV sits alongside [[garch-models|GARCH]] and
+[[stochastic-volatility-model|stochastic volatility]] as one of the three main
+practical approaches to volatility forecasting, distinguished by using realized
+(high-frequency-based) rather than daily-return-based volatility proxies.
+
+### References
+- [[realized-volatility]]
+- [[garch-models]]
+- [[long-memory-processes-arfima]]
+- [[midas-models]]

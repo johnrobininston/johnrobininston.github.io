@@ -1,0 +1,44 @@
+---
+title: Innovations Algorithm
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Innovations Algorithm and Forecasting
+Define the **innovations** of a series as the one-step prediction errors
+$X_n - \hat X_n$, where $\hat X_n$ is the best linear predictor of $X_n$ from
+$X_1,\dots,X_{n-1}$ (see [[time-series-best-linear-predictors]]). By
+construction the innovations are uncorrelated, which makes them a convenient
+orthogonal basis for prediction.
+
+:::{.theorem data-title="Innovations Representation"}
+
+For a (possibly non-stationary, finite-variance) time series, the best one-step
+predictors satisfy
+$$
+\hat X_{n+1} = \sum_{j=1}^n \theta_{nj}\,(X_{n+1-j} - \hat X_{n+1-j}), \qquad n \geq 1,
+$$
+where the coefficients $\theta_{nj}$ are computed recursively from the
+covariance function via the **innovations algorithm**. Unlike the
+[[durbin-levinson-algorithm]] (which assumes stationarity to fit successive
+$AR(h)$ models), the innovations algorithm applies to any process with finite
+second moments, stationary or not — including [[arima-processes|ARIMA]] and
+models with missing values.
+
+:::
+
+For an invertible $MA(q)$ process, this reduces to the familiar one-step
+forecast
+$$
+\hat X_{n+1} = \theta_1(X_n - \hat X_n) + \dots + \theta_q(X_{n+1-q}-\hat X_{n+1-q}),
+$$
+using the **tower property** $\mathbb{E}X = \mathbb{E}[\mathbb{E}[X\mid Y]]$
+and the fact that innovations beyond the observed sample have conditional
+expectation zero.
+
+### References
+- [[time-series-best-linear-predictors]]
+- [[durbin-levinson-algorithm]]
+- [[pstat274-time-series-summary-notes]]

@@ -1,0 +1,75 @@
+---
+id: ou-process
+aliases: []
+tags: []
+author: "John Inston"
+date: 2026-09-25
+title: "Ornstein-Uhlenbeck Process"
+title-block-banner: false
+---
+
+## Ornstein-Uhlenbeck (OU) Process Definition
+
+The **Ornstein-Uhlenbeck process** $\{X_{t}\}$ has dynamics described by the 
+stochastic differential equation
+
+$$
+dX_{t}=-\theta X_{t}dt+\sigma dW_{t},
+$$
+
+where $\theta>0$ and $\sigma>0$ and $W_{t}$ is a BM.
+
+An additional **drift term** is sometimes included giving the model the form
+
+$$
+dX_{t}=\theta(\mu-X_{t})dt+\sigma dW_{t}
+$$
+
+where $\mu$ is a constant.
+
+## OU Process Solution
+
+The process can be formally solved by **variation of parameters**.  
+We can define $f(t,X_{t})=e^{\theta t}X_{t}$ and applying [[Itô Formula]] we 
+have that
+
+$$
+\begin{align}
+d(e^{\theta t}X_{t}) & =\theta e^{\theta t}X_{t}dt+e^{\theta t}dX_{t} \\
+ & =e^{\theta t}\theta \mu dt+\sigma e^{\theta t}dW_{t} .
+\end{align}
+$$
+
+Integrating from $0$ to $t$ we get
+
+$$
+\begin{align}
+X_{t}e^{\theta t} & = X_{0}+\int _{0}^te^{\theta s}\theta \mu  \, ds + 
+  \int _{0}^t\sigma e^{\theta s} \, dW_{s} \\
+\implies X_{t} & =  X_{0}e^{-\theta t}+\mu(1-e^{-\theta t})+
+  \sigma \int _{0}^te^{-\theta(t-s)} \, dW_{s.}  
+\end{align}
+$$
+
+## Langevin Equation Form
+
+The process is sometimes also written as a [[Langevin Equation]] of the form
+
+$$
+\frac{dX_{t}}{dt}=-\theta X_{t}+\sigma \eta(t),
+$$
+
+where $\eta(t)$, also known as white noise, stands in for the supposed 
+derivative $\frac{dW_{t}}{dt}$ of BM - which doesn't exist as BM is nowhere 
+differentiable, this is a common representation by tacitly assuming that the 
+noise term is a derivative of a differentiable (e.g. Fourier) interpolation 
+of BM.
+
+## Kolmogorov Equation
+
+The [[Infinitesimal Generator|infinitesimal generator]] of the process is
+
+$$
+Lf=-\theta(x-\mu)f'+ \frac{1}{2}\sigma^2 f''.
+$$
+

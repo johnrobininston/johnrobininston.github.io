@@ -1,0 +1,73 @@
+---
+title: Markov Chain State Classification
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Persistence
+
+A state $j$ is *persistent* if the probability that the process will return to
+$j$ given that it started at $j$ eventually is 1. This is equivalent to writing
+$$
+\mathbb{P}(X_{n}=j~\text{for some}~n\geq 1|X_{0}=j)=1.
+$$
+Notice too that this is equivalent to each of the following:
+
+1. The probability that the first hitting time of state $j$ is finite given the
+   process started at $j$ is 1 i.e. $\mathbb{P}(T_{i}<\infty|X_{0}=i)=1$ or
+   equivalently $\mathbb{P}(T_{i}=\infty|X_{0}=i)=0$;
+2. The sum of the $n$ step transition probabilities from $j$ to $j$ for all
+   $n\in \mathbb{N}$ is infinite i.e. $\sum_{n}p_{j,j}(n)=\infty$;
+3. The probability that the chain ever visits $j$ having started at $j$ is 1
+   i.e. $f_{j,j}=1$.
+4. The [[markov-chain-excursions-state-visits|expected number of visits]]
+   $N_{j}$ to state $j$ is infinite i.e. $\mathbb{E}[N_{j}|X_{0}=i]=\infty$.
+
+A state $j$ is *null-persistent* if it is persistent but the mean recurrence
+time is still infinite i.e. $\mu_{i}=\infty$. Otherwise the state is known as
+*non-null* or *positive persistent*.  
+
+For example we consider a random walk whereby any point in the state space is
+null-persistent since the random walk can always return but may take infinitely
+long to do so.
+
+### Transience
+
+Alternatively, if a state $j$ is not persistent it must be *transient*, that
+is, the probability that the process will return to $j$ given that it started
+at $j$ eventually is 0 i.e. the processes structure prevents it from returning.
+This is equivalent to writing
+$$
+\mathbb{P}(X_{n}=i~\text{for some}~n\geq 1|X_{0}=i)<1
+$$
+As above, notice that this is equivalent to each of the following:
+
+1. $\mathbb{P}(T_{i}=\infty|X_{0}=i)>0$;
+2. $\sum_{n}p_{j,j}(n)<\infty$
+3. $f_{j,j}<1$
+4.  $\mathbb{E}[N_{j}|X_{0}=i]<\infty$
+
+Note that if a state $j$ is transient we must have that $p_{i,j}(n) \to 0$ as
+$n \to \infty$ for all $i$ since $\sum_{n}p_{{i,j}}(n)<\infty$. Intuitively,
+this is stating that since $j$ is transient, the probability that the chain
+visits $j$ as time $n$ goes to infinity approaches 0.
+
+#### Periodicity & Ergodicity
+
+The *period* of a state $j$ is the greatest common divider of all $n$ for which
+$p_{{i,i}}(n)>0$ i.e.
+$$
+d(i)=gcd\{n:p_{i,i}(n)>0\}.
+$$
+If $d(i)=1$ then the state $j$ is *aperiodic* and otherwise, the state is said
+to be *periodic*.
+
+A state $j$ is *ergodic* if it is positive persistent and aperiodic i.e.
+$\mu_{i,i}<\infty$ and $d(i)=1$.
+
+A state $j$ is *absorbing* if $p_{j,j}=1$, that is the probability of leaving
+state $j$ once the process has entered is 0.
+
+<!-- TODO: image "Pasted image 20240621184531.png" not found in vault -->

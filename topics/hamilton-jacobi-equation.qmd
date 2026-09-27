@@ -1,0 +1,95 @@
+---
+title: Hamilton-Jacobi Equation
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Hamilton-Jacobi Equation
+
+## Hamilton-Jacobi Equation
+In physics the **Hamilton-Jacobi equation** is an alternative formulation of
+classical mechanics equivalent to [[newtonian-mechanics]],
+[[lagrangian-mechanics]] and [[hamiltonian-mechanics]]. Specifically, the
+Hamilton-Jacobi equation is a formulation of mechanics in which the motion of a
+particle can be represented as a wave. The wave equation followed by mechanical
+systems is similar but not identical to the [[schrodinger-equation]].
+
+In mathematics, the Hamilton-Jacobi equation is a necessary condition
+describing extremal geometry in generalizations of problems from the
+[[calculus-of-variations]]. It can be understood as a special case of the
+[[hamilton-jacobi-bellman-equation]] from [[dynamic-programming-principle]].
+
+:::{.definition data-title="Hamilton-Jacobi Equation"}
+
+The **Hamilton-Jacobi Equation (HJE)** is a non-linear first-order PDE with the
+form
+$$
+\begin{cases}u_{t}+H(\nabla u)=0 & \text{in }\mathbb{R}^n\times(0,\infty) \\ u=g & \text{on } \mathbb{R}^n \times \{ t=0 \},\end{cases}
+$$
+where $u=u(x,t):\mathbb{R}^n\times [0,\infty)\to \mathbb{R}$ is the function we
+are looking to solve out and $\nabla u=(u_{x_{1}}, \dots, u_{x_{n}})$ is the
+[[gradient|gradient]] of $u$ with respect to the $n$-dimensional space variable
+$x:=(x_{1}, \dots, x_{n})$.  
+
+:::
+
+The [[hamiltonian]] $H:\mathbb{R}^n \times \mathbb{R}$ is given and the initial
+condition $g:\mathbb{R}^n \to \mathbb{R}$ is given.
+
+## Link to [[hamiltonian]] via [[calculus-of-variations]]
+We highlight the link between the HJE and the [[hamilton-equation]] by
+considering a problem in [[calculus-of-variations]]. The problem is finding a
+best curve in the admissible class
+$$
+\mathscr{A} := \{  w \in C^2,~w:[0,t]\to \mathbb{R}^n:w(0)=y,~w(t)=x \},
+$$
+i.e. paths in $\mathbb{R}^n$ with continuous second derivatives starting at
+$y\in R^n$ and ending at $x \in \mathbb{R}^n$ at time $t>0$ or more
+intuitively, the moving trajectory of a particle. Under this intuition $w'(s)$
+is the speed of the particle.
+
+The action [[functional|functional]] is defined as
+$$
+I[w] = \int_{0}^{t}{\mathcal{L}(w',w)}~d{s}
+$$
+where $\mathcal{L}:\mathbb{R}^n \times \mathbb{R}^n \to  \mathbb{R}$ is a given
+smooth mapping function known as the [[lagrangian]]. Our aim is to find a curve
+$x(s)\in\mathscr{A}$ such that
+$$
+I[x] = \inf_{w \in\mathscr{A}}{I[w]}.
+$$
+Assume $L=L(v,x)$ for $v,x \in \mathbb{R}^n$ (for notation convenience) and
+that we can achieve the infimum of $I[w]$ by some optimal trajectory
+$x(s)\in\mathscr{A}$. To build our PDE for $x(s)$ we choose smooth
+$y:[0,t] \to \mathbb{R}^n$ with $y(s)=(y^1(s), \dots, y^n(s))$ such that
+$y(0)=y(t)=0$ and consider perturbing $x(s)$ by small multiples
+$\tau \in \mathbb{R}$ of $y(s)$ to get
+$$
+w(s)=x(s)+\tau y(s).
+$$
+Since $w(s) \in \mathscr{A}$ we see immediately that
+$$
+I[w]\geq I[x].
+$$
+Considering the action functional of the perturbed path we have that
+$$
+i:\mathbb{R} \to \mathbb{R};\quad i(\tau)=I[x+\tau y].
+$$
+Assuming differentiability we can compute 
+$$
+\begin{align}
+i'(\tau) & = \frac{d}{d\tau}\int_{0}^{t}{\mathcal{L}(x'(s)+\tau y'(s), x(s)+\tau y(s))}~d{s}  \\
+ & =\int_{0}^{t}{y'(s)\cdot \mathcal{L}_{v}(x'(s)+\tau y'(s), x(s)+\tau y(s))+y(s) \cdot \mathcal{L}_{x}(x'(s)+\tau y'(s),x(s)+\tau y(s))}~d{s},
+\end{align}
+$$
+where we have applied [[leibniz-integral-rule]] taking the derivative inside
+the integral. Evaluating at $\tau=0$ we find that
+$$
+\begin{align}
+i'(0) & =\int_{0}^{t}{y'(s)\cdot \mathcal{L}_{v}(x'(s), x(s))+y(s) \cdot \mathcal{L}_{x}(x'(s), x(s))}~d{s}  \\
+ & = \int_{0}^{t}\sum_{i=1}^{n}{([y^i(s)]'\cdot \mathcal{L}_{v_{i}}(x'(s), x(s)) + y^i(s) \cdot\mathcal{L}_{x_{i}}(x'(s), x(s)))}~d{s} \\
+ & =0.
+\end{align}
+$$

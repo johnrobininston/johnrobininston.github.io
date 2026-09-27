@@ -1,0 +1,56 @@
+---
+title: Regime-Switching Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Regime-Switching Models
+Linear models ([[arma-processes|ARMA]], [[garch-models|GARCH]]) assume one
+fixed dynamic regime throughout the sample. Many economic and financial series
+instead alternate between qualitatively different regimes (expansion/recession,
+calm/crisis volatility), motivating **nonlinear time series models** that allow
+parameters to switch.
+
+:::{.definition data-title="Markov-Switching Model (Hamilton, 1989)"}
+
+Let $S_t \in \{1,\dots,K\}$ be an unobserved discrete **regime** following a
+first-order [[markov-chains|Markov chain]] with transition matrix
+$P_{ij} = \mathbb{P}(S_t=j\mid S_{t-1}=i)$. Conditional on $S_t$, the series
+follows a regime-specific model, e.g. a Markov-switching AR(p):
+$$
+X_t = \mu_{S_t} + \phi_{1,S_t}X_{t-1}+\dots+\phi_{p,S_t}X_{t-p} + \sigma_{S_t}Z_t.
+$$
+Since $S_t$ is unobserved, this is a
+[[hidden-markov-models|hidden Markov model]] with continuous-valued emissions;
+estimation uses the **Hamilton filter** (a discrete-state analogue of the
+[[state-space-models-and-the-kalman-filter|Kalman filter]]) to recursively
+compute filtered regime probabilities $\mathbb{P}(S_t\mid X_1,\dots,X_t)$ and
+evaluate the likelihood by MLE, with smoothed probabilities from a backward
+pass.
+
+:::
+
+**Threshold and smooth-transition models.** An alternative to a latent Markov
+regime is to let the regime be an observable (deterministic) function of the
+data itself:
+- **TAR (Threshold Autoregressive)**: regime determined by whether a lagged
+  value $X_{t-d}$ crosses a threshold $\gamma$, giving piecewise-linear AR
+  dynamics — e.g. **SETAR** (self-exciting TAR) when the threshold variable is
+  the series itself.
+- **STAR (Smooth Transition AR)**: replaces the hard threshold indicator with a
+  smooth logistic/exponential transition function, avoiding a discontinuous
+  switch.
+
+**Applications.** Business-cycle dating (NBER-style expansion/recession
+classification), volatility regime identification (calm vs. crisis,
+complementing
+[[garch-models|GARCH]]/[[stochastic-volatility-model|stochastic volatility]]),
+and interest-rate/exchange-rate models with regime-dependent mean reversion.
+
+### References
+- [[hidden-markov-models]]
+- [[markov-chains]]
+- [[state-space-models-and-the-kalman-filter]]
+- [[garch-models]]

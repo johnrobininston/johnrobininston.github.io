@@ -1,0 +1,107 @@
+---
+title: Convergence in Law
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Convergence in Law
+
+**Convergence in Law**, also known as **convergence in distribution** or **weak
+convergence** is the fourth and weakest type of
+[[convergence-of-random-variables|convergence of random variables]].  
+
+:::{.definition data-title="Convergence in Law"}
+
+A sequence of random variables $\{X_n\}_{n\in\mathbb{N}}$ on probability space
+$(\Omega, \mathcal{F}, \mathbb{P})$ is said to **converge in law** (or
+**converge in distribution**) to $X$ as $n\to \infty$, denoted
+$X_{n}\stackrel{\mathcal{D}}{\to}X$ if
+$$
+\lim_{ n \to \infty } F_{X_{n}}(x)=F_{X}(x),
+$$
+that is, their sequence of [[distribution-function|distribution functions]]
+converge.
+
+:::
+
+We note the following key points and observations about convergence in law:
+
+1. Unlike other types of convergence ([[convergence-almost-surely|a.s.]],
+   [[convergence-in-norm|norm]], [[convergence-in-probability|probability]])
+   convergence in law **tells us nothing about the behavior of the random
+   variables** themselves, only their distribution. See
+   [[files-notes-pstat213bc-lecture-notes-raya-pdf|PSTAT213BC Lecture Notes (Raya), page 32]]
+   for an explanatory example.
+
+2. Convergence in law means that $F_{n}(x) \to F(x)$ for all $x$ up to the
+   **points of discontinuity** of $F$.
+
+3. Limits in distribution are unique, that is $F_{n}(x) \to F(x)$ and
+   $F_{n}(x) \to G(x)$ then $F=G$.
+### Convergence in Probability $\implies$ Convergence in Law
+
+:::{.theorem data-title="$\stackrel{\mathbb{P}}{\to}\implies \stackrel{\mathcal{D}}{\to}$"}
+
+If $X_{n}\stackrel{{\mathbb{P}}}{\to}X$ as $n \to \infty$, then
+$X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n\to \infty$.
+
+:::
+
+`\begin{proof}`
+For every $x \in\mathbb{R}$, $\epsilon>0$ we have that
+$$
+\mathbb{P}(X\leq x-\epsilon)\leq \liminf_{n \to \infty } \mathbb{P}(X_{n}\leq x)\leq \limsup_{ n \to \infty }\mathbb{P}(X_{n}\leq x)\leq \mathbb{P}(X\leq x+\epsilon).
+$$
+If $x$ is a continuity point of $X$, then as $\epsilon\downarrow 0$, the left
+and right sides converge and hence
+$$
+\lim_{ n \to \infty } \mathbb{P}(X_{n}\leq x)=P(X\leq x),
+$$
+giving the result.`\end{proof}`
+### [[skorohods-representation-theorem]]
+
+**Skorohod's Representation Theorem** is a result showing that a
+[[convergence-in-law|convergent in law]] sequence of probability measures whose
+limit measure is sufficiently well-behaved can be represented as the
+distribution / law of a pointwise convergent sequence of random variables
+defined on a common probability space.
+
+:::{.theorem data-title="[[skorohods-representation-theorem]]"}
+
+Suppose that $X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n \to \infty$ with
+$F_{n}(x):=\mathbb{P}(X_{n} \leq x)$ and $F(x):=\mathbb{P}(X\leq x)$ for
+$x \in \mathbb{R}$. Then, there exists a probability space
+$(\Omega', \mathcal{F}',\mathbb{P}')$ and random variables $\{Y_{n}, n\geq 1\}$
+and $Y$ such that
+$$
+Y_{n}\stackrel{\mathcal{D}}{=}X_{n},\quad Y\stackrel{\mathcal{D}}{=X},
+$$
+for every $n$ and $Y_{n}\stackrel{a.s.}{\to}Y$ as $n \to \infty$.
+
+:::
+
+### Key Results
+
+With convergence of distribution functions we consider the following questions:
+
+1. Does a sequence of d.f.s $\{  F_{n} \}$ necessarily converge?
+	- *In general no, [[hellys-selection-theorem]] provides a partial answer.*
+2. If a sequence of d.f.s $\{  F_{n} \}$ converges to a function $F$:
+   $F_{n}(x) \to F(x)$ is the limit $F$ necessarily a distribution function?
+	- *In general, no, the space of distribution functions is not compact.*  
+3. When is the limit $F$ (of a sequence of d.f.s $\{  F_{n} \}$) is a proper
+   d.f.?
+	- *When $\{ F_{n} \}$ is [[tightness|tight]]*. 
+
+[[continuous-mapping-theorem]]
+
+[[portmanteau-theorem]]
+
+[[hellys-selection-theorem]]
+
+[[tightness]]
+##### Prohorov's Theorem
+
+

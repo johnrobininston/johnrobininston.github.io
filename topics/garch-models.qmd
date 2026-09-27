@@ -1,0 +1,57 @@
+---
+title: GARCH Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### GARCH Models
+:::{.definition data-title="GARCH(p,q) (Bollerslev, 1986)"}
+
+$\varepsilon_t = \sigma_t Z_t$, $Z_t \sim IID(0,1)$, with conditional variance
+$$
+\sigma_t^2 = \omega + \sum_{i=1}^q \alpha_i \varepsilon_{t-i}^2 + \sum_{j=1}^p \beta_j \sigma_{t-j}^2, \qquad \omega>0,\ \alpha_i,\beta_j\geq 0.
+$$
+This is the volatility analogue of an $ARMA$ model: [[arch-models|ARCH(q)]]
+terms are the "MA" part (shocks) and the $\beta_j\sigma_{t-j}^2$ terms are the
+"AR" part (persistence), letting a low-order GARCH(1,1) match the volatility
+persistence that would need a very large ARCH order.
+
+:::
+
+**GARCH(1,1)** is the workhorse:
+$\sigma_t^2 = \omega + \alpha\varepsilon_{t-1}^2 + \beta\sigma_{t-1}^2$,
+covariance-stationary iff $\alpha+\beta<1$, with unconditional variance
+$\omega/(1-\alpha-\beta)$ and $\alpha+\beta$ close to $1$ typically observed
+empirically (high persistence, slow mean reversion of volatility).
+
+**Estimation.** Usually by (quasi-)maximum likelihood, conditioning on initial
+values, since $\sigma_t^2$ is a deterministic (recursively defined) function of
+past data given parameters — unlike
+[[stochastic-volatility-model|stochastic volatility]] models, where $\sigma_t$
+has its own noise source and requires filtering/simulation-based estimation
+(e.g. `stochvol`-style MCMC).
+
+**Extensions.**
+- **IGARCH**: $\alpha+\beta=1$, integrated (unit-root) volatility, connecting
+  to [[long-memory-processes-arfima|long-memory]] volatility behavior.
+- **EGARCH / GJR-GARCH**: allow asymmetric ("leverage") response, where
+  negative returns raise future volatility more than positive returns of the
+  same size.
+- **GARCH-M**: feeds $\sigma_t^2$ (or $\sigma_t$) into the conditional mean
+  equation, pricing a risk premium for volatility.
+- **Multivariate GARCH** (BEKK, DCC): extends to a vector of returns with
+  time-varying conditional covariance/correlation matrices.
+
+GARCH models the *conditional* variance parametrically from returns; an
+alternative, model-light approach uses high-frequency data to construct a
+nonparametric ex-post volatility measure — see [[realized-volatility]] and
+[[har-rv-model]].
+
+### References
+- [[arch-models]]
+- [[realized-volatility]]
+- [[har-rv-model]]
+- [[stochastic-volatility-model]]
+- [[volatility-models]]

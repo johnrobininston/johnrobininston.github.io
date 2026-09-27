@@ -1,0 +1,324 @@
+---
+title: Groundwater Market Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## 1 Groundwater Market Model
+
+In Cialenco & Ludkovski [[cialencogroundwatermarketmodel2025]] the authors
+describe a groundwater market model defined on filtered probability space
+$(\Omega, \mathcal{F}, \mathbb{P}, \mathbb{F}:=(\mathcal{F}_{t})_{t=0}^T)$
+assuming that $J$ agents trade groundwater among themselves within one basin.
+Throughout, all processes are assumed $\mathbb{F}$-adapted and we use boldface
+to denote vectors $\boldsymbol{\varphi}=(\varphi_{1}, \dots, \varphi_{J})$ and
+Fraktur letter to denote sums of quantities across agents
+$\mathfrak{W}=\sum_{j=1}^J W_{j}$.
+
+The **profit and loss** of the $j$-th agent is given by
+$$
+L_{j}(t):=\sum_{k=1}^K \overline{f}_{j}^k(t, \varphi_{j}^k)\cdot \varphi_{j}^k(t)+\psi_{j}(t)\cdot p(t),
+$$
+where:
+1. $K$ denotes the **types of goods** that can be produced;
+2. $\varphi_{j}^k$ denotes the **units of good** $k$ for individual $j$;
+3. $\overline{f}_{j}^k(t, \varphi_{j}^k)$ is a function (assumed continuous)
+   denoting **net profit in dollars
+   ($) per $\varphi_{j}^k$ units of good $k$ at time $t$**;
+4. $\psi_{j}(t)$ denotes the **amount of water traded** in acre-feet (ac-ft) at
+   time $t$ with the convention that $\psi_{j}>0$ means selling and
+   $\psi_{j}<0$ means buying;
+5. $p(t)$ denotes the **price of traded water** in $/ac-ft at time $t$.
+
+The **agents control** $\pi_{j}(t)$ consists of the type of goods to produce,
+the quantity of goods to produce, and the amount of water to trade, hence
+$$
+\pi_{j}(t):=(\boldsymbol{\varphi}_{j}(t), \psi_{j}(t)),
+$$
+subject to the additional production constraints
+$$
+0 \leq n_{j}^k(t)\leq \varphi_{j}^k(t)\leq N_{j}^k(t)\quad(\forall k,t),
+$$
+where the lower bound $n_{j}^k(t)$ represents **agricultural constraints**. The
+processes $\boldsymbol{n}(t)$ and $\boldsymbol{N}(t)$ are taken as inputs to
+the model and can be either deterministic or stochastic.
+
+The production of one unit of good $k$ requires $a^k(t)$ ac-ft of water and so
+we denote the $j$-th agent's water needs for producing goods at time $t$ by
+$$
+C_{j}(t):=\sum_{k=1}^K\varphi_{j}^k(t)a^k(t).
+$$
+The water availability for agent $j$ $\{W_{j}(t)\}$ has dynamics described by
+$$
+W_{j}(t+1)=W_{j}(t)+\theta_{j}R(t+1)-C_{j}(t)-\psi_{j}(t)\quad (t=0, \dots, T-1),
+$$
+with $W_{j}(0) = \theta_{j}H(0)$ where:
+1. $R(t)$ denotes the water recharge process (primarily from surface
+   precipitation) from $t$ to $t+1$.
+2. $\theta_{j}$ denotes the fixed proportion of recharge for agent $j$
+   allocated by regulators where we assume $\theta_{j}>0$ such that
+   $\sum_{j}\theta_{j}=1$.
+
+The recharge process $R(t)$ is given exogenously and follows a Markovian
+structure. The dynamics of the water table height $H(t)$ is given by
+$$
+H(t+1)=H(t)+R(t+1)-\mathfrak{C}(t)\quad (t=0,1\dots,T-1),
+$$
+and for simplicity we equate this with available water for all $J$ agents
+$$
+H(t)=\mathfrak{W}(t).
+$$
+We assume that agents cannot use more water than total available to them for
+that period, namely, imposing the water budget constraints
+$$
+-\sum_{i \neq j}W_{i}(t)\leq C_{j}(t)+\psi_{j}(t)\leq W_{j}(t).
+$$
+The agents have the opportunity for groundwater banking, that is 
+$$
+C_{j}(t)+\psi_{j}(t)<W_{j}(t),
+$$
+yielding an inter-temporal shift in water consumption. Moreover, the traded
+water amounts must balance out via the market clearing condition
+$$
+\sum_{j}\psi_{j}(t)=0.
+$$
+Denote by $\mathscr{S}_{j}$ the set of all feasible controls $\pi_{j}$ of agent
+$j$ i.e. stochastic processes satisfying (1.3) and (1.4). Considering only
+Markovian policies $\pi_{j}\in\mathscr{S}_{j}$, the process
+$(\boldsymbol{W}(t), R(t))$ is Markov and the agents solve
+$$
+\sup_{\pi_{j}\in\mathscr{S}_{j}}\mathbb{E}\left[ \sum_{s=t}^T U_{j}(L_{j}(s))\middle|\boldsymbol{W}(t)=\boldsymbol{w}, R(t)=r \right],
+$$
+where the functions $U_{j}$ account for each agent's idiosyncratic utility, as
+well as the temporal discount factor, and are required to be monotone
+increasing and concave.
+
+## 2 One-Period Fixed Parameter Market Model
+
+ We consider the one-period model consisting of two agents $j=1,2$ each able to
+ plant two crop types $k=1,2$. Each agent is looking to maximize profit
+$$
+A_{j}(\pi_{j}, \boldsymbol{\pi}_{-j}, p)=\mathbb{E}\left[ U_{j}(L_{j}( \pi_{j}, p) \right]=L_{j}(\pi_{j}, p)
+$$
+with respect to $\pi_{j}\in\mathscr{S}_{j}$ where we are considering the linear
+utility function $U_{j}(x)=x$. We note that in the one-period case we are
+taking everything as fixed, hence nothing is stochastic and we can drop the
+expectation. Each agent's profit is given by
+$$
+L_{j}(\pi_{j}, p):=\sum_{k}^{}\overline{f}_{j}^k(\varphi_{j}^k)\cdot \varphi_{j}^k + \varphi_{j}\cdot p
+$$
+which we rewrite as
+$$
+L_{j}(\pi_{j},p)=G_{j}(C_{j})+\varphi_{j}p=G_{j}(C_{j})+(W_{j}-C_{j})p,
+$$
+where we have some assumed agents good production given her constraints $G_{j}$
+and that self-sufficient farmers will treat trading as a bonus or a necessity
+(i.e. $\varphi_{j}=W_{j}-C_{j}$). We consider the net profit function
+$$
+\overline{f}_{j}^k(\varphi_{j}^k)=f_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k-1}-q_{j}^k\varphi_{j}^k,
+$$
+for constants $f_{j}^k, q_{j}^k\geq 0$ and $\alpha_{j}^k \in (0,1)$. The
+[[lagrange-multipliers|Lagrangian]] for agent $j=1,\dots,J$ assuming no
+production constraints and for fixed price $p$ becomes
+$$
+\mathcal{L}(\boldsymbol{\varphi}_{j}; \lambda_{j}) = \sum_{k}^{}(f_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k}-q_{j}\varphi_{j}^k)+\left( W_{j}-\sum_{k}^{}a^k\varphi_{j}^k \right)p+\lambda_{j}\left( R-\sum_{i,k}^{}a^k \varphi_{i}^k \right),
+$$
+and the combined first-order conditions for agents $j=1, \dots, J$ are
+$$
+\begin{cases}
+f_{j}^k\alpha_{j}^k(\varphi_{j}^k)^{\alpha_{j}^k-1}-q_{j}^k-a^kp\lambda_{j}=0 \\
+R-\sum_{i,k}^{} a^k \varphi_{i}^k = 0,\quad \varphi_{j}^k \geq 0 \,\quad k = 1, \dots, K.
+\end{cases}
+$$
+Letting 
+$$
+d_{j}^k:=\left( \frac{a^k}{\alpha_{j}^k f_{j}^k} \right)^{\frac{1}{\alpha_{j}^k-1}} ~~\&~~e_{j}^k:=\frac{q_{j}^k}{a_{k}},
+$$
+then for any $\lambda_{j}\geq -p - e_{j}^k$
+$$
+\begin{align}
+\varphi_{j}^k &  = (p + \lambda_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k - 1}}d_{j}^k,~~k=1, \dots, K \\
+R  & =  \sum_{k,j}^{}(p+\lambda_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}a^k d_{j}^k
+\end{align}
+$$
+Clearly, for any $p\geq 0$ there exists $\lambda_{j}\in \mathbb{R}$ for
+$j = 1, \dots, J$ such that this expression for $R$ holds and so our expression
+for $\varphi_{j}^k$ is satisfied. Moreover, since the optimization problem at
+hand is convex with affine constraints, these conditions are sufficient for
+$\boldsymbol{\varphi}$ to be the joint maximizer.  
+
+For a fixed price $p>0$ announced by the price setter, assuming that agent $j$
+has no constraints on available water to buy/sell, her optimal production is
+given by
+$$
+\varphi_{j}^k=(p+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k,
+$$
+which decreases as a function of $p$, i.e. lower price will yield larger
+production and hence larger consumption. To meet these optimal production
+rates, agent $j$ would buy water if
+$$
+W_{j}\leq \sum_{k}^{}a^k \varphi_{j}^k=\sum_{k}^{}a^k(p+e_{j}^k)^{\frac{1}{\alpha_{j}^k - 1}}d_{j}^k.
+$$
+Due to the monotonicity of the power function, there exists unique price
+$\tilde{p}_{j}$ such that the above inequality becomes an equality. Thus, for
+any $p \leq \underline{p}=\min_{j} \tilde{p}_{j}$ no agent would be willing to
+sell the water. The agent will consume all the allocated water $W_{j}$ and by
+direct calculations we obtain the optimal production rates
+$$
+\varphi_{j}^k=(\tilde{p}_{j}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k.
+$$
+This implies that the agent $k$ chooses the Lagrange multiplier $\lambda_{j}$
+corresponding to the NE such that $p+\lambda_{j}=\tilde{p}_{j}$, hence
+$\lambda_{j}>0$ making the agent $j$ artificially boost profit from producing
+the goods. Similarly, if $p>\overline{p}=\max_{j}\tilde{p}_{j}$ each agent
+prefers to sell water, thus no water is traded, and the multipliers are chosen
+so that $\lambda_{j}<0$ which can be interpreted as the agent $j$ produces
+goods pretending that the water price is the indifferent price.
+
+From here, to reach the maximum profit for a fixed price $p$, each agent $j$
+should choose $\lambda_{j}=0$. Taking $\lambda_{j}=0$ for all $j$, we get the
+unique price $p^\circ$ that clears the market
+$$
+\sum_{j,k}^{}(p^\circ+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}a^kd_{j}^k = R.
+$$
+Clearly, this price $p^\circ$ is Pareto optimal. We also note that if there
+were a central planner who would implement the cooperative solution of
+maximizing the total production revenue of all farmers
+$\sum_{j}^{}G_{j}(C_{j})$ subject to $\sum_{j}^{}C_{j}=R$ this yields the same
+f.o.c.
+$$
+\varphi_{j}^k = (\lambda^{SO}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k,\quad \sum_{j,k}^{}a^k\varphi_{j}^k=R,
+$$
+and hence the same optimal production rates $\varphi_{j}^k$ corresponding to
+$p^\circ$. Moreover, we can interpret $p^\circ$ as the shadow cost of water
+(i.e. the Lagrange multiplier for the budget constraint) from the central
+planners perspective. Note that the social optimum is driven by the total
+available water $\mathfrak{W}$ and agent specific allocations $W_{j}$ play no
+role beyond cash transfers within the *subsidiary* farmers in the community.
+
+Similar computations and arguments can be extended to the case with nontrivial
+production bound $n_{j}^k, N_{j}^k$. For example, assuming that
+$\sum_{j}^{}\underline{c}_{j}<R<\sum_{j}^{}\overline{c}_{j}$ the social optimum
+exists and is computed from KKT conditions
+$$
+\varphi_{j}^k=n_{j}^k \vee (\lambda^{SO}+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k \wedge N_{j}^k,\quad \sum_{j,k}^{}a^k\varphi_{j}^k=R.
+$$
+Correspondingly, the max profit function $C_{j}(C)$ are computed through
+$\varphi_{j}^k=n_{j}^k \vee (\lambda_{j}(C)+e_{j}^k)^{\frac{1}{\alpha_{j}^k-1}}d_{j}^k\wedge N_{j}^k$
+where $\lambda_{j}(C)$ are the Lagrange multipliers such that
+$\sum_{j,k}^{}a^k\varphi_{j}^k=R.$
+
+## 3 One Period Agent Continuum Model
+
+We now look to modify our one period finite agent model to instead consider a
+continuum of infinitesimally small agents. We assume that agents in the
+continuum are characterized by some selection of model parameters, for example
+$f^k$, and that all remaining parameters are constant across the continuum for
+each crop $k$. On our abstract player space $\mathcal{J}$ there is some measure
+$\mu$ describing the distribution of aggregate agent behavior. We denote the
+distribution induced by $\mu$, of for example by $f^k$, by
+$$
+G_{f}^k(x)=\mu(f^k < x),
+$$
+with the corresponding density given by $g_{f}^k$ assuming that $G_{f}^k$ is
+differentiable. We are particularly interested in resulting continuum
+distribution of optimal agent production $G_{\varphi}^k$ and resulting water
+consumption $G_{C}{}^k$ given by
+$$
+\begin{cases}
+\varphi^k:= n^k \vee \Phi^k \wedge N^k  \\
+\Phi^k := \left( \frac{{pa^k+q^k}}{\alpha^kf^k} \right)^{\frac{1}{\alpha^k-1}}.
+\end{cases}
+$$
+Intuitively we can think of the continuum case as the target that the finite
+$J$ player model should tend towards asymptotically as we take $J\to \infty$.
+Note that our existing model has **no parameter scaling** and relies on the
+input parameters to determine the convergence of the final productivity. We
+attempt to construct a scalable model requiring an in-built dependence on the
+total number of players $J$ scaling production $\varphi_{j}\to 0$ as
+$J \to \infty$.
+
+To clarify notation we write $^*\varphi_{j}^k$ for our scalable model
+parameters and we note that our aim is to have
+$$
+\lim_{ J \to \infty } ~\sum_{j=1}^{J}~^*\varphi_{j}^k = m^k
+$$
+where $m^k$ is the population optimal average production for the continuum
+$$
+m^k=\int_{\mathcal{J}}^{}{x}~d{G_{\varphi}^k(x)}.
+$$
+To construct this scalable model we need to consider the following points: (1)
+the agent characterization model components; (2) the distribution of agents
+across each characterizing components; (3) the discretization of continuous
+parameter spaces.
+
+### 3.1 One Period Agent Continuum - Productivity
+
+As a starting point assume that agents are characterized by productivity $f^k$
+across the continuum and that all other model parameters are constant across
+the continuum for each crop $k$. To simplify our analysis we our expression for
+$\Phi^k$ as
+$$
+\Phi^k=\left( \frac{\alpha^k}{pa^k+q^k} \cdot f^k \right)^{\frac{1}{1-\alpha^k}}=(\xi^{k}\cdot f^k)^{\frac{1}{\beta^k}}=h(f^k),
+$$
+where we have defined
+$$
+h(x) = (\xi^k\cdot x)^{\frac{1}{\beta^k}},\quad\xi(p) = \frac{\alpha}{pa + q}\quad\&\quad \beta={1-\alpha}.
+$$
+From the non-negativity of all terms and since $\beta^k<1$ we have that $h$ is
+one-to-one, hence we can write the density of $\Phi^k$ as
+$$
+g_{\Phi}^k(y)=g_{f}^k(h^{-1}(y))\cdot \left|  \frac{d}{dy} h^{-1}(y) \right| =g_{f}^k\left( \frac{y^{\beta^k}}{\xi^k} \right)\cdot \frac{\beta^k}{\xi^k} x^{\beta^k-1}.
+$$
+From this the density of $g_{\varphi}^k$ includes a weighting and point masses
+due to the production bounds $n^k, N^k$ and so
+$$
+g_{\varphi}^k(x)=\begin{cases}
+\mu(\Phi^k \leq n^k) & x=n^k \\
+g_{\Phi}^k(x) & x \in [n^k, N^k]  \\
+\mu(\Phi^k \geq N^k) & x = N^k.
+\end{cases}
+$$
+Thus the population average optimal production can be computed from the
+integral
+$$
+m^k = \int_\mathcal{J} x g_\varphi^k(x)dx = n^k \mu(\Phi^k\leq n^k) + \int_{n_k}^{N^k}x\Phi^k(x)dx+N^k\mu(\Phi^k\geq N^k).
+$$
+***Note: It should be possible to compute the spread of the distribution of
+optimal agent production. It should also be simple to verify the result
+numerically.***
+
+We 
+
+
+We proceed to consider several cases each of which considers $f^k$ to follow a
+standard non-negative distribution. family such as the continuous uniform, the
+two-parameter gamma and the scaled two-parameter beta.  
+#### 3.1.1 Case 1 - Uniform Productivity
+
+Assume that $\mu$ induces a **uniform distribution**
+$f^k\sim\mathcal{U}([A^k, B^k])$ for some $0\leq A^k<B^k$ with
+$$
+g_f^k(x)=\frac{1}{B^k-A^k}\mathbb{1}_{\{x\in[A^k, B^k]\}}.
+$$
+The density of $\Phi^k=h(f^k)$ is given by
+$$
+g_\Phi^k(x) = \frac{1}{B^k-A^k}\mathbb{1}_{h^{-1}(x)\in[A^k, B^k]}\cdot \left|\frac{\beta^k x^{\beta^k-1}}{\xi^k}\right|  = \frac{\beta^k x^{\beta^k-1}}{\xi^k(B^k-A^k)}\mathbb{1}_{\{x\in[h(A^k), h(B^k)]\}}.
+$$
+Noting that in this case productivity is bounded on $[A^k, B^k]$ we define
+$\lambda_1^k := (n^k\vee h(A^k))\wedge h(B^k)$ and
+$\lambda_2^k := (N^k\wedge h(B^k))\vee h(A^k)$ so that we can write the player
+average of $\varphi^k$ as
+$$
+\begin{aligned}
+m^k & = \int x dG_\varphi(x) = n^k\cdot\mathbb{P}(\Phi^k\leq \lambda_1^k) + \int x\mathbb{1}_{\Phi^k\in[\lambda_1^k, \lambda_2^k]}g_\Phi^k(x)dx + N^k\cdot\mathbb{P}(\Phi^k\geq \lambda_2^k) \\
+& = \frac{n^k(h^{-1}(\lambda_1^k)-A^k)}{B^k-A^k} + \frac{\beta^k[(\lambda_2^k)^{\beta^k+1}-(\lambda_1^k)^{\beta^k+1}]}{\xi^k(B^k-A^k)(\beta^k+1)} + \frac{N^k[B^k-h^{-1}(\lambda_2^k)]}{B^k-A^k}.
+\end{aligned}
+$$
+From this we can look to construct a finite model for $^*\varphi^k_{j}$. First
+considering the case for unbounded production we have that
+$$
+\lim_{ J \to \infty } \sum_{j=1}^{J}~^*\varphi_{j}^k=
+$$

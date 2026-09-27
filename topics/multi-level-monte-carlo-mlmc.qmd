@@ -1,0 +1,88 @@
+---
+title: Multi-Level Monte-Carlo (MLMC)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Multi-Level Monte-Carlo (MLMC)
+*References: [[higham-kloeden]] §15.3.*
+
+Standard Monte Carlo gives an estimate of an expected value by averaging over
+many paths of an SDE discretized with a fixed time step. But simulating very
+fine (accurate) time steps is expensive. **Multi-Level Monte-Carlo (MLMC)**
+solves this by combining simulations at multiple time resolutions (levels)
+(using many cheap, coarse simulations and fewer expensive, fine simulations) in
+a way that reduces both bias and variance more efficiently.
+
+### Implementation of MLMC
+
+Suppose we wish to estimate $\mathbb{E}[g(S_{T})]$ where $g$ is the payoff
+function for a Euro-call option. We can show that $g$ satisfies a global
+[[lipschitz-continuity]] condition
+$$
+\lvert g(x)-g(y) \rvert \leq K\lvert x - y \rvert ; \quad \forall x,y,\tag{B}
+$$
+where $K$ is a constant that does not depend on $x$ and $y$ (see
+[[higham-kloeden-exercise-15-2]]). The MLMC algorithm uses step sizes of the
+form
+$$
+\Delta t_{l}=\frac{T}{2^l};\quad l = 0,1,2,\dots,L=\frac{{\log \frac{1}{\epsilon}}}{\log_{2}}.
+$$
+Note that at level $l=0$ we have the largest step size $\Delta t_{0}=T$
+covering the whole interval in one step, whereas the smallest step size
+$\Delta t_{L}=O(\epsilon)$ (see [[higham-kloeden-exercise-15-3]]). This
+$\Delta t_{L}$ is the time step needed by the EM method to achieve weak error
+of $O(\epsilon)$.
+
+For each step size $\Delta t_{l}$ we may apply the EM method to the underlying
+SDE $(8)$ and evaluate $g$ at the final time. We will let $\widehat{P}_{l}$
+denote the approximation of $g(S_{T})$. From the linearity of expectation it is
+clear that
+$$
+\mathbb{E}[\widehat{P}_{L}]=\mathbb{E}[\widehat{P}_{0}]+\sum_{l=1}^{L}\mathbb{E}[\widehat{P}_{l}-\widehat{P}_{l-1}].\tag{A}
+$$
+To estimate $\mathbb{E}[\widehat{P}_{0}]$ we form the usual sample mean using
+$N_{0}$ sample paths giving
+$$
+\widehat{Y}_{0}= \frac{1}{N_{0}}\sum_{i=1}^{N_{0}}\widehat{P}_{0}^{[i]},
+$$
+and generally for $\mathbb{E}[\widehat{P}_{l}-\widehat{P}_{l-1}]$ we use
+$N_{l}$ sample paths giving
+$$
+\widehat{Y_{l}}= \frac{1}{N_{l}}\sum_{{i=1}}^{N_{l}}(\widehat{P}_{l}^{[i]}- \widehat{P}_{l-1}^{[i]}),\tag{C}
+$$
+where $P_{l}^{[i]}$ and $P_{l-1}^{[i]}$ come from the same discretized Brownian
+path, with step sizes $\Delta t_{l}$ and $\Delta t_{l-1}$ respectively.
+Intuitively, we compute $N_{l}$ Brownian paths, for each path apply the EM
+method with step sizes $\Delta t_{l}$ and $\Delta t_{l-1}$ respectively
+(practically this simply means computing a path at resolution $\Delta t_{l}$
+and then combining Brownian increments over pairs of steps to get resolution
+$\Delta t_{l-1}$).
+
+### MLMC Results
+
+From $(A)$ we have that our estimator will have the correct $O(\epsilon)$ bias.
+We next determine the values of $\{ N_{l} \}_{l=1}^L$ to retain accuracy in the
+overall confidence interval. Using the strong convergence property of the EM
+method (see Section 1.5) and the global Lipschitz condition $(B)$ for $g$ we
+have that
+$$
+\begin{align}
+\text{Var}(\widehat{P}_{l}-g(S_{T})) & = \mathbb{E}[(\widehat{P}_{l}-g(S_{T}))^2]-\mathbb{E}[\widehat{P}_{l}-g(S_{T})]^2 \\
+ & \leq \mathbb{E}[(\widehat{P}_{l}-g(S_{T}))^2]\stackrel{\text{Lip}}\leq \mathbb{E}[K^2(S_{N}-S_{T})^2] \\
+ & \leq K^2\mathbb{E}[(S_{N}-S_{T})^2]= O(\Delta t_{l}).
+\end{align}
+$$
+It then follows from the [[minkowski-inequality]] that
+$$
+\begin{align}
+\text{Var}(\widehat{P}_{l}-\widehat{P}_{l-1}) & =\text{Var}(\widehat{P}_{l}-g(S_{T})+g(S_{T})-\widehat{P}_{l-1})  \\
+ & \leq \left( \sqrt{ \text{Var}(\widehat{P}_{l}-g(S_{T})) }+\sqrt{ \text{Var}(g(S_{T})-\widehat{P}_{l-1}) } \right)^2 \\
+ & =O(\Delta t_{l}).
+\end{align}
+$$
+Since $\text{Var}(X+Y)=\text{Var}(X)+\text{Var}(Y)$ for $X \perp Y$ and
+$\text{Var}(aX)=a^2\text{Var}(X)$ we have that $\widehat{Y}_{l}$ in $(C)$ has
+variance of $O\left( \frac{\Delta t_{l}}{N_{l}} \right)$ for $l>1$.  

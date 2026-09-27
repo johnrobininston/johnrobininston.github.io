@@ -13,7 +13,8 @@ execute:
 
 ::: {.callout-important title="Learning Objectives"}
 - Define the logistic regression model.
-- Implement logistic regression in python using the famous Titanic classification data set.
+- Implement logistic regression in python using the famous Titanic
+  classification data set.
 :::
 
 ```{python}
@@ -41,15 +42,23 @@ sns.set_palette('Set2')
 
 ## Logistic Regression
 
-Logistic regression is the GLM for a **binary response** $Y_i \in \{0,1\}$. It arises naturally in settings like: did a patient recover? did a loan default? is a species present at a site?
+Logistic regression is the GLM for a **binary response** $Y_i \in \{0,1\}$. It
+arises naturally in settings like: did a patient recover? did a loan default?
+is a species present at a site?
 
-We assume $Y_i \mid \mathbf{x}_i \sim \text{Bernoulli}(\pi_i)$ and model the **log-odds** (logit) of $\pi_i$ as a linear function of the predictors:
+We assume $Y_i \mid \mathbf{x}_i \sim \text{Bernoulli}(\pi_i)$ and model the
+**log-odds** (logit) of $\pi_i$ as a linear function of the predictors:
 
-$$\log\frac{\pi_i}{1 - \pi_i} = \mathbf{x}_i^\top\boldsymbol{\beta} = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}.$$
+$$
+\log\frac{\pi_i}{1 - \pi_i} = \mathbf{x}_i^\top\boldsymbol{\beta} = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_p x_{ip}.
+$$
 
-Inverting the logit link gives the **logistic (sigmoid) function**, which maps any real number to $(0,1)$ and ensures probabilities are always valid:
+Inverting the logit link gives the **logistic (sigmoid) function**, which maps
+any real number to $(0,1)$ and ensures probabilities are always valid:
 
-$$\pi_i = \sigma(\eta_i) = \frac{1}{1 + e^{-\eta_i}}, \quad \eta_i = \mathbf{x}_i^\top\boldsymbol{\beta}.$$
+$$
+\pi_i = \sigma(\eta_i) = \frac{1}{1 + e^{-\eta_i}}, \quad \eta_i = \mathbf{x}_i^\top\boldsymbol{\beta}.
+$$
 
 ```{python}
 #| echo: false
@@ -78,7 +87,9 @@ Coefficients can be read on three equivalent scales:
 | **Odds** | $\frac{\pi}{1-\pi} = e^{\boldsymbol{x}^\top\boldsymbol{\beta}}$ | $e^{\beta_j}$ is the **odds ratio** per unit increase in $x_j$ |
 | **Probability** | $\pi = \sigma(\boldsymbol{x}^\top\boldsymbol{\beta})$ | Non-linear; depends on the values of all predictors |
 
-If $\beta_j = 0.5$, then $e^{0.5} \approx 1.65$: a one-unit increase in $X_j$ **multiplies the odds** by $1.65$. Odds ratios are multiplicative, not additive. If $\beta_j < 0$, the odds decrease with $X_j$.
+If $\beta_j = 0.5$, then $e^{0.5} \approx 1.65$: a one-unit increase in $X_j$
+**multiplies the odds** by $1.65$. Odds ratios are multiplicative, not
+additive. If $\beta_j < 0$, the odds decrease with $X_j$.
 
 The log-likelihood (also called binary cross-entropy) is:
 
@@ -90,7 +101,9 @@ A **pseudo-$R^2$** is often computed as McFadden's $R^2 = 1 - D/D_0$.
 
 ### Application: Titanic Survival
 
-We illustrate logistic regression on Titanic passenger data — a classic binary classification problem where $Y = 1$ indicates survival, with predictors including class, sex, age, and fare.
+We illustrate logistic regression on Titanic passenger data — a classic binary
+classification problem where $Y = 1$ indicates survival, with predictors
+including class, sex, age, and fare.
 
 ```{python}
 titanic = (
@@ -142,7 +155,8 @@ ax.legend()
 plt.tight_layout(); plt.show()
 ```
 
-We fit the model using `smf.logit()`, which uses the same formula syntax as `smf.ols()`. Categorical variables are automatically dummy-coded with `C(...)`.
+We fit the model using `smf.logit()`, which uses the same formula syntax as
+`smf.ols()`. Categorical variables are automatically dummy-coded with `C(...)`.
 
 ```{python}
 logit1 = smf.logit(
@@ -163,7 +177,9 @@ Key fields in the output:
 | **$P > |z|$** | Wald test $p$-value for $H_0: \beta_j = 0$ |
 | **$[0.025,\, 0.975]$** | 95% confidence interval on the log-odds scale |
 
-Standard errors and tests are based on the Wald statistic $z = \hat{\beta}_j / \widehat{\text{SE}}(\hat{\beta}_j) \approx \mathcal{N}(0,1)$, a large-sample result from maximum likelihood theory.
+Standard errors and tests are based on the Wald statistic
+$z = \hat{\beta}_j / \widehat{\text{SE}}(\hat{\beta}_j) \approx \mathcal{N}(0,1)$,
+a large-sample result from maximum likelihood theory.
 
 ```{python}
 #| echo: false
@@ -199,7 +215,9 @@ ax.legend(fontsize=9)
 plt.tight_layout(); plt.show()
 ```
 
-We can predict probabilities for individual passengers using `logit1.predict()`. The coefficient table lives on the log-odds scale, but for communication we usually want probabilities:
+We can predict probabilities for individual passengers using
+`logit1.predict()`. The coefficient table lives on the log-odds scale, but for
+communication we usually want probabilities:
 
 ```{python}
 newdata = pd.DataFrame({
@@ -214,7 +232,9 @@ for i, row in newdata.iterrows():
           f"fare {row['fare']:.0f}: P(survive) = {probs[i]:.3f}")
 ```
 
-A 30-year-old female in first class has a high predicted survival probability; a 30-year-old male in third class has a much lower one — consistent with the historical record.
+A 30-year-old female in first class has a high predicted survival probability;
+a 30-year-old male in third class has a much lower one — consistent with the
+historical record.
 
 ```{python}
 #| echo: false
@@ -249,10 +269,17 @@ plt.tight_layout(); plt.show()
 ### Classification Performance
 
 ::: {.callout-important title="In-sample evaluation"}
-The classification metrics below are computed on the **same data used to fit the model**, giving an **optimistic** picture of predictive performance. In a prediction-focused workflow you would split data into training and test sets before reporting these metrics. Here our primary goal is **inference** — understanding which predictors are associated with survival — and the classification metrics illustrate how a fitted logistic regression translates into a classifier.
+The classification metrics below are computed on the **same data used to fit
+the model**, giving an **optimistic** picture of predictive performance. In a
+prediction-focused workflow you would split data into training and test sets
+before reporting these metrics. Here our primary goal is **inference** —
+understanding which predictors are associated with survival — and the
+classification metrics illustrate how a fitted logistic regression translates
+into a classifier.
 :::
 
-We classify $\hat{Y}_i = 1$ if $\hat{\pi}_i > 0.5$ and summarise performance with the confusion matrix and ROC curve.
+We classify $\hat{Y}_i = 1$ if $\hat{\pi}_i > 0.5$ and summarise performance
+with the confusion matrix and ROC curve.
 
 ```{python}
 pi_hat = logit1.predict()
@@ -275,7 +302,10 @@ ax.set_title('Confusion Matrix — Logistic Regression (threshold = 0.5)', fonts
 plt.tight_layout(); plt.show()
 ```
 
-The **ROC curve** plots the true positive rate (sensitivity) against the false positive rate (1 - specificity) as the threshold varies from 1 to 0. The **AUC** (area under the ROC curve) measures overall discriminative ability: AUC = 1 is perfect; AUC = 0.5 is a random classifier.
+The **ROC curve** plots the true positive rate (sensitivity) against the false
+positive rate (1 - specificity) as the threshold varies from 1 to 0. The
+**AUC** (area under the ROC curve) measures overall discriminative ability: AUC
+= 1 is perfect; AUC = 0.5 is a random classifier.
 
 ```{python}
 #| echo: false

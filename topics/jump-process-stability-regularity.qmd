@@ -1,0 +1,92 @@
+---
+title: "Jump Process Stability & Regularity"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+Consider a [[jump-processes|jump process]] $(X_{t})$ determined by transition
+matrix $P=(p_{i,j})$ with $p_{i,i}=0$, and holding rate function
+$(q_{k}=q(k),~k \in S)$, $0<q_{k}<\infty$. Then jump times
+$S_{0}=0, S_{1}, S_{2}, \dots$ are constructed via holding times
+$$
+T_{m-1}=S_{m}-S_{m-1}= \frac{E_{m-1}}{q(X_{m-1})}\sim\mathcal{E}(q(X_{m-1})),
+$$
+where $\{ E_{m} \}$ is a sequence of i.i.d. $\mathcal{E}(1)$ random variables.
+At times $S_{m}$, $m=1,2,\dots$ the chain jumps to state $X_{m}=j$ according to
+probabilities $p_{i,j}$. Further, $X_{t}=X_{m}$ on $S_{m}\leq t\leq S_{m+1}$ so
+that the chain is well defined on $[0,S_{\infty})$ with
+$S_{\infty}=\lim_{n \to \infty}S_{n}$.
+
+We consider the following problems:
+
+1. When is the limit $S_{\infty}=\infty$? - i.e. when $(X_{t})$ is defined for
+   all $t \geq 0$.
+2. What is the important of the condition $0<q_{k}<\infty$?
+
+:::{.definition data-title="Stable State"}
+
+State $i$ for which $0<q_{i}<\infty$ is called **stable**. If $q_{i}=\infty$,
+state $i$ is called **instantaneous**.
+
+:::
+
+Note that:
+- $q_{i}=\infty$ means that the mean holding time at state $i$ is
+  $\frac{1}{q_{i}}=0$. Such state is exited *instantaneously*.
+- $q_{i}=0$ means that the mean holding time at state $i$ is
+  $\frac{1}{q_{i}}=\infty$. Thus $i$ is an *absorbing* state.
+
+***Assumption:*** For the following results we assume all chains considered
+have only stable states.
+
+:::{.definition data-title="Regular Chains"}
+
+If for all $i \in S$ we have $\mathbb{P}(S_{\infty}=\infty|X_{0}=i)=1$ then the
+chain $(X_{t})$ is called **regular**.
+
+:::
+
+Note that if $S_{\infty}<\infty$ this intuitively means that an infinite number
+of jumps at times $S_{1}, S_{2}, \dots$ occurs on finite interval
+$[0,S_{\infty})$. This is called an **explosion**.
+
+:::{.theorem}
+
+For all $i \in S$ we have that $\mathbb{P}(S_{\infty}<\infty|X_{0}=i)=\mathbb{P}\left( \sum_{n} \frac{1}{q(X_{n})}<\infty \middle| X_{0}=i \right).$ Thus we have that $$(X_{t})~\text{is regular}\iff \mathbb{P}\left( \sum_{n} \frac{1}{q(X_{n})}=\infty\middle|X_{0}=i \right)=1,~~\forall i \in S.$$
+
+:::
+
+`\begin{proof}`
+First we note that 
+$$
+S_{\infty}=\lim_{N \to \infty}S_{N}=\lim_{N \to \infty}\sum_{n=0}^{N-1}(S_{n+1}-S_{n})=\sum_{n=0}^\infty(S_{n+1}-S_{n})=\sum_{n=0}^\infty \frac{{E_n}}{q(X_{n})}. 
+$$
+Then we have that
+$$
+\begin{align}
+\mathbb{P}(S_{\infty} < \infty|X_{0}=i_{0}=i, X_{n}=i_{n}, n \geq  0) & = \mathbb{P}\left( \sum_{n=0}^\infty \frac{E_{n}}{q(X_{n})}<\infty\middle|(X_{n}=i_{n},~n\geq  0) \right)  \\
+& = \mathbb{P}\left( \sum_{n=0}^\infty \frac{1}{q(X_{n})}<\infty\middle|(X_{n}) \right),
+\end{align}
+$$
+where this last equality follows from properties of the exponential
+distribution and the [[tower-property|tower property]].
+`\end{proof}`
+Some examples of regular processes are:
+
+- [[poisson-process]] is regular since $\sum_{i} \frac{1}{\lambda}=\infty$.
+- [[yule-process]] is regular since $\sum_{i} \frac{1}{i\lambda}=\infty$.
+- [[pure-birth-process]] is regular if and only if
+  $\sum_{i}\frac{1}{\lambda_{i}}=\infty$.
+
+:::{.theorem data-title="Regularity Sufficient Conditions"}
+
+The following are sufficient conditions for regularity:
+1. $\max_{i}q_{i}<\infty$
+2. Finite state space $S$
+3. $X_{0}=i$ and $i$ is a persistent state for the imbedded jump chain
+   $(X_{t})$.
+
+:::
+

@@ -1,0 +1,46 @@
+---
+title: Yule-Walker Equations
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Yule-Walker Equations
+For a causal $AR(p)$ process $X_t = \phi_1X_{t-1}+\dots+\phi_pX_{t-p}+Z_t$,
+multiplying through by $X_{t-k}$ and taking expectations gives the
+**Yule-Walker equations** relating the AR coefficients to the ACF:
+$$
+\rho_X(k) - \phi_1\rho_X(k-1) - \dots - \phi_p\rho_X(k-p) = 0, \qquad k \geq 1.
+$$
+
+In matrix form, using the first $p$ equations ($k=1,\dots,p$),
+$$
+\Gamma_p\, \vec\phi = \vec\gamma_p, \qquad \Gamma_p = [\gamma(i-j)]_{i,j=1}^p, \quad \vec\gamma_p = (\gamma(1),\dots,\gamma(p))^T,
+$$
+which can be solved for $\vec\phi = (\phi_1,\dots,\phi_p)^T$ given the ACVF
+$\gamma$, and $\sigma_Z^2$ then follows from the $k=0$ equation.
+
+**Use in estimation.** Replacing the theoretical $\rho_X, \gamma_X$ by their
+sample counterparts $\hat\rho, \hat\gamma$ (see
+[[autocovariance-and-autocorrelation-function]]) yields the
+**method-of-moments** estimator $\hat\phi$ of the AR coefficients —
+computationally cheap but generally less efficient than
+[[maximum-likelihood-estimation]].
+
+**Use in PACF.** Solving the Yule-Walker system at successively increasing
+orders $h=1,2,\dots$ and reading off the last coefficient $\hat\phi_{hh}$ at
+each order gives the sample [[partial-autocorrelation-function|PACF]]. This is
+done efficiently and recursively by the [[durbin-levinson-algorithm]] rather
+than solving each linear system from scratch.
+
+**Example (AR(2)).** From $\rho_X(1) = \phi_1 + \phi_2\rho_X(1)$ and
+$\rho_X(2) = \phi_1\rho_X(1)+\phi_2$, one obtains
+$$
+\rho_X(1) = \frac{\phi_1}{1-\phi_2}, \qquad \rho_X(2) = \phi_1\rho_X(1) + \phi_2.
+$$
+
+### References
+- [[autoregressive-processes]]
+- [[durbin-levinson-algorithm]]
+- [[pstat274-time-series-summary-notes]]

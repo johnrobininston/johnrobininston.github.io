@@ -1,0 +1,168 @@
+---
+title: Dynamic Programming Principle
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is Dynamic Programming?
+
+*Dynamic programming (DP)* is an algorithmic technique for solving problems by
+breaking them down into overlapping subproblems and storing their solutions to
+avoid redundant computation. It trades space for time, using memoization or
+tabulation to achieve efficient solutions.
+
+## The Dynamic Programming Principle (Bellman Principle)
+
+The **Bellman optimality principle** states that an optimal solution to a
+problem contains optimal solutions to its subproblems. In other words:
+
+> An optimal policy has the property that whatever the initial state and decision are, the remaining decisions must constitute an optimal policy with regard to the state resulting from the first decision.
+
+### Mathematical Form
+
+For an optimization problem, if `f(n)` is the optimal solution for problem size
+`n`:
+
+```
+f(n) = optimal_choice + f(k) where k < n
+```
+
+The principle guarantees that we can build up the optimal solution by combining
+optimal solutions of smaller subproblems.
+
+### Key Characteristics of DP Problems
+
+1. **Optimal Substructure**: The optimal solution is built from optimal
+   solutions to subproblems
+2. **Overlapping Subproblems**: The same subproblems are solved multiple times
+   in naive approaches
+3. **Memoryless Property**: The optimal decision depends only on the current
+   state, not how we reached it
+
+## Two Approaches to Dynamic Programming
+### 1. Memoization (Top-Down)
+
+- Start with the original problem
+- Recursively break it into subproblems
+- Cache/store results of subproblems
+- Avoid recomputation by checking cache first
+
+```
+fibonacci_memo(n):
+  if n in cache: return cache[n]
+  if n <= 1: return n
+  result = fibonacci_memo(n-1) + fibonacci_memo(n-2)
+  cache[n] = result
+  return result
+```
+
+### 2. Tabulation (Bottom-Up)
+
+- Start with base cases
+- Iteratively build up solutions to larger problems
+- Use a table to store all intermediate results
+- Solve in order of increasing problem size
+
+```
+fibonacci_tab(n):
+  dp[0] = 0
+  dp[1] = 1
+  for i in 2 to n:
+    dp[i] = dp[i-1] + dp[i-2]
+  return dp[n]
+```
+
+## Classic Examples
+
+### 1. Fibonacci Sequence
+
+- **Naive recursion**: $\mathcal{O}(2^n)$ — solves same subproblems repeatedly
+- **DP solution**: $\mathcal{O}(n)$ time, $\mathcal{O}(n)$ space
+- Demonstrates overlapping subproblems clearly
+
+### 2. 0/1 Knapsack Problem
+
+- **Problem**: Given items with weights/values and capacity, maximize value
+- **DP state**: `dp[i][w]` = max value using items 0..i with capacity w
+- **Recurrence**: `dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])`
+
+### 3. Longest Common Subsequence (LCS)
+
+- **Problem**: Find longest sequence appearing in both strings
+- **DP state**: `dp[i][j]` = length of LCS of first i chars of string1 and
+  first j chars of string2
+- **Recurrence**: 
+  - If chars match: `dp[i][j] = dp[i-1][j-1] + 1`
+  - Else: `dp[i][j] = max(dp[i-1][j], dp[i][j-1])`
+
+### 4. Coin Change Problem
+
+- **Problem**: Minimum coins needed to make amount
+- **DP state**: `dp[i]` = minimum coins to make amount i
+- **Recurrence**: `dp[i] = min(dp[i-coin] + 1) for each coin`
+
+### 5. House Robber
+
+- **Problem**: Rob houses to maximize loot, can't rob adjacent houses
+- **DP state**: `dp[i]` = max loot from houses 0..i
+- **Recurrence**: `dp[i] = max(dp[i-1], dp[i-2] + house[i])`
+
+## Problem-Solving Pattern
+1. **Identify the state**: What subproblem uniquely represents a decision
+   point?
+2. **Define the recurrence**: How does the current state relate to previous
+   states?
+3. **Establish base cases**: What's the simplest subproblem?
+4. **Choose implementation**: Memoization or tabulation?
+5. **Optimize space**: Can you reduce array dimensions? (e.g., rolling array)
+
+## Common DP Categories
+### Sequence DP
+
+- Problems involving sequences or strings
+- Examples: LCS, edit distance, longest increasing subsequence
+
+### Grid DP
+
+- Problems on 2D grids
+- State: `dp[i][j]` = solution for subgrid up to (i,j)
+- Examples: Unique paths, minimum path sum
+
+### Interval DP
+
+- Problems on intervals or subarrays
+- State: `dp[i][j]` = solution for interval [i,j]
+- Examples: Matrix chain multiplication, palindrome partitioning
+
+### Backpack/Knapsack DP
+
+- Resource allocation problems
+- State: `dp[i][w]` = solution using i items with capacity w
+
+### Graph DP
+
+- Problems on DAGs (directed acyclic graphs)
+- Can use topological order for efficient computation
+
+## Complexity Analysis
+
+- **Time**: Usually O(# subproblems × time per subproblem)
+- **Space**: O(# subproblems) for DP table + O(recursion depth) for memoization
+
+## Tips for DP Problems
+
+- Think backwards: what would an optimal solution look like?
+- Define clear state meaning and what it represents
+- Ensure Bellman principle applies (optimal substructure)
+- Test base cases and small examples first
+- Consider space optimization (rolling arrays, etc.)
+- Top-down (memoization) is often more intuitive; bottom-up is usually more
+  efficient
+
+## When NOT to Use DP
+
+- No overlapping subproblems (greedy or divide-and-conquer better)
+- State space is too large (exponential even after DP)
+- Problem requires exploring all solutions, not just optimal one

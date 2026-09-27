@@ -1,0 +1,92 @@
+---
+title: Birth-Death Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Birth-Death Processes
+
+## What is a Birth-Death (BD) Process?
+
+**Birth-death processes** are continuous-time models for population growth
+where $\{ X_{t};t\geq 0 \}$ records the **number of individuals alive** at time
+$t$.  
+
+Assume that $X_{t}=i$ that is, at time $t$, the population numbers $i$
+individuals. We define the following:
+
+1. $B(i)\sim\text{Exponential}(\lambda_{i})$ be the **time until the next
+   birth**.
+2. $D(i)\sim\text{Exponential}(\mu_{i})$ be the **time until the next death**.
+
+Here $\lambda_{i}$ is the **birth rate** and $\mu_{i}$ is the **death rate**.
+From standard results for exponential random variables we have that:
+
+1. **Mean birth time.**  $\frac{1}{\lambda_{i}}$, $i \geq 0$.
+
+The underlying assumption here is that the birth and death rates depend on the
+size of the population. We also make the following further simplifying
+assumptions:
+
+- Only one event happens at a time e.g. two births do not happen at the same
+  time.
+- $\{ B(i) \}$'s and $\{ D(i) \}$'s are independent sequences that are
+  independent of each other.
+- We have rates $\lambda_{i}\geq 0$, $\mu_{i}\geq 0$, $\mu_{0}=0$ and
+  $\mu_{i}+\lambda_{i}>0$ for all $i\geq 1$.
+
+## BD Process Transition Probabilities
+
+From this construction we have a a continuous process $(X_{t})$ bounded below
+by zero that has jumps of size $\pm 1$. We are naturally interested in the
+**transition probabilities** $p_{i,i+1}$ and $p_{i,i-1}$.  
+
+If the population size **increases** by 1 then $B(i)$ occurred before $D(i)$
+hence
+$$
+p_{i,i+1}=\mathbb{P}(B(i)<D(i))= \frac{{\lambda_{i}}}{\lambda_{i}+\mu_{i}}.
+$$
+by properties of the Exponential distribution.
+
+*Proof:*
+We can compute
+$$
+\begin{align}
+\mathbb{P}(B(i)<D(i)) & =\int_{0}^\infty \int_{0}^s f_{D(i)}(s)f_{B(i)}(t)~dtds \\
+& = \int_{0}^\infty \mu_{i}\exp(-\mu_{i}s)(1-\lambda_{i}\exp(-\lambda_{i}t))~dtds
+\end{align}
+$$
+$\square$
+
+Similarly, if the population **decreases** by 1, that is $X_{t}$ makes a
+transition $i \to i-1$, if the next event is death rather than birth, so that
+$D(i)<B(i)$ with probability
+$$
+p_{i,i-1}=\mathbb{P}(D(i)<B(i))= \frac{{\mu_{i}}}{\lambda_{i}+\mu_{i}}.
+$$
+
+## BD Process Holding Times
+
+Since the process is continuous with jumps we are also interested in how long
+the process stays in each state known as the **holding times**.  
+
+Intuitively, since $B(i), D(i)$ are times until either birth or death (i.e. a
+jump) the holding time of the process in state $i$ is which ever happens first.
+
+Therefore, the holding time for state $X_{t}=i$ is then
+$$
+T_{i}=\min(B(i), D(i))\sim\mathcal{E}(\lambda_{i}+\mu_{i}).
+$$
+Thus, the **holding rate** is $q(i)=\lambda(i)+\mu(i)$. Note
+$q_{0}=\lambda_{0}$ and furthermore, the mean time until a transition is
+$\frac{1}{\lambda_{i}+\mu_{i}}$.
+
+## BD Process Examples
+
+- Pure Birth Process
+- Linear Birth-Death Process
+- Yule Process
+- [[poisson-processes]]
+	- Thinned Poisson Process

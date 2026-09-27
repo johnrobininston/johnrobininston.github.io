@@ -1,0 +1,73 @@
+---
+title: First Passage Times
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is a First Passage Time?
+
+A **first passage time** (also called a **hitting time**) is the first time at
+which a stochastic process reaches or crosses a specified threshold or set. It
+is a canonical example of a [[stopping-times|stopping time]].
+
+Formally, given a stochastic process $(X_n)$ and a target set $A$, the first
+passage time is:
+$$
+\tau_A = \inf\{n \geq 0 : X_n \in A\}
+$$
+
+The infimum is $\infty$ if the process never reaches $A$.
+
+## Examples
+
+### Random Walk
+For a simple symmetric random walk $(S_n)$ starting at 0, the first time it
+hits level $k > 0$ is:
+$$
+\tau_k = \inf\{n \geq 1 : S_n = k\}
+$$
+
+This is a [[stopping-times|stopping time]] because we can determine at time $n$
+whether $\tau_k \leq n$ based only on the path up to time $n$.
+
+### Barrier Crossing
+In finance, the first time a stock price $P_t$ hits a barrier level $B$ is a
+hitting time commonly used in option pricing and barrier option analysis.
+
+### Gambler's Ruin
+A gambler with initial wealth $x$ plays until reaching $0$ (ruin) or $N$
+(goal). The first time either occurs is
+$\tau = \inf\{n : X_n = 0 \text{ or } X_n = N\}$.
+
+## Properties
+
+**First passage times are stopping times**: By definition,
+$\{\tau \leq n\} \in \mathcal{F}_n$ since we need only observe the process up
+to time $n$ to determine whether we've reached $A$ by then.
+
+**Hitting probability**: For a process starting at $x$, define $P_x(A)$ as the
+probability of eventually reaching set $A$:
+$$
+P_x(A) = \mathbb{P}_x(\tau_A < \infty)
+$$
+
+## Applications
+
+- **Structural Breaks**: Detection of when a time series changes regime
+- **Sequential Decision-Making**: Optimal stopping when to act based on
+  threshold crossing
+- **Failure Analysis**: Time until a system fails (reliability theory)
+- **Brownian Motion**: First passage time of Brownian motion and its variants
+  (e.g., hitting time above a barrier)
+- **Queuing Theory**: Time until queue reaches capacity
+
+## Related Concepts
+
+- [[stopping-times|Stopping Times]] - The theoretical framework for first
+  passage times
+- [[optional-stopping-theorem|Optional Stopping Theorem]] - Used to compute
+  expectations at hitting times
+- Return Times - The first time a process returns to a previous state
+- Occupation Times - Total time spent in a set before hitting a threshold

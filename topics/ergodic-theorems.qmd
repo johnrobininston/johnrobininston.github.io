@@ -1,0 +1,83 @@
+---
+title: Ergodic Theorems
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Ergodic Theorems
+
+Ergodic Theorems concern the limiting behavior of averages over time. The
+Ergodic theorem for Markov chains identifies the long-run proportion of time
+spent in each state.
+
+### Ergodic Theorem for Markov Chains
+
+A Markov chain is a discrete time and countable 
+
+:::{.theorem data-title="Ergodic Theorem for [[markov-chains]]"}
+
+Let $(X_{n})$ be an irreducible non-null persistent countable state
+[[markov-chains|Markov chain]] with stationary distributions $\pi$ such that
+$\pi=\pi P$.
+Then, the following results hold:
+1. If the chain is aperiodic then
+   $\lim_{ n \to \infty }p_{i,j}(n)=\pi_{j}=\frac{1}{\mu_{j}}$ for all
+   $j \in S$.
+2. If the chain is periodic with period $d$, then for all $i,j\in S$ there
+   exists an integer $r$ such that $0\leq r<d$ and $p_{i,j}(n)=0$ unless
+   $n=md+r$ for some $m\geq 0$ and
+   $\lim_{ m \to \infty }p_{i,j}(md+r)=d\cdot \pi_{j}= \frac{d}{\mu_{j}}$.
+
+For null persistent irreducible chains these results hold with $\mu_{j}=\infty$
+i.e. $\lim_{ n \to \infty }p_{i,j}(n)=0$ in aperiodic case and
+$\lim_{ m \to \infty }p_{i,j}(md+r)=0$ in periodic case.
+
+:::
+
+We discuss the result in the following points:
+
+1. In ergodic case, $p_{i,j}(n)\to \pi_{j}= \frac{1}{\mu_{j}}$ and the chain forgets its origin: $$\mathbb{P}(X_{n}=j)=\sum_{i \in S}\mathbb{P}(X_{n}=j|X_{0}=i)\mathbb{P}(X_{0}=i)=\sum_{i}p_{i,j}(n)\cdot \mathbb{P}(X_{0}=i)\stackrel{n \to \infty}{\to}\pi_{j}\sum_{i}\mathbb{P}(X_{0}=i)=\pi_{j}.$$Here we used the [[dominated-convergence-theorem]] to justify exchanging summation and limits: $$\left| \sum_{i}p_{i,n}(n)\mathbb{P}(X_{0}=i) \right|\leq \sum_{i}\mathbb{P}(X_{0}=i)=1.$$
+2. A finite irreducible aperiodic Markov chain is always non-null persistent
+   (see previous results) so that the stationary distribution always exists and
+   by the [[ergodic-theorems|ergodic theorem]],
+   $\lim_{ n \to \infty }p_{i,j}(n)=\pi p_{j}=\frac{1}{\mu_{j}}$.
+   
+3. An irreducible aperiodic Markov chain has: stationary distribution $\iff$
+   non-null persistent $\iff$ there exists
+   $\lim_{ n \to \infty }p_{i,j}(n)=\pi_{j}$ and $\pi=(\pi_{j},~j \in S)$ is a
+   probability distribution (ergodic chain!).
+
+### Ergodic Theorem for Discrete-Time Weakly Stationary Process
+
+:::{.theorem data-title="Ergodic Theorem - Discrete Time Weakly Stationary"}
+
+For discrete-time, weakly stationary process $\{ X_{n},~n\geq 1 \}$ with
+$\mathbb{E}[|X_{1}|]<\infty$, there exiss $Y$ such that the sample average
+$\bar{X}_{n}:=(X_{1}+\dots+X_{n}) /n$ converges to $Y$ in $L^2$ and
+$\mathbb{E}[Y]=\mathbb{E}[X_{1}]$.
+
+:::
+
+
+
+
+### General Result
+
+:::{.theorem data-title="Ergodic Theorem"}
+
+Let $X \in L^1(\Omega, \mathcal{F}, \mathbb{P})$ and $f:\Omega \to \Omega$ be:
+1. Measure preserving: $\mathbb{P}(f^{-1}(A))=\mathbb{P}(A)$ for all
+   $A \in \mathcal{F}$; and
+2. Ergodic: $f^{-1}(A)=A\implies \mathbb{P}(A)=0$ or $1$. 
+
+Then we have that
+$$
+\frac{1}{n} \sum_{i=1}^nX(f^i(\omega))\stackrel{a.s.}{\to} \mathbb{E}X.
+$$
+
+:::
+
+
+

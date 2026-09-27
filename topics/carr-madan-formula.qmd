@@ -1,0 +1,114 @@
+---
+title: Carr-Madan Formula
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Carr-Madan Formula
+
+The Carr-Madan formula provides an equation for the price of a European-style
+call option with any payoff function $h(S_{T})$. Denote the price of this
+option at time $0$ with payoff $h$, time to maturity $T$ and strike $K$ by
+$C_{h}(T,K)$. Denote $C(T,K)$ as the price of European call option at time $0$
+with payoff $h(S_{T})=(S_{T}-K)_{+}$, with time to maturity $T$ and strike $K$.
+
+:::{.theorem data-title="Carr-Madan Formula"}
+
+The price of a European-style call option with any payoff function $h(S_T)$,
+denoted by $C_{h}(T,K)$ is given by
+$$
+C_{h}(T,K)=h(0)e^{-rT}+h'(0)S_{0}+\int _{0}^\infty h''(x)\cdot C(T,x) \, dx .
+$$
+
+:::
+
+*Proof:*
+If we assume that the density of $S_T$ under $\mathbb{Q}$ is assume to exist
+then we have
+$$
+\begin{align}
+C_{h}(T,K) & =e^{-rT}\mathbb{E}_{\mathbb{Q}}[h(S_{T})] \\
+ & = e^{-rT}\int _{0}^\infty h(x)\cdot p(T,x) \, dx. 
+\end{align}
+$$
+Plugging in the [[breeden-litzenberger-formula]] for the distribution $p$ and
+we get
+$$
+\begin{align}
+C_{h}(T,K) & =\int _{0}^\infty h(x)\cdot \frac{{\partial^2C}}{\partial K^2}(T,x) \, d \\
+  & =h(x) \frac{{\partial C}}{\partial K}(T,x)\big|_{x=0}^\infty +\int _{0}^\infty h'(x)\cdot \frac{{\partial C}}{\partial K}(T,x) \, dx. 
+\end{align}
+$$
+Note that
+$\frac{{\partial C}}{\partial K}(T,K)=-e^{-rT}\int _{K}^\infty p(T,x) \, dx$
+from the proof of the Breeden-Litzenberger formula
+$$
+\begin{align}
+C_{h}(T,K) & =h(0)e^{-rT}-\int _{0}^\infty h'(x)\cdot\frac{{\partial C}}{\partial K} \, dx  \\
+ & = h(0)e^{-rT}-h'(x)C(T,x)\big|_{x=0}^\infty +\int _{0}^\infty h''(x)\cdot C(T,x) \, dx .
+\end{align}
+$$
+Finally, we note that $C(T,\infty)=0$ since the strike is too high to ever be
+exercised, and $C(T,0)=S_{0}$ since the call option with zero strike has payoff
+$S_{T}$, the same as a forward contract, which gives the result
+$$
+C_{h}(T,K)=h(0)e^{-rT}+h'(0)S_{0}+\int _{0}^\infty h''(x)\cdot C(T,x) \, dx 
+$$
+### Put-Call Parity
+
+The Carr-Madan formula implies [[put-call-parity|put-call parity]]. To see
+this, take $h(x)=(K-x)_{+}$ so that $C_{h}(T,K)=P(T,K)$ is the price of a
+European put. Plug into Carr-Madan formula, $h(0)=K$,
+$h'(x)=-\mathbb{1}_{{x<K}}$ and $h''(x)=\delta_{\{K\}}$ where $h', h''$ are in
+the sense of weak derivative and $h''$ is a Dirac point mass. The result
+$$
+P(T,K)=Ke^{-rT}-S_{0}+C(T,K)
+$$
+is exactly put-call-parity.
+
+### Results
+
+:::{.theorem}
+
+For any $x,x_{0}>0$ the following equation holds
+$$
+G(x)=G(x_{0})+G'(x_{0})+\int _{x_{0}}^\infty G''(K)(x-K)_{+} \, dK + \int _{0}^{x_{0}}G''(K)(K-x)_{+} \, dK.
+$$
+
+:::
+
+`\begin{proof}`
+Splitting into cases $x>x_{0}$, $x=x_{0}$ and $x<x_{0}$ we prove for $x>x_{0}$
+since the proof for other cases is similar. Starting with the RHS we have that
+$$
+\begin{align}
+& G(x_{0})+G'(x-x_{0})+\int _{x_{0}}^x(x-K)G''(K) \, dK \\
+& = G(x_{0})+G'(x_{0})(x-x_{0})+x[G'(x)-G'(x_{0})]-\int _{x_{0}}^xKG''(K) \, dK \\
+& = G(x_{0})-x_{0}G'(x_{0})+xG'(x)-xG'(x)+x_{0}G'(x_{0})+\int _{x_{0}}^xG'(K) \, dK  \\
+ & =G(x_{0})+\int _{x_{0}}^x G'(K)\, dK  \\
+ & =G(x).   
+\end{align}
+$$
+`\end{proof}`
+The point here is not only introduce the European call but also introduce the
+European put. Applying the Lemma with $x=S_{T}$, $G(x)=\log x$ and
+$x_{0}=S_{0}$ specified
+$$
+\log S_{T}=\log S_{0}+\frac{1}{S_{0}}(S_{T}-S_{0})+\int _{S_{0}}^\infty \left( - \frac{1}{K^2} \right)(S_{T}-K)_{+} \, dK+\int _{0}^{S_{0}}\left( - \frac{1}{K^2} \right)(K-S_{T})_{+} \, dK,  
+$$
+and taking expectation under $\mathbb{Q}$ and discounting both sides gives the
+**Carr-Madan extension**
+$$
+\begin{align}
+e^{-rT}\mathbb{E}_{\mathbb{Q}}\log S_{T} & =e^{-rT}\log S_{0}+e^{-rT} \frac{{\mathbb{E}_{\mathbb{Q}}S_{T}-S_{0}}}{S_{0}}+\int _{S_{0}}^\infty\left( - \frac{1}{K^2} \right)C(T,K) \, dK  \\
+ & \quad\quad\quad+\int _{0}^{S_{0}}\left( - \frac{1}{K^2} \right)P(T,K) \, dK,
+\end{align} 
+$$
+that connects the BS formula with the price of a European option with log
+payoff.  
+
+The importance of Carr-Madan is that t tells us that any European style option
+with twice differentiable payoff function can be replicated using European call
+and put.

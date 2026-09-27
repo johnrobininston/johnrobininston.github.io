@@ -1,0 +1,72 @@
+---
+title: Sufficient Statistics
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Definition
+To gain an intuitive idea of sufficiency consider the role of a statistician.
+Raw data might be very large and difficult to store, visualize and interpret.
+Therefore the statistician would like to condense the data by computing some
+statistics that loose no information upon which she may base her analysis.
+
+:::{.definition data-title="**Sufficient Statistics**"}
+
+For sample $\boldsymbol{X}$ from $F:=\{F_{\theta} : \theta \in \Theta\}$
+statistic $T(\boldsymbol{X})$ is sufficient for $\theta$ (or for family $F$) if
+and only if the conditional distribution of $X$ given $T=t$ does not depend on
+$\theta$ almost surely.
+
+:::
+
+> ***Example:***
+> Let $X_{1}, X_{2}$ be i.i.d. $\mathcal{P}(\lambda)$ random variables and consider the statistic $T=X_{1}+2X_{2}$.  We show that this statistic is not sufficient.  From the definition of conditional probability we have
+> $$\begin{align}\mathbb{P}(X_{1}=0, X_{2}=1 |X_{1}+2X_{2}=2)  & = \frac{\mathbb{P}(X_{1}=0, X_{2}=1)}{\mathbb{P}(X_{1}+2X_{2}=2)} \\ & = \frac{e^{-\lambda}\lambda e^{-\lambda}}{\mathbb{P}(X_{1}=0, X_{2}=1)+\mathbb{P}(X_{2}=2, X_{2}=0)} \\ & = \frac{\lambda e^{-2\lambda}}{\lambda e^{-2\lambda}+\left( \frac{\lambda^2}{2} \right)e^{-2\lambda}} \\ & =\frac{1}{1+\frac{\lambda}{2}},\end{align}$$
+> hence $X_{1}+2X_{2}$ is not sufficient.
+
+## Factorization Criterion
+The definition of sufficiency is not constructive since it requires we first
+guess a statistic $T$ before checking for sufficiency through a time consuming
+computation. The following important theorem gives a criterion for determining
+sufficient statistics.
+
+:::{.theorem data-title="The Factorization Criterion"}
+
+For random variables $\boldsymbol{X}:=(X_{1}, \dots, X_{n})$ with distribution
+$f_{\theta}(\boldsymbol{x})$, $\boldsymbol{\theta}\in \Theta$, the statistic
+$T(\boldsymbol{X})$ is sufficient for $\theta$ if and only if we can write
+$$
+f_{\theta}(\boldsymbol{x})=h(\boldsymbol{x})g_{\boldsymbol{\theta}}(T(\boldsymbol{x})),
+$$
+where $h$ is a nonnegative function of $\boldsymbol{x}$ only and does not
+depend on $\boldsymbol{\theta}$, and $g_{\theta}$ is a nonnegative nonconstant
+function of $\boldsymbol{\theta}$ and $T(\boldsymbol{x})$ only (where $T$ and
+$\boldsymbol{\theta}$ may be multidimensional).
+
+:::
+
+*For a proof of this theorem please be directed to Halmos and Savage 41 or to
+Lehmann 64, pp. 53–56.*
+
+*Example:*
+
+:::{.theorem data-title="One-to-one functions of sufficient statistics"}
+
+If $T$ is sufficient for $\boldsymbol{\theta}$, any one-to-one function of $T$
+is also sufficient.
+
+:::
+
+*Proof:*
+If $U = k(T)$ is a one-to-one function then $t=k^{-1}(u)$ and we can write
+$$
+f_{\boldsymbol{\theta}}(\boldsymbol{x})=g_{\boldsymbol{\theta}}(t_{1})h(\boldsymbol{x})=g_{\boldsymbol{\theta}}(k^{-1}(u))h(\boldsymbol{x})=g_{\boldsymbol{\theta}}^*(u)h(\boldsymbol{x}).
+$$
+If $T_{1}, T_{2}$ are two distinct sufficient statistics, then
+$$
+f_{\boldsymbol{\theta}}(\boldsymbol{x})=g_{\boldsymbol{\theta}}(t_{1})h_{1}(\boldsymbol{ x})=g_{\boldsymbol{\theta}}(t_{2})h_{2}(\boldsymbol{x}),
+$$
+and it follows that $T_1$ is a function of $T_{2}$.
+$\square$

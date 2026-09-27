@@ -1,0 +1,254 @@
+---
+title: Option Greeks
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Option Greeks
+References: [[pstat-222-option-notes-pdf|Haosheng PSTAT222 Notes]].
+[[bjork-pdf]]
+
+In mathematical finance, specifically
+[[derivatives-pricing|derivatives pricing]], we study methods of determining
+the prices $V(t,S_{t})$ of derivative contracts. Options have several factors
+affecting their price: (1) time which is constantly eroding their value, (2)
+underlying asset price, and (3) underlying asset volatility; and it is
+important for traders to be able to measure the sensitivity of the option price
+process to these factors. These sensitivity measures are known as the **option
+greeks**.
+
+:::{.definition data-title="Option Greeks"}
+
+Suppose a derivative on asset $S_{t}$ has value at time $t$ given by
+$V(t,S_{t})$. Furthermore, denote the volatility of the asset price process by
+$\sigma$ and the risk-free rate by $r$. The **option greeks** are defined as
+follows:
+1. **Delta:** $\Delta= \frac{\partial V}{\partial S}$;
+2. **Gamma:** $\Gamma = \frac{\partial^2V}{\partial S^2}$;
+3. **Theta:** $\Theta=\frac{\partial V}{\partial t}$;
+4. **Vega:** $\mathcal{V}=\frac{\partial V}{\partial \sigma}$; and
+5. **Rho:** $\rho = \frac{\partial V}{\partial r}$.
+
+:::
+
+*Intuitively, the greeks are a collection of first and second order partial
+derivatives of the derivative value process with respect to asset price, asset
+volatility, time and the risk-free rate. For notes on the use of PDEs in
+derivatives pricing see our note [[black-scholes-pde-bspde]].*
+
+### Option Greeks of Common Options
+
+The derivations of the analytical results for the option Greeks for common
+options are detailed in our notes for each specific option type:
+
+- Black-Scholes Model Options:
+	- Black-Scholes Model European Options
+	- Black-Scholes Model American Options
+	- Black-Scholes Model Corridor Options
+	- Black-Scholes Model Asian Options
+	- Black-Scholes Model Compound Options
+- Heston Model Options
+- 
+
+##### Example - BS Model Euro-Call Greeks
+Consider a [[options|Euro-Call]] with strike $K$ at maturity $T$ on a stock
+$S_{t}$ with dynamics given by the [[black-scholes-merton-model]] i.e.
+[[geometric-brownian-motion]] *GBM)*
+$$
+\begin{cases}
+dS_{t} = \mu S_{t}dt+\sigma S_{t}dW_{t} \\
+dB_{t} = rB_{t}dt,
+\end{cases}
+$$
+with drift and diffusion $\mu,\sigma$ and BM $W_{t}$. The payoff function for
+the option is
+$$
+\Phi(S_{T})=(S_{T}-K)_{+}.
+$$
+The solution of GBM is given by
+$$
+S_t = S_0\exp\left(\left(\mu-\frac{1}{2}\sigma^2\right)t+\sigma W_t\right),
+$$
+and hence under the risk-free measure, the price of the option is given by
+$$
+V(t,S_{t})=\mathbb{E}_{\mathbb{Q}}[e^{-r(T-t)}(S_{T}-K)_{+}].
+$$
+Although this can be computed to a high accuracy using
+[[sde-monte-carlo-methods]] to compute the expli
+
+## Option Greek Estimation
+
+In this section we explore the various classic empirical methods for the
+estimation of option Greeks. Many of the results in this section build upon our
+study of numerical methods for derivatives pricing.
+
+### Bump-and-Revalue
+
+The easiest way to approximate option Greeks is the **bump-and-revalue** method
+whereby we approximate option Greeks using estimations for option prices
+$$
+\begin{align}
+\widehat{\Delta} & = \lim_{ h \to 0 } \frac{\widehat{V}(0,S_{0}+h)-\widehat{V}(0,S_{0}-h)}{2h} \\
+\widehat{\Gamma} & = \lim_{ h \to 0 } \frac{ \widehat{V}(0,S_{0}+h)+\widehat{V}(0,S_{0-h})-2\widehat{V}(0,S_{0})}{h^2},
+\end{align}
+$$
+where we have employed **Numerical Option Pricing Methods** such as
+**Finite-Difference Methods** or **Monte-Carlo Methods**. Since we have already
+estimated the option price, this estimation does not require any significant
+additional work (no more simulation).  
+
+We note however that there is a trade-off here between accuracy and efficiency
+since an accurate numerical differentiation scheme requires evaluations of
+option prices for multiple values of $S_{0}$ but each estimated option price
+has its own error and it is time-consuming to run Monte-Carlo multiple times.
+
+### Path-wise Estimation
+
+We can perform **path-wise estimation** of option Greeks by taking the
+derivative with respect to the option price in the analytic formula before
+performing our Monte-Carlo simulations. To provide some context, assume for
+example that we have the [[black-scholes-merton-model|BS Model]] and a
+[[european-options|Euro-Call]] so the option price at $t=0$ is given under
+[[risk-neutral-measure|risk-neutral measure]] $\mathbb{Q}$ by
+$$
+\mathbb{E}_{\mathbb{Q}}[e^{-rT}(S_{T}-K)_{+}].
+$$
+From standard results we details in [[european-call-option-price]] we know that
+under $\mathbb{Q}$
+$$
+S_{T}=S_{0}\exp \left\{ \left( r- \frac{\sigma^2}{2} \right)t+\sigma W_{t} \right\}
+$$
+and so the option $\Delta$ can be computed through
+$$
+\begin{align}
+\Delta &  = \frac{\partial}{\partial S_{0}}\mathbb{E}[e^{-rt}(S_{T}-K)_{+}] \\
+ & =\mathbb{E}\left[ \frac{\partial}{\partial S_{0}}e^{-rt}(S_{T}-K)_{+} \right] \\
+ & =\mathbb{E}\left[ e^{-rt}\exp \left\{ \left( r- \frac{\sigma^2}{2} \right)t+\sigma W_{t} \right\}\mathbb{1}_{\{ S_{T}>K \} }  \right] \\
+ & =\mathbb{E}
+\left[ e^{-rt} \frac{S_{T}}{S_{0}}\mathbb{1}_{\{ S_{T}>K \}} \right]\end{align},
+$$
+if we assume that the interchange of the expectation and the derivative is
+justified. Accordingly, one has to simulate the trajectories of $S_{t}$,
+calculate this value and take the sample average. This methodology is also
+known as **infinitesimal perturbation** for the payoff function and is
+significantly more efficient and accurate than the bump-and-revalue method.
+
+One drawback of this methodology is that we may not be able to deal with more
+exotic options or higher-order option Greeks. Specifically, this method falls
+down for **non-smooth payoff functions** including those with
+**discontinuities** or **kinks** (which strangely is a very large number of
+option types). For example, this methodology cannot help us estimate $\Gamma$
+under Black-Scholes since taking the derivative for the indicator function
+causes problems. More generally, any option payoff structure that includes
+payoff functions are off the table.
+
+Despite this drawback we note the following interesting result. Denote the
+option payoff as $\Phi(S_{T})$ and assume it has a nice structure (i.e. does
+not contain an indicator function) so that the option price under risk-neutral
+measure $\mathbb{Q}$ is given by $\mathbb{E}_{\mathbb{Q}}[e^{-rt}\Phi(S_{T})]$.
+Path-wise estimation always needs to know
+$$
+\frac{\partial}{\partial S_{0}}h(S_{T})= h'(S_{T}) \frac{{\partial S_{T}}}{\partial S_{0}},
+$$
+and so the problem turns into finding
+$\frac{{\partial S_{T}}}{\partial S_{0}}$. However, this partial derivative has
+already been provided within the SDE dynamics. Assume that the stock price
+follow the SDE
+$$
+dS_{t}=a(S_{t})dt+b(S_{t})dW_{t}
+$$
+under the risk-neutral measure. Using the [[euler-maruyama-method]] we perform
+the simulation
+$$
+S_{t_{k+1}}=S_{t_{k}}+a(S_{t_{k}})(t_{k+1}-t_{k})+b(S_{t_{k}})\sqrt{ t_{k+1}-t_{k} }Z_{k+1}
+$$
+where $Z_{k+1}\stackrel{i.i.d}\sim\mathcal{N}(0,1)$. Denoting
+$\Delta t_{k}:= \partial S_{t_{k}} /\partial S_{0}$ and differentiating both
+sides with respect to $S_{0}$ we obtain
+$$
+\Delta t_{k+1}=\Delta t_{k}+a'(S_{t_{k}})\Delta t_{k}(t_{k+1}-t_{k})+b'(S_{t_{k}})\Delta t_{k}\sqrt{ t_{k+1}-t_{k} }Z_{k+1},
+$$
+with $\Delta_{0}=1$. This gives rise to the **tangent SDE** of $S_{t}$
+$$
+\begin{cases}
+d\Delta t =a'(S_{t})\Delta_{t}dt + b'(S_{t})\Delta_{t}dW_{t} \\
+\Delta_{0}=1.
+\end{cases}
+$$
+The path-wise estimation can be generalized to **path-dependent** option
+Greeks. For example, consider an Asian-Call with payoff
+$$
+\begin{align}
+\frac{\partial}{\partial S_{0}}\mathbb{E}[e^{-rT}(\overline{S}-K)_{+}] & = \mathbb{E}\left[ e^{-rT} \frac{\partial}{\partial S_{0}}(\overline{S}-K)_{+} \right]  = \mathbb{E}\left[ e^{-rT}\mathbb{1}_{\{ \overline{S}>K \}} \frac{{\partial \overline{S}}}{\partial S_{0}} \right] \\ 
+ & =\mathbb{E}\left[ e^{-rT}\mathbb{1}_{\{\overline{S}>K\}} \frac{1}{m}\sum_{i=1}^{m} \frac{S_{t_{i}}}{S_{0}} \right]=\mathbb{E}\left[e^{-rT}\mathbb{1}_{\{\overline{S}>K\}} \frac{\overline{S}}{S_{0}}\right].
+\end{align}
+$$
+We note that this estimator requires negligible extra work to compute after
+trajectory simulations and has practical use due to the lack of a closed form
+formula for the price of Asian options.
+
+### Likelihood Ratio Method (LRM)
+
+The Likelihood Ratio method is the proposed methodology that is applicable for
+non-smooth functions. The idea is to represent the option price as an integral
+and differentiate the density of stock price instead of the payoff function.  
+
+For European option price with payoff $\Phi$ we have
+$$
+\mathbb{E}[e^{-rT}\Phi(S_{T})]=e^{-rT}\int_{}^{}{\Phi(x)f_{S_{T}}}~d{x},
+$$
+where $f_{S_{T}}$ denotes the density of $S_{T}$. To obtain $\Delta$ we
+differentiate with respect to $S_{0}$ and get
+$$
+\begin{align}
+\Delta &  = \frac{\partial}{\partial S_{0}}e^{-rT}\int_{}^{}{\Phi(x)f_{S_{T}}}(x)~d{x} \\
+ & =e^{-rT}\int_{}^{}{\Phi(x) \frac{\partial}{\partial S_{0}}f_{S_{T}}(x)}~d{ x}  \\
+ & =e^{-rT}\int_{}^{}{\Phi(x) \left(  \frac{\partial}{\partial S_{0}}f_{S_{T}}(x)\right) \frac{1}{f_{S_{T}}(x)}f_{S_{T}}(x) }~d{x}  \\
+ & = e^{-rT}\int_{}^{}{\Phi(x) \left( \frac{\partial}{\partial S_{0}} \log f_{S_{T}}(x) \right)f_{S_{T}}(x)}~d{x}  \\
+ & = e^{-rT}\mathbb{E}\left[ \Phi(S_{T})\left(  \frac{\partial \log f_{S_{T}}}{\partial S_{0}}(S_{T})  \right) \right],
+\end{align}
+$$
+again assuming the interchange between the integral and the derivative is
+justified. We notice here that $g(x)$is free of $S_{0}$ while $f_{S_{T}}$
+depends on $S_{T}$ thus being a function of $S_{0}$. This clever log-likelihood
+trick coming from [[statistical-inference]] circumvents the non-smoothness of
+$\Phi$ and Monte-Carlo is again application to estimate $\Delta$.
+
+Under the [[black-scholes-merton-model]] we have
+$$
+S_{T}=S_{0}\exp \left\{ \left( r- \frac{\sigma^2}{2} \right)T + \sigma W_{T} \right\} 
+$$
+which is a function of a gaussian random variable, and so some simple
+computations we obtain the density of $S_{T}$ as
+$$
+f(x)=\frac{1}{\sqrt{ 2\pi T }\sigma x} \exp \left\{ -\frac{{ \left( \log \frac{x}{S_{0}}-\left( r- \frac{\sigma^2}{2} \right)T \right)^2}}{2\sigma^2T} \right\} 
+$$
+and so the likelihood ratio method estimates $\Delta$ as
+$$
+\begin{align}
+e^{-rT}\mathbb{E}\left[ \Phi(S_{T})\left(  \frac{\partial \log f}{\partial S_{0}} (S_{T}) \right) \right]  & = e^{-rT}\mathbb{E}\left[ \Phi(S_{T}) \frac{1}{\sigma^2 TS_{0}}\left( \log \frac{S_{T}}{S_{0}}-\left( r- \frac{\sigma^2}{2} \right)T \right) \right] \\
+ & =e^{-rT}\mathbb{E}\left[ \Phi(S_{T}) \frac{W_{T}}{\sigma T S_{0}} \right].
+\end{align}
+$$
+We notice that the expression above works for any payoff function $\Phi$ under
+the Black-Scholes model so we need just calculate the derivative of the
+log-likelihood (score function) once and for all for each model. This method
+works well for European options but is complicated for path dependent payoff
+functions (e.g. Asian options) where one has to consider the joint distribution
+of $(S_{t_{1}}, \dots, S_{t_{m}})$ and compose it into the product of
+conditional densities together with the Markovian structure of GBM.
+
+For $\Gamma$ LRM works where path-wise estimation may fail to work. A similar
+derivation shows
+$$
+\begin{align}
+\Gamma & = \frac{\partial^2}{\partial S_{0}^2}e^{-rT}\int_{}^{}{g(x)f_{S_{T}}(x) }~d{x} \\
+ & = e^{-rT}\int_{}^{}{g(x) \frac{\partial^2}{\partial S_{0}^2}f_{S_{T}}(x)}~d{x}  \\
+ & =e^{-rT}\int_{}^{}{g(x) \left( \frac{\partial^2 f_{S_{T}}(x)}{\partial S_{0}^2}\cdot \frac{1}{f_{S_{T}}(x)} \right)f_{S_{T}}(x)}~d{x}
+\end{align}
+$$
+Notice that 
+
+

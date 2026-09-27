@@ -1,0 +1,70 @@
+---
+title: Hamiltonian Monte-Carlo
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+#### Resources
+- [[learning-hamiltonian-monte-carlo-in-r-tu-et-al-2020-pdf]]
+- https://jonnylaw.rocks/posts/2019-07-31-hmc/ - (useful website post)
+
+## Description
+
+The Hamiltonian Monte-Carlo algorithm is a
+[[markov-chain-monte-carlo-mcmc-methods]] for obtaining a sequence of random
+samples which converge in distribution according to a target probability
+distribution for which direct sampling is difficult.  
+
+Hamiltonian Monte-Carlo corresponds to an instance of
+[[metropolis-hastings-algorithm]], with a [[hamiltonian-mechanics]] evolution
+simulated using a time-reversible and volume-preserving numerical integrator
+(typically the [[leapfrog-integrator]]) to propose a move to a new point in the
+state space.  
+
+Compared to using a Gaussian [[random-walks|Random Walk]] proposal distribution
+in the Metropolis-Hastings algorithm, Hamiltonian Monte-Carlo reduces the
+correlation between successive samples states by proposing moves to distance
+states which maintain a high probability of acceptance due to the approximate
+energy conserving properties of the simulated Hamiltonian dynamic when using a
+[[symplectic-integrator]]. The reduced correlation means fewer
+[[markov-process|Markov Chain]] samples are needed to approximate integrals
+with respect to the target probability distribution for a given Monte Carlo
+error.
+
+Originally proposed for calculations in [[lattice-quantum-chromodynamics]] but
+has found uses in a broader class of statistical problems such as in
+[[bayesian-inference]] and [[artificial-neural-networks-ann]].
+
+## Formal Definition
+
+Suppose the target distribution to sample is $f(x)$ for $x\in\mathbb{R}^d$ for
+$d\geq 1$ and a chain of samples $X_{0}, X_{1}, \dots,$ is required. The
+Hamilton's equations are
+$$
+\frac{dx_{i}}{dt}= \frac{{\partial H}}{\partial p_{i}}\quad\&\quad \frac{{dp_{i}}}{dt}=\frac{{\partial H}}{\partial x_{i}},
+$$
+where $x_i$ and $p_i$ are the $i$th component of the position and momentum
+vector respectively and $H$ is the Hamiltonian. Let $M$ be the mass matric
+which is symmetric and positive definite, then the Hamiltonian is
+$$
+H(x,p)=U(x)+ \frac{1}{2 }p^TM^{-1}p,
+$$
+where $U(x)$ is the potential energy. The potential energy for a target is
+given as
+$$
+U(x)=-\log f(x),
+$$
+which comes from the Boltzmann's factor.
+
+The algorithm requires a positive integer for the number of leap from steps $L$
+and a positive number for the step size $\Delta t$. Suppose that chain is at
+$X_{n}=x_{n}$. Let $x_{n}(0)=x_{n}$. First, a random Gaussian momentum $p_n(0)$
+is drawn from $N(0,M)$ Next, the particle will run under Hamiltonian dynamics
+for time $L\Delta t$, this is done by solving the Hamilton's equations
+numerically using the lap from algorithm. The position and momentum vectors
+after time $\Delta t$ using the lap from algorithm are
+$$
+
+$$

@@ -1,0 +1,99 @@
+---
+title: Vitali Non-Measurability Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Vitali Set
+
+The **Vitali non-measurability theorem** is a fundamental result in
+[[measure-theory-notes]] constructed to prove that it is impossible to define a
+function on the power set of the real numbers $\mathbb{R}$ that satisfies the
+intuitive properties of countable additivity, translation invariance and
+produces intuitive interval measure $\mu([a,b])=b-a, \forall a\leq b$. The idea
+of the theorem can be extended to higher dimensions (see
+[[banarch-tarski-theorem]]) as well as similar results for other abstract sets
+although the form of the proof relies heavily on the nature of the set being
+considered.
+
+We preemptively prove the following lemma proving that we obtain monotonicity
+from countable additivity of functions.
+
+:::{.theorem data-title="Monotonicity from Countable Additivity"}
+
+Given a set $X$ and countably additive function $\mu:2^X\to[0,\infty]$ then for
+all $A,B\subseteq X$
+$$
+A \subseteq B\implies \mu(A)\leq  \mu(B).
+$$
+
+:::
+
+*PROOF:*
+Since $A \subseteq B$ we can write
+$B =A\cup(B\setminus A)\implies \mu(B)=\mu(A)+\mu(B\setminus A)\geq \mu(A)$
+since measures are non-negative.
+$\square$
+
+:::{.theorem data-title="Vitali non-measurability theorem"}
+
+There exists no function $\mu :2^\mathbb{R}\to[0,+\infty]$ that is countably
+additive, translation invariant and satisfies $\mu([a,b])=b-a$ for all
+$a\leq b$.
+
+:::
+
+*PROOF:*
+Assume for the sake of contradiction that such a $\mu$ exists. We define an
+equivalence relation $\sim$ on $\mathbb{R}$
+$$
+x\sim y\iff x-y \in \mathbb{Q}.
+$$
+The equivalence class of $\sim$ to which $x$ belongs is therefore given by
+$$
+[x]_{\sim}:=\{  y \in \mathbb{R} : x\sim y \}.
+$$
+We make the claim that every such equivalence class contains an element in
+$[0,1]$. Assuming the claim is false then $\exists x \in \mathbb{R}$ s.t.
+$[x]_{\sim}\cap[0,1]=\emptyset \implies \forall a \in [0,1],~x-a\not\in \mathbb{Q}$
+i.e. $[x-1,x]$ contains no rational numbers which is impossible since the
+rationals are dense in the reals, giving the contradiction. Using the
+[[axiom-of-choice]], for each equivalence class we choose one element in
+$[0,1]$ belonging to that class and call the resulting set $A$. Then we define
+$$
+A_{q}=\{ A+q \}_{q \in \mathbb{Q}\cap [-1,1]}=\{ a+q:a\in A,q\in \mathbb{Q}\cap[-1,1] \},
+$$
+hence each $A_{q}$ contains the elements of $A$ shifted by rational
+$q \in [-1,1]$. We assume these are not disjoint i.e.
+$\exists x \in A_{q}\cap A_{p}~s.t.~p \neq q$. This gives that
+$$
+\begin{cases}
+x = a+p\quad\therefore\quad a=x-p \in A \\
+x = a+q\quad \therefore\quad a = x-q \in A,
+\end{cases}
+$$
+$\implies x-p$ and $x-q$ are distinct elements of $A$ from the same equivalence
+class giving the contradiction $\rightarrow\leftarrow$. We therefore define the
+disjoint union $B = \bigcup_{q \in\mathbb{Q}\cap [-1,1]}A_{q}$ and claim that
+$$
+[0,1]\stackrel{(i)}{\subseteq} B \stackrel{(ii)}{\subseteq} [-1,2].
+$$
+(i) Since $\forall x \in \mathbb{R}$ we have $x \in [a]$ for some $a \in A$, in
+particular $\forall x \in [0,1]$, $x -a\in \mathbb{Q}$ for some $a \in A$, i.e.
+$x = a+q$ for some $a \in A$ and $q \in \mathbb{Q}$. Since $x \in[0,1]$ and
+$a \in A \subseteq [0,1]$, $q = x-a\in[-1,1]$ and thus $x \in B$. (ii) If
+$b \in B$, then $b = a+q$ for $a \in A \subseteq [0,1]$, $q \in [-1,1]$ and so
+$b \in [-1,2]$. By monotonicity of countably additive functions
+$$
+1 = \mu([0,1])\leq  \mu(B)\leq  \mu([-1,2])=3.
+$$
+However, we also note that 
+$$
+\mu(B)=\sum_{q\in\mathbb{Q}\cap [-1,1]}\mu(A+q)=\sum_{q \in \mathbb{Q}\cap [-1,1]}\mu(A).
+$$
+Since $\mu(B)\leq 3$ we must have that $\mu(A)=0$, however this implies
+$\mu(B)=0$ which contradicts our previous conclusion that $\mu(B)\geq 1$.
+$\rightarrow\leftarrow$
+$\square$

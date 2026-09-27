@@ -1,0 +1,629 @@
+---
+title: Deep Generative Modeling (DGM)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Deep Generative Modeling
+
+## Overview
+
+1.  [[]]
+2.  Energy (Score) Based Models
+3.  
+
+## Introduction to Deep Generative Modeling
+
+### What is Deep Generative Modeling?
+
+**Deep generative models (DGMs)** are ***neural networks (NN)*** that learn a
+probability distribution over high-dimensional data so they can ***efficiently
+generate new examples*** that resemble the dataset, for example image
+generation.
+
+### ‍ Training of DGM
+
+Assume we have i.i.d. sample $x$ from an underlying complex **data
+distribution** $p(x)$. A ***deep generative model (DGM)*** uses a **Deep Neural
+Network (DNN)** $p_\phi(x)$ to parameterize a model distribution where $\phi$
+represents the network's **trainable parameters**. We wish to train our network
+such that
+
+$$
+p_\phi(x)\approx p(x).
+$$
+
+This is accomplished by finding **optimal parameters** $\phi^*$ that minimize a
+***loss function***, known as a **divergence** or a **discrepancy**, measuring
+the "distance" between $p$ and $p_\phi$
+
+$$
+\phi^* \in \arg\min_\phi\mathcal{D}(p, p_\phi).
+$$
+
+Because $p$ is unknown, a practical choice of $\mathcal{D}$ must admit
+efficient estimation from i.i.d. samples from $p$.
+
+#### Forward Kullback-Leibler Divergence
+
+A standard choice for $\mathcal{D}$ is the **(forward) Kullback-Leibler
+divergence**
+
+$$
+\begin{aligned}
+\mathcal{D}_{\text{KL}} (p, p_{\phi}) 
+    & = \int p(x) \log \frac{p(x)}{p_{\phi}(x)} ~dx \\
+    & = \mathbb{E}_{x\sim p}\left[ \log \frac{p(x)}
+        {p_{\phi}(x)} \right] \\
+    & = \mathbb{E}_{x \sim p}[\log p(x) - 
+        \log p_{\phi}(x)].
+\end{aligned}
+$$
+
+To understand how this loss function works we we note that if there is some set
+$A$ with $p(A)>0$ but $p_{\phi}(x)=0$ for $x \in A$, then the integrand
+contains $\log(p_{\text{data}}(x)/0)=\infty$ on $A$, so
+$\mathcal{D}_{\text{KL}}=\infty$. By minimizing $\mathcal{D}_{\text{KL}}$ we
+assign probability wherever the data has support.
+
+Although we cannot evaluate $p(x)$ explicitly we can write
+
+$$
+\mathcal{D}_{\text{KL}}(p,p_{\phi}) 
+    = -\mathbb{E}_{x\sim p_{\text{data}}}[\log p_{\phi}(x)] + 
+        \mathcal{H}(p),
+$$
+
+where
+
+$$
+\mathcal{H}(p) 
+    := \mathbb{E}_{x\sim p}[\log p(x)],
+$$
+
+is the **entropy** of the data distribution, which is **constant** with respect
+to $\phi$. This gives the important equivalence between minimizing the forward
+KL divergence and performing [[maximum-likelihood-estimation]].
+
+:::{.definition data-title="Minimizing KL and MLE Equivalence"}
+
+$$
+\min_{\phi}\mathcal{D}_{\text{KL}}(p, p_{\phi})\iff \max _{\phi}\mathbb{E}_{x\sim p}[\log p_{\phi}(x)].
+$$
+
+:::
+
+In practice we replace the population expectation by its Monte Carlo estimate
+from i.i.d. samples $\{ x^{(i)} \}_{i=1}^N\sim p_{\text{data}}$ yielding the
+**empirical MLE objective**
+
+$$
+\hat{\mathcal{L}}_{\text{MLE}}(\phi):=-\frac{1}{N}\sum_{i=1}^N \log p_{\phi}(x^{(i)}),
+$$
+
+optimized via ***stochastic gradients*** over *minibatches*.
+
+### ‍ Distribution Modelling Challenges
+
+For $p_{\phi}$ to be a valid probability density function it must satisfy:
+
+1.  Non-negativity. $p_{\phi}(x)\geq 0$ for all $x$ in the domain.
+2.  Normalization. The integral over the entire domain must equal one, i.e.
+    $$
+    \int p_{\phi}(x)~dx = 1.
+    $$
+
+#### Step 1: Ensuring Non-Negativity.
+
+A network can naturally produce a **real scalar** $E_{\phi}(x)\in \mathbb{R}$
+for some input $x$. We can guarantee non-negativity by applying a **positive
+function** to the neural network output $E_{\phi}(x)$ such as $|\cdot|$,
+$(\cdot)^2$ or $\exp(\cdot)$. The standard approach is to take $\exp(\cdot)$
+and to define
+
+$$
+\tilde{p}_{\phi}(x):=\exp E_{\phi}(x).
+$$
+
+#### Step 2: Enforcing Normalization.
+
+To create a valid probability density we must scale $\tilde{p}_{\phi}(x)$ by
+its ***integral over the entire space*** which leads to the final form of our
+model
+
+$$
+p_{\phi}(x) = \frac{{\tilde{p}_{\phi}(x)}}{\int \tilde{p}_{\phi}(y)~dy}.
+$$
+
+The denominator in this expression is known as the **normalizing constant** or
+the **partition function** (despite not being a function) and is denoted by
+
+$$
+Z(\phi):= \int \exp(E_{\phi}(y))~dy.
+$$
+
+#### Remaining Challenges and Branches of DGMS
+
+The key problem in DGMs is this partition function which is ***rarely
+tractable***. Overcoming this challenge has developed many different branches
+of DGMS:
+
+1.  \[\[#Energy (Score) Based Models\]\].
+2.  Autoregressive Models.
+3.  Variational Autoencoders.
+4.  Flow-Based Models.
+5.  Generative Adversarial Networks.
+
+-   *Figure - Topical overview of DGMs* 
+	![Topical overview of DGMs.](/Images/dgm-overview.png)
+
+## Energy (Score) Based Models
+
+### What is an Energy Based Model (EBM)?
+
+An **Energy Based Model (EBM)** describes a distribution by an ***energy
+landscape*** that is low on data and high elsewhere. Specifically, EMBs define
+a density via an **energy function** $E_\phi(x)$ (a NN) parameterized by
+$\phi$.
+
+With the density described by the energy function we can sample using
+**Langevin dynamics** which moves samples toward high density regions by
+following the ***gradient*** of the landscape.
+
+This ***gradient field***, known as the **score**, points towards directions of
+higher probability. Thus, knowing the score is enough for generation avoiding
+the need to compute the intractable normalization constant.
+
+**Score-based diffusion models** build directly upon this idea by considering a
+sequence of ***Gaussian noise-perturbed distributions*** whose scores are
+easier to approximate, yielding a family of vector fields that guide noisy
+samples step-by-step back to the data, turning generation into ***progressive
+denoising***.
+
+![Training EBM Models](/Images/ebm-training.png)
+
+### Training EBMs (Link to DGMs)
+
+If energy function $E_\phi(x)$ is a **_deep neural network (DNN)_** used to
+describe a **_probability density_** then the EBM falls under the umbrella of
+DGM. We quickly summarize the DGM methodology for modeling densities with DNNs
+in the context of EBMs.
+
+Consider data $x\in\mathbb{R}^D$ with unknown true distribution $p(x)$. EBMs
+approximate $p$ by defining a probability density $p_\phi(x)$ using a neural
+network $E_\phi(x)$, known as the **energy function**. This energy function
+assigns lower energy to more likely configurations. We transform real scalar
+output $E_\phi(x)$ into a probability density $p_\phi\approx p$ by applying a
+positive function and normalizing
+
+$$
+p_\phi(x) = \frac{\exp(-E_\phi(x))}{\int_{\mathbb{R}^d}\exp(-E_\phi(y))dy} = \frac{\exp(-E_\phi(x))}{Z(\phi)},
+$$
+
+with **partition function**
+
+$$
+Z(\phi):= \int \exp(-E_{\phi}(y))~dy.
+$$
+
+We select optimal parameters $\phi^*$ by minimizing the
+[[deep-generative-modeling|Forward Kullback-Leibler (KL) Divergence]] which is
+shown to be equivalent to training by [[maximum-likelihood-estimation]]
+
+$$
+\begin{aligned} \mathcal{L}_\text{MLE}(\phi) = \mathbb{E}_{x\sim p}[\log p_{\phi}(x)] \ & = \mathbb{E}_{x\sim p}\left[\log\left( \frac{\exp(-E_\phi(x))}{Z_\phi}\right)\right] = -\underbrace{\mathbb{E}_{x\sim p}[E_\phi(x)]}_ {\text{lowers energy of data}} - \underbrace{\log Z(\phi)}_ {\text{global regularization}} \end{aligned}
+$$
+
+In high dimensions, computing $\log Z_\phi$ and its gradient is intractable.
+This motivates alternative objectives that either approximate the term, such as
+contrastive divergence, or avoid it altogether, such as **score matching**.
+
+### Score Matching
+
+Let $x \in \mathbb{R}^D$ denote a data point. For a density $p(x)$ on
+$\mathbb{R}^D$ the **score function** $s:\mathbb{R}^D \to \mathbb{R}^D$ is the
+**_gradient_** of the log-density
+
+$$
+s(x):=\nabla _{x}\log p(x).
+$$
+
+Whilst distributions are defined only up to an unnormalized density with some
+intractable normalizing constant, the score depends only on $\tilde{p}$. For
+example, in EBMs
+
+$$
+\nabla_{x}\log p(x)=\nabla_{x}\log \tilde{p}(x)-\underbrace{\nabla_{x}\log Z}_{=0}=\nabla_{x}\log \tilde{p}(x),
+$$
+
+since $Z$ is constant in $x$ which bypasses the partition function entirely.
+Furthermore, the score fully characterizes the gradient of the log-density
+since the density can be recovered up to a constant by
+
+$$
+\log p(x) = \log p(x_{0})+\int_{0}^ts(x_{0}+t(x-x_{0}))^\top(x-x_{0})~dt.
+$$
+
+- *Figure - Score vector field visualization.*
+  ![Score vector field visualization.](/Images/score-vector-field.png)
+
+**Score matching** leverages the fact that score depends only on the energy
+function. It avoids fitting normalized probabilities and trains EBMs by
+aligning the model score with the (unknown) data score
+
+$$
+\begin{aligned} \mathcal{L}_{\text{SM}}(\phi) & = \frac{1}{2}\mathbb{E}_{x\sim p} \lVert s_{\phi}(x)-s(x) \rVert _{2}^2  = \frac{1}{2}\mathbb{E}_{x\sim p}\lVert \nabla_{x}\log p_{\phi}(x) - \nabla_{x}\log p(x) \rVert_{2}^2. \end{aligned}
+$$
+
+Although the data score is inaccessible, **Hyvärinen** showed that integration
+by parts yields an equivalent objective that depends only on the model
+$s_{\phi}$ and the data samples, without requiring access to the true score.
+Our equivalent expression involves only the energy and its derivatives
+
+$$
+\mathcal{L}_{\text{SM}}(\phi)=\mathbb{E}_{x\sim p}\left[ \mathrm{Tr} (\nabla_{x}^2E_{\phi}(x)) + \frac{1}{2}\lVert \nabla_{x}E_{\phi}(x) \rVert_{2}^2 \right] +C,
+$$
+
+where $\nabla_{x}^2E_{\phi}(x)$ is the **Hessian** of $E_{\phi}$ and $C$ is a
+constant independent of $\phi$. This formulation is attractive because it
+eliminates the partition function and avoids sampling from the model during
+training, but requires **_second-order derivatives_** which can be
+computationally challenging in high dimensions.
+
+:::{.definition data-title="Hyvärinen's Tractable Form of SM"}
+
+We can express $\mathcal{L}_{\text{SM}}$ as
+$$
+\mathcal{L}_{\text{SM}}(\phi)=\tilde{\mathcal{L}}_{\text{SM}}(\phi)+C,
+$$
+where
+$$
+\tilde{\mathcal{L}}_{\text{SM}}(\phi):=\mathbb{E}_{x\sim p(x)} \left[ \mathrm{Tr}(\nabla_{x}s_{\phi}(x))+ \frac{1}{2} \lVert s_{\phi}(x) \rVert _{2}^2 \right],
+$$
+and $C$ is a constant that does not depend on $\phi$. The minimizer $s^*$ is
+obtained as
+$$
+s^*(\cdot)=\nabla_{x}\log p(\cdot).
+$$
+
+:::
+
+_Proof:_
+
+First, let us expand the squared difference inside the expectation
+
+$$
+\begin{aligned} \mathcal{L}_{\text{SM}}(\phi) & = \frac{1}{2}\mathbb{E}_{x\sim p} \left[ \lVert s_{\phi}(x) \rVert _{2}^2 -2\left< s_{\phi}(x), s(x) \right> +\lVert s(x) \rVert_{2}^2\right] \\ &= \frac{1}{2}\mathbb{E}_{x\sim p}\left[\lVert s_{\phi}(x) \rVert _{2}^2\right] - \mathbb{E}_{x\sim p}[\left< s_{\phi}(x), s(x) \right> ] + \frac{1}{2}\mathbb{E}_{x\sim p}[\lVert s(x) \rVert_{2}^2 ]. \end{aligned}
+$$
+
+For the cross-product term, using the fact that
+
+$$
+\nabla_{x}\log p(x) = \frac{\nabla_{x}p(x)}{p(x)},
+$$
+
+and assuming $p(x)$ is not zero, the cross-product term becomes
+
+$$
+\begin{aligned} \mathbb{E}_{x\sim p}[\left< s_{\phi}(x), s(x) \right> ] & = \int s_{\phi}(x)^\top \nabla_{x}\log p(x)p(x)~dx \ & = \int s_{\phi}(x)^\top \nabla _{x} p(x)~dx \ & = \sum_{i=1}^D \int s_{\phi}^{(i)}(x)\partial_{x_{i}}p(x)~dx, \end{aligned}
+$$
+
+where $s_{\phi}^{(i)}$ is the $i$-th component of the score function
+
+$$
+s_{\phi}=\left( s_{\phi}^{(1)}, \dots, s_{\phi}^{(D)} \right).
+$$
+
+:::{.definition data-title="Integration-by-Parts Formula"}
+
+Let $u,v$ be differentiable real-valued functions on a ball
+$B(0,R)\subset \mathbb{R}^D$ and radius $R>0$. Then for $i=1, ..., D$ we have
+that
+$$
+\int_{B(0,R)}u\partial_{x_i}v~dx=-\int_{B(0,R)}v\partial_{x_i}u~dx + \int_{\partial B(0,R)}uv\nu_i~dS,
+$$
+where $\nu=(\nu_1, ..., \nu_D)$ is the outward unit normal to the boundary
+$\partial B(0,R)$ — a sphere with radius $R>0$ and $dS$ is the surface measure
+on $\partial B(0,R)$.
+
+:::
+
+Applying this formula to $u(x):=s_\phi^{(i)}(x)$ and $v(x)=p(x)$ for all
+$i=1, ..., D$ assuming that
+
+$$ |u(x)v(x)| \xrightarrow{R\to\infty} 0. $$
+
+Summing the results over all $i=1, ..., D$ we get
+
+$$
+\begin{aligned} \mathbb{E}_{x\sim p}\left[\langle s_\phi(x), s(x) \rangle\right] & = -\sum_{i=1}^D \int \partial_{x_i}s_\phi^{(i)}(x)p(x)~dx \ & = -\mathbb{E}_{x\sim p}\left[\text{Tr} \left(\nabla_xs_\phi(x)\right)\right]. \end{aligned}
+$$
+
+Combining all results, we obtain
+
+$$ \begin{aligned} \mathcal{L}_{SM}(\phi) & = \underbrace{\mathbb{E}_{x\sim p}\left[\text{Tr}\left(\nabla_x s_\phi(x) \right)+ \frac{1}{2}|s_\phi(x)|_2^2\right]}_{\tilde{\mathcal{L}}_ {\text{SM}}(\phi)} + \underbrace{\frac{1}{2}\mathbb{E}_{x\sim p} \left[|s(x)|_2^2\right]}_{C}. \end{aligned} $$
+
+$\square$
+### Sampling with Langevin Dynamics
+
+Sampling from EBMs defined by energy function $E_{\phi}(x)$ can be performed
+using **Langevin dynamics**. In Langevin dynamics we make use of the score
+function to sample by first generating noise and then using the score to guide
+us to regions of high density.
+
+#### Discrete-Time Langevin Dynamics
+
+The **discrete-time** Langevin update is
+
+$$
+x_{n+1}=x_{n}-\eta \nabla_{x}E_{\phi}(x_{n})+\sqrt{ 2\eta }\epsilon_{n}; \quad (n=0,1,2,\dots),\tag{$\star$}
+$$
+
+where $x_{0}$ is initialized from some distribution (often Gaussian), $\eta>0$
+is the step size, and $\epsilon _n\sim\text{Normal}(0,I)$ is Gaussian noise.
+The noise enables exploration beyond local minima by adding stochasticity.
+
+Since the score function can be computed as
+
+$$
+\nabla_{x} \log p_\phi(x) = - \nabla_{x} E_\phi(x),
+$$
+
+the update can equivalently be written as
+
+$$
+x_{n+1} = x_n + \eta \nabla_{x} \log p_\phi(x_n) + \sqrt{2\eta} \epsilon_n,
+$$
+
+where the score function guides the samples toward high-density regions. This
+formulation is central to diffusion models, as will be detailed later.
+
+#### ⏱ Continuous-Time Langevin Dynamics
+
+As the step size $\eta$ approaches zero, the discrete Langevin updates
+naturally converge to a continuous-time process described by the **Langevin
+Stochastic Differential Equation (SDE)**
+
+$$
+dx(t) = \nabla_{x}\log p_{\phi}(x(t))~dt + \sqrt{ 2 }~dw(t),
+$$
+
+where $w(t)$ denotes a standard **Brownian motion**. We note that $(\star)$
+serves as the **Euler-Maruyama** discretization of this continuous SDE.
+
+:::{.definition data-title="Further Reading"}
+
+Further discussion about the motivation for using Langevin sampling and its
+inherent challenges can be found on pg 62 of the lecture notes.
+
+:::
+
+### Denoising Score Matching
+
+#### Sliced Score Matching
+
+From **Hyvärinen's Tractable Form of SM** we still are required to compute the
+trace of the Jacobian
+
+$$
+\mathrm{Tr}(\nabla_{x}s_{\phi}(x)),
+$$
+
+which has worst-case complexity $\mathcal{O}(D^2)$, limiting scalability to
+high-dimensional data.
+
+To address this, **sliced score matching** replaces the trace term with a
+stochastic estimate based on random projections. Sliced score matching replaces
+the trace in score matching by averaging directional derivatives along random
+_slices_.
+ 
+ Let $u\in \mathbb{R}^D$ be an **isotropic** (no preferred direction) random
+ vector (e.g. standard Gaussian) with $\mathbb{E}[u]=0$ and
+ $\mathbb{E}[uu^\top]=I$. By **Hutchinson's identity**
+
+$$
+\begin{aligned} \mathrm{Tr}(A) & = \mathbb{E}_{u}[u^\top Au], \ \mathbb{E}_{u}[(u^\top s_{\phi}(x))^2] & = \lVert s_{\phi}(x) \rVert _{2}^2, \end{aligned}
+$$
+
+thus we obtain the exact form
+
+$$
+\tilde{\mathcal{L}}_{\text{SM}}(\phi)=\mathbb{E}_{x,u}\left[ u^\top (\nabla_{x} s_{\phi}(x))u+ \frac{1}{2}(u^\top s_{\phi}(x))^2 \right].
+$$
+
+This objective can be evaluated efficiently with automatic differentiation
+using **_Jacobian- and vector-Jacobian-product operations (JVP/VJP)_** instead
+of explicitly computing large Jacobian or Hessian matrices.
+
+#### Denoising Score Matching
+
+Hyvärinen's trick still struggles in high dimensions because the score of a
+distribution supported on raw data is poorly behaved (the data distribution is
+often concentrated on a low-dimensional manifold, making gradients unstable or
+undefined in most of space).  
+
+A more robust alternative is **Denoising Score Matching (DSM)**
+[(Vincent, 2011)](obsidian://open?vault=Brain&file=Articles%2FVincent2011a.pdf),
+which is principled and scalable. By picking a noise distribution
+$p_\sigma(\tilde{x} | x)$ — typically Gaussian, so
+$\tilde{x} = x + \sigma\epsilon$ with $\epsilon \sim \mathcal{N}(0, I)$ - you
+slightly corrupt the data and instead of trying to learn the score of
+$p_{\text{data}}$, you learn the score of the *smoothed distribution*
+
+$$p_\sigma(\tilde{x}) = \int p_\sigma(\tilde{x}|x), p_{\text{data}}(x), dx.$$
+
+This is much better behaved because the Gaussian noise spreads probability mass
+across all of $\mathbb{R}^D$, giving you a smooth, well-defined score
+everywhere.
+
+The remaining problem is that $\nabla_{\tilde{x}} \log p_\sigma(\tilde{x})$ is
+still intractable — you can't evaluate that integral. But here's the key move:
+Vincent (2011) showed that minimizing the SM loss on $p_\sigma$ is
+**equivalent** to minimizing a loss that conditions on the clean data point $x$
+
+$$\mathcal{L}_{\text{DSM}}(\phi;\sigma) = \frac{1}{2}\mathbb{E}_{x \sim p_{\text{data}},, \tilde{x} \sim p_\sigma(\cdot|x)}\left[\left| s_\phi(\tilde{x};\sigma) - \nabla_{\tilde{x}} \log p_\sigma(\tilde{x}|x) \right|_2^2\right].$$
+
+The crucial point is that $\nabla_{\tilde{x}} \log p_\sigma(\tilde{x}|x)$ — the
+score of the _conditional_ — is completely tractable because you chose
+$p_\sigma(\tilde{x}|x)$. For a Gaussian kernel it works out to
+
+$$\nabla_{\tilde{x}} \log p_\sigma(\tilde{x}|x) = -\frac{\tilde{x} - x}{\sigma^2},$$
+
+which is just the scaled vector pointing from the noisy sample back to the
+clean one. So in practice, DSM is training your network to **predict the
+noise** (or equivalently, the denoising direction) given a corrupted input. The
+score at a noisy point $\tilde{x}$ should point back toward wherever the clean
+data $x$ likely came from.
+
+This is exactly why DSM is the foundation of diffusion models. If you run DSM
+at many noise scales $\sigma_1 < \sigma_2 < \cdots < \sigma_T$, you get a score
+network $s_\phi(x, t)$ that knows how to denoise at every level of corruption —
+and running the reverse SDE from pure noise is just iteratively applying this
+denoising direction, which is the diffusion model sampling procedure.
+
+
+To defeat the intractability of $\nabla_{x}\log p_{\text{data}}(x)$, we inject
+noise into the data $x\sim p_{\text{data}}$ via a known conditional
+distribution $p_{\sigma}(\tilde{x}|x)$ with scale $\sigma$. The neural network
+$s_{\phi}(\tilde{x}; \sigma)$ is trained to approximate the score of the
+marginal perturbed distribution
+
+$$ p_{\sigma}(\tilde{x})=\int p_{\sigma}(\tilde{x}|x)p_{\text{data}}(x)~dx, $$
+
+by minimizing the loss
+
+$$
+\mathcal{L}_{\text{SM}}(\phi;\sigma):= \frac{1}{2}\mathbb{E}_{\tilde{x}\sim p_{\sigma}}\left[\lVert s_{\phi}(\tilde{x};\sigma) - \nabla_{\tilde{x}}\log p_{\sigma}(\tilde{x}) \rVert_{2}^2 \right].
+$$
+
+Although $\nabla_{\tilde{x}}\log p_{\sigma}(\tilde{x})$ is generally
+intractable, conditioning on $x\sim p_{\text{data}}$ yields an equivalent,
+tractable objective known as the **Denoising Score Matching (DSM) loss**.
+
+:::{.definition data-title="Denoising Score Matching (DSM) Loss $$\mathcal{L}_{\text{DSM}}(\phi; \sigma) := \frac{1}{2} \mathbb{E}_{x \sim p_{\text{data}},,\tilde{x}\sim p_{\sigma}(\cdot|x)}\left[\lVert s_{\phi}(\tilde{x}; \sigma) - \nabla_{\tilde{x}}\log p_{\sigma}(\tilde{x}|x) \rVert _{2}^2\right].$$"}
+
+
+:::
+
+The optimal minimizer $s^*$ of this loss satisfies
+
+$$
+s^*(\tilde{x}; \sigma) = \nabla_{\tilde{x}} \log p_{\sigma}(\tilde{x}),
+$$
+
+which is also optimal for $\mathcal{L}_{\text{SM}}$ above.
+
+:::{.definition data-title="Equivalence of SM and DSM"}
+
+For any fixed noise scale $\sigma>0$ we have that
+$$
+\mathcal{L}_{\text{SM}}(\phi;\sigma) = \mathcal{L}_{\text{DSM}}(\phi;\sigma)+C,
+$$
+where $C$ is a constant independent of the parameter $\phi$. Furthermore, the
+minimizer $s^*(\cdot;\sigma)$ of both losses satisfies
+$$
+s^*(\tilde{x};\sigma)=\nabla_{\tilde{x}}\log p_{\sigma}(\tilde{x}),
+$$
+for almost every $\tilde{x}$.
+
+:::
+
+_Proof:_
+
+## Score SDE Framework
+
+The core of the **continuous-time** framework lies the **Score SDE**, the
+continuous limit that unifies
+
+**UPDATE NOTES**
+
+## Flow-Based Models
+
+In this section we discuss Flow-Based Models, including:
+
+1.  **Normalizing Flows (NFs).** NFs enable flexible and tractable probability
+    density estimation by applying a series of invertible transformations to a
+    simple base distribution.
+
+2.  **Neural ODEs (NODEs).** NODEs extend to continuous time where the
+    transformation is governed by an ODE, providing a smooth, scalable
+    extension to the NF paradigm.
+
+### Normalizing Flows
+
+NFs model a complex data distribution $p_{\text{data}}(x)$ by transforming a
+simple prior $p_{\text{prior}}(z)$ (e.g. standard normal) via an invertible
+mapping
+$$
+f_{\phi}:\mathbb{R}^D \to \mathbb{R}^D,
+$$
+with $x=f_{\phi}(z)$ and $z\sim p_{\text{prior}}$. Here $x$ and $z$ share the
+same dimension. Using the
+[Change-of-Variables Formula](Change-of-Variables%20Formula.md) the model
+likelihood is
+$$
+\log p_{\phi}(x) = \log p_{\text{prior}}(z) + \log \left| \det \frac{{\partial f_{\phi}^{-1}(x)}}{\partial x} \right|.  
+$$
+Parameters $\phi$ are learned by maximizing the likelihood over data
+$$
+\mathcal{L}_{NF}(\phi) = \mathbb{E}_{x\sim p_{\text{data}}}[\log p_{\phi}(x)].
+$$
+The [Jacobian Matrix](Jacobian%20Matrix.md) in this likelihood can be costly
+scaling as $\mathcal{O}(D^3)$ generally, thus NFs employ a sequence of $K$
+trainable invertible mappings $\{ f_{k} \}_{k=0}^{L-1}$ each with efficiently
+computable Jacobians:
+$$
+f_{\phi} = f_{L-1}\circ f_{L-2}\circ \cdots \circ f_{0}. 
+$$
+Each $f_{k}$ is parameterized by a **Neural Network** with explicit dependence
+on $\phi$. Samples transform via
+$$
+x_{k+1}=f_{k}(x_{k});\quad k=0, \dots, L-1,
+$$
+with $z=x_{0}\sim p_{\text{prior}}$ and $x=x_{L}$ corresponding to data. The
+resulting log-density is derived as
+$$
+\begin{align}
+\log p_{\phi}(x) & = \log\left[p_{\text{prior}}(x_{0})\prod_{k=0}^{L-1}\left\lvert  \det \frac{{\partial f_{k}}}{\partial x_{k}}  \right\rvert^{-1} \right] \\ 
+& = \log p_{\text{prior}}(x_{0})+\sum_{k=0}^{L-1}\log \left\lvert  \det \frac{{\partial f_{k}}}{\partial x_{k}}  \right\rvert ^{-1}.
+\end{align}
+$$
+![Visualization of NF as a stack of invertible maps which when applied in sequence maps from some prior distribution to the data distribution.](normalizing-flows.png)
+
+**UPDATE NOTES**
+
+![Flow-based methods overview.](flow-based-methods.png)
+
+### Flow Matching Framework
+
+The **Flow Matching (FM) framework**
+
+-   Flow matching framework (Chapter 5.2)
+    -   Velocity field:
+    -   Probability "path"
+-   
+
+------------------------------------------------------------------------
+
+Week 2 Lecture 2
+
+-   FPK Equations & Time Reversal of Diffusions
+-   DDPM (CH2)
+-   Tweedie's Formula
+
+Week 3 Lecture 1
+
+-   Score SDE Ideas
+    -   clean prediction, noise prediction §6 pg 170
+    -   score prediction §6 pg 171
+-   Normalizing flows
+
+Week 3 Lecture 2
+
+-   Chapter 7: Optimal Transport
+    -   Connection to flow matching
+    -   Schrodinger Bridges
+
+![Dynamic view of Optimal Transport](dm-optimal-transport.png)

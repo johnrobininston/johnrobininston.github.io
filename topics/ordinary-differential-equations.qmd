@@ -1,0 +1,252 @@
+---
+title: Ordinary Differential Equations
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Ordinary Differential Equations
+
+- ODE Fundamentals
+
+## Fundamentals of ODEs
+
+A **differential equation** is an equation in which the unknowns are functions
+of one or more variables and which contains both these functions and their
+derivatives.
+
+:::{.definition data-title="Ordinary Differential Equation"}
+
+An **ordinary differential equation (ODE)** to be differential equations that
+involve functions of a single independent variable with general form
+$$
+F(x,y,y',\dots,y^{(n)})=0,
+$$
+where $x$ is the independent variable, $y$ is the function (or dependent
+variable) and $y^{(n)}$ denotes the $n$-th derivative with respect to $x$.
+
+:::
+
+The solution of an ODE is the function $y$ which we aim to determine the closed
+form expression for. Typically, if solvable, an ODE will have an infinite
+number of solutions parameterized by arbitrary constants, therefore our aim is
+to instead define the **solution space of the ODE**.
+
+Often we will also be given some **boundary condition** (e.g. $y(0)=0$) from
+which we will be able to determine the unique solution to the ODE given that
+initial condition.
+
+:::{.definition data-title="Boundary Condition"}
+
+A **boundary condition** (also known as an **initial condition** when
+considering equations with respect to time) is the statement that
+$$
+y(x_{0})=y_{0};~~\text{for some }(x_{0},y_{0})\in\mathscr{D},
+$$
+where $\mathscr{D}$ is the function domain.
+
+:::
+
+When more than one independent variable is involved, the equation is known as a
+[[partial-differential-equations|partial differential equation]] which are
+reserved for their own note. Further, there can be more than one function
+involved $y_{1}(x), y_{2}(x), \dots$ in which case there will be multiple
+equations relating them allowing us to solve the system of equations (i.e.
+determine the solution space for functions $y_{j}$ for all $j$).
+
+:::{.definition data-title="Order"}
+
+The **order** of an ODE is the order of the highest derivative that it contains
+
+:::
+
+When one cannot analytically solve an ODE (and most cannot be solved
+analytically) one has four options:
+
+1. Introduce a new function (known as special functions) defined as the
+   solution of the previously unsolved ODE and study it in some way (e.g. power
+   series, plot it, tabulate it);
+2. Find approximate (or asymptotic solutions);
+3. Find numerical solutions; and
+4. Study solutions qualitatively.
+
+### Notation Conventions
+
+Here we make a quick note about **notation conventions**. By convention we will
+use
+$$
+\frac{dy}{dt}=\dot{y}\quad\&\quad \frac{dy}{dx}=y'.
+$$
+The fractional notation both specifies the independent variable and reminds us
+that (with care) derivatives behave similarly to fractions.
+
+Furthermore we note the difference between $\partial$ and $d$ notation.  
+- $\frac{{\partial f}}{\partial x}$ is the **partial derivative** meaning it
+  describes the change of $f$ with respect to $x$ assuming all other variables
+  are constants with respect to $x$;
+- $\frac{df}{dx}$ is the **total derivative** meaning it describes the change
+  of $f$ with respect to $x$ making no assumptions about other variables, they
+  are all considered variables in $x$.
+
+## Linear ODEs
+
+**Example:**
+One of the most important examples of an ODE is
+$$
+\dot{y}=\frac{dy}{dt}=ay,
+$$
+i.e. the rate of growth of a quantity is proportional to the quantity itself
+(i.e. a monogamous population). This example is both first-order and linear. It
+can also be resolved with respect to derivative, i.e. it is of the general form
+$$
+\dot{y}=f(t,y).
+$$
+
+:::{.definition data-title="Linear ODE"}
+
+An ODE is **linear** if it can be written in the form
+$$
+a_{n}(x)y^{(n)}+a_{n-1}(x)y^{(n-1)}+\dots+a_{1}(x)y'+a_{0}(x)y=f(x)),
+$$
+or to use Einstein's convention of implied summation over repeated indices
+(here mean to run from $0$ to $n$)
+$$
+a_{i}(x)y^{(i)}=f(x).
+$$
+
+:::
+
+When $f(x)=0$ the linear ODE is said to be **homogeneous**, otherwise it is
+**inhomogeneous**. Homogeneous linear ODEs have the important property that
+they are **invariant under arbitrary rescaling**
+$y \to \lambda y,~\forall \lambda \neq 0$. Further, linear ODEs have many nice
+properties making them much easier to solve.
+
+## First Order ODEs
+
+:::{.definition data-title="Symmetric Form"}
+
+A first-order ODE can be written in **symmetric form**
+$$
+P(x,y) dx+Q(x,y)dy=0,
+$$
+if it can be expressed implicitly in terms of $x$ and $y$.  
+
+:::
+
+This includes: (1) first-order ODEs that are explicitly or implicitly solvable;
+(2) separable equations; (3) exact equations; and (4) integrating factor cases;
+all of which we will consider in this note.
+
+### Equations in Full Differentials
+
+Consider a first-order ODE in symmetric form
+$$
+P(x,y)dx+Q(x,y)dy=0.
+$$
+It is easy to integrate if the LHS is a full differential of some function,
+i.e. if $\exists \Phi(x,y)$ such that
+$$
+\forall(x,y)\in\mathscr{D},~~P(x,y)=\frac{{\partial \Phi}}{\partial x}~~\&~~Q(x,y)=\frac{{\partial \Phi}}{\partial y}.
+$$
+Then the ODE is said to be an **equation in full differentials** and becomes
+$$
+d\Phi(x,y)=0\implies \Phi(x,y)=C,
+$$
+where $X$ is an **arbitrary constant of integration**.
+
+The necessary condition for this method is that differentiating the first of
+them with respect to $y$ and the second with respect to $x$ we find that these
+derivatives must be equal
+$$
+\forall(x,y)\in\mathscr{D},~~ \frac{{\partial P}}{\partial y}=\frac{{\partial Q}}{\partial x}.
+$$
+**Example (Equations in Full Differentials):**
+Consider the ODE 
+$$
+2xydx+(x^2-y^2)dy=0.
+$$
+Since $P(x,y)=2xy$ and $Q(x,y)=(x^2-y^2)$ the necessary condition is satisfied.
+It must be that
+$$
+\frac{{\partial \Phi}}{\partial x}=2xy\implies \Phi=x^2y+\phi(y),
+$$
+where $\phi(y)$ is the integration *constant in $x$* but a function of $y$.
+This is given by
+$$
+\frac{{\partial \Phi}}{\partial y}=x^2-y^2\implies x^2+\phi'(y)=x^2-y^2\implies \phi(y)=-\frac{y^3}{3}+c.
+$$
+Thus the solution is
+$$
+\Phi(x,y)=x^2y-\frac{y^3}{3}=C.
+$$
+### Integrating Factor
+
+ Supposing that the necessary condition is not met we can instead sometimes use
+ the **integrating factor method**. The **integrating factor** is a function
+ $\Lambda(x,y)\neq 0$ such that
+$$
+\Lambda(x,y)\left[ P(x,y)dx+Q(x,y)dy \right] =0,
+$$
+is an equation in full differentials. i.e.
+$$
+\frac{{\partial \Lambda P}}{\partial y}=\frac{{\partial \Lambda Q}}{\partial x}\quad\text{or}\quad Q \frac{{\partial \Lambda}}{\partial x}-P \frac{{\partial \Lambda}}{\partial y}=\left( \frac{{\partial P}}{\partial y} - \frac{{\partial Q}}{\partial x} \right)\Lambda. 
+$$
+Generally speaking this is a PDE (first-order) and is not necessarily any
+easier to solve than the original ODE but it can allow us to more easily find a
+particular solution in some cases.
+
+**Example (Integrating Factor):**
+Consider the equation
+$$
+(x^2+y^2+y)dx-xdy=0.
+$$
+We spot that $ydx-xdy=-x^2d({y/x})$ thus we have
+$$
+(x^2+y^2)dx-x^2d(y/x)=0.
+$$
+The integrating factor is $\Lambda=1/(x^2+y^2)$. Multiplying by the integrating
+factor we get
+$$
+dx- \frac{d(y/x)}{1+(y/x)^2}=0\implies x - \arctan(y/x)=C.
+$$
+### Separable Equations
+
+A particularly simple and very useful special case of an ODE in full
+differentials is a **separable ODE** which takes the form
+$$
+P(x)dx+Q(y)dy=0.
+$$
+In this case we can integrate instantly
+$$
+\int_{}^{}{}~d{x}P(x)+\int_{}^{}{}~d{y}Q(y)=C.
+$$
+**Example (Separable Equations):**
+Consider the ODE 
+$$
+x \frac{dy}{dx}+y=y^2\implies \frac{1}{y(y-1)}dy=\frac{1}{x}dx.
+$$
+Thus we can integrate
+$$
+\begin{align}
+\int_{}^{}{\frac{1}{y(y-1)}}~d{y} & =\int_{}^{}{\frac{1}{x}}~d{x} \\
+ \implies \log \lvert x \rvert +C & =\int_{}^{}{\frac{1}{y-1}}~d{y}-\int_{}^{}{\frac{1}{y}}~d{y}=\log \left\lvert  \frac{{y-1}}{y}  \right\rvert  \\
+\implies \frac{{y-1}}{y} & =Cx \\
+\implies y & =\frac{1}{1+Cx}.
+\end{align}
+$$
+### Homogeneous Equations
+
+- Reduction to homogeneous form by linear change of variables
+
+### Linear Equations
+
+- Solution via integrating factor
+- Solution via Variation of Constant
+- CF + PI
+
+### Riccati Equations
+
+## Higher-Order ODEs
+

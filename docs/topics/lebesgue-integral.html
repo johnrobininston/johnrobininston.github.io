@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-09-25">
+
+<title>Lebesgue Integral – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="quarto-graph-sidebar-depth" content="2">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Lebesgue Integral</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 25, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#almost-surely" id="toc-almost-surely" class="nav-link active" data-scroll-target="#almost-surely"><span class="header-section-number">1</span> Almost Surely</a></li>
+  <li><a href="#constructing-the-lebesgue-integral" id="toc-constructing-the-lebesgue-integral" class="nav-link" data-scroll-target="#constructing-the-lebesgue-integral"><span class="header-section-number">2</span> Constructing the Lebesgue Integral</a>
+  <ul class="collapse">
+  <li><a href="#step-1-lebesgue-integrals-for-simple-functions" id="toc-step-1-lebesgue-integrals-for-simple-functions" class="nav-link" data-scroll-target="#step-1-lebesgue-integrals-for-simple-functions"><span class="header-section-number">2.1</span> <strong>Step 1: Lebesgue Integrals for Simple Functions</strong></a></li>
+  <li><a href="#step-2-lebesgue-integrals-for-bounded-functions" id="toc-step-2-lebesgue-integrals-for-bounded-functions" class="nav-link" data-scroll-target="#step-2-lebesgue-integrals-for-bounded-functions"><span class="header-section-number">2.2</span> <strong>Step 2: Lebesgue Integrals for Bounded Functions</strong></a></li>
+  <li><a href="#step-4-lebesgue-integrals-for-general-measurable-functions" id="toc-step-4-lebesgue-integrals-for-general-measurable-functions" class="nav-link" data-scroll-target="#step-4-lebesgue-integrals-for-general-measurable-functions"><span class="header-section-number">2.3</span> <strong>Step 4: Lebesgue Integrals for General Measurable Functions</strong></a></li>
+  <li><a href="#lebesgue-integral-properties" id="toc-lebesgue-integral-properties" class="nav-link" data-scroll-target="#lebesgue-integral-properties"><span class="header-section-number">2.4</span> Lebesgue Integral Properties</a></li>
+  </ul></li>
+  <li><a href="#what-is-an-lp-space" id="toc-what-is-an-lp-space" class="nav-link" data-scroll-target="#what-is-an-lp-space"><span class="header-section-number">3</span> What is an <span class="math inline">\(L^p\)</span> space?</a></li>
+  <li><a href="#what-is-jensens-inequality" id="toc-what-is-jensens-inequality" class="nav-link" data-scroll-target="#what-is-jensens-inequality"><span class="header-section-number">4</span> What is Jensen’s inequality?</a></li>
+  <li><a href="#what-is-hölders-inequality" id="toc-what-is-hölders-inequality" class="nav-link" data-scroll-target="#what-is-hölders-inequality"><span class="header-section-number">5</span> What is Hölder’s inequality?</a></li>
+  <li><a href="#what-is-the-minkowski-inequality" id="toc-what-is-the-minkowski-inequality" class="nav-link" data-scroll-target="#what-is-the-minkowski-inequality"><span class="header-section-number">6</span> What is the Minkowski inequality?</a></li>
+  <li><a href="#what-does-convergence-in-measure-mean" id="toc-what-does-convergence-in-measure-mean" class="nav-link" data-scroll-target="#what-does-convergence-in-measure-mean"><span class="header-section-number">7</span> What does convergence in measure mean?</a></li>
+  <li><a href="#what-is-the-bounded-convergence-theorem" id="toc-what-is-the-bounded-convergence-theorem" class="nav-link" data-scroll-target="#what-is-the-bounded-convergence-theorem"><span class="header-section-number">8</span> What is the bounded convergence theorem?</a></li>
+  <li><a href="#what-is-fatous-lemma" id="toc-what-is-fatous-lemma" class="nav-link" data-scroll-target="#what-is-fatous-lemma"><span class="header-section-number">9</span> What is Fatou’s lemma?</a></li>
+  <li><a href="#what-is-the-monotone-convergence-theorem" id="toc-what-is-the-monotone-convergence-theorem" class="nav-link" data-scroll-target="#what-is-the-monotone-convergence-theorem"><span class="header-section-number">10</span> What is the monotone convergence theorem?</a></li>
+  <li><a href="#what-is-the-dominated-convergence-theorem" id="toc-what-is-the-dominated-convergence-theorem" class="nav-link" data-scroll-target="#what-is-the-dominated-convergence-theorem"><span class="header-section-number">11</span> What is the dominated convergence theorem?</a></li>
+  <li><a href="#what-is-chebyshevs-inequality" id="toc-what-is-chebyshevs-inequality" class="nav-link" data-scroll-target="#what-is-chebyshevs-inequality"><span class="header-section-number">12</span> What is Chebyshev’s inequality?</a></li>
+  <li><a href="#what-is-the-change-of-variables-formula" id="toc-what-is-the-change-of-variables-formula" class="nav-link" data-scroll-target="#what-is-the-change-of-variables-formula"><span class="header-section-number">13</span> What is the change of variables formula?</a></li>
+  <li><span class="header-section-number">14</span> Backlinks</li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<section id="almost-surely" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="almost-surely"><span class="header-section-number">1</span> Almost Surely</h2>
+<p>For two measurable functions <span class="math inline">\(\varphi, \psi: \Omega \to \mathbb{R}\)</span>, we say <span class="math inline">\(\varphi\)</span> is <strong>less than or equal to <span class="math inline">\(\psi\)</span> almost everywhere</strong> (a.e.) if <span class="math inline">\(\mu(\{\varphi &gt; \psi\}) = 0\)</span>. We say <span class="math inline">\(\varphi = \psi\)</span> a.e. if <span class="math inline">\(\mu(\varphi \neq \psi) = 0\)</span>.</p>
+<p>For probability measures, the term <strong>almost surely</strong> (a.s.) is also used. For two random variables <span class="math inline">\(X, Y\)</span> on a probability space, we say <span class="math inline">\(X = Y\)</span> a.s. if <span class="math inline">\(\mathbb{P}(\{\omega: X(\omega) = Y(\omega)\}) = 1\)</span>.</p>
+<p>The distinction between a.e. and pointwise equality is crucial: a.e. allows for a set of measure zero where the equality fails, which is negligible in measure theory.</p>
+</section>
+<section id="constructing-the-lebesgue-integral" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="constructing-the-lebesgue-integral"><span class="header-section-number">2</span> Constructing the Lebesgue Integral</h2>
+<section id="step-1-lebesgue-integrals-for-simple-functions" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="step-1-lebesgue-integrals-for-simple-functions"><span class="header-section-number">2.1</span> <strong>Step 1: Lebesgue Integrals for Simple Functions</strong></h3>
+<div class="definition" data-title="Definition: Simple Function and Integration">
+<p>A <strong>simple function</strong> is a finite linear combination <span class="math inline">\(\varphi(\omega) = \sum_{i=1}^n a_i \cdot \mathbf{1}_{A_i}(\omega)\)</span> where <span class="math inline">\(a_i \in \mathbb{R}\)</span> and <span class="math inline">\(A_i \in \mathcal{F}\)</span> are disjoint sets with <span class="math inline">\(\Omega = \bigcup_{i=1}^n A_i\)</span>.</p>
+<p>The <strong>integral</strong> of a simple function <span class="math inline">\(\varphi\)</span> with respect to measure <span class="math inline">\(\mu\)</span> is defined as: <span class="math display">\[
+\int_\Omega \varphi \, d\mu = \sum_{i=1}^n a_i \cdot \mu(A_i)
+\]</span></p>
+</div>
+<p>The key insight is that simple functions allow us to reduce integration to a finite sum of weighted measures—the integral is essentially a weighted average of the measure values.</p>
+<p>We denote by <span class="math inline">\(\mathcal{S}\)</span> the collection of all simple functions. This step is fundamental because it defines integration in the simplest, most intuitive way before extending to more complex functions.</p>
+<div class="theorem" data-title="Proposition 1.3: Properties of Simple Function Integration">
+<p>For simple functions <span class="math inline">\(\varphi, \psi \in \mathcal{S}\)</span> with respect to a <span class="math inline">\(\sigma\)</span>-finite measure <span class="math inline">\(\mu\)</span>:</p>
+<ol type="1">
+<li><strong>Non-negativity:</strong> If <span class="math inline">\(\varphi \geq 0\)</span> a.e., then <span class="math inline">\(\int_\Omega \varphi \, d\mu \geq 0\)</span>.</li>
+<li><strong>Homogeneity:</strong> For <span class="math inline">\(a \in \mathbb{R}\)</span>, <span class="math inline">\(\int_\Omega a\varphi \, d\mu = a \int_\Omega \varphi \, d\mu\)</span>.</li>
+<li><strong>Additivity:</strong> <span class="math inline">\(\int_\Omega (\varphi + \psi) \, d\mu = \int_\Omega \varphi \, d\mu + \int_\Omega \psi \, d\mu\)</span>.</li>
+<li><strong>Monotonicity:</strong> If <span class="math inline">\(\varphi \leq \psi\)</span> a.e., then <span class="math inline">\(\int_\Omega \psi \, d\mu \geq \int_\Omega \varphi \, d\mu\)</span>.</li>
+<li><strong>Invariance under a.e. equality:</strong> If <span class="math inline">\(\varphi = \psi\)</span> a.e., then <span class="math inline">\(\int_\Omega \psi \, d\mu = \int_\Omega \varphi \, d\mu\)</span>.</li>
+<li><strong>Absolute value inequality:</strong> <span class="math inline">\(|\int_\Omega \varphi \, d\mu| \leq \int_\Omega |\varphi| \, d\mu\)</span>.</li>
+</ol>
+</div>
+<p>These properties establish that the integral is well-defined (independent of representation), linear, and respects the measure-theoretic notion of “almost everywhere” equality.</p>
+<p>The most important consequence is that integration is <strong>well-defined</strong> despite multiple representations of the same simple function—different representations yield the same integral value.</p>
+</section>
+<section id="step-2-lebesgue-integrals-for-bounded-functions" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="step-2-lebesgue-integrals-for-bounded-functions"><span class="header-section-number">2.2</span> <strong>Step 2: Lebesgue Integrals for Bounded Functions</strong></h3>
+<div class="definition" data-title="Step 2: Integration of Bounded Functions">
+<p>For a measurable set <span class="math inline">\(E\)</span> with finite measure <span class="math inline">\(\mu(E) &lt; \infty\)</span>, consider the integration of a bounded function <span class="math inline">\(f\)</span> that vanishes outside <span class="math inline">\(E\)</span>. That is, there exists <span class="math inline">\(M\)</span> such that <span class="math inline">\(|f(\omega)| \leq M\)</span> for all <span class="math inline">\(\omega \in \Omega\)</span> and <span class="math inline">\(f(\omega) = 0\)</span> for <span class="math inline">\(\omega \in E^c\)</span>.</p>
+</div>
+<p>The strategy is to approximate bounded functions by simple functions from above and below.</p>
+<p>Define <span class="math inline">\(\mathcal{S}_E^f\)</span> as the set of simple functions <span class="math inline">\(\varphi\)</span> satisfying <span class="math inline">\(\varphi \leq f(\omega)\)</span> on <span class="math inline">\(\Omega\)</span> and <span class="math inline">\(\varphi = 0\)</span> outside <span class="math inline">\(E\)</span>. For such simple functions:</p>
+<p><span class="math display">\[
+\int_E f \, d\mu := \int_\Omega f \cdot \mathbf{1}_E \, d\mu
+\]</span></p>
+<p>The integral is defined as: <span class="math display">\[
+\int_E f \, d\mu := \sup_{\varphi \in \mathcal{S}_E, \varphi \leq f} \int_\Omega \varphi \, d\mu = \inf_{\varphi \in \mathcal{S}_E, \varphi \geq f} \int_\Omega \psi \, d\mu
+\]</span></p>
+<p>The equality holds because the set of simple functions below <span class="math inline">\(f\)</span> and above <span class="math inline">\(f\)</span> are ordered appropriately.</p>
+<p><strong>Key insight:</strong> The integral of a bounded function is the supremum of integrals of simple functions below it (and equivalently, the infimum of integrals of simple functions above it). This “squeezing” between simple functions is the central technique for extending the integral.</p>
+<p>The integral of bounded functions inherits the same properties as simple functions: <strong>non-negativity, linearity, monotonicity, and absolute value inequality</strong>.</p>
+<p>The crucial verification is that the supremum and infimum definitions coincide. This follows from: 1. <strong>Monotonicity of simple function integration:</strong> If <span class="math inline">\(\varphi \leq f \leq \psi\)</span> for simple functions <span class="math inline">\(\varphi, \psi\)</span>, then <span class="math inline">\(\int \varphi \, d\mu \leq \int \psi \, d\mu\)</span>. 2. <strong>Density of simple functions:</strong> For any <span class="math inline">\(\epsilon &gt; 0\)</span>, we can find simple functions <span class="math inline">\(\varphi, \psi\)</span> with <span class="math inline">\(\varphi \leq f \leq \psi\)</span> and <span class="math inline">\(\int (\psi - \varphi) \, d\mu &lt; \epsilon\)</span>.</p>
+<p>This construction ensures the integral is <strong>independent of the choice of representation</strong> - two different ways of computing the integral as a supremum/infimum yield the same value. ### <strong>Step 3: Lebesgue Integrals for Nonnegative Functions</strong></p>
+<div class="definition" data-title="Step 3: Integration of Nonnegative Functions">
+<p>For a nonnegative measurable function <span class="math inline">\(f: \Omega \to \mathbb{R}_+\)</span>, define the collection <span class="math inline">\(\mathcal{B}_f := \{h \in \mathcal{B} : 0 \leq h(\omega) \leq f(\omega), \omega \in \Omega \text{ and } \mu(\{h &gt; 0\}) &lt; \infty\}\)</span> of bounded, nonnegative functions dominated by <span class="math inline">\(f\)</span> and vanishing outside a set of finite measure.</p>
+<p>The integral of <span class="math inline">\(f\)</span> is defined as: <span class="math display">\[
+\int_\Omega f(\omega) d\mu(\omega) = \sup_{h \in \mathcal{B}_f} \int_\Omega h(\omega) d\mu(\omega)
+\]</span></p>
+</div>
+<p>This step extends the integral to all nonnegative measurable functions by taking the supremum over bounded functions dominated by <span class="math inline">\(f\)</span>.</p>
+<div class="theorem" data-title="Lemma 1: Approximation of Nonnegative Functions">
+<p>Suppose <span class="math inline">\(E_n \uparrow \Omega\)</span> as <span class="math inline">\(n \to \infty\)</span>, and <span class="math inline">\(\mu(E_n) &lt; \infty\)</span> for every <span class="math inline">\(n\)</span>. For every nonnegative function <span class="math inline">\(f\)</span>, we have the approximation: <span class="math display">\[
+\lim_{n \to \infty} \uparrow \int_{E_n} (f(\omega) \wedge n) d\mu(\omega) = \lim_{n \to \infty} \uparrow \int_\Omega (f(\omega) \wedge n) \cdot \mathbf{1}_{E_n}(\omega) d\mu(\omega) = \int_\Omega f(d\omega)
+\]</span></p>
+</div>
+<p>The key insight is that nonnegative functions can be approximated from below by bounded functions vanishing outside sets of finite measure. Taking the limit of these bounded approximations yields the integral.</p>
+<div class="theorem" data-title="Theorem 3: Well-Definedness of the Lebesgue Integral">
+<p>For a measurable function <span class="math inline">\(f\)</span> and a <span class="math inline">\(\sigma\)</span>-finite measure <span class="math inline">\(\mu\)</span>, the integral <span class="math inline">\(\int_\Omega f(\omega) d\mu(\omega)\)</span> is well-defined and satisfies the properties 1-6 of Proposition 1.3.</p>
+</div>
+<p>The construction proceeds in four steps—simple functions, bounded functions, nonnegative functions, and general functions—each extending the integral to a larger class while preserving the fundamental properties. At each step, the integral is well-defined because the supremum/infimum definitions are independent of the choice of approximating sequences.</p>
+</section>
+<section id="step-4-lebesgue-integrals-for-general-measurable-functions" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="step-4-lebesgue-integrals-for-general-measurable-functions"><span class="header-section-number">2.3</span> <strong>Step 4: Lebesgue Integrals for General Measurable Functions</strong></h3>
+<div class="definition" data-title="Step 4: Integration of General Measurable Functions">
+<p>For a general measurable function <span class="math inline">\(f\)</span>, consider the decomposition <span class="math inline">\(f(\omega)=f^+(\omega) - f^-(\omega)\)</span> where <span class="math inline">\(f^+(\omega):=f(\omega)\vee 0\)</span> and <span class="math inline">\(f^-(\omega)=-f(\omega)\vee 0\)</span> and define the integration of <span class="math inline">\(f\)</span> <span class="math display">\[
+\int_{\Omega}f(\omega)d\mu(\omega) = \int_{\Omega}f^+(\omega)d\mu(\omega) - \int_{\Omega}f^-(\omega)d\mu(\omega).
+\]</span> This integral is well defined because of step 3 and satisfies the same properties.</p>
+</div>
+</section>
+<section id="lebesgue-integral-properties" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="lebesgue-integral-properties"><span class="header-section-number">2.4</span> Lebesgue Integral Properties</h3>
+<div class="theorem" data-title="Proposition 1.3: Properties of Lebesgue Integration">
+<p>For general measurable functions <span class="math inline">\(\varphi, \psi\)</span> with respect to a <span class="math inline">\(\sigma\)</span>-finite measure <span class="math inline">\(\mu\)</span>: 1. <strong>Non-negativity:</strong> If <span class="math inline">\(\varphi \geq 0\)</span> a.e., then <span class="math inline">\(\int_\Omega \varphi \, d\mu \geq 0\)</span>. 2. <strong>Homogeneity:</strong> For <span class="math inline">\(a \in \mathbb{R}\)</span>, <span class="math inline">\(\int_\Omega a\varphi \, d\mu = a \int_\Omega \varphi \, d\mu\)</span>. 3. <strong>Additivity:</strong> <span class="math inline">\(\int_\Omega (\varphi + \psi) \, d\mu = \int_\Omega \varphi \, d\mu + \int_\Omega \psi \, d\mu\)</span>. 4. <strong>Monotonicity:</strong> If <span class="math inline">\(\varphi \leq \psi\)</span> a.e., then <span class="math inline">\(\int_\Omega \psi \, d\mu \geq \int_\Omega \varphi \, d\mu\)</span>. 5. <strong>Invariance under a.e. equality:</strong> If <span class="math inline">\(\varphi = \psi\)</span> a.e., then <span class="math inline">\(\int_\Omega \psi \, d\mu = \int_\Omega \varphi \, d\mu\)</span>. 6. <strong>Absolute value inequality:</strong> <span class="math inline">\(|\int_\Omega \varphi \, d\mu| \leq \int_\Omega |\varphi| \, d\mu\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="what-is-an-lp-space" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="what-is-an-lp-space"><span class="header-section-number">3</span> What is an <span class="math inline">\(L^p\)</span> space?</h2>
+<div class="definition" data-title="Definition 1.11: $L^p$ Space">
+<p>For a fixed <span class="math inline">\(p \geq 1\)</span>, we denote by <span class="math inline">\(L^p\)</span> the collection of measurable functions <span class="math inline">\(f\)</span> such that <span class="math inline">\(\|f\|_p^p := \int_\Omega |f(\omega)|^p d\mu(\omega) &lt; \infty\)</span>. We say <span class="math inline">\(f\)</span> is <strong>integrable</strong> if <span class="math inline">\(f \in L^1\)</span>.</p>
+</div>
+<p>The <span class="math inline">\(L^p\)</span> spaces are fundamental function spaces in analysis and probability. Functions in <span class="math inline">\(L^p\)</span> have <span class="math inline">\(p\)</span>-th moment finite, which controls tail behavior. The quantity <span class="math inline">\(\|f\|_p\)</span> defines a seminorm on the space of measurable functions.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-jensens-inequality" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="what-is-jensens-inequality"><span class="header-section-number">4</span> What is Jensen’s inequality?</h2>
+<div class="theorem" data-title="Proposition 1.4: Jensen's Inequality">
+<p>For every convex function <span class="math inline">\(\varphi\)</span> and random variable <span class="math inline">\(X\)</span> on a probability space <span class="math inline">\((\Omega, \mathcal{F}, \mathbb{P})\)</span>, we have: <span class="math display">\[
+\varphi(\mathbb{E}[X]) \leq \mathbb{E}[\varphi(X)]
+\]</span></p>
+</div>
+<p>Jensen’s inequality states that the value of a convex function at the expected value is less than or equal to the expected value of the function. This is a cornerstone inequality in probability theory with applications to variance bounds and concentration inequalities.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-hölders-inequality" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="what-is-hölders-inequality"><span class="header-section-number">5</span> What is Hölder’s inequality?</h2>
+<div class="theorem" data-title="Proposition 1.5: Hölder and Cauchy-Schwarz Inequality">
+<p>For a conjugate pair <span class="math inline">\(p, q \in (1, \infty)\)</span> with <span class="math inline">\(1/p + 1/q = 1\)</span> and measurable functions <span class="math inline">\(f, g\)</span>, we have: <span class="math display">\[\int_\Omega f(\omega)g(\omega) d\mu(\omega) \leq \|f\|_p \|g\|_q\]</span></p>
+<p>If <span class="math inline">\(p = q = 2\)</span>, this is called the <strong>Cauchy-Schwarz inequality</strong>.</p>
+</div>
+<p>Hölder’s inequality is a fundamental result controlling products of functions in different <span class="math inline">\(L^p\)</span> spaces. It generalizes the Cauchy-Schwarz inequality and is essential for proving properties of <span class="math inline">\(L^p\)</span> spaces.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-the-minkowski-inequality" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="what-is-the-minkowski-inequality"><span class="header-section-number">6</span> What is the Minkowski inequality?</h2>
+<div class="theorem" data-title="Proposition 1.6: Minkowski Inequality">
+<p>For every <span class="math inline">\(p \in [1, \infty)\)</span> and <span class="math inline">\(f, g \in L^p\)</span>, we have the triangle inequality: <span class="math display">\[\|f + g\|_p \leq \|f\|_p + \|g\|_p\]</span></p>
+<p>Hence <span class="math inline">\(\|\cdot\|_p\)</span> is a norm on the <span class="math inline">\(L^p\)</span> space.</p>
+</div>
+<p>The Minkowski inequality establishes that <span class="math inline">\(L^p\)</span> is a normed vector space. This is crucial for understanding the geometric structure of function spaces used in analysis and probability.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-does-convergence-in-measure-mean" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="what-does-convergence-in-measure-mean"><span class="header-section-number">7</span> What does convergence in measure mean?</h2>
+<div class="definition" data-title="Definition 1.12: Convergence in Measure">
+<p>For measurable functions <span class="math inline">\(\{f_n\}, f\)</span> on <span class="math inline">\((\Omega, \mathcal{F}, \mu)\)</span>, we say <span class="math inline">\(f_n\)</span> converges to <span class="math inline">\(f\)</span> <strong>in measure</strong> <span class="math inline">\(\mu\)</span> as <span class="math inline">\(n \to \infty\)</span> if, for every <span class="math inline">\(\varepsilon &gt; 0\)</span>: <span class="math display">\[\lim_{n \to \infty} \mu(\{\omega \in \Omega : |f_n(\omega) - f(\omega)| &gt; \varepsilon\}) = 0\]</span></p>
+<p>We write <span class="math inline">\(f_n \xrightarrow{\mu} f\)</span>. When <span class="math inline">\(\mu\)</span> is a probability measure <span class="math inline">\(\mathbb{P}\)</span>, we say the sequence of random variables <span class="math inline">\(\{X_n\}\)</span> <strong>converges to <span class="math inline">\(X\)</span> in probability</strong> as <span class="math inline">\(n \to \infty\)</span>, written <span class="math inline">\(X_n \xrightarrow{\mathbb{P}} X\)</span>.</p>
+</div>
+<p>Convergence in measure captures the idea that <span class="math inline">\(f_n\)</span> becomes close to <span class="math inline">\(f\)</span> on sets of large measure, allowing for deviations on small sets.</p>
+<p>%%+++%%</p>
+<p>When <span class="math inline">\(\mu(\Omega) &lt; \infty\)</span>, convergence almost surely implies convergence in measure.</p>
+</section>
+<section id="what-is-the-bounded-convergence-theorem" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="what-is-the-bounded-convergence-theorem"><span class="header-section-number">8</span> What is the bounded convergence theorem?</h2>
+<div class="theorem" data-title="Theorem 4: Bounded Convergence Theorem">
+<p>Suppose that for every <span class="math inline">\(n\)</span>, a measurable function <span class="math inline">\(f_n\)</span> vanishes on <span class="math inline">\(E^c\)</span> (where <span class="math inline">\(E\)</span> is a set with <span class="math inline">\(\mu(E) &lt; \infty\)</span>), is bounded by a common constant <span class="math inline">\(M &gt; 0\)</span> (i.e., <span class="math inline">\(|f_n| \leq M\)</span> a.e.), and converges to a measurable function <span class="math inline">\(f\)</span> in measure <span class="math inline">\(\mu\)</span>, where <span class="math inline">\(f\)</span> vanishes outside <span class="math inline">\(E\)</span>. Then the interchange of limit and integration is allowed: <span class="math display">\[
+\lim_{n \to \infty} \int_\Omega f_n d\mu = \lim_{n \to \infty} \int_E f_n d\mu = \int_E f d\mu = \int_\Omega f d\mu
+\]</span></p>
+</div>
+<p>The bounded convergence theorem allows us to exchange limits and integrals when functions are uniformly bounded on a set of finite measure. This is the weakest convergence result.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-fatous-lemma" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="what-is-fatous-lemma"><span class="header-section-number">9</span> What is Fatou’s lemma?</h2>
+<div class="theorem" data-title="Lemma 2: Fatou's Lemma">
+<p>For nonnegative measurable functions <span class="math inline">\(f_n : \Omega \to \mathbb{R}_+\)</span>, <span class="math inline">\(n \geq 1\)</span>, we have: <span class="math display">\[
+\int_\Omega \liminf_{n \to \infty} f_n(\omega) d\mu(\omega) \leq \liminf_{n \to \infty} \int_\Omega f_n(\omega) d\mu(\omega)
+\]</span></p>
+</div>
+<p>Fatou’s lemma provides a lower bound for the integral of the liminf in terms of the liminf of the integrals. It is weaker than monotone convergence but applies to any nonnegative sequence.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-the-monotone-convergence-theorem" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="what-is-the-monotone-convergence-theorem"><span class="header-section-number">10</span> What is the monotone convergence theorem?</h2>
+<div class="theorem" data-title="Theorem 5: Monotone Convergence Theorem">
+<p>For any monotonically increasing sequence <span class="math inline">\(\{f_n\}_{n=1}^\infty\)</span> of nonnegative measurable functions that converges to <span class="math inline">\(f\)</span> a.e. (i.e., <span class="math inline">\(0 \leq f_n \leq f_{n+1}\)</span> a.e. for every <span class="math inline">\(n\)</span> and <span class="math inline">\(\lim_{n \to \infty} \uparrow f_n = f\)</span> a.e.), we have: <span class="math display">\[
+\lim_{n \to \infty} \uparrow \int_\Omega f_n(\omega) d\mu(\omega) = \int_\Omega f(\omega) d\mu(\omega)
+\]</span></p>
+</div>
+<p>The monotone convergence theorem is the most powerful convergence result for nonnegative functions, requiring no boundedness assumption. It allows unrestricted interchange of limits and integration.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-the-dominated-convergence-theorem" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="what-is-the-dominated-convergence-theorem"><span class="header-section-number">11</span> What is the dominated convergence theorem?</h2>
+<div class="theorem" data-title="Theorem 6: Dominated Convergence Theorem">
+<p>For any sequence <span class="math inline">\(\{f_n\}_{n=1}^\infty\)</span> of measurable functions that converges to a measurable function <span class="math inline">\(f\)</span> almost everywhere and is dominated by an integrable function <span class="math inline">\(g\)</span> for every <span class="math inline">\(n \geq 1\)</span> (i.e., <span class="math inline">\(|f_n(\omega)| \leq g(\omega)\)</span> a.e. and <span class="math inline">\(\int_\Omega g(\omega) d\mu(\omega) &lt; \infty\)</span>), we have: <span class="math display">\[
+\lim_{n \to \infty} \int_\Omega f_n(\omega) d\mu(\omega) = \int_\Omega f(\omega) d\mu(\omega)
+\]</span></p>
+</div>
+<p>The dominated convergence theorem is the most practical convergence result, applying to sequences that converge pointwise almost everywhere and are dominated by an integrable bound. It handles both positive and negative functions.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-chebyshevs-inequality" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="what-is-chebyshevs-inequality"><span class="header-section-number">12</span> What is Chebyshev’s inequality?</h2>
+<div class="theorem" data-title="Proposition 1.7: Chebyshev's Inequality">
+<p>For any nonnegative function <span class="math inline">\(\varphi\)</span>, a Borel set <span class="math inline">\(A\)</span>, and a random variable <span class="math inline">\(X\)</span>, we have: <span class="math display">\[
+\inf_{y \in A} \varphi(y) \cdot \mathbb{P}(X \in A) \leq \mathbb{E}[\varphi(X); X \in A] \leq \mathbb{E}[\varphi(X)]
+\]</span></p>
+</div>
+<p>Chebyshev’s inequality bounds the probability that a random variable falls in a set <span class="math inline">\(A\)</span> in terms of the expected value of functions of that variable. It is foundational for concentration inequalities.</p>
+<p>%%+++%%</p>
+</section>
+<section id="what-is-the-change-of-variables-formula" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="what-is-the-change-of-variables-formula"><span class="header-section-number">13</span> What is the change of variables formula?</h2>
+<div class="theorem" data-title="Proposition 1.8: Change of Variables">
+<p>For every <span class="math inline">\(S\)</span>-valued measurable map <span class="math inline">\(X\)</span> with distribution <span class="math inline">\(\mu(·) = \mathbb{P}(X \in ·) = \mathbb{P} \circ X^{-1}(·)\)</span> and for <span class="math inline">\(g: (S, \mathcal{S}) \to (\mathbb{R}, \mathcal{R})\)</span> with <span class="math inline">\(g \geq 0\)</span> or <span class="math inline">\(\mathbb{E}[|g(X)|] &lt; \infty\)</span>, we have the <strong>change-of-variables formula</strong>: <span class="math display">\[
+\mathbb{E}[g(X)] = \int_\Omega g(X(\omega)) d\mathbb{P}(\omega) = \int_S g(y) d\mu(y)
+\]</span></p>
+</div>
+<p>The change of variables formula is fundamental for computing expectations: we can compute <span class="math inline">\(\mathbb{E}[g(X)]\)</span> either directly from the probability distribution on <span class="math inline">\(\Omega\)</span> or by pushing forward to the induced distribution on <span class="math inline">\(S\)</span>. This allows us to work with the marginal distribution of <span class="math inline">\(X\)</span> rather than the full probability space.</p>
+<p>%%+++%%</p>
+<p>This formula demonstrates that expectations of functions of random variables depend only on the distribution of <span class="math inline">\(X\)</span>, not on the underlying probability space.</p>
+
+
+</section>
+<section class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id=""><span class="header-section-number">14</span> Backlinks</h2>
+<ul>
+<li><a href="../topics/exploration-lebesgue-measure.html">Exploration - Lebesgue Measure</a></li>
+<li><a href="../topics/ito-process.html">Itô Process</a></li>
+<li><a href="../topics/measure-theory.html">Measure Theory</a></li>
+<li><a href="../topics/probability-measure-theory.html">Probability Measure Theory</a></li>
+<li><a href="../topics/stochastic-differential-equations.html">Stochastic Differential Equations</a></li>
+</ul>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

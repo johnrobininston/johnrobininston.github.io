@@ -1,0 +1,41 @@
+---
+title: Granger Causality
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Granger Causality
+:::{.definition data-title="Granger Causality"}
+
+A series $Y_t$ **Granger-causes** $X_t$ if past values of $Y$ improve the
+prediction of $X_t$ beyond what is achievable using past values of $X$ alone,
+i.e.
+$$
+Var(X_t \mid X_{t-1}, X_{t-2},\dots) > Var(X_t \mid X_{t-1},X_{t-2},\dots,\,Y_{t-1},Y_{t-2},\dots).
+$$
+This is a statement about predictive incremental information, not
+structural/philosophical causation.
+
+:::
+
+**Testing in a [[vector-autoregression-var|VAR]].** In a bivariate $VAR(p)$ for
+$(X_t,Y_t)$, $Y$ fails to Granger-cause $X$ iff all coefficients on lagged $Y$
+in the $X$-equation are zero; this is tested with a standard $F$-test (or Wald
+test) of that joint linear restriction.
+
+**Caveats.**
+- Requires both series to be (or be transformed to be) stationary; testing in
+  levels when series are $I(1)$ and cointegrated can be misleading — the
+  correct specification is then a VECM including the error-correction term (see
+  [[cointegration]]).
+- Sensitive to omitted variables: a third series driving both $X$ and $Y$ can
+  produce spurious Granger causality.
+- Does not resolve simultaneity or contemporaneous causal direction, only
+  lead-lag predictive structure.
+
+### References
+- [[vector-autoregression-var]]
+- [[cointegration]]
+- [[time-series-analysis]]

@@ -1,0 +1,139 @@
+---
+title: Measure
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Measure
+
+A [[measure-spaces|measurable space]] is a set $X$ with a σ-algebra
+$\mathcal{F}$ containing all measurable subsets of $X$. Upon a measurable space
+we are able to define a **measure**, a function assigning elements of
+$\mathcal{F}$ a measure of size.
+
+:::{.definition data-title="Measure"}
+
+Given a measurable space $(X,\mathcal{F})$ a *measure*
+$\mu:\mathcal{F}\to[0,+\infty]$ is a mapping frm the collection of measurable
+sets to $[0,+\infty]$ such that:
+1. $\mu(\emptyset)=0$
+2. $\{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}~\&~\text{disjoint}\implies \mu(\cup_{i=1}^\infty E_{i})=\sum_{i=1}^\infty \mu(E_{i})$.
+
+:::
+
+We call the triple $(X, \mathcal{F}, \mu)$ a **measure space**.
+ 
+**Example (Dirac Measure):** 
+For $(X,\mathcal{F})=(X, 2^X)$ we fix $x_{0}\in X$ and define
+$$
+\mu(A)=\delta_{x_{0}}(A)=\begin{cases}
+1&x_{0}\in A \\
+0& \text{o.w.}
+\end{cases}
+$$
+known as the **Dirac measure**.
+
+:::{.theorem data-title="Measure Properties"}
+
+For any measure space $(X,\mathcal{F},\mu)$ and $A,B\in \mathcal{F}$,
+$\{ A_{i} \}_{i=1}^n\subseteq \mathcal{F}$ we have the following properties:
+1. $A \subseteq B\implies \mu(A)\leq \mu(B)$ (Monotonicity)
+2. $A \subseteq B\implies \mu(B\setminus A)=\mu(B)-\mu(A)$
+3. $\mu(\cup_{i=1}^\infty A_{i})\leq \sum_{i=1}^\infty \mu(A_{i})$
+   (Subadditivity)
+4. $A_{i}\subseteq A_{i+1},~\forall i\implies \mu(\cup_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from below)
+5. $A_{i}\supseteq A_{i+1},~\forall i\implies \mu(\cap_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from above)
+
+:::
+
+*PROOF:*
+(1) + (2) Assume there exists $A\subseteq B$ then we can partition
+$B=A\cup(B\setminus A)$ and so
+$$
+\mu(B)=\mu(A)+\mu(B\setminus A)\geq  \mu(A).
+$$
+(3) Similarly, we can define $A_{1}=B_{1}$ and
+$B_{n}=A_{n}\setminus \cup_{i=1}^{n-1}A_{i}$ then we have that
+$$
+\mu(\cup_{i=1}^\infty A_{i})=\mu(\cup_{i=1}^\infty B_{i})=\sum_{i=1}^\infty \mu(B_{i})=\sum_{i=1}^\infty \mu(A_{i})-\mu(\cup_{i=1}^{n-1}A_{i})\leq \sum_{i=1}^\infty \mu(A_{i}).
+$$
+(4) Defining $B_{1}=A_{1}$ and $B_{i}=A_{i}\setminus A_{i-1}$ for $i \geq 2$.
+By definition $\cup_{i=1}^n B_{i}=A_{n}$ hence
+$$
+\cup_{i=1}^\infty B_{i}=\cup_{n=1}^\infty A_{n}\implies \mu(A_{n})=\mu(\cup_{i=1}^nB_{i})=\sum_{i=1}^n\mu(B_{i}).
+$$
+Consequently taking the limit as $n \to \infty$ we find
+$$
+\lim_{n \to \infty}\mu(A_{n})=\sum_{i=1}^\infty \mu(B_{i})=\mu\left( \bigcup_{i=1}^\infty B_{i} \right) =\mu\left(\bigcup_{i=1}^n A_{i}\right)
+$$
+(5) Define $B_{i}=A_{1}\setminus A_{i}$. By constraint $B_{i}\subseteq B_{i+1}$
+and so
+$$
+\begin{align}
+\bigcup_{i=1}^\infty B_{i} & =\bigcup_{i=1}^\infty(A_{1}\setminus A_{i})=\bigcup_{i=1}^\infty(A_{i}\cap A_{i}^c)=A_{1}\cap\left( \bigcup_{i=1}^\infty A_{i}^c \right) \\
+ & = A_{1}\cap \left( \bigcap_{i=1}^\infty A_{i} \right)^c=A_{1}\setminus \left( \bigcap_{i=1}^\infty A_{i} \right).
+\end{align}
+$$
+Therefore we have that
+$$
+\begin{align}
+\mu(A_{1}) & =\mu\left( A_{1}\cap\left( \bigcap_{i=1}^\infty A_{i} \right) \right)+\mu\left( A_{1}\setminus \bigcap_{i=1}^\infty A_{i} \right)  =\mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty} \mu(B_{i}) \\
+& = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty}\mu(A_{i})-\mu(A_{i} ) = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\mu(A_{1})-\lim_{i \to \infty}\mu(A_{i}),
+\end{align}
+$$
+and rearranging gives the result.
+$\square$
+
+:::{.definition data-title="Finite, Sigma-Finite, Null Set, Almost Everywhere, Complete"}
+
+Given a measure space $(X,\mathcal{F}, \mu)$ we define the following
+terminology:
+1. the measure is **finite** if $\mu(X)<+\infty$
+2. the measure is $\sigma$**-finite** if
+   $\exists \{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}$ such that
+   $\cup_{i=1}^\infty E_{i}=X$ and $\mu(E_{i})< \infty$ for all
+   $i \in \mathbb{N}$
+3. $E \in S^X$ is a **null set** (of $\mu$) if $E\in \mathcal{F}$ and
+   $\mu(E)=0$
+4. a property holds ($\mu$-) **almost everywhere** if the set of points where
+   it fails is a null set
+5. a measure whose domain includes all subsets of null sets is called
+   **complete**.
+
+:::
+
+The next theorem defines a **complete measure space**, a measure space in which
+every subset of every null set is measurable (with measure zero).  
+
+:::{.theorem data-title="Completions"}
+
+Suppose that $(X,\mathcal{F}, \mu)$ is a measure space. Let
+$\mathcal{N}=\{ N \in \mathcal{F}:\mu(N)=0 \}$ and
+$\overline{\mathcal{F}}=\{ E \cup F:E \in\mathcal{F},~F\subset N~\text{for some }N \in\mathcal{N} \}$.
+Then $\overline{\mathcal{F}}$ is a $\sigma$-algebra known as the **completion**
+of $\mathcal{F}$ with respect to $\mu$, and there is a unique extension
+$\overline\mu$ of $\mu$ to a **complete measure** on $\overline{\mathcal{F}}$,
+known as the **completion** of $\mu$. The resulting measure space
+$(X,\overline{F}, \overline{\mu})$ is called a **complete measure space**.
+
+:::
+
+*PROOF:*
+Firstly, we show that $\overline{\mathcal{F}}$ is a $\sigma$-algebra. Note that
+since $\mathcal{F}$ and $\mathcal{N}$ are both closed under countable unions,
+so to is $\overline{\mathcal{F}}$ and further, since
+$\emptyset \in \mathcal{F},\mathcal{N}$ then we have that
+$\emptyset \in\overline{\mathcal{F}}$, hence we need only show that
+$\overline{\mathcal{F}}$ is closed under compliments.  
+$\square$
+
+Naturally you might ask whether there exists a measure $\mu$ on the
+**measurable real space** $(\mathbb{R}, \mathcal{B}_{\mathbb{R}})$ (i.e. the
+couple of the real numbers and the [[borel-sigma-algebra]]) where
+$\mu((a,b))=b-a$ and $\mu$ is translation invariant. To prove existence we must
+first consider [[outer-measure|outer-measures]], functions similar to measures
+but that are defined on all collections of subsets.

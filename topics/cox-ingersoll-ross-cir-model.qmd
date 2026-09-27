@@ -1,0 +1,62 @@
+---
+title: Cox-Ingersoll-Ross (CIR) Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Model Description
+
+The **Cox-Ingersoll-Ross (CIR) Model** describes the evolution of interest
+rates as driven by market risk and was proposed as an extension of the
+[[vasicek-model]]. The key difference between the models is that Vasiček is
+based on the [[ornstein-uhlenbeck-process]] and CIR is based on the CIR
+process, also known as the Feller square root process.
+
+The CIR model describes the [[instantaneous-rates|instantaneous interest rate]]
+$\{r_{t}\}$ with the Feller square root process with dynamics described by the
+stochastic differential equation
+$$
+dr_{t}=a(b-r_{t})dt+\sigma \sqrt{  r_{t} }dW_{t},
+$$
+where $W_{t}$ is a Wiener process.  
+
+The parameter $a$ corresponds to the speed of adjustment to the mean $b$, and
+$\sigma$ the volatility. The drift factor $a(b-r_{t})$ is the same as in the
+Vasiček model, ensuring [[mean-reversion]] of the interest rate towards the
+long run value $b$, with speed of adjustment governed by the strictly positive
+$a$.
+
+The standard deviation factor $\sigma \sqrt{  r_{t} }$ avoids the possibility
+of negative interest rates for all positive values of $a$ and $b$. Generally,
+when the rate $r_{t}$ is close to zero, the standard deviation
+$\sigma \sqrt{  r_{t} }$ becomes very small, dampening the effect of the random
+shock on the rate. Consequently, when the rate gets close to zero, its
+evolution becomes dominated by the drift factor which pushes the rate upwards
+towards equilibrium.
+
+The process is used in the [[heston-model]] used to model stochastic
+volatility.
+
+### Distribution
+
+In this model, the probability density of interest rate at time $t$ conditional
+on its value at the current time $s$ is given by
+$$
+f(r_{t}|r_{s}, s)=ce^{-u-v}\left(  \frac{v}{u} \right)^{q/2}I_{q}(2\sqrt{  uv }),
+$$
+where 
+$$
+\begin{cases}
+c= \frac{2a}{\sigma^2(1-e^{-a(t-s)})} \\
+u=cr_{s}e^{-a(t-s)} \\
+v=cr_{t} \\
+q= \frac{2ab}{\sigma^2}-1,
+\end{cases}
+$$
+and $I_{q}(\cdot)$ is the modified Basel function of the first kind of order
+$q$ defined as
+$$
+I_{q}(z) = \left(  \frac{z}{2} \right)^q \sum_{k=0}^\infty \frac{1}{ \Gamma(k+1)\Gamma(z+k+1)}\left(  \frac{z}{2} \right)^2k.
+$$

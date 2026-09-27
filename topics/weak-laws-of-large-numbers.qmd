@@ -1,0 +1,104 @@
+---
+title: Weak Laws of Large Numbers
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+The **Weak Law(s) of Large Numbers (WLLN)** are a family of results in
+probability theory that describe the **convergence in probability** of the
+sample average of a sequence of random variables to the expected value (if it
+exists), as the sample size grows.
+
+The most commonly stated result is for sequences of i.i.d. random variables
+with common finite mean and finite variance. This is simple to prove using the
+[[chebychev-inequality]].
+
+:::{.theorem data-title="Weak Law of Large Numbers"}
+
+Given a collection of i.i.d. samples $X_{1}, \dots, X_{n}$ from a random
+variable with finite mean $\mathbb{E}[X_{i}]=\mu$ and finite variance
+$\operatorname{Var}(X_{i})=\sigma^2<\infty$ the sample mean
+[[convergence-of-random-variables|converges in probability and $L_2$]] to $\mu$
+i.e.
+$$
+\frac{S_{n}}{n} \stackrel{L_{2}~\&~\mathbb{P}}{\to}\mu\quad (n\to \infty),
+$$
+that is, for any positive number $\epsilon$ we have
+$\lim_{ n \to \infty }\mathbb{P}(|\bar{X}_{n}-\mu|<\epsilon)=1$.
+
+:::
+
+*Proof:*
+	First, note that $\mathbb{E}\left[ \frac{S_{n}}{n} \right]= \frac{1}{n}\sum_{i=1}^n\mu=\mu$ and that $$\operatorname{Var}\left(  \frac{S_{n}}{n} \right)= \frac{1}{n^2}\operatorname{Var}\left(  \sum_{i=1}^n X_{i} \right)=\frac{1}{n^2}\sum_{i=1}^n\operatorname{Var}(X_{i})= \frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.$$Fixing $\epsilon>0$ we apply [[chebychev-inequality]] and find that $$\lim_{ n \to \infty } \mathbb{P}\left(  \left| \frac{S_{n}}{n} -\mu\right| \geq \epsilon \right)\leq \lim_{ n \to \infty } \frac{\operatorname{Var}(S_{n})}{\epsilon ^2}=\lim_{ n \to \infty } \frac{\sigma^2}{n\epsilon ^2}=0,$$completing the proof. $\square$
+
+A slightly broader result weakens the assumption to uncorrelated random
+variables with bounded variance.
+
+:::{.theorem data-title="$L_2$ Weak Law of Large Numbers"}
+
+Given a collection $X_{1}, X_{2}, \dots$ of uncorrelated random variables with
+$\mathbb{E}[X_{i}]=\mu$ and $\text{Var}(X_{i})\leq C<\infty$ then
+$$
+\frac{S_{n}}{n} \stackrel{L_{2}~\&~\mathbb{P}}{\to}\mu\quad (n\to \infty).
+$$
+
+:::
+
+*Proof:*
+	Similarly, we simply have that
+ $$
+ \mathbb{E}\left\lvert   \frac{S_{n}}{n}-\mu  \right\rvert ^2=\text{Var}\left(  \frac{S_{n}}{n} \right)=n^{-2}\text{Var}(S_{n})=n^{-2}\sum_{i=1}^n \text{Var}(X_{i})\leq  n^{-2}\cdot n\cdot C \to 0,
+ $$
+ completing the proof. $\square$
+
+Next we state the most general version of the weak law of large numbers which
+gives the sufficient and necessary conditions for convergence in norm and
+probability of the sample mean.
+
+:::{.theorem data-title="General Weak Law of Large Numbers"}
+
+For independent random variables $\{  X_{n} \}$ if:
+1. $\sum_{j=1}^n \mathbb{P}(\lvert  X_{j} \rvert>n)\to 0$ as $n \to \infty$;
+   and
+2. $\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to 0$
+   as $n \to \infty$,
+then we define
+$a_{n}:=\sum_{j=1}^n \mathbb{E}[X_{j}\mathbb{1}_{\lvert X_{j} \rvert\leq n}]$
+and $\frac{{S_n-a_n}}{n}\stackrel{\mathbb{P}}{\to}0$ as $n \to \infty$.
+
+:::
+
+*Proof:*
+
+There are several versions of the [[weak-laws-of-large-numbers]] that adjust
+the assumptions required (such as [[khinchines-wlln]]). One such version is
+**Feller's WLLN** which drops the often restrictive first moment assumption.
+
+:::{.theorem data-title="Feller's Weak Law of Large Numbers"}
+
+Let $\{  X_{n} \}$ be a sequence of i.i.d. random variables such that
+$\lim_{_{x \to \infty}}x\mathbb{P}(\lvert  X_{1} \rvert>x)=0$. Then
+$$
+\frac{S_{n}}{n}-\mathbb{E}[X_{1}\mathbb{1}_{\lvert X_{1} \rvert \leq  n}]\stackrel{\mathbb{P}}{\to}0\quad \text{as}\quad n \to \infty.
+$$
+
+:::
+
+*Proof:*
+
+**Khinchine's WLLN** gives a version of the [[weak-laws-of-large-numbers]] for
+i.i.d. sequences under the finite first moment assumption.
+
+:::{.theorem data-title="Khinchine's Weak Law of Large Numbers"}
+
+Let $\{  X_{n} \}$ be a sequence of i.i.d. random variables such that
+$\mathbb{E}[\lvert X_{j} \rvert]< \infty$, and $E[X_{j}]=\mu$. Then
+$$
+\frac{S_{n}}{n}\stackrel{\mathbb{P}}{\to}\mu\quad\text{as}\quad n \to \infty.
+$$
+
+:::
+
+*Proof:*

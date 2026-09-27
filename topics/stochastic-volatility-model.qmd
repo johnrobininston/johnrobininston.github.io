@@ -1,0 +1,153 @@
+---
+title: Stochastic Volatility Model
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Structure
+We introduce the general framework of the stochastic volatility model where
+$\sigma_{t}=f(Y_{t})$ is the volatility process and $\{Y_{t}\}$ has dynamics
+given by
+$$
+dY_{t}=\alpha(Y_{t})dt+\beta(Y_{t})dW_{t}^1,
+$$
+the stock price $\{S_{t}\}$ has dynamics given by
+$$
+dS_{t}=\mu(Y_{t})S_{t}dt+\sigma_{t}S_{t}dW_{t}^0,
+$$
+and Brownian Motions $W^0, W^1$ have a given correlation coefficient $\rho$.
+Equivalently
+$$
+W^1=\rho W^0+\sqrt{ 1-\rho^2 }W^\perp,
+$$
+for independent BM $W^0, W^\perp$.
+
+Under risk-neutral pricing, we wish to find $\mathbb{Q}$ under which
+$\{e^{-rt}S_{t}\}$ is a martingale. A similar application of
+[[girsanovs-theorem]] tells us
+$$
+\begin{align}
+dS_{t} & =rS_{t}dt+(\mu(Y_{t})-r)S_{t}dt+f(Y_{t})S_{t}dW_{t}^0  \\
+ & = r S_{t}dt+f(Y_{t})S_{t}dW_{t}^{0,\mathbb{Q}},
+\end{align}
+$$
+so $\mathbb{Q}$ is chosen such that
+$$
+W_{t}^{0,\mathbb{Q}}=W_{t}^0+\int _{0}^t \frac{{\mu(Y_{s})-r}}{f(Y_{s})} \, ds 
+$$
+is a BM under $\mathbb{Q}$. Different from BS model, in stochastic volatility
+model we also have the dynamics for $\{Y_{t}\}$ which we shall care about under
+the change of measure. Luckily
+$$
+W_{t}^{\perp,\mathbb{Q}}=W_{t}^\perp+ \int _{0}^t\gamma_{s} \, ds 
+$$
+as a BM under $\mathbb{Q}$ does not change the drift term in the stock price
+dynamics. As a result, different $\{\gamma_{t}\}$ can be chosen to do the
+change of measure and they result in $W^{0,\mathbb{Q}}$ and
+$W^{\perp,\mathbb{Q}}$ being independent BM under $\mathbb{Q}$. Thus it is
+necessary to denote the risk neutral measure as $\mathbb{Q}^{(\gamma)}$ as it
+is induced by the choice of $\{\gamma_{t}\}$.
+
+The [[radon-nikodym-derivative]] is then
+$$
+\frac{{d\mathbb{Q}^{(\gamma)}}}{d\mathbb{P}}=\exp\left( -\int _{0}^T \frac{{\mu(Y_{s})-r}}{f(Y_{s})} \, dW_{s}^0 - \frac{1}{2}\int _{0}^T \left(\frac{{\mu(Y_{s})-r}}{f(Y_{s})}\right)^2 \, ds - \int _{0}^T\gamma_{s} \, dW_{s}^\perp - \frac{1}{2 }\int _{0}^T \gamma_{s}^2 \, ds    \right),
+$$
+from Girsanov's theorem and it remains as an issue whether the condition of
+Girsanov holds. Here we assume that its always legitimate by force e.g. the
+**stochastic Sharpe ratio** $\frac{{\mu(Y_{t})-r}}{f(Y_{t})}$ is always almost
+surely bounded bounded (which is not necessarily true in practice).
+
+### Incompleteness
+In the BS model the risk-neutral measure $\mathbb{Q}$ always exists and is
+unique, implying that the market is complete, however in the Stochastic
+Volatility Model, the risk-neutral measure is not unique (since any choice of
+$\{\gamma_{t}\}$ results in a risk-neutral measure) and so the market is
+incomplete. Intuitively, this is due to the fact that there is only one stock
+in the market but there are two independent BM (two sources of randomness)
+leading to the failure of exact replication. This is equivalent to the second
+fundamental theorem of asset pricing which states that the market is complete
+iff the number of independent stocks equal the number of independent sources of
+randomness.
+
+### Total Risk Premium
+Under the risk-neutral measure $\mathbb{Q}^{(\gamma)}$, the dynamics of
+$\{S_{t}\}$ now becomes
+$$
+dS_{t}=rS_{t}dt+f(Y_{t})S_{t}dW_{t}^{0, \mathbb{Q}^{(\gamma)}},
+$$
+and the dynamics if $\{Y_{t}\}$ now becomes
+$$
+\begin{align}
+dY_{t} & =\alpha(Y_{t})dt+\rho \beta(Y_{t})dW_{t}^{0,\mathbb{Q}^{(\gamma)}}-\rho \beta(Y_{t}) \frac{{\mu(Y_{t})-r}}{f(Y_{t})}dt+\sqrt{ 1-\rho^2 }\beta(Y_{t})dW_{t}^{\perp,\mathbb{Q}^{(\gamma)}}-\sqrt{ 1-\rho^2 }\beta(Y_{t})\gamma_{t}dt \\
+& = \left[  \alpha(Y_{t})-\rho \beta(Y_{t}) \frac{{\mu(Y_{t})-r}}{f(Y_{t})}-\sqrt{ {1-\rho^2} }\beta(Y_{t})\gamma_{t} \right]dt+\beta(Y_{t})dW_{t}^{1,\mathbb{Q}^{(\gamma)}},
+\end{align}
+$$
+where
+$$
+W_{t}^{1,\mathbb{Q}^{(\gamma)}}=\rho W_{t}^{0,\mathbb{Q}^{(\gamma)}}+\sqrt{ {1-\rho^2} }W_{t}^{\perp,\mathbb{Q}^{(\gamma)}}.
+$$
+We define the **total risk premium** as
+$$
+\Lambda_{t}=\frac{\rho {\mu(Y_{t})-r}}{f(Y_{t})}+\sqrt{ 1-\rho^2 }\gamma_{t}.
+$$
+The dynamics of $\{Y_{t}\}$ under the risk-neutral measure is
+$$
+dY_{t}=(\alpha(Y_{t})-\beta(Y_{t})\Lambda_{t})dt+\beta(Y_{t})dW_{t}^{1,\mathbb{Q}^{(\gamma)}},
+$$
+the change of measure is finished for now and it's time to price the option
+under the stochastic volatility model.
+
+*Remark: $\{\gamma_{t}\}$ is called the volatility risk premium or market price
+or volatility risk and it parameterizes the space of all risk-neutral measures.
+The total risk premium is just an average of the stochastic Sharpe ratio and
+the volatility risk premium.*
+
+### Option Pricing
+A fixed $\{\gamma_{t}\}$ induces the risk-neutral measure
+$\mathbb{Q}^{(\gamma)}$ and if the payoff function is $h(S_{[0,T]})$ then the
+arbitrage-free value of the option at time $t$ is given by
+$$
+e^{r(T-t)}\mathbb{E}_{{\mathbb{Q}^{(\gamma)}}}[h(S_{[0,T]})|\mathcal{F}_t]
+$$
+under the logic of risk-neutral pricing. Obviously the selection of
+$\{\gamma_{t}\}$ is not unique so this leads to a family of arbitrage-free
+prices of the option, not a single value.
+
+#### Exponential Ornstein-Uhlenbeck Model
+
+Differing out choice of $f,\alpha, \beta,\Lambda$ leads to different stochastic
+volatility models. Empirically, volatility is observed to have mean-reverting
+pattern so it is natural to set up
+[[ornstein-uhlenbeck-process|Ornstein-Uhlenbeck]] dynamics for $\{Y_{t}\}$
+together with $\Lambda=0$, $f(y)=e^y$. This is the **Exponential
+Ornstein-Uhlenbeck Model** and under this specific risk-neutral measure
+$\mathbb{Q}$ induced by $\Lambda$ we have
+$$
+\begin{align}
+dS_{t} & =rS_{t}dt+e^{Y_{t}}S_{t}dW_{t}^{0,\mathbb{Q}} \\
+dY_{t} & = \alpha(m-Y_{t})dt+\beta W_{t}^{1,\mathbb{Q}}
+\end{align}
+$$
+where $W^{0,\mathbb{Q}}$, $W^{1,\mathbb{Q}}$ have correlation coefficient
+$\rho$.
+
+#### [[heston-model]]
+
+Alternatively, we could use [[cox-ingersoll-ross-cir-model]] as the dynamics of
+$\{Y_{t}\}$ together with $\Lambda=0$, $f(y)=\sqrt{ {y} }$. This is the
+**Heston Model** and under this specific risk-neutral measure $\mathbb{Q}$ we
+have
+$$
+\begin{align}
+dS_{t} & = rS_{t} dt+\sqrt{ Y_{t} }S_{t}dW_{t}^{0,\mathbb{Q}} \\
+dY_{t} & = \alpha(m-Y_{t})dt+\beta \sqrt{ Y_{t} }W_{t}^{1,\mathbb{Q}},
+\end{align}
+$$
+where $W^{0,\mathbb{Q}}$, $W^{1,\mathbb{Q}}$ have correlation coefficient
+$\rho$.
+
+The Heston model is popular since under the PDE approach, after log transform,
+one gets a PDE with constant coefficient, solvable through
+[[fourier-transform]].

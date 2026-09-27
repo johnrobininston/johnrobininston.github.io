@@ -1,0 +1,70 @@
+---
+title: Dominated Convergence Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Dominated Convergence Theorem
+
+Lebesgue's **Dominated Convergence Theorem** gives a sufficient condition for
+when the limits and integrals of a sequence of functions can be exchanged. More
+technically it says that if a sequence of functions is **bounded in absolute
+value by an integrable function** and is **almost everywhere point wise
+convergent to a function** then the sequence converges in $L_{1}$ to its point
+wise limit, and in particular the integral of the limit is the limit of the
+integrals.
+
+## Dominated Convergence Theorem (Lebesgue Integrals)
+
+:::{.theorem data-title="Dominated Convergence Theorem"}
+
+Suppose $f_{n}:\mathbb{R} \to [-\infty, \infty]$ are (Lebesgue) measurable
+functions such that the pointwise limit $f(x)=\lim_{ n \to \infty }f_{n}(x)$
+exists. Assume there is an integrable $g:\mathbb{R} \to [0,\infty]$ with
+$\lvert f_{n}(x) \rvert\leq g(x)$ for each $x \in \mathbb{R}$. Then $f$ is
+integrable as is $f_{n}$ for each $n$, and
+$$
+\lim_{ n \to \infty }\int_{\mathbb{R}}^{}{f_{n}}~d{\mu}=\int_{\mathbb{R}}^{}{\lim_{ n \to \infty } f_{n}}~d{\mu}=\int_{\mathbb{R}}^{}{f}~d{\mu}.
+$$
+
+:::
+
+*PROOF:*
+
+
+## Dominated Convergence Theorem (Random Variables)
+
+:::{.theorem data-title="Dominated Convergence Theorem (Random Variables)"}
+
+For sequence of random variables $\{ X_{n} \}$ such that the pointwise limit
+exists i.e. $X(\omega)=\lim_{n\to \infty}X_{n}(\omega),~\forall \omega$, and is
+dominated by an integrable random variable $Y$ fpr every $n \geq 1$ i.e.
+$\lvert X_{n}(\omega) \rvert\leq Y(\omega)$ and $\mathbb{E}Y<\infty$, then $X$
+is integrable and
+$$
+\lim_{n \to \infty}\mathbb{E}[X_{n}]=\mathbb{E}\left[\lim_{n\to \infty} X_{n}\right]=\mathbb{E}[X].
+$$
+
+:::
+
+*Proof:* Since $-Y\leq X_{n}\leq Y$ we have that $X_{n}+Y\geq 0$ and
+$-X_{n}+Y \geq 0$ almost everywhere, and hence applying [[fatous-lemma]] we
+have that
+$$
+\begin{align}
+\mathbb{E}[X+Y] & \leq \liminf_{n \to \infty}{\mathbb{E}[X_{n}+Y]} \\
+\mathbb{E}[-X+Y] & \leq \liminf_{n \to \infty}{\mathbb{E}[X_{n}+Y]}.
+\end{align}
+$$
+Since $Y$ is integrable, we have that
+$$
+\begin{align}
+\mathbb{E}[X] & \leq \liminf_{n\to \infty}{\mathbb{E}[X_{n}]} \\
+\mathbb{E}[-X] & \leq \liminf_{n \to \infty}{\mathbb{E}[-X_{n}]}\implies \mathbb{E}[X]\geq \limsup_{n \to \infty}{\mathbb{E}[X_{n}]},
+\end{align}
+$$
+and since
+$\liminf_{n \to \infty}{\mathbb{E}[X_{n}]}=\limsup_{n \to \infty}{\mathbb{E}[X_{n}]}$
+we obtain equality. $\square$

@@ -1,0 +1,44 @@
+---
+title: Wavelet Analysis
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Wavelet Analysis
+Fourier-based tools ([[spectral-distributions|spectral density]],
+[[periodogram-and-spectral-estimation|periodogram]]) assume the frequency
+content of a series is constant over time (stationarity). Many real series —
+financial volatility, climate signals, EEG — have time-varying frequency
+content, motivating **wavelet analysis**, which decomposes a signal jointly in
+time and scale (frequency).
+
+:::{.definition data-title="Continuous Wavelet Transform"}
+
+Given a mother wavelet $\psi$ (a localized, oscillating, mean-zero function),
+the **continuous wavelet transform** of $x(t)$ is
+$$
+W(a,b) = \frac{1}{\sqrt{a}}\int x(t)\,\overline{\psi\!\left(\frac{t-b}{a}\right)}\,dt,
+$$
+where $a>0$ is the scale (inverse frequency) and $b$ is the time location.
+$|W(a,b)|^2$ is the **wavelet power spectrum**, showing how power at scale $a$
+evolves through time — a time-localized analogue of the periodogram.
+
+:::
+
+**Discrete wavelet transform (DWT).** Using dyadic scales $a=2^j$ and an
+orthonormal wavelet basis, the DWT decomposes a series of length $n$ into
+detail coefficients at each scale $j$ (capturing variation at resolution $2^j$)
+plus a smooth approximation, analogous to a multiresolution version of
+[[time-series-decomposition]].
+
+**Applications.** Detecting and localizing structural breaks or regime changes
+(complementing [[regime-switching-models]]), denoising, multiresolution
+analysis of realized volatility, and time-frequency analysis of macroeconomic
+and climate series.
+
+### References
+- [[spectral-distributions]]
+- [[periodogram-and-spectral-estimation]]
+- [[time-series-analysis]]

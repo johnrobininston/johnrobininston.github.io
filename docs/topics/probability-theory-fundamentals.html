@@ -474,8 +474,10 @@ window.Quarto = {
 <ol type="1">
 <li><strong>Non-negativity:</strong> <span class="math inline">\(\mathbb{P}(A) \geq 0\)</span> for every event <span class="math inline">\(A\)</span>.</li>
 <li><strong>Normalization:</strong> <span class="math inline">\(\mathbb{P}(\Omega) = 1\)</span>.</li>
-<li><strong>Countable additivity:</strong> for pairwise disjoint events <span class="math inline">\(A_1, A_2, \dots\)</span>, <span class="math display">\[\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) =
-\sum_{i=1}^\infty \mathbb{P}(A_i).\]</span></li>
+<li><strong>Countable additivity:</strong> for pairwise disjoint events <span class="math inline">\(A_1, A_2, \dots\)</span>, <span class="math display">\[
+\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) =
+\sum_{i=1}^\infty \mathbb{P}(A_i).
+\]</span></li>
 </ol>
 </div>
 <p>Immediate consequences:</p>
@@ -491,8 +493,10 @@ window.Quarto = {
 <p>The following results are immediate consequences of the axioms of probability. They serve as the basic toolkit for computing probabilities of events.</p>
 <p>The Addition Law (Inclusion-Exclusion) is used to compute the probability of a union of events.</p>
 <div class="theorem" data-title="Addition Law (Inclusion–Exclusion)">
-<p>For any two events <span class="math inline">\(A, B\)</span>: <span class="math display">\[\mathbb{P}(A \cup B) = \mathbb{P}(A) +
-\mathbb{P}(B) - \mathbb{P}(A \cap B).\]</span> If <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are mutually exclusive, this reduces to <span class="math inline">\(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)\)</span>.</p>
+<p>For any two events <span class="math inline">\(A, B\)</span>: <span class="math display">\[
+\mathbb{P}(A \cup B) = \mathbb{P}(A) +
+\mathbb{P}(B) - \mathbb{P}(A \cap B).
+\]</span> If <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are mutually exclusive, this reduces to <span class="math inline">\(\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)\)</span>.</p>
 </div>
 <div class="proof">
 <p><span class="proof-title"><em>Proof</em>. </span>Clearly we have that <span class="math display">\[
@@ -508,37 +512,57 @@ window.Quarto = {
 </div>
 <p>The multiplication law is used to compute the probability of an intersection of events, and is the basis for conditional probability.</p>
 <div class="theorem" data-title="Multiplication Law">
-<p>For any two events with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>: <span class="math display">\[\mathbb{P}(A \cap B) =
-\mathbb{P}(A \mid B)\,\mathbb{P}(B) = \mathbb{P}(B \mid A)\,\mathbb{P}(A).\]</span> More generally, for events <span class="math inline">\(A_1, \dots, A_n\)</span> (<strong>chain rule</strong>): <span class="math display">\[\mathbb{P}(A_1 \cap \cdots \cap A_n) = \mathbb{P}(A_1)\,
+<p>For any two events with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>: <span class="math display">\[
+\mathbb{P}(A \cap B) =
+\mathbb{P}(A \mid B)\,\mathbb{P}(B) = \mathbb{P}(B \mid A)\,\mathbb{P}(A).
+\]</span> More generally, for events <span class="math inline">\(A_1, \dots, A_n\)</span> (<strong>chain rule</strong>): <span class="math display">\[
+\mathbb{P}(A_1 \cap \cdots \cap A_n) = \mathbb{P}(A_1)\,
 \mathbb{P}(A_2 \mid A_1)\,\mathbb{P}(A_3 \mid A_1 \cap A_2) \cdots
-\mathbb{P}(A_n \mid A_1 \cap \cdots \cap A_{n-1}).\]</span></p>
+\mathbb{P}(A_n \mid A_1 \cap \cdots \cap A_{n-1}).
+\]</span></p>
 </div>
 <div class="theorem" data-title="De Morgan's Laws">
-<p><span class="math display">\[(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.\]</span> These let you rewrite unions of events as complements of intersections (and vice versa) — useful for computing <span class="math inline">\(\mathbb{P}(\text{at least one})\)</span> via <span class="math inline">\(1 - \mathbb{P}(\text{none})\)</span>. See [[De Morgan’s Laws]] for the general set-theoretic statement.</p>
+<p><span class="math display">\[
+(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.
+\]</span> These let you rewrite unions of events as complements of intersections (and vice versa) — useful for computing <span class="math inline">\(\mathbb{P}(\text{at least one})\)</span> via <span class="math inline">\(1 - \mathbb{P}(\text{none})\)</span>. See [[De Morgan’s Laws]] for the general set-theoretic statement.</p>
 </div>
 <div class="theorem" data-title="De Moivre–Laplace Theorem">
-<p>A classical precursor to the CLT: if <span class="math inline">\(X \sim \text{Binomial}(n,p)\)</span>, then for large <span class="math inline">\(n\)</span> the standardized binomial is approximately standard normal, <span class="math display">\[\frac{X - np}{\sqrt{np(1-p)}} \approx N(0,1).\]</span> This is the special case of the [[Central Limit Theorem]] for sums of Bernoulli trials, and historically the first CLT result proved.</p>
+<p>A classical precursor to the CLT: if <span class="math inline">\(X \sim \text{Binomial}(n,p)\)</span>, then for large <span class="math inline">\(n\)</span> the standardized binomial is approximately standard normal, <span class="math display">\[
+\frac{X - np}{\sqrt{np(1-p)}} \approx N(0,1).
+\]</span> This is the special case of the <a href="../topics/central-limit-theorem.html">Central Limit Theorem</a> for sums of Bernoulli trials, and historically the first CLT result proved.</p>
 </div>
 </section>
 <section id="conditional-probability" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="conditional-probability"><span class="header-section-number">4</span> Conditional Probability</h2>
 <div class="definition" data-title="Conditional Probability">
-<p>For events <span class="math inline">\(A, B\)</span> with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>, the probability of <span class="math inline">\(A\)</span> given that <span class="math inline">\(B\)</span> has occurred is <span class="math display">\[\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.\]</span></p>
+<p>For events <span class="math inline">\(A, B\)</span> with <span class="math inline">\(\mathbb{P}(B) &gt; 0\)</span>, the probability of <span class="math inline">\(A\)</span> given that <span class="math inline">\(B\)</span> has occurred is <span class="math display">\[
+\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.
+\]</span></p>
 </div>
 <ul>
 <li><span class="math inline">\(\mathbb{P}(\cdot \mid B)\)</span> is itself a valid probability measure (satisfies the Kolmogorov axioms) on <span class="math inline">\(\Omega\)</span>.</li>
-<li><strong>Independence:</strong> <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> iff <span class="math display">\[\mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A).\]</span> Events <span class="math inline">\(A_1,\dots,A_n\)</span> are <strong>mutually independent</strong> if this factorization holds for every subcollection, not just pairwise.</li>
+<li><strong>Independence:</strong> <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are <strong>independent</strong> iff <span class="math display">\[
+\mathbb{P}(A \cap B) = \mathbb{P}(A)\,\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A).
+\]</span> Events <span class="math inline">\(A_1,\dots,A_n\)</span> are <strong>mutually independent</strong> if this factorization holds for every subcollection, not just pairwise.</li>
 </ul>
 <div class="theorem" data-title="Law of Total Probability">
-<p>If <span class="math inline">\(\{B_1, \dots, B_n\}\)</span> partitions <span class="math inline">\(\Omega\)</span> with <span class="math inline">\(\mathbb{P}(B_i) &gt; 0\)</span>, then for any event <span class="math inline">\(A\)</span>: <span class="math display">\[\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i).\]</span></p>
+<p>If <span class="math inline">\(\{B_1, \dots, B_n\}\)</span> partitions <span class="math inline">\(\Omega\)</span> with <span class="math inline">\(\mathbb{P}(B_i) &gt; 0\)</span>, then for any event <span class="math inline">\(A\)</span>: <span class="math display">\[
+\mathbb{P}(A) = \sum_{i=1}^n \mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i).
+\]</span></p>
 </div>
 <div class="theorem" data-title="Bayes' Theorem">
-<p><span class="math display">\[\mathbb{P}(A \mid B) = \frac{\mathbb{P}(B \mid A)\,\mathbb{P}(A)}{\mathbb{P}(B)},\]</span> and combined with the law of total probability, for a partition <span class="math inline">\(\{B_1,\dots,B_n\}\)</span>: <span class="math display">\[\mathbb{P}(B_i \mid A) = \frac{\mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i)}{\sum_j \mathbb{P}(A \mid B_j)\,\mathbb{P}(B_j)}.\]</span></p>
+<p><span class="math display">\[
+\mathbb{P}(A \mid B) = \frac{\mathbb{P}(B \mid A)\,\mathbb{P}(A)}{\mathbb{P}(B)},
+\]</span> and combined with the law of total probability, for a partition <span class="math inline">\(\{B_1,\dots,B_n\}\)</span>: <span class="math display">\[
+\mathbb{P}(B_i \mid A) = \frac{\mathbb{P}(A \mid B_i)\,\mathbb{P}(B_i)}{\sum_j \mathbb{P}(A \mid B_j)\,\mathbb{P}(B_j)}.
+\]</span></p>
 </div>
 <div class="example" data-title="Medical test">
-<p>Suppose a disease affects <span class="math inline">\(1\%\)</span> of a population, and a test is <span class="math inline">\(95\%\)</span> sensitive (<span class="math inline">\(\mathbb{P}(+\mid D)=0.95\)</span>) and <span class="math inline">\(90\%\)</span> specific (<span class="math inline">\(\mathbb{P}(-\mid D^c)=0.90\)</span>, so <span class="math inline">\(\mathbb{P}(+\mid D^c)=0.10\)</span>). If a randomly chosen person tests positive, Bayes’ theorem gives <span class="math display">\[\mathbb{P}(D \mid +) = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.10 \times 0.99} \approx 0.088.\]</span> A positive result still implies under a <span class="math inline">\(9\%\)</span> chance of disease — the low base rate dominates the test’s accuracy.</p>
+<p>Suppose a disease affects <span class="math inline">\(1\%\)</span> of a population, and a test is <span class="math inline">\(95\%\)</span> sensitive (<span class="math inline">\(\mathbb{P}(+\mid D)=0.95\)</span>) and <span class="math inline">\(90\%\)</span> specific (<span class="math inline">\(\mathbb{P}(-\mid D^c)=0.90\)</span>, so <span class="math inline">\(\mathbb{P}(+\mid D^c)=0.10\)</span>). If a randomly chosen person tests positive, Bayes’ theorem gives <span class="math display">\[
+\mathbb{P}(D \mid +) = \frac{0.95 \times 0.01}{0.95 \times 0.01 + 0.10 \times 0.99} \approx 0.088.
+\]</span> A positive result still implies under a <span class="math inline">\(9\%\)</span> chance of disease — the low base rate dominates the test’s accuracy.</p>
 </div>
-<p>Interpreted as <strong>prior</strong> <span class="math inline">\(\mathbb{P}(B_i)\)</span>, <strong>likelihood</strong> <span class="math inline">\(\mathbb{P}(A \mid B_i)\)</span>, and <strong>posterior</strong> <span class="math inline">\(\mathbb{P}(B_i \mid A)\)</span>; this is the seed of all Bayesian inference. See [[Bayes’ Theorem]] and, for the statistical-inference framework built on it, [[Bayesian Inference]] / [[Bayesian Statistics]].</p>
+<p>Interpreted as <strong>prior</strong> <span class="math inline">\(\mathbb{P}(B_i)\)</span>, <strong>likelihood</strong> <span class="math inline">\(\mathbb{P}(A \mid B_i)\)</span>, and <strong>posterior</strong> <span class="math inline">\(\mathbb{P}(B_i \mid A)\)</span>; this is the seed of all Bayesian inference. See [[Bayes’ Theorem]] and, for the statistical-inference framework built on it, <a href="../topics/bayesian-inference.html">Bayesian Inference</a> / <a href="../topics/bayesian-statistics.html">Bayesian Statistics</a>.</p>
 </section>
 <section id="random-variables" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">5</span> Random Variables</h2>
@@ -549,19 +573,25 @@ window.Quarto = {
 <li><strong>continuous</strong> if it takes values in an uncountable set (typically an interval) and its CDF is (absolutely) continuous.</li>
 </ul>
 </div>
-<p>The rigorous, measure-theoretic definition (requiring <span class="math inline">\(X\)</span> to be measurable) is in [<a href="#random-variables">Random Variables</a>] and <a href="../topics/random-variables.html">Random Variables and Distribution Functions</a>.</p>
+<p>The rigorous, measure-theoretic definition (requiring <span class="math inline">\(X\)</span> to be measurable) is in [<a href="#random-variables">Random Variables</a>] and <a href="../topics/random-variables-and-distribution-functions.html">Random Variables and Distribution Functions</a>.</p>
 <section id="probability-mass-function-pmf" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="probability-mass-function-pmf"><span class="header-section-number">5.1</span> Probability Mass Function (PMF)</h3>
-<p>For a discrete random variable <span class="math inline">\(X\)</span>, the <strong>PMF</strong> is <span class="math display">\[p_X(x) = \mathbb{P}(X = x),\]</span> satisfying <span class="math inline">\(p_X(x) \geq 0\)</span> and <span class="math inline">\(\sum_x p_X(x) = 1\)</span>.</p>
+<p>For a discrete random variable <span class="math inline">\(X\)</span>, the <strong>PMF</strong> is <span class="math display">\[
+p_X(x) = \mathbb{P}(X = x),
+\]</span> satisfying <span class="math inline">\(p_X(x) \geq 0\)</span> and <span class="math inline">\(\sum_x p_X(x) = 1\)</span>.</p>
 </section>
 <section id="probability-density-function-pdf" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="probability-density-function-pdf"><span class="header-section-number">5.2</span> Probability Density Function (PDF)</h3>
-<p>For a continuous random variable <span class="math inline">\(X\)</span>, the <strong>PDF</strong> <span class="math inline">\(f_X(x) \geq 0\)</span> satisfies <span class="math display">\[\mathbb{P}(a \leq X \leq b) = \int_a^b f_X(x)\,dx, \qquad \int_{-\infty}^{\infty} f_X(x)\,dx = 1.\]</span> Note <span class="math inline">\(f_X(x)\)</span> is a <em>density</em>, not a probability — <span class="math inline">\(\mathbb{P}(X = x) = 0\)</span> for any single point <span class="math inline">\(x\)</span> when <span class="math inline">\(X\)</span> is continuous.</p>
+<p>For a continuous random variable <span class="math inline">\(X\)</span>, the <strong>PDF</strong> <span class="math inline">\(f_X(x) \geq 0\)</span> satisfies <span class="math display">\[
+\mathbb{P}(a \leq X \leq b) = \int_a^b f_X(x)\,dx, \qquad \int_{-\infty}^{\infty} f_X(x)\,dx = 1.
+\]</span> Note <span class="math inline">\(f_X(x)\)</span> is a <em>density</em>, not a probability — <span class="math inline">\(\mathbb{P}(X = x) = 0\)</span> for any single point <span class="math inline">\(x\)</span> when <span class="math inline">\(X\)</span> is continuous.</p>
 </section>
 <section id="cumulative-distribution-function-cdf" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="cumulative-distribution-function-cdf"><span class="header-section-number">5.3</span> Cumulative Distribution Function (CDF)</h3>
 <div class="definition" data-title="CDF">
-<p>For any random variable <span class="math inline">\(X\)</span> (discrete or continuous): <span class="math display">\[F_X(x) = \mathbb{P}(X \leq x).\]</span> Properties: <span class="math inline">\(F_X\)</span> is non-decreasing, right-continuous, <span class="math inline">\(\lim_{x \to -\infty} F_X(x) = 0\)</span>, <span class="math inline">\(\lim_{x \to \infty} F_X(x) = 1\)</span>.</p>
+<p>For any random variable <span class="math inline">\(X\)</span> (discrete or continuous): <span class="math display">\[
+F_X(x) = \mathbb{P}(X \leq x).
+\]</span> Properties: <span class="math inline">\(F_X\)</span> is non-decreasing, right-continuous, <span class="math inline">\(\lim_{x \to -\infty} F_X(x) = 0\)</span>, <span class="math inline">\(\lim_{x \to \infty} F_X(x) = 1\)</span>.</p>
 <ul>
 <li>Discrete case: <span class="math inline">\(F_X(x) = \sum_{t \leq x} p_X(t)\)</span> (a step function).</li>
 <li>Continuous case: <span class="math inline">\(F_X(x) = \int_{-\infty}^x f_X(t)\,dt\)</span>, and where <span class="math inline">\(F_X\)</span> is differentiable, <span class="math inline">\(f_X(x) = F_X'(x)\)</span>.</li>
@@ -573,34 +603,46 @@ window.Quarto = {
 <section id="expectation" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="expectation"><span class="header-section-number">6</span> Expectation</h2>
 <div class="definition" data-title="Expectation">
-<p>The <strong>expected value</strong> (mean) of a random variable is <span class="math display">\[\mathbb{E}[X] = \sum_x x\, p_X(x) \quad \text{(discrete)}, \qquad \mathbb{E}[X] = \int_{-\infty}^\infty x\, f_X(x)\,dx \quad \text{(continuous)}.\]</span></p>
+<p>The <strong>expected value</strong> (mean) of a random variable is <span class="math display">\[
+\mathbb{E}[X] = \sum_x x\, p_X(x) \quad \text{(discrete)}, \qquad \mathbb{E}[X] = \int_{-\infty}^\infty x\, f_X(x)\,dx \quad \text{(continuous)}.
+\]</span></p>
 </div>
-<p><strong>Law of the Unconscious Statistician (LOTUS):</strong> for a function <span class="math inline">\(g\)</span>, <span class="math display">\[\mathbb{E}[g(X)] = \sum_x g(x)p_X(x) \quad \text{or} \quad \int g(x)f_X(x)\,dx\]</span> — computed <em>without</em> first finding the distribution of <span class="math inline">\(g(X)\)</span>.</p>
-<p><strong>Linearity of expectation</strong> (always holds, independence not required): <span class="math display">\[\mathbb{E}[aX + bY + c] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y] + c.\]</span></p>
-<p>For the fully general, measure-theoretic construction of expectation as a Lebesgue integral, see [<a href="#expectation">Expectation</a>]; for expectation given information / another random variable, see [[Conditional Expectation]].</p>
+<p><strong>Law of the Unconscious Statistician (LOTUS):</strong> for a function <span class="math inline">\(g\)</span>, <span class="math display">\[
+\mathbb{E}[g(X)] = \sum_x g(x)p_X(x) \quad \text{or} \quad \int g(x)f_X(x)\,dx
+\]</span> — computed <em>without</em> first finding the distribution of <span class="math inline">\(g(X)\)</span>.</p>
+<p><strong>Linearity of expectation</strong> (always holds, independence not required): <span class="math display">\[
+\mathbb{E}[aX + bY + c] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y] + c.
+\]</span></p>
+<p>For the fully general, measure-theoretic construction of expectation as a Lebesgue integral, see [<a href="#expectation">Expectation</a>]; for expectation given information / another random variable, see <a href="../topics/conditional-expectation.html">Conditional Expectation</a>.</p>
 <div class="definition" data-title="Variance">
-<p><span class="math display">\[\operatorname{Var}(X) = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.\]</span> The <strong>standard deviation</strong> is <span class="math inline">\(\sigma_X = \sqrt{\operatorname{Var}(X)}\)</span>.</p>
+<p><span class="math display">\[
+\operatorname{Var}(X) = \mathbb{E}\big[(X - \mathbb{E}[X])^2\big] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.
+\]</span> The <strong>standard deviation</strong> is <span class="math inline">\(\sigma_X = \sqrt{\operatorname{Var}(X)}\)</span>.</p>
 </div>
 <p>Properties: <span class="math inline">\(\operatorname{Var}(aX+b) = a^2\operatorname{Var}(X)\)</span>; if <span class="math inline">\(X, Y\)</span> are independent, <span class="math inline">\(\operatorname{Var}(X+Y) = \operatorname{Var}(X)+\operatorname{Var}(Y)\)</span> (in general there’s a covariance cross term, see below).</p>
 <section id="covariance-and-correlation" class="level3" data-number="6.1">
 <h3 data-number="6.1" class="anchored" data-anchor-id="covariance-and-correlation"><span class="header-section-number">6.1</span> Covariance and Correlation</h3>
-<p><span class="math display">\[\operatorname{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].\]</span> <span class="math display">\[\operatorname{Corr}(X,Y) = \rho_{X,Y} = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1,1].\]</span> General bilinear expansion: <span class="math inline">\(\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)\)</span>. If <span class="math inline">\(X \perp Y\)</span> then <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span> (converse not true in general — zero covariance does not imply independence).</p>
+<p><span class="math display">\[
+\operatorname{Cov}(X,Y) = \mathbb{E}[(X-\mathbb{E}[X])(Y-\mathbb{E}[Y])] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y].
+\]</span> <span class="math display">\[
+\operatorname{Corr}(X,Y) = \rho_{X,Y} = \frac{\operatorname{Cov}(X,Y)}{\sigma_X \sigma_Y} \in [-1,1].
+\]</span> General bilinear expansion: <span class="math inline">\(\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X,Y)\)</span>. If <span class="math inline">\(X \perp Y\)</span> then <span class="math inline">\(\operatorname{Cov}(X,Y) = 0\)</span> (converse not true in general — zero covariance does not imply independence).</p>
 </section>
 </section>
 <section id="common-distributions" class="level2" data-number="7">
 <h2 data-number="7" class="anchored" data-anchor-id="common-distributions"><span class="header-section-number">7</span> Common Distributions</h2>
-<p>A quick undergraduate toolkit — full catalogue with PMFs/PDFs, means, and variances in [[Common Probability Distributions]].</p>
+<p>A quick undergraduate toolkit — full catalogue with PMFs/PDFs, means, and variances in <a href="../topics/common-probability-distributions.html">Common Probability Distributions</a>.</p>
 <p><strong>Discrete:</strong></p>
 <ul>
 <li>Bernoulli<span class="math inline">\((p)\)</span> — single trial, success/failure.</li>
 <li><a href="../topics/binomial-distribution.html">Binomial Distribution</a> — number of successes in <span class="math inline">\(n\)</span> i.i.d. Bernoulli<span class="math inline">\((p)\)</span> trials.</li>
 <li><a href="../topics/poisson-distribution.html">Poisson Distribution</a> — number of rare events in a fixed interval, rate <span class="math inline">\(\lambda\)</span>.</li>
 <li>Geometric<span class="math inline">\((p)\)</span> — number of trials until first success.</li>
-<li>[[Multinomial Distribution]] — vector generalization of the binomial.</li>
+<li><a href="../topics/multinomial-distribution.html">Multinomial Distribution</a> — vector generalization of the binomial.</li>
 </ul>
 <p><strong>Continuous:</strong></p>
 <ul>
-<li>[[Uniform Distribution]] — equally likely outcomes on an interval.</li>
+<li><a href="../topics/uniform-distribution.html">Uniform Distribution</a> — equally likely outcomes on an interval.</li>
 <li><a href="../topics/normal-distribution.html">Normal Distribution</a> — the bell curve, <span class="math inline">\(N(\mu, \sigma^2)\)</span>; central to the CLT.</li>
 <li><a href="../topics/exponential-distribution.html">Exponential Distribution</a> — memoryless waiting time, rate <span class="math inline">\(\lambda\)</span>.</li>
 <li><a href="../topics/gamma-distribution.html">Gamma Distribution</a>, <a href="../topics/beta-distribution.html">Beta Distribution</a>, <a href="../topics/chi-squared-distribution.html">Chi-Squared Distribution</a> — common in statistical inference.</li>

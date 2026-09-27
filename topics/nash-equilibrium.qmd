@@ -1,0 +1,119 @@
+---
+title: Nash Equilibrium
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is a Nash Equilibrium?
+
+In game theory, a *Nash Equilibrium* (NE) is a situation where no player could
+gain by changing their own strategy holding all other player's strategies as
+fixed. The famous John Nash showed that there exists a Nash equilibrium,
+possibly in *mixed strategies* (those with stochastic decisions) for every
+*finite game*.
+
+:::{.definition data-title="Nash Equilibrium"}
+
+Formally, consider a game with players $j=1, \dots, J$ and let
+$\mathscr{S}_{j}$ denote the set of all possible strategies for player $j$. Let
+$s^*=(s_{j}^*, s_{-j}^*)$ be a strategy profile that is, a set consisting of
+one strategy for each player where $s_{-j}^*$ denotes the $J-1$ strategies of
+all the players besides $j$. Let $u_{j}(s_{j},s^*_{-j})$ be player $j$'s payoff
+function of the strategies. The strategy profile $s^*$ is a Nash equilibrium if
+$$
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j}.
+$$
+
+:::
+
+A game can have more than one Nash equilibrium. Even if the equilibrium is
+unique, it might be *weak* whereby a player might be indifferent among several
+strategies given the other player's choices. The equilibrium is unique and
+called a *strict Nash equilibrium* if the inequality if the inequality is
+strict so one strategy is the unique best response
+$$
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j};~s_{j}\neq s_{j^*}.
+$$
+The strategy set $\mathscr{S}_{j}$ can be different for different players, and
+its elements can be a variety of mathematical objects.  
+
+## Pure Equilibrium vs Mixed Equilibrium
+
+A *pure strategy* is a deterministic choice: player $j$ selects a single
+element $s_j \in \mathscr{S}_j$ with certainty. A *mixed strategy* generalizes
+this by allowing player $j$ to randomize, selecting each pure strategy
+according to some probability distribution
+$\sigma_j \in \Delta(\mathscr{S}_j)$, where $\Delta(\mathscr{S}_j)$ is the set
+of all probability distributions over $\mathscr{S}_j$. The payoff under a mixed
+strategy profile $\sigma = (\sigma_1, \dots, \sigma_J)$ is then replaced by the
+expected payoff
+$$
+U_j(\sigma_j, \sigma_{-j}) = \sum_{s \in \mathscr{S}} u_j(s)\prod_{k=1}^{J}\sigma_k(s_k).
+$$
+A *pure strategy Nash equilibrium* (PSNE) is a NE in which every player's
+equilibrium strategy is a pure strategy — a degenerate mixed strategy placing
+probability 1 on a single action. A *mixed strategy Nash equilibrium* (MSNE) is
+one in which at least one player randomizes non-trivially. In a MSNE, a player
+is willing to randomize only if they are *indifferent* among all pure
+strategies in the support of their mixing distribution; each pure strategy in
+the support must be a best response.
+
+:::{.theorem data-title="Nash's Existence Theorem"}
+
+Every finite game (finitely many players, each with a finite pure strategy set)
+has at least one Nash equilibrium, possibly in mixed strategies.
+
+:::
+
+## Strict vs Non-Strict Equilibrium
+
+A Nash equilibrium $s^*$ is *strict* if every player has a unique best
+response: for all $j$ and all $s_j \neq s_j^*$,
+$$
+u_j(s_j^*, s_{-j}^*) > u_j(s_j, s_{-j}^*).
+$$
+It is *weak* (or non-strict) if at least one player is indifferent between
+their equilibrium strategy and some other strategy, so the inequality holds
+with equality for some $s_j \neq s_j^*$. Strict Nash equilibria are in some
+sense more robust: a player has no incentive to deviate even if they break ties
+arbitrarily. Weak equilibria can be fragile, as small perturbations to payoffs
+may destroy them. Note that a strict NE must be a pure strategy equilibrium,
+since a player who mixes must be indifferent among all strategies in their
+support.
+
+## Equilibria for Coalitions
+
+The Nash equilibrium concept assumes players deviate *unilaterally*; it does
+not account for groups of players jointly coordinating a deviation. Several
+refinements address this.
+
+A *strong Nash equilibrium* (Aumann, 1959) requires that no *coalition*
+$C \subseteq \{1,\dots,J\}$ can jointly deviate in a way that makes every
+member of $C$ strictly better off. Formally, $s^*$ is a strong NE if for every
+coalition $C$ and every joint deviation
+$\hat{s}_C \in \prod_{j \in C}\mathscr{S}_j$, there exists some $j \in C$ such
+that
+$$
+u_j(s_j^*, s_{-j}^*) \geq u_j(\hat{s}_j, \hat{s}_{-C}^*, s_{-C}^*).
+$$
+Strong NE is a very demanding concept and frequently fails to exist. A weaker
+notion is the *coalition-proof Nash equilibrium* (Bernheim, Peleg & Whinston,
+1987), which only rules out *self-enforcing* joint deviations — those that are
+themselves immune to further defection by sub-coalitions.
+
+## Discussion of Fixed Point Theorems
+
+Nash's existence result is proved using fixed point arguments. Each player's
+*best response correspondence*
+$\text{BR}_j: \prod_{k \neq j}\Delta(\mathscr{S}_k) \rightrightarrows \Delta(\mathscr{S}_j)$
+maps opponents' mixed strategies to the set of the player's optimal mixed
+responses. A Nash equilibrium is precisely a fixed point of the joint best
+response map $\text{BR}(\sigma) = \prod_j \text{BR}_j(\sigma_{-j})$. For finite
+games, the strategy simplex is compact and convex, and $\text{BR}$ has convex
+values and a closed graph, so [[kakutanis-fixed-point-theorem]] applies
+directly. In games with a continuum of pure strategies,
+[[brouwers-fixed-point-theorem]] is used instead. A formal treatment of these
+results is given in [[fixed-point-theorems]].
+

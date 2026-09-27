@@ -1,0 +1,131 @@
+---
+title: Time Series Analysis
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Time Series Analysis
+
+**Time series analysis** is the study of describing, modeling, and forecasting
+data recorded sequentially over time, where — unlike in i.i.d. settings — the
+ordering of observations carries information and successive values are
+typically dependent. The field rests on a small set of core ideas that recur
+across every sub-area below: (1) reducing a dependent sequence to a
+**stationary** process (by differencing, decomposition, or transformation) so
+that classical asymptotic theory applies; (2) characterizing dependence through
+the **autocovariance/autocorrelation function** in the time domain, or the
+**spectral density** in the frequency domain; (3) building parsimonious
+generative models (AR, MA, ARMA and their many descendants) whose parameters
+can be estimated and whose structure gives interpretable, testable predictions;
+and (4) using the fitted model to **forecast**, filter, and quantify
+uncertainty out of sample.
+
+Classical (academic/Box-Jenkins) time series analysis focuses on the
+conditional *mean* of a process and linear dependence structure. Quantitative
+finance adds a second axis largely absent from the classical treatment:
+modeling the conditional *variance* (volatility clustering, leverage effects)
+of financial returns, since means are close to unpredictable but variances are
+highly persistent and directly priced (options, risk management). The notes
+below are organized as a sequence of textbook-style chapters moving from
+foundations, through classical linear models, into frequency-domain methods,
+non-stationarity/multivariate extensions, and finally the volatility- and
+mixed-frequency-focused topics central to financial econometrics.
+
+## Topics
+
+### 1. Foundations
+
+- [[time-series]] — discrete- vs continuous-time series, the basic object of
+  study.
+- [[stationary-processes]] — strict vs weak (covariance) stationarity, the
+  assumption underlying nearly everything that follows.
+- [[white-noise]] — the elementary building-block "shock" process.
+- [[autocovariance-and-autocorrelation-function]] — ACVF/ACF, sample
+  estimation, Bartlett's formula.
+- [[partial-autocorrelation-function]] — PACF and its role in identifying AR
+  order.
+- [[time-series-best-linear-predictors]] — optimal linear forecasting given
+  known second-order structure.
+- [[innovations-algorithm]] — recursive one-step prediction for general
+  (non-stationary-friendly) processes.
+
+### 2. Linear Time Series Models (Box-Jenkins)
+
+- [[moving-average-processes]] — MA(q): always stationary, ACF cuts off at lag
+  $q$.
+- [[autoregressive-processes]] — AR(p): causality condition, ACF decays, PACF
+  cuts off at lag $p$.
+- [[arma-processes]] — ARMA(p,q), combining AR and MA structure.
+- [[causality-and-invertibility]] — root conditions unifying the AR/MA
+  stationarity and invertibility results.
+- [[yule-walker-equations]] — moment-based estimation of AR coefficients from
+  the ACF.
+- [[durbin-levinson-algorithm]] — recursive solution of the Yule-Walker system
+  and sample PACF.
+- [[arima-processes]] — ARIMA(p,d,q): differencing to handle non-stationary
+  (integrated) series.
+- [[sarima-processes]] — seasonal ARIMA(p,d,q)(P,D,Q)$_s$.
+- [[time-series-decomposition]] — classical/STL trend-seasonal-remainder
+  decomposition, an alternative to differencing out seasonality.
+- [[model-selection-criteria-aic-bic]] — AIC/BIC/AICc for choosing model order.
+- [[ljung-box-test]] — portmanteau residual white-noise diagnostic.
+
+### 3. Frequency-Domain Methods
+
+- [[spectral-distributions]] — spectral density, the spectral representation
+  theorem.
+- [[periodogram-and-spectral-estimation]] — periodogram, smoothing/tapering,
+  Whittle likelihood.
+- [[wavelet-analysis]] — joint time-frequency (multiresolution) analysis for
+  non-stationary signals.
+
+### 4. Non-Stationarity, Long Memory & Multivariate Extensions
+
+- [[unit-root-tests]] — (Augmented) Dickey-Fuller, KPSS, Phillips-Perron:
+  testing $I(1)$ vs stationary.
+- [[long-memory-processes-arfima]] — fractional differencing, hyperbolically
+  decaying ACF.
+- [[cointegration]] — shared stochastic trends, Engle-Granger and Johansen
+  procedures, VECM.
+- [[vector-autoregression-var]] — multivariate AR, impulse responses, variance
+  decomposition.
+- [[granger-causality]] — testing predictive (lead-lag) information content
+  across series.
+- [[state-space-models-and-the-kalman-filter]] — unifying latent-state
+  representation, exact filtering/smoothing/MLE.
+- [[regime-switching-models]] — Markov-switching, TAR/SETAR, STAR: nonlinear
+  regime-dependent dynamics.
+- [[space-time-modeling]] — extending time series methods to spatially indexed
+  data.
+
+## 5. Financial Econometrics & Volatility Modeling (QF)
+- [[volatility-models]] — overview: constant, deterministic, local, and
+  stochastic volatility in derivatives pricing.
+- [[time-dependent-volatility-model]] · [[local-volatility-model]] —
+  deterministic volatility extensions of Black-Scholes.
+- [[arch-models]] — conditional heteroskedasticity, volatility clustering.
+- [[garch-models]] — GARCH(p,q) and extensions (IGARCH, EGARCH/GJR, GARCH-M,
+  multivariate GARCH).
+- [[stochastic-volatility-model]] — volatility as its own latent diffusion,
+  correlated with returns (leverage).
+- [[dealing-with-stochastic-volatility-in-time-series-using-the-r-package-stochvol]]
+  · [[heavy-tailed-innovations-in-the-r-package-stochvol]] ·
+  [[bayesian-analysis-of-a-stochastic-volatility-model]] — Bayesian/MCMC
+  estimation of SV models (paper notes).
+- [[realized-volatility]] — nonparametric, high-frequency-based volatility
+  measurement; jumps and bipower variation.
+- [[har-rv-model]] — heterogeneous-horizon linear forecasting of realized
+  volatility, mimicking long memory.
+- [[midas-models]] — mixed-frequency regressions (e.g. GARCH-MIDAS, nowcasting)
+  bridging high- and low-frequency data.
+
+## Foundational References
+- [[introduction-to-time-series-and-forecasting-brockwell-pdf]] (and solutions)
+  — primary textbook reference for Sections 1-2.
+- [[shumway]] — Shumway & Stoffer, time series analysis and its applications.
+- [[pstat274-time-series-analysis]] · [[pstat274-time-series-summary-notes]] —
+  course notes underlying much of Sections 1-2.
+- [[time-series-office-hours]] — worked example problems (ACVF/ACF
+  derivations).

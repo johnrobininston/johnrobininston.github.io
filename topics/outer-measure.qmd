@@ -1,0 +1,129 @@
+---
+title: Outer Measure
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Outer Measure
+
+## Outer Measure
+
+In [[measure-theory-notes|measure theory]] an **outer (exterior) measure** is a
+function defined on all subsets of a given set taking values in the extended
+real numbers satisfying some additional technical conditions. The theory of
+outer measures was first introduced by Constantin Carathéodory to provide an
+abstract basis for the theory of measurable sets and countably additive
+measures.
+
+:::{.definition data-title="Outer Measure"}
+
+An outer measure on non-empty $X$ is a function $\mu^*:2^X\to[0,+\infty]$ s.t.:
+1. $\mu^*(\emptyset)=0$
+2. $A \subseteq B\implies \mu^*(A)\leq \mu^*(B)$
+3. $\mu^*\left( \cup_{i=1}^\infty A_{i} \right)\leq \sum_{i=1}^\infty \mu^*(A_{i})$
+   (not necessarily disjoint).
+
+:::
+
+Note that we often prove (2) and (3) simultaneously since they both hold iff if
+$E \subseteq \cup_{i=1}^\infty A_{i}$ then
+$\mu^*(E)\leq \sum_{i=1}^\infty \mu^*(A_{i})$.
+
+The most common way of obtaining outer measures is to start with a family
+$\mathcal{E}$ of elementary sets on which a notion of measure is defined (such
+as rectangles in the plane) and then to approximate arbitrary sets "from the
+outside" by countable unions of members of $\mathcal{E}$. We state this more
+precisely in the following proposition.
+
+:::{.theorem data-title="Constructing Outer Measures"}
+
+Let $\mathcal{E}\subset 2^X$ and $\rho:\mathcal{E}\to[0,\infty]$ be such that
+$\emptyset \in\mathcal{E}$, $X\in\mathcal{E}$ and $\rho(\emptyset)=0$. For any
+$A\subset X$ we can define an outer measure by
+$$
+\mu^*(A)=\inf\left\{ \sum_{j=1}^\infty \rho(E_{j}):E_{j}\in\mathcal{E},~A\subset \bigcup_{j=1}^\infty E_{j}\right\}.
+$$
+
+:::
+
+*PROOF:*
+For any $A \subset X$ there exists
+$\{ E_{j} \}_{j=1}^\infty \subset\mathcal{E}$ such that
+$A\subset \bigcup_{j=1}^\infty E_{j}$ (take $E_{j}=X$ for all $j$) and so the
+definition of $\mu^*$ makes sense. We proceed to show this satisfies the
+properties of outer measure.  
+(1) Firstly note that clearly $\mu*(\emptyset)=0$ by taking $E_{j}=\emptyset$
+for all $j$.  
+(2) Next for $A\subset B$ we have that $\mu^*(A)\leq \mu^*(B)$ since the set
+over which the infimum is taken in the definition of $\mu^*(A)$ includes the
+corresponding set in the definition of $\mu^*(B)$.
+(3) To prove countable subadditivity, suppose
+$\{ A_{j} \}_{j=1}^\infty \subset2^X$ and fix $\varepsilon>0$. For each $j$
+there exists $\{ E_{j}^k \}_{k=1}^\infty \subset\mathcal{E}$ such that
+$A_{j}\subset \bigcup_{k=1}^\infty E_{j}^k$ and
+$\sum_{k=1}^\infty \rho(E_{j}^k)\leq \mu^*(A_{j})+\varepsilon{2}^{-j}$. But
+then, if $A=\bigcup_{i=1}^\infty A_{j}$, we have
+$A\subset \bigcup_{j,k=1}^\infty E_{j}^k$ and
+$\sum_{j,k}\rho(E_{j}^k)\leq \sum_{j}\mu^*(A_{j})+\varepsilon$ whence
+$\mu^*(A)\leq \sum_{j}\mu^*(A_{j})+\varepsilon$. Since $\varepsilon$ is
+arbitrary, we are done.
+$\square$
+
+Intuitively, we are defining the outer measure of the set $A$ to be the infimum
+of all sums of collections of sets that cover $A$. An important outer-measure
+in **real analysis** and [[probability-theory]] is the Lebesgue outer-measure
+$\lambda^*$.
+
+:::{.definition data-title="Lebesgue Outer Measure"}
+
+The **Lebesgue outer measure** $\lambda^*:2^\mathbb{R}\to [0,+\infty]$ is
+defined
+$$
+\lambda^*(A)=\inf\left\{  \sum_{i=1}^\infty \lvert b_{i}-a_{i} \rvert :A \subseteq \bigcup_{i=1}^\infty (a_{i},b_{i}]   \right\}.
+$$
+
+:::
+
+Clearly from the previous result the function is an outer measure. We can also
+show: (1) $\lambda^*((a,b])=b-a$, $a\leq b$; and (2) $\lambda^*$ is translation
+invariant. Importantly, it is not countable additive however, we will how that
+it becomes countably additive when restricted to "nice enough" sets.
+
+:::{.definition data-title="Outer-Measurable"}
+
+Given any outer-measure $\mu^*$, a set $A \subseteq X$ is (outer)
+$\mu^*$-measurable if $\forall E \subseteq X$ we have
+$$
+\mu^*(E)=\mu^*(E \cap A)+\mu^*(E \cap A^c).
+$$
+We denote the set of outer-measurable sets
+$\mathcal{F}_{\mu^*}:=\{ A\subseteq X:A\text{ is }\mu^*\text{-measurable} \}$.
+Intuitively, we say $A$ breaks apart any set nicely.
+
+:::
+
+*Remark:* Note that by countable subadditivity $\leq$ holds for all
+$A \subseteq X$ hence we need only show $\geq$ for equality.
+
+:::{.theorem data-title="$~$"}
+
+For any outer measure $\mu^*$ if $\mu^*(B)=0$ then $B \in \mathcal{F}_{\mu^*}$.
+
+:::
+
+*PROOF:*
+We very quickly see that
+$$
+\mu^*(E)\geq  \mu^*\left( E \cap B\right)+\mu ^*(E \cap B^c)=\mu^*(E\cap B^c).
+$$
+$\square$
+
+The next key theory from Carathéodory shows that if we are given an
+outer-measure $\mu^*$, then the set of outer-measurable sets
+$\mathcal{F}_{\mu^*}$ is a $\sigma$-algebra and when restricted to this
+$\sigma$-algebra, $\mu^*$ becomes a measure.
+
+## Carathéodory Extension Theorem
+[[caratheodory-extension-theorem]]

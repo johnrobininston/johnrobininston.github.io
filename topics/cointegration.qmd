@@ -1,0 +1,59 @@
+---
+title: Cointegration
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Cointegration
+Individually non-stationary series can share a common stochastic trend, so that
+some linear combination of them is stationary even though none of the series
+is. This is the phenomenon of **cointegration**, central to modelling long-run
+equilibrium relationships (e.g. spot vs. futures prices, exchange rates and
+price levels).
+
+:::{.definition data-title="Cointegration"}
+
+Series $X_t, Y_t$, each $I(1)$ (i.e. $\nabla X_t, \nabla Y_t$ stationary — see
+[[unit-root-tests]]), are **cointegrated** if there exists $\beta \neq 0$ such
+that
+$$
+u_t = Y_t - \beta X_t
+$$
+is stationary, $I(0)$. More generally, an $n$-vector $I(1)$ process is
+cointegrated with cointegrating rank $r$ if there are $r$ linearly independent
+vectors $\beta_1,\dots,\beta_r$ such that $\beta_i'X_t$ is stationary.
+
+:::
+
+**Engle-Granger two-step method.**
+1. Regress $Y_t$ on $X_t$ by OLS to estimate $\hat\beta$; form the residual
+   $\hat u_t = Y_t - \hat\beta X_t$.
+2. Test $\hat u_t$ for a unit root using the
+   [[unit-root-tests|(Augmented) Dickey-Fuller test]] with
+   cointegration-adjusted critical values; rejection implies cointegration.
+
+:::{.theorem data-title="Granger Representation Theorem"}
+
+If $X_t, Y_t$ are cointegrated, their dynamics admit a **Vector Error
+Correction Model (VECM)** representation
+$$
+\nabla \mathbf{Z}_t = \alpha\,\beta'\mathbf{Z}_{t-1} + \sum_{j=1}^{k-1}\Gamma_j \nabla\mathbf{Z}_{t-j} + \varepsilon_t, \qquad \mathbf{Z}_t = (X_t,Y_t)',
+$$
+where $\beta'\mathbf{Z}_{t-1}$ is the (lagged) equilibrium error and $\alpha$
+the speed-of-adjustment coefficients pulling the system back toward equilibrium
+— this links cointegration directly to [[vector-autoregression-var|VAR]]
+modelling.
+
+:::
+
+**Johansen procedure.** For $n>2$ series, the Engle-Granger method is
+asymmetric and limited to rank 1; the **Johansen test** uses a reduced-rank
+regression (canonical correlation) on a VAR in levels to jointly estimate the
+cointegrating rank $r$ and the space spanned by $\beta$.
+
+### References
+- [[unit-root-tests]]
+- [[vector-autoregression-var]]
+- [[time-series-analysis]]

@@ -1,0 +1,107 @@
+---
+title: Convergence of Random Variables
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Convergence of Random Variables
+
+Since [[random-variables-and-distribution-functions|random variables]] are
+simply functions measurable on the probability space
+$(\Omega, \mathcal{F}, \mathbb{P})$ we can consider the convergence of
+sequences of random variables in a similar way to the
+[[convergence-of-functions|convergence of functions]].
+
+Consider a sequences of random variables $\{X_{n}, n\geq 1\}$ and $X$ on some
+probability space $(\Omega,\mathcal{F}, \mathbb{P})$. The following are ways in
+which $\{X_n\}$ can converge to $X$ as $n \to \infty$:
+
+1. [[convergence-almost-surely]]
+2. [[convergence-in-lp-norm]]
+3. [[convergence-in-probability]]
+4. [[convergence-in-law]] 
+
+### Convergence Implication Hierarchy
+
+These types of convergence are of difference strengths (in that some imply
+others but not vice versa) as outlined in the diagram below.
+
+<!-- TODO: image "Note Jun 3, 2024.jpeg" not found in vault -->
+
+:::{.theorem data-title="$\stackrel{L^1}{\to}\implies \stackrel{\mathbb{P}}{\to}$"}
+
+If $X_{n}\stackrel{L^1}{\to}X$ then $X_{n}\stackrel{\mathbb{P}}{\to}X$ as
+$n \to \infty$.
+
+:::
+
+*Proof:*
+This result follows directly from applying [[markov-inequality]] since, for
+every $\epsilon>0$ we have that
+$$
+\mathbb{P}(|X_{n}-X|>\epsilon)\leq \frac{1}{\epsilon}\cdot \mathbb{E}|X_{n}-X|.
+$$
+*Note: The converse does not hold in general.*
+
+**Theorem 2 ($\stackrel{L^s}{\to}\implies \stackrel{L^r}{\to}$ for
+$1<r<s<\infty$)**
+Consider $1<r<s<\infty$ and assume that $X_{n}\stackrel{L^s}{\to}X$ as
+$n \to \infty$. Then we have that $X_{n}\stackrel{L^r}{\to}X$. *In other words,
+higher orders of r-th mean convergence imply lower orders.*
+*Proof:*
+This result follows directly from applying [[lyapunovs-inequality]]
+$$
+(\mathbb{E}|X|^r)^{1/r}\leq(\mathbb{E}|X|^s)^{1/s};\quad 0<r<s<\infty.
+$$
+*Note: The converse does not hold in general.*
+
+:::{.theorem data-title="$\stackrel{\mathbb{P}}{\to}\implies \stackrel{\mathcal{D}}{\to}$"}
+
+If $X_{n}\stackrel{{\mathbb{P}}}{\to}X$ as $n \to \infty$, then
+$X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n\to \infty$.
+
+:::
+
+`\begin{proof}`
+For every $x \in\mathbb{R}$, $\epsilon>0$ we have that
+$$
+\mathbb{P}(X\leq x-\epsilon)\leq \liminf_{n \to \infty } \mathbb{P}(X_{n}\leq x)\leq \limsup_{ n \to \infty }\mathbb{P}(X_{n}\leq x)\leq \mathbb{P}(X\leq x+\epsilon).
+$$
+If $x$ is a continuity point of $X$, then as $\epsilon\downarrow 0$, the left
+and right sides converge and hence
+$$
+\lim_{ n \to \infty } \mathbb{P}(X_{n}\leq x)=P(X\leq x),
+$$
+giving the result.`\end{proof}`
+
+*Note: The converse does not hold in general.*
+
+**Theorem 4**
+Suppose there exists $K>0$ such that $\mathbb{P}(|X_{n}|\leq K)=1$ for every
+$n$ and $X_{n}\stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$. Then
+$X_{n}\stackrel{L^1}{\to}X$ as $n \to \infty$.
+
+**Theorem 5**
+If $X_{n}\stackrel{a.s}{\to}X$ as $n \to \infty$ then
+$X_{n}\stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$.
+
+**Theorem 6**
+If $X_{n} \stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$, then there exists a
+subsequence $\{n_{i}\}$ such that $X_{n_{i}}\stackrel{a.s.}{\to}X$ as
+$i \to \infty$.
+
+[[skorohods-representation-theorem]]
+Suppose that $X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n \to \infty$ with
+$F_{n}(x):=\mathbb{P}(X_{n} \leq x)$ and $F(x):=\mathbb{P}(X\leq x)$ for
+$x \in \mathbb{R}$. Then, there exists a probability space
+$(\Omega', \mathcal{F}',\mathbb{P}')$ and random variables $\{Y_{n}, n\geq 1\}$
+and $Y$ such that
+$$
+Y_{n}\stackrel{\mathcal{D}}{=}X_{n},\quad Y\stackrel{\mathcal{D}}{=X}, 
+$$
+for every $n$ and $Y_{n}\stackrel{a.s.}{\to}Y$ as $n \to \infty$.
+
+#### Mutual Convergence
+

@@ -1,0 +1,65 @@
+---
+title: "Markov Chain Passage & Recurrence Times"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Passage Time Probability
+
+To understand recurrence and passage times we first define the *first hitting
+time* of a state.
+
+:::{.definition data-title="Hitting Times"}
+
+The *first hitting time* of state $j\in S$ is defined as
+$$
+T_{j}=\min\{n\geq 1:X_{n}=j\},
+$$
+where we assume that $T_{j}=\infty$ if the chain $X$ never visits this state
+for $n=1,2,\dots$.
+
+:::
+
+*Note:* Sometimes we denote $T_{i,j}$ when we wish to specify that the process
+starts from $i$ and finishes at $j$.
+
+The *probability that the chain visits state* $j$, starting from state $i$, for
+the first time on step $n$ is called the *passage time probability* and is
+defined by
+$$
+f_{i,j}(n)=\mathbb{P}(T_{j}=n|X_{0}=i)=\mathbb{P}(X_{1}\neq j, X_{2}\neq j, \dots, X_{{n-1}}\neq j, X_{n}=j|X_{0}=i).
+$$
+The *probability that the chain ever visits state* $j$ when starting from state
+$i$ is defined by
+$$
+f_{ij}=\mathbb{P}(T_{j}<\infty|X_{0}=i)=\sum_{n=1}^\infty f_{{ij}}(n).
+$$
+:::{.definition data-title="Mean Recurrence Time"}
+
+The *mean recurrence time* is defined as $\mu_{i}=\mathbb{E}[T_{i}|X_{0}=i]$
+which gives that $\mu_{i}=\infty$ if $i$ is
+[[markov-chain-state-classification|transient]] and
+$\mu_{i}=\sum_{n=1}^\infty nf_{i,i}(n)$ if $i$ is
+[[markov-chain-state-classification|persistent]].
+
+:::
+
+### Markov Chain Passage Time Probability Examples
+
+#### Simple Random Walks
+
+A fundamental result for simple [[random-walks|random walks]]
+$X_{n}=X_{0}+\sum_{i=1}^n\xi_{i}$ where $\xi_{i}$ are independent and take
+values $1,-1$ with probability $p,q=1-p$ respectively is the following
+proposition regarding hitting times.
+
+:::{.theorem data-title="Hitting Times of Simple Random Walks"}
+
+If $p \geq q$ then $T_{0,1}$ is finite. If $p < q$, then $T_{0,1}$ with
+probability $\frac{p}{q}$.
+
+:::
+
+

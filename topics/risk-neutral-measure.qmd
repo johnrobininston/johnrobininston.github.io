@@ -1,0 +1,97 @@
+---
+title: Risk-Neutral Measure
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Risk-Neutral Measure
+
+The **risk neutral measure** (**equilibrium measure**, **equivalent martingale
+measure**) is a probability measure such that each share price is exactly equal
+to the discounted expectation of the share price under this measure. The risk
+neutral measure is used frequently in
+[[derivatives-pricing|derivatives pricing]] due to the
+[[fundamental-theorem-of-asset-pricing]] which implies that in a **complete
+market**, a derivative's price is the discounted expected value of the future
+payoff under the unique risk-neutral measure, which exists if and only if the
+market is **arbitrage-free**.
+
+Intuitively, the risk-neutral measure is the probability measure of a
+transformed random variable, typically the utility function of the payoff. The
+risk-neutral measure is the measure corresponding to an expectation of the
+payoff with a linear utility.
+
+:::{.definition data-title="Equivalent Martingale Measure"}
+
+Let $S$ be a $d$-dimensional market representing the price processes of the
+risky assets. $B$ the risk-free bond and $(\Omega, \mathcal{F}, \mathbb{P})$
+the underlying probability space. The measure $\mathbb{Q}$ is called an
+equivalent (local) martingale measure if:
+1. $\mathbb{Q}\approx \mathbb{P}$ (measure equivalence); and
+2. the processes $\left( \frac{{S_{t}^i}}{B_{t}} \right)_{t}$ are
+   [[martingale-theory|(local) martingales]] with respect to $\mathbb{Q}$ for
+   all $i=1, \dots, d$.
+
+:::
+
+Suppose at a future time $T$ a derivative has value equal to the payoff 
+$$
+V(T)=\Phi(S_{[0:T]})
+$$
+which is a random variable on the probability space describing the market.
+Further, suppose that the discount factor from $T$ to $0$ is $D_{T}$. Then
+today's fair value of the derivative is
+$$
+V(0)=D_{T}\mathbb{E}_{\mathbb{Q}}[\Phi(S_{[0:T]})]=\frac{d\mathbb{Q}}{d\mathbb{P}}V(0)=D_{T}\mathbb{E}_{\mathbb{P}}\left[ \frac{{d\mathbb{Q}}}{d\mathbb{P}}V(T) \right],
+$$
+where $\frac{d\mathbb{Q}}{d\mathbb{P}}$ is the [[radon-nikodym-derivative]] of
+$\mathbb{Q}$ with respect to $\mathbb{P}$, and therefore is still a
+[[martingale-theory|martingale]].
+
+### Example - Geometric Brownian Motion Stock Price Model
+
+Let $S_{t}$ be the price of a stock following [[geometric-brownian-motion]]
+$$
+dS_{t}=\mu S_{t}dt + \sigma S_{t}dW_{t}^\mathbb{P},
+$$
+where: $\mu$ is the drift term (expected return under real measure
+$\mathbb{P}$), $\sigma$ is the diffusion term and $W_{t}^\mathbb{P}$ is a
+Weiner process under the real measure. The solution is known to be
+$$
+S_{t}=S_{0}\exp\left( \left( \mu+\frac{1}{2}\sigma^2 \right)t+\sigma W_{t}^\mathbb{P} \right).
+$$
+We wish to define new measure $\mathbb{Q}$ such that the discounted stock price
+$e^{-rt}S_{t}$ is a [[martingale-theory|martingale]] under $\mathbb{Q}$.
+[[girsanovs-theorem]] allows us to define a new Brownian motion under
+$\mathbb{Q}$ such that
+$$
+dW_{t}^\mathbb{Q}=dW_{t}^\mathbb{P}+\theta dt.
+$$
+We define the [[radon-nikodym-derivative]] $Z_{t}$ of $\mathbb{Q}$ with respect
+to $\mathbb{P}$ as
+$$
+Z_{t}= \frac{d\mathbb{Q}}{d\mathbb{P}}\Big|_{\mathcal{F}_{t}}=\exp\left( -\theta W_{t}^\mathbb{P}- \frac{1}{2}\theta^2 t \right),
+$$
+where for $Z_t$ to be a true martingale (so $\mathbb{Q}$ is well defined) we
+typically require [[novikovs-condition]]. Rewriting our expression in terms of
+our new BM $W_{t}^\mathbb{Q}$ we have
+$$
+dS_{t}=\mu S_{t}dt+\sigma S_{t}(dW_{t}^\mathbb{Q}-\theta dt)=(\mu-\sigma \theta)S_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q},
+$$
+and selecting $\theta$ such that our drift term is equal to the risk-free
+interest rate gives
+$$
+\mu-\sigma \theta=r \implies \theta=\frac{{\mu-r}}{\sigma}.
+$$
+Thus the stock price process is given by
+$$
+dS_{t}=\mu S_{t}dt+\sigma S_{t}\left( dW_{t}^\mathbb{Q}-\frac{{\mu-r}}{\sigma} dt \right)=rS_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q}.,
+$$
+and discounted stock price is a $\mathbb{Q}$-martingale
+$$
+d(e^{-rt}S_{t})=e^{-rt}\sigma S_{t}dW_{t}^\mathbb{Q}.
+$$
+
+

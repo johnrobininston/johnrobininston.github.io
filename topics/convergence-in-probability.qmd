@@ -1,0 +1,86 @@
+---
+title: Convergence in Probability
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Convergence in Probability
+
+:::{.definition data-title="Convergence in Probability"}
+
+A sequence of random variables $\{X_n\}_{n\in\mathbb{N}}$ on probability space $(\Omega, \mathcal{F}, \mathbb{P})$ converges in probability to $X$, denoted $X_n\stackrel{\mathbb{P}}{\rightarrow}X$ $(n\rightarrow\infty)$ if $$\lim_{ n \to \infty } \mathbb{P}(\{\omega \in\Omega:|X_{n}(\omega)-X(\omega)|>\epsilon\})=0$$for every $\epsilon>0$.
+
+:::
+
+Random variables can also converge [[convergence-almost-surely|almost surely]],
+[[convergence-in-lp-norm|in norm]] and [[convergence-in-law|in law]] and the
+relationships between all types of convergence can be found in the note:
+[[convergence-of-random-variables]].  
+<!-- TODO: image "Note Jun 3, 2024.jpeg" not found in vault -->*Figure:  Random Variable Convergence Relationships.*
+
+### Convergence in Norm & Convergence in Probability
+
+:::{.theorem data-title="$\stackrel{L^1}{\to}\implies \stackrel{\mathbb{P}}{\to}$"}
+
+If $X_{n}\stackrel{L^1}{\to}X$ then $X_{n}\stackrel{\mathbb{P}}{\to}X$ as
+$n \to \infty$.
+
+:::
+
+`\begin{proof}`
+This result follows directly from applying [[markov-inequality]] since, for
+every $\epsilon>0$ we have that
+$$
+\mathbb{P}(|X_{n}-X|>\epsilon)\leq \frac{1}{\epsilon}\cdot \mathbb{E}|X_{n}-X|.
+$$
+`\end{proof}`
+*Note: The converse does not hold in general.*
+
+
+### Convergence Almost Surely & Convergence in Probability
+
+:::{.theorem data-title="$X_{n}\stackrel{a.s}{\to}X \implies X_{n} \stackrel{\mathbb{P}}{\to}X$"}
+
+If $X_{n}\stackrel{a.s}{\to}X$ as $n \to \infty$ then
+$X_{n}\stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$.
+
+:::
+
+*Proof:*
+This result follows from an application of the
+[[monotone-convergence-theorem]].  
+
+:::{.theorem data-title="$\stackrel{\mathbb{P}}{\to}\implies \stackrel{\mathcal{D}}{\to}$"}
+
+If $X_{n}\stackrel{{\mathbb{P}}}{\to}X$ as $n \to \infty$, then
+$X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n\to \infty$.
+
+:::
+
+*Proof:*
+For every $x \in\mathbb{R}$, $\epsilon>0$ we have that
+$$
+\mathbb{P}(X\leq x-\epsilon)\leq \liminf_{n \to \infty } \mathbb{P}(X_{n}\leq x)\leq \limsup_{ n \to \infty }\mathbb{P}(X_{n}\leq x)\leq \mathbb{P}(X\leq x+\epsilon).
+$$
+If $x$ is a continuity point of $X$, then as $\epsilon\downarrow 0$, the left
+and right sides converge and hence
+$$
+\lim_{ n \to \infty } \mathbb{P}(X_{n}\leq x)=P(X\leq x),
+$$
+giving the result.
+
+:::{.theorem data-title="$X_{n}\stackrel{\mathbb{P}}{\to}X \implies \exists \text{ subsequence s.t. }X_{n_{i}}\stackrel{a.s.}{\to}X~(i \to \infty)$"}
+
+If $X_{n} \stackrel{\mathbb{P}}{\to}X$ as $n \to \infty$, then there exists a
+subsequence $\{n_{i}\}$ such that $X_{n_{i}}\stackrel{a.s.}{\to}X$ as
+$i \to \infty$.
+
+:::
+
+^16613e
+
+*Proof:*
+This results follows from an application of the [[borel-cantelli-lemma]].
+

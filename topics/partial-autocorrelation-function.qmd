@@ -1,0 +1,45 @@
+---
+title: Partial Autocorrelation Function
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Partial Autocorrelation Function (PACF)
+:::{.definition data-title="Partial Autocorrelation"}
+
+The **partial autocorrelation** at lag $n$, $\alpha(n) = \phi_{nn}$, is the
+correlation between $X_t$ and $X_{t+n}$ after removing the linear effect of the
+intervening observations $X_{t+1}, \dots, X_{t+n-1}$. Equivalently, $\phi_{nn}$
+is the coefficient on $X_{t-n}$ in the best linear predictor (see
+[[time-series-best-linear-predictors]]) of $X_t$ from
+$X_{t-1}, \dots, X_{t-n}$. By convention $\alpha(0)=1$.
+
+:::
+
+:::{.theorem data-title="PACF of an AR(p)"}
+
+For a causal $AR(p)$ process, $\alpha(n) = \phi_{nn} = 0$ for all $n > p$ — the
+PACF **cuts off** at lag $p$, mirroring how the ACF cuts off at lag $q$ for
+$MA(q)$ (see [[moving-average-processes]]). This complementary behavior is the
+basis of the classical Box-Jenkins identification strategy for
+[[autoregressive-processes|AR]] vs [[moving-average-processes|MA]] models.
+
+:::
+
+**Example (PACF of MA(1)).** For $\theta(B)=1+\theta_1B$,
+$$
+\alpha(1) = \rho_X(1) = \frac{\theta_1}{1+\theta_1^2}, \qquad \alpha(k) = \frac{(-1)^{k+1}\theta_1^k}{1+\theta_1^2+\dots+\theta_1^{2k}}\ (k>0),
+$$
+which decays geometrically rather than cutting off — consistent with $MA$
+having infinite AR order.
+
+### Estimation
+The sample PACF $\hat\alpha(h) = \hat\phi_{hh}$ is obtained either by solving
+the sample [[yule-walker-equations]] at each order $h$, or recursively via the
+[[durbin-levinson-algorithm]].
+
+### References
+- [[time-series-analysis]]
+- [[pstat274-time-series-summary-notes]]

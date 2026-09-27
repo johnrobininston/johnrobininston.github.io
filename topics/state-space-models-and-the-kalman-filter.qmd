@@ -1,0 +1,62 @@
+---
+title: State-Space Models and the Kalman Filter
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### State-Space Models and the Kalman Filter
+A very large class of time series models — $ARMA$, structural
+time-series/decomposition models, and
+[[stochastic-volatility-model|stochastic volatility]] models — can be written
+in **state-space form**, separating an unobserved (latent) state process from a
+noisy observation process. This unifies estimation, filtering, and forecasting
+into a single recursive framework.
+
+:::{.definition data-title="Linear Gaussian State-Space Model"}
+
+$$
+\begin{aligned}
+\text{(state)} \qquad & \boldsymbol\alpha_t = T_t\boldsymbol\alpha_{t-1} + R_t\boldsymbol\eta_t, && \boldsymbol\eta_t \sim N(0,Q_t),\\
+\text{(observation)} \qquad & \mathbf{y}_t = Z_t\boldsymbol\alpha_t + \boldsymbol\varepsilon_t, && \boldsymbol\varepsilon_t \sim N(0,H_t),
+\end{aligned}
+$$
+with $\boldsymbol\eta_t, \boldsymbol\varepsilon_t$ independent across $t$ and
+of each other. Any causal $ARMA(p,q)$ process (see [[arma-processes]]) can be
+written this way with $\boldsymbol\alpha_t$ a stacked vector of lagged states.
+
+:::
+
+:::{.theorem data-title="Kalman Filter"}
+
+Given
+$\boldsymbol\alpha_{t-1}\mid \mathcal{F}_{t-1} \sim N(\mathbf{a}_{t-1}, P_{t-1})$,
+the Kalman filter recursively computes the exact conditional distribution of
+the state given data up to time $t$:
+- **Predict:** $\mathbf{a}_{t|t-1} = T_t\mathbf{a}_{t-1}$,
+  $P_{t|t-1} = T_tP_{t-1}T_t' + R_tQ_tR_t'$.
+- **Update:** with innovation
+  $\mathbf{v}_t = \mathbf{y}_t - Z_t\mathbf{a}_{t|t-1}$ and
+  $F_t = Z_tP_{t|t-1}Z_t' + H_t$,
+$$\mathbf{a}_t = \mathbf{a}_{t|t-1} + P_{t|t-1}Z_t'F_t^{-1}\mathbf{v}_t, \qquad P_t = P_{t|t-1} - P_{t|t-1}Z_t'F_t^{-1}Z_tP_{t|t-1}.$$
+The $\mathbf{v}_t$ are the [[innovations-algorithm|innovations]]; their
+Gaussian likelihood (the *prediction error decomposition*) gives exact MLE for
+all model parameters without ever inverting the full $n\times n$ covariance
+matrix of the data.
+
+:::
+
+**Extensions.** The **Kalman smoother** produces $\boldsymbol\alpha_t \mid$
+full sample; the **Extended/Unscented Kalman Filter** and **particle filters**
+handle nonlinear or non-Gaussian state-space models (e.g. discrete-time
+[[stochastic-volatility-model|stochastic volatility]]); structural time-series
+models (local level/local linear trend + seasonal + cycle) are a popular
+state-space alternative to [[arima-processes|ARIMA]] and to
+[[time-series-decomposition]].
+
+### References
+- [[arma-processes]]
+- [[time-series-decomposition]]
+- [[stochastic-volatility-model]]
+- [[time-series-analysis]]

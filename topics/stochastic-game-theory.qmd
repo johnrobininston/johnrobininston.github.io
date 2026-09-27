@@ -1,0 +1,104 @@
+---
+title: Stochastic Game Theory
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+```table-of-contents
+title: Contents
+style: nestedOrderedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
+minLevel: 0 # Include headings from the specified level
+maxLevel: 3 # Include headings up to the specified level
+includeLinks: true # Make headings clickable
+hideWhenEmpty: false # Hide TOC if no headings are found
+debugInConsole: false # Print debug info in Obsidian console
+```
+## Finite Player Games
+
+### Discrete Time
+
+#### Markov Decision Processes (1-Player)
+
+Due to their wide applicability in reinforcement learning we begin by focussing
+on **Markov Decision Processes** (MDP) for discrete time. A MDP intuitively can
+be thought of as an individual decision making model with uncertain outcomes.
+An MDP is defined by a tuple
+$$
+\Gamma := (S,A,N_{T}, \mu_{0}, P, r),
+$$
+where:
+- $S$ is a finite set of states;
+- For each $s \in S$, $A(s)$ is a finite set of actions available at state $s$.
+  The set of (state, decision) pairs is
+$$
+S\times A:=\{ (s,a):s \in S, a \in A(s) \};
+$$
+- $N_{T}>0$ is the total number of time steps;
+- $\mu_{0}\in \mathcal{P}(S)$ is the initial state distribution;
+- $P_{n}:S\times A \to \Delta(s)$ is a transition rule, i.e. the probability
+  distribution of the next state given action $a$ in state $s$ at time $n$; and
+- $r_{n}:S\times A\to \mathbb{R}$ is a payoff function, i.e. the payoff of
+  action $a$ in state $s$ at time $n$.
+
+We use the notation $\mathcal{P}(S)$ to denote the space of probability
+distributions of the object $S$, for example for state space $S$,
+$\mathcal{P}(S)$ denotes the space of possible probability distributions for
+states. We write the time index set by $\mathcal{T}:=\{ 0,1,\dots,N_{T} \}$.
+The actions and states can be both continuous or finite however for now we
+primarily focus on finite action and state space setup.
+
+The aim of the agent is to find an **optimal strategy** $\pi$, which
+specifically is a function $\pi:\mathcal{T}\times S\to \mathcal{P}(A)$ that
+gives the **probability distribution** on the actions that can be taken while
+being at a specific state $s$ at a given time. If this distribution is a Dirac
+distribution (i.e. a point mass), then the policy is called **pure policy**.
+Then, the objective of the agent is to choose a policy $\pi$ that maximizes the
+cumulative expected reward
+$$
+\begin{align}
+J(\pi)&=\mathbb{E}\left[ \sum_{n=0}^{N_{T}}r_{n}(s_{n},a_{n}) \right] \\ 
+&a_{n}\sim \pi_{n}(s_{n}),~~s_{n+1}\sim P_{n}(s_{n},a_{n}),~~n \geq 0,~~s_{0} \sim \mu_{0}.
+\end{align}
+$$
+#### Discrete Time N-Player Games
+
+A discrete time $N$-player game is defined by a tuple
+$$
+(\vec{S}, \vec{ A}, N_{T}, \vec{\mu}^0, \vec{P}, \vec{r}),
+$$
+where:
+- $\vec{S}:=(S^i)_{i \in \{ 1, \dots, N \}}$ are finite sets of states for each
+  player $i$;
+- $\vec{A}=(A^i)_{i \in \{ 1, \dots, N \}}$ are finite sets of actions for each
+  player $i$;
+	- For each $s \in S^1$, $A^1(s)$ is a finite set of actions available at state
+   $s$. The set of (state, decision) pairs is
+   $\vec{S}\times \vec{A}:=\{ (S^i\times A^i):i\in \{ 1,\dots,N \} \};$
+- $N$ is the total number of players;
+- $N_{T}>0$ is the total number of time steps;
+- $\vec{\mu}_{0}:=(\mu_{0}^i)_{i \in \{ 1, \dots, N \}}\in \mathcal{P}(\vec{S})$
+  is the initial state distribution for each player;
+- $\vec{P}_{n}:=(P_{n}^i)_{i \in \{  1, \dots, N \}}$ 
+
+
+
+- 
+- is a transition rule, i.e. the probability distribution of the next state
+  given action $a$ in state $s$ at time $n$; and
+- $r_{n}:S\times A\to \mathbb{R}$ is a payoff function, i.e. the payoff of
+  action $a$ in state $s$ at time $n$.
+
+
+
+### Continuous Time
+
+The agent chooses an $A$-valued (we assume control set
+$A\subseteq \mathbb{R}^k$ is closed, convex and bounded to ensure existence and
+uniqueness) square-integrable control
+$\boldsymbol{\alpha}:=(\alpha_{t})_{t \in[0,T]}\in\mathbb{A}$ to minimize their
+expected cost over a time horizon $[0,T]$ where $T > 0$. In some applications
+$T$ can also be taken as infinity, which is called an infinite horizon
+stochastic optimal control problem.
+

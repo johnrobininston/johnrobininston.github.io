@@ -1,0 +1,45 @@
+---
+title: Ljung-Box Test
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Ljung-Box Test
+After fitting a model ([[arma-processes|ARMA]], [[garch-models|GARCH]],
+regression), the residuals should behave like [[white-noise|white noise]] if
+the model is correctly specified. The **Ljung-Box test** is a portmanteau
+(joint) test of whether the first $K$ residual autocorrelations are
+simultaneously zero, rather than testing each lag individually (which would
+inflate false-positive rates).
+
+:::{.definition data-title="Ljung-Box Statistic"}
+
+Given sample residual ACF $\hat\rho(h)$ (see
+[[autocovariance-and-autocorrelation-function]]) from $n$ residuals of a fitted
+model with $m$ estimated parameters,
+$$
+Q_{LB} = n(n+2)\sum_{h=1}^K \frac{\hat\rho(h)^2}{n-h}.
+$$
+Under $H_0$: the residuals are white noise, $Q_{LB} \sim \chi^2_{K-m}$
+approximately for large $n$ (degrees of freedom reduced by the $m$ parameters
+already fit). Large $Q_{LB}$ (small $p$-value) rejects white-noise residuals,
+indicating remaining structure the model failed to capture — suggesting a
+higher $ARMA$ order, missed seasonality (check seasonal lags, see
+[[sarima-processes]]), or (if applied to squared residuals) remaining
+[[arch-models|ARCH]] effects requiring a GARCH-type variance model.
+
+:::
+
+**Practical use.** Standard final diagnostic step after model fitting,
+alongside inspecting the ACF/PACF of residuals directly and comparing
+candidates via [[model-selection-criteria-aic-bic]]. Applying the test to
+*squared* residuals is the standard way to check whether conditional
+heteroskedasticity ([[arch-models|ARCH]]/[[garch-models|GARCH]] effects)
+remains unmodeled.
+
+### References
+- [[autocovariance-and-autocorrelation-function]]
+- [[model-selection-criteria-aic-bic]]
+- [[arch-models]]

@@ -1,0 +1,226 @@
+---
+title: Hidden Markov Models
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Hidden Markov Models
+
+## Hidden Markov Model
+
+A **Hidden Markov Model (HMM)** intuitively is a combination between an
+[[independent-mixture-models|independent mixture model]] and a
+[[markov-chains|Markov chain]] in that it is essentially an independent mixture
+model with added serial dependance.
+
+More precisely, a HMM is a double $(X_{t}, Y_{t})$ consisting of an
+unobservable (discrete) Markov Chain $\{ X_{t} \}_{t=1}^\infty$ taking values
+in some finite state space $\mathcal{\mathcal{X}}:=\{ 1, .., M \}$ with
+discrete time index set $\mathcal{T}:=\mathcal{\mathbb{N}}$ known as the
+**hidden state process**; and a **state-dependent process**
+$\{  Y_{t} \}_{t=1}^\infty$ taking values in observation space $\mathcal{Y}$
+whose distribution depends only on the current state $X_{t}$.  
+
+The model can be summarized mathematically as $$\begin{cases}\mathbb{P}(X_{t}|X_{1 : t-1})=\mathbb{P}(X_{t}|X_{{t-1}}), & t = 2,3,\dots \\ 
+\mathbb{P}(Y_{t}|Y_{1 : t-1}, X_{1 : t})=\mathbb{P}(Y_{t}|X_{t}),&t \in \mathbb{N},\tag{11}
+\end{cases}
+$$
+where we have denoted $Y_{1 : t} = \{ Y_{1}, \dots, Y_{t} \}$ and similarly for $X_{1 : t}$.
+
+
+
+
+The observation space $\mathcal{Y}$ can be either discrete (in which case we consider probability mass functions and sums) or continuous (in which case we consider probability distribution functions and integrals).  We denote the emission probabilities by
+$$
+\eta_{i}(j)=\mathbb{P}(Y_{t}=j|X_{t}=i).
+$$
+
+## Inference on Discrete HMMs
+
+Assuming we have a sequence of observations $y_{1:T}$, the classical inference problems are to find the following:
+
+1. $\mathbb{P}(X_{t}=x_{t}|Y_{1 : t}=y_{1 : t})$ (Filtering)
+2. $\mathbb{P}(X_{t}=x_{t}|Y_{1:s}=y_{1:s}),~s<t$ (Prediction)
+3. $\mathbb{P}(X_{t}=x_{t}|Y_{1:s}=y_{1:s}),~(s>t)$ (Smoothing)
+4. $\mathbb{P}(Y_{1 : T}=y_{1: T})$ (Likelihood)
+5. $\arg\max_{x_{0:T}}{\mathbb{P}(X_{0:T}=x_{0:T}|Y_{1: T}=y_{1: T}})$ (Most likely state path)
+
+#### Forward Filtering
+
+We are interested in the conditional probability mass function $\mathbb{P}(X_{t}=x_{t}|Y_{1 : t}=y_{1 : t})$ of the state $X_{t}$ given the data observed up to time $t$.  By Bayes rules $\mathbb{P}(X_{t}=x_{t}|Y_{1 : t}=y_{1 : t})$ can be obtained by normalizing $\mathbb{P}(X_{t}=x_{t},Y_{1 : t}=y_{1 : t})$ 
+$$
+\mathbb{P}(X_{t}=x_{t}|Y_{1 : t}=y_{1 : t}) = \frac{{\mathbb{P}(X_{t}=x_{t}, Y_{1:t}=y_{1 : t})}}{\sum_{x_{t}'\in\mathcal{X} }\mathbb{P}(X_{t}=x_{t}', Y_{1: t}=y_{1 : t})}.
+$$
+We will derive a recursion for $\mathbb{P}(X_{t}=x_{t}, Y_{1:t}=y_{1:t})$ by noting that
+$$
+\begin{align}
+\mathbb{P}&(X_{t}=x_{t}, Y_{1:t}=y_{1:t}) = \sum_{x_{t-1}\in \mathcal{X}}
+\mathbb{P}(X_{t}=x_{t}, X_{t-1}=x_{t-1}, Y_{t}=y_{t}, Y_{1:t-1}=y_{1:t-1}) \\
+ & = \sum_{x_{t-1}\in \mathcal{X}}\mathbb{P}(Y_{t}=y_{t}|X_{t}=x_{t}, X_{t-1}=x_{t-1}, Y_{1:t-1}=y_{1:t-1})\mathbb{P}(X_{t}=x_{t}|X_{t-1}=x_{t-1},Y_{1:t-1}=y_{1:t-1}) \mathbb{P}(X_{t-1}=x_{t-1}, Y_{1:t-1}=y_{1:t-1}) \\
+ & =\mathbb{P}(Y_{t}=y_{t}|X_{t}=x_{t})\sum_{x_{t-1}\in \mathcal{X}}\mathbb{P}(X_{t}=x_{t}|X_{t-1}=x_{t-1})\mathbb{P}(X_{t-1}=x_{t-1}, Y_{1:t-1}=y_{1:t-1}).
+\end{align}
+$$
+Defining $\alpha_{t}(x_{t})=\mathbb{P}(X_{t}=x_{t}, Y_{1:t}= y_{1:t})$ this equation defines the **$\alpha$-recursion**.  For $t=1, .., T$ and $x_{t} \in \mathcal{X}$ we have
+$$
+\begin{align}
+\alpha_{t}(x_{t})=\mathbb{P}(Y_{t}=y_{t}|X_{t}=x_{t})\sum_{x_{t-1}\in \mathcal{X}}\mathbb{P}(X_{t}=x_{t}|X_{t-1}=x_{t-1})\alpha_{t-1}(x_{t-1})=\eta_{x_{t}}(y_{t})\sum_{x_{t-1}\in \mathcal{X}}p_{x_{t-1}, x_{t}}^{(t)}\alpha_{t-1}(x_{t-1}),
+\end{align}
+$$
+with $\alpha_{0}(x_{0})=\mathbb{P}(X_{0}=x_{0})$. **(THIS IS THE INITIAL DISTRIBUTION, UPDATE NOTATION)**
+
+The filtering p.m.f. is obtained by normalizing $\alpha_{t}(x_{t})$ as
+$$
+\mathbb{P}(X_{t}=x_{t}|Y_{1:t}=y_{1:t}) = \frac{\alpha_{t}(x_{t})}{\sum_{x \in \mathcal{X}}\alpha_{t}(x)}.
+$$
+The likelihood term $\mathbb{P}(Y_{1:T}=y_{1:t})$ can then be computed as
+$$
+\mathbb{P}(Y_{1:T}=y_{1:T})=\sum_{x \in \mathcal{X}}\alpha_{T}(x).
+$$
+> Forward $\alpha$-Recursion
+> 1. For $i=1, \dots, K$ set $\alpha_{0}(i)=\mu_{i}$.
+> 2. For $t=1, \dots, T$:
+> 	1. For $j=1, .., M$ set $\alpha_{t}(j)=g_{j}(y_{t})\sum_{i=1}^M P_{i,j}\alpha_{t-1}(i)$.
+
+The computation cost of the forward-recursion is $O(T|\mathcal{X}|^2)$.  The proposed recursion may suffer from [[numerical-underflow-and-overflow|numerical underflow / overflow]] as $\alpha_{t}$ may become very small or very large for large $t$.  To avoid this, we can normalize $\alpha_{t}$, or propagate the filtering p.m.f. $\mathbb{P}(X_{t}=x_{t}|Y_{1:t}=y_{1:t})$ instead of $\alpha_{t}$, using the following **Predict-Update recursion**:
+
+1. Predict: $\mathbb{P}(X_{t}=x_{t}|Y_{1:t-1})=\sum_{x_{t-1}\in \mathcal{X}}\mathbb{P}(X_{t}=x_{t}|X_{t-1}=x_{t-1})\mathbb{P}(X_{t-1}=x_{t-1}|Y_{1:t-1}=y_{1:t-1})$
+2. Update: $\mathbb{P}(X_{t}|Y_{1:t})=\frac{{g_{x_{t}}(y_{t})\mathbb{P}(X_{t}=x_{t}|Y_{1:t-1}=y_{1:t-1})}}{\sum_{x_{t}'\in \mathcal{X}}g_{x_{t}'}(y_{t})\mathbb{P}(X_{t}=x_{t}'|Y_{1:t-1}=y_{1:t-1})}$.
+
+#### Forward-Backward Smoothing
+
+
+### Moments
+
+First, we note that the expectation is given by
+$$
+\mathbb{E}[X_{t}]=\sum_{i=1}^m \mathbb{E}[X_{t}|C_{t}=i]\mathbb{P}(C_{t}=i)=\sum_{i=1}^m u_{i}(t)\mathbb{E}[X_{t}|C_{t}=i],
+$$
+which in the stationary case reduces to
+$$
+\mathbb{E}[X_{t}]=\sum_{i=1}^m \delta \mathbb{E}[g(X_{t})|C_{t}=i].
+$$
+More generally, analogous results for $\mathbb{E}[g(X_{t})]$ and $\mathbb{E}[g(X_{t},X_{t+k})]$ for any functions $g$ for which the relevant state-dependent expectations exist
+
+### Univariate Distributions
+
+We define the time-dependent state distributions by $u_{i}(t)=\mathbb{P}(S_{t}=i)$ for $i \in \mathcal{S}$ and denote the state dependent densities by $p_{i}(x)=f_{X_{t}|C_{t}}(x|i)$. Assuming a continuous observation process we can write the distribution for $X_{t}$ as
+$$
+f_{X_{t}}(x)=\sum_{i=1}^m\mathbb{P}(S_{t}=i)f_{X_{t}|C_{t}}(x|i)=\sum_{i=1}^m u_{i}(t)p_{i}(x).
+$$
+This expression can be written in matrix notation
+$$
+f_{X_{t}}(x)= \boldsymbol{u}(t)\boldsymbol{P}(x)\boldsymbol{1}^T,
+$$
+where we have defined
+$$
+\boldsymbol{u}(t)=\begin{pmatrix}
+u_{1}(t) & \cdots  & u_{m}(t)
+\end{pmatrix};\quad \boldsymbol{P}(x)=\begin{pmatrix}
+p_{1}(x) & 0  & \cdots  & 0 \\
+0 & p_{2}(x) & \cdots & 0 \\
+\vdots  &  \vdots  &  \ddots & \vdots  \\
+0 & 0 & \cdots  &  p_{m}(x)
+\end{pmatrix};\quad\boldsymbol{1}=\begin{pmatrix}
+1 & \cdots & 1
+\end{pmatrix}.
+$$
+### Higher-Order Distributions
+
+First, we note that in any directed graphical model, the joint distribution of a set of random variables $V_{i}$ is given by
+$$
+\mathbb{P}(V_{1}, V_{2}, \dots, V_{n})= \prod_{i=1}^n \mathbb{P}(V_{i}|\text{pa}(V_{i})),
+$$
+where $\text{pa}(V_{i})$ denotes the set of all *parents* of $V_{i}$ in the set $V_{1}, V_{2}, \dots, V_{n}$. 
+
+Using this result, we can state that the joint distribution
+$$
+\begin{align}
+\mathbb{P}(X_{t}=v, X_{t+k}=w) & = \sum_{i=1}^m\sum_{j=1}^m \mathbb{P}(X_{t}=v,
+X_{t+k}=w, S_{t}=i, S_{t+k}=j) \\
+ & =\sum_{i=1}^m\sum_{j=1}^m \underbrace{\mathbb{P}(S_{t}=i)}_{u_{i}(t)} p_{i}(v)\underbrace{\mathbb{P}(C_{t+k}=j|C_{t}=i)}_{\gamma_{i,j}(k)}p_{j}(w) \\
+ & = \sum_{i=1}^m\sum_{j=1}^m u_{i}(t)p_{i}(v)\gamma_{i,j}(k)p_{j}(w).
+\end{align}
+$$
+We can write this double sum as a product of matrices to give
+$$
+\mathbb{P}(X_{t}=v,X_{t+k}=w)=\boldsymbol{u}(t)\boldsymbol{P}(v)\boldsymbol{\Gamma}^k\boldsymbol{P}(w)\boldsymbol{1}^T.
+$$
+Similarly, one can obtain expressions for the higher-order marginal distributions.  For example, the formula for the trivariate distribution is, for positive integers $k$ and $l$ is
+$$
+\mathbb{P}(X_{t}=v,X_{t+k}=w,X_{t+k+l}=z)=\boldsymbol{u}(t)\boldsymbol{P}(v)\boldsymbol{\Gamma}^k\boldsymbol{P}(w)\boldsymbol{\Gamma}^l\boldsymbol{P}(z)\boldsymbol{1}^T.
+$$
+This is the key result that allows us to derive the [[likelihood-inference|likelihood function]].
+
+### Likelihood Function
+
+Suppose there is an observation sequence $x_{1},x_{2},\dots, x_{T}$ generated from an $m$-state HMM which has initial distribution $\boldsymbol{\delta}$ and one-step transition probability matrix $\boldsymbol{\Gamma}$.  We seek the probability 
+$$
+L_{T}=\mathbb{P}(X_{1}=x_{1}, \dots, X_{T}=x_{t}),
+$$
+of observing this sequence.
+
+:::{.theorem}
+
+The likelihood is given by
+$$
+L_{T}=\boldsymbol{\delta}\boldsymbol{P}(x_{i})\boldsymbol{\Gamma}\boldsymbol{P}(x_{2})\boldsymbol{\Gamma}\boldsymbol{P}(x_{3})\cdots\boldsymbol{\Gamma}\boldsymbol{P}(x_{T})\boldsymbol{1}'.\tag{1}
+$$
+If $\boldsymbol{\delta}$ is the stationary distribution of the Markov chain, then additionally
+$$
+L_{T}=\boldsymbol{\delta}\boldsymbol{\Gamma}\boldsymbol{P}(x_{1})\boldsymbol{\Gamma}\boldsymbol{P}(x_{2})\boldsymbol{\Gamma}\boldsymbol{P}(x_{3})\cdots\boldsymbol{\Gamma}\boldsymbol{P}(x_{T})\boldsymbol{1}^T.\tag{2}
+$$
+
+:::
+
+*Proof:*
+The proof follows quickly from the multivariate distribution results above.  
+
+### Forward Algorithm
+
+A very simple but crucial consequence of the matrix expression for the likelihood is the **forward algorithm** for recursive computation of the likelihood.  To state the forward algorithm we define the vector $\boldsymbol{\alpha}_{t}$, for $t=1,2,\dots,T$ by 
+$$
+\boldsymbol{\alpha}_{t}=\boldsymbol{\delta}\boldsymbol{P}(x_{1})\boldsymbol{\Gamma}\boldsymbol{P}(x_{2})\cdots
+\boldsymbol{\Gamma}\boldsymbol{P}(x_{t}),
+$$
+with the convention that an empty product is the identity matrix.  It follows from this definition that
+$$
+L_{T}=\boldsymbol{\alpha}_{T}\boldsymbol{1}^T\qquad\&\qquad
+\boldsymbol{\alpha}_{t}=\boldsymbol{\alpha}_{t-1}\boldsymbol{\Gamma}\boldsymbol{P}(x_{t})\qquad
+(t \geq 2).
+$$
+Accordingly, we can conveniently set out as follows the computations involved in the likelihood formula
+$$
+\begin{align}
+\boldsymbol{\alpha}_{1} & =\boldsymbol{\delta}\boldsymbol{P}(x_{1}) \\
+\boldsymbol{\alpha}_{t} & =
+\boldsymbol{\alpha}_{t-1}\boldsymbol{\Gamma}\boldsymbol{P}(x_{t})\quad(t=2,3,\dots,T)
+\\
+L_{T} & =\boldsymbol{\alpha}_{T}\boldsymbol{1}^T.
+\end{align}
+$$
+The corresponding scheme for computation of $(2)$ (i.e. assuming that $\boldsymbol{\delta}$ is the stationary distribution of the Markov chain) is
+$$
+\begin{align}
+\boldsymbol{\alpha}_{0} & = \boldsymbol{\delta} \\
+\boldsymbol{\alpha}_{t} & =
+\boldsymbol{\alpha}_{t-1}\boldsymbol{\Gamma}\boldsymbol{P}(x_{t})\quad
+(t=1,2,\dots,T) \\
+L_{T} & = \boldsymbol{\alpha}_{T}\boldsymbol{1}^T.
+\end{align}
+$$
+The elements of the vector $\boldsymbol{\alpha}_{t}$ are referred to as the **forward probabilities**.
+
+### EM Algorithm
+
+The EM algorithm is an iterative method for performing maximum likelihood estimation when some of the data are missing, and exploits the fact that that the complete-data log-likelihood (CDLL) may be straightforward to maximize even if the likelihood of the observed data is not.  The algorithm is outlined as follows:
+
+1. Choose starting values for the parameters $\boldsymbol{\theta}$ you wish to estimate.
+2. **E step** 
+   Compute the conditional expectations of the missing data given the observations and given the current estimate of $\boldsymbol{\theta}$.  More precisely, compute the conditional expectations of *those functions of* the missing data that appear in the CDLL.
+3. **M step**
+   Maximize, with respect to $\boldsymbol{\theta}$, the CDLL with the functions of the missing data replaced in it by their conditional expectations.
+4. Repeat the above steps until some convergence criterion has been satisfied, for example, until the resulting change in $\boldsymbol{\theta}$ is less than some threshold.
+
+The resulting value of $\boldsymbol{\theta}$ is then a stationary point of the likelihood of the observed data.  We note that sometimes the  stationary point reached can be a local maximum or a saddle point as opposed to a global maximum.

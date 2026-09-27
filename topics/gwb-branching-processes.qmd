@@ -1,0 +1,180 @@
+---
+title: GWB Branching Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is a GWB Branching Process?
+
+The **Galton-Watson-Bienaymé (GWB) Branching Process** serves as the simplest
+stochastic model of population growth. To construct the process we think about
+a family tree with one
+founding member (progenitor).
+
+:::{.definition data-title="Galton-Watson-Bienaymé (GWB) Branching Process"}
+
+A GWB branching process $\{Z_{n}\}$ is defined by
+$$
+Z_{n}=\sum_{i=1}^{Z_{n-1}}Z_{n,i},
+$$
+where $Z_{n,i}$ are i.i.d. random variables with PMF $\{p_{k}\}$ where
+$p_k=\mathbb{P}(Z_{{n,i}=k})$ for $k=1,2,\dots$and $Z_{0}=1$.
+
+:::
+
+Intuitively, $Z_{n}$ describes the **size of the family at generation** $n$ and
+$Z_{n,i}$ describes the **size of an individual branching** at generation $n$.
+The process describes the population growth from a single progenitor when at
+each iteration, each individual has the same probability of having different
+numbers of children.
+
+Some immediate observations include:
+
+- $Z_{n}=0\implies Z_{i}=0$ for all $i>n$.
+- $Z_{n,i}$'s and $Z_{n-1}$ are independent.
+- $Z_{1}=Z_{1,1}\stackrel{\mathcal{D}}=Z_{n,i}$ is the family size for one
+  individual.
+
+Since this is a discrete state SP we will often require the
+[[generating-functions|generating function]] to perform our analysis.
+
+:::{.theorem data-title="GWB Generator"}
+
+Consider the generator of the population size $Z_{n}$ denoted
+$G_{n}(s):=\mathbb{E}s^{Z_{n}}$. For the generator of $Z_{{n+m}}$ we have
+$$
+G_{n+m}(s)=G_{m}(G_{n}(s))= \underbrace {G(G(G(\dots(G(s)) \dots)))}_{n+m}
+$$
+where $G(s):=\mathbb{E}s^{Z_{{n,i}}}=\sum_{k=0}^\infty p_{k}s^k$ is the
+generator of one branching.
+
+:::
+
+*Proof:*
+We write $Z_{n+1}=Z_{n+1,1}+Z_{n+1,2}+\dots+Z_{n+1,Z_{n}}$. The RV $Z_{n+1}$has
+generator $G_{n+1}$ while $Z_{n+1,i}$ has generator $G$ for all $i$. From
+results on the
+[[generating-functions|generators of sums of independent summands]] - we have
+that
+$$
+\begin{align}
+G_{n+1}(s)=G_{Z_{n}}(G(s))=G_{n}(G(s)).
+\end{align}
+$$
+$\square$
+
+:::{.theorem data-title="GWB Moments"}
+
+Let $\mu=\mathbb{E}Z_{1}$ and $\sigma^2=\operatorname{Var}(Z_{1})$ be the
+average size and variance of an individual family. Then,
+$$
+\mathbb{E}Z_{n}=\mu^n
+$$
+and
+$$
+\operatorname{Var}(Z_{n})=\begin{cases}n\sigma^2&\text{if }\mu=1 \\ \sigma^2(\mu^n-1)\mu^{n-1}(\mu-1)^{-1}&\text{if }\mu \neq 1.
+
+:::
+\end{cases}
+$$
+
+*Proof:*
+From [[probability-generating-functions|PGF results]] for factorial moments we
+recall that
+$$
+\mathbb{E}Z_{n}=G_{n}'(1)\quad \& \quad\mathbb{E}Z_{n}(Z_{n}-1)=G_{n}''(1).
+$$
+From the result above we also have that $G_{n}(s)=G(G_{n-1}(s))$ so that
+$$
+G_{n}'(s)=G'(G_{n-1}(s))\cdot G_{n-1}'(s).
+$$
+For $s=1$ we have that
+$$
+G_{n-1}(1)=\sum_{k=0}^\infty 1^kp_{Z_{n-1}}(k)=1;\quad G'(1)=\mathbb{E}Z=\mu;\quad G_{n-1}'(1)=\mathbb{E}Z_{n-1},
+$$
+from which we see that
+$$
+\mathbb{E}Z_{n}=G_{n}'(1)=\mu \mathbb{E}Z_{n-1}=\mu(\mu \mathbb{E}Z_{n-2})=\dots=\mu^n.
+$$
+To find the variance we write in terms of factorial moments as
+$$
+\operatorname{Var}(Z_{n})=\mathbb{E}Z_{n}^2-(\mathbb{E}Z_{n})^2=\mathbb{E}[Z_{n}(Z_{n}-1)]+\mathbb{E}Z_{n}-(\mathbb{E}Z_{n})^2=G_{n}''(1)+\mu^n-(\mu^n)^2.
+$$
+To complete the proof we compute $G_{n}''(s)$.
+
+## GWB Extinction Probability
+
+The **extinction** of a branching process is the event that the random sequence
+$\{Z_{n}\}$ consists of zeros for all but a finite number of values of $n$.
+This can be written mathematically as
+$$
+\{\text{extinction}\}=\{Z_{n}=0\text{ for some }n\}=\{Z_{1}=0\text{ or }Z_{2}=0\text{ or }\dots\}=\cup_{n=1}^\infty\{Z_{n}=0\}.
+$$
+We notice that $\{Z_{n}=0\}\subseteq \{Z_{n+1}=0\}\subseteq \dots$ since
+extinction at time $n$ implies the process will remain at $0$ for future
+generations. By the monotonicity of probability, there exists a limit
+$$
+\lim_{ n \to \infty } \mathbb{P}(\{Z_{n}=0\})=\mathbb{P}(\cup_{n=1}^\infty\{Z_{n}=0\}).
+$$
+:::{.definition data-title="GWB Probability of Extinction"}
+
+The probability of extinction of a GWB process $\eta$ is given by
+$$
+\eta:=\mathbb{P}(\cup_{n=1}^\infty\{Z_{n}=0\})=\lim_{ n \to \infty } \mathbb{P}(Z_{n}=0)=\lim_{ n \to \infty } G_{n}(0).
+$$
+
+:::
+
+Considering the behavior of $\eta$ for different values $\mu$ leads to the
+following useful theorem.
+
+:::{.theorem data-title="GWB Probability of Extinction"}
+
+Assuming $0<p_{0}=\mathbb{P}(Z_{1}=0)<1$,
+$\eta:= \lim_{ n \to \infty }\mathbb{P}(Z_{n}=0)$ is the smallest non-negative
+root of the equation $G(s)=s$. Furthermore:
+1. If $\mu=\mathbb{E}Z_{1}=1$ and $\sigma^2=\operatorname{Var}(Z_{1})>0$, then
+   $\eta=1$ (critical case)
+2. If $\mu<1$, then $\eta =1$ (subcritical case)
+3. If $\mu>1$, then $\eta<1$ (supercritical case)
+
+:::
+
+Note that if $p_{0}=0$ then $\eta=0$ and if $p_{0}=1$ then $\eta=1$. Further,
+if $\mu>1$ then $\mathbb{E}Z_{n}=\mu^n\uparrow \infty$ so, on average,
+population size increases to infinity. Contrarily, if $\mu<1$ then
+$EZ_{n}=\mu^n\downarrow 0$ so, on average, population decreases to zero.
+
+Considering the subcritical case we see that as $n\rightarrow \infty$ the
+process can either explode or become extinct
+
+:::{.theorem data-title="GWB Surviving Behavior"}
+
+Assume $p_{1}=\mathbb{P}(Z_{n,j}=1)<1$. No matter what the finite value of
+$\mu=\mathbb{E}Z_{1}$ is, for any positive finite integer $k$ we have
+$$
+\lim_{ n \to \infty } \mathbb{P}(Z_{n}=k)=0
+$$
+for $k=1,2,\dots$. Moreover, there is a positive probability of explosion
+$\mathbb{P}(Z_{n}\rightarrow\infty)=1-\eta \in(0,1)$, and positive probability
+of extinction $\mathbb{P}(Z_{n}\rightarrow 0)=\eta \in(0,1)$.
+
+:::
+
+Furthermore, we obtain the following result about the rate of growth to
+infinity for trees where $Z_{n}\rightarrow \infty$.
+
+If $\mu>1$, $\mathbb{E}Z_{1}^2<\infty$, then there is an a.s. convergence of
+the random sequence
+$$
+W_{n}:=\frac{Z_{n}}{\mu^n}\rightarrow W~a.s.
+$$
+where limit $W$ is a random variable with mean $\mathbb{E}W=1$ and
+$\operatorname{Var}(W)>0$, i.e. $W$ is a non-degenerate random variable that is
+not constant. Also, $W=0$ if and only if $Z_{n}\rightarrow 0$.
+
+
+
+

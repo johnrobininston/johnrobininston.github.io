@@ -1,0 +1,534 @@
+---
+title: Stochastic Calculus
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Overview
+
+Stochastic calculus is the branch of mathematics that extends classical
+calculus to stochastic (random) processes. Where classical calculus deals with
+deterministic functions and their derivatives/integrals, stochastic calculus
+handles processes whose evolution involves randomness. The key insight is that
+stochastic processes like Brownian motion have infinite variation, requiring
+new integration and differentiation rules—particularly the Itô integral and Itô
+formula.
+
+## Fundamental Areas
+
+- **[[filtrations-and-adapted-processes|Foundations]]**  
+	- [[measure-theoretic-probability]] - Probability spaces, filtrations, adapted
+   processes, information flow
+	- [[brownian-motion]] - The canonical stochastic process (continuous-time
+   random walk)
+	- [[martingale-theory]] - Fair-game processes fundamental to stochastic
+   modeling
+	- [[stopping-times]] - Random times adapted to the filtration
+
+- **[[p-variation|Quadratic Variation]]** — How stochastic processes differ
+  from classical ones. Brownian motion has infinite total variation but finite
+  quadratic variation, requiring new calculus rules.
+
+- **[[stochastic-integrals|Itô Integral]]** — The stochastic version of the
+  Riemann integral. Integration with respect to Brownian motion and other
+  martingales. Properties (linearity, martingale property, Itô isometry).
+
+- **Itô Calculus (Change of Variables)** — The stochastic generalization of the
+  chain rule
+	- [[ito-formula]] (1D and multivariate) — how functions of stochastic
+   processes evolve
+	- [[stochastic-integration-by-parts]] — product rules for stochastic processes
+	- Quadratic covariation — the extra terms that appear in stochastic calculus
+
+- **[[stochastic-differential-equations]]** — Definition and theory
+	- Existence and uniqueness of solutions (Picard-Lindelöf conditions: growth
+   and Lipschitz)
+	- Strong vs weak solutions
+	- Markov property and time-homogeneity of solutions
+
+- **SDE Solution Methods & Examples** — Specific important processes
+	- [[geometric-brownian-motion]] — Exponential growth with random noise (stock
+   prices)
+	- [[ornstein-uhlenbeck-process]] — Mean-reverting processes (interest rates,
+   commodities)
+	- [[brownian-bridge]] — Brownian motion conditioned to return to a fixed point
+	- Linear SDEs and their explicit solutions
+
+- **Diffusion Processes** — Time-homogeneous SDEs and their properties
+	- Itô diffusions: definition and key properties (flow property, Markov
+   property)
+	- Continuous sample paths and regularity
+
+- **[[infinitesimal-generator]]** — Operator associated with a diffusion
+	- Generator and semi-group theory
+	- [[dynkins-formula]] — relating expectations to the generator (martingale
+   characterization)
+	- Kolmogorov backward and forward equations
+
+- **Advanced Results** — Tools for solving and transforming SDEs
+	- [[girsanovs-theorem]] — Change of measure and drift transformation
+	- [[feynman-kac-formula]] — Connection between SDEs and PDEs
+	- [[fokker-planck-equation]] / [[kolmogorov-equations]] — Evolution of
+   probability densities
+	- [[martingale-representation-theorem]] — Every martingale is an Itô integral
+
+
+
+The Itô integral has several helpful properties that follow from its derivation
+as an approximation of sums of elementary functions. Letting
+$f,g \in\mathcal{V}(0,T)$ and let $0 \leq S < U < T$ we have that:
+
+1. $\int_{S}^Tf dB_{t}=\int_{S}^UfdB_{t}+\int_{U}^T fdB_{t}$ almost surely
+   (partition of integration area);
+2. $\int_{S}^T (cf + g)dB_{t}=c \cdot \int_{S}^T fdB_{t}+\int_{S}^TgdB_{t}$
+   (constant $c$) almost surely (linearity);
+3. $\mathbb{E}\left[ \int_{S}^T fdB_{t} \right]=0$ (mean zero); 
+4. $\int_{S}^T fdB_{t}$ is $\mathcal{F}_{T}$-measurable (adapted); and
+5. $\int_{S}^TfdB_{t}$ is a martingale.
+
+The Itô integral can be defined for a larger class of integrands $f$ than
+$\mathcal{V}$. Specifically, the measurability condition (2) in our definition
+of $\mathcal{V}$ can be relaxed to the following:
+2. There exists an increasing family of $\sigma$-algebras
+   $\mathcal{H}_{t};~t \geq 0$ such that:
+	1. $B_{t}$ is a martingale with respect to $\mathcal{H}_{t}$; and
+	2. $f_{t}$ is $\mathcal{H}_{t}$-adapted.
+
+### 4 Itô Formula
+
+Similar to Riemann integrals, we wish to establish an Itô integral version of
+the chain rule without differentiation theory, known as the Itô formula. The
+Itô formula provides a method informing us about the behavior of a function of
+BM $g(B_{t})$ or indeed other processes by expanding it into stochastic
+integrals, also known as Itô processes.
+
+:::{.definition data-title="1-Dimensional Itô Process"}
+
+A (1-dimensional) Itô process (or stochastic integral) is a stochastic process
+$X_{t}$ on $(\Omega, \mathcal{F}, \mathbb{P})$ of the form
+$$
+X_{t}=X_{0}+\int_{0}^t u(s, \omega)ds + \int_{0}^t v(s, \omega)dB_{s},
+$$
+where $v \in\mathcal{W}_{\mathcal{H}}$, so that
+$$
+\mathbb{P}\left( \int_{0}^t v(s, \omega)^2ds< \infty \text{ for all }t \geq 0 \right)=1.
+$$
+We further assume that $u$ is $\mathcal{H}_{t}$-adapted and
+$\mathbb{P}\left( \int_{0}^t\lvert u(s, \omega) \rvert ds < \infty\text{ for all }t \geq 0 \right)=1$.
+The differential form of the Itô process $(X_{t})$ is
+$$
+dX_{t}=udt + vdB_{t}.
+$$
+
+:::
+
+:::{.theorem data-title="1-Dimensional Itô Formula"}
+
+Let $X_{t}$ be an Itô process given by
+$$
+dX_{t}=udt+vdB_{t}.
+$$
+Further, let $g(t,x)\in C^2([0,\infty)\times \mathbb{R})$ (i.e. twice
+differentiable on $[0,\infty)\times \mathbb{R}$). Then
+$$
+Y_{t}=g(t,X_{t})
+$$
+is again an Itô process and
+$$
+dY_{t}=g_{t}(t, X_{t})dt+g_{x}(t, X_{t})dX_{t}+ \frac{1}{2}g_{x x}(t, X_{t})d\left< X,X \right>_{t}.
+$$
+
+:::
+
+Here $d\left< X,X \right>_{t}=(dX_{t})\cdot(dX_{t})$ is computed according to
+the following:
+$$
+dt\cdot dt=dt\cdot dB_{t}=dB_{t}\cdot dt=0,\quad dB_{t}\cdot dB_{t}=0.
+$$
+*Proof:*
+
+**Example (Itô Formula Application I)**
+Consider the integral
+$$
+Y_{t}=\int_{0}^tB_{s}dB_{s}.
+$$
+Assuming we can write $Y_{t}=g(t, B_{t})$ from Itô's formula we have
+$$
+dY_{t}=\left[ g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t,B_{t}) \right] dt+g_{B}(t,B_{t})dB_{t},
+$$
+which written in integral form gives
+$$
+Y_{t}-Y_{0}=\int_{0}^t\left[ g_{t}(s,B_{s})+\frac{1}{2}g_{B B}(s,B_{s}) \right]ds+\int_{0}^t g_{B}(s, B_{s})dB_{s}. 
+$$
+Hence we need some $g(t,B_{t})$ such that
+$$
+(1)~~g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t, B_{t})=0\quad \&\quad (2)~~ g_{B}(t,B_{t})=B_{t}.
+$$
+Since $g_{B}=B_{t}\implies g_{BB}=1$ and so $g_{t}=-\frac{1}{2}$. An obvious
+candidate therefore is
+$$
+g(t,B_{t})=\frac{1}{2}B_{t}^2 - \frac{1}{2}t,
+$$
+which in fact is the result, as can be verified by plugging into Itô's formula.
+
+**Example (Itô Formula Application II)**
+Consider the Itô process
+$$
+g(t,B_{t})=\exp(bt+\sigma B_{t}),
+$$
+where $b,\sigma$ are constants for drift and diffusion. To compute $dg$ we
+apply the Itô formula
+$$
+\begin{align}
+dg(t,B_{t}) & =b\exp(bt+\sigma B_{t})dt+\sigma \exp(bt+\sigma B_{t})dB_{t}+ \frac{1}{2} \sigma^2\exp(bt+\sigma B_{t})d\left< B,B \right>_{t}  \\
+ & = g(t,B_{t})\left\{ \left( b+ \frac{1}{2} \sigma^2 \right)dt+\sigma dB_{t} \right\}. 
+\end{align}
+$$
+The process $X_{t}=g(t,B_{t})$ defines geometric BM and is used to simulate the
+change of the stock price in the [[black-scholes-merton-model]] ($\mu$ as mean
+return and $\sigma$ as volatility).
+
+:::{.theorem data-title="Itô Integration by Parts"}
+
+For a continuous function $f(s,\omega)$ that is of bounded variation with
+respect to $s \in [0,t]$ almost surely we have that
+$$
+\int_{0}^t f(s)dB_{s}=f(t)B_{t}-\int_{0}^t B_{s}df_{s}.
+$$
+
+:::
+
+#### 4.1 Multi-dimensional Itô Formula
+
+Considering the situation in higher dimensions we define a $d$-dimensional Itô
+process as the integral with respect to the $m$-dimensional BM as
+$$
+X_{t}^i=x_{0}^i+\int_{0}^t\psi_{s}^ids+\sum_{k=1}^m \int_{0}^t \varphi_{s}^{i,k}dB_{s}^k,
+$$
+for $k = 1, \dots, m$ and $i = 1, \dots, d$ where we note that such an Itô
+process exists in $\mathbb{R}^d$ and is constructed with respect to BM
+$B_{s}=(B_{s}^1, \dots, B_{s}^m)$. To write this in a more compact form
+$$
+X_{t}=x_{0}+\int_{0}^t \psi_{s}ds+\int_{0}^t\varphi_{s}\cdot dB_{s},
+$$
+where $X_{t}, x_{0},\psi_{s} \in \mathbb{R}^d$ and
+$\varphi_{s}\in \mathbb{R}^{d \times m}$ and here $\varphi_{s}^{i,k}$ stands
+for the process $\varphi$ used to construct the $i$-th coordinate of the Itô
+process as a stochastic integral with respect to the $k$-th coordinate of the
+$m$-dimensional BM.
+
+:::{.theorem data-title="Multi-Dimensional Itô Formula"}
+
+For some vector-valued function
+$g:\mathbb{R}_{+}\times \mathbb{R}^d\to \mathbb{R}^p \in C^{1,2}$, then the
+multi-dimensional Itô formula holds
+$$
+\begin{align}dg^i(t,X_{t}) & =\partial_{t}g^i(t,X_{t})dt+\nabla_{x} g^i(t,X_{t})\cdot dX_{t}+ \frac{1}{2}\mathrm{Tr}(\varphi_{t}^T H \varphi_{t})dt \\ & = \partial_{t}g^i(t,X_{t})dt+\sum_{k=1}^{d}\partial_{x_{k}}g^i(t,X_{t})dX_{t}^k+ \frac{1}{2}\sum_{j,k = 1}^{d}\partial_{x_{j},  x_{k}}g^i(t,X_{t})d\left< X^j, X^k \right> _{t},\end{align}
+$$
+where $\nabla _x f$ denotes the gradient of $f$ with respect to vector $x$,
+$\varphi_{t}\in \mathbb{R}^{d \times m}$ is a matrix and $H_{d \times d}$ is
+the Hessian of $g$ restricted on its action on $x \in \mathbb{R}^d$ at
+$(t, X_{t})$. The bracket
+$d\left< X^j, X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+
+:::
+
+*Proof:*
+	The structure of the proof is still exactly the same as the 1-dimensional
+ case. We need only verify that $dB_{t}^pdB_{t}^q=0$ for $p \neq q$ and
+ $d\left< X^j,X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+
+#### 4.2 The Martingale Representation Theorem
+
+The **martingale representation theorem** states that a random variable that is
+measurable with respect to the filtration generated by a Brownian motion can be
+written in terms of an Itô integral with respect to this Brownian motion.
+
+:::{.theorem data-title="Martingale Representation Theorem"}
+
+Let $B(t)$ be $n$-dimensional BM. Suppose $M_{t}$ is an
+$\mathcal{F}_{t}^{(n)}$-martingale (w.r.t.) $\mathbb{P}$ and that
+$M_{t}\in\mathcal{L}_{2}(\mathbb{P})$ for all $t \geq 0$. Then there exists a
+unique stochastic process $g(s,\omega)$ such that
+$g \in \mathcal{V}^{(n)}(0,t)$ for all $t \geq 0$ and
+$$
+M_{t}(\omega)=\mathbb{E}[M_{0}]+\int_{0}^t g(s,\omega) dB(s),
+$$
+almost surely for all $g \geq 0$.
+
+:::
+
+The proof of this result is involved and is omitted from this note. Details can
+be found in our note on this theorem
+[[martingale-representation-theorem|here]].
+
+### 5 Stochastic Differential Equations
+*References: [[stochastic-differential-equations-1]].*
+
+A general **stochastic differential equation** in $\mathbb{R}^n$ with initial
+condition has the form
+$$
+\begin{cases}
+dX_{t}=b(t,X_{t})dt+\sigma(t, X_{t})dBt \\
+X_{0}=x,
+\end{cases}
+$$
+where $x,X_{t}\in \mathbb{R}^n$,
+$b: \mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:\mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^{n \times m}$ and
+$B_{t}$ is an $m$-dimensional BM. Here $b$ is the **drift** coefficient and
+$\sigma$ is the **volatility** coefficient. We note the difference between SDEs
+and a general Itô process lies in the fact that $b,\sigma$ are functions of the
+unknown process $X_{t}$.
+
+:::{.theorem data-title="Existence and Uniqueness of SDE Solutions"}
+
+Fixing time $T>0$ and assuming $b:[0,T]\times \mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:[0,T]\times \mathbb{R}^n \to \mathbb{R}^{n \times m}$ are deterministic
+functions with bounded time variable $T$ which satisfy the following
+conditions:
+1. $\exists c>0,~\forall t \in [0,T],~\forall x \in \mathbb{R}^n,~\lvert b(t,x) \rvert + \lvert \sigma(t,x) \rvert\leq c(1+\lvert x \rvert)$
+   (growth condition);
+2. $\exists D>0,~\forall t \in[0,T],~\forall x,y \in \mathbb{R}^n,~\lvert b(t,x)-b(t,y) \rvert + \lvert \sigma(t,x)-\sigma(t,y) \rvert\leq D\lvert x-y \rvert$
+   (Lipschitz condition),
+
+then the SDE has unique solution in $L^2([0,T]\times \Omega)$ that has
+continuous sample path.  
+
+:::
+
+The proof of this theorem can be found detailed in our specific note on
+[[stochastic-differential-equations-1]].
+
+#### 5.1 Strong and Weak SDE Solutions
+
+A strong solution to a stochastic differential equation is defined as the
+solution $X_{t}\in \mathcal{F}_{t}$ adapted to the filtration generated by
+[[brownian-motion-1]] and the initial condition (if it is random)
+$$
+\mathcal{F}_{t}=\sigma(B_{s}, 0 \leq s \leq t)\vee \sigma(X_{0}).
+$$
+The uniqueness and global existence theorem stated for
+[[stochastic-differential-equations-1]] is just proving that for strong
+solutions.
+
+
+
+#### 5.2 SDE Example: Linear SDE
+*References: Linear Stochastic Differential Equations.*
+
+:::{.definition data-title="Linear SDE"}
+
+Let $W_t$ be $m$-dimensional BM, $A$ be an $n \times n$ matrix and $B$ an
+$n \times m$ matrix. Then a linear stochastic differential equation $X_{t}$ has
+dynamics given by
+$$
+\begin{cases}dX_{t}=AX_{t}dt+BdW_{t},\\X_{0}=x.\end{cases}
+$$
+
+:::
+
+To find the general solution of a linear SDE we first note that by setting the
+noise term $B$ to the $0$-matrix we have the ODE $dX_{t}=AX_{t}dt$ which has
+the solution $X_{t}=X_{0}e^{At}$. Setting this as our
+
+
+which are given explicitly by
+$$
+X_{t}=e^{At}x+\int_{0}^{t}{e^A(t-s)B}~d{W_{s}}.
+$$
+
+#### 5.3 SDE Example: Black Scholes Model
+*References: [[black-scholes-merton-model]]*
+
+The Black-Scholes model provides the structure on which we are able to price
+contingency claims (specifically options). Specifically, the Black-Scholes
+model is a mathematical model for the dynamics of a financial market containing
+derivative investment instruments such as stock shares or futures contracts
+assumed to have a lognormal distribution of prices following a random walk with
+constant drift and volatility.
+
+:::{.definition data-title="Black-Scholes Model"}
+
+The Black-Scholes model consists of two assets, a risk free asset $B$ and a
+stock $S$ with price dynamics given by
+$$
+\begin{align}dB_{t}&=rB_{t}dt \\dX_{t}& =\mu X_{t}dt+\sigma X_{t}dB_{t}\end{align}
+$$
+where $r,\mu,\sigma \in \mathbb{R}$ are deterministic constants.
+
+:::
+
+So in our notation we have $b(t,x)=\mu x$ and $\sigma(t,x)=\sigma x$ which are
+both Lipschitz in in $x$ and satisfy the growth condition.  
+
+To solve this system we note that if we ignore the stochastic term
+$dX_{t}=\mu X_{t}dt$ is an ODE with solution $X_{t}=X_{0}\cdot e^{\mu t}$. We
+therefore consider changing variables with $Y_{t}=\log(X_{t})$ and applying
+Itô's formula we obtain
+$$
+dY_{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2X_{t}^2}d\left< X,X \right> _{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2}\sigma^2dt,
+$$
+where we have used that
+$d\left< X,X \right>_{t}=\sigma^2X_{t}^2d\left< B,B \right>_{t}=\sigma^2X_{t}^2dt$.
+Substituting in our initial expression we have
+$$
+\begin{align}
+dY_{t} & =\mu dt+\sigma dB_{t}-\frac{1}{2}\sigma^2dt=\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\sigma dB_{t}  \\
+ \implies Y_{t}-Y_{0} & =\int_{0}^t\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\int_{0}^t\sigma dB_{t} \\
+ & =\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t} \\
+\implies X_{t} & =X_{0}\cdot e^{\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t}}.
+\end{align}
+$$
+
+#### 5.4 SDE Example: OU Process
+*References: [[ornstein-uhlenbeck-process]]*
+
+An Ornstein-Uhlenbeck process is a mean reverting stochastic process that is a
+Gaussian process, is Markov and is temporally stationary. This process can be
+used to describe the fluctuation of interest rate around the mean interest rate
+$M$ with the speed of the regression described by $\theta$.
+
+:::{.definition data-title="Ornstein-Uhlenbeck Process"}
+
+The Ornstein-Uhlenbeck process $(X_{t})$ with drift has dynamics described by
+the stochastic differential equation
+$$
+dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}
+$$
+where $\theta,\sigma>0$, $\mu \in \mathbb{R}$ are all constant and $B_{t}$ is a
+BM.
+
+:::
+
+Consider such a process with a deterministic starting value $X_{0}$. To find a
+solution to this SDE we first change the variable to set the regression level
+to 0 with $Y_{t}=X_{t}-\mu$. From Itô's formula we have
+$$
+dY_{t}=dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}=-\theta Y_{t}dt+\sigma dB_{t}.
+$$
+Considering when $\sigma=0$ we have the ODE $dY_{t}=-\theta Y_{t}dt$ with the
+solution $Y_{t}=Y_{0}\cdot e^{-\theta t}$ and so replacing this constant
+$Y_{0}$ with some yet to define process $C_{t}$ we have
+$Y_{t}=C_{t}e^{-\theta t}$ and from Itô's formula we have
+$$
+dY_{t}=-\theta e^{-\theta t}C_{t}dt+e^{-\theta t}dC_{t}=-\theta Y_{t}dt+e^{-\theta t}dC_{t}.
+$$
+We therefore can define $dC_{t}=\sigma e^{\theta t}dB_{t}$ and so
+$C_{0}=Y_{0}=X_{0}-\mu$ and
+$$
+\begin{align}
+C_{t}-C_{0} & = \int_{0}^t\sigma e^{\theta s}dB_{s} \\
+ \implies C_{t} & =X_{0}-\mu+\sigma \int_{0}^te^{\theta s}dB_{s} \\
+\implies Y_{t} & = (X_{0}-\mu)e^{-\theta t}+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s} \\
+\implies X_{t} & = (X_{0}-\mu)e^{-\theta t}+\mu+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s}.
+\end{align}
+$$
+
+#### 5.5 SDE Example: Brownian Bridge
+*References: [[brownian-bridge]].*
+
+A Brownian bridge is a continuous-time gaussian process $(X_{t})$ whose
+probability distribution is the conditional probability distribution of a
+standard Brownian Motion $B_t$ subject to the condition (when standardized)
+that $W_{T} = 0$, so that the process is pinned to the same value at both t = 0
+and t = T.
+
+ >[!definition] Brownian Bridge
+> The **Brownian Bridge** is an SDE $(X_{t})$ characterized by the dynamics $$\begin{cases}dX_{t}=\frac{b-X_{t}}{1-t}dt+dB_{t}\\ X_{0}=a,\end{cases}$$ for $a,b \in \mathbb{R}$ and $0 \leq t < 1$.
+
+This is the Brownian bridge starting from $a$ and ending at $b$ that has the
+same finite-dimensional distribution as the BM conditioning on starting from
+$a$ at time $0$ and ending at $b$ at time $1$. The Brownian bridge starting
+from $0$ at time $0$ and ending at $0$ at time $1$ has the simple form as
+$B_t−tB_1$.
+
+We can verify that the solution is given by
+$$
+Y_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
+$$
+First note that since
+$$
+G:=\int_{0}^t \frac{1}{1-s}sB_{s} \sim\mathcal{N}\left( 0, \frac{1}{1-t} \right),
+$$
+its characteristic function is
+$$
+\phi(p)=\phi_{G}(p(1-t))=e^{\frac{1}{2(1-t)}p^2(1-t)^2}=e^{\frac{1}{2}p^2(1-t)}\to 1~~\text{as}~~t \to 1.
+$$
+Hence $(1-t)G\stackrel{\mathcal{L}}{\to} 0$ as $t \to 1$ and since the limit is
+a constant $(1-t)G\stackrel{\mathbb{P}}{\to} 0$ as $t \to 1$. Finally, we
+notice that this stochastic integral is the sum of countably many independent
+random variables, hence from Durrett 2.5.10 we have
+$(1-t)G\stackrel{\text{a.s.}}{\to} 0$ as $t \to 1$ and
+$Y_{t}\stackrel{\text{a.s.}}{\to}b$.
+
+#### 5.6 SDE Example: Geometric Mean-Reverting Process
+
+:::{.definition data-title="Geometric Mean-Reverting Process"}
+
+The **geometric mean-reverting process** $X_{t}$ is defined as the solution to
+the SDE
+$$
+\begin{cases}dX_{t}=\kappa(\alpha-\log X_{t})X_{t}dt + \sigma X_{t}dB_{t}\\X_{0}=x>0.\end{cases}
+$$
+
+:::
+
+By using the substitution $Y_{t}=\log X_{t}$ we can verify that the solution to
+the SDE is
+$$
+X_{t}=\exp \left\{ e^{-\kappa t}\log x+\left( \alpha- \frac{\sigma^2}{2\kappa} \right)(1-e^{-\kappa t})+\frac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}) \right\}.
+$$
+
+### 6 Diffusion Processes
+
+:::{.definition data-title="Itô Diffusion"}
+
+A **(time-homogeneous) Itô diffusion** in $\mathbb{R}^n$ is a stochastic
+process $(X_{t})$ defined on space $(\Omega, \mathcal{F},\mathbb{P})$ that
+satisfies the stochastic differential equation
+$$
+\begin{cases} dX_{t}=b(X_{t})dt+\sigma(X_{t})dB_{t} \\ X_{s}=x \end{cases}
+$$
+where $X_{t}\in \mathbb{R}^n$, $B_{t}\in \mathbb{R}^m$,
+$B:\mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:\mathbb{R}^n\to \mathbb{R}^{n \times m}$ where it is assumed that
+$b,\sigma$ are both [[lipschitz-continuity|Lipschitzs]] on $\mathbb{R}^n$ (to
+ensure the existence and uniqueness of strong solutions).
+
+:::
+
+The distinguishing feature of diffusions is that the drift and diffusion
+coefficients $b,\sigma$ are time independent and the Lipschitz condition is
+here to ensure the existence and uniqueness of the strong solution. Next we
+detail the results outlining the key properties of Itô diffusions.
+
+:::{.theorem data-title="Time Homogeneity of Itô DIffusions"}
+
+Denoting the solution to the SDE above with initial condition $X_{s}=x$ as an
+Itô diffusion by $X_{s+h}^{s,x}$ then
+$$
+\forall s \geq 0,~x \in \mathbb{R}^n,~\{ X_{s+t}^{s,x} \}_{t \geq 0}\stackrel{\mathcal{L}}{=}\{  X_{t}^{0,x} \}_{t \geq 0}.
+$$
+
+:::
+
+*Proof:*
+
+
+:::{.theorem data-title="Flow Property of Itô Diffusion"}
+
+For an Itô diffusion $X$ we have
+$$
+\forall t,h \geq 0,~ X_{h}^{0,X_{t}^{0,x}}\stackrel{a.s.}{X_{t+h}^{0,x}}.
+$$
+
+:::
+
+*Proof:* By construction, both are strong solutions to the same SDE
+$$
+X_{t+h}^{0,x}=X_{t}^{0,x}+\int_{t}^{t+h}{b(X_{s}^{0,x})}~d{s}+\int_{t}^{t+h}{\sigma(X_{s}^{0,x})}~d{B_{s}}.
+$$
+By the uniqueness in modification we conclude

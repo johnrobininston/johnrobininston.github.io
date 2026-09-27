@@ -1,0 +1,114 @@
+---
+title: Dynkin's π-λ Theorem
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+It is often the case that two measures which agree on a certain class of sets
+actually agree on all sets in the relevant σ-algebra. There are a couple of
+standard tools to prove that the measures are the same: the
+[[monotone-class-theorem]] and **Dynkin's π−λ theorem**. These are essentially
+equivalent devices and it is largely a matter of taste which one to take as
+standard equipment.
+
+**Dynkin's π-λ theorem** is a powerful result in measure theory that is often
+used to **extend properties of measures (or functions) defined on simple sets**
+(like intervals or rectangles) to a larger σ-algebra, like the Borel σ-algebra.
+We first define $\pi$ and $\lambda$ systems before stating and proving the main
+theorem.
+
+:::{.definition data-title="π-System"}
+
+A **π-system** on a set $\Omega$ is a non-empty collection $\mathcal{P}$ of
+subsets of $\Omega$ that is closed under finite intersections, that is
+$$
+A,B\in P \implies A \cap B \in P.
+$$
+
+:::
+
+The importance of $\pi$-systems arises from the fact that if two
+[[probability-measure|probability measures]] agree on a $\pi$-system, then they
+agree on the [[generated-sigma-algebra|$\sigma$-algebra generated]] by that
+$\pi$-system. Moreover, if other properties, such as equality of integrals,
+hold for the $\pi$-system, then they hold for the
+[[generated-sigma-algebra|generated $\sigma$-algebra]] as well. This is the
+case whenever the collection of subsets for which the property holds is a
+system.
+
+:::{.definition data-title="$\lambda$-System"}
+
+A **$\lambda$-system** on $\Omega$ is a set $\mathcal{L}$ of subsets of
+$\Omega$ satisfying:
+1. $\Omega \in \mathcal{L}$;
+2. $A,B \in \mathcal{L}~~\& ~~A \subset B \implies B \setminus A \in \mathcal{L}$;
+   and
+3. $\{ A_{n} \}_{n=1}^\infty \in \mathcal{L}$ and $A_{n}\uparrow A$ then
+   $A\in \mathcal{L}$.
+
+:::
+
+Intuitively, we can think of the $\pi$-system representing a small, manageable
+collection of sets (like the real intervals, cylinder sets, rectangles etc.)
+where a property (e.g. equality of measures, independence etc.) is easily
+verified. The $\lambda$-system is designed to be stable under operations needed
+to build up to a $\sigma$-algebra (differences and countable increasing unions)
+but not necessarily intersections. The theorem states that once a property
+holds for the $\pi$-system, it propagates up to the $\sigma$-algebra generated
+by it, provided the $\lambda$-system contains the $\pi$-system.
+
+:::{.theorem data-title="Dynkin's π-λ Theorem"}
+
+If $\mathcal{P}$ is a $\pi$-system, $\mathcal{L}$ is a $\lambda$-system and
+$\mathcal{P} \subset \mathcal{L}$ then
+$\sigma(\mathcal{P})\subset \mathcal{L}$.
+
+:::
+
+*Proof:*
+**Step 1:** We prove that if $\mathcal{l}(\mathcal{P})$ is the smallest
+$\lambda$-system containing $\mathcal{P}$, then $\mathcal{l}(\mathcal{P})$ is a
+$\sigma$-algebra. Note that a $\lambda$-system that is closed under
+intersections is a $\sigma$-algebra since: (1) $\Omega \in\mathcal{L}$; (2)
+$A\in\mathcal{L}\implies A^c=\Omega \setminus A\in\mathcal{L}$ by second
+property of $\lambda$-systems; and (3) $A \cup B = (A^c \cap B^c)^c$ and
+$\bigcup_{i=1}^n A_{i}\uparrow\bigcup_{i=1}^\infty A_{i}\in\mathcal{L}$ by the
+third property of $\lambda$-systems.  
+**Step 2:** We show that $\mathcal{l}(\mathcal{P})$ is closed under
+intersections. We define
+$\mathcal{G}_{A}=\{ B:A \cap B \in \mathcal{l}(\mathcal{P}) \}$ and prove that
+if $A \in \mathcal{l}(\mathcal{P})$, then $\mathcal{G}_{A}$ is a
+$\lambda$-system.  
+**Step 3:** We assume $A\in\mathcal{l}(\mathcal{P})$ and show that
+$\mathcal{G}_{A}$ is a $\lambda$-system by noting that: (1)
+$\Omega \in \mathcal{G}_{A}$ since $A \in \mathcal{l}(\mathcal{P})$; (2)
+$B,C \in \mathcal{G}_{A}$ and $B \supset C$
+$\implies A \cap (B\setminus C)=(A \cap B)\setminus (A \cap C) \in\mathcal{l}(\mathcal{P})$
+since $A \cap B,~A \cap C \in\mathcal{l}(\mathcal{P})$; and (3)
+$B_{n}\in \mathcal{G}_{A}$ and $B_{n}\uparrow B$
+$\implies A \cap B_{n}\uparrow A \cap B \in \mathcal{l}(\mathcal{P})$ since
+$A \cap B_{n}\in \mathcal{l}(\mathcal{P})$.  
+Note that $\mathcal{P}$ is a $\pi$-system and so if $A \in \mathcal{P}$ then
+$\mathcal{G}_{A}\supset \mathcal{P}$, hence step (3)
+$\implies \mathcal{G}_{A}\supset \mathcal{l}(\mathcal{P})$, i.e. if
+$A \in \mathcal{P}$ and $B\in \mathcal{l}(\mathcal{P})$ then
+$A \cap B \in\mathcal{l}(\mathcal{P})$. Interchanging $A$ and $B$ in this
+sentence implies that if $A \in \mathcal{l}(\mathcal{P})$ then
+$\mathcal{G}_{A}\supset \mathcal{P}$ and so if $A\in \mathcal{l}(\mathcal{P})$
+then $\mathcal{G}_{A}\supset \mathcal{P}$ and so step (3)
+$\implies \mathcal{G}_{A}\supset \mathcal{l}(\mathcal{P})$.  
+This conclusion gives that if $A,B\in \mathcal{l}(\mathcal{P})$ then
+$A\cap B\in n\mathcal{l}(\mathcal{P})$, which proves step (2). Hence we have
+that
+$$
+\sigma(\mathcal{P})\subset \mathcal{l}(\mathcal{P})\subset\mathcal{L},
+$$
+giving the result. $\square$
+
+**Example: Uniqueness of Measures on $\mathbb{R}$** 
+We suppose that two measures $\mu$ and $\nu$ on
+$(\mathbb{R}, \mathcal{B}_{\mathbb{R}})$ agree on all intervals
+$\{ (-\infty, x]:x \in \mathbb{R} \}$. We wish to show that $\mu = \nu$ on all
+Borel sets.

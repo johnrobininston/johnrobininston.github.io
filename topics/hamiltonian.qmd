@@ -1,0 +1,178 @@
+---
+title: Hamiltonian
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Hamiltonian
+
+In [[control-theory]] the **Hamiltonian** is a function used to solve for the
+**optimal control of a dynamic system**. Specifically, the Hamiltonian is a
+central object that encodes both the **system dynamics** and the **optimization
+objective**. It can be understood as the instantaneous increment of the
+[[lagrange-multiplier-method|Lagrangian]] expression of the problem that is to
+be optimized over a certain time period.
+
+## Hamiltonian Formal Definition
+
+We have a system with dynamics given by $n$
+[[ordinary-differential-equations|first-order ODEs]]
+$$
+\frac{d\boldsymbol{x}(t)}{dt}=\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t)),
+$$
+where: (1) $\boldsymbol{x}(t)=[x_{1}(t), \dots, x_{n}(t)]^T$ is the vector of
+**state variables**; and $\boldsymbol{u}(t):=[u_{1}(t), \dots, u_{r}(t)]^T$ is
+the vector of **control variables**. We specify initial conditions
+$\boldsymbol{x}(t_{0})=\boldsymbol{x}_{0}$ and control $\boldsymbol{u}(t)$. Our
+aim is to find a solution known as a **trajectory**
+$\boldsymbol{x}(t;\boldsymbol{x}_{0}, t_{0})$ can be found.
+
+**Problem Formulation:**
+The problem of optimal control is to choose
+$\boldsymbol{u}(t)\in\mathcal{U}\subseteq \mathbb{R}^r$ so that
+$\boldsymbol{x}(t)$ maximizes or minimizes a certain objective function over a
+specified time interval $[t_{0},t_{1}]$. We define the **cost functional** as
+$$
+J(u)=\int_{t_{0}}^{t_{1}}{L()}~d{}
+$$
+
+
+
+
+Specifically, the goal to optimize over a performance index
+$I(\boldsymbol{x}(t),\boldsymbol{u}(t),t)$ defined at each point in time
+$$
+\max_{\boldsymbol{u}(t)}\int_{t_{0}}^{t_{1}}{I[\boldsymbol{}(t),\boldsymbol{u}(t),t]}~d{t}
+$$
+subject to the above equations of motion of the state variables. The solution
+method involves defining an ancillary function known as the **control
+Hamiltonian**
+$$
+H(\boldsymbol{x}(t), \boldsymbol{u}(t), \lambda(t),t)=I(\boldsymbol{x}(t), \boldsymbol{u}(t), t) + \lambda^T(t)\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t),t),
+$$
+which combines the objective function and the state equations much like a
+[[lagrange-multiplier-method|Lagrangian]] in a static optimization problem only
+that multipliers $\lambda(t)$ - referred to as **costate variables** - are
+functions of time rather than constants.
+
+The goal 
+
+
+
+
+
+
+Let’s consider a control system:
+
+- **State variable:** $x(t)∈\mathbb{R}^n$
+- **Control variable:** $u(t)∈U⊆\mathbb{R}^m$
+- **Dynamics:** $\cdot{x}(t)=f(x(t),u(t),t)$
+- **Cost functional (objective):**
+  $J(u)=∫_{t_{0}}^{t_{f}}L(x(t),u(t),t) dt+ϕ(x(tf))$
+
+The **Hamiltonian** is a function defined by:
+
+H(x,u,λ,t)=L(x,u,t)+λ⊤f(x,u,t)H(x,u,λ,t)=L(x,u,t)+λ⊤f(x,u,t)
+
+Where:
+
+- λ(t)∈Rnλ(t)∈Rn is the **costate** or **adjoint variable**, analogous to
+  Lagrange multipliers in constrained optimization.
+    
+
+
+## Intuitive Breakdown
+
+The Hamiltonian combines:
+
+- The **instantaneous cost** (via LL), and
+    
+- The **effect of your control on future costs**, via the adjoint λ⊤fλ⊤f.
+    
+
+Intuition:
+
+- You want to choose a control u(t)u(t) that not only optimizes immediate
+  reward/cost, but also drives the system in a direction (via ff) that’s
+  favorable in the long run — as reflected by the costate λ(t)λ(t).
+    
+
+In optimal control:
+
+- You solve for x(t)x(t) (the state) **forward in time** using the system
+  dynamics.
+    
+- You solve for λ(t)λ(t) **backward in time** using the adjoint equation:
+    
+    λ˙(t)=−∂H∂xλ˙(t)=−∂x∂H​
+- The optimal control u∗(t)u∗(t) minimizes (or maximizes) the Hamiltonian:
+    
+    u∗(t)=arg⁡min⁡uH(x(t),u,λ(t),t)u∗(t)=argumin​H(x(t),u,λ(t),t)
+    
+    (or maximize, depending on formulation — usually minimization for cost
+    problems)
+    
+
+
+## Worked Example: Linear-Quadratic Regulator (LQR)
+
+**Problem Setup:**
+
+- System:
+    
+    x˙(t)=ax(t)+bu(t)x˙(t)=ax(t)+bu(t)
+- Cost functional:
+    
+    J(u)=∫0T(12qx(t)2+12ru(t)2) dtJ(u)=∫0T​(21​qx(t)2+21​ru(t)2)dt
+
+Let’s find the optimal control u(t)u(t) that minimizes J(u)J(u).
+
+### Step 1: Define the Hamiltonian
+
+Let λ(t)∈Rλ(t)∈R (scalar case):
+
+H(x,u,λ,t)=12qx2+12ru2+λ(ax+bu)H(x,u,λ,t)=21​qx2+21​ru2+λ(ax+bu)
+
+
+### Step 2: Find optimal control u∗(t)u∗(t)
+
+We minimize HH with respect to uu:
+
+∂H∂u=ru+λb=0⇒u∗(t)=−brλ(t)∂u∂H​=ru+λb=0⇒u∗(t)=−rb​λ(t)
+
+
+### Step 3: State and Adjoint Equations
+
+- State:
+    
+    x˙(t)=ax(t)+bu∗(t)=ax(t)−b2rλ(t)x˙(t)=ax(t)+bu∗(t)=ax(t)−rb2​λ(t)
+- Adjoint:
+    
+    λ˙(t)=−∂H∂x=−qx(t)−λ(t)aλ˙(t)=−∂x∂H​=−qx(t)−λ(t)a
+
+
+### Step 4: Solve System
+
+This gives a coupled system of ODEs for x(t)x(t) and λ(t)λ(t). Solving it
+(typically via Riccati equations in LQR) gives the optimal state and control
+trajectories.
+
+
+## Summary
+
+- **Hamiltonian** in control theory is a function combining cost and dynamics.
+    
+- It's used to formulate necessary conditions for optimality via the
+  **Pontryagin Maximum Principle**.
+    
+- The optimal control minimizes the Hamiltonian, with the state and adjoint
+  evolving according to the system and adjoint dynamics.
+    
+- In problems like LQR, it leads to elegant analytic solutions.
+
+
+## Linked Topics:
+
+- Pontryagin Maximum Principle

@@ -1,0 +1,56 @@
+---
+title: Random Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Random Processes
+
+### Generating Functions
+
+Generating functions allow us to represent infinite sequences of numbers as the
+coefficients of a formal [[power-series|power series]]. For any real sequence
+$\{x_{n}\}$ the **generating function** $G_{x}(s)$ where $s\in\mathbb{R}$ is
+given by the convergent sum
+$$
+G_{x}(s)=\sum_{i=0}^\infty x_{i}s^i.
+$$
+The original sequence can be reconstructed from its generating function by
+evaluating the derivative
+$$
+x_{n}= \frac{G_{x}^{(n)}(0)}{n!}.
+$$
+In probability theory the probability mass function or probability density
+function of a sum of independent random variables is the convolution of their
+corresponding probability mass functions or probability density functions
+respectively. Recall from our notes on [[functional-analysis]] that a
+**convolution** is a mathematical operation on two functions $f$ and $g$ that
+produces a third function denoted $f*g$ which is defined as the integral of the
+product of the two functions after one is reflected about the $y$-axis and
+shifted.
+
+For functions $f$ and $g$, the convolution $f*g$ is defined as the integral
+transform
+$$
+(f*g)(t):=\int _{-\infty}^\infty f(s)g(t-s)  \, ds=\int _{-\infty}^\infty f(s-t)g(s) \, ds.  
+$$
+Since sequences can just be thought of as discrete functions from $\mathbb{N}$
+there is an equivalent discrete definition of the convolution of two sequences
+whereby, for sequences $x:=\{ x_{n} \}_{n=0}^\infty$ and
+$y:=\{ y_{n} \}_{n=0}^\infty$ the convolution $z:=x*y$ is defined by
+$$
+z_{n}:=\sum_{i=0}^n x_{i}y_{n-i}=\sum_{i=0}^nx_{n-i}y_{i}.
+$$
+We can show that the **generating function for the convolution** $z=x*y$ is
+given by
+$$
+G_{z}(s)=G_{x}(s)\cdot G_{y}(s).
+$$
+*Proof:*
+$$
+\begin{align}G_{z}(s) & = \sum_{n=0}^\infty z_{n}s^n  \\& = \sum_{n=0}^\infty\left( \sum_{i=0}^n x_{i}y_{n-i} \right)s^n  \\& = \sum_{i=0}^\infty x_{i}\left( \sum_{n=i}^\infty y_{n-i}s^{n-i} \right)s^i  \\& = \sum_{i=0}^\infty x_{i}s^i\left( \sum_{j=0}^\infty y_{j}s^j \right) \\ & = G_{x}(s)\cdot G_{y}(s).\tag*{$\square$}\end{align}
+$$
+### Probability Generating Functions
+

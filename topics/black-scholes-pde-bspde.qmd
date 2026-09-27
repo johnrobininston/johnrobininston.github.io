@@ -1,0 +1,122 @@
+---
+title: Black-Scholes PDE (BSPDE)
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Black-Scholes Formula
+*References:
+[Quantpie Video Series](https://www.youtube.com/watch?v=-qa2B_sCpZQ&list=PLS3zAvd8Oxey3aBAZuglIpQYWhQSH0VTc).*
+
+The **Black-Scholes formula** provides the theoretical price of a European call
+or put option under the [[black-scholes-merton-model]], assuming no dividends
+and a constant volatility environment.
+
+In the Black-Scholes model setting the price of a stock $(S_{t})$ is assumed to
+follow a [[geometric-brownian-motion]] with constant drift and diffusion terms
+$\mu,\sigma$ and the interest rate $r$ that is constant
+$$
+\begin{cases}
+dS_{t}=\mu S_{t}dt+\sigma S_{t}dW_{t} \\
+dB_{t}=rB_{t}dt.
+\end{cases}
+$$
+The payoff function for a European call option given some maturity $T$ and some
+strike price $K$ is given by $V(T-t, S_{t})=V_{t}$ which itself is some
+stochastic process and a function of $t$ and $S_{t}$. From [[ito-formula]] we
+have that
+$$
+\begin{align}
+dV_{t} & = \frac{\partial V_{t}}{\partial t}dt + \frac{\partial V_{t}}{\partial S_{t}}dS_{t} + \frac{1}{2} \frac{\partial ^2V_{t}}{\partial S_{t}^2} d\left< S,S \right> _{t} \\
+ & =\frac{\partial V_{t}}{\partial t}dt + \frac{{\partial V_{t}}}{\partial S_{t}}(\mu S_{t}+\sigma S_{t}dW_{t})+ \frac{1}{2} \frac{{\partial ^2 V_{t}}}{\partial S^2_{t}}\sigma^2S_{t}^2dt \\
+ & = \left( \frac{{\partial V_{t}}}{\partial t}+\mu S_{t} \frac{{\partial V_{t}}}{\partial S_{t}}+ \frac{1}{2} \sigma^2 S_{t}^2 \frac{{\partial^2 V_{t}}}{\partial S_{t}^2} \right)dt + \sigma S_{t} \frac{{\partial V_{t}}}{\partial S_{t}}dW_{t},
+\end{align}
+$$
+where we have grouped the drift and diffusion terms respectively. The idea of
+Black-Scholes is to use a [[delta-hedging]] strategy to eliminate the
+stochastic element (i.e. trading in the underlying stock to eliminate the risk
+of the option).  
+
+Assume we are hedging a short position in a call option, so our strategy is to
+buy stocks assuming we have unlimited money in the form of bank loans / surplus
+subject to the interest rate. Lets suppose we bought $\Delta$ units of stock
+and borrowed $\alpha$ units of cash. Our portfolio $\Pi$ is summarized by the
+stochastic process
+$$
+\Pi_{t} = \Delta_{t} S_{t}+\alpha_{t} B_{t}
+$$
+Again applying [[ito-formula]] we obtain
+$$
+\begin{align}
+d\Pi  & = \Delta dS+\alpha dB  \\
+ & =\Delta(\mu Sdt + \sigma SdW)+\alpha rBdt \\
+ & =(\Delta \mu S + \alpha rB) dt + \Delta \sigma SdW.
+\end{align}
+$$
+*Note: For this step we have assumed that the $\Delta, \alpha$ are
+deterministic i.e. that the portfolio is self-financing where the change of
+value of the portfolio is down to only the change of value of the assets within
+without which the result after applying Itô's Lemma would be*
+$$
+d\Pi = (\Delta dS + Sd\Delta + dS d\Delta) + (\alpha dB + Bd\alpha).
+$$
+<!-- TODO: image "Screenshot 2025-05-06 at 12.36.58 PM.png" not found in vault -->
+
+Now our total portfolio is given by our option plus of hedging stock and cash
+holdings. Our aim is to choose $\Delta$ such that the coefficient of the
+stochastic term becomes zero, i.e.
+$$
+\Delta \sigma S + \sigma S \frac{{\partial V}}{\partial S}=0 \implies \Delta = - \frac{{\partial V}}{\partial S}.
+$$
+Substituting in our result we obtain
+$$
+\begin{align}
+dV + d\Pi &  = \left(  \frac{{\partial V}}{\partial t}+ \mu S \frac{{\partial V}}{\partial S}+ \frac{1}{2}\sigma^2 S^2 \frac{{\partial^2}V}{\partial S^2}- \frac{{\partial V}}{\partial S}\mu S + \alpha r B \right) dt \\
+d(V + \Pi) &  = \left(  \frac{{\partial V}}{\partial t}+ \frac{1}{2}\sigma^2S^2 \frac{{\partial ^2 V}}{\partial S^2}+\alpha rB  \right) dt.
+\end{align}
+$$
+Now substituting our $\Delta$ into our expression for $\Pi$ we have
+$$
+\Pi = -\frac{{\partial V}}{\partial S}S+\alpha B.
+$$
+The combined portfolio is deterministic and therefore must grow at the risk
+free rate to avoid arbitrage, hence
+$$
+\begin{align}
+d(V + \Pi) & = (V + \Pi)r dt  \\
+ & =\left( V- \frac{{\partial V}}{\partial S}S + \alpha B \right)r dt \\
+\implies \frac{{\partial V}}{\partial t}+ \frac{1}{2}\sigma^2 S^2 \frac{{\partial^2V}}{\partial S^2}+\alpha rB  &  =rV-r \frac{{\partial V}}{\partial S}S + \alpha rB \\
+\frac{{\partial V}}{\partial t}+ \frac{1}{2}\sigma^2S^2 \frac{{\partial ^2V}}{\partial S^2}+ rS \frac{{\partial V}}{\partial S}-rV & =0,
+\end{align}
+$$
+the **Black Scholes PDE**, which we specifically define below.
+
+:::{.definition data-title="Black Scholes Equation"}
+
+Consider a derivative on a stock paying no dividends that has a fixed maturity
+$T$ and payoff $K(S_T)$, then the price of the derivative satisfies
+$$
+\begin{cases} \frac{\partial V}{\partial t}+ \frac{1}{2}\sigma^2S^2 \frac{{\partial^2V}}{\partial S^2}+rS\frac{{\partial V}}{\partial S}-rV=0 \\ V(T,s)=K(s)\quad\forall s\end{cases}
+$$
+where $V(t,S)$ is the price of the option as a function of stock price $S$ and
+time $t$, $r$ is the risk-free interest rate and $\sigma$ is the stock
+volatility.
+
+:::
+
+Although the BS PDE looks complicated we can provide the following intuitive
+breakdown. Firstly, rewriting the expression as
+$$
+\frac{{\partial V}}{\partial t}+ \frac{1}{2}\sigma^2S^2 \frac{{\partial ^2V}}{\partial S^2} = rV - rS \frac{{\partial V}}{\partial S}=r\left( V - S \frac{{\partial V}}{\partial S} \right),
+$$
+we see that the RHS represents the return on the bank account which is equal to
+the option premium minus the amount borrowed to finance the stock units, which
+in an infinitesimal period is equal to the balance times the interest rate. The
+LHS essentially represents how the value of the delta-hedged option changes in
+an infinitesimal period where the first term captures the impact of the
+shortening maturity, and the second term captures the gamma impact, the
+remaining risk after the delta is hedged. From the world of probability this is
+essentially the [[backwards-diffusion-equation]].
+

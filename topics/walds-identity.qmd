@@ -1,0 +1,58 @@
+---
+title: Wald's Identity
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+:::{.theorem data-title="Wald's Identity"}
+
+Let $(B_t, \mathcal{F}_{t})$ be a [[wiener-process-brownian-motion]] and assume
+that $\tau$ is an $\mathcal{F}_{t}$-measurable [[stopping-time|stopping time]].
+If $\mathbb{E}\tau<\infty$ then $B_{\tau}\in L^2(\mathbb{P})$ and we have that
+$$
+\mathbb{E}B_{\tau}=0\quad\&\quad \mathbb{E}B_{\tau}^2=\mathbb{E}\tau.
+$$
+
+:::
+
+`\begin{proof}`
+Since $(\tau \wedge t )_{t\geq 0}$ is a family of bounded stopping times, the
+[[optional-stopping-theorem]] applies and shows that $(B_{t}, \mathcal{F}_t)$
+is a martingale. In particular $\mathbb{E}B_{\tau \wedge t}=\mathbb{E}B_{0}=0.$
+For $p=2$ we have that
+$$
+\mathbb{E}B_{\tau \wedge t}^2\leq \mathbb{E}\sup_{{s\leq t}}B_{s}^2\leq 4\mathbb{E}B_{t}^2=4t,
+$$
+from
+[[brownian-motion-an-introduction-to-stochastic-processes-schilling-partzsch-pdf|Schilling & Partzsch]]
+Lemma 5.3, hence $B_{\tau \wedge t}\in L^2(\mathbb{P})$.  
+`\end{proof}`
+
+:::{.theorem data-title="Wald's Identity for Independent Variables"}
+
+Let $X_{1}, \dots, X_{n}$ be i.i.d. with PGF $G_{X}$ and mean $\mathbb{E}X$.
+Let $N\geq 0$ be an integer-valued RV which is independent of all $X_i$ with
+PGF $G_{N}$ and mean $\mathbb{E}N$. The expectation of the sum
+$S_{N}=\sum_{i=1}^NX_{i}$ is given by
+$$
+\mathbb{E}S_{N}=\mathbb{E}N \cdot \mathbb{E}X.
+$$
+
+:::
+
+`\begin{proof}`
+By recovering the factorial moments of the PGF (INSERT REFERENCE) we see that
+we need to take the derivative at $s=1$ of the PGF of $S_{N}$, remembering that
+$G_{X}(1)=1$, $EX=G_{X}^{(1)}$ and $\mathbb{E}N=G_{N}^{(1)}(1)$. We have that
+$$
+\begin{align}
+\mathbb{E}S_{N} & = G_{S_{N}}^{(1)}(1) \\
+ & = (G_{N}(G_{X}(t)))^{(1)}|_{t=1}  \\
+ & = G_{N}^{(1)}(G_{X}(t)) \cdot G_{X}^{(1)}(t)|_{t=1}  \\
+ & = G_{N}^{(1)}(1) \cdot G_{X}^{(1)}(1)  \\
+ & = \mathbb{E}N \cdot \mathbb{E}X.
+\end{align}
+$$
+`\end{proof}`

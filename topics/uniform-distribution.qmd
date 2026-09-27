@@ -1,0 +1,139 @@
+---
+title: Uniform Distribution
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is the Uniform Distribution?
+
+The **uniform distribution** is a continuous probability distribution where all
+outcomes are equally likely within a specified interval. It is the simplest
+continuous distribution and serves as a fundamental model for random variables
+with no preference for any particular value within a bounded range.
+
+:::{.definition data-title="Uniform Distribution"}
+
+A random variable $X$ follows a **uniform distribution** on the interval
+$[a, b]$ with $a < b$ if
+$$
+X \sim \text{Uniform}(a, b) \quad \text{or} \quad X \sim U(a,b).
+$$
+
+:::
+
+The most common case is the **standard uniform distribution** on $[0,1]$,
+denoted $\text{Uniform}(0,1)$ or $U(0,1)$.
+
+## Probability Density Function
+
+:::{.definition data-title="PDF of Uniform Distribution"}
+
+The probability density function is
+$$
+f(x) = \begin{cases}\frac{1}{b-a} & x \in [a,b] \\ 0 & \text{otherwise}\end{cases}
+$$
+
+:::
+
+The constant value $\frac{1}{b-a}$ ensures that the PDF integrates to 1 over
+the interval $[a,b]$.
+
+:::{.definition data-title="CDF of Uniform Distribution"}
+
+The cumulative distribution function is
+$$
+F(x) = \begin{cases}0 & x < a \\ \frac{x-a}{b-a} & a \leq x \leq b \\ 1 & x > b\end{cases}
+$$
+
+:::
+
+## Key Properties
+
+:::{.definition data-title="Moments of Uniform Distribution"}
+
+$$
+\mathbb{E}[X] = \frac{a+b}{2}
+$$
+$$
+\operatorname{Var}(X) = \frac{(b-a)^2}{12}
+$$
+
+:::
+
+*Proof:*
+$$
+\mathbb{E}[X] = \int_a^b x \cdot \frac{1}{b-a} dx = \frac{1}{b-a} \left[\frac{x^2}{2}\right]_a^b = \frac{1}{b-a} \cdot \frac{b^2 - a^2}{2} = \frac{a+b}{2}.
+$$
+
+For the variance,
+$\mathbb{E}[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a} dx = \frac{a^2 + ab + b^2}{3}$,
+so
+$$
+\operatorname{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = \frac{a^2 + ab + b^2}{3} - \frac{(a+b)^2}{4} = \frac{(b-a)^2}{12}.
+$$
+$\square$
+
+:::{.definition data-title="Moment Generating Function"}
+
+$$
+M_X(t) = \frac{e^{tb} - e^{ta}}{t(b-a)}, \quad t \neq 0
+$$
+
+For $t = 0$: $M_X(0) = 1$.
+
+:::
+
+:::{.definition data-title="Characteristic Function"}
+
+$$
+\varphi_X(t) = \frac{e^{itb} - e^{ita}}{it(b-a)}, \quad t \neq 0
+$$
+
+For $t = 0$: $\varphi_X(0) = 1$.
+
+:::
+
+## Affine Transformations
+
+:::{.definition data-title="Linear Transformation of Uniform RV"}
+
+If $X \sim \text{Uniform}(a, b)$ and $Y = cX + d$ for constants $c > 0$ and
+$d$, then
+$$
+Y \sim \text{Uniform}(ca + d, cb + d).
+$$
+
+:::
+
+In particular, if $X \sim \text{Uniform}(0,1)$, then
+$Y = (b-a)X + a \sim \text{Uniform}(a,b)$.
+
+## Relationship to Order Statistics
+
+The uniform distribution arises naturally through order statistics:
+
+:::{.definition data-title="Order Statistics from Uniform Distribution"}
+
+If $U_1, U_2, \ldots, U_n$ are i.i.d. $\text{Uniform}(0,1)$, and
+$U_{(1)} \leq U_{(2)} \leq \cdots \leq U_{(n)}$ are the order statistics, then
+the $k$-th order statistic follows a **Beta distribution**:
+$$
+U_{(k)} \sim \text{Beta}(k, n+1-k).
+$$
+
+:::
+
+## Examples and Applications
+
+- **Random number generation:** Uniform(0,1) is the foundation for generating
+  random variables from any other distribution via inverse transform sampling.
+- **Simulation and modeling:** Modeling scenarios where any value in a range is
+  equally likely (e.g., arrival times within a time window).
+- **Uncertainty quantification:** Prior distribution in Bayesian analysis when
+  there is no reason to favor any particular value in a bounded interval.
+- **Quality control:** Acceptable measurements or dimensions within specified
+  tolerances.
+- **System performance:** Response time of a task uniformly distributed between
+  minimum and maximum latency values.

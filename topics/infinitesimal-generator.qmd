@@ -1,0 +1,90 @@
+---
+title: Infinitesimal Generator
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+*This is the general form of [[transition-rate-matrices|transition matrices]]
+of finite-state continuous time [[markov-process|Markov chains]].*
+
+*See*
+[[brownian-motion-an-introduction-to-stochastic-processes-schilling-partzsch-pdf]]
+*for further details as detailed in the post
+https://math.stackexchange.com/questions/694227/what-is-the-importance-of-the-infinitesimal-generator-of-brownian-motion*
+
+### General Description
+In mathematics - specifically stochastic analysis - the infinitesimal generator
+of a Feller process (i.e. a continuous-time Markov process satisfying certain
+regularity conditions) is a Fourier multiplier operator that encodes
+significant information about the process.
+
+The generator is used in evolution equations such as the
+[[kolmogorov-backward-equation]] which describes the evolution of statistics of
+the process; its $L^2$ Hermitian adjoint is used in evolution equations such as
+the [[fokker-planck-equation]], also known as Kolmogorov forward equation,
+which describes the evolution of the probability density functions of the
+process.
+
+### Mathematical Description
+For a Feller process $(X_{t})_{t\geq 0}$ with Feller semigroup
+$T=(T_{t})_{{t\geq 0}}$ and state space $E$ we define the generator $(A,D(A))$
+by
+$$
+\begin{cases}
+D(A)=\left\{ f\in C_{0}(E):\lim_{ t \downarrow 0 } \frac{T_{t}f-f}{t} \text{ exists as uniform limit} \right\} \\
+Af=\lim_{ t \downarrow 0 }\frac{{T_{t}f-f}}{t}, \text{ for any }f\in D(A). 
+\end{cases}
+$$
+Here $C_{0}(E)$ denotes the [[banarch-space|Banarch space]] of continuous
+functions on $E$ vanishing at infinity, equipped with the supremum
+[[norm|norm]] and
+$$
+T_{t}f(x)=\mathbb{E}^xf(X_{t})=\mathbb{E}[f(X_{t})|X_{0}=x].
+$$
+### Generators of Common Processes
+The general $n$-dimensional diffusion process 
+$$
+dX_{t}=\mu(t, X_{t})dt+\sigma(t,X_{t})dW_{t},
+$$
+has generator
+$$
+Af=(\nabla f)^T\mu+tr((\nabla^2f)D),
+$$
+where $D=\frac{1}{2}\sigma \sigma^T$ is the diffusion matrix, $\nabla^2f$ is
+the [[hessian-matrix|Hessian]] of the function $f$, and $tr$ is the trace of
+the matrix. Its adjoint operator is
+$$
+A^*f=-\sum_{i}\partial_{i}(f\mu_{i})+\sum_{ij}\partial_{ij}(fD_{ij}).
+$$
+The following are commonly used special cases for the general $n$-dimensional
+diffusion process:
+
+1. Standard Brownian Motion on $\mathbb{R}^n$, which satisfies the stochastic
+   differential equation $dX_{t}=dB_{t}$ has generator
+   $$
+   \frac{1}{2}\Delta
+   $$
+   where $\Delta$ denotes the [[laplace-operator]].
+2. The two-dimensional process $Y$ satisfying
+   $$
+   dY_{t}=\begin{pmatrix}dt\\dB_{t}\end{pmatrix}
+   $$
+   where $B$ is a one-dimensional Brownian motion, can be thought of as the
+   graph of that Brownian motion, and has generator
+   $$
+   Af(t,x)= \frac{{\partial f}}{\partial t}(t,x)+ \frac{1}{2}\frac{\partial^2f}{\partial x^2}(t,x).
+   $$
+3. The [[ornstein-uhlenbeck-process]] on $\mathbb{R}$ has generator
+   $$
+   Af(x)=\theta(\mu-x)f'(x)+\frac{\sigma^2}{2}f''(x).
+   $$
+   similarly, the graph of the Ornstein-Uhlenbeck process has generator
+   $$
+   Af(t,x)=\frac{\partial f}{\partial t}(t,x)+\theta(\mu-x)\frac{\partial f}{\partial x}(t,x)+\frac{\sigma^2}{2}\frac{\partial^2f}{\partial x^2}(t,x).
+   $$
+4. A [[geometric-brownian-motion]] on $\mathbb{R}$ has generator
+   $$
+   Af(x)=rxf'(x)+ \frac{1}{2}\alpha^2x^2f''(x).
+   $$

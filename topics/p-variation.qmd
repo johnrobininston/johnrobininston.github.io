@@ -1,0 +1,73 @@
+---
+title: P-Variation
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# $p$-Variation
+
+:::{.definition data-title="$p$ -Variation"}
+
+The $p$ -variation of a real-valued stochastic process $(X_{t})$ on $[0,T]$ is
+a process $\left\langle X,X \right\rangle_{t}^{(p)}$ such that for all $t>0$
+and sequence of partitions
+$$
+\Delta^{(n)}:=\{  0 = t_{0}^{(n)}<t_{1}^{(n)}<\dots<t_{K_{n}}^{(n)}=t \},
+$$
+of interval $[0,t]$ such that
+$$
+\delta^{(n)}:=\max_{1\leq i\leq K_{n}}\lvert t_{i}^{(n)}-t_{i-1}^{(n)} \rvert \to 0\quad \text{as}\quad n \to \infty,
+$$
+the following holds
+$$
+S_{n}^\Delta = \sup_{\Delta}\sum_{i=0}^{K_{n}-1} \lvert X_{t_{i}}-X_{t_{i-1}} \rvert ^p \stackrel{\mathcal{L}_{2}~\&~\mathbb{P}}\to \left\langle X,X \right\rangle_{t}^{(p)}.
+$$
+
+:::
+
+For $p=1$ we call this the **total variation**. For $p=2$ we call this the
+**quadratic variation** and often will drop the $p$ notation
+$\left< X,X \right>_{t}$. We primarily deal with quadratic variance when we are
+working in the $\mathcal{L}_{2}$ space and is key to our construction of an
+integral in this space.
+
+Importantly, if a process is differentiable on $[0,T]$ then its total variation
+will be finite. To show that BM is not differentiable we take
+$T=n\cdot\Delta t$ and find that
+$$
+\sum_{i}\lvert B_{t_{i}}-B_{t_{i-1}} \rvert \sim n\mathbb{E}\lvert B_{\Delta t} \rvert \sim \frac{T}{\Delta t}\sqrt{ \Delta t }\to \infty\quad \text{as}\quad n \to \infty,~\Delta t \to 0.
+$$
+## $p$-Variation of Brownian Motion
+
+:::{.theorem data-title="Quadratic Variation of BM"}
+
+For BM we have $\left< B,B \right>_{t}=t$, that is, for partition
+$\Delta^{(n)}$ of an interval $[a,b]$ such that $\delta^{(n)}\to 0$ as
+$n \to \infty$ then
+$S_{n}^\Delta \stackrel{\mathcal{L}_{2}~\&~\mathbb{P}}\to b-a$.
+
+:::
+
+*PROOF:*
+	We wish to show that $\mathbb{E}(S_{n}^\Delta)^2\to(b-a)^2$ as $n \to \infty$.
+ First note that
+ $$
+ \mathbb{E}S_{n}^\Delta = \mathbb{E}\left[ \sum_{i=0}^{K_{n}-1} \left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \right\rvert^2  \right]=\sum_{i=0}^{K_{n}-1}(t_{i+1}^{(n)}-t_{i}^{(n)})=b-a.
+ $$
+	We proceed to compute
+ $$
+ \begin{align}\mathbb{E}\left[(S_{n}^{\Delta})^2\right] & =\mathbb{E}\left[ \left( \sum_{i=0}^{K_{n}-1}\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \rvert ^2 \right)^2 \right]  \\ & =\sum_{i=0}^{K_{n}-1}\mathbb{E}\left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert ^4+2\sum_{i<j}\mathbb{E}\left[ \left\lvert   B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert^2\cdot \left\lvert  B_{t_{j+1}^{(n)}}-B_{t_{j}}^{(n)}  \right\rvert   \right]  \\ & = \sum_{i}3\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)^2+2\sum_{i<j}\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)\cdot \left(t_{j+1}^{(n)}-t_{j}^{(n)}\right) \\ & = 2\sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right) ^2+\left( \sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right)  \right) ^2 \\ & \leq 2\delta^{(n)}(b-a)+(b-a)^2 \\  & \to(b-a)^2\quad\text{as}\quad n \to \infty,\end{align}
+ $$
+ where we have used $\mathbb{E}X^4=3[(\sigma^2_{X})^2]$ and the stationary
+ independent increments of Brownian motion. We have showed that
+ $$
+ \forall\varepsilon>0,~\exists N:\forall n\geq N,~\mathbb{E}[(S_{n}^{\Delta})^2]\leq (b-a)^2+\varepsilon.
+ $$
+ Additionally, we have shown that
+ $\mathbb{E}[(S_{n}^\Delta)^2]-(b-a)^2=\text{Var}(S_{n}^\Delta)\geq 0$ i.e.
+ $\mathbb{E}[(S_{n}^\Delta)^2]\geq (b-a)^2$ hence we obtain equality. Hence we
+ have convergence in $\mathcal{L}_{2}$ which gives convergence in probability.
+	$\square$
+

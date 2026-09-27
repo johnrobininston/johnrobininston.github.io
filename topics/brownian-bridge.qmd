@@ -1,0 +1,118 @@
+---
+title: Brownian Bridge
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## What is a Brownian Bridge?
+A **Brownian bridge** is a continuous-time gaussian process $(X_{t})$ whose
+probability distribution is the conditional probability distribution of a
+standard Brownian Motion $B_t$ subject to the condition (when standardized)
+that $W_{T} = 0$, so that the process is pinned to the same value at both t = 0
+and t = T.
+
+ >[!definition] Brownian Bridge
+> The **Brownian Bridge** is an SDE $(X_{t})$ characterized by the dynamics $$\begin{cases}dX_{t}=\frac{b-X_{t}}{1-t}dt+dB_{t}\\ X_{0}=a,\end{cases}$$ for $a,b \in \mathbb{R}$ and $0 \leq t < 1$.
+
+This is the Brownian bridge starting from $a$ and ending at $b$ that has the
+same finite-dimensional distribution as the BM conditioning on starting from
+$a$ at time $0$ and ending at $b$ at time $1$. The Brownian bridge starting
+from $0$ at time $0$ and ending at $0$ at time $1$ has the simple form as
+$B_t−tB_1$.
+
+We can verify that the solution is given by
+$$
+X_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
+$$
+First note that from standard results and the [[ito-formula]] we have that 
+$$
+G:=\int_{0}^t \frac{1}{1-s}sB_{s} \sim\mathcal{N}\left( 0, \frac{1}{1-t} \right),
+$$
+and so the [[characteristic-functions|characteristic function]] of $(1-t)G$ is
+given by
+$$
+\phi(p)=\phi_{G}(p(1-t))=e^{\frac{1}{2(1-t)}p^2(1-t)^2}=e^{\frac{1}{2}p^2(1-t)}\to 1~~\text{as}~~t \to 1.
+$$
+Hence $(1-t)G\stackrel{\mathcal{L}}{\to} 0$ as $t \to 1$ and since the limit is
+a constant $(1-t)G\stackrel{\mathbb{P}}{\to} 0$ as $t \to 1$. Finally, we
+notice that this stochastic integral is the sum of countably many independent
+random variables, hence from [[durrett-2-5-10]] we have
+$(1-t)G\stackrel{\text{a.s.}}{\to} 0$ as $t \to 1$ and
+$Y_{t}\stackrel{\text{a.s.}}{\to}b$.
+
+## 0⃣ Standard Brownian Bridge (zero-to-zero)
+A special case is the Brownian Bridge from 0 to 0 which has dynamics given by
+$$
+\begin{cases}
+X_{t}=W_{t}-tW_{1}  \\
+X_{0}=0.
+\end{cases}
+$$
+The Brownian bridge is sometimes called the **tied-down Brownian Motion** (or
+**tied-down Wiener process**). It is useful for modeling a system that starts
+at some given level and is expected to return to that level at some specified
+future time. We note that
+$$
+\begin{align}
+X_{0} & =W_{0}-0W_{1}  \\
+X_{1} & = W_{1}-1W_{1}.
+\end{align}
+$$
+The mean is clearly $\mathbb{E}X_{t}=\mathbb{E}B_{t}-t\mathbb{E}B_{1}=0$ and
+the covariance is computed as
+$$
+\begin{align}
+\text{Cov}(X_{s}, X_{t}) &=\mathbb{E}[X_{s}X_{t}]-\underbrace{\mathbb{E}[X_{s}]\cdot \mathbb{E}[X_{t}]}_{=0}  = \mathbb{E}[(B_{s}-sB_{1})(B_{t}-tB_{1})]  \\
+& = \mathbb{E}[B_{s}B_{t}]-s\mathbb{E}[B_{1}B_{t}]-t\mathbb{E}[B_{s}B_{1}]+st\mathbb{E}[B_{1}^2] \\
+& = \sigma^2s-s\sigma^2t-t\sigma^2s+st \sigma^2=\sigma^2s(1-t).
+\end{align}
+$$
+where we have used the fact that $\mathbb{E}[B_{s}B_{t}]=\sigma^2(s\wedge t)$. 
+
+Thus, the Brownian bridge is not a wide-sense stationary process because the
+covariance is not a function of only the difference between _s_ and _t_.
+
+## Transition Probability of a Brownian Bridge
+
+The distribution of $X_{t}$ is the same as the conditional distribution of BM
+conditioned on $B_{1}=0$, which is a Gaussian process. To see this, consider
+the process $Y_t = B_t | B_1 = 0$ and let's derive the conditional distribution
+of $(B_s, B_t)$ where $0 \leq s \leq t \leq 1$.
+
+Consider the transformation from $(B_t, B_1 - B_t)$ to $(B_s, B_t)$. The joint
+density is:
+$$
+\begin{align}
+f_{B_{s}, B_{1}-B_{t}}(x, y)  & = f_{B_{s}}(x) f_{B_{1}-B_{t}}(y)  \\
+ & = \frac{1}{\sqrt{2\pi s}} e^{-x^{2}/2s} \cdot \frac{1}{\sqrt{2\pi(1-t)}} e^{-y^{2}/2(1-t)} 
+\end{align}
+$$
+since $B_t$ and $B_1 - B_t$ are independent. The conditional density with
+respect to $B_1$ is:
+$$
+f_{B_{s}, B_{t} | B_{1}}(x, y) = \frac{f_{B_{s}, B_{1}}(x, y)}{\sqrt{2\pi(1-s)} \cdot e^{-(x^{2}-1)y^{2}/2}} .
+$$
+
+For the mean, we have:
+$$
+\mathbb{E}Y_t = \mathbb{E}[B_t | B_1 = 0] = 0.
+$$
+
+For the covariance kernel, for $s < t$:
+$$
+\begin{align}
+\text{Cov}(Y_s, Y_t)  & = \text{Cov}(B_s, B_t | B_1 = 0)  \\
+ & = \mathbb{E}[B_s B_t | B_1 = 0] \\
+ & = \mathbb{E}[\mathbb{E}[B_s B_t | B_1] | B_1 = 0]  \\ 
+ & = \mathbb{E}[B_s \mathbb{E}[B_t | B_1] | B_1 = 0]  \\
+ & = \mathbb{E}[B_s B_t | B_1 = 0] \\ 
+ & = s(1-t).
+\end{align}
+$$
+By the Markov property of BM, we have proved that the finite-dimensional
+distributions of these two processes are the same.
+
+## Related Topics
+- [[brownian-bridge-simulation]]

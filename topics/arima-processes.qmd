@@ -1,0 +1,50 @@
+---
+title: ARIMA Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### ARIMA(p,d,q) Processes
+Many series are non-stationary (trending, no fixed mean level) yet become
+stationary after **differencing**. Denote the differencing operator
+$\nabla = 1-B$ and its $d$-fold application
+$$
+\nabla^d X_t = (1-B)^d X_t.
+$$
+
+:::{.definition data-title="ARIMA(p,d,q)"}
+
+$\{X_t\}$ follows an **integrated ARMA process**, $ARIMA(p,d,q)$, if
+$W_t := \nabla^d X_t$ is a stationary, causal [[arma-processes|ARMA(p,q)]]
+process. Equivalently,
+$$
+\phi(B)(1-B)^d X_t = \theta(B)Z_t.
+$$
+$d$ is the **order of integration**, often written $X_t \sim I(d)$.
+
+:::
+
+**Example.** A quadratic trend plus stationary noise, $X_t = bt^2 + S_t$, is
+non-stationary, but $\nabla^2 X_t = 2b + (S_t - 2S_{t-1}+S_{t-2})$ is
+stationary — this is the general mechanism: polynomial trends of degree $d$ are
+eliminated by $d$-th order differencing.
+
+In practice, the order $d$ is chosen empirically (by inspecting the series/ACF
+for trend, and confirmed by [[unit-root-tests]] such as the Augmented
+Dickey-Fuller or KPSS test) before an $ARMA(p,q)$ model is fit to
+$\nabla^d X_t$.
+
+Related generalizations:
+- [[sarima-processes|SARIMA(p,d,q)(P,D,Q)_s]] — adds seasonal differencing/ARMA
+  structure.
+- [[long-memory-processes-arfima|ARFIMA(p,d,q)]] — allows *fractional*
+  $d \in (-0.5, 0.5)$, capturing long-range dependence without full unit-root
+  non-stationarity.
+- [[cointegration]] — the multivariate analogue, where individual $I(1)$ series
+  combine into a stationary linear combination.
+
+### References
+- [[time-series-analysis]]
+- [[pstat274-time-series-summary-notes]]

@@ -1,0 +1,70 @@
+---
+title: Markov Process
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Markov Process
+
+A **Markov process** is a stochastic process indexed by time that has the
+property that the future is independent of the past given the present, known as
+the **Markov property**. Markov processes are used frequently in applied
+mathematics to describe many real world memoryless stochastic processes which
+evolve purely based on the current state.
+
+## Markov Property
+ 
+In probability theory a stochastic process is said to satisfy the Markov
+property if its future evolution is independent of its history. We often
+describe such processes as **memoryless**. We state the general definition
+below recalling the intuitive definition of a $\sigma$-algebra of a stochastic
+process as the *memory* of the process.
+
+:::{.definition data-title="Markov Property"}
+
+Let $(\Omega, \mathcal{F}, \mathbb{P})$ be a probability space with a filtration $(\mathcal{F}_{s},~s \in I)$ for some totally ordered index set $I$; and let $(S,\mathcal{S})$ be a measurable space.  A $(S,\mathcal{S})$-valued stochastic process $X=\{ X_{t}:\Omega \to S \}_{t \in I}$ adapted to the filtration is said to possess the **Markov property** if, for each $A \in \mathcal{S}$ and each $s,t \in I$ with $s<t$, $$\mathbb{P}(X_{t} \in S|\mathcal{F}_{s})=\mathbb{P}(X_{t} \in A|X_{s}).$$In the case where $S$ is a discrete set with the discrete σ-Algebra and $I=\mathbb{N}$, this is reformulated as $$\mathbb{P}(X_{n+1}=x_{n+1}|X_{n}=x_{n}, \dots, X_{1}=x_1)=\mathbb{P}(X_{n+1}=x_{n+1}|X_{n}=x_{n}),$$ for all $n \in \mathbb{N}$.
+
+:::
+
+An alternative property can be formulated as
+$$
+\mathbb{E}[f(X_{t})|\mathcal{F}_{s}]=\mathbb{E}[f(X_{t})|\sigma(X_{s})],
+$$
+for all $t\geq s\geq 0$ and $f:S\to \mathbb{R}$.
+
+### Strong Markov Property
+
+The strong Markov property is based on the same concept with the key difference
+that the time, say $\tau$, that the present refers to is a
+[[stopping-times|stopping time]].
+
+:::{.definition data-title="Strong Markov Property"}
+
+Suppose that $X=(X_{t},~t\geq 0)$ is a stochastic process on a probability
+space $(\Omega, \mathcal{F}, \mathbb{P})$ with natural filtration
+$\{ \mathcal{F}_{t} \}_{t\geq 0}$. Then, for any stopping time $\tau$ on
+$\Omega$ we can define
+$$
+\mathcal{F}_{\tau}=\{ A\in\mathcal{F}:\forall t\geq 0,\{ \tau \leq t \}\cap A\in \mathcal{F}_{t} \}
+$$
+to be the information up to $\tau$. Then $X$ is said to have the strong Markov
+property if, for each stopping time $\tau$, conditional on the event
+$\{  \tau<\infty \}$ we have that for each $t\geq 0$, $X_{\tau+t}$ is
+independent of $\mathcal{F}_{\tau}$ given $X_{\tau}$.
+
+:::
+
+
+
+
+
+
+We can categorize Markov processes into the following four groups:
+
+1. Discrete Time & Countable State Space - [[markov-chains-1]]
+2. Discrete Time & General State Space - [[markov-chains-1]] on Measurable
+   State Space
+3. Continuous Time & Countable State Space - [[jump-processes]]
+4. Continuous Time & General State Space - [[continuous-time-markov-processes]]

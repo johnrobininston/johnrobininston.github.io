@@ -1,0 +1,541 @@
+---
+title: Game Theory Notes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Game Theory
+
+## Introduction
+
+Informally, a game is a system of interacting decision making agents with
+conflicting aims. The flexibility of this definition has lead to a wide variety
+of different games depending on their underlying structure. For example, games
+can be:
+
+- **Cooperative or Non-cooperative:** 
+	A game in which players are able to mutually benefit through cooperation is
+ said to be cooperative. Otherwise, the games are said to be con-cooperative.
+- **Static vs Dynamic:**
+	A game 
+- Deterministic vs Stochastic
+- Simultaneous vs Sequential vs Continuous Time
+- Symmetric vs Asymmetric
+- Perfect Information vs Imperfect Information
+- Zero-Sum vs Non-Zero-Sum
+- Monotone
+- Super-modular
+- Potential
+
+The **solution** to games from a mathematical perspective is to find
+**equilibriums**, i.e. states that the game will move into if left to run.  
+
+Denote agents $j\in \{ 1, \dots, J \}:=\mathcal{J}$ gather in **agent space**
+$\mathcal{J}$. The fundamental underpinnings of game theory are studied in
+**Decision Theory** which involves the study of single agent decision making
+under uncertainty.  
+
+:::{.definition data-title="Decision Space"}
+
+Each agent can select from set of possible **strategy**
+$s_{j}\in\mathcal{S}_{j}$ (also called **actions** or **decisions**) called the
+**strategy space**.
+
+:::
+
+We denote the agent wide strategy space by the Cartesian product
+$\mathcal{S}:=\mathcal{S}_{1}\times\cdots\times \mathcal{S}_{J}$. Typically
+strategies are driven by **decision rules** which are functions mapping from an
+observation to an appropriate strategy.
+
+:::{.definition data-title="Pure and Mixed Strategy"}
+
+A strategy is said to be **pure** if it is deterministic i.e. there is no
+randomness to the strategy. Otherwise the strategy is said to be **mixed**.  
+
+:::
+
+All elements of the strategy spaces $\mathcal{S}_{j}$ are pure. The space of
+mixed strategies for agent $j$ is the simplex over $\mathcal{S}_{j}$.
+
+:::{.definition data-title="Simplex"}
+
+The **simplex** $\Delta \mathcal{S}_{j}$ of pure decision space
+$\mathcal{S}_{j}$ is the **set of probability distributions** over
+$\mathcal{S}_{j}$. A **mixed strategy** for player $j$ is an element
+$\sigma_{j}\in\Delta\mathcal{S}_{j}$ so that $\sigma_{j}$ is a probability
+distribution over $\mathcal{S}_{j}$. We denote by $\sigma(s_{j})$ the
+probability that player $j$ employs $s_{j}$.
+
+:::
+
+**Example (Pure vs Mixed Strategy):**
+Suppose we are playing poker and we construct a strategy on how to handle
+strong hands. A pure strategy could be "for 3-of-a-kind or stronger go all in".
+Although the game itself is random, the strategy is deterministic, if this then
+that. Alternatively, a mixed strategy could be "for a 3-of-a-kind or stronger
+go all in 75% of the time". Now we have introduced a stochastic component to
+our strategy.
+
+:::{.definition data-title="Utility Function"}
+
+Each agent has a **utility function** (also called **payoff** or **profit**)
+$$
+U_{j}:\mathcal{S}\to \mathbb{R},
+$$
+which describes their utility gain (or loss) based on an **strategy profile**
+$s\in\mathcal{S}$. We denote the combined agent utility function space by the
+Cartesian product $\mathcal{U}:=\prod_{j\in \mathcal{J}}U_{j}$. The game is
+therefore mathematically represented by the tuple
+$(\mathcal{J},\mathcal{S},\mathcal{U})$.
+
+:::
+
+Given that the game involved only pure strategies each agent $j$ chooses
+strategy $s_{j}\in\mathcal{S}_{j}$ to **maximize her utility**
+$$
+\max_{s_{j}\in \mathcal{S}_{j}}U_{j}(s_{j},s_{{-j}}),
+$$
+where $s_{-j}$ denotes the strategies of all players except $j$. For games with
+mixed strategies an agent chooses mixed strategy
+$\sigma_{j}\in \Delta \mathcal{S}_{j}$ to **maximize her expected utility**
+$$
+\max_{\sigma_{j}\in \Delta\mathcal{S}_{j}}\mathbb{E}[U_{j}(s_{j},s_{-j})].
+$$
+## Minimax and Maximin Rules
+
+Recall that a decision rule is a rule designed to aid in decision making based
+on incoming future information. *Minimax* is a decision rule used for
+*minimizing the possible loss for the worst case scenario*. Originally
+formulated for several-player **zero-sum games** for both sequential and
+simultaneous moves but has since been extended to more complex games.
+
+### Maximin Rule
+
+Consider a general finite-player game with agents $j\in\{1, \dots, J\}$ and
+denote all players but $j$ by $-j$. The *maximin* value is the highest value
+that the player can be sure to get whatever the actions of the other players.
+Equivalently, it is the lowest value the other players can force the player to
+receive when they know the player's action. Mathematically, this is written
+$$
+\underline{v_{j}}=\max_{a_{j}}\min_{a_{-j}}v_{j}(a_{j},a_{-j}),
+$$
+where: (1) $a_{j}$ is the *action taken* by player $j$; and (2) $v_{j}$ is the
+*value function* of player $j$.
+
+### Minimax Rule
+
+The *minimax* value of a player is the lowest value that the other players can
+force the players to receive, without knowing the player's actions.
+Equivalently, it is the highest value the other players can force the player to
+receive when they know the player's action. Mathematically, this is written
+$$
+\overline{v_{j}}:=\min_{a_{-j}}\max_{a_{j}}v_{j}(a_{j},a_{-j}).
+$$
+For every player$j$, the maximin is at most the minimax
+$$
+\underline{v_{j}}\leq\overline{v_{j}}.
+$$
+#### Example
+
+Consider the **zero-sum game** where players $s,t$ make simultaneous moves
+selected from decision spaces $\mathscr{S}:=\{s_{1}, s_{2}, s_{3}\}$ and
+$\mathscr{T}:=\{ t_{1}, t_{2}, t_{3} \}$ with payoff matrix for $s$ given by
+$$
+\boldsymbol{P}:=(p_{i,j})_{i,j\in \{ 1,\dots,3 \}}=\left[ \begin{matrix}
+3 & -2 & 2 \\ 
+-1 & 0 & 4  \\
+-4 & -3 & 1
+\end{matrix} \right],
+$$
+where $p_{i,j}$ corresponds to the outcome with $s_{i}$ and $t_{j}$ decisions.
+The payoff matrix for $t$ is $-\boldsymbol{P}$ since the game is zero-sum.
+
+Then, the maximin choice for $s$ is $s_2$ since the worst possible result is
+then having to pay $1$, while the simple maximin choice for $t$ is $t_2$ since
+the worst possible result is then no payment. However, this solution is not
+stable, since if $t$ believes $s$ will choose $s_2$ then $t$ will choose $t_1$
+to gain $1$; then if $s$ believes $t$ will choose $t_1$ then $s$ will choose
+$s_1$ to gain $3$; and then $t$ will choose $t_2$; and eventually both players
+will realize the difficulty of making a choice.
+
+Some choices are _dominated_ by others and can be eliminated: $s$ will not
+choose $s_3$ since either $s_1$ or $s_2$ will produce a better result, no
+matter what $t$ chooses; $t$ will not choose $t_3$ since some mixtures of $t_1$
+and $t_2$ will produce a better result, no matter what $s$ chooses.
+
+Player **A** can avoid having to make an expected payment of more than ⁠1/ 3 ⁠
+by choosing $s_1$ with probability ⁠$1/ 6$ ⁠ and $s_2$ with probability $⁠5/ 6$
+⁠: The expected payoff for $s$ would be
+$3 \times ⁠1/ 6 ⁠ − 1 \times ⁠5/ 6 ⁠ = ⁠-1/ 3$ ⁠ in case $t$ choses $t_1$ and
+$−2 \times ⁠1/6 ⁠ + 0 \times ⁠5/ 6 ⁠ = ⁠- 1/ 3$ ⁠in case $t$ chose $t_2$.
+Similarly, $t$ can ensure an expected gain of at least $⁠1/ 3$ ⁠, no matter
+what s chooses, by using a randomized strategy of choosing $t_1$ with
+probability ⁠$1/ 3$ ⁠and $t_2$ with probability ⁠$2/ 3 $. These *mixed minimax
+strategies* cannot be improved and are now stable.
+
+## Nash Equilibrium
+
+In game theory, a *Nash equilibrium* is a situation where no player could gain
+by changing their own strategy holding all other player's strategies as fixed.
+The famous John Nash showed that there exists a Nash equilibrium, possibly in
+*mixed strategies* (those with stochastic decisions) for every *finite game*.
+
+**Definition (Nash Equilibrium):**
+Formally, consider a game with players $j=1, \dots, J$ and let
+$\mathscr{S}_{j}$ denote the set of all possible strategies for player $j$. Let
+$s^*=(s_{j}^*, s_{-j}^*)$ be a strategy profile that is, a set consisting of
+one strategy for each player where $s_{-j}^*$ denotes the $J-1$ strategies of
+all the players besides $j$. Let $u_{j}(s_{j},s^*_{-j})$ be player $j$'s payoff
+function of the strategies. The strategy profile $s^*$ is a Nash equilibrium if
+$$
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j}.
+$$
+A game can have more than one Nash equilibrium. Even if the equilibrium is
+unique, it might be *weak* whereby a player might be indifferent among several
+strategies given the other player's choices. The equilibrium is unique and
+called a *strict Nash equilibrium* if the inequality if the inequality is
+strict so one strategy is the unique best response
+$$
+u_{j}(s_{j}^*, s_{-j}^*)\geq u_{j}(s_{j},s_{-j}^*);\quad \forall s_{j}\in S_{j};~s_{j}\neq s_{j^*}.
+$$
+The strategy set $\mathscr{S}_{j}$ can be different for different players, and
+its elements can be a variety of mathematical objects.  
+
+**Example (One-Period Sequential ):** 
+Consider the following example from page 6 of Textbook - Başar and Olsder -
+Dynamic Noncooperative Game Theory considering a *one-period sequential game*
+between two companies $P_{1}, P_{2}$ deciding whether to advertise (spend
+money) based on their resulting customer numbers and profit.
+
+The Nash equilibrium is deduced as follows: no matter what $P_{1}$ decides,
+$P_{2}$ will decide to advertise since they will be better off; thus assuming
+$P_{2}$ is a smart player, $P_1$ knows this and picks their own ideal case
+which is to also advertise.
+
+Some Nash equilibrium variants include:
+
+- Pure Equilibrium vs Mixed Equilibrium
+- Strict Equilibrium vs Non-Strict Equilibrium
+- Equilibria for coalitions
+
+## Notes to add
+
+- Proof of Nash's result
+- Discussion of Fixed Point Theorems
+
+## Pareto Optimal
+
+In welfare economics, a Pareto improvement formalizes the idea of outcomes
+being better in *every possible way*. An improvement is Pareto if at least one
+person in the system is better off without anybody else being worse off.
+
+A situation is called **Pareto optimal (efficient)** is all possible Pareto
+improvements have already been made, that is all *win-win* improvements have
+already been applied.  
+
+:::{.definition data-title="Pareto Optimality"}
+
+Formally, let $X$ be the set of all feasible allocations and define **utility
+functions** $u_{i}:X \to \mathbb{R}$ of agent $i=1,\dots,n$. An allocation
+$x^*\in X$ is **Pareto optimal** if there is no other allocation $x \in X$ such
+that $u_{i}(x)\geq u_{i}(x^*);\quad \forall i$ and $u_{j}(x)>u_{j}(x^*)$ for at
+least one $j$.  
+
+:::
+
+In other words, you cannot improve someones utility without lowering someone
+else's.
+
+# Zero-Sum Games
+
+## Fundamentals of Zero-Sum Games
+
+The simplest kind of game utility structure is a **zero sum game** in which
+players can only gain at the equal cost to other players.  
+
+:::{.definition data-title="Zero-Sum Game"}
+
+A **zero-sum game** requires for finite agents $j=\{1, \dots, J\}=:\mathcal{J}$
+with decision variables $\boldsymbol{d}=(d^j)_\mathcal{J}$ and utility function
+$U^j$ we have
+$$
+\sum_{j=1}^{J}U^j(\boldsymbol{d})=0.
+$$
+
+:::
+
+
+
+Games where this sum is equal to a nonzero constant (independent of decision
+variables) are known as **constant sum game** which can easily transformed to a
+zero-sum game.
+
+Zero-sum games are often called *strictly competitive games* and are most often
+solved with the *minimax theorem* or with *Nash equilibrium*.  
+
+The zero-sum property means that any result of a zero-sum situation is
+[[pareto-optimal]] (no players position can be improved without making another
+players worse).
+
+
+- **Definition of Zero-Sum Game**
+    
+    - Two-player game where one player’s gain is the other’s loss:
+      u1+u2=0u1​+u2​=0
+        
+- **Game Representations**
+    
+    - **Normal-form (Matrix) Games**
+        
+        - Payoff matrix for player 1; player 2's payoffs are the negation
+            
+    - **Extensive-form Games**
+        
+        - Game tree with sequential moves and perfect/imperfect information
+            
+- **Basic Concepts**
+    
+    - **Strategies**
+        
+        - Pure vs. mixed strategies
+            
+    - **Expected Payoff**
+        
+        - Payoff under mixed strategies computed using bilinear forms
+            
+- **Dominance and Simplification**
+    
+    - Dominated strategies can be eliminated
+        
+    - Best response correspondences
+        
+
+
+### Foundational Theorems and Results
+
+- **Minimax Theorem (von Neumann, 1928)**
+    
+    max⁡x∈Δmmin⁡y∈ΔnxTAy=min⁡y∈Δnmax⁡x∈ΔmxTAyx∈Δm​max​y∈Δn​min​xTAy=y∈Δn​min​x∈Δm​max​xTAy
+    - Existence of equilibrium in mixed strategies
+        
+    - Value of the game is unique
+        
+- **Duality in Linear Programming**
+    
+    - Connection between zero-sum games and LP duality
+        
+    - Game value as LP optimum
+        
+    - Dual variables represent optimal strategies
+        
+
+
+### Solution Concepts
+
+- **Saddle Point**
+    
+    - Strategy pair (x∗,y∗)(x∗,y∗) such that
+      x∗Ay∗=min⁡ymax⁡xxAy=max⁡xmin⁡yxAyx∗Ay∗=miny​maxx​xAy=maxx​miny​xAy
+        
+- **Value of the Game**
+    
+    - Common expected payoff to both players at equilibrium
+        
+
+
+### Algorithms for Computing Strategies
+
+- **Linear Programming Formulation**
+    
+- **Simplex Method**
+    
+- **Iterated Best Response**
+    
+- **Fictitious Play (Brown, 1951)**
+    
+- **Regret Minimization and Online Learning (e.g., Follow the Regularized
+  Leader)**
+    
+
+
+### Extensions and Advanced Topics
+
+- **Zero-Sum Games with Infinite Strategy Sets**
+    
+    - Measurable strategy spaces, Glicksberg’s generalization
+        
+- **Differential Games**
+    
+    - Continuous-time control interpretation of zero-sum interactions
+        
+- **Stochastic Games (Shapley, 1953)**
+    
+    - Markov decision process with two players and transition dynamics
+        
+- **Repeated Games**
+    
+    - Zero-sum repeated games with finite/infinite horizon
+        
+    - Folk theorems and the emergence of cooperation
+        
+- **Mean Field Games (in zero-sum settings)**
+    
+    - Large population limits with antagonistic interactions
+        
+
+
+### Connections to Other Fields
+
+- **Optimization & Convex Analysis**
+    
+    - Saddle point theory
+        
+- **Control Theory**
+    
+    - Differential and dynamic zero-sum games
+        
+- **Economics**
+    
+    - Competitive equilibria in markets with strategic antagonism
+        
+- **Machine Learning**
+    
+    - Adversarial training, GANs as a zero-sum game
+
+
+
+## Zero-Sum Games
+
+The simplest kind of game utility structure is a zero sum game in which players
+can only gain utility at the equal cost to another players utility, for example
+chess. They naturally describe any head to head competition with reward for
+only a single winner at the end.
+
+:::{.definition data-title="Zero-Sum Game"}
+
+A **zero-sum game** is defined by the requirement that the sum of all player
+cost / reward functions is zero. Written mathematically, for finite agents
+$j=\{1, \dots, J\}=:\mathcal{J}$ with decision variables
+$\boldsymbol{u}=(u^j)_\mathcal{J}$ and cost / reward function $L^i$ we have
+$$
+\sum_{j=1}^{J}L^i(\boldsymbol{u})=0.\tag{1}
+$$
+Games where this sum is equal to a nonzero constant (independent of decision
+variables) are known as **constant sum game** which can easily transformed to a
+zero-sum game.
+
+:::
+
+Zero-sum games are often called *strictly competitive games* and are most often
+solved with the *minimax theorem* or with *Nash equilibrium*.  
+
+The zero-sum property means that any result of a zero-sum situation is
+[[pareto-optimal]] (no players position can be improved without making another
+players worse).  
+
+## 2-Player Zero-Sum Games
+
+Two-person zero-sum games **do not allow for any cooperation between the
+players** since what one player gains incurs an equivalent loss in the other.
+This is not the case in other games, such as two-player non-zero-sum games or
+games with three or more players, as cooperation between two or more players
+can result in their mutual advantage.
+
+**Definition (Saddle Point):** In a zero-sum game, a *saddle point* represents
+a stable solution where the maximin value (highest row minimum) equals the
+[[minimax-and-maximin|minimax]] value (lowest column maximum). This point
+indicates an equilibrium where neither player can improve their outcome by
+unilaterally changing their strategy.
+
+*Example:* Consider players $p_{1}, p_{2}$ who are directing unit forces on a
+point mass in $\mathbb{R}^2$ at the origin $(x,y)=(0,0)$ at time $t=0$. At
+$t=1$ player $p_{1}$ has aim to maximize the $y$ coordinate and $p_{2}$ has aim
+to minimize the $y$-coordinate. This is a zero-sum game with solution following
+immediately, both players will act their force in their preferred direction,
+cancel each other out, resulting in no net force and equilibrium.
+
+## Matrix Games
+
+Elementary two-person zero-sum games are **matrix games** in which players
+$p_1, p_{2}$ have game outcomes summarized in the $n \times m$ matrix
+$$
+A=(a_{i,j});\quad i=1, .., m; ~j=1, \dots, n,\tag{2}
+$$
+where each outcome corresponds to a particular pair of decisions made by the
+players. The matrix rows and columns correspond to the strategies for players
+$p_{1}, p_{2}$ respectively. We interpret positive outcomes as $p_{1}$ paying
+$p_{2}$ and vice versa, generally thought of as relative change of **utility**.  
+
+First considering a single round, a reasonable strategy for $p_1$ might be to
+minimize her losses against any strategy of $p_{2}$ (rational or irrational).
+Similarly, $p_{2}$ will want to secure his gains against any behavior of
+$p_{1}$. These are known as *security strategies*.
+
+:::{.definition data-title="Loss Ceilings & Security Strategy"}
+
+The *security strategy* $i^*$ is the strategy of $p_{1}$ (matrix row) such that
+$$
+\overline{V}(A)\stackrel{\Delta}{=}\max_{j}a_{i^*j}\leq \max_{j}a_{i,j};\quad i=1, \dots, m.\tag{3}
+$$
+If selected then her losses will be no greater than $\overline{V}$ which we
+call the *loss ceiling* of $p_{1}$. Similarly, the *security strategy* $j^*$ is
+the strategy of $p_{2}$ (matrix column) such that
+$$
+\underline{V}(A)\stackrel{\Delta}{=}\min_{i}a_{i,j^*}\geq \min_{i}a_{ij};\quad j = 1, \dots, n.\tag{4}
+$$
+If selected then her gains will be no less than $\underline{V}$ which we call
+the *gain floor* of $p_{2}$.
+
+:::
+
+
+
+:::{.theorem data-title="$~$"}
+
+In every matrix game $A=(a_{ij})$ the following hold:
+1. The security level of each player is unique;
+2. There exists at least one security strategy for each player; and
+3. The security level of $p_{1}$ (the minimizer) never falls below the security
+   level of $p_{2}$ (the maximizer)
+   $$
+   \min_{i}a_{ij^*}=\underline{V}(A)\leq \overline{V}(A)=\max_{j}a_{i^*j}\tag{5}
+   $$
+   for security strategies $i^*,j^*$.
+
+:::
+
+*Proof:* 
+Properties 1 and 2 follow directly from equations $(3)$ and $(4)$, since in
+every matrix game there is only a finite number of alternatives for each player
+to chose from. To proce 3 we note
+$$
+\min_{i}a_{i,l}\leq a_{kl}\leq \max_{j}a_{kj};\quad \forall k,l.\tag{6}
+$$
+Letting $k=i^*$ and $l=j^*$ the result follows. 
+$\square$
+
+:::{.definition data-title="Saddle-Point Strategies"}
+
+For matrix game $A=(a_{ij})$ with security strategies $i^*, j^*$. If the paif
+og inequalities
+$$
+a_{i^*j} \leq a_{i^*j^*}\leq a_{ij^*};\quad \forall i,j,
+$$
+the strategies are said to be *saddle-point strategies*, and the game is said
+to have a saddle point in pure strategies. The corresponding outcome
+$a_{i^*j^*}$ is called the saddle-point value and is denoted $V(A)$.
+
+:::
+## Types of Game
+
+1. **Cournot Game**
+	- The canonical model of quantity competition in oligopoly. Each firm chooses
+   how much to produce at some cost with profit given by market price which is
+   dependent on total output.
+	- Formally, a Cournot game is a static noncooperative game with continuous
+   strategy sets and payoff functions determined by inverse demand and costs,
+   whose equilibria are Nash equilibria in quantities.
+	- 

@@ -1,0 +1,49 @@
+---
+title: Autoregressive Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### Autoregressive Processes
+:::{.definition data-title="AR(p) Process"}
+
+A time series $\{X_t\}$ is an **autoregressive process of order $p$**, $AR(p)$,
+if
+$$
+X_t = \phi_1 X_{t-1} + \dots + \phi_p X_{t-p} + Z_t, \qquad Z_t \sim [[white-noise|WN]](0,\sigma_Z^2).
+$$
+With the backshift operator, $\phi(B)X_t = Z_t$ where
+$\phi(B) = 1-\phi_1B-\dots-\phi_pB^p$.
+
+:::
+
+:::{.theorem data-title="Stationarity and Causality"}
+
+An $AR(p)$ process has a (unique) stationary and
+[[causality-and-invertibility|causal]] solution iff the roots of $\phi(z)$ lie
+strictly outside the unit circle, i.e. $\phi(z)\neq 0$ for $|z|\leq 1$. In that
+case $X_t = \psi(B)Z_t$ for an absolutely summable $\psi(B) = \phi(B)^{-1}$ —
+an $AR$ process is an infinite-order $MA$ process (contrast with
+[[moving-average-processes]], where finite $MA(q)$ is a limit of $AR(\infty)$).
+
+:::
+
+All (causal, stationary) $AR(p)$ models are automatically **invertible**.
+Unlike $MA(q)$, the ACF of an $AR(p)$ process decays (exponentially, possibly
+with oscillation) rather than cutting off, which is why the
+[[partial-autocorrelation-function|PACF]] — which does cut off at lag $p$ — is
+used instead to identify the order.
+
+### Yule-Walker Equations
+The ACF of an $AR(p)$ satisfies the recursion
+$$
+\rho_X(k) - \phi_1\rho_X(k-1) - \dots - \phi_p \rho_X(k-p) = 0, \qquad k \geq 1,
+$$
+see [[yule-walker-equations]] for the full system and sample-based estimation
+via the [[durbin-levinson-algorithm]].
+
+### References
+- [[time-series-analysis]]
+- [[pstat274-time-series-summary-notes]]

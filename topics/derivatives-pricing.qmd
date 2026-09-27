@@ -1,0 +1,187 @@
+---
+title: Derivatives Pricing
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+```table-of-contents
+title: ## Contents
+style: nestedOrderedList # TOC style (nestedList|nestedOrderedList|inlineFirstLevel)
+minLevel: 0 # Include headings from the specified level
+maxLevel: 3 # Include headings up to the specified level
+includeLinks: true # Make headings clickable
+hideWhenEmpty: false # Hide TOC if no headings are found
+debugInConsole: false # Print debug info in Obsidian console
+```
+
+## Derivatives Pricing
+
+In [[financial-mathematics]] a **financial asset** is a non-physical asset that
+represents a claim to ownership or future cash flows. A **derivative** or a
+**contingency claim** is a subset of financial assets that derive their value
+from other financial assets, e.g. financial contracts such as options which
+give their owner the right (but not the obligation) to purchase / sell assets
+at some future time $T$ (known as maturity) for so pre-specified $K$ (known as
+the strike price). The **payoff** of a derivative is the amount the holder
+receives at maturity and is generally given by some function of the underlying
+asset price, either at maturity (such as a European option) or of the process
+from inception to maturity (such as a Asian option).
+
+To formalize our notation we typically denote the asset price process by some
+continuous [[stochastic-process|stochastic process]] $(S_{t})$ and the payoff
+function by $g(S_{[t_{0},T]})$ which is a random variable. The key idea of
+derivatives pricing is the **principle of no arbitrage** which states that we
+cannot have profit without risk. Therefore, in order to determine the fair
+price of the derivative we need to be able to describe the dynamics of the
+underlying process $(S_{t})$ and compute its expected payoff which (once
+adjusted for the time-value of money and the buy-side risk) will give us the
+price of the contract.
+ 
+### 2.2 Black-Scholes-Merton Model
+
+First we consider the Black-Scholes-Merton model for describing the dynamics of
+the underlying asset price.
+
+:::{.definition data-title="Black-Scholes Merton Model"}
+
+The Black-Scholes-Merton (BSM) model considers a market consisting of 2 assets:
+a risk-free asset (e.g. a bond) $(B_{t})$; and a risky asset (e.g. a stock)
+$(S_{t})$, with dynamics given by given by [[geometric-brownian-motion]] (GBM)
+$$
+\begin{align} dB_{t} & = rBtdt\tag{1}\\dS_{t} & =\mu S_{t}dt+\sigma S_{t}dW_{t},\tag{2}\end{align}
+$$
+where $r$ is the risk-free interest rate and $\mu$ and $\sigma$ are the
+**drift** and **diffusion** component of the
+[[stochastic-calculus|stochastic differential equation (SDE)]].  
+
+:::
+
+We note that $(1)$ is just an [[ordinary-differential-equations|ODE]] and has
+the solution
+$$
+B_{t}=B_{0}e^{rt},\tag{3}
+$$
+and the solution to GBM $(2)$ is
+$$
+S_{t}=S_{0}e^{(\mu-\frac{\sigma^2}{2})t+\sigma W_{t}}.\tag{4}
+$$
+
+#### 2.2.1 BSM Model: Risk-Neutral Measure
+*References: [[girsanovs-theorem]], [[radon-nikodym-derivative]].*
+
+Stochastic processes evolve under probability measures and so in the real world
+we can think of the asset price $(S_{t})$ evolving under some *real-world*
+measure $\mathbb{P}$ with drift terms reflecting the preference of investors
+recieving larger returns for riskier assets. Thus the arbitrage-free price of a
+financial derivative is not equal to its discounted expected payoff since one
+has to compensate the buyers for the risk.  
+
+If we assume the investor is risk-neutral, he has no positive or negative
+preference on taking any risk thus the price of the derivative is the expected
+payoff. We can therefore construct a *risk-free* measure $\mathbb{Q}$ ensuring
+that the discounted stock price $(e^{-rt}S_{t})$ is a
+[[martingale-theory|martingale]] using [[girsanovs-theorem]], where the
+resulting drift term in the dynamics of $(S_{t})$ will be $rS_{t}$ and all
+other extra drift terms shall be absorbed into the the diffusion term.
+
+The asset price process dynamics are therefore
+$$
+\begin{align}
+dS_{t} & = rS_{t}dt+((\mu-r)S_{t}dt + \sigma S_{t}dW^{\mathbb{P}}_{t}) \\
+ & =rS_{t}dt+\sigma S_{t}\left(  \frac{{\mu-r}}{\sigma}dt+dW_{t} \right)  \\
+ & =rS_{t}dt+\sigma S_{t}dW_{t}^{\mathbb{Q}}
+\end{align}
+$$
+where $dW_{t}^\mathbb{Q}=\frac{\mu-r}{\sigma}dt+dW_{t}$ is a BM under
+$\mathbb{Q}$. [[girsanovs-theorem]] enables us to find the connection between
+$\mathbb{P}$ and $\mathbb{Q}$. We write $L_{t}=-\frac{\mu-r}{\sigma}W_{t}$ such
+that $\langle W,L\rangle_{t}=-\frac{\mu-r}{\sigma}t,$ then
+$$
+W_{t}^\mathbb{Q}=W_{t}-\langle W,L\rangle_{t}
+$$
+and so by Girsanov the [[radon-nikodym-derivative]] is given by
+$$
+\frac{d\mathbb{Q}}{d\mathbb{P}}=\exp\left\{ L_{T}-\frac{1}{2}\langle L,L\rangle_{T} \right\}=\exp\left\{ - \frac{{\mu-r}}{\sigma}W_{T}- \frac{1}{2}\left( \frac{{\mu-r}}{\sigma} \right)^2T \right\}.
+$$
+It is simple to check that the RN derivative has expectation 1 so its not only
+a local martingale but also a martingale, which satisfies the condition of
+Girsanov's theorem. In this risk neutral world, the price of the option at time
+0 is just the discounted expected payoff
+$$
+\exp\{-rT\}\mathbb{E}_{\mathbb{Q}}[h(S_{T})].
+$$
+#### 2.3.1 BSM Model: PDE Approach
+
+The idea is that one can build a self-financing replicating portfolio using
+stock and bond which has exactly the same payoff as the option. Assuming no
+arbitrage, the portfolio and the claim must have the same price.  
+
+To be specific, assume the self-financing replicating portfolio $h_{t}$
+consists of $a_{t}$ units of stocks and $b_t$ units of bond at time $t$
+(assuming the bond has initial price $1$ at time $0$) so the portfolio value
+process is
+$$
+V_{t}^h=a_{t}S_{t}+b_{t}e^{rt},
+$$
+where $r$ is the short interest rate. From [[ito-formula]] we have that the
+change in the value of the portfolio is given by
+$$
+dV_{t}=a_{t}dS_{t}+S_{t}da_{t}+d\langle S,a\rangle_{t}+rb_{t}e^{rt}dt+e^{rt}d_{t}
+$$
+Inspecting this we see $S_{t}da_{t}+e^{rt}db_{t}$ denotes the change in the
+value of the portfolio that is due to the change of the position in stock and
+bond and $d\langle S,a\rangle_{t}$ is the cross variation term. By definition,
+a self-financing portfolio satisfies
+$$
+S_{t}da_{t}+d\langle S,a\rangle_{t}+e^{rt}db_{t}=0.
+$$
+Hence, the change in value of the process reduces to
+$$
+\begin{align}
+dV_{t} & =a_{t}dS_{t}+rb_{t}e^{rt}dt \\
+ & = a_{t}(\alpha S_{t}dt+\sigma S_{t}dW_{t})+rb_{t}e^{rt}dt\tag{$\star$}
+\end{align}
+$$
+with the assumption that $V_{t}=u(t,S_{t})$ has the Markovian form with
+deterministic time-independent feedback function $u$. Applying [[ito-formula]]
+we have that
+$$
+\begin{align}
+dV_{t} & =\partial_{t}udt+\partial_{x}udS_{t}+ \frac{1}{2}\partial_{x x} ud\langle S,S\rangle_{t} \\
+ & = \left( \partial _{t}u+\mu S_{t}\partial_{x}u+ \frac{1}{2}\sigma^2S_{t}^2 \partial_{x x}u \right)dt+\sigma S_{t}\partial_{x}udW_{t} \tag{$\star\star$}
+\end{align}
+$$
+Matching the coefficients of $(\star)$ and $(\star\star)$ we obtain the
+following system
+$$
+\begin{cases}
+\sigma a_{t}S_{t}=\sigma S_{t}\partial_{x}u \\
+\mu A_{t}S_{t}+rb_{t}e^{rt}=\partial_{t}u+\mu S_{t}\partial_{x}u+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u,
+\end{cases}
+$$
+hence the replicating portfolio $h_t$ is satisfies
+$$
+\begin{cases}
+a_{t}=\partial_{x}u(t,S_{t}) \\
+b_{t}=\frac{\partial_{t}u(t,S_{t})+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u(t,S_{t})}{\mathrm{re}^{rt}}.
+\end{cases}
+$$
+Our only remaining problem is to find the PDS characterization for $u=u(t,x)$
+to solve for $u$. We recall that the self-financing property requires
+$$
+a_{t}S_{t}+b_{t}e^{rt}=V_{t}=u(t,S_{t})
+$$
+into which we plug in $a_{t}$ and $b_{t}$ computed above to get the
+[[black-scholes-pde-option-pde-bspde]] as a characterization for $u$
+$$
+\partial_{t}u+rx\partial_{x}u_+\frac{1}{2}\sigma^2x^2\partial_{x x}u-ru=0
+$$
+paired with the natural terminal condition that 
+$$
+u(T,x)=h(x),
+$$
+to match the payoff of the option. As a result, the option price at time $0$ is
+given by $V_{0}=u(0,S_{0})$.
+

@@ -1,0 +1,966 @@
+---
+title: Stochastic Differential Equations
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Preliminaries
+
+The study of stochastic differential equations and stochastic calculus builds
+upon strong foundational understanding in
+[Stochastic Processes](Stochastic%20Processes.md) including: *Stochastic
+Processes*; Filtrations; *Martingales*; *Stopping Times*; *Lebesgue Integrals*
+and *$L_{p}$-Spaces* and *$p$-variation*.
+
+### Lebesgue Spaces
+
+A **Lebesgue space** ($L^p$ space) is a space of space of measurable functions
+whose absolute value
+### p-Variation
+
+:::{.definition data-title="$p$ -Variation"}
+
+The $p$ -variation of a real-valued stochastic process $(X_{t})$ on $[0,T]$ is
+a process $\left\langle X,X \right\rangle_{t}^{(p)}$ such that for all $t>0$
+and sequence of partitions
+$$
+\Delta^{(n)}:=\{  0 = t_{0}^{(n)}<t_{1}^{(n)}<\dots<t_{K_{n}}^{(n)}=t \},
+$$
+of interval $[0,t]$ such that
+$$
+\delta^{(n)}:=\max_{1\leq i\leq K_{n}}\lvert t_{i}^{(n)}-t_{i-1}^{(n)} \rvert \to 0\quad \text{as}\quad n \to \infty,
+$$
+the following holds
+$$
+S_{n}^\Delta = \sup_{\Delta}\sum_{i=0}^{K_{n}-1} \lvert X_{t_{i}}-X_{t_{i-1}} \rvert ^p \stackrel{\mathcal{L}_{2}~\&~\mathbb{P}}\to \left\langle X,X \right\rangle_{t}^{(p)}.
+$$
+
+:::
+
+For $p=1$ we call this the **total variation**. For $p=2$ we call this the
+**quadratic variation** and often will drop the $p$ notation
+$\left< X,X \right>_{t}$. We primarily deal with quadratic variance when we are
+working in the $\mathcal{L}_{2}$ space and is key to our construction of an
+integral in this space.
+
+## Brownian Motion
+
+Recall that a random variable $X$ is said to be normally distributed or
+*Gaussian* with mean $\mu$ and variance $\sigma^2$ if for all
+$x \in \mathbb{R}$
+$$
+\mathbb{P}(X>x)= \frac{1}{\sqrt{ 2\pi \sigma^2 }}\int_{x}^\infty \exp\left( - \frac{{(u-\mu)^2}}{2\sigma^2} \right)~du.
+$$
+
+:::{.definition data-title="Brownian Motion"}
+
+A **Brownian motion** (BM) or a **Wiener process** with variance parameter
+$\sigma^2>0$ is a stochastic process $(B_{t})_{t \geq 0}$ taking values in
+$\mathbb{R}$ that satisfies:
+1. $B_{0}=0~a.s.$ (starts at zero);
+2. $\forall~0 < t_{1}<\dots<t_{n},~B_{t_{1}}-B_{0}, B_{t_{2}}-B_{t_{1}}, \dots, B_{t_{n}}-B_{t_{n-1}}$
+   are independent (independent increments);
+3. $\forall s < t, B_{t}-B_{s}\sim\mathcal{N}(0,\sigma^2(t-s))$ (normal
+   stationary increments);
+4. $\omega\mapsto B_{t}(\omega)$ is a continuous function of $t$ on
+   $\mathbb{R}_{+}$ almost surely (continuous paths no jumps).
+
+:::
+
+If $\sigma^2=1$ then $(B_{t})$ is called the **standard BM**. Furthermore, we
+use the notation $B_{t}^x=B_{t}+x$ for BM starting from $x$.
+
+### BM Properties
+
+Here we have defined BM as a stochastic process, i.e. a family of (uncountably
+many) random variables $\omega \mapsto B(t, \omega)$ defined on a single
+probability space. Alternatively, we could interpret BM as a **random
+function** with the sample functions defined by $t \mapsto B(t, \omega)$, in
+which case it is sometimes useful to assume that the mapping
+$(t, \omega)\mapsto B(t, \omega)$ is measurable on the product space
+$[o, \infty)\times \Omega$.
+
+:::{.definition data-title="Brownian Motion Properties"}
+
+BM satisfies the following properties:
+1. $B_t$ is a **Gaussian Processes**, i.e. for all
+   $0 \leq t_{1}\leq \dots \leq t_{k}$ the random variable
+   $Z=(B_{t_{1}}, \dots, B_{t_{k}})\in \mathbb{R}^{nk}$ has a Multivariate
+   Normal Distribution.
+2. $B_{t}$ is both **Markov** and a **martingale**.
+3. $B_{t}$ satisfies the **stronger Markov property** whereby for any bounded
+   real function $f$ we have
+   $\mathbb{E}[f(B_{t})|\mathcal{F}_{s}]=\mathbb{E}[f(B_{t})|B_{s}]$.
+
+:::
+
+BM is the only **Lévy Process** (processes with independent stationary
+increments) with continuous paths. Although the process has continuous paths,
+it is not differentiable due its roughness. We summarize this and the other key
+path properties of BM in the following theorem.
+
+:::{.definition data-title="Brownian Motion Path Properties"}
+
+Brownian paths, considered to be functions of $t$, have the following
+properties. Almost every sample path $\{ B_{t}, t \in [0,T] \}$:
+1. is a continuous function of $t$;
+2. is not monotone on any interval, no matter how small
+3. is **not differentiable** at any point
+4. has **infinite total variation** on any interval, no matter how small
+5. has **quadratic variation** on $[0,t]$ equal $t$, for all $t$.
+
+:::
+
+### BM Transition Probabilities
+
+To find the transition density function for $B_{t}$ we consider Borel set
+$A \in \mathcal{B}(\mathbb{R})$ and compute
+$$
+\begin{align}
+\mathbb{P}_{t}^B(x,A) & = \mathbb{P}(B_{t+s}\in A|B_{s}=x) = \mathbb{P}(B_{t+s}\in A|B_{s}=x) \\
+& = \mathbb{P}(B_{t+s}\in A|B_{s}=x) \\
+& = \mathbb{P}(B_{t+s}-B_{s}\in A-x|B_{s}=x) \\
+& = \mathbb{P}(B_{t+s}-B_{s}\in A-x),
+\end{align}
+$$
+where the last line holds from independent increments. Then, using the fact
+that $B_{t+s}-B_{s}\sim\mathcal{N}(0, \sigma^2t)$ we have
+$$
+\begin{align}
+\mathbb{P}_{t}^B(x,A) & =\int_{A-x} \frac{1}{\sqrt{ 2\pi \sigma^2t }}\exp\left( -\frac{y^2}{2\sigma^2t} \right)~dy  \\
+& = \int_{A} \frac{1}{\sqrt{ 2\pi \sigma^2t }}\exp\left(  -\frac{(z-x)^2}{2\sigma^2t} \right) ~dz,
+\end{align}
+$$
+where we have used the substitution $z=y+x$. Hence, the transition density
+function is
+$$
+p_{t}^B(x,z)= \frac{1}{\sqrt{ 2\pi \sigma^2 t }}\exp\left(  -\frac{(z-x)^2}{2\sigma^2t} \right).
+$$
+The transition probabilities of BM satisfy the **Chapman-Kolmogorov Equations**
+$$
+p_{s+t}(x,y)= \int_{\mathbb{R}}p_{s}(x,z)p_{t}(z,y)~dz.
+$$
+
+### Variation of BM
+
+If a process is differentiable on $[0,T]$ then its **total variation** will be
+finite. This is a crucial motivation for constructing stochastic intervals
+since we can show that BM is not differentiable by taking $T=n\cdot\Delta t$
+and computing
+$$
+\sum_{i}\lvert B_{t_{i}}-B_{t_{i-1}} \rvert \sim n\mathbb{E}\lvert B_{\Delta t} \rvert \sim \frac{T}{\Delta t}\sqrt{ \Delta t }\to \infty\quad \text{as}\quad n \to \infty,~\Delta t \to 0.
+$$
+Hence BM has an infinite total variation. Intuitively, this means that BM is
+too rough for Reimann integral approximations to work (think like fractals, no
+matter how much we zoom in th surface doesn't get smoother). However, BM does
+have a **finite quadratic variation** which explains the difference between the
+chain rule in stochastic calculus and the classical result.
+
+:::{.definition data-title="Quadratic Variation of BM"}
+
+For BM we have $\left< B,B \right>_{t}=t$, that is, for partition
+$\Delta^{(n)}$ of an interval $[a,b]$ such that $\delta^{(n)}\to 0$ as
+$n \to \infty$ then
+$S_{n}^\Delta \stackrel{\mathcal{L}_{2}~\&~\mathbb{P}}\to b-a$.
+
+:::
+
+*Proof:*
+We wish to show that $\mathbb{E}(S_{n}^\Delta)^2\to(b-a)^2$ as $n \to \infty$.
+First note that
+$$
+\mathbb{E}S_{n}^\Delta = \mathbb{E}\left[ \sum_{i=0}^{K_{n}-1} \left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \right\rvert^2  \right]=\sum_{i=0}^{K_{n}-1}(t_{i+1}^{(n)}-t_{i}^{(n)})=b-a.
+$$
+We proceed to compute
+$$
+\begin{align}\mathbb{E}\left[(S_{n}^{\Delta})^2\right] & =\mathbb{E}\left[ \left( \sum_{i=0}^{K_{n}-1}\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \rvert ^2 \right)^2 \right]  \\ & =\sum_{i=0}^{K_{n}-1}\mathbb{E}\left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert ^4+2\sum_{i<j}\mathbb{E}\left[ \left\lvert   B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert^2\cdot \left\lvert  B_{t_{j+1}^{(n)}}-B_{t_{j}}^{(n)}  \right\rvert   \right]  \\ & = \sum_{i}3\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)^2+2\sum_{i<j}\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)\cdot \left(t_{j+1}^{(n)}-t_{j}^{(n)}\right) \\ & = 2\sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right) ^2+\left( \sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right)  \right) ^2 \\ & \leq 2\delta^{(n)}(b-a)+(b-a)^2 \\  & \to(b-a)^2\quad\text{as}\quad n \to \infty,\end{align}
+$$
+where we have used $\mathbb{E}X^4=3[(\sigma^2_{X})^2]$ and the stationary
+independent increments of Brownian motion. We have showed that
+$$
+\forall\varepsilon>0,~\exists N:\forall n\geq N,~\mathbb{E}[(S_{n}^{\Delta})^2]\leq (b-a)^2+\varepsilon.
+$$
+Additionally, we have shown that
+$\mathbb{E}[(S_{n}^\Delta)^2]-(b-a)^2=\text{Var}(S_{n}^\Delta)\geq 0$ i.e.
+$\mathbb{E}[(S_{n}^\Delta)^2]\geq (b-a)^2$ hence we obtain equality. Hence we
+have convergence in $\mathcal{L}_{2}$ which gives convergence in probability.
+$\square$
+
+## Itô Integral
+
+Consider the probability space $(\Omega, \mathcal{F}, \mathbb{P})$ and let
+$(\boldsymbol{B}(t))=(B_{1}(t), \dots, B_{n}(t))$ be $n$-dimensional (standard)
+[Brownian Motion](#Brownian%20Motion). Define
+$\boldsymbol{\mathcal{F}}(t)=\boldsymbol{\mathcal{F}}^{(n)}(t)$ to be the
+filtration generated by $(B_{i}(s))_{{1\leq i \leq n}, 0 \leq s \leq t}$.
+Recall that we call the **natural filtration** of $(\boldsymbol{B}(t))$ and
+interpret as the history of the process $\boldsymbol{B}(t)$ up to time $t$.  
+
+Our aim is to construct the integral $I(f)=\int_{S}^{T}{f_{t}}~d{B_{t}}$ for a
+general process $f_{t}$ in order to define an Itô process however this is
+somewhat challenging since $B_{t}$ can be shown to be nowhere differentiable
+and have infinite variation meaning that we cannot use a [[riemann-integral]]
+or [[lebesgue-integral]]. Instead we construct the **Itô integral** as the
+limit in mean square (or probability) of simple processes (akin to Riemann
+sums) where the integrand is evaluated at the left endpoint of each
+subinterval. This ensures the process is **non-anticipating** (adapted to the
+filtration) which preserves **martingale properties**.
+
+### Itô Integral Construction
+
+We begin by defining the space of all **measurable (actually progressive),
+adapted and $\mathcal{L}_{2}$ processes** for which we can define the Itô
+integral. Let $\mathcal{V}=\mathcal{V}(S,T)$ be the class of functions
+$$
+\mathcal{V}(S,T):=\{f(t,\omega):[0,\infty) \times \Omega \to \mathbb{R}\},
+$$
+such that:
+1. $(t, \omega)\to f(t, \omega)$ is
+   $\mathcal{B}\times\mathcal{F}$-**measurable**, where $\mathcal{B}$ denotes
+   the **Borel σ-Algebra** on $[0,\infty)$;
+2. $f(t,\omega)$ is $\mathcal{F}_{t}$-**adapted**;
+3. $\mathbb{E}[\int_{S}^T f(t,\omega)^2dt]<\infty$.
+
+For (3) say $f \in \mathcal{L}_{2}([S,T]\times \Omega)$ since
+$\left< f_{t},g_{t} \right> = \mathbb{E}\left[ \int_{S}^T f_{t}g_{t} ~dt \right]$
+is the inner product on such a space. Our goal is to define the **stochastic
+integral** $I(f)=\int_{S}^T f_{t}dB_{t}$ for a general process $f$ in such a
+[[hilbert-spaces|Hilbert space]].
+
+Our construction process is as follows, first consider defining such an
+integral for an elementary process and then extend it to general processes in
+$\mathcal{V}$. The main thought is to find a **dense subset** of the Hilbert
+space and define the stochastic integral on it to prove that it is actually an
+**isometry**. We are then able to **extend** it as the isometry to the whole
+Hilbert space.
+
+:::{.definition data-title="Elementary Processes"}
+
+A process $(X_{t})$ is called an **elementary adapted process** if it can be
+written in the form
+$$
+\varphi_{t}(\omega)=\sum_{j \geq 0} e_{j}\mathbb{1}_{\left[\frac{j}{2^n}, \frac{{j+1}}{2^n}\right)}(t),
+$$
+where $n\in \mathbb{N}$ and each $e_{j}\in \mathcal{F}_{t}$ and
+$e_{j}\in\mathcal{L}_{2}$.
+
+:::
+
+This is a slightly changed step function where $e_j$ are now a collection of
+$\mathcal{F}$ measurable random variables with finite over the
+[dyadic number](https://en.wikipedia.org/wiki/Dyadic_rational) partition. For
+elementary functions we can define the stochastic integral
+$$
+\int_{S}^T \varphi_{t}~dB_{t}=\sum_{j \geq 0}e_{j}[B_{t_{j+1}}-B_{t_{j}}],
+$$
+where we specify
+$$
+t_{k}=t_{k}^{(n)}=\begin{cases}
+\frac{k}{2^n} & \text{if }S\leq \frac{k}{2^n}\leq T \\
+S & \text{if } \frac{k}{2^n} < S \\
+T & \text{if } \frac{k}{2^n}>T.
+\end{cases}
+$$
+At this point it is natural to approximate a given function $f(t,\omega)$ by
+$$
+\sum_{j}f_{t_{j}^*}(\omega)\cdot \mathbb{1}_{[t_{j},t_{j+1})}(t),
+$$
+where the points $t_{j}^*\in[t_{j}, t_{j+1}]$ allowing us to define the
+integral $\int_{S}^T f_{t}(\omega)dB_{t}(\omega)$ as the limit (in
+$\mathcal{L}_{2}$) of
+$\sum_{j}f_{t_{j}^*}(\omega)[B_{t_{j+1}}-B_{t_{j}}](\omega)$ as $n \to \infty$.
+However, unlike with the Riemann-Stieltjes Integral our choice of $t_{j}^*$
+impacts our final result, as shown with the following example.
+
+**Example (Choice of $t^*$ on interval)**
+We define
+$$
+\varphi^{(1)}_{t}(\omega)=\sum_{j \geq 0} B_{\frac{j}{2^n}}(\omega)\mathbb{1}_{[\frac{j}{2^n}, \frac{{j+1}}{2^n})}(t)\quad \& \quad \varphi_{t}^{(2)}(\omega) = \sum_{j \geq 0} B_{\frac{j+1}{2^n}}(\omega)\mathbb{1}_{[\frac{j}{2^n}, \frac{{j+1}}{2^n})}(t).
+$$
+Then from independent increments we have
+$$
+\mathbb{E}\left[ \int_{0}^T \varphi _{t}^{(1)}(\omega)~dB_{t}(\omega)\right]=\sum_{j \geq 0 }\mathbb{E}[B_{t_{j}}(B_{t_{j+1}}-B_{t_{j}})]=0.
+$$
+However
+$$
+\mathbb{E}\left[ \int_{0}^T \varphi^{(2)}_{t}(\omega)~dB_{t}(\omega) \right]=\sum_{j \geq 0 }\mathbb{E}[B_{t_{j+1}}\cdot(B_{t_{j+1}}-B_{t_{j}})]=T.
+$$
+The two most useful choices have been found to be the *left end point*
+$t_{j}^* = t_{j}$ leading to the Itô integral (the primary consideration in
+this note and throughout this topic) and the *mid point*
+$t_{j}^*=(t_{j}+t_{j+1})/2$ leading to the *Stratonovich integral*.  
+
+To begin our extension from the elementary functions we make the following
+important observation.
+
+:::{.theorem data-title="Itô Isometry (Elementary Functions)"}
+
+If $\varphi_{t}(\omega)$ is bounded and elementary then we have
+$$
+\mathbb{E}\left[ \left( \int_{S}^T \varphi_{t}(\omega )dB_{t} \right) ^2 \right] =\mathbb{E}\left[ \int_{S}^T \varphi_{t}^2(\omega )dt \right].
+$$
+
+:::
+
+*Proof:*
+Define $\Delta B_{j}=B_{t_{j+1}}-B_{t_{j}}$ and then note that
+$$
+\mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\begin{cases}0 & \text{if }i \neq j \\ \mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j}) & \text{if }i = j, \end{cases}
+$$
+from independent increments. Thus we have
+$$
+\begin{align}\mathbb{E}\left[ \int_{S}^T \varphi_{t}~dB_{t} \right]=\sum_{i,j}\mathbb{E}[e_{i}e_{j}\Delta B_{i}\Delta B_{j}]=\sum_{j}\mathbb{E}[e_{j}^2]\cdot(t_{j+1}-t_{j})=\mathbb{E}\left[ \int_{S}^T \varphi_{t}^2~dt \right],\end{align}
+$$
+completing the proof.
+$\square$
+
+#### Step 1: Bounded Continuous Processes
+
+Letting $g \in \mathcal{V}$ be bounded and $g_{\cdot}(\omega)$ continuous for
+each $\omega$. Then there exist elementary functions
+$\varphi^{(n)}\in \mathcal{V}$ such that
+$$
+\mathbb{E}\left[ \int_{S}^T (g_{t} - \varphi_{t})^2dt \right]\to 0\quad \text{as}\quad n \to \infty.
+$$
+To see this define
+$\varphi_{t}^{(n)}(\omega)=\sum_{j}g_{t_{j}}(\omega)\cdot \mathbb{1}_{[t_{j},t_{j+1})}(t)$
+which is elementary since $g \in\mathcal{V}$ and
+$$
+\int_{S}^T(g-\varphi_{n})^2dt\to 0\quad \text{as}\quad n \to \infty,
+$$
+for each $\omega$ (pointwise) since $g_{\cdot}(\omega)$ is pointwise
+continuous. Hence the result follows by bounded convergence.
+
+#### Step 2: Bounded Processes
+
+Let $h \in \mathcal{V}$ be bounded. Then there exist bounded functions
+$g^{(n)} \in \mathcal{V}$ such that $g_{t}^{(n)}(\omega)$ is continuous for all
+$\omega$ and $n$, and
+$$
+\mathbb{E}\left[ \int_{S}^T (h_{t} - g_{t}^{(n)})^2dt \right]\to 0.
+$$
+To see this suppose $\lvert h_{t}(\omega) \rvert\leq M$ for all $(t, \omega)$.
+For each $n$ let $\phi^{(n)}$ be a non-negative, continuous function on
+$\mathbb{R}$ such that:
+1. $\phi^{(n)}(x)=0$ for $x \leq -\frac{1}{n}$ and $x \geq 0$; and
+2. $\int_{\mathbb{R}}\phi^{(n)}(x)~dx =1.$
+Define
+$$
+g_{t}^{(n)}(\omega)=\int_{0}^t\phi^{(n)}_{t}(s-t)h_{s}(\omega)ds.
+$$
+Then $g_{\cdot}^{(n)}(\omega)$ is continuous for each $\omega$ (pointwise) and
+$\lvert g_{t}^{(n)}(\omega) \rvert\leq M$. Since $h \in \mathcal{V}$ we show
+that $g^{(n)}_{t}(\cdot)$ is adapted (e.g. Karatzas and Shreve (1991); pg 133).
+Moreover
+$$
+\int_{S}^T(g^{(n)}_{s}(\omega)-h_{s}(\omega))^2ds\to 0 \quad \text{pointwise as}\quad n\to \infty,
+$$
+since $\{ \phi_{n} \}$ constitutes an approximate identity (e.g. Hoffman
+(1962); pg 22). Hence, by bounded convergence we obtain the result.
+
+#### Step 3: General Process
+
+Let $f \in\mathcal{V}$. Then there exists a sequence
+$\{ h^{(n)} \}\subset\mathcal{V}$ such that $h_{n}$ is bounded for each $n$ and
+$$
+\mathbb{E}
+\left[ \int_{S}^T(f-h^{(n)})^2 dt \right]\to 0 ~~\text{as}~~ n \to \infty.
+$$
+To see this we simply put
+$$
+h^{(n)}_{t}(\omega) = \begin{cases}
+-n & \text{if } f_{t}(\omega)<-n \\
+f_{t}(\omega) & \text{if } -n \leq f_{t}(\omega)\leq n \\
+n & \text{if } f_{t}(\omega)>n,
+\end{cases}
+$$
+and the conclusion follows by the **Dominated Convergence Theorem**.
+
+### Itô Integral & Itô's Isometry
+
+
+
+:::{.definition data-title="Itô Integral"}
+
+For $f\in\mathcal{V}(S,T)$ the Itô integral from $S$ to $T$ is defined by
+$$
+\int_{S}^Tf(t, \omega)dB_{t}(\omega) =\lim_{ n \to \infty } \int_{S}^T \phi_{n}(t, \omega)dB_{t}(\omega),
+$$
+where the limit is taken in $L^2$ and $\{ \phi_{n} \}$ is a sequence of
+elementary functions such that
+$$
+\mathbb{E}\left[ \int_{S}^T (f(t, \omega)-\phi_{n}(t, \omega))^2dt \right] \to 0,
+$$
+as $n \to \infty$.
+
+:::
+
+### Itô Isometry
+
+:::{.theorem data-title="Itô's Isometry"}
+
+For $f \in\mathcal{V}(S,T)$ we have that
+$$
+\mathbb{E}\left[ \left( \int_{S}^T f(t,\omega )dB_{t} \right) ^2 \right] =\mathbb{E}\left[ \int_{S}^T f^2(t,\omega )dt \right].
+$$
+
+:::
+
+The Itô integral has many of the same properties as the classical integrals
+which allow for ease of manipulation.
+
+:::{.definition data-title="Itô Integral Properties"}
+
+Let $f,g\in\mathcal{V}(0,T)$ and let $0\leq S<U<T$.  Then we have that:
+1. $\int_{S}^Tf~dB_{t}=\int_{S}^U f~dB_{t}+\int_{U}^T f~dB_{t}$ almost surely.
+2. $\int_{S}^T(cf+g)dB_{t}=c\int_{S}^Tf~dB_{t}+\int_{S}^Tg~dB_{t}$ almost
+   surely for constant $c$
+3. $\mathbb{E}\left[\int_{S}^T f~dB_{t}\right]=0$.
+4. $\int_{S}^Tf~dB_{t}$ is $\mathcal{F}_{T}$-measurable.
+
+:::
+
+*Proof:*
+This clearly holds for elementary functions hence by taking limits we obtain
+this for all $f,g\in\mathcal{V}(0,T)$.
+$\square$
+
+Another important property of the Itô integral is that it is a **martingale**,
+that is it does not drift on average over time.
+
+## Itô Processes
+
+### Itô Process
+
+Let $B_{t}$ be a 1-dimensional Brownian motion on
+$(\Omega, \mathcal{F}, \mathbb{P})$. A (1-dimensional) **Itô process** (or
+stochastic integral) is a stochastic process $X_{t}$ on
+$(\Omega, \mathcal{F}, \mathbb{P})$ of the form
+$$
+X_{t}=x+\int_{0}^{t}{u(s, \omega )}~d{s} + \int_{0}^{t}{v(s,\omega)}~d{B_{s}},
+$$
+where we say that $u$ is the **drift coefficient** (controls the growth of the
+process) and $v$ is the **diffusion coefficient** (controls the size of the
+noise). Sometimes this is written in the shorter differential form
+$$
+dX_{t}=udt+vdB_{t}.
+$$
+
+### Itô Formula
+
+Itô's formula or Itô's lemma is an identity used in Itô calculus to find the
+differential of a time-dependent function of a stochastic process. It serves as
+the stochastic calculus counterpart of the chain rule.
+
+:::{.theorem data-title="1-Dimensional Itô Formula"}
+
+Let $X_{t}$ be an Itô process given by
+$$
+dX_{t}=udt+vdB_{t}.
+$$
+Further, let $g(t,x)\in C^2([0,\infty)\times \mathbb{R})$ (i.e. twice
+differentiable on $[0,\infty)\times \mathbb{R}$). Then
+$$
+Y_{t}=g(t,X_{t})
+$$
+is again an Itô process and
+$$
+dY_{t}=g_{t}(t, X_{t})dt+g_{x}(t, X_{t})dX_{t}+ \frac{1}{2}g_{x x}(t, X_{t})d\left< X,X \right>_{t}.
+$$
+
+:::
+
+Here $d\left< X,X \right>_{t}=(dX_{t})\cdot(dX_{t})$ is computed according to
+the following:
+$$
+dt\cdot dt=dt\cdot dB_{t}=dB_{t}\cdot dt=0,\quad dB_{t}\cdot dB_{t}=0.
+$$
+*Proof:*
+Substituting $dX_{t}=udt+vdB_{t}$ into the Itô formula we get
+$$
+\begin{align}
+g(t,X_{t}) & = g(0,X_{0}) + \int_{0}^t\left(  \frac{{\partial g}}{\partial s}(s,X_{s})+u_{s}\frac{{\partial g}}{\partial x}(s,X_{s})+ \frac{1}{2} v_{s}^2 \frac{{\partial^2g}}{\partial x^2}(s,X_{s}) \right)ds \\
+ & + \int_{0}^t v_{s} \frac{{\partial g}}{\partial x}(s,X_{s})dB_{s}.
+\end{align}
+$$
+We may assume that $g, g_{t}, g_{x}, g_{x x}$ are bounded for each $n$ and
+converge uniformly on compact subsets of $[0,\infty)\times \mathbb{R}$ to
+$g,g_{t},g_{x},g_{x x}$ respectively. Moreover, we may assume that $u,v$ are
+elementary functions. Using Taylor's theorem we get
+$$
+\begin{align}
+g(t,X_{t}) & = g(0,X_{0}) + \sum_{j}\Delta g(t_{j}, X_{j})  \\
+ & = g(0,X_{0})+\sum_{j} \frac{{\partial g}}{\partial t} \Delta t_{j}+\sum_{j} \frac{{\partial g}}{\partial x}\Delta X_{j}+ \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial t^2}(\Delta t_{j}^2)  \\
+ & \qquad + \sum_{j} \frac{{\partial^2g}}{\partial t\partial x}(\Delta t_{j})(\Delta X_{j}) + \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial x^2}(\Delta X_{j})^2 + \sum_{j}R_{j},
+\end{align}
+$$
+where $\frac{{\partial g}}{\partial t}, \frac{{\partial g}}{\partial x}$ etc.
+are evaluated at the points $(t_{j}, X_{t_{j}})$,
+$$
+\begin{align}
+\Delta t_{j} & =t_{j+1}-t_{j} \\
+\Delta X_{j} & = X_{t_{j+1}}-X_{t_{j}} \\
+\Delta g(t_{j},X_{j}) & = g(t_{j+1},X_{t_{j+1}})-g(t_{j},X_{j}),
+\end{align}
+$$
+and $R_{j}=o(\lvert \Delta t_{j} \rvert^2+\lvert \Delta X_{j} \rvert^2)$ for
+all $j$. If $\Delta t_{j}\to 0$ then
+$$
+\begin{align}
+\sum_{j} \frac{{\partial g}}{\partial t}\Delta t_{j} & =\sum_{j} \frac{{\partial g}}{\partial t}(t_{j}, X_{j})\Delta t_{j} \to \int_{0}^t \frac{{\partial g}}{\partial t}(s,X_{s})~ds \\
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2} \Delta X_{j} & = \sum_{j} \frac{{\partial g}}{\partial x}(t_{j}, X_{j})\Delta X_{j} \to \int_{0}^t \frac{{\partial g}}{\partial x}(s,X_{s})dX_{s}.
+\end{align}
+$$
+Moreover, since $u$ and $v$ are elementary we get
+$$
+\begin{align}
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2}(\Delta X_{j})^2  & = \underbrace{\sum_{j} \frac{{\partial^2g}}{\partial x^2}u_{j}^2 (\Delta t_{j})^2}_{\to 0\text{ as }\Delta t_{j}\to 0} + \underbrace{2 \sum_{j} \frac{{\partial^2g}}{\partial x^2} u_{j}v_{j}(\Delta t_{j})(\Delta B_{j})}_{\to 0\text{ as }\Delta t_{j}\to 0} +\sum_{j} \frac{{\partial^2g}}{\partial x^2}v_{j}^2 \cdot (\Delta B_{j})^2,
+\end{align}
+$$
+where $u_{j}=u(t_{j},\omega)$ and $v_{j}=v(t_{j},\omega)$ and convergence in
+$L_2$. We claim the third term tends to
+$$
+\int_{0}^t \frac{{\partial^2g}}{\partial x^2}v^2~ds.
+$$
+To prove this put
+$a(t)= \frac{{\partial^2g}}{\partial x^2}(t,X_{t})v^2(t,\omega)$,
+$a_{j}=a(t_{j})$ and consider
+$$
+\mathbb{E}\left[ \left( \sum_{j} a_{j}(\Delta B_{j})^2-\sum_{j}a_{j}\Delta t_{j} \right)^2 \right] = \sum_{i,j} \mathbb{E}[a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})((\Delta B_{j})^2 - \Delta t_{j})].
+$$
+If $i<j$ then $a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})$ and
+$(\Delta B_{j})^2-\Delta t_{j}$ are independent so the terms vanish, and
+similarly if $i>j$. This leaves
+$$
+\begin{align}
+\sum_{j}\mathbb{E}[a_{j}^2((\Delta B_{j})^2-\Delta t_{j})^2]  & = \sum_{j}\mathbb{E}[a_{j}^2] \cdot \mathbb{E}[(\Delta B_{j})^4-2(\Delta B_{j})^2\Delta t_{j} + (\Delta t_{j})^2]  \\
+ & = \sum_{j}\mathbb{E}[a_{j}^2]\cdot (3(\Delta t_{j})^2 - 2(\Delta t_{j})^2+(\Delta t_{j})^2)  \\
+ & =2\sum_{j}\mathbb{E}[a_{j}^2]\cdot(\Delta t_{j})^2  \\
+ & \to 0\quad (\Delta t_{j}\to 0).
+\end{align}
+$$
+Thus we have established that
+$$
+\sum_{j}a_{j}(\Delta B_{j})^2 \to \int_{0}^t a(s)ds,
+$$
+which is often expressed as
+$$
+(dB_{t})^2=dt.
+$$
+The argument above also proves that $\sum R_{j}\to 0$ as $\Delta t_{j}\to_{0}$.
+$\square$
+
+**Example (Itô Formula Application I)**
+Consider the integral
+$$
+Y_{t}=\int_{0}^tB_{s}dB_{s}.
+$$
+Assuming we can write $Y_{t}=g(t, B_{t})$ from Itô's formula we have
+$$
+dY_{t}=\left[ g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t,B_{t}) \right] dt+g_{B}(t,B_{t})dB_{t},
+$$
+which written in integral form gives
+$$
+Y_{t}-Y_{0}=\int_{0}^t\left[ g_{t}(s,B_{s})+\frac{1}{2}g_{B B}(s,B_{s}) \right]ds+\int_{0}^t g_{B}(s, B_{s})dB_{s}. 
+$$
+Hence we need some $g(t,B_{t})$ such that
+$$
+(1)~~g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t, B_{t})=0\quad \&\quad (2)~~ g_{B}(t,B_{t})=B_{t}.
+$$
+Since $g_{B}=B_{t}\implies g_{BB}=1$ and so $g_{t}=-\frac{1}{2}$. An obvious
+candidate therefore is
+$$
+g(t,B_{t})=\frac{1}{2}B_{t}^2 - \frac{1}{2}t,
+$$
+which in fact is the result, as can be verified by plugging into Itô's formula.
+
+**Example (Itô Formula Application II)**
+Consider the Itô process
+$$
+g(t,B_{t})=\exp(bt+\sigma B_{t}),
+$$
+where $b,\sigma$ are constants for drift and diffusion. To compute $dg$ we
+apply the Itô formula
+$$
+\begin{align}
+dg(t,B_{t}) & =b\exp(bt+\sigma B_{t})dt+\sigma \exp(bt+\sigma B_{t})dB_{t}+ \frac{1}{2} \sigma^2\exp(bt+\sigma B_{t})d\left< B,B \right>_{t}  \\
+ & = g(t,B_{t})\left\{ \left( b+ \frac{1}{2} \sigma^2 \right)dt+\sigma dB_{t} \right\}. 
+\end{align}
+$$
+The process $X_{t}=g(t,B_{t})$ defines **geometric BM** and is used to simulate
+the change of the stock price in the **Black-Scholes-Merton Model** ($\mu$ as
+mean return and $\sigma$ as volatility).
+
+:::{.theorem data-title="Itô Integration by Parts"}
+
+For a continuous function $f(s,\omega)$ that is of bounded variation with
+respect to $s \in [0,t]$ almost surely we have that
+$$
+\int_{0}^t f(s)dB_{s}=f(t)B_{t}-\int_{0}^t B_{s}df_{s}.
+$$
+
+:::
+
+### Multi-dimensional Itô Formula
+
+Considering the situation in higher dimensions we define a $d$-dimensional Itô
+process as the integral with respect to the $m$-dimensional BM as
+$$
+X_{t}^i=x_{0}^i+\int_{0}^t\psi_{s}^ids+\sum_{k=1}^m \int_{0}^t \varphi_{s}^{i,k}dB_{s}^k,
+$$
+for $k = 1, \dots, m$ and $i = 1, \dots, d$ where we note that such an Itô
+process exists in $\mathbb{R}^d$ and is constructed with respect to BM
+$B_{s}=(B_{s}^1, \dots, B_{s}^m)$. To write this in a more compact form
+$$
+X_{t}=x_{0}+\int_{0}^t \psi_{s}ds+\int_{0}^t\varphi_{s}\cdot dB_{s},
+$$
+where $X_{t}, x_{0},\psi_{s} \in \mathbb{R}^d$ and
+$\varphi_{s}\in \mathbb{R}^{d \times m}$ and here $\varphi_{s}^{i,k}$ stands
+for the process $\varphi$ used to construct the $i$-th coordinate of the Itô
+process as a stochastic integral with respect to the $k$-th coordinate of the
+$m$-dimensional BM.
+
+:::{.theorem data-title="Multi-Dimensional Itô Formula"}
+
+For some vector-valued function
+$g:\mathbb{R}_{+}\times \mathbb{R}^d\to \mathbb{R}^p \in C^{1,2}$, then the
+multi-dimensional Itô formula holds
+$$
+\begin{align}dg^i(t,X_{t}) & =\partial_{t}g^i(t,X_{t})dt+\nabla_{x} g^i(t,X_{t})\cdot dX_{t}+ \frac{1}{2}\mathrm{Tr}(\varphi_{t}^T H \varphi_{t})dt \\ & = \partial_{t}g^i(t,X_{t})dt+\sum_{k=1}^{d}\partial_{x_{k}}g^i(t,X_{t})dX_{t}^k+ \frac{1}{2}\sum_{j,k = 1}^{d}\partial_{x_{j},  x_{k}}g^i(t,X_{t})d\left< X^j, X^k \right> _{t},\end{align}
+$$
+where $\nabla _x f$ denotes the gradient of $f$ with respect to vector $x$,
+$\varphi_{t}\in \mathbb{R}^{d \times m}$ is a matrix and $H_{d \times d}$ is
+the Hessian of $g$ restricted on its action on $x \in \mathbb{R}^d$ at
+$(t, X_{t})$. The bracket
+$d\left< X^j, X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+
+:::
+
+*Proof:*
+The structure of the proof is still exactly the same as the 1-dimensional case.
+We need only verify that $dB_{t}^pdB_{t}^q=0$ for $p \neq q$ and
+$d\left< X^j,X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+$\square$
+
+### The Martingale Representation Theorem
+
+The **martingale representation theorem** states that a random variable that is
+measurable with respect to the filtration generated by a Brownian motion can be
+written in terms of an Itô integral with respect to this Brownian motion.
+
+:::{.theorem data-title="Martingale Representation Theorem"}
+
+Let $B(t)$ be $n$-dimensional BM. Suppose $M_{t}$ is an
+$\mathcal{F}_{t}^{(n)}$-martingale (w.r.t.) $\mathbb{P}$ and that
+$M_{t}\in\mathcal{L}_{2}(\mathbb{P})$ for all $t \geq 0$. Then there exists a
+unique stochastic process $g(s,\omega)$ such that
+$g \in \mathcal{V}^{(n)}(0,t)$ for all $t \geq 0$ and
+$$
+M_{t}(\omega)=\mathbb{E}[M_{0}]+\int_{0}^t g(s,\omega) dB(s),
+$$
+almost surely for all $g \geq 0$.
+
+:::
+
+The proof of this result is involved and is omitted from this note. Details can
+be found in our note on this theorem
+[[martingale-representation-theorem|here]].
+
+## Stochastic Differential Equations
+
+A general **stochastic differential equation** in $\mathbb{R}^n$ with initial
+condition has the form
+$$
+\begin{cases}
+dX_{t}=b(t,X_{t})dt+\sigma(t, X_{t})dBt \\
+X_{0}=x,
+\end{cases}
+$$
+where $x,X_{t}\in \mathbb{R}^n$,
+$b: \mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:\mathbb{R}_{+}\times \mathbb{R}^n\to \mathbb{R}^{n \times m}$ and
+$B_{t}$ is an $m$-dimensional BM. Here $b$ is the **drift** coefficient and
+$\sigma$ is the **volatility** coefficient. We note the difference between SDEs
+and a general Itô process lies in the fact that $b,\sigma$ are functions of the
+unknown process $X_{t}$.
+
+:::{.theorem data-title="Existence and Uniqueness of SDE Solutions"}
+
+Fixing time $T>0$ and assuming $b:[0,T]\times \mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:[0,T]\times \mathbb{R}^n \to \mathbb{R}^{n \times m}$ are deterministic
+functions with bounded time variable $T$ which satisfy the following
+conditions:
+1. $\exists c>0,~\forall t \in [0,T],~\forall x \in \mathbb{R}^n,~\lvert b(t,x) \rvert + \lvert \sigma(t,x) \rvert\leq c(1+\lvert x \rvert)$
+   (growth condition);
+2. $\exists D>0,~\forall t \in[0,T],~\forall x,y \in \mathbb{R}^n,~\lvert b(t,x)-b(t,y) \rvert + \lvert \sigma(t,x)-\sigma(t,y) \rvert\leq D\lvert x-y \rvert$
+   (Lipschitz condition),
+
+then the SDE has unique solution in $L^2([0,T]\times \Omega)$ that has
+continuous sample path.  
+
+:::
+
+*NEED TO ADD PROOF.*
+
+### Strong and Weak SDE Solutions
+
+A strong solution to a stochastic differential equation is defined as the
+solution $X_{t}\in \mathcal{F}_{t}$ adapted to the filtration generated by
+Brownian Motion and the initial condition (if it is random)
+$$
+\mathcal{F}_{t}=\sigma(B_{s}, 0 \leq s \leq t)\vee \sigma(X_{0}).
+$$
+The uniqueness and global existence theorem stated for Stochastic Differential
+Equations is just proving that for strong solutions.
+
+### SDE Example: Linear SDE
+*References: Linear Stochastic Differential Equations.*
+
+:::{.definition data-title="Linear SDE"}
+
+Let $W_t$ be $m$-dimensional BM, $A$ be an $n \times n$ matrix and $B$ an
+$n \times m$ matrix. Then a linear stochastic differential equation $X_{t}$ has
+dynamics given by
+$$
+\begin{cases}dX_{t}=AX_{t}dt+BdW_{t},\\X_{0}=x.\end{cases}
+$$
+
+:::
+
+To find the general solution of a linear SDE we first note that by setting the
+noise term $B$ to the $0$-matrix we have the ODE $dX_{t}=AX_{t}dt$ which has
+the solution $X_{t}=X_{0}e^{At}$. Setting this as our
+
+
+which are given explicitly by
+$$
+X_{t}=e^{At}x+\int_{0}^{t}{e^A(t-s)B}~d{W_{s}}.
+$$
+
+### SDE Example: Black Scholes Model
+
+The Black-Scholes model provides the structure on which we are able to price
+contingency claims (specifically options). Specifically, the Black-Scholes
+model is a mathematical model for the dynamics of a financial market containing
+derivative investment instruments such as stock shares or futures contracts
+assumed to have a lognormal distribution of prices following a random walk with
+constant drift and volatility.
+
+:::{.definition data-title="Black-Scholes Model"}
+
+The Black-Scholes model consists of two assets, a risk free asset $B$ and a
+stock $S$ with price dynamics given by
+$$
+\begin{align}dB_{t}&=rB_{t}dt \\dX_{t}& =\mu X_{t}dt+\sigma X_{t}dB_{t}\end{align}
+$$
+where $r,\mu,\sigma \in \mathbb{R}$ are deterministic constants.
+
+:::
+
+So in our notation we have $b(t,x)=\mu x$ and $\sigma(t,x)=\sigma x$ which are
+both Lipschitz in in $x$ and satisfy the growth condition.  
+
+To solve this system we note that if we ignore the stochastic term
+$dX_{t}=\mu X_{t}dt$ is an ODE with solution $X_{t}=X_{0}\cdot e^{\mu t}$. We
+therefore consider changing variables with $Y_{t}=\log(X_{t})$ and applying
+Itô's formula we obtain
+$$
+dY_{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2X_{t}^2}d\left< X,X \right> _{t}=\frac{1}{X_{t}}dX_{t}-\frac{1}{2}\sigma^2dt,
+$$
+where we have used that
+$d\left< X,X \right>_{t}=\sigma^2X_{t}^2d\left< B,B \right>_{t}=\sigma^2X_{t}^2dt$.
+Substituting in our initial expression we have
+$$
+\begin{align}
+dY_{t} & =\mu dt+\sigma dB_{t}-\frac{1}{2}\sigma^2dt=\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\sigma dB_{t}  \\
+ \implies Y_{t}-Y_{0} & =\int_{0}^t\left( \mu-\frac{1}{2}\sigma^2 \right)dt+\int_{0}^t\sigma dB_{t} \\
+ & =\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t} \\
+\implies X_{t} & =X_{0}\cdot e^{\left( \mu-\frac{1}{2}\sigma^2 \right)t+\sigma B_{t}}.
+\end{align}
+$$
+### SDE Example: OU Process
+
+An Ornstein-Uhlenbeck process is a mean reverting stochastic process that is a
+Gaussian process, is Markov and is temporally stationary. This process can be
+used to describe the fluctuation of interest rate around the mean interest rate
+$M$ with the speed of the regression described by $\theta$.
+
+:::{.definition data-title="Ornstein-Uhlenbeck Process"}
+
+The Ornstein-Uhlenbeck process $(X_{t})$ with drift has dynamics described by
+the stochastic differential equation
+$$
+dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}
+$$
+where $\theta,\sigma>0$, $\mu \in \mathbb{R}$ are all constant and $B_{t}$ is a
+BM.
+
+:::
+
+Consider such a process with a deterministic starting value $X_{0}$. To find a
+solution to this SDE we first change the variable to set the regression level
+to 0 with $Y_{t}=X_{t}-\mu$. From Itô's formula we have
+$$
+dY_{t}=dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}=-\theta Y_{t}dt+\sigma dB_{t}.
+$$
+Considering when $\sigma=0$ we have the ODE $dY_{t}=-\theta Y_{t}dt$ with the
+solution $Y_{t}=Y_{0}\cdot e^{-\theta t}$ and so replacing this constant
+$Y_{0}$ with some yet to define process $C_{t}$ we have
+$Y_{t}=C_{t}e^{-\theta t}$ and from Itô's formula we have
+$$
+dY_{t}=-\theta e^{-\theta t}C_{t}dt+e^{-\theta t}dC_{t}=-\theta Y_{t}dt+e^{-\theta t}dC_{t}.
+$$
+We therefore can define $dC_{t}=\sigma e^{\theta t}dB_{t}$ and so
+$C_{0}=Y_{0}=X_{0}-\mu$ and
+$$
+\begin{align}
+C_{t}-C_{0} & = \int_{0}^t\sigma e^{\theta s}dB_{s} \\
+ \implies C_{t} & =X_{0}-\mu+\sigma \int_{0}^te^{\theta s}dB_{s} \\
+\implies Y_{t} & = (X_{0}-\mu)e^{-\theta t}+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s} \\
+\implies X_{t} & = (X_{0}-\mu)e^{-\theta t}+\mu+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s}.
+\end{align}
+$$
+### SDE Example: Brownian Bridge
+
+A Brownian bridge is a continuous-time gaussian process $(X_{t})$ whose
+probability distribution is the conditional probability distribution of a
+standard Brownian Motion $B_t$ subject to the condition (when standardized)
+that $W_{T} = 0$, so that the process is pinned to the same value at both t = 0
+and t = T.
+
+ >[!definition] Brownian Bridge
+> The **Brownian Bridge** is an SDE $(X_{t})$ characterized by the dynamics $$\begin{cases}dX_{t}=\frac{b-X_{t}}{1-t}dt+dB_{t}\\ X_{0}=a,\end{cases}$$ for $a,b \in \mathbb{R}$ and $0 \leq t < 1$.
+
+This is the Brownian bridge starting from $a$ and ending at $b$ that has the
+same finite-dimensional distribution as the BM conditioning on starting from
+$a$ at time $0$ and ending at $b$ at time $1$. The Brownian bridge starting
+from $0$ at time $0$ and ending at $0$ at time $1$ has the simple form as
+$B_t−tB_1$.
+
+We can verify that the solution is given by
+$$
+Y_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
+$$
+First note that since
+$$
+G:=\int_{0}^t \frac{1}{1-s}sB_{s} \sim\mathcal{N}\left( 0, \frac{1}{1-t} \right),
+$$
+its characteristic function is
+$$
+\phi(p)=\phi_{G}(p(1-t))=e^{\frac{1}{2(1-t)}p^2(1-t)^2}=e^{\frac{1}{2}p^2(1-t)}\to 1~~\text{as}~~t \to 1.
+$$
+Hence $(1-t)G\stackrel{\mathcal{L}}{\to} 0$ as $t \to 1$ and since the limit is
+a constant $(1-t)G\stackrel{\mathbb{P}}{\to} 0$ as $t \to 1$. Finally, we
+notice that this stochastic integral is the sum of countably many independent
+random variables, hence from Durrett 2.5.10 we have
+$(1-t)G\stackrel{\text{a.s.}}{\to} 0$ as $t \to 1$ and
+$Y_{t}\stackrel{\text{a.s.}}{\to}b$.
+
+### 5.6 SDE Example: Geometric Mean-Reverting Process
+
+:::{.definition data-title="Geometric Mean-Reverting Process"}
+
+The **geometric mean-reverting process** $X_{t}$ is defined as the solution to
+the SDE
+$$
+\begin{cases}dX_{t}=\kappa(\alpha-\log X_{t})X_{t}dt + \sigma X_{t}dB_{t}\\X_{0}=x>0.\end{cases}
+$$
+
+:::
+
+By using the substitution $Y_{t}=\log X_{t}$ we can verify that the solution to
+the SDE is
+$$
+X_{t}=\exp \left\{ e^{-\kappa t}\log x+\left( \alpha- \frac{\sigma^2}{2\kappa} \right)(1-e^{-\kappa t})+\frac{\sigma^2}{2\kappa}(1-e^{-2\kappa t}) \right\}.
+$$
+
+## Diffusion Processes
+
+
+## Diffusions
+- Itô Diffusion
+	- Generator of an Itô Diffusion
+- Dynkin Formula
+- Characteristic Operator
+- Kolmogorov's Backward Equation
+- [[feynman-kac-formula]]
+- Martingale Problem
+- Random Time Change
+- Girsanov Theorem
+
+:::{.definition data-title="Itô Diffusion"}
+
+A **(time-homogeneous) Itô diffusion** in $\mathbb{R}^n$ is a stochastic
+process $(X_{t})$ defined on space $(\Omega, \mathcal{F},\mathbb{P})$ that
+satisfies the stochastic differential equation
+$$
+\begin{cases} dX_{t}=b(X_{t})dt+\sigma(X_{t})dB_{t} \\ X_{s}=x \end{cases}
+$$
+where $X_{t}\in \mathbb{R}^n$, $B_{t}\in \mathbb{R}^m$,
+$B:\mathbb{R}^n\to \mathbb{R}^n$,
+$\sigma:\mathbb{R}^n\to \mathbb{R}^{n \times m}$ where it is assumed that
+$b,\sigma$ are both [[lipschitz-continuity|Lipschitzs]] on $\mathbb{R}^n$ (to
+ensure the existence and uniqueness of strong solutions).
+
+:::
+
+The distinguishing feature of diffusions is that the drift and diffusion
+coefficients $b,\sigma$ are time independent and the Lipschitz condition is
+here to ensure the existence and uniqueness of the strong solution. Next we
+detail the results outlining the key properties of Itô diffusions.
+
+:::{.theorem data-title="Time Homogeneity of Itô DIffusions"}
+
+Denoting the solution to the SDE above with initial condition $X_{s}=x$ as an
+Itô diffusion by $X_{s+h}^{s,x}$ then
+$$
+\forall s \geq 0,~x \in \mathbb{R}^n,~\{ X_{s+t}^{s,x} \}_{t \geq 0}\stackrel{\mathcal{L}}{=}\{  X_{t}^{0,x} \}_{t \geq 0}.
+$$
+
+:::
+
+*Proof:*
+
+
+:::{.theorem data-title="Flow Property of Itô Diffusion"}
+
+For an Itô diffusion $X$ we have
+$$
+\forall t,h \geq 0,~ X_{h}^{0,X_{t}^{0,x}}\stackrel{a.s.}{X_{t+h}^{0,x}}.
+$$
+
+:::
+
+*Proof:* By construction, both are strong solutions to the same SDE
+$$
+X_{t+h}^{0,x}=X_{t}^{0,x}+\int_{t}^{t+h}{b(X_{s}^{0,x})}~d{s}+\int_{t}^{t+h}{\sigma(X_{s}^{0,x})}~d{B_{s}}.
+$$
+By the uniqueness in modification we conclude 
+
+
+
+
+
+Diffusion properties:
+1. Time-homogeneity
+2. Flow Property
+3. Markov Property
+4. Strong Markov Property
+
+Ito Diffusion Generators
+Semi-Group Generators
+Infinitesimal Generators (special and general cases)
+	Infinitesimal Generator Examples
+Dynkin Formula
+	Dynkin Formula Examples
+Backward Kolmogorov Equation (BKE)
+Forward Kolmogorov Equation (FKE, Fokker-Planck Equation)
+Feynman-Kac Formula
+Itô Process as DIffusion
+Time Changing Processes
+[Girsanov Theorem](Girsanov%20Theorem.md)
+
+
+

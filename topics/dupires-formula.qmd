@@ -1,0 +1,94 @@
+---
+title: Dupire's Formula
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+Dupire's formula enables us to deduce the volatility function in a local
+volatility model from quoted put and call options on the market.  
+
+
+
+In a local volatility model the asset price model under a risk-neutral measure
+takes the form
+$$
+dS_t=\mu(t)S_tdt+\tilde\sigma(t,S_t)S_tdW_t.
+$$
+The equivalent PDE statement is
+$$
+\frac{{\partial C}}{\partial T}(T,K)=-rK\frac{{\partial C}}{\partial K}(T,K)+ \frac{1}{2}\sigma^2(T,K)K^2 \frac{{\partial^2C}}{\partial K^2}(T,K)
+$$
+with natural initial condition
+$$
+C(0,K)=(S_{0}-K)_{+},
+$$
+since when $T=0$ option price is just the immediate payoff.
+
+`\begin{proof}`
+Consider the European call option under the [[local-volatility-model]] with
+time to maturity $T$ and strike $K$, denoting the option price $C(T,K)$. Then
+clearly
+$$
+C(T,K)=e^{-rT}\mathbb{E}_{\mathbb{Q}}(S_{T}-K)_{+}=e^{-rT}\int _{0}^\infty (x-K)_{+}\cdot p(T,x) \, dx ,
+$$
+where $p(T,\cdot)$ is the density of $S_T$ under $\mathbb{Q}$. Taking the
+derivative w.r.t. $T$ we get
+$$
+\frac{{\partial C}}{\partial T}=-re^{-rT}\int _{K}^\infty (x-K)\cdot p(T,x) \, d +e^{-rT}\int_{K}^\infty(x-K)\cdot\frac{{\partial p}}{\partial T}(T,x) \, dx,  
+$$
+where we notice that $\frac{{\partial p}}{\partial T}(T,x)$ is the time
+derivative of the density of $S_T$ under $\mathbb{Q}$ and $S_t$ has dynamics
+under $\mathbb{Q}$ given by
+$$
+dS_{t}=rS_{t}dt+\sigma(t,S_{t})S_{t}dW_{t}^\mathbb{Q}.
+$$
+The time evolution of density is described by the [[fokker-planck-equation]]
+that
+$$
+L_{t}^*p(t,x)= \frac{{\partial p}}{{\partial T}}(t,x),
+$$
+where $L_{t}^*$ is the adjoint of the infinitesimal generator $L_t$ of the
+diffusion and
+$$
+L_{t}=rx\partial_{x}+ \frac{1}{2}\sigma^2(t,x)x^2\partial_{{x x}}.
+$$
+As a result
+$$
+\begin{align}
+e^{-rT}\int _{K}^\infty (x-K)\cdot \frac{{\partial P}}{\partial T}(T,x) \, dx & = \int _{0}^\infty e^{-rT}(x-K)_{+}\cdot L_{T}^*p(T,x) \, dx  \\
+& =\int _{0}^\infty L_{T}[e^{-rT}(x-K)_{+}]\cdot p(T,x) \, dx ,
+\end{align}
+$$
+from the definition of adjoint. Calculating the action of infinitesimal
+generator
+$$
+L_{T}[e^{-rT}(x-K)_{+}]=e^{-rT}\left( rx \mathbb{1}_{x>K}+ \frac{1}{2}\sigma^2(T,x)x^2\delta_{\{K\}} \right),
+$$
+so the integral has value
+$$
+\int _{0}^\infty L_{T}[e^{-rT}(x-K)_{+}]\cdot p(T,x) \, dx = e^{-rT}\left( \int _{K}^\infty rxp(T,x) \, dx  + \frac{1}{2}\sigma^2(T,K)K^2\cdot p(T,K)\right).
+$$
+Combining these equations we have that
+$$
+\begin{align}
+\frac{{\partial C}}{\partial T} & = -r e^{-rT}\int _{K}^\infty (x-K)\cdot p(T,x) \, dx +e^{-rT}\left( \int _{K}^\infty r xp(T,x) \, dx+ \frac{1}{2}\sigma^2(T,K)K^2 \cdot p(T,K)  \right) \\
+ & =r Ke^{-rT} \int _{K}^\infty p(T,x) \, dx + \frac{1}{2}\sigma^2(T,K)K^2e^{-rT}p(T,K),
+\end{align}
+$$
+hence by the use of the [[black-scholes-pde-bspde]] we obtain the result
+$$
+\frac{{\partial C}}{\partial T}(T,K)=-rK\frac{{\partial C}}{\partial K}(T,K)+ \frac{1}{2}\sigma^2(T,K)K^2 \frac{{\partial^2C}}{\partial K^2}(T,K).
+$$
+`\end{proof}`
+### Comments
+- Dupire's ODE is a forward equation and it is much more efficient to use than
+  BS-PDE since on knowing one point $(0,K)$ for some given strike $K$ one can
+  figure out the call price for all $(T,K)$ at all time to maturity.  
+- Furthermore, Dupire's PDE also provides an explicit formula for implied
+  volatility in the [[local-volatility-model]].
+
+#### References
+- https://www.csie.ntu.edu.tw/~d00922011/python/cases/LocalVol/DUPIRE_FORMULA.PDF
+- 

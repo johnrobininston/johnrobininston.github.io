@@ -1,0 +1,152 @@
+---
+title: Exponential Family
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+## Definition
+A family of distributions is part of the **exponential family** if the
+probability mass or density function can be written in the form:
+$$
+p(x|\theta) = h(x) \exp\{\eta(\theta) \cdot T(x) - A(\theta)\}
+$$
+Or more generally:
+$$
+p(x|\theta) = h(x) \exp\left\{\sum_{j=1}^{k} \eta_j(\theta) T_j(x) - A(\theta)\right\}
+$$
+where:
+
+- $θ$ is the parameter vector
+- $η(θ)$ are the **natural parameters** (canonical parameters)
+- $T(x)$ are the **sufficient statistics**
+- $A(θ)$ is the **log-partition function** (also called the cumulant generating
+  function)
+- $h(x)$ is the base measure
+
+## Canonical Form
+When expressed in natural parameters $\eta$ instead of $\theta$, the
+exponential family takes its simplest form:
+
+$$p(x|\eta) = h(x) \exp\{\eta \cdot T(x) - A(\eta)\}$$
+
+This canonical form reveals the underlying structure and is often easier to
+work with analytically.
+
+## Key Properties
+### 1. **Sufficient Statistics**
+
+The sufficient statistics **T(x)** capture all information about the data
+relevant to parameter estimation. For n i.i.d. observations:
+$$
+\sum_{i=1}^{n} T(x_i) \text{ is sufficient for } \theta
+$$
+### 2. **Log-Partition Function**
+
+The log-partition function $A(\eta)$ ensures the distribution integrates to 1:
+$$
+A(\eta) = \log \int h(x) \exp\{\eta \cdot T(x)\} dx
+$$
+
+**Critical property**: The moments of $T(x)$ can be derived from derivatives of
+$A(\eta)$:
+$$
+\mathbb{E}[T(x)] = \nabla A(\eta)
+$$
+$$
+\text{Cov}[T(x)] = \nabla^2 A(\eta)
+$$
+This is why $A(\eta)$ is the cumulant generating function.
+
+### 3. **Conjugate Priors**
+
+Every exponential family distribution has a **natural conjugate prior** of the
+form:
+$$
+p(\eta|\alpha, \lambda) \propto \exp\{\eta \cdot \alpha - \lambda A(\eta)\}
+$$
+where $\alpha$ and $\lambda$ are hyperparameters. Posterior updates remain in
+the same family.
+
+## Common Examples
+### 1. [[normal-distribution]] (univariate)
+$$
+p(x|\mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left\{-\frac{(x-\mu)^2}{2\sigma^2}\right\}
+$$
+**Natural parameters**: $\eta_1 = \mu/\sigma^2$, $\eta_2 = -1/(2\sigma^2)$
+**Sufficient statistics**: $T_1(x) = x$, $T_2(x) = x^2$
+**Log-partition**: $A(\eta) = -\eta_1^2/(4\eta_2) - \frac{1}{2} \log(-2\eta_2)$
+
+### 2. [[binomial-distribution|Bernoulli Distribution]]
+$$p(x|p) = p^x(1-p)^{1-x}$$
+
+**Natural parameter**: $\eta = \log(p/(1-p))$
+**Sufficient statistic**: $T(x) = x$
+**Log-partition**: $A(\eta) = \log(1 + e^\eta)$
+
+### 3. [[poisson-distribution]]
+$$p(x|\lambda) = \frac{\lambda^x e^{-\lambda}}{x!}$$
+
+**Natural parameter**: $\eta = \log(\lambda)$
+**Sufficient statistic**: $T(x) = x$
+**Log-partition**: $A(\eta) = e^\eta$
+
+### 4. [[exponential-distribution]] (scalar parameter)
+$$p(x|\beta) = \frac{1}{\beta} e^{-x/\beta}$$
+
+**Natural parameter**: $\eta = -1/\beta$
+**Sufficient statistic**: $T(x) = x$
+**Log-partition**: $A(\eta) = -\log(-\eta)$
+
+### 5. [[beta-distribution]]
+$$p(x|α, β) = \frac{\Gamma(α+β)}{\Gamma(α)\Gamma(β)} x^{α-1}(1-x)^{β-1}$$
+
+**Natural parameters**: $\eta_1 = \alpha - 1$, $\eta_2 = \beta - 1$
+**Sufficient statistics**: $T_1(x) = \log(x)$, $T_2(x) = \log(1-x)$
+
+### 6. [[multinomial-distribution]]
+Generalization of Bernoulli to k categories.
+
+## [[maximum-likelihood-estimation]]
+For the exponential family, the MLE has a closed form:
+
+$$
+\hat{\eta}_{\text{MLE}} = \arg_{\eta} \max_{\theta} \sum_i \eta \cdot T(x_i) - nA(\eta)
+$$
+
+At the optimum:
+$$
+\mathbb{E}[T(x)] = \frac{1}{n}\sum_i T(x_i)
+$$
+
+This is a fundamental result: the expected sufficient statistics equal the
+empirical sufficient statistics.
+
+## Why the Exponential Family Matters
+1. **Theoretical elegance**: Unified framework for diverse distributions
+2. **Computational efficiency**: Closed-form solutions for MLEs, conjugate
+   priors, and moments
+3. **Variational inference**: Exponential families are the natural choice for
+   variational inference and expectation propagation
+4. **[[sufficient-statistics]]**: Enables data reduction without loss of
+   information
+5. **Generative modeling**: Foundation for exponential family models, GLMs, and
+   more
+
+## Connections to Other Concepts
+- **[[generalized-linear-models]] (GLMs)**: GLMs assume the response follows an
+  exponential family distribution
+- **Information Geometry**: The exponential family is the natural structure for
+  differential geometry in statistics
+- **Variational Bayes**: Uses exponential families for tractable approximate
+  inference
+- **Statistical Physics**: Exponential families are Gibbs distributions in
+  statistical mechanics
+
+## Non-Examples
+
+Not all distributions are in the exponential family. Examples include:
+- Mixture models (not in exponential family form themselves)
+- Uniform distribution on variable support U(0, θ)—support depends on parameter
+- Cauchy distribution—moments don't exist

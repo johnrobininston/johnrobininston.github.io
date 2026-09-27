@@ -1,0 +1,47 @@
+---
+title: ARMA Processes
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+### ARMA(p,q) Processes
+:::{.definition data-title="ARMA(p,q) Process"}
+
+A time series $\{X_t\}$ is $ARMA(p,q)$ if it is stationary and satisfies
+$$
+\phi(B)X_t = \theta(B)Z_t, \qquad Z_t \sim [[white-noise|WN]](0,\sigma_Z^2),
+$$
+with $\phi(B) = 1-\phi_1B-\dots-\phi_pB^p$ and
+$\theta(B) = 1+\theta_1B+\dots+\theta_qB^q$ sharing no common roots.
+
+:::
+
+$ARMA$ models combine the finite-order [[moving-average-processes|MA]] and
+[[autoregressive-processes|AR]] structures, and nest both as special cases
+($ARMA(p,0)=AR(p)$, $ARMA(0,q)=MA(q)$).
+
+:::{.theorem data-title="Causality and Invertibility"}
+
+- **Causal** (expressible as $X_t = \psi(B)Z_t$, $\sum|\psi_j|<\infty$) iff the
+  roots of $\phi(z)$ lie outside the unit circle.
+- **Invertible** (expressible as $Z_t = \pi(B)X_t$, $\sum|\pi_j|<\infty$) iff
+  the roots of $\theta(z)$ lie outside the unit circle.
+
+See [[causality-and-invertibility]] for details and proofs.
+
+:::
+
+Neither the ACF nor PACF of a general $ARMA(p,q)$ process cuts off at a finite
+lag — both decay geometrically (a "tapering" pattern) after lag
+$\max(p,q)-\text{something}$, which makes order identification harder in
+practice than for pure AR or MA models; this motivates using information
+criteria (see [[model-selection-criteria-aic-bic]]) alongside ACF/PACF plots.
+
+Non-stationary generalizations are given by [[arima-processes|ARIMA(p,d,q)]]
+(via differencing) and [[sarima-processes|SARIMA]] (adding seasonal structure).
+
+### References
+- [[time-series-analysis]]
+- [[time-series-best-linear-predictors]]

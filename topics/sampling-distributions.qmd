@@ -1,0 +1,168 @@
+---
+title: Sampling Distributions
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: true
+---
+
+# Sampling Distributions
+
+## Definition
+A **sampling distribution** is the probability distribution of a statistic
+(such as the mean, proportion, or standard deviation) calculated from repeated
+random samples of the same size drawn from a population.
+
+Unlike a population distribution, which describes all values in a population, a
+sampling distribution describes how a sample statistic varies across different
+samples.
+
+## Key Concepts
+### Sample Statistic
+
+A **statistic** is a summary measure calculated from a sample (e.g., sample
+mean $\bar{x}$, sample proportion $\hat{p}$). Different samples will produce
+different values of the statistic and therefore **random variables**.
+
+
+
+When we repeatedly take samples and calculate a statistic for each, those
+statistics themselves form a distribution. This is what we call the sampling
+distribution.
+
+### Standard Error
+The standard deviation of a sampling distribution, denoted $SE$ or
+$\sigma_{\bar{x}}$.
+
+For the sample mean:
+$$
+SE = \frac{\sigma}{\sqrt{n}}
+$$
+
+where $\sigma$ is the population standard deviation and $n$ is the sample size.
+
+## The Central Limit Theorem (CLT)
+
+The [[central-limit-theorem]] is foundational to understanding sampling
+distributions.
+
+**Statement**: For a population with mean $\mu$ and standard deviation
+$\sigma$, the distribution of sample means approaches a **normal distribution**
+as the sample size $n$ increases, regardless of the shape of the original
+population distribution.
+
+**Key implications**:
+- Sample means are approximately normally distributed for large sample sizes
+  (typically $n \geq 30$)
+- The mean of the sampling distribution equals the population mean:
+  $E[\bar{x}] = \mu$
+- The standard error decreases as sample size increases
+- Enables us to make probabilistic statements about sample statistics
+
+## Common Sampling Distributions
+
+### 1. Distribution of Sample Mean
+- **Applicable to**: Continuous data with known or unknown population standard
+  deviation
+- **Properties**: Approaches normal distribution as $n$ increases
+- **Use case**: Hypothesis testing about population means, confidence intervals
+  for means
+
+### 2. Distribution of Sample Proportion
+- **Applicable to**: Categorical/binary data
+- **Conditions**: Approximately normal when $np \geq 10$ and $n(1-p) \geq 10$
+- **Standard error**: $SE = \sqrt{\frac{p(1-p)}{n}}$
+- **Use case**: Testing hypotheses about proportions, confidence intervals for
+  proportions
+
+### 3. t-Distribution
+- **When to use**: Small samples ($n < 30$) or unknown population standard
+  deviation
+- **Characteristics**: Heavier tails than normal distribution; approaches
+  normal as $n$ increases
+- **Degrees of freedom**: $df = n - 1$
+
+### 4. Chi-Square Distribution
+- **When to use**: Testing goodness of fit or independence in categorical data
+- **Characteristics**: Right-skewed, different shape based on degrees of
+  freedom
+
+### 5. F-Distribution
+- **When to use**: Comparing variances between two populations (ANOVA)
+- **Characteristics**: Right-skewed, ratio of two chi-square distributions
+
+## Factors Affecting Sampling Distributions
+
+### Sample Size ($n$)
+- **Larger sample size** → smaller standard error → sampling distribution
+  becomes more concentrated
+- **Relationship**: $SE \propto \frac{1}{\sqrt{n}}$ (inverse square root
+  relationship)
+
+### Population Variability ($\sigma$)
+- **Higher population standard deviation** → larger standard error
+- **Direct relationship**: $SE \propto \sigma$
+
+### Sampling Method
+- Random sampling produces unbiased sampling distributions
+- Non-random sampling can introduce bias
+
+## Practical Applications
+
+### 1. Confidence Intervals
+Using sampling distributions, we can construct intervals that likely contain
+the true population parameter:
+$$
+\bar{x} \pm z^* \cdot SE \quad \text{or} \quad \bar{x} \pm t^* \cdot SE
+$$
+
+### 2. Hypothesis Testing
+Sampling distributions allow us to calculate p-values and make decisions about
+population parameters based on sample evidence.
+
+### 3. Quality Control
+Monitoring sampling distributions of production statistics to detect shifts in
+process parameters.
+
+### 4. Election Polling
+Understanding sampling distribution of proportions to assess margin of error in
+polls.
+
+## Example: Distribution of Sample Means
+
+Suppose we have a population with:
+- Mean: $\mu = 100$
+- Standard deviation: $\sigma = 15$
+
+If we draw samples of size $n = 36$:
+
+**Sampling distribution of $\bar{x}$** will have:
+- Mean: $\mu_{\bar{x}} = 100$
+- Standard error: $SE = \frac{15}{\sqrt{36}} = 2.5$
+- Distribution: Approximately normal (by CLT)
+
+This means:
+- 95% of sample means will fall within $100 \pm 1.96(2.5) = 100 \pm 4.9$
+- P($\bar{x} > 105$) can be calculated using the normal distribution
+
+## Key Takeaways
+
+1. **Sampling distributions describe variability** of a statistic across
+   repeated sampling
+2. **Central Limit Theorem** ensures sample means are approximately normal for
+   large samples
+3. **Standard error** quantifies the precision of our sample statistic
+4. **Larger samples** produce more precise estimates (smaller standard error)
+5. **Shape of sampling distribution** depends on both the population
+   distribution and the statistic
+6. **Statistical inference** relies on understanding sampling distributions to
+   quantify uncertainty
+
+## Summary Table
+
+| Statistic         | Population | Sampling Distribution Mean | Standard Error            |
+| ----------------- | ---------- | -------------------------- | ------------------------- |
+| Sample Mean       | Any        | $\mu$                      | $\frac{\sigma}{\sqrt{n}}$ |
+| Sample Proportion | Binary     | $p$                        | $\sqrt{\frac{p(1-p)}{n}}$ |
+| Sample Variance   | Normal     | $\sigma^2$                 | Depends on 4th moment     |
+
