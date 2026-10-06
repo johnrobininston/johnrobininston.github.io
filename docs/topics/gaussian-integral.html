@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
-<meta name="dcterms.date" content="2026-09-25">
+<meta name="dcterms.date" content="2026-10-02">
 
-<title>Time Series Analysis and its Applications (with R examples) – John Robin Inston</title>
+<title>Gaussian Integral – John Robin Inston</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -79,8 +79,36 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto-graph-sidebar-depth" content="2">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -322,7 +350,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Time Series Analysis and its Applications (with R examples)</h1>
+      <h1 class="title">Gaussian Integral</h1>
                       </div>
   </div>
     
@@ -339,7 +367,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 25, 2026</p>
+        <p class="date">October 2, 2026</p>
       </div>
     </div>
     
@@ -355,7 +383,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><span class="header-section-number">1</span> Backlinks</li>
+  <li><a href="#gaussian-integral" id="toc-gaussian-integral" class="nav-link active" data-scroll-target="#gaussian-integral">Gaussian Integral</a></li>
+  <li><a href="#standard-normal" id="toc-standard-normal" class="nav-link" data-scroll-target="#standard-normal">Standard Normal</a></li>
   </ul>
 </nav>
     </div>
@@ -367,16 +396,97 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="gaussian-integral" class="level2">
+<h2 class="anchored" data-anchor-id="gaussian-integral">Gaussian Integral</h2>
+<p>In <a href="../topics/probability-theory.html">Probability Theory</a> the <a href="../topics/normal-distribution.html">Normal Distribution</a> is a continuous probability distribution with parameters mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> that takes the form of a bell-shaped curve that is symmetric about the mean. For a Normal random variable <span class="math inline">\(X\sim\mathcal{N}(\mu,\sigma^2)\)</span> can take values in <span class="math inline">\(\mathbb{R}\)</span> and has probability density function (PDF) of the normal distribution is given by</p>
+<p><span class="math display">\[
+f(x;\mu,\sigma^2)=\frac{1}{\sqrt{2\pi\sigma^2}}
+  \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right).
+\]</span></p>
+<p>Now, since this is a probability distribution, we know that the total probability must be equal to 1, that is</p>
+<p><span class="math display">\[
+\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi\sigma^2}}
+  \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right) dx = 1.
+\]</span></p>
+<p>The purpose of this note is to demonstrate how to compute this integral analytically.</p>
+</section>
+<section id="standard-normal" class="level2">
+<h2 class="anchored" data-anchor-id="standard-normal">Standard Normal</h2>
+<p>First lets evaluate the following Gaussian integral</p>
+<p><span class="math display">\[
+I = \int_{-\infty}^{\infty}
+  \exp\left(-\frac{x^2}{2}\right) dx.
+\]</span></p>
+<p>Since the integrand is non-negative, Tonelli’s theorem allows us to square the integral as</p>
+<p><span class="math display">\[
+I^2 = \int_{-\infty}^{\infty} \exp\left(-\frac{x^2}{2}\right) dx
+  \int_{-\infty}^{\infty} \exp\left(-\frac{y^2}{2}\right) dy
+  = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}
+    \exp\left(-\frac{x^2+y^2}{2}\right) dx dy.
+\]</span></p>
+<p>We can then change to polar coordinates</p>
+<p><span class="math display">\[
+y = r\sin(\theta), \quad x = r\cos(\theta), \quad r\in [0,\infty), \theta\in[0,2\pi).
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/polar-coordinates.png" class="img-fluid figure-img" style="width:50.0%"></p>
+<figcaption>Polar Coordinates</figcaption>
+</figure>
+</div>
+<p>The <a href="../topics/jacobian-matrix.html">Jacobian Matrix</a> of the transformation is given by</p>
+<p><span class="math display">\[
+\begin{align}
+J &amp; = \lvert \frac{\partial (x,y) }{\partial (r,\theta)}\rvert| =
+  \left\lvert \begin{matrix}
+\frac{\partial x}{\partial r} &amp; \frac{\partial x}{\partial \theta} \\
+\frac{\partial y}{\partial r} &amp; \frac{\partial y}{\partial \theta}
+\end{matrix} \right\rvert =
+\left\lvert \begin{matrix}
+\cos(\theta) &amp; -r\sin(\theta) \\
+\sin(\theta) &amp; r\cos(\theta)
+\end{matrix} \right\rvert \\
+&amp; = r \cos^2(\theta) + r\sin^2(\theta)= r.
+\end{align}
+\]</span></p>
 
 
-<section class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id=""><span class="header-section-number">1</span> Backlinks</h2>
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
 <ul>
-<li><a href="../topics/time-series-analysis.html">Time Series Analysis</a></li>
+<li><a href="../topics/calculus.html">Calculus</a></li>
 </ul>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

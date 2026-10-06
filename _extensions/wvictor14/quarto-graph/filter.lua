@@ -206,8 +206,21 @@ function Pandoc(doc)
     for _, b in ipairs(backlinks) do
       items:insert(pandoc.Plain({ pandoc.Link(b.title, "/" .. b.rel) }))
     end
-    doc.blocks:insert(pandoc.Header(2, "Backlinks"))
-    doc.blocks:insert(pandoc.BulletList(items))
+    -- Emit backlinks as a self-contained block rather than a Header, so they
+    -- stay out of the TOC and section numbering. The title is a plain styled
+    -- element, not a heading, for the same reason. backlinks-sidebar.js
+    -- (loaded via include-after-body) then relocates #quarto-backlinks into
+    -- the right margin sidebar, under the "On this page" TOC; if that script
+    -- never runs the block simply remains at the foot of the page.
+    local title = pandoc.Div(
+      pandoc.Plain(pandoc.Str("Backlinks")),
+      pandoc.Attr("", { "quarto-backlinks__title" })
+    )
+    local block = pandoc.Div(
+      { title, pandoc.BulletList(items) },
+      pandoc.Attr("quarto-backlinks", { "quarto-backlinks" })
+    )
+    doc.blocks:insert(block)
   end
 
   local output_dir = quarto.project.output_directory

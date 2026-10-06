@@ -79,7 +79,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto-graph-sidebar-depth" content="2">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -379,14 +378,8 @@ window.Quarto = {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><span class="header-section-number">1</span> Backlinks</li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -404,17 +397,44 @@ window.Quarto = {
 <p><code>\begin{proof}</code> To show that <span class="math inline">\(\sigma(\mathcal{A})\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra we simply note each of the following: 1. <span class="math inline">\(\forall i,\Omega \in\mathcal{F}_{i} \implies\Omega \in\cap_{i}\mathcal{F}_{i}\)</span>. 2. Let <span class="math inline">\(A\in\cap_{i}\mathcal{F}_{i}\implies \forall i, A\in\mathcal{F}_{i}\implies \forall i,A^c\in\mathcal{F}_{i}\implies A^c\in\cap_{i}\mathcal{F}_{i}\)</span>. 3. Let <span class="math inline">\(\{ A_{n} \}_{n\in\mathbb{N}}\subseteq \cap_{i}\mathcal{F}_{i}\implies \{ A_{n} \}_{n\in \mathbb{N}}\in \mathcal{F}_{i},~\forall i\in I\implies \bigcup_{n\in \mathbb{N}}A_{n}\in \mathcal{F}_{i},~ \forall i\in I\implies \bigcup_{n\in \mathbb{N}}A_{n}\in \bigcap_{i \in I}\mathcal{F}_{i}\)</span>. Hence <span class="math inline">\(\sigma(\mathcal{A})\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra and since it is the intersection of all possible <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{A}\)</span> it is the smallest.<code>\end{proof}</code></p>
 
 
-<section class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id=""><span class="header-section-number">1</span> Backlinks</h2>
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
 <ul>
 <li><a href="../topics/dynkins-pi-lambda-theorem.html">Dynkin's π-λ Theorem</a></li>
 <li><a href="../topics/exploration-lebesgue-measure.html">Exploration - Lebesgue Measure</a></li>
 <li><a href="../topics/monotone-class-theorem.html">Monotone Class Theorem</a></li>
 <li><a href="../topics/pi-system.html">Pi System</a></li>
 </ul>
-</section>
+</div>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

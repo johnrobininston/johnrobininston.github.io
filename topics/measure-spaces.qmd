@@ -1,20 +1,19 @@
 ---
-title: Measure Spaces
-author: John Robin Inston
+id: measure-spaces
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Measure Spaces"
 title-block-banner: true
 ---
 
-# Measure Space
+## Concept of Measure
 
-## Constructing Measure Spaces
-
-The primary aim of [[measure-theory-notes|measure theory]] is to define the
-concept of **measurability** and ultimately assign a **measure** to measurable
-sets. That is, for general $X$ we wish to construct a function
-$\mu:2^{X}\to[0,\infty]$ that assigns each $E\subset X$ a number
-$\mu(E)\in[0,\infty]$, the measure of $E$ where $\mu$ satisfies:
+For general set $X\subseteq \mathbb{R}$ we wish to construct a function
+$\mu:2^{X}\to[0,\infty]$ that assigns each subset $E\subset X$ a number
+$\mu(E)\in[0,\infty]$, some **measure** of $E$ where $\mu$ satisfies:
 
 1. For disjoint $E_{1}, E_{2}, \dots \in X$ we have
    $\mu\left( \bigcup_{j=1}^\infty E_{j} \right)=\sum_{j=1}^\infty \mu(E_{j})$
@@ -29,10 +28,14 @@ exists**. Indeed the closest mathematical generalization of mass is
 sets have such a measure (for example, a Vitali set).
 
 To overcome this problem we turn to some standard approaches for
-mathematicians, either (1) weaken the criteria; or (2) restrict the domain of
-the function to the family of **well-behaved** sets. Both options are valid and
-we will see that (1) leads us to the concept of **outer-measure**, and (2)
-leads to the concept of **measure spaces** and **measures**.
+mathematicians, either:
+
+1. Weaken the criteria; or
+2. Restrict the domain of the function to the family of **well-behaved** sets. 
+
+Both options are valid and we will see that (1) leads us to the concept of
+**outer-measure**, and (2) leads to the concept of **measure spaces** 
+and **measures**.
 
 Let us consider how we might restrict the domain of the function and what kind
 of family of subsets we should restrict to. The answer is a non-empty
@@ -40,11 +43,254 @@ collection of subsets that is both closed under compliments and closed under
 countable unions (i.e. sets that preserve the properties we wish our measure to
 have) also known as a *$\sigma$-algebra*, a specific type of **algebra**.
 
-## Algebra over Sets
-[[algebra]]
+## Algebra & σ-Algebra
 
-## σ-Algebra
-[[algebra]]
+An **algebra** is a non-empty collection of subsets of a set $X$ that is 
+closed under finite unions and compliments. 
+
+:::{.definition data-title="Algebra"}
+
+A collection $\mathcal{A}\subseteq 2^X$ is an **algebra** of subsets of $X$ 
+if it satisfies the following properties:
+
+1. $\mathcal{A}$ is non-empty.
+2. **Closed under finite unions.**
+   $\{E_i\}_{i=1}^n\subseteq\mathcal{A}\implies\bigcup_{i=1}^nE_i \in\mathcal{A}$.
+3. **Closed under compliments.** $E\in\mathcal{A}\implies E^c\in\mathcal{A}$. 
+
+:::
+
+The following results follow immediately from the definition of an algebra.
+
+:::{.theorem}
+
+If $\mathcal{A}$ is an algebra then:
+
+1. $\empty\in\mathcal{A}$, $X\in\mathcal{A}$.
+2. $\{E_i\}_{i=1}^n\subseteq\mathcal{A}\implies \bigcap_{i=1}^nE_i\in\mathcal{A}$.
+
+:::
+
+:::{.proof}
+
+For (1) since $\mathcal{A}$ is non-empty there exists $E\in\mathcal{A}$ and 
+also $E^c\in\mathcal{A}$ by closure under compliments.  Then 
+$\emptyset=E\cap E^c\in\mathcal{A}$ by closure under finite unions. 
+Additionally $X=\emptyset^c\in\mathcal{A}$ by closure under compliments.
+For (2) we have that 
+:::
+
+A $\sigma$-algebra is an algebra that is **closed under countable unions**.
+
+:::{.definition data-title="σ-Algebra"}
+
+An algebra $\mathcal{F}\subseteq 2^X$ that is **closed under countable 
+unions** (a property known as **σ-additivity**) is called a **σ-algebra**.  
+
+:::
+
+A $\sigma$-algebra is also closed under countable intersections 
+
+:::{.theorem}
+
+An algebra $\mathcal{A}$ that is closed under countable disjoint unions 
+is a $\sigma$-algebra.
+
+:::
+
+:::{.proof}
+
+Assume that $\mathcal{A}$ is closed under countable disjoint unions.  We wish
+to show that $\mathcal{A}$ is closed under countable unions.  
+
+:::
+
+
+:::{.definition data-title="Measurable Space"}
+
+A double $(X, \mathcal{F})$ consisting of a set $X$ and a σ-algebra 
+$\mathcal{F}$ of subsets of $X$ is called a **measurable space**. Any set
+$E\in\mathcal{F}$ is called a **measurable set**.
+
+:::
+
+In measure theory we will spend a lot of time working with σ-algebras and thus 
+we spend some time deriving the most important results about them.
+
+:::{.theorem data-title="Intersection of σ-Algebras"}
+
+Given any nonempty collection $\mathcal{C}$ of $\sigma$-algebras on $X, then 
+
+$$
+\bigcap \mathcal{C} \coloneqq  \{E\subseteq X: E\in \mathcal{A}, \forall \mathcal{A}\in\mathcal{C}\},
+$$
+
+is a $\sigma$-algebra on $X$.
+
+:::
+
+:::{.proof}
+
+To show this holds 
+
+:::
+
+:::{.theorem data-title="Set Generated σ-Algebra"}
+
+Given a set $\mathcal{E}\subseteq 2^X$ there exists a smallest $\sigma$-algebra
+containing $\mathcal{E}$, denoted $\sigma(\mathcal{E})$, and referred to as the 
+$\sigma$-algebra **generated** by $\mathcal{E}$.  
+
+:::
+
+:::{.proof}
+
+To show  
+
+:::
+
+By the smallest we mean that, all other $\sigma$-algebra $\mathcal{F}$
+containing $\mathcal{E}$ satisfy $\sigma(\mathcal{E})\subseteq\mathcal{F}$. 
+You can also think of $\sigma(\mathcal{E})$ as the **intersection** of all 
+other $\sigma$-algebra that contain $\mathcal{E}$.
 
 ## Measure
-[[measure]]
+
+Upon a measurable space we are able to define a **measure**, a function 
+assigning elements of $\mathcal{F}$ a measure of size.
+
+:::{.definition data-title="Measure"}
+
+Given a measurable space $(X,\mathcal{F})$ a *measure*
+$\mu:\mathcal{F}\to[0,+\infty]$ is a mapping frm the collection of measurable
+sets to $[0,+\infty]$ such that:
+1. $\mu(\emptyset)=0$
+2. $\{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}~\&~\text{disjoint}\implies \mu(\cup_{i=1}^\infty E_{i})=\sum_{i=1}^\infty \mu(E_{i})$.
+
+:::
+
+We call the triple $(X, \mathcal{F}, \mu)$ a **measure space**.
+
+:::{.example data-title="Dirac Measure"}
+
+For $(X,\mathcal{F})=(X, 2^X)$ we fix $x_{0}\in X$ and define
+
+$$
+\mu(A)=\delta_{x_{0}}(A)=\begin{cases}
+1&x_{0}\in A \\
+0& \text{o.w.}
+\end{cases}
+$$
+
+known as the **Dirac measure**.
+
+:::
+
+:::{.theorem data-title="Measure Properties"}
+
+For any measure space $(X,\mathcal{F},\mu)$ and $A,B\in \mathcal{F}$,
+$\{ A_{i} \}_{i=1}^n\subseteq \mathcal{F}$ we have the following properties:
+1. $A \subseteq B\implies \mu(A)\leq \mu(B)$ (Monotonicity)
+2. $A \subseteq B\implies \mu(B\setminus A)=\mu(B)-\mu(A)$
+3. $\mu(\cup_{i=1}^\infty A_{i})\leq \sum_{i=1}^\infty \mu(A_{i})$
+   (Countable subadditivity)
+4. $A_{i}\subseteq A_{i+1},~\forall i\implies \mu(\cup_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from below)
+5. $A_{i}\supseteq A_{i+1},~\forall i$ where $\mu(A_1)<+\infty\implies \mu(\cap_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})$
+   (Continuity from above)
+
+:::
+
+:::{.proof}
+
+(1) + (2) Assume there exists $A\subseteq B$ then we can partition
+$B=A\cup(B\setminus A)$ and so
+$$
+\mu(B)=\mu(A)+\mu(B\setminus A)\geq  \mu(A).
+$$
+(3) Similarly, we can define $A_{1}=B_{1}$ and
+$B_{n}=A_{n}\setminus \cup_{i=1}^{n-1}A_{i}$ then we have that
+$$
+\mu(\cup_{i=1}^\infty A_{i})=\mu(\cup_{i=1}^\infty B_{i})=\sum_{i=1}^\infty \mu(B_{i})=\sum_{i=1}^\infty \mu(A_{i})-\mu(\cup_{i=1}^{n-1}A_{i})\leq \sum_{i=1}^\infty \mu(A_{i}).
+$$
+(4) Defining $B_{1}=A_{1}$ and $B_{i}=A_{i}\setminus A_{i-1}$ for $i \geq 2$.
+By definition $\cup_{i=1}^n B_{i}=A_{n}$ hence
+$$
+\cup_{i=1}^\infty B_{i}=\cup_{n=1}^\infty A_{n}\implies \mu(A_{n})=\mu(\cup_{i=1}^nB_{i})=\sum_{i=1}^n\mu(B_{i}).
+$$
+Consequently taking the limit as $n \to \infty$ we find
+$$
+\lim_{n \to \infty}\mu(A_{n})=\sum_{i=1}^\infty \mu(B_{i})=\mu\left( \bigcup_{i=1}^\infty B_{i} \right) =\mu\left(\bigcup_{i=1}^n A_{i}\right)
+$$
+(5) Define $B_{i}=A_{1}\setminus A_{i}$. By constraint $B_{i}\subseteq B_{i+1}$
+and so
+$$
+\begin{align}
+\bigcup_{i=1}^\infty B_{i} & =\bigcup_{i=1}^\infty(A_{1}\setminus A_{i})=\bigcup_{i=1}^\infty(A_{i}\cap A_{i}^c)=A_{1}\cap\left( \bigcup_{i=1}^\infty A_{i}^c \right) \\
+ & = A_{1}\cap \left( \bigcap_{i=1}^\infty A_{i} \right)^c=A_{1}\setminus \left( \bigcap_{i=1}^\infty A_{i} \right).
+\end{align}
+$$
+Therefore we have that
+$$
+\begin{align}
+\mu(A_{1}) & =\mu\left( A_{1}\cap\left( \bigcap_{i=1}^\infty A_{i} \right) \right)+\mu\left( A_{1}\setminus \bigcap_{i=1}^\infty A_{i} \right)  =\mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty} \mu(B_{i}) \\
+& = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty}\mu(A_{i})-\mu(A_{i} ) = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\mu(A_{1})-\lim_{i \to \infty}\mu(A_{i}),
+\end{align}
+$$
+
+and rearranging gives the result.
+
+:::
+
+:::{.definition data-title="Finite, Sigma-Finite, Null Set, Almost Everywhere, Complete"}
+
+Given a measure space $(X,\mathcal{F}, \mu)$ we define the following
+terminology:
+1. the measure is **finite** if $\mu(X)<+\infty$
+2. the measure is $\sigma$**-finite** if
+   $\exists \{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}$ such that
+   $\cup_{i=1}^\infty E_{i}=X$ and $\mu(E_{i})< \infty$ for all
+   $i \in \mathbb{N}$
+3. $E \in S^X$ is a **null set** (of $\mu$) if $E\in \mathcal{F}$ and
+   $\mu(E)=0$
+4. a property holds ($\mu$-) **almost everywhere** if the set of points where
+   it fails is a null set
+5. a measure whose domain includes all subsets of null sets is called
+   **complete**.
+
+:::
+
+The next theorem defines a **complete measure space**, a measure space in which
+every subset of every null set is measurable (with measure zero).  
+
+:::{.theorem data-title="Completions"}
+
+Suppose that $(X,\mathcal{F}, \mu)$ is a measure space. Let
+$\mathcal{N}=\{ N \in \mathcal{F}:\mu(N)=0 \}$ and
+$\overline{\mathcal{F}}=\{ E \cup F:E \in\mathcal{F},~F\subset N~\text{for some }N \in\mathcal{N} \}$.
+Then $\overline{\mathcal{F}}$ is a $\sigma$-algebra known as the **completion**
+of $\mathcal{F}$ with respect to $\mu$, and there is a unique extension
+$\overline\mu$ of $\mu$ to a **complete measure** on $\overline{\mathcal{F}}$,
+known as the **completion** of $\mu$. The resulting measure space
+$(X,\overline{F}, \overline{\mu})$ is called a **complete measure space**.
+
+:::
+
+:::{.proof}
+
+Firstly, we show that $\overline{\mathcal{F}}$ is a $\sigma$-algebra. Note that
+since $\mathcal{F}$ and $\mathcal{N}$ are both closed under countable unions,
+so to is $\overline{\mathcal{F}}$ and further, since
+$\emptyset \in \mathcal{F},\mathcal{N}$ then we have that
+$\emptyset \in\overline{\mathcal{F}}$, hence we need only show that
+$\overline{\mathcal{F}}$ is closed under compliments.  
+
+:::
+
+Naturally you might ask whether there exists a measure $\mu$ on the
+**measurable real space** $(\mathbb{R}, \mathcal{B}_{\mathbb{R}})$ (i.e. the
+couple of the real numbers and the [[borel-sigma-algebra]]) where
+$\mu((a,b))=b-a$ and $\mu$ is translation invariant. To prove existence we must
+first consider [[outer-measure|outer-measures]], functions similar to measures
+but that are defined on all collections of subsets.
+

@@ -79,7 +79,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto-graph-sidebar-depth" content="2">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -384,14 +383,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#measure-space" id="toc-measure-space" class="nav-link active" data-scroll-target="#measure-space"><span class="header-section-number">1</span> Measure Space</a>
-  <ul class="collapse">
-  <li><a href="#constructing-measure-spaces" id="toc-constructing-measure-spaces" class="nav-link" data-scroll-target="#constructing-measure-spaces"><span class="header-section-number">1.1</span> Constructing Measure Spaces</a></li>
-  <li><a href="#algebra-over-sets" id="toc-algebra-over-sets" class="nav-link" data-scroll-target="#algebra-over-sets"><span class="header-section-number">1.2</span> Algebra over Sets</a></li>
-  <li><a href="#σ-algebra" id="toc-σ-algebra" class="nav-link" data-scroll-target="#σ-algebra"><span class="header-section-number">1.3</span> σ-Algebra</a></li>
-  <li><a href="#measure" id="toc-measure" class="nav-link" data-scroll-target="#measure"><span class="header-section-number">1.4</span> Measure</a></li>
-  <li><span class="header-section-number">1.5</span> Backlinks</li>
-  </ul></li>
+  <li><a href="#concept-of-measure" id="toc-concept-of-measure" class="nav-link active" data-scroll-target="#concept-of-measure"><span class="header-section-number">1</span> Concept of Measure</a></li>
+  <li><a href="#algebra-σ-algebra" id="toc-algebra-σ-algebra" class="nav-link" data-scroll-target="#algebra-σ-algebra"><span class="header-section-number">2</span> Algebra &amp; σ-Algebra</a></li>
+  <li><a href="#measure" id="toc-measure" class="nav-link" data-scroll-target="#measure"><span class="header-section-number">3</span> Measure</a></li>
   </ul>
 </nav>
     </div>
@@ -403,45 +397,181 @@ window.Quarto = {
 
 
 
-<section id="measure-space" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Measure Space</h1>
-<section id="constructing-measure-spaces" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="constructing-measure-spaces"><span class="header-section-number">1.1</span> Constructing Measure Spaces</h2>
-<p>The primary aim of <a href="../topics/measure-theory-notes.html">measure theory</a> is to define the concept of <strong>measurability</strong> and ultimately assign a <strong>measure</strong> to measurable sets. That is, for general <span class="math inline">\(X\)</span> we wish to construct a function <span class="math inline">\(\mu:2^{X}\to[0,\infty]\)</span> that assigns each <span class="math inline">\(E\subset X\)</span> a number <span class="math inline">\(\mu(E)\in[0,\infty]\)</span>, the measure of <span class="math inline">\(E\)</span> where <span class="math inline">\(\mu\)</span> satisfies:</p>
+<section id="concept-of-measure" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="concept-of-measure"><span class="header-section-number">1</span> Concept of Measure</h2>
+<p>For general set <span class="math inline">\(X\subseteq \mathbb{R}\)</span> we wish to construct a function <span class="math inline">\(\mu:2^{X}\to[0,\infty]\)</span> that assigns each subset <span class="math inline">\(E\subset X\)</span> a number <span class="math inline">\(\mu(E)\in[0,\infty]\)</span>, some <strong>measure</strong> of <span class="math inline">\(E\)</span> where <span class="math inline">\(\mu\)</span> satisfies:</p>
 <ol type="1">
 <li>For disjoint <span class="math inline">\(E_{1}, E_{2}, \dots \in X\)</span> we have <span class="math inline">\(\mu\left( \bigcup_{j=1}^\infty E_{j} \right)=\sum_{j=1}^\infty \mu(E_{j})\)</span> (countably additive);</li>
 <li>For interval <span class="math inline">\([a,b]\)</span> we have <span class="math inline">\(\mu([a,b])=b-a\)</span>; and</li>
 <li>For set <span class="math inline">\(E\subset \mathbb{R}\)</span> and constant <span class="math inline">\(c\in \mathbb{R}\)</span> we have <span class="math inline">\(\mu(E+c)=\mu(E)\)</span> (translation invariance).</li>
 </ol>
-<p>The <a href="../topics/vitali-non-measurability-theorem.html">Vitali Non-Measurability Theorem</a> demonstrates that <strong>no such function exists</strong>. Indeed the closest mathematical generalization of mass is <strong>σ-additivity</strong> which gives rise to the <strong>Lebesgue measure</strong>, however not all sets have such a measure (for example, a Vitali set).</p>
-<p>To overcome this problem we turn to some standard approaches for mathematicians, either (1) weaken the criteria; or (2) restrict the domain of the function to the family of <strong>well-behaved</strong> sets. Both options are valid and we will see that (1) leads us to the concept of <strong>outer-measure</strong>, and (2) leads to the concept of <strong>measure spaces</strong> and <strong>measures</strong>.</p>
+<p>The [[vitali-non-measurability-theorem]] demonstrates that <strong>no such function exists</strong>. Indeed the closest mathematical generalization of mass is <strong>σ-additivity</strong> which gives rise to the <strong>Lebesgue measure</strong>, however not all sets have such a measure (for example, a Vitali set).</p>
+<p>To overcome this problem we turn to some standard approaches for mathematicians, either:</p>
+<ol type="1">
+<li>Weaken the criteria; or</li>
+<li>Restrict the domain of the function to the family of <strong>well-behaved</strong> sets.</li>
+</ol>
+<p>Both options are valid and we will see that (1) leads us to the concept of <strong>outer-measure</strong>, and (2) leads to the concept of <strong>measure spaces</strong> and <strong>measures</strong>.</p>
 <p>Let us consider how we might restrict the domain of the function and what kind of family of subsets we should restrict to. The answer is a non-empty collection of subsets that is both closed under compliments and closed under countable unions (i.e.&nbsp;sets that preserve the properties we wish our measure to have) also known as a <em><span class="math inline">\(\sigma\)</span>-algebra</em>, a specific type of <strong>algebra</strong>.</p>
 </section>
-<section id="algebra-over-sets" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="algebra-over-sets"><span class="header-section-number">1.2</span> Algebra over Sets</h2>
-<p><a href="../topics/algebra.html">Algebra</a></p>
+<section id="algebra-σ-algebra" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="algebra-σ-algebra"><span class="header-section-number">2</span> Algebra &amp; σ-Algebra</h2>
+<p>An <strong>algebra</strong> is a non-empty collection of subsets of a set <span class="math inline">\(X\)</span> that is closed under finite unions and compliments.</p>
+<div class="definition" data-title="Algebra">
+<p>A collection <span class="math inline">\(\mathcal{A}\subseteq 2^X\)</span> is an <strong>algebra</strong> of subsets of <span class="math inline">\(X\)</span> if it satisfies the following properties:</p>
+<ol type="1">
+<li><span class="math inline">\(\mathcal{A}\)</span> is non-empty.</li>
+<li><strong>Closed under finite unions.</strong> <span class="math inline">\(\{E_i\}_{i=1}^n\subseteq\mathcal{A}\implies\bigcup_{i=1}^nE_i \in\mathcal{A}\)</span>.</li>
+<li><strong>Closed under compliments.</strong> <span class="math inline">\(E\in\mathcal{A}\implies E^c\in\mathcal{A}\)</span>.</li>
+</ol>
+</div>
+<p>The following results follow immediately from the definition of an algebra.</p>
+<div class="theorem">
+<p>If <span class="math inline">\(\mathcal{A}\)</span> is an algebra then:</p>
+<ol type="1">
+<li><span class="math inline">\(\empty\in\mathcal{A}\)</span>, <span class="math inline">\(X\in\mathcal{A}\)</span>.</li>
+<li><span class="math inline">\(\{E_i\}_{i=1}^n\subseteq\mathcal{A}\implies \bigcap_{i=1}^nE_i\in\mathcal{A}\)</span>.</li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>For (1) since <span class="math inline">\(\mathcal{A}\)</span> is non-empty there exists <span class="math inline">\(E\in\mathcal{A}\)</span> and also <span class="math inline">\(E^c\in\mathcal{A}\)</span> by closure under compliments. Then <span class="math inline">\(\emptyset=E\cap E^c\in\mathcal{A}\)</span> by closure under finite unions. Additionally <span class="math inline">\(X=\emptyset^c\in\mathcal{A}\)</span> by closure under compliments. For (2) we have that</p>
+</div>
+<p>A <span class="math inline">\(\sigma\)</span>-algebra is an algebra that is <strong>closed under countable unions</strong>.</p>
+<div class="definition" data-title="σ-Algebra">
+<p>An algebra <span class="math inline">\(\mathcal{F}\subseteq 2^X\)</span> that is <strong>closed under countable unions</strong> (a property known as <strong>σ-additivity</strong>) is called a <strong>σ-algebra</strong>.</p>
+</div>
+<p>A <span class="math inline">\(\sigma\)</span>-algebra is also closed under countable intersections</p>
+<div class="theorem">
+<p>An algebra <span class="math inline">\(\mathcal{A}\)</span> that is closed under countable disjoint unions is a <span class="math inline">\(\sigma\)</span>-algebra.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Assume that <span class="math inline">\(\mathcal{A}\)</span> is closed under countable disjoint unions. We wish to show that <span class="math inline">\(\mathcal{A}\)</span> is closed under countable unions.</p>
+</div>
+<div class="definition" data-title="Measurable Space">
+<p>A double <span class="math inline">\((X, \mathcal{F})\)</span> consisting of a set <span class="math inline">\(X\)</span> and a σ-algebra <span class="math inline">\(\mathcal{F}\)</span> of subsets of <span class="math inline">\(X\)</span> is called a <strong>measurable space</strong>. Any set <span class="math inline">\(E\in\mathcal{F}\)</span> is called a <strong>measurable set</strong>.</p>
+</div>
+<p>In measure theory we will spend a lot of time working with σ-algebras and thus we spend some time deriving the most important results about them.</p>
+<div class="theorem" data-title="Intersection of σ-Algebras">
+<p>Given any nonempty collection <span class="math inline">\(\mathcal{C}\)</span> of <span class="math inline">\(\sigma\)</span>-algebras on $X, then</p>
+<p><span class="math display">\[
+\bigcap \mathcal{C} \coloneqq  \{E\subseteq X: E\in \mathcal{A}, \forall \mathcal{A}\in\mathcal{C}\},
+\]</span></p>
+<p>is a <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(X\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>To show this holds</p>
+</div>
+<div class="theorem" data-title="Set Generated σ-Algebra">
+<p>Given a set <span class="math inline">\(\mathcal{E}\subseteq 2^X\)</span> there exists a smallest <span class="math inline">\(\sigma\)</span>-algebra containing <span class="math inline">\(\mathcal{E}\)</span>, denoted <span class="math inline">\(\sigma(\mathcal{E})\)</span>, and referred to as the <span class="math inline">\(\sigma\)</span>-algebra <strong>generated</strong> by <span class="math inline">\(\mathcal{E}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>To show</p>
+</div>
+<p>By the smallest we mean that, all other <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{F}\)</span> containing <span class="math inline">\(\mathcal{E}\)</span> satisfy <span class="math inline">\(\sigma(\mathcal{E})\subseteq\mathcal{F}\)</span>. You can also think of <span class="math inline">\(\sigma(\mathcal{E})\)</span> as the <strong>intersection</strong> of all other <span class="math inline">\(\sigma\)</span>-algebra that contain <span class="math inline">\(\mathcal{E}\)</span>.</p>
 </section>
-<section id="σ-algebra" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="σ-algebra"><span class="header-section-number">1.3</span> σ-Algebra</h2>
-<p><a href="../topics/algebra.html">Algebra</a></p>
-</section>
-<section id="measure" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="measure"><span class="header-section-number">1.4</span> Measure</h2>
-<p>[<a href="#measure">measure</a>]</p>
+<section id="measure" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="measure"><span class="header-section-number">3</span> Measure</h2>
+<p>Upon a measurable space we are able to define a <strong>measure</strong>, a function assigning elements of <span class="math inline">\(\mathcal{F}\)</span> a measure of size.</p>
+<div class="definition" data-title="Measure">
+<p>Given a measurable space <span class="math inline">\((X,\mathcal{F})\)</span> a <em>measure</em> <span class="math inline">\(\mu:\mathcal{F}\to[0,+\infty]\)</span> is a mapping frm the collection of measurable sets to <span class="math inline">\([0,+\infty]\)</span> such that: 1. <span class="math inline">\(\mu(\emptyset)=0\)</span> 2. <span class="math inline">\(\{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}~\&amp;~\text{disjoint}\implies \mu(\cup_{i=1}^\infty E_{i})=\sum_{i=1}^\infty \mu(E_{i})\)</span>.</p>
+</div>
+<p>We call the triple <span class="math inline">\((X, \mathcal{F}, \mu)\)</span> a <strong>measure space</strong>.</p>
+<div class="example" data-title="Dirac Measure">
+<p>For <span class="math inline">\((X,\mathcal{F})=(X, 2^X)\)</span> we fix <span class="math inline">\(x_{0}\in X\)</span> and define</p>
+<p><span class="math display">\[
+\mu(A)=\delta_{x_{0}}(A)=\begin{cases}
+1&amp;x_{0}\in A \\
+0&amp; \text{o.w.}
+\end{cases}
+\]</span></p>
+<p>known as the <strong>Dirac measure</strong>.</p>
+</div>
+<div class="theorem" data-title="Measure Properties">
+<p>For any measure space <span class="math inline">\((X,\mathcal{F},\mu)\)</span> and <span class="math inline">\(A,B\in \mathcal{F}\)</span>, <span class="math inline">\(\{ A_{i} \}_{i=1}^n\subseteq \mathcal{F}\)</span> we have the following properties: 1. <span class="math inline">\(A \subseteq B\implies \mu(A)\leq \mu(B)\)</span> (Monotonicity) 2. <span class="math inline">\(A \subseteq B\implies \mu(B\setminus A)=\mu(B)-\mu(A)\)</span> 3. <span class="math inline">\(\mu(\cup_{i=1}^\infty A_{i})\leq \sum_{i=1}^\infty \mu(A_{i})\)</span> (Countable subadditivity) 4. <span class="math inline">\(A_{i}\subseteq A_{i+1},~\forall i\implies \mu(\cup_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})\)</span> (Continuity from below) 5. <span class="math inline">\(A_{i}\supseteq A_{i+1},~\forall i\)</span> where <span class="math inline">\(\mu(A_1)&lt;+\infty\implies \mu(\cap_{i=1}^\infty A_{i})=\lim_{_{i \to \infty}}\mu(A_{i})\)</span> (Continuity from above)</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span></p>
+<ol type="1">
+<li><ul>
+<li><ol start="2" type="1">
+<li>Assume there exists <span class="math inline">\(A\subseteq B\)</span> then we can partition <span class="math inline">\(B=A\cup(B\setminus A)\)</span> and so <span class="math display">\[
+\mu(B)=\mu(A)+\mu(B\setminus A)\geq  \mu(A).
+\]</span></li>
+</ol></li>
+</ul></li>
+<li>Similarly, we can define <span class="math inline">\(A_{1}=B_{1}\)</span> and <span class="math inline">\(B_{n}=A_{n}\setminus \cup_{i=1}^{n-1}A_{i}\)</span> then we have that <span class="math display">\[
+\mu(\cup_{i=1}^\infty A_{i})=\mu(\cup_{i=1}^\infty B_{i})=\sum_{i=1}^\infty \mu(B_{i})=\sum_{i=1}^\infty \mu(A_{i})-\mu(\cup_{i=1}^{n-1}A_{i})\leq \sum_{i=1}^\infty \mu(A_{i}).
+\]</span></li>
+<li>Defining <span class="math inline">\(B_{1}=A_{1}\)</span> and <span class="math inline">\(B_{i}=A_{i}\setminus A_{i-1}\)</span> for <span class="math inline">\(i \geq 2\)</span>. By definition <span class="math inline">\(\cup_{i=1}^n B_{i}=A_{n}\)</span> hence <span class="math display">\[
+\cup_{i=1}^\infty B_{i}=\cup_{n=1}^\infty A_{n}\implies \mu(A_{n})=\mu(\cup_{i=1}^nB_{i})=\sum_{i=1}^n\mu(B_{i}).
+\]</span> Consequently taking the limit as <span class="math inline">\(n \to \infty\)</span> we find <span class="math display">\[
+\lim_{n \to \infty}\mu(A_{n})=\sum_{i=1}^\infty \mu(B_{i})=\mu\left( \bigcup_{i=1}^\infty B_{i} \right) =\mu\left(\bigcup_{i=1}^n A_{i}\right)
+\]</span></li>
+<li>Define <span class="math inline">\(B_{i}=A_{1}\setminus A_{i}\)</span>. By constraint <span class="math inline">\(B_{i}\subseteq B_{i+1}\)</span> and so <span class="math display">\[
+\begin{align}
+\bigcup_{i=1}^\infty B_{i} &amp; =\bigcup_{i=1}^\infty(A_{1}\setminus A_{i})=\bigcup_{i=1}^\infty(A_{i}\cap A_{i}^c)=A_{1}\cap\left( \bigcup_{i=1}^\infty A_{i}^c \right) \\
+&amp; = A_{1}\cap \left( \bigcap_{i=1}^\infty A_{i} \right)^c=A_{1}\setminus \left( \bigcap_{i=1}^\infty A_{i} \right).
+\end{align}
+\]</span> Therefore we have that <span class="math display">\[
+\begin{align}
+\mu(A_{1}) &amp; =\mu\left( A_{1}\cap\left( \bigcap_{i=1}^\infty A_{i} \right) \right)+\mu\left( A_{1}\setminus \bigcap_{i=1}^\infty A_{i} \right)  =\mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty} \mu(B_{i}) \\
+&amp; = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\lim_{i \to \infty}\mu(A_{i})-\mu(A_{i} ) = \mu\left( \bigcap_{i=1}^\infty A_{i} \right)+\mu(A_{1})-\lim_{i \to \infty}\mu(A_{i}),
+\end{align}
+\]</span></li>
+</ol>
+<p>and rearranging gives the result.</p>
+</div>
+<div class="definition" data-title="Finite, Sigma-Finite, Null Set, Almost Everywhere, Complete">
+<p>Given a measure space <span class="math inline">\((X,\mathcal{F}, \mu)\)</span> we define the following terminology: 1. the measure is <strong>finite</strong> if <span class="math inline">\(\mu(X)&lt;+\infty\)</span> 2. the measure is <span class="math inline">\(\sigma\)</span><strong>-finite</strong> if <span class="math inline">\(\exists \{ E_{i} \}_{i=1}^\infty \subseteq \mathcal{F}\)</span> such that <span class="math inline">\(\cup_{i=1}^\infty E_{i}=X\)</span> and <span class="math inline">\(\mu(E_{i})&lt; \infty\)</span> for all <span class="math inline">\(i \in \mathbb{N}\)</span> 3. <span class="math inline">\(E \in S^X\)</span> is a <strong>null set</strong> (of <span class="math inline">\(\mu\)</span>) if <span class="math inline">\(E\in \mathcal{F}\)</span> and <span class="math inline">\(\mu(E)=0\)</span> 4. a property holds (<span class="math inline">\(\mu\)</span>-) <strong>almost everywhere</strong> if the set of points where it fails is a null set 5. a measure whose domain includes all subsets of null sets is called <strong>complete</strong>.</p>
+</div>
+<p>The next theorem defines a <strong>complete measure space</strong>, a measure space in which every subset of every null set is measurable (with measure zero).</p>
+<div class="theorem" data-title="Completions">
+<p>Suppose that <span class="math inline">\((X,\mathcal{F}, \mu)\)</span> is a measure space. Let <span class="math inline">\(\mathcal{N}=\{ N \in \mathcal{F}:\mu(N)=0 \}\)</span> and <span class="math inline">\(\overline{\mathcal{F}}=\{ E \cup F:E \in\mathcal{F},~F\subset N~\text{for some }N \in\mathcal{N} \}\)</span>. Then <span class="math inline">\(\overline{\mathcal{F}}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra known as the <strong>completion</strong> of <span class="math inline">\(\mathcal{F}\)</span> with respect to <span class="math inline">\(\mu\)</span>, and there is a unique extension <span class="math inline">\(\overline\mu\)</span> of <span class="math inline">\(\mu\)</span> to a <strong>complete measure</strong> on <span class="math inline">\(\overline{\mathcal{F}}\)</span>, known as the <strong>completion</strong> of <span class="math inline">\(\mu\)</span>. The resulting measure space <span class="math inline">\((X,\overline{F}, \overline{\mu})\)</span> is called a <strong>complete measure space</strong>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Firstly, we show that <span class="math inline">\(\overline{\mathcal{F}}\)</span> is a <span class="math inline">\(\sigma\)</span>-algebra. Note that since <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(\mathcal{N}\)</span> are both closed under countable unions, so to is <span class="math inline">\(\overline{\mathcal{F}}\)</span> and further, since <span class="math inline">\(\emptyset \in \mathcal{F},\mathcal{N}\)</span> then we have that <span class="math inline">\(\emptyset \in\overline{\mathcal{F}}\)</span>, hence we need only show that <span class="math inline">\(\overline{\mathcal{F}}\)</span> is closed under compliments.</p>
+</div>
+<p>Naturally you might ask whether there exists a measure <span class="math inline">\(\mu\)</span> on the <strong>measurable real space</strong> <span class="math inline">\((\mathbb{R}, \mathcal{B}_{\mathbb{R}})\)</span> (i.e.&nbsp;the couple of the real numbers and the <a href="../topics/borel-sigma-algebra.html">Borel σ-Algebra</a>) where <span class="math inline">\(\mu((a,b))=b-a\)</span> and <span class="math inline">\(\mu\)</span> is translation invariant. To prove existence we must first consider <a href="../topics/outer-measure.html">outer-measures</a>, functions similar to measures but that are defined on all collections of subsets.</p>
 
 
-</section>
-<section class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id=""><span class="header-section-number">1.5</span> Backlinks</h2>
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
 <ul>
 <li><a href="../topics/measure.html">Measure</a></li>
 <li><a href="../topics/measure-theory.html">Measure Theory</a></li>
 <li><a href="../topics/product-sigma-algebra.html">Product σ-Algebra</a></li>
 </ul>
-</section>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

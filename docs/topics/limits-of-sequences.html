@@ -79,7 +79,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto-graph-sidebar-depth" content="2">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -384,12 +383,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#limits-of-sequences" id="toc-limits-of-sequences" class="nav-link active" data-scroll-target="#limits-of-sequences"><span class="header-section-number">1</span> Limits of Sequences</a>
-  <ul class="collapse">
-  <li><a href="#convergence-of-sequences" id="toc-convergence-of-sequences" class="nav-link" data-scroll-target="#convergence-of-sequences"><span class="header-section-number">1.1</span> Convergence of Sequences</a></li>
-  <li><a href="#sequence-limit-results" id="toc-sequence-limit-results" class="nav-link" data-scroll-target="#sequence-limit-results"><span class="header-section-number">1.2</span> Sequence Limit Results</a></li>
-  <li><a href="#rate-of-convergence" id="toc-rate-of-convergence" class="nav-link" data-scroll-target="#rate-of-convergence"><span class="header-section-number">1.3</span> Rate of Convergence</a></li>
-  </ul></li>
+  <li><a href="#convergence-of-sequences" id="toc-convergence-of-sequences" class="nav-link active" data-scroll-target="#convergence-of-sequences"><span class="header-section-number">1</span> Convergence of Sequences</a></li>
+  <li><a href="#sequence-limit-results" id="toc-sequence-limit-results" class="nav-link" data-scroll-target="#sequence-limit-results"><span class="header-section-number">2</span> Sequence Limit Results</a></li>
+  <li><a href="#rate-of-convergence" id="toc-rate-of-convergence" class="nav-link" data-scroll-target="#rate-of-convergence"><span class="header-section-number">3</span> Rate of Convergence</a></li>
   </ul>
 </nav>
     </div>
@@ -401,40 +397,61 @@ window.Quarto = {
 
 
 
-<section id="limits-of-sequences" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Limits of Sequences</h1>
-<section id="convergence-of-sequences" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="convergence-of-sequences"><span class="header-section-number">1.1</span> Convergence of Sequences</h2>
-<p>An important property of <a href="../topics/sequences.html">sequences</a> is <strong>convergence</strong>. If a sequences converges to some particular value then we say that value is the <strong>limit</strong> and that the sequence is <strong>convergent</strong>. A sequence that is not convergent is said to be <strong>divergent</strong>.</p>
-<p>Informally, a sequence <span class="math inline">\(\{ x_{n} \}\)</span> has a limit <span class="math inline">\(x\)</span> if the elements of a sequence become arbitrarily close to the limit <span class="math inline">\(x\)</span> eventually. Clearly, this definition is vague and requires us to specify what we mean by <em>close</em> which in turn requires us to specifically define <em>distance</em> more concretely.</p>
+<section id="convergence-of-sequences" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="convergence-of-sequences"><span class="header-section-number">1</span> Convergence of Sequences</h2>
+<p>A <strong>sequence</strong> <span class="math inline">\(\{x_n\}\)</span> is an ordered list of numbers indexed by the natural numbers <span class="math inline">\(\mathbb{N}\)</span>. If <span class="math inline">\(x_n\in\mathbb{R}\)</span> then we say that <span class="math inline">\(\{x_n\}\)</span> is a <strong>real sequence</strong>.</p>
+<p>An important property of sequences is <strong>convergence</strong>. If a sequences converges to some particular value then we say that value is the <strong>limit</strong> and that the sequence is <strong>convergent</strong>. A sequence that is not convergent is said to be <strong>divergent</strong>.</p>
+<p>Informally, a sequence <span class="math inline">\(\{ x_{n} \}\)</span> has a limit <span class="math inline">\(x\)</span> if the elements of a sequence become arbitrarily close to the limit <span class="math inline">\(x\)</span> <strong>eventually</strong>. Clearly, this definition is vague and requires us to specify what we mean by <em>close</em> which in turn requires us to specifically define <em>distance</em> more concretely using a [[metric-spaces.qmd|metric]].</p>
 <div class="definition" data-title="Standard Euclidean Metric (Distance)">
-<p>The <strong>distance</strong> between two real numbers <span class="math inline">\(a,b\in \mathbb{R}\)</span> is given by the <strong>standard Euclidean metric</strong>, i.e.&nbsp;the <strong>modulus</strong> of the difference <span class="math display">\[
+<p>For real numbers <span class="math inline">\(a,b\in \mathbb{R}\)</span> the <strong>Euclidean metric</strong> is defined by</p>
+<p><span class="math display">\[
 d(a,b):=\lvert b-a \rvert.
 \]</span></p>
 </div>
-<p>This is a specific type of <a href="../topics/metric.html">Metric</a>, a function generalizing the concept of distance in sets, studied in <a href="../topics/metric-spaces.html">Metric Spaces</a>. The most general concept of distance however is that of <strong>neighborhoods</strong>, which is a concept we study in <a href="../topics/topology.html">Topology</a>.</p>
-<div class="definition" data-title="$\epsilon,N$-Convergence of Real Sequences">
+<p>This is a specific type of <strong>metric</strong>, a function generalizing the concept of distance in sets, studied in <a href="../topics/metric-spaces.html">Metric Spaces</a>. The most general concept of distance however is that of <strong>neighborhoods</strong>, which is a concept we study in <a href="../topics/topology.html">Topology</a>.</p>
+<div class="definition" data-title="Euclidean convergence of Real Sequences">
 <p>The real sequence <span class="math inline">\(\{ x_{n} \}\subset \mathbb{R}\)</span> is said to converge to limit <span class="math inline">\(x \in \mathbb{R}\)</span> if for all <span class="math inline">\(\epsilon&gt;0\)</span> we can find <span class="math inline">\(N\)</span> such that for all <span class="math inline">\(n \geq N\)</span> we have <span class="math inline">\(\lvert x_{n}-x \rvert&lt;\epsilon\)</span>. More succinctly, we write <span class="math display">\[
 \forall n&gt;0,\exists N : \forall n \geq N, \lvert x_{n}-x \rvert &lt;\epsilon.
 \]</span></p>
 </div>
-<p><strong>Example:</strong> Define real sequence <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\)</span> by <span class="math inline">\(x_{n}=\frac{1}{n}\)</span>. We show that this sequence converges to <span class="math inline">\(x=0\)</span> as <span class="math inline">\(n \to \infty\)</span>. Consider arbitrary <span class="math inline">\(\epsilon&gt;0\)</span>. We wish to find <span class="math inline">\(N\)</span> such that <span class="math display">\[
+<p><strong>Example:</strong> Define real sequence <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\)</span> by <span class="math inline">\(x_{n}=\frac{1}{n}\)</span>. We show that this sequence converges to <span class="math inline">\(x=0\)</span> as <span class="math inline">\(n \to \infty\)</span>. Consider arbitrary <span class="math inline">\(\epsilon&gt;0\)</span>. We wish to find <span class="math inline">\(N\)</span> such that</p>
+<p><span class="math display">\[
 \begin{align}
 \left\lvert  \frac{1}{N}  -0\right\rvert &lt;\epsilon \implies \frac{1}{N}&lt;\epsilon \implies N&gt; \frac{1}{\epsilon}.
 \end{align}
-\]</span> Thus we can select <span class="math inline">\(N=\lceil \frac{1}{\epsilon} \rceil+1\)</span> and the proof is complete. <span class="math inline">\(\square\)</span></p>
+\]</span></p>
+<p>Thus we can select <span class="math inline">\(N=\lceil \frac{1}{\epsilon} \rceil+1\)</span> and the proof is complete. <span class="math inline">\(\square\)</span></p>
 <p>If a sequence <span class="math inline">\(\{ x_{n} \}\)</span> becomes arbitrarily large as <span class="math inline">\(n \to \infty\)</span> we write <span class="math inline">\(\lim_{ n \to \infty }x_{n}=\infty\)</span> and say that the sequence <strong>diverges</strong> or equivalently, <strong>converges to infinity</strong>. Similarly if <span class="math inline">\(\{  x_{n} \}\)</span> becomes arbitrarily negatively large as <span class="math inline">\(n \to \infty\)</span> we write <span class="math inline">\(\lim_{ n \to \infty }x_{n}=-\infty\)</span> and say again that the sequence <strong>diverges</strong> of equivalently, <strong>converges to negative infinity</strong>.</p>
 </section>
-<section id="sequence-limit-results" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sequence-limit-results"><span class="header-section-number">1.2</span> Sequence Limit Results</h2>
+<section id="sequence-limit-results" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sequence-limit-results"><span class="header-section-number">2</span> Sequence Limit Results</h2>
 <div class="theorem" data-title="Limit Uniqueness">
 <p>The limit <span class="math inline">\(\lim_{ n \to \infty }x_{n}=x\)</span> of a real sequence <span class="math inline">\(\{ x_{n} \}\)</span> is unique.</p>
 </div>
-<p><em>PROOF:</em> Assume that there exists <span class="math inline">\(x^{(1)}\neq x^{(2)}\)</span> thus <span class="math inline">\(\lvert x^{(1)}-x^{(2)} \rvert=\delta\)</span>. By definition <span class="math inline">\(\forall n \geq N\)</span> we have that <span class="math inline">\(\lvert x_{n}-x^{(2)} \rvert&lt;\epsilon\)</span></p>
-<div class="theorem" data-title="Real Sequence Limit Results">
-<p>Let <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\)</span> and <span class="math inline">\(\{ y_{n} \}_{n \in \mathbb{N}}\)</span> be convergence real sequences. Then the following limits exist: 1. <span class="math inline">\(\lim_{ n \to \infty }(a_{n}\pm b_{n})=\lim_{ n \to \infty }a_{n}\pm \lim_{ n \to \infty }b_{n}\)</span>, 2. <span class="math inline">\(\lim_{ n \to \infty }ca_{n}=c\lim_{ n \to \infty }a_{n}\)</span> for all <span class="math inline">\(c\in \mathbb{R}\)</span>, 3. <span class="math inline">\(\lim_{ n \to \infty }(a_{n}b_{n})=\frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}\)</span>, 4. <span class="math inline">\(\lim_{ n \to \infty } \frac{a_{n}}{b_{n}}= \frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}\)</span> given that <span class="math inline">\(\lim_{ n \to \infty }b_{n}neq 0\)</span>, and 5. <span class="math inline">\(\lim_{ n \to \infty }a_{n}^p=(\lim_{ n \to \infty }a_{n})^p\)</span> for all <span class="math inline">\(p&gt;0\)</span> and <span class="math inline">\(a_{n&gt;0}\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Assume <span class="math inline">\(x^{(1)}, x^{(2)}\in\mathbb{R}\)</span> are both limits of the sequence <span class="math inline">\(\{ x_{n} \}\)</span> and that <span class="math inline">\(x^{(1)}\neq x^{(2)}\)</span> thus <span class="math inline">\(\lvert x^{(1)}-x^{(2)} \rvert=\delta\)</span>. There exists <span class="math inline">\(N_1,N_2\)</span> such that <span class="math inline">\(\lvert x_n-x^{(1)}\rvert&lt;\varepsilon\)</span> for all <span class="math inline">\(n\geq N_1\)</span> and <span class="math inline">\(\lvert x_n-x^{(2)}\rvert&lt;\varepsilon\)</span> for all <span class="math inline">\(n\geq N_2\)</span>. Considering <span class="math inline">\(n\geq N_1\vee N_2\)</span> we have that</p>
+<p><span class="math display">\[
+\begin{align}
+\lvert x_n - x^{(1)}\rvert - \lvert x_n - x^{(2)}\rvert &lt;
+\lvert x_n - x^{(1)} - x_n +x^{(2)} \rvert =
+\lvert x^{(1)} - x^{(2)} \rvert &lt;\varepsilon.
+\end{align}
+\]</span></p>
+<p>Since our choice of <span class="math inline">\(\varepsilon\)</span> is arbitrary this is contradiction and thus the limit is unique.</p>
 </div>
-<p><em>PROOF:</em></p>
+<div class="theorem" data-title="Real Sequence Limit Results">
+<p>Let <span class="math inline">\(\{ x_{n} \}_{n \in \mathbb{N}}\)</span> and <span class="math inline">\(\{ y_{n} \}_{n \in \mathbb{N}}\)</span> be convergence real sequences. Then the following limits exist:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\lim_{ n \to \infty }(a_{n}\pm b_{n})=\lim_{ n \to \infty }a_{n}\pm \lim_{ n \to \infty }b_{n}\)</span>,</p></li>
+<li><p><span class="math inline">\(\lim_{ n \to \infty }ca_{n}=c\lim_{ n \to \infty }a_{n}\)</span> for all <span class="math inline">\(c\in \mathbb{R}\)</span>,</p></li>
+<li><p><span class="math inline">\(\lim_{ n \to \infty }(a_{n}b_{n})=\frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}\)</span>,</p></li>
+<li><p><span class="math inline">\(\lim_{ n \to \infty } \frac{a_{n}}{b_{n}}= \frac{{\lim_{ n \to \infty }a_{n}}}{\lim_{ n \to \infty }b_{n}}\)</span> given that <span class="math inline">\(\lim_{ n \to \infty }b_{n}neq 0\)</span>, and</p></li>
+<li><p><span class="math inline">\(\lim_{ n \to \infty }a_{n}^p=(\lim_{ n \to \infty }a_{n})^p\)</span> for all <span class="math inline">\(p&gt;0\)</span> and <span class="math inline">\(a_{n&gt;0}\)</span>.</p></li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span></p>
+</div>
 <div class="theorem" data-title="Dominated Sequences">
 <p>For dominated sequence <span class="math inline">\(x_{n}\leq y_{n}\)</span> for all <span class="math inline">\(n&gt;N\)</span> then <span class="math inline">\(\lim_{ n \to \infty }x_{n}\leq \lim_{ n \to \infty }y_{n}\)</span>.</p>
 </div>
@@ -454,8 +471,8 @@ d(a,b):=\lvert b-a \rvert.
 </div>
 <p><em>PROOF:</em></p>
 </section>
-<section id="rate-of-convergence" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="rate-of-convergence"><span class="header-section-number">1.3</span> Rate of Convergence</h2>
+<section id="rate-of-convergence" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="rate-of-convergence"><span class="header-section-number">3</span> Rate of Convergence</h2>
 <p>The <strong>asymptotic error</strong> is a measure of the <strong>rate of convergence</strong> of a sequence. Specifically, given a sequence <span class="math inline">\(\{ x_{n} \}\)</span> we are able to compute the asymptotic error constant <span class="math inline">\(\lambda\)</span> which provides information on the differences between the terms of the sequence and the sequence limit <span class="math inline">\(x\)</span>.</p>
 <div class="definition" data-title="Asymptotic Error Constant">
 <p>If the limit exists and is finite then we can compute the <strong>asymptotic error constant</strong> <span class="math inline">\(\lambda\)</span> as <span class="math display">\[
@@ -473,9 +490,33 @@ x_{n}=5+\frac{1}{2^n}\quad \&amp;\quad y_{n}=5+\frac{1}{2^{2^n-1}}.
 
 
 </section>
-</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

@@ -14,7 +14,69 @@ title-block-banner: false
 toc: true
 ---
 
-## Mean Field Games
+## Introduction
+
+Suppose we have a large number of agents
+who are all competing against each other in a game over time, that is they
+are selecting strategy processes in an attempt to optimize their 
+objective functionals.  The solutions to these games are 
+[[nash-equilibrium|Nash equlibria (NE)]] which are combinations of strategies 
+such that no agent can improve their outcome given no other agent changes 
+their strategy.  In stochastic differential games, agent states and strategies
+are modeled by continuous time stochastic processes with game dynamics 
+decribed by coupled
+[[stochastic-differential-equations|stochastic differential equations (SDEs)]], 
+one for each agent.  The complexity of these games grows exponentially
+as the number of agents increases,
+meaning that determining solutions quickly becomes intractable.  However, 
+if we assume that the number of agents is very large, and that agents 
+are sufficiently homogenous, then we can consider the limit as the number 
+of agents goes to infinity.  In this limit, the game dynamics are described by 
+a single representative agent interacts with the distribution of the population
+without impacting the distribution itself.  This limiting case is 
+called a **Mean Field Game (MFG)**.
+
+First introuced by Lasry and Lions in 2006, **Mean Field Game (MFG)** theory 
+stems primarily from mean field models in mathematical physics which analyze
+the behavior of many idential particals.  Another branch of study is Mean
+Field Control (MFC) theory, which is concerned with the optimal control of
+a population of agents.
+
+## MFG General Definition
+
+:::{.definition data-title="Mean Field Game"}
+
+The typical model for Mean Field Games (MFGs) is the following system
+
+$$
+\begin{cases}
+-\partial_t u - \nu \delta u + H(x, m, Du) = 0 
+    \quad \text{in } \mathbb{R}^d\times (0,T) \\
+\partial_t m - \nu \delta m - \text{div}(D_p H(x, m, Du)m) = 0
+    \quad \text{in } \mathbb{R}^d\times (0,T) \\
+m(0) = m_0(x), \quad u(x,T) = G(x, m(T)),
+\end{cases}
+$$
+
+where $\nu$ is a nonnegative parameter.
+
+:::
+
+
+
+
+
+The first equation is a [[hjb-equation]] and is understood in backward time.
+The second equation is a [[fokker-planck-equation]] and is understood in 
+forward time. There are two crucial structural conditions for this system:
+
+1. Convexity $H=H(x, m, p)$ with respect to the last variable $p$, which
+   implies that the HJB equation is associated with an optimal control problem.
+   Specifically, this is the value function associated with a representative
+   agent.
+
+2. $m_0$ (and therefore $m_t$) is (the density of) a probability measure, 
+   associated with the evolution of a population (continuum) of agents.
 
 
 

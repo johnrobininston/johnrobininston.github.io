@@ -9,7 +9,7 @@
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
 
-<title>An Introduction to Probability and Statistics – John Robin Inston</title>
+<title>Vitalli Non-Measurability Theorem – John Robin Inston</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -79,8 +79,36 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto-graph-sidebar-depth" content="2">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -322,7 +350,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">An Introduction to Probability and Statistics</h1>
+      <h1 class="title">Vitalli Non-Measurability Theorem</h1>
                       </div>
   </div>
     
@@ -350,8 +378,14 @@ ul.task-list li input[type="checkbox"] {
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#vitalli-non-measurability-theorem" id="toc-vitalli-non-measurability-theorem" class="nav-link active" data-scroll-target="#vitalli-non-measurability-theorem"><span class="header-section-number">1</span> Vitalli Non-Measurability Theorem</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
@@ -361,10 +395,77 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="vitalli-non-measurability-theorem" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="vitalli-non-measurability-theorem"><span class="header-section-number">1</span> Vitalli Non-Measurability Theorem</h2>
+<p>The <strong>Vitali non-measurability theorem</strong> is a fundamental result in <a href="../topics/measure-theory.html">Measure Theory</a> constructed to prove that it is impossible to define a <strong>measure function</strong> on the power set of the real numbers <span class="math inline">\(\mathbb{R}\)</span>, that is <span class="math inline">\(\mu:2^\mathbb{R}\to [0,+\infty]\)</span>, that satisfies the intuitive properties desired of measures:</p>
+<ol type="1">
+<li><strong>Countable additivity.</strong> For disjoint <span class="math inline">\(\{A_i\}_{i=1}^n\in 2^\mathbb{R}\)</span> then <span class="math inline">\(\mu\left(\bigcup_{i=1}^n A_i\right)=\sum_{i=1}^n\mu(A_i).\)</span></li>
+<li><strong>Translation invariance.</strong> For all <span class="math inline">\(A\in 2^\mathbb{R}\)</span> and <span class="math inline">\(x\in \mathbb{R}\)</span> then <span class="math inline">\(\mu(A+x)=\mu(A)\)</span>.</li>
+<li><strong>Intuitive interval measure.</strong> <span class="math inline">\(\mu([a,b])=b-a, \forall a\leq b\)</span>.</li>
+</ol>
+<p>The idea of the theorem can be extended to higher dimensions (see [[banarch-tarski-theorem|Banarch-Tarski Theorem]]) as well as similar results for other abstract sets although the form of the proof relies heavily on the nature of the set being considered.</p>
+<p>We preemptively prove the following lemma proving that we obtain monotonicity from countable additivity of functions.</p>
+<div class="theorem" data-title="Monotonicity from Countable Additivity">
+<p>Given a set <span class="math inline">\(X\)</span> and countably additive function <span class="math inline">\(\mu:2^X\to[0,\infty]\)</span> then for all <span class="math inline">\(A,B\subseteq X\)</span> <span class="math display">\[
+A \subseteq B\implies \mu(A)\leq  \mu(B).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Since <span class="math inline">\(A \subseteq B\)</span> we can write <span class="math inline">\(B =A\cup(B\setminus A)\implies \mu(B)=\mu(A)+\mu(B\setminus A)\geq \mu(A)\)</span> since measures are non-negative.</p>
+</div>
+<div class="theorem" data-title="Vitalli non-measurability theorem">
+<p>There exists no function <span class="math inline">\(\mu :2^\mathbb{R}\to[0,+\infty]\)</span> that is countably additive, translation invariant and satisfies <span class="math inline">\(\mu([a,b])=b-a\)</span> for all <span class="math inline">\(a\leq b\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Assume for the sake of contradiction that such a <span class="math inline">\(\mu\)</span> exists. We define an equivalence relation <span class="math inline">\(\sim\)</span> on <span class="math inline">\(\mathbb{R}\)</span> <span class="math display">\[
+x\sim y\iff x-y \in \mathbb{Q}.
+\]</span> The equivalence class of <span class="math inline">\(\sim\)</span> to which <span class="math inline">\(x\)</span> belongs is therefore given by <span class="math display">\[
+[x]_{\sim}:=\{  y \in \mathbb{R} : x\sim y \}.
+\]</span> We make the claim that every such equivalence class contains an element in <span class="math inline">\([0,1]\)</span>. Assuming the claim is false then <span class="math inline">\(\exists x \in \mathbb{R}\)</span> s.t. <span class="math inline">\([x]_{\sim}\cap[0,1]=\emptyset \implies \forall a \in [0,1],~x-a\not\in \mathbb{Q}\)</span> i.e.&nbsp;<span class="math inline">\([x-1,x]\)</span> contains no rational numbers which is impossible since the rationals are dense in the reals, giving the contradiction. Using the [[axiom-of-choice]], for each equivalence class we choose one element in <span class="math inline">\([0,1]\)</span> belonging to that class and call the resulting set <span class="math inline">\(A\)</span>. Then we define <span class="math display">\[
+A_{q}=\{ A+q \}_{q \in \mathbb{Q}\cap [-1,1]}=\{ a+q:a\in A,q\in \mathbb{Q}\cap[-1,1] \},
+\]</span> hence each <span class="math inline">\(A_{q}\)</span> contains the elements of <span class="math inline">\(A\)</span> shifted by rational <span class="math inline">\(q \in [-1,1]\)</span>. We assume these are not disjoint i.e. <span class="math inline">\(\exists x \in A_{q}\cap A_{p}~s.t.~p \neq q\)</span>. This gives that <span class="math display">\[
+\begin{cases}
+x = a+p\quad\therefore\quad a=x-p \in A \\
+x = a+q\quad \therefore\quad a = x-q \in A,
+\end{cases}
+\]</span> <span class="math inline">\(\implies x-p\)</span> and <span class="math inline">\(x-q\)</span> are distinct elements of <span class="math inline">\(A\)</span> from the same equivalence class giving the contradiction <span class="math inline">\(\rightarrow\leftarrow\)</span>. We therefore define the disjoint union <span class="math inline">\(B = \bigcup_{q \in\mathbb{Q}\cap [-1,1]}A_{q}\)</span> and claim that <span class="math display">\[
+[0,1]\stackrel{(i)}{\subseteq} B \stackrel{(ii)}{\subseteq} [-1,2].
+\]</span> (i) Since <span class="math inline">\(\forall x \in \mathbb{R}\)</span> we have <span class="math inline">\(x \in [a]\)</span> for some <span class="math inline">\(a \in A\)</span>, in particular <span class="math inline">\(\forall x \in [0,1]\)</span>, <span class="math inline">\(x -a\in \mathbb{Q}\)</span> for some <span class="math inline">\(a \in A\)</span>, i.e. <span class="math inline">\(x = a+q\)</span> for some <span class="math inline">\(a \in A\)</span> and <span class="math inline">\(q \in \mathbb{Q}\)</span>. Since <span class="math inline">\(x \in[0,1]\)</span> and <span class="math inline">\(a \in A \subseteq [0,1]\)</span>, <span class="math inline">\(q = x-a\in[-1,1]\)</span> and thus <span class="math inline">\(x \in B\)</span>. (ii) If <span class="math inline">\(b \in B\)</span>, then <span class="math inline">\(b = a+q\)</span> for <span class="math inline">\(a \in A \subseteq [0,1]\)</span>, <span class="math inline">\(q \in [-1,1]\)</span> and so <span class="math inline">\(b \in [-1,2]\)</span>. By monotonicity of countably additive functions <span class="math display">\[
+1 = \mu([0,1])\leq  \mu(B)\leq  \mu([-1,2])=3.
+\]</span> However, we also note that <span class="math display">\[
+\mu(B)=\sum_{q\in\mathbb{Q}\cap [-1,1]}\mu(A+q)=\sum_{q \in \mathbb{Q}\cap [-1,1]}\mu(A).
+\]</span> Since <span class="math inline">\(\mu(B)\leq 3\)</span> we must have that <span class="math inline">\(\mu(A)=0\)</span>, however this implies <span class="math inline">\(\mu(B)=0\)</span> which contradicts our previous conclusion that <span class="math inline">\(\mu(B)\geq 1\)</span>. <span class="math inline">\(\rightarrow\leftarrow\)</span></p>
+</div>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
