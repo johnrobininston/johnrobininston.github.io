@@ -1,11 +1,224 @@
 ---
-title: Fundamentals of Partial Differential Equations
-author: John Robin Inston
+id: fundamentals-of-partial-differential-equations
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Fundamentals of Partial Differential Equations"
 title-block-banner: true
 ---
 
-# Fundamentals of Partial Differential Equations
+## Introduction
 
-A **Partial Differential Equation (PDE)** is a 
+Partial Differential Equations (PDEs) are equations that involve an unknown 
+function of several variables and their partial derivatives.  PDEs are used 
+to formulate many applied problems in physics, engineering and optimization 
+including head transfer, wave propogation, fluid flow and elasticity.  In this 
+series of notes we will cover the fundamentals of PDEs including their 
+classification, solution methods and applications.
+
+The study of PDEs is quite complicated and draws on many areas of matHhematics. 
+It is recommended to have studied the following topics before tackling PDEs:
+
+* Multivariate Calculus
+* Ordinary Differential Equations
+* Multidimensional Integration
+
+Some additional topics that are helpful but not strictly necessary include:
+
+* Measure Theory
+* Functional Analysis
+
+In making these study notes I have used the following resources:
+
+1. Bright Side of Mathematics: Partial Differential Equations Series.
+2. Lecture Notes by Prof. Viktor Grigoryan, Fall 2010, UC Santa Barbara.
+3. Lecture Notes by Prof. Denis Labutin, Fall 2026, UC Santa Barbara.
+
+## Partial Derivatives
+
+First recall the following definition of a partial derivative from 
+our study of multivariate calculus.
+
+:::{.definition data-title="Partial Derivative"}
+
+A **partial derivative** of a function $u:\mathbb{R}^n \to \mathbb{R}$ 
+in variables $x_1, x_2, \ldots, x_n$ with repect to $j$-th variable 
+is the derivative of $u$ with respect to $x_j$ while keeping all other 
+variables fixed
+
+$$
+\partial_j u = \frac{\partial u}{\partial x_j}, \quad j = 1, 2, \ldots, n,
+$$
+
+also written as $D_j u$, $\partial_{x_{j}}$ or $u_{x_j}$.  
+
+:::
+
+Here we have referenced the differential operator $D^n_j$ to denote the
+$n$-th partial derivative with respect to the $j$-th variable.  
+
+:::{.definition data-title="Multi-Index"}
+
+A **multi-index** $\alpha = (\alpha_1, \ldots, \alpha_n)$ is an $n$-tuple of
+non-negative integers.  The **order** of a multi-index is given by 
+$\| \alpha \| = \alpha_1 + \ldots  + \alpha_n$.  We define
+
+$$
+D^\alpha
+  = \partial_1^{\alpha_1} \ldots \partial_n^{\alpha_n} 
+  = \frac{\partial^{\| \alpha \|}}{\partial x_1^{\alpha_1} \ldots \partial x_n^{\alpha_n}}
+$$
+
+:::
+
+:::{.example}
+
+Consider the function $u(x,y) = 2x^2 + 4y^3 + 2xy$.  The partial derivative of 
+$f$ with respect to $x$ and $y$ respectively are given by
+
+$$
+u_x = 4x + 2y, \quad u_y = 12y^2 + 2x.
+$$
+
+:::
+
+## Partial Differential Equations
+
+:::{.definition data-title="Partial Differential Equation"}
+
+A **partial differential equation (PDE)** is an equation of an unknown 
+function $u:\Omega \to \mathbb{R}$ (where typically 
+$\Omega \subseteq \mathbb{R}^n$ open, $n \ge 2$) involving some 
+partial derivative of $u$ 
+
+$$
+F(x, u(x), (D^\alpha u)(x)) = 0,
+$$
+
+where $F$ is a given function, $\alpha$ is a multi-index, and $D^\alpha u$ 
+denotes the partial derivative of $u$ corresponding to the multi-index 
+$\alpha$.
+
+:::
+
+A function $u:\Omega\to\mathbb{R}$ is a **(classical)** solution of a PDE if 
+all partial derivatives appearing in the PDE are well-defined 
+and the function $u$ satisfies the PDE at all points in $\Omega$. 
+
+:::{.example}
+
+A simple example of a PDE for function $u(x,y)$ written in different notations
+
+$$
+\begin{align*}
+\cos (u) + 3u_{x} + 2u\cdot u_{xy} & = 0 \\
+\cos (u) + 3 \partial_ x u + 2 u\cdot \partial _{xy} u & = 0\\
+\cos (u) + 3Dx + 2u\cdot D_x D_y u & = 0.
+\end{align*}
+$$
+
+:::
+
+:::{.definition data-title="Order of a PDE"}
+
+The **order** of a PDE is the order of the highest partial derivative in 
+the equation.  
+
+:::
+
+:::{.example}
+The order of our last example is 2 since the highest order partial derivative 
+is $u_{xy}$.
+:::
+
+## Classification of PDEs
+
+There are two lenses through which to view PDEs: the mathematical structure
+and the physical phenomena they model.  
+
+### Classification by Mathematical Structure
+
+Let's first consider mathematical structure of a PDEs up to second order. 
+We write the principal part (the highest-order terms) as
+
+$$
+Lu = \sum_{i,j=1}^{n} a_{ij}(x) u_{x_i x_j} + (\text{lower order terms}), 
+\quad A = (a_{ij})_{i,j=1}^{n}~ \text{(symmetric)}.
+$$
+
+The type depends on the eigenvalues of $A$:
+
+1. Elliptic PDEs - all eigenvalues of $A$ are non-zero and have the same sign.
+2. Parabolic PDEs - one eigenvalue of $A$ is zero and the rest have the same sign.
+3. Hyperbolic PDEs - one eigenvalue of $A$ has a different sign than the rest.
+
+In two dimensions, the classification can be determined by the discriminant of the
+principal part of the PDE.  For a second-order PDE in two variables $x$ and
+$y$ of the form
+
+$$
+a u_{xx} + b u_{xy} + c u_{yy} + (\ \text{lower order terms}) = 0, 
+$$
+the PDE is classified as follows:
+
+$$
+\begin{cases}
+b^2 - 4ac < 0 & \text{elliptic} \\
+b^2 - 4ac = 0 & \text{parabolic} \\
+b^2 - 4ac > 0 & \text{hyperbolic}.
+\end{cases}
+$$
+
+The prototypical examples of each type of PDE are given in Table 1 below.
+
+| Type | Prototypical Example | Typical Behavior | 
+|------|---------------------|-----------------|
+| Elliptic | Laplace's Equation: $\Delta u = 0$, Poisson's Equation: $-\Delta u = f$.  | Equilibrium or steady state, boundary value problems, smooth solutions, every point influences each other.  |
+| Parabolic | Heat Equation: $u_t = \Delta u$ | Smoothing, irreversible in time, infinite propogation speed, initial-boundary value problems. |
+| Hyperbolic | Wave Equation: $u_{tt}=c^2\Delta u$ | Finite propogation speed, real characteristics, singularities travel, time-reversible. |
+
+### Classification by Physical Phenomena
+
+Alternatively, PDEs can be classified by asking what a solution does as 
+time evolves.  A good way to see the distinction is to test each equation on a
+plane wave $u=\exp (i(kx - \omega  t)$, which gives a dispersion relation 
+$\omega  = \omega (k)$.
+
+| Phenomenon | Model Equation | Dispersion Relation | Observations |
+|------------|----------------|--------------------|--------------|
+| Transport (Advection) | $u_t + c u_x = 0$ | $\omega = ck$ | Profile moves rigidly at speed $c$: $u = f(x-ct)$. |
+| Diffusion | $u_t = D u_{xx}$ | $\omega = -iDk^2$ | Modes decay like $\exp(-iDk^2)$, so high frequencies die fastest and the profile smooths and spreads. |
+| Wave Propogation | $u_{tt} = c^2 u_{xx}$ | $\omega = \pm ck$ | Two transport waves, profile moves rigidly at speed $c$: $u = f(x-ct) + g(x+ct)$. |
+| Dispersion (Schroedinger) | $i u_t = -\frac{1}{2} u_{xx}$ | $\omega = \frac{1}{2} k^2$ | Modes rotate in the complex plane at different speeds, so the profile spreads and oscillates. |
+
+
+## Linear PDEs
+
+:::{.definition data-title="Linear PDE"}
+
+The general form of a **linear PDE** of order $m$ is given by
+
+$$
+\sum_{|\alpha| \le m} a_\alpha(x) (D^\alpha u)(x) = f(x), \quad x \in \Omega,
+$$
+
+where $a_\alpha$ and $f$ are given functions, $\alpha$ is a multi-index, and
+$D^\alpha u$ denotes the partial derivative of $u$ corresponding to the
+multi-index $\alpha$.
+
+:::
+
+:::{.definition data-title="Linear Operator"}
+
+A **linear operator** $L$ is a mapping from a vector space $V$ to itself
+that satisfies the following properties for all $u, v \in V$ and scalars $c$:
+
+$$
+L(cu+v) = cL(u) + L(v).
+$$
+
+:::
+
+
