@@ -1,0 +1,116 @@
+---
+id: set-countability
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-11
+number-sections: true
+title: "Set Countability"
+title-block-banner: false
+---
+
+## Set Countability
+
+Countability is the first measure of the "size" of a set, and underlies many
+arguments in measure theory, for example that the countable/co-countable
+collection is a $\sigma$-algebra (see [[set-theory-fundamentals]]).
+
+## Countable and Uncountable Sets
+
+:::{.definition data-title="Countable Set"}
+
+A set $A$ is **countably infinite** if there is a bijection $A\to\mathbb{N}$. It
+is **countable** (or **at most countable**) if it is finite or countably
+infinite, equivalently if there is an injection $A\to\mathbb{N}$. A set that is
+not countable is **uncountable**.
+
+:::
+
+> *Note:* Some authors use "countable" to mean countably infinite. Here
+countable includes finite sets.
+
+## Subsets and Images
+
+:::{.theorem data-title="Subsets of Countable Sets"}
+
+Every subset of a countable set is countable.
+
+:::
+
+:::{.proof}
+Let $B\subseteq A$ with an injection $f:A\to\mathbb{N}$. Then $f|_B$ is an
+injection $B\to\mathbb{N}$, so $B$ is countable.
+:::
+
+## Products and Unions
+
+:::{.theorem data-title="Countable Products"}
+
+$\mathbb{N}\times\mathbb{N}$ is countable. Hence if $A,B$ are countable then so
+is $A\times B$.
+
+:::
+
+:::{.proof}
+The map $(n,m)\mapsto 2^n3^m$ is an injection $\mathbb{N}\times\mathbb{N}\to\mathbb{N}$ by
+uniqueness of prime factorisation. For general countable $A,B$ compose with
+injections $A\to\mathbb{N}$, $B\to\mathbb{N}$.
+:::
+
+:::{.theorem data-title="Countable Union of Countable Sets"}
+
+If $A_n$ is countable for each $n\in\mathbb{N}$ then $\bigcup_{n}A_n$ is countable.
+
+:::
+
+:::{.proof}
+For each $n$ choose an injection $f_n:A_n\to\mathbb{N}$. For $x\in\bigcup_nA_n$ let
+$n(x)=\min\{n: x\in A_n\}$ and define
+$$
+F(x)=(n(x),\,f_{n(x)}(x))\in\mathbb{N}\times\mathbb{N}.
+$$
+Then $F$ is injective, since $F(x)=F(y)$ gives $n(x)=n(y)=n$ and
+$f_n(x)=f_n(y)$, so $x=y$. Composing with an injection
+$\mathbb{N}\times\mathbb{N}\to\mathbb{N}$ shows the union is countable.
+:::
+
+> *Note:* Choosing the injections $f_n$ simultaneously for all $n$ uses the
+(countable) Axiom of Choice, see [[vitalli-non-measurability-theorem|Axiom of Choice]].
+
+A finite union or finite product of countable sets is a special case.
+
+## Examples
+
+:::{.example data-title="$\mathbb{Z}$ and $\mathbb{Q}$ are Countable"}
+
+$\mathbb{Z}=\mathbb{N}\cup(-\mathbb{N})\cup\{0\}$ is a countable union of countable
+sets. Each $\mathbb{Q}_n=\{p/n: p\in\mathbb{Z}\}$ is countable (a bijective image of
+$\mathbb{Z}$), so $\mathbb{Q}=\bigcup_{n\geq1}\mathbb{Q}_n$ is countable. In particular
+$\mathbb{Q}\cap[0,1]$ is a countable dense subset of $[0,1]$.
+
+:::
+
+## Uncountable Sets
+
+:::{.theorem data-title="$\mathbb{R}$ is Uncountable"}
+
+The interval $(0,1)$, and hence $\mathbb{R}$, is uncountable.
+
+:::
+
+:::{.proof}
+(Cantor's diagonal argument.) Suppose $(0,1)=\{x_1,x_2,\dots\}$ and write
+$x_n=0.d_{n1}d_{n2}d_{n3}\dots$ in decimal, choosing the expansion not ending
+in all $9$s. Define $y=0.e_1e_2\dots$ with $e_n=5$ if $d_{nn}\neq5$ and $e_n=4$
+if $d_{nn}=5$. Then $y\in(0,1)$, has no digit $0$ or $9$, so its expansion is
+unique, and $y$ differs from each $x_n$ in the $n$-th digit. So $y\neq x_n$ for
+all $n$, a contradiction. Since $(0,1)\subseteq\mathbb{R}$, $\mathbb{R}$ is uncountable.
+:::
+
+More generally, **Cantor's theorem** states that there is no surjection
+$X\to2^X$ for any set $X$, so $2^X$ is strictly larger than $X$.
+
+## Related Topics
+
+- [[set-theory-fundamentals]]
+- [[vitalli-non-measurability-theorem|Axiom of Choice]]

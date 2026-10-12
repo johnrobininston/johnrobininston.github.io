@@ -1,0 +1,148 @@
+---
+id: set-theory-fundamentals
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-11
+number-sections: true
+title: "Set Theory Fundamentals"
+title-block-banner: false
+---
+
+## Set Theory Fundamentals
+
+This note collects the basic vocabulary and operations of naïve
+[[set-theory|set theory]] that are used throughout analysis and measure theory.
+De Morgan's laws, which relate unions, intersections and complements, are
+included under *Algebra of Sets* below.
+
+## Sets and Subsets
+
+:::{.definition data-title="Set, Subset, Power Set"}
+
+A **set** is a collection of distinct objects, called its **elements**. We write
+$x\in A$ if $x$ is an element of $A$. The **empty set** $\emptyset$ has no
+elements. A set $A$ is a **subset** of $B$, written $A\subseteq B$, if
+$x\in A\implies x\in B$. Two sets are **equal** if and only if
+$A\subseteq B$ and $B\subseteq A$. The **power set** of $X$ is the collection
+of all subsets of $X$,
+$$
+2^X:=\{A: A\subseteq X\}.
+$$
+
+:::
+
+> *Note:* If $X$ is finite with $n$ elements then $\lvert 2^X\rvert=2^n$, which
+motivates the notation $2^X$.
+
+Throughout, we fix an ambient **universe** set $X$ and consider subsets of $X$.
+
+## Set Operations
+
+:::{.definition data-title="Set Operations"}
+
+For $A,B\subseteq X$ we define the
+
+- **union** $A\cup B:=\{x: x\in A \text{ or } x\in B\}$;
+- **intersection** $A\cap B:=\{x: x\in A \text{ and } x\in B\}$;
+- **complement** $A^c:=\{x\in X: x\notin A\}$;
+- **difference** $A\setminus B:=\{x: x\in A \text{ and } x\notin B\}=A\cap B^c$;
+- **symmetric difference** $A\triangle B:=(A\setminus B)\cup(B\setminus A)$.
+
+:::
+
+## Indexed Families
+
+:::{.definition data-title="Arbitrary Unions and Intersections"}
+
+Let $\{A_\alpha\}_{\alpha\in I}$ be a family of subsets of $X$ indexed by a set
+$I$. Then
+$$
+\bigcup_{\alpha\in I}A_\alpha:=\{x: x\in A_\alpha \text{ for some }\alpha\in I\},
+\qquad
+\bigcap_{\alpha\in I}A_\alpha:=\{x: x\in A_\alpha \text{ for all }\alpha\in I\}.
+$$
+
+:::
+
+When $I=\mathbb{N}$ we have a **countable** union or intersection, which is the
+form that appears in the definition of a $\sigma$-algebra.
+
+## Algebra of Sets
+
+:::{.theorem data-title="Algebra of Sets"}
+
+For $A,B,C\subseteq X$:
+
+1. **Commutativity:** $A\cup B=B\cup A$ and $A\cap B=B\cap A$.
+2. **Associativity:** $(A\cup B)\cup C=A\cup(B\cup C)$ and
+   $(A\cap B)\cap C=A\cap(B\cap C)$.
+3. **Distributivity:**
+   $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$ and
+   $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$.
+4. **Complements:** $(A^c)^c=A$, $A\cup A^c=X$, $A\cap A^c=\emptyset$.
+5. **De Morgan:** $\left(\bigcup_\alpha A_\alpha\right)^c=\bigcap_\alpha A_\alpha^c$
+   and $\left(\bigcap_\alpha A_\alpha\right)^c=\bigcup_\alpha A_\alpha^c$.
+
+:::
+
+:::{.proof}
+Each identity is proved by double inclusion: take an arbitrary $x$ in the
+left-hand side and show it lies in the right-hand side, then vice versa. For
+example, for the first distributive law,
+$$
+x\in A\cap(B\cup C)\iff x\in A \text{ and } (x\in B \text{ or } x\in C)
+\iff (x\in A\cap B) \text{ or } (x\in A\cap C).
+$$
+:::
+
+## Disjoint Unions and Partitions
+
+:::{.definition data-title="Disjoint Family and Partition"}
+
+Sets $A,B$ are **disjoint** if $A\cap B=\emptyset$. A family
+$\{A_\alpha\}_{\alpha\in I}$ is **pairwise disjoint** if $A_\alpha\cap A_\beta=\emptyset$
+for all $\alpha\neq\beta$. We write $A\sqcup B$ or $\bigsqcup_\alpha A_\alpha$ for
+a union that is known to be disjoint. A **partition** of $X$ is a pairwise
+disjoint family of nonempty sets whose union is $X$.
+
+:::
+
+Any union can be made disjoint: given $\{A_n\}_{n\geq1}$, set
+$B_1=A_1$ and $B_n=A_n\setminus\bigcup_{k<n}A_k$. Then the $B_n$ are pairwise
+disjoint and $\bigcup_nB_n=\bigcup_nA_n$. This trick is used constantly to
+reduce statements about measures of countable unions to countable additivity.
+
+## Cartesian Products
+
+:::{.definition data-title="Cartesian Product"}
+
+The **Cartesian product** of sets $A$ and $B$ is the set of ordered pairs
+$$
+A\times B:=\{(a,b): a\in A,\ b\in B\}.
+$$
+More generally, for an indexed family, $\prod_{\alpha\in I}A_\alpha$ is the set
+of functions $x$ on $I$ with $x(\alpha)\in A_\alpha$ for all $\alpha$. We write
+$A^n=A\times\cdots\times A$.
+
+:::
+
+## Monotone Sequences of Sets
+
+:::{.definition data-title="Monotone Sequence of Sets"}
+
+A sequence $\{A_n\}_{n\geq1}$ is **increasing** if $A_n\subseteq A_{n+1}$ for all
+$n$, in which case we write $A_n\uparrow A$ with $A=\bigcup_nA_n$. It is
+**decreasing** if $A_{n+1}\subseteq A_n$ for all $n$, in which case we write
+$A_n\downarrow A$ with $A=\bigcap_nA_n$.
+
+:::
+
+Monotone sequences are the sets analogue of monotone real sequences, and they
+are the setting for continuity from below and above of measures.
+
+
+## Related Topics
+
+- [[set-theory]]
+- [[borel-cantelli-lemma]]

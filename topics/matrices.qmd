@@ -2,7 +2,7 @@
 title: Matrices
 author: John Robin Inston
 date: 2026-09-06
-title-block-banner: true
+title-block-banner: false
 number-sections: true
 ---
 
@@ -154,3 +154,116 @@ OLS to have a unique solution.
 
 
 
+
+
+## Matrices over a Field and Further Products
+
+For a field $F$ we write $M_{n\times m}(F)$ for the $n\times m$ matrices with
+entries in $F$; with entrywise addition and scalar multiplication this is a
+[[vector-spaces|vector space]] of dimension $nm$. If $A\in M_{n\times m}(F)$ and
+$B\in M_{m\times o}(F)$ then $(AB)_{ij}=\sum_{k=1}^ma_{ik}b_{kj}$.
+
+For $A,B\in M_{n\times m}(F)$ the **Hadamard product** is the entrywise product
+$(A\odot B)_{ij}=a_{ij}b_{ij}$. For $A\in M_{n\times m}(F)$ and $B\in M_{k\times l}(F)$
+the **Kronecker product** is the $nk\times ml$ block matrix
+$$
+A\otimes B=\begin{bmatrix}a_{11}B&\cdots&a_{1m}B\\\vdots&\ddots&\vdots\\a_{n1}B&\cdots&a_{nm}B\end{bmatrix}.
+$$
+
+A square matrix is **upper (lower) triangular** if all entries below (above) the
+diagonal are zero.
+
+## Elementary Operations and Row Reduction
+
+:::{.definition data-title="Elementary Row Operations"}
+
+The **elementary row operations** on $A\in M_{n\times m}(F)$ are:
+
+1. $R_i=r_i+\lambda r_j$ for $\lambda\in F$ and $j\neq i$ (add a multiple of another row);
+2. $R_i=\lambda r_i$ for $0\neq\lambda\in F$ (scale a row);
+3. $R_i\leftrightarrow R_j$ (swap rows),
+
+where $r_i$ denotes the row before the operation and $R_i$ the row after.
+**Column operations** are defined similarly. Matrices related by a sequence of
+elementary operations are **row-equivalent**.
+
+:::
+
+:::{.definition data-title="Reduced Row Echelon Form"}
+
+A matrix is in **reduced row echelon form** if
+
+1. every zero row is below every nonzero row;
+2. the leading (first nonzero) entry of each nonzero row is $1$, and these move
+   strictly to the right as we go down the rows;
+3. each leading $1$ is the only nonzero entry in its column.
+
+:::
+
+Every matrix can be put in reduced row echelon form by elementary row operations
+(**Gaussian elimination**). Row operations correspond to multiplying on the left
+by invertible matrices, so they do not change the solution set of $A\vec{x}=\vec{b}$
+(applied to the augmented matrix $[A\mid\vec{b}]$). A homogeneous system with more
+unknowns than equations therefore always has a nonzero solution, since a free
+column remains.
+
+:::{.example data-title="Reduced Row Echelon Form"}
+
+$$
+\begin{bmatrix}1&3&3&8&5\\0&1&3&10&8\\0&0&0&-1&-4\\0&0&0&2&8\end{bmatrix}
+\xrightarrow{\substack{R_3=-r_3\\R_4=r_4+2r_3\text{ (old }r_3)}}
+\begin{bmatrix}1&3&3&8&5\\0&1&3&10&8\\0&0&0&1&4\\0&0&0&0&0\end{bmatrix}
+\xrightarrow{\substack{R_1=r_1-3r_2\\R_2=r_2-10r_3}}
+\begin{bmatrix}1&0&-6&-22&-19\\0&1&3&0&-32\\0&0&0&1&4\\0&0&0&0&0\end{bmatrix}
+\xrightarrow{R_1=r_1+22r_3}
+\begin{bmatrix}1&0&-6&0&69\\0&1&3&0&-32\\0&0&0&1&4\\0&0&0&0&0\end{bmatrix}.
+$$
+
+:::
+
+## Determinant
+
+:::{.definition data-title="Determinant"}
+
+The **determinant** of $A\in M_n(F)$ is
+$$
+\det(A)=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)\prod_{i=1}^na_{i,\sigma(i)},
+$$
+where $S_n$ is the set of permutations of $\{1,\dots,n\}$ and
+$\operatorname{sgn}(\sigma)=\pm1$ is the sign of $\sigma$.
+
+:::
+
+For $n=3$ this gives
+$\det\begin{bmatrix}a&b&c\\d&e&f\\g&h&i\end{bmatrix}=a(ei-fh)-b(di-fg)+c(dh-eg)$.
+Standard properties are $\det(AB)=\det(A)\det(B)$, $\det(A^\top)=\det(A)$, and
+$\det(A)\neq0$ if and only if $A$ is invertible. The determinant of a triangular
+matrix is the product of its diagonal entries.
+
+To find the inverse of an invertible matrix we row reduce the **augmented
+matrix**: $[A\mid I_n]\longrightarrow[I_n\mid A^{-1}]$.
+
+## Trace
+
+:::{.definition data-title="Trace"}
+
+The **trace** of $A\in M_n(F)$ is the sum of the diagonal entries,
+$\operatorname{Tr}(A)=\sum_{i=1}^na_{ii}$.
+
+:::
+
+:::{.theorem data-title="Properties of the Trace"}
+
+1. Linearity: $\operatorname{Tr}(cA+B)=c\operatorname{Tr}(A)+\operatorname{Tr}(B)$.
+2. $\operatorname{Tr}(A^\top)=\operatorname{Tr}(A)$.
+3. Cyclicity: $\operatorname{Tr}(AB)=\operatorname{Tr}(BA)$ whenever both products are defined.
+4. For $A,B\in M_{n\times m}(F)$, $\operatorname{Tr}(A^\top B)=\sum_{i,j}a_{ij}b_{ij}$.
+
+:::
+
+:::{.proof}
+(1) and (2) are immediate. (3): $\operatorname{Tr}(AB)=\sum_i\sum_ka_{ik}b_{ki}=\sum_k\sum_ib_{ki}a_{ik}=\operatorname{Tr}(BA)$.
+(4): $(A^\top B)_{jj}=\sum_ia_{ij}b_{ij}$, then sum over $j$.
+:::
+
+By cyclicity, similar matrices have equal traces: see [[linear-maps]].

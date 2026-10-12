@@ -1,0 +1,235 @@
+---
+author: "John Robin Inston"
+date: 2026-10-11
+number-sections: true
+title: "Set Functions"
+title-block-banner: false
+---
+
+## Set Functions
+
+This note covers functions between sets, and in particular how they act on
+*subsets*. This is the language needed for [[measurable-function|measurable
+functions]], whose definition is stated entirely in terms of preimages of sets.
+It builds on [[set-theory-fundamentals]] and [[relations]].
+
+> *Note:* A **set function** in measure theory also means a function
+$\mu:\mathcal{C}\to[0,\infty]$ defined on a collection of sets
+$\mathcal{C}\subseteq2^X$, such as a measure. That is the subject of
+[[measure-spaces]]; here we study ordinary functions $f:X\to Y$ and the maps
+$A\mapsto f(A)$ and $B\mapsto f^{-1}(B)$ they induce on subsets.
+
+## Functions, Images and Preimages
+
+:::{.definition data-title="Image and Preimage"}
+
+Let $f:X\to Y$. For $A\subseteq X$ and $B\subseteq Y$ define the **image** of
+$A$ and the **preimage** (inverse image) of $B$ by
+$$
+f(A):=\{f(x):x\in A\},\qquad f^{-1}(B):=\{x\in X:f(x)\in B\}.
+$$
+
+:::
+
+> *Note:* The notation $f^{-1}(B)$ does **not** require $f$ to be invertible. It
+is a function $2^Y\to2^X$ defined for every $f$.
+
+:::{.definition data-title="Injective, Surjective, Bijective"}
+
+A function $f:X\to Y$ is **injective** if $f(x)=f(x')\implies x=x'$,
+**surjective** if $f(X)=Y$, and **bijective** if it is both, in which case it
+has an inverse function $f^{-1}:Y\to X$ (consistent with the preimage notation,
+since $f^{-1}(\{y\})=\{f^{-1}(y)\}$).
+
+:::
+
+For $g:Y\to Z$ the **composition** $g\circ f:X\to Z$ satisfies
+$(g\circ f)^{-1}(C)=f^{-1}(g^{-1}(C))$ for $C\subseteq Z$.
+
+## Preimages Preserve Set Operations
+
+The key fact is that preimages commute with every set operation, whereas images
+do not.
+
+:::{.theorem data-title="Preimages and Set Operations"}
+
+Let $f:X\to Y$, $B\subseteq Y$ and $\{B_\alpha\}_{\alpha\in I}$ subsets of $Y$.
+Then
+$$
+f^{-1}\left(\bigcup_\alpha B_\alpha\right)=\bigcup_\alpha f^{-1}(B_\alpha),\qquad
+f^{-1}\left(\bigcap_\alpha B_\alpha\right)=\bigcap_\alpha f^{-1}(B_\alpha),\qquad
+f^{-1}(B^c)=\left(f^{-1}(B)\right)^c.
+$$
+In particular $f^{-1}(A\setminus B)=f^{-1}(A)\setminus f^{-1}(B)$,
+$f^{-1}(\emptyset)=\emptyset$ and $f^{-1}(Y)=X$.
+
+:::
+
+:::{.proof}
+For the union,
+$$
+x\in f^{-1}\left(\bigcup_\alpha B_\alpha\right)\iff f(x)\in\bigcup_\alpha B_\alpha
+\iff\exists\alpha:f(x)\in B_\alpha\iff x\in\bigcup_\alpha f^{-1}(B_\alpha).
+$$
+The intersection is identical with "$\forall\alpha$" in place of "$\exists\alpha$".
+For the complement, $x\in f^{-1}(B^c)\iff f(x)\notin B\iff x\notin f^{-1}(B)$.
+The remaining identities follow from $A\setminus B=A\cap B^c$.
+:::
+
+Images only partly preserve the operations.
+
+:::{.theorem data-title="Images and Set Operations"}
+
+Let $f:X\to Y$ and $A,A_\alpha\subseteq X$. Then
+$$
+f\left(\bigcup_\alpha A_\alpha\right)=\bigcup_\alpha f(A_\alpha),\qquad
+f\left(\bigcap_\alpha A_\alpha\right)\subseteq\bigcap_\alpha f(A_\alpha),
+$$
+with equality in the second if $f$ is injective, and in general
+$f(A^c)\neq f(A)^c$.
+
+:::
+
+:::{.proof}
+For the union, $y\in f(\bigcup_\alpha A_\alpha)\iff\exists\alpha,\exists x\in A_\alpha:f(x)=y\iff y\in\bigcup_\alpha f(A_\alpha)$.
+For the intersection, if $y=f(x)$ with $x\in A_\alpha$ for all $\alpha$ then
+$y\in f(A_\alpha)$ for all $\alpha$. The converse can fail: if
+$f(x_1)=f(x_2)=y$ with $x_1\in A_1\setminus A_2$ and $x_2\in A_2\setminus A_1$,
+then $y\in f(A_1)\cap f(A_2)$ but $A_1\cap A_2$ need not contain a preimage of
+$y$. If $f$ is injective, $x_1=x_2$ rules this out.
+:::
+
+:::{.example data-title="Images do not preserve complements"}
+
+Let $f:\mathbb{R}\to\mathbb{R}$, $f(x)=x^2$, and $A=[0,\infty)$. Then
+$f(A^c)=(0,\infty)$ but $f(A)^c=(-\infty,0)$. Also
+$f(\{-1\}\cap\{1\})=f(\emptyset)=\emptyset\neq\{1\}=f(\{-1\})\cap f(\{1\})$.
+
+:::
+
+## Images and Preimages Together
+
+:::{.theorem data-title="Round Trips"}
+
+Let $f:X\to Y$, $A\subseteq X$ and $B\subseteq Y$. Then
+$$
+A\subseteq f^{-1}(f(A)),\qquad f(f^{-1}(B))\subseteq B.
+$$
+The first is an equality for all $A$ if and only if $f$ is injective, and the
+second is an equality for all $B$ if and only if $f$ is surjective. Moreover
+$$
+f(A)\subseteq B\iff A\subseteq f^{-1}(B).
+$$
+
+:::
+
+:::{.proof}
+If $x\in A$ then $f(x)\in f(A)$, so $x\in f^{-1}(f(A))$. If
+$y\in f(f^{-1}(B))$ then $y=f(x)$ with $f(x)\in B$, so $y\in B$. Equality for
+all $B$ fails exactly when some $y\in Y$ has no preimage, that is, $f$ is not
+surjective; equality for all $A$ fails exactly when two points share an image.
+The final equivalence holds because both sides say $f(x)\in B$ for every
+$x\in A$.
+:::
+
+## Indicator Functions
+
+:::{.definition data-title="Indicator Function"}
+
+For $A\subseteq X$ the **indicator function** $\mathbf{1}_A:X\to\{0,1\}$ is
+$\mathbf{1}_A(x)=1$ if $x\in A$ and $0$ otherwise.
+
+:::
+
+Indicators translate set operations into arithmetic:
+$\mathbf{1}_{A\cap B}=\mathbf{1}_A\mathbf{1}_B$,
+$\mathbf{1}_{A^c}=1-\mathbf{1}_A$, and
+$\mathbf{1}_{A\cup B}=\mathbf{1}_A+\mathbf{1}_B-\mathbf{1}_{A\cap B}$. Their
+preimages are simple:
+$$
+\mathbf{1}_A^{-1}(B)=\begin{cases}
+\emptyset&0,1\notin B,\\
+A&1\in B,\ 0\notin B,\\
+A^c&0\in B,\ 1\notin B,\\
+X&0,1\in B.
+\end{cases}
+$$
+This is why $\mathbf{1}_A$ is measurable exactly when $A$ is a measurable set.
+
+## Preimages and σ-Algebras
+
+This section is what makes measurability work. Recall that a
+[[measure-spaces|σ-algebra]] is a collection of sets closed under complements and
+countable unions, and that $\sigma(\mathcal{E})$ denotes the σ-algebra generated
+by $\mathcal{E}$ (see [[measure-spaces#Algebra & σ-Algebra|generated σ-algebra]]). Since preimages commute
+with complements and unions, they transport σ-algebras.
+
+:::{.theorem data-title="Preimages of σ-Algebras"}
+
+Let $f:X\to Y$.
+
+1. If $\mathcal{N}$ is a σ-algebra on $Y$, then
+   $f^{-1}(\mathcal{N}):=\{f^{-1}(B):B\in\mathcal{N}\}$ is a σ-algebra on $X$.
+2. If $\mathcal{M}$ is a σ-algebra on $X$, then
+   $\{B\subseteq Y:f^{-1}(B)\in\mathcal{M}\}$ is a σ-algebra on $Y$.
+
+:::
+
+:::{.proof}
+(1) $f^{-1}(\emptyset)=\emptyset$ lies in $f^{-1}(\mathcal{N})$. If
+$E=f^{-1}(B)$ with $B\in\mathcal{N}$ then $E^c=f^{-1}(B^c)$ and $B^c\in\mathcal{N}$.
+If $E_i=f^{-1}(B_i)$ then $\bigcup_iE_i=f^{-1}(\bigcup_iB_i)$ and
+$\bigcup_iB_i\in\mathcal{N}$.
+
+(2) Call the collection $\mathcal{N}'$. Since $f^{-1}(Y)=X\in\mathcal{M}$ we have
+$Y\in\mathcal{N}'$. If $B\in\mathcal{N}'$ then $f^{-1}(B^c)=f^{-1}(B)^c\in\mathcal{M}$.
+If $B_i\in\mathcal{N}'$ then $f^{-1}(\bigcup_iB_i)=\bigcup_if^{-1}(B_i)\in\mathcal{M}$.
+:::
+
+:::{.theorem data-title="Preimages Commute with Generation"}
+
+Let $f:X\to Y$ and $\mathcal{E}\subseteq2^Y$. Then
+$$
+\sigma\big(f^{-1}(\mathcal{E})\big)=f^{-1}\big(\sigma(\mathcal{E})\big).
+$$
+
+:::
+
+:::{.proof}
+($\subseteq$) By part 1 above, $f^{-1}(\sigma(\mathcal{E}))$ is a σ-algebra on
+$X$, and it contains $f^{-1}(\mathcal{E})$, so it contains the generated
+σ-algebra $\sigma(f^{-1}(\mathcal{E}))$.
+
+($\supseteq$) Let $\mathcal{N}'=\{B\subseteq Y:f^{-1}(B)\in\sigma(f^{-1}(\mathcal{E}))\}$.
+By part 2 above, $\mathcal{N}'$ is a σ-algebra on $Y$ (applied with
+$\mathcal{M}=\sigma(f^{-1}(\mathcal{E}))$), and it contains $\mathcal{E}$. Hence
+$\sigma(\mathcal{E})\subseteq\mathcal{N}'$, that is,
+$f^{-1}(B)\in\sigma(f^{-1}(\mathcal{E}))$ for all $B\in\sigma(\mathcal{E})$.
+:::
+
+:::{.theorem data-title="Checking Measurability on Generators"}
+
+Let $(X,\mathcal{M})$ and $(Y,\mathcal{N})$ be measurable spaces with
+$\mathcal{N}=\sigma(\mathcal{E})$. Then $f^{-1}(B)\in\mathcal{M}$ for all
+$B\in\mathcal{N}$ if and only if $f^{-1}(E)\in\mathcal{M}$ for all
+$E\in\mathcal{E}$.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) is clear as $\mathcal{E}\subseteq\mathcal{N}$. ($\Leftarrow$) The
+collection $\{B\subseteq Y:f^{-1}(B)\in\mathcal{M}\}$ is a σ-algebra on $Y$ by
+part 2 above and contains $\mathcal{E}$, so it contains $\sigma(\mathcal{E})=\mathcal{N}$.
+:::
+
+This last result is the workhorse for [[measurable-function|measurable
+functions]]: to show $f:X\to\mathbb{R}$ is measurable it is enough to check
+preimages of the generators of the Borel σ-algebra, such as open rays
+$(a,\infty)$ (see [[borel-measure]]).
+
+## Related Topics
+
+- [[set-theory-fundamentals]]
+- [[relations]]
+- [[measurable-function]]
+- [[measure-spaces]]

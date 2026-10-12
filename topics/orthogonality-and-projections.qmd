@@ -1,0 +1,115 @@
+---
+title: Orthogonality and Projections
+author: John Robin Inston
+date: 2026-10-11
+number-sections: true
+title-block-banner: false
+---
+
+## Orthogonality and Projections
+
+Orthogonality is the geometry of right angles in an
+[[inner-product-space|inner product space]]. It leads to orthonormal bases and to
+projections, which give the closest point of a subspace to a given vector. These
+are the foundation of least squares and of [[conditional-expectation]] as an
+orthogonal projection in $L^2$.
+
+## Orthogonality
+
+:::{.definition data-title="Orthogonal and Orthonormal Sets"}
+
+Vectors $\vec{x},\vec{y}$ are **orthogonal**, written $\vec{x}\perp\vec{y}$, if
+$\langle\vec{x},\vec{y}\rangle=0$. A family $\vec{x}_1,\dots,\vec{x}_n$ is
+**orthogonal** if $\langle\vec{x}_i,\vec{x}_j\rangle=0$ for $i\neq j$, and
+**orthonormal** if additionally $\lVert\vec{x}_i\rVert=1$ for all $i$.
+
+:::
+
+:::{.theorem data-title="Pythagoras and Independence"}
+
+1. If $\vec{x}_1,\dots,\vec{x}_n$ are orthogonal then
+   $\left\lVert\sum_i\vec{x}_i\right\rVert^2=\sum_i\lVert\vec{x}_i\rVert^2$.
+2. Orthogonal families of nonzero vectors are linearly independent.
+
+:::
+
+:::{.proof}
+(1) Expand $\left\langle\sum_i\vec{x}_i,\sum_j\vec{x}_j\right\rangle=\sum_{i,j}\langle\vec{x}_i,\vec{x}_j\rangle$,
+and only the diagonal terms survive. (2) If $\sum_ic_i\vec{x}_i=\vec{0}$, taking the
+inner product with $\vec{x}_j$ gives $c_j\lVert\vec{x}_j\rVert^2=0$, so $c_j=0$.
+:::
+
+:::{.definition data-title="Orthogonal Complement"}
+
+For a subspace $\mathcal{W}\subseteq\mathcal{V}$ its **orthogonal complement** is
+$\mathcal{W}^\perp=\{\vec{x}\in\mathcal{V}:\langle\vec{x},\vec{y}\rangle=0\ \forall\vec{y}\in\mathcal{W}\}$.
+
+:::
+
+$\mathcal{W}^\perp$ is a subspace, and $\mathcal{W}\cap\mathcal{W}^\perp=\{\vec{0}\}$
+since $\langle\vec{x},\vec{x}\rangle=0$ forces $\vec{x}=\vec{0}$.
+
+## Gram-Schmidt
+
+Given linearly independent $\vec{v}_1,\dots,\vec{v}_n$, define
+$$
+\vec{u}_k=\vec{v}_k-\sum_{j<k}\frac{\langle\vec{v}_k,\vec{u}_j\rangle}{\langle\vec{u}_j,\vec{u}_j\rangle}\vec{u}_j,\qquad\vec{e}_k=\frac{\vec{u}_k}{\lVert\vec{u}_k\rVert}.
+$$
+Then $\vec{e}_1,\dots,\vec{e}_n$ is an orthonormal family with
+$\operatorname{span}(\vec{e}_1,\dots,\vec{e}_k)=\operatorname{span}(\vec{v}_1,\dots,\vec{v}_k)$
+for every $k$. Hence every finite-dimensional inner product space has an
+orthonormal basis. This procedure is the basis of the QR decomposition, see
+[[matrix-decompositions]].
+
+## Projections
+
+:::{.definition data-title="Projection"}
+
+A **projection** on a vector space $\mathcal{V}$ is a linear operator
+$P:\mathcal{V}\to\mathcal{V}$ with $P^2=P$. A projection on an inner product space
+is an **orthogonal projection** if $\langle P\vec{x},\vec{y}\rangle=\langle\vec{x},P\vec{y}\rangle$
+for all $\vec{x},\vec{y}$, and an **oblique projection** otherwise.
+
+:::
+
+For any projection, $\vec{v}=P\vec{v}+(\vec{v}-P\vec{v})$ with
+$P\vec{v}\in\operatorname{im}(P)$ and $\vec{v}-P\vec{v}\in\ker(P)$ (as
+$P(\vec{v}-P\vec{v})=\vec{0}$), so $\mathcal{V}=\operatorname{im}(P)\oplus\ker(P)$.
+For an orthogonal projection the two pieces are orthogonal.
+
+:::{.theorem data-title="Orthogonal Projection onto a Subspace"}
+
+Let $\mathcal{W}$ be a finite-dimensional subspace with orthonormal basis
+$\vec{e}_1,\dots,\vec{e}_k$. Then
+$$
+P_{\mathcal{W}}\vec{v}=\sum_{i=1}^k\langle\vec{v},\vec{e}_i\rangle\vec{e}_i
+$$
+is an orthogonal projection onto $\mathcal{W}$ with $\vec{v}-P_{\mathcal{W}}\vec{v}\in\mathcal{W}^\perp$,
+and $P_{\mathcal{W}}\vec{v}$ is the **closest point** of $\mathcal{W}$ to $\vec{v}$:
+$$
+\lVert\vec{v}-P_{\mathcal{W}}\vec{v}\rVert\leq\lVert\vec{v}-\vec{w}\rVert\quad\text{for all }\vec{w}\in\mathcal{W}.
+$$
+
+:::
+
+:::{.proof}
+For each $j$, $\langle\vec{v}-P_{\mathcal{W}}\vec{v},\vec{e}_j\rangle=\langle\vec{v},\vec{e}_j\rangle-\langle\vec{v},\vec{e}_j\rangle=0$,
+so $\vec{v}-P_{\mathcal{W}}\vec{v}\in\mathcal{W}^\perp$. For $\vec{w}\in\mathcal{W}$,
+the vector $P_{\mathcal{W}}\vec{v}-\vec{w}$ lies in $\mathcal{W}$, so by Pythagoras
+$$
+\lVert\vec{v}-\vec{w}\rVert^2=\lVert\vec{v}-P_{\mathcal{W}}\vec{v}\rVert^2+\lVert P_{\mathcal{W}}\vec{v}-\vec{w}\rVert^2\geq\lVert\vec{v}-P_{\mathcal{W}}\vec{v}\rVert^2.
+$$
+:::
+
+For a single direction $\vec{u}\neq\vec{0}$ this is
+$\operatorname{proj}_{\vec{u}}\vec{v}=\frac{\langle\vec{v},\vec{u}\rangle}{\langle\vec{u},\vec{u}\rangle}\vec{u}$.
+In $\mathbb{R}^n$, if $X$ has linearly independent columns then orthogonal
+projection onto $\operatorname{im}(X)$ has matrix $X(X^\top X)^{-1}X^\top$, the
+"hat matrix" of [[linear-regression]].
+
+## Related Topics
+
+- [[inner-product-space]]
+- [[matrix-decompositions]]
+- [[hilbert-spaces]]
+- [[conditional-expectation]]

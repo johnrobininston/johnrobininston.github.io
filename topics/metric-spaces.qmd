@@ -3,8 +3,193 @@ title: Metric Spaces
 author: John Robin Inston
 date: 2026-09-25
 number-sections: true
-title-block-banner: true
+title-block-banner: false
 ---
 
-# Metric Spaces
+## Metric Spaces
 
+A metric is a generalisation of the concept of distance between points of a set.
+Metric spaces are the setting in which convergence, continuity and completeness
+make sense without any algebraic structure. They sit between
+[[normed-space|normed spaces]] (a metric from a norm) and general
+[[topology|topological spaces]] (open sets without a metric).
+
+:::{.definition data-title="Metric Space"}
+
+A **metric** on a set $X$ is a function $d:X\times X\to[0,\infty)$ such that for
+all $x,y,z\in X$:
+
+1. $d(x,y)=0$ if and only if $x=y$;
+2. $d(x,y)=d(y,x)$ (symmetry);
+3. $d(x,z)\leq d(x,y)+d(y,z)$ (triangle inequality).
+
+The pair $(X,d)$ is a **metric space**.
+
+:::
+
+:::{.example data-title="Examples of Metrics"}
+
+- **Euclidean:** $d(x,y)=\lvert x-y\rvert$ on $\mathbb{R}$, and
+  $d(x,y)=\lVert x-y\rVert_2$ on $\mathbb{R}^n$. More generally any
+  [[normed-space|norm]] gives a metric $d(x,y)=\lVert x-y\rVert$.
+- **Discrete:** $d(x,y)=1$ if $x\neq y$ and $0$ otherwise, on any set $X$.
+- **Function spaces:** on $C([0,1])$,
+  $d_\infty(f,g)=\sup_{x\in[0,1]}\lvert f(x)-g(x)\rvert$ and
+  $d_1(f,g)=\int_0^1\lvert f(x)-g(x)\rvert\,dx$. For $d_1$, the condition
+  $d_1(f,g)=0\implies f=g$ uses continuity: a nonzero continuous function has a
+  positive integral. (On merely integrable functions $d_1$ is only a
+  pseudometric.)
+- **Extended reals:** $\overline{\mathbb{R}}=\mathbb{R}\cup\{\pm\infty\}$ with
+  $d(x,y)=\lvert\varphi(x)-\varphi(y)\rvert$, where
+  $\varphi(x)=\frac{x}{1+\lvert x\rvert}$ and $\varphi(\pm\infty)=\pm1$. This is a
+  metric because $\varphi$ is injective, and it makes $\varphi$ an isometry onto
+  $[-1,1]$. Hence $\overline{\mathbb{R}}$ is a compact metric space.
+
+:::
+
+## Open and Closed Sets
+
+:::{.definition data-title="Open Ball, Open Set, Closed Set"}
+
+The **open ball** of radius $\epsilon>0$ about $x\in X$ is
+$B_\epsilon(x)=\{y\in X:d(x,y)<\epsilon\}$, and the **closed ball** is
+$\bar B_\epsilon(x)=\{y\in X:d(x,y)\leq\epsilon\}$. A set $A\subseteq X$ is
+**open** if for every $x\in A$ there is $\epsilon>0$ with $B_\epsilon(x)\subseteq A$.
+A set is **closed** if its complement is open.
+
+:::
+
+:::{.theorem data-title="Topology of a Metric Space"}
+
+In a metric space $(X,d)$:
+
+1. Open balls are open.
+2. $\emptyset$ and $X$ are open, arbitrary unions of open sets are open, and
+   finite intersections of open sets are open.
+3. Dually, $\emptyset$ and $X$ are closed, arbitrary intersections of closed
+   sets are closed, and finite unions of closed sets are closed.
+
+:::
+
+:::{.proof}
+(1) If $y\in B_\epsilon(x)$ let $\delta=\epsilon-d(x,y)>0$. For
+$z\in B_\delta(y)$ the triangle inequality gives
+$d(x,z)\leq d(x,y)+d(y,z)<\epsilon$, so $B_\delta(y)\subseteq B_\epsilon(x)$.
+
+(2) A point in a union lies in one of the sets, hence has a ball inside it. For
+$x\in U_1\cap\cdots\cap U_n$ choose $\epsilon_i$ with $B_{\epsilon_i}(x)\subseteq U_i$
+and take $\epsilon=\min_i\epsilon_i>0$. The finite requirement is needed: in
+$\mathbb{R}$, $\bigcap_n(-\tfrac1n,\tfrac1n)=\{0\}$ is not open.
+
+(3) follows from (2) by taking complements ([[set-theory-fundamentals#Algebra of Sets|De Morgan]]).
+:::
+
+Open sets are exactly what a [[topology]] axiomatises: a collection of sets
+closed under arbitrary unions and finite intersections. A set can be both open
+and closed (such as $\emptyset$ and $X$) or neither (such as $[0,1)$ in
+$\mathbb{R}$). The countable intersections of open sets ($G_\delta$) and
+countable unions of closed sets ($F_\sigma$) feed into the
+[[borel-measure|Borel σ-algebra]].
+
+## Convergence and Continuity
+
+:::{.definition data-title="Convergence in a Metric Space"}
+
+A sequence $\{x_n\}$ in $(X,d)$ **converges** to $x\in X$, written $x_n\to x$, if
+$d(x_n,x)\to0$, that is, for every $\epsilon>0$ there is $N$ with
+$d(x_n,x)<\epsilon$ for all $n\geq N$. See [[sequence-convergence]] for the real
+case.
+
+:::
+
+:::{.theorem data-title="Closed Sets and Sequences"}
+
+$A\subseteq X$ is closed if and only if whenever $x_n\in A$ and $x_n\to x\in X$,
+we have $x\in A$.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) Suppose $A$ is closed, $x_n\in A$, $x_n\to x$ and $x\notin A$.
+Since $A^c$ is open there is $\epsilon>0$ with $B_\epsilon(x)\subseteq A^c$, but
+$x_n\in B_\epsilon(x)$ for large $n$, contradicting $x_n\in A$.
+($\Leftarrow$) Suppose $A$ is not closed, so $A^c$ is not open: there is
+$x\in A^c$ with $B_{1/n}(x)\cap A\neq\emptyset$ for every $n$. Choosing
+$x_n\in B_{1/n}(x)\cap A$ gives $x_n\to x$ with $x\notin A$.
+:::
+
+:::{.theorem data-title="Continuity"}
+
+For $f:(X,d_X)\to(Y,d_Y)$ and $x_0\in X$ the following are equivalent:
+
+1. **$\epsilon$-$\delta$:** for all $\epsilon>0$ there is $\delta>0$ with
+   $d_X(x,x_0)<\delta\implies d_Y(f(x),f(x_0))<\epsilon$.
+2. **Sequential:** $x_n\to x_0$ implies $f(x_n)\to f(x_0)$.
+
+Moreover $f$ is continuous at every point if and only if $f^{-1}(V)$ is open in
+$X$ for every open $V\subseteq Y$.
+
+:::
+
+:::{.proof}
+(1)$\Rightarrow$(2): given $\epsilon$ take $\delta$ from (1), then
+$d_X(x_n,x_0)<\delta$ for large $n$ gives $d_Y(f(x_n),f(x_0))<\epsilon$.
+(2)$\Rightarrow$(1): if (1) fails there is $\epsilon>0$ such that for every $n$ some
+$x_n$ has $d_X(x_n,x_0)<1/n$ but $d_Y(f(x_n),f(x_0))\geq\epsilon$, contradicting (2).
+
+For the last claim, if $f$ is $\epsilon$-$\delta$ continuous and $V$ is open, take
+$x_0\in f^{-1}(V)$ and $\epsilon$ with $B_\epsilon(f(x_0))\subseteq V$; then
+$B_\delta(x_0)\subseteq f^{-1}(V)$. Conversely, apply the open-preimage condition
+to $V=B_\epsilon(f(x_0))$ to get an open set containing $x_0$, hence a ball
+$B_\delta(x_0)$ inside it.
+:::
+
+The open-preimage formulation is the one that survives in topology and in
+[[measure-spaces|measure theory]], where a function is *measurable* when preimages
+of open (Borel) sets are measurable, see [[set-functions]]. A bijection $f$ such
+that $f$ and $f^{-1}$ are continuous is a **homeomorphism**.
+
+## Completeness and Compactness
+
+:::{.definition data-title="Cauchy Sequence & Complete Space"}
+
+A sequence $\{x_n\}$ is **Cauchy** if for all $\epsilon>0$ there is $N$ with
+$d(x_n,x_m)<\epsilon$ for all $n,m\geq N$. A metric space is **complete** if every
+Cauchy sequence converges to a point of the space.
+
+:::
+
+Every convergent sequence is Cauchy (see [[cauchy-sequence]]), but the converse
+depends on the space. $\mathbb{R}$ is complete while $\mathbb{Q}$ is not (a
+rational sequence can converge to $\sqrt2$). See [[completeness]].
+
+:::{.example data-title="$(C([0,1]),d_\infty)$ is complete but $(C([0,1]),d_1)$ is not"}
+
+$C([0,1])$ with $d_\infty$ is complete, as uniform limits of continuous functions
+are continuous. For $d_1$, let $f_n=1$ on $[0,\tfrac12]$, $f_n=0$ on
+$[\tfrac12+\tfrac1n,1]$ and linear in between. Then
+$d_1(f_n,f_m)=\tfrac12\left\lvert\tfrac1n-\tfrac1m\right\rvert\to0$, so $\{f_n\}$
+is $d_1$-Cauchy, but not $d_\infty$-Cauchy since
+$d_\infty(f_n,f_{2n})\geq\tfrac12$. If $f_n\to f$ in $d_1$ with $f$ continuous, then
+$f=1$ on $[0,\tfrac12]$ and $f=0$ on $(\tfrac12,1]$, which is not continuous at
+$\tfrac12$. So no limit exists in $C([0,1])$.
+
+:::
+
+:::{.definition data-title="Compact Metric Space"}
+
+A metric space $X$ is **(sequentially) compact** if every sequence in $X$ has a
+subsequence converging to a point of $X$. A compact metric space is complete and
+bounded, and in $\mathbb{R}^n$ the compact sets are exactly the closed and
+bounded ones (Heine-Borel). See [[compactness]].
+
+:::
+
+## Related Topics
+
+- [[normed-space]]
+- [[topology]]
+- [[completeness]]
+- [[compactness]]
+- [[sequence-convergence]]
+- [[set-functions]]

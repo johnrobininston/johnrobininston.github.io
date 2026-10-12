@@ -3,8 +3,174 @@ title: Compactness
 author: John Robin Inston
 date: 2026-09-25
 number-sections: true
-title-block-banner: true
+title-block-banner: false
 ---
 
 ## Compactness
 
+Compactness is the right generalisation of "closed and bounded" to settings
+beyond $\mathbb{R}^n$. Informally, a compact set cannot escape to infinity or
+have missing boundary points: any infinite collection of points in it must
+*pile up* somewhere inside it. It is the property that lets us extract limits,
+and it underlies the extreme value theorem, the fact that $\overline{\mathbb{R}}$
+is a compact metric space (see [[metric-spaces]]), and tightness and Prokhorov's
+theorem in probability (see [[tightness]]).
+
+## Definitions
+
+:::{.definition data-title="Sequential Compactness"}
+
+A subset $K$ of a [[metric-spaces|metric space]] $X$ is **(sequentially)
+compact** if every sequence in $K$ has a subsequence that converges to a point
+of $K$.
+
+:::
+
+:::{.definition data-title="Open Cover Compactness"}
+
+An **open cover** of $K\subseteq X$ is a family $\{U_\alpha\}$ of open sets with
+$K\subseteq\bigcup_\alpha U_\alpha$. The set $K$ is **compact** if every open
+cover has a **finite subcover**, that is, finitely many $U_{\alpha_1},\dots,U_{\alpha_n}$
+with $K\subseteq\bigcup_iU_{\alpha_i}$.
+
+:::
+
+In a metric space the two definitions agree (proved below). The open cover
+definition is the one used in general [[topology]], where there are no
+sequences to speak of.
+
+:::{.example data-title="Examples and Non-Examples"}
+
+- $[0,1]$ and every closed bounded subset of $\mathbb{R}^n$ is compact, as is any
+  finite set.
+- $(0,1)$ is not compact: the sequence $1/n$ has no limit in $(0,1)$, and the
+  open cover $\{(1/n,1)\}_{n\geq2}$ has no finite subcover.
+- $\mathbb{R}$ is not compact: the sequence $n$ has no convergent subsequence, and
+  $\{(-n,n)\}$ has no finite subcover.
+- In infinite dimensions closed and bounded is not enough. The closed unit ball in
+  $(C([0,1]),d_\infty)$ is not compact: $f_n(x)=x^n$ has no uniformly convergent
+  subsequence, as its pointwise limit is discontinuous at $1$.
+
+:::
+
+## Basic Properties
+
+:::{.theorem data-title="Compact Implies Closed and Bounded"}
+
+A compact subset $K$ of a metric space is closed and bounded.
+
+:::
+
+:::{.proof}
+*Bounded:* if not, fix $x_0\in K$ and choose $x_n\in K$ with $d(x_n,x_0)>n$. Any
+subsequence is unbounded, so none converges, contradicting compactness.
+*Closed:* let $x_n\in K$ with $x_n\to x$. By compactness a subsequence converges
+to some $y\in K$, but also converges to $x$, so $x=y\in K$ by uniqueness of limits.
+By the sequential criterion for closed sets in [[metric-spaces]], $K$ is closed.
+:::
+
+:::{.theorem data-title="Closed Subsets of Compact Sets"}
+
+A closed subset $F$ of a compact set $K$ is compact.
+
+:::
+
+:::{.proof}
+A sequence in $F$ lies in $K$, so has a subsequence converging in $K$; its limit
+lies in $F$ since $F$ is closed.
+:::
+
+## Heine-Borel
+
+:::{.theorem data-title="Bolzano-Weierstrass"}
+
+Every bounded sequence in $\mathbb{R}^n$ has a convergent subsequence.
+
+:::
+
+:::{.proof}
+For $n=1$: every real sequence has a monotone subsequence (call $m$ a *peak* if
+$x_m\geq x_k$ for all $k>m$; infinitely many peaks give a decreasing subsequence,
+and otherwise after the last peak we can repeatedly find larger terms, giving an
+increasing one). A bounded monotone sequence converges, see
+[[sequence-convergence]]. For $\mathbb{R}^n$ pass to a subsequence converging in
+the first coordinate, then a further one converging in the second, and so on;
+after $n$ steps all coordinates converge.
+:::
+
+:::{.theorem data-title="Heine-Borel"}
+
+A subset of $\mathbb{R}^n$ is compact if and only if it is closed and bounded.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) is the theorem above. ($\Leftarrow$) A sequence in a bounded set
+is bounded, so has a convergent subsequence by Bolzano-Weierstrass, and the limit
+lies in the set since it is closed.
+:::
+
+## Equivalence of the Definitions
+
+:::{.theorem data-title="Open Cover and Sequential Compactness Agree"}
+
+For a subset $K$ of a metric space, $K$ is open cover compact if and only if it
+is sequentially compact.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) Let $\{x_n\}\subseteq K$ have no subsequence converging in $K$.
+Then every $y\in K$ has a ball $B_y$ containing $x_n$ for only finitely many $n$
+(otherwise we could choose $n_1<n_2<\cdots$ with $x_{n_k}\to y$). The balls $B_y$
+cover $K$, so finitely many of them do, and then only finitely many indices $n$
+exist, a contradiction.
+
+($\Leftarrow$) *Sketch.* Sequential compactness gives (i) **total boundedness**:
+for every $\epsilon>0$ finitely many $\epsilon$-balls cover $K$ (otherwise
+choose points at distance at least $\epsilon$ from each other, a sequence with
+no convergent subsequence), and (ii) a **Lebesgue number** $\delta>0$ for any
+open cover, such that every ball of radius $\delta$ lies in a single set of the
+cover. Covering $K$ by finitely many $\delta$-balls then yields a finite
+subcover.
+:::
+
+A metric space is thus compact if and only if it is **complete and totally
+bounded**.
+
+## Continuous Functions on Compact Sets
+
+:::{.theorem data-title="Continuous Image of a Compact Set"}
+
+If $f:K\to Y$ is continuous and $K$ is compact, then $f(K)$ is compact.
+
+:::
+
+:::{.proof}
+Let $y_n=f(x_n)$ be a sequence in $f(K)$. By compactness a subsequence
+$x_{n_k}\to x\in K$, and by continuity $y_{n_k}=f(x_{n_k})\to f(x)\in f(K)$.
+:::
+
+:::{.theorem data-title="Extreme Value Theorem"}
+
+A continuous function $f:K\to\mathbb{R}$ on a nonempty compact set attains its
+maximum and minimum.
+
+:::
+
+:::{.proof}
+$f(K)$ is compact in $\mathbb{R}$, hence closed and bounded by Heine-Borel, so
+$\sup f(K)$ and $\inf f(K)$ are finite and belong to $f(K)$.
+:::
+
+A continuous function on a compact metric space is also **uniformly continuous**
+(Heine-Cantor). Continuous images of compact sets explain why a homeomorphism
+$\varphi:\overline{\mathbb{R}}\to[-1,1]$ shows $\overline{\mathbb{R}}$ is compact.
+
+## Related Topics
+
+- [[metric-spaces]]
+- [[completeness]]
+- [[topology]]
+- [[sequence-convergence]]
+- [[tightness]]

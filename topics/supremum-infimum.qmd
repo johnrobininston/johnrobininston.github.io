@@ -3,8 +3,21 @@ title: "Supremum & Infimum"
 author: John Robin Inston
 date: 2026-09-25
 number-sections: true
-title-block-banner: true
+title-block-banner: false
 ---
+
+### Bounded Sets (Real Numbers)
+
+:::{.definition data-title="Bounded Real Sets"}
+
+A set $A \subset \mathbb{R}$ is **bounded from above** if there exists
+$M \in \mathbb{R}$, called an **upper bound** of $A$, such that $x \leq M$ for
+all $x \in A$. Similarly, $A$ is **bounded from below** if there exists
+$m \in \mathbb{R}$, called a **lower bound** of $A$, such that $x \geq m$ for
+all $x \in A$. A set $A$ is **bounded** if it is bounded both from above and
+below, equivalently if $A \subset [m,M]$ for some $m,M\in\mathbb{R}$.
+
+:::
 
 ### Supremum & Infimum (Real Numbers)
 
@@ -66,6 +79,88 @@ We frequently use this proposition as follows:
 2. If you $A$ is nonempty and bounded from above, then for every
    $\varepsilon>0,~\exists x \in A~s.t. x>\sup_{}{A}-\varepsilon$.
 
+### Supremum & Infimum of Extended Real Sequences
 
+Consider an extended real sequence
+$\{ x_{n} \}_{n \in \mathbb{N}}\subseteq\overline{\mathbb{R}}=\mathbb{R}\cup \{ \pm \infty \}$.
+A number $u \in \overline{\mathbb{R}}$ is an **upper bound** of the sequence if
+$x_{n}\leq u$ for all $n$, and the sequence is **bounded above**. Similarly,
+$l \in \overline{\mathbb{R}}$ is a **lower bound** if $x_{n}\geq l$ for all $n$,
+and the sequence is **bounded below**. A sequence is **bounded** if it is both
+bounded above and below.
 
+:::{.definition data-title="Supremum & Infimum of a Sequence"}
 
+The **supremum** $\sup_{n}{x_{n}}$ is the unique **least upper bound** of the
+sequence: it is an upper bound, and $\sup_{n}x_{n}\leq u$ for every upper bound
+$u$. The **infimum** $\inf_{n}{x_{n}}$ is the unique **greatest lower bound**:
+it is a lower bound, and $\inf_{n}x_{n}\geq l$ for every lower bound $l$.
+
+:::
+
+These are fundamental definitions in [[measure-theory-notes]] and
+[[real-analysis]], where they form the basis for defining limits, continuity and
+integrals, and in particular [[limsup-liminf]].
+
+:::{.theorem data-title="Infimum and Supremum Inequality"}
+
+For an extended real sequence $\{ x_{n} \}$,
+$$
+\inf_{n}{x_{n}}\leq x_{k}\leq \sup_{n}{x_{n}}\quad\text{for all }k.
+$$
+
+:::
+
+:::{.proof}
+The infimum is a lower bound and the supremum is an upper bound, so
+$\inf_nx_n\leq x_k\leq\sup_nx_n$ for each $k$ by definition.
+:::
+
+:::{.theorem data-title="Order Preservation"}
+
+If $x_{n}\leq y_{n}$ for all $n$ then
+$$
+\inf_{n}{x_{n}}\leq \inf_{n}{y_{n}},\qquad \sup_{n}{x_{n}}\leq \sup_{n}{y_{n}}.
+$$
+
+:::
+
+:::{.proof}
+For every $n$, $x_n\leq y_n\leq\sup_ky_k$, so $\sup_ky_k$ is an upper bound of
+$\{x_n\}$ and hence $\sup_nx_n\leq\sup_ky_k$. Similarly
+$\inf_kx_k\leq x_n\leq y_n$ for every $n$, so $\inf_kx_k$ is a lower bound of
+$\{y_n\}$ and hence $\inf_kx_k\leq\inf_ny_n$.
+:::
+
+:::{.theorem data-title="Inequalities of Sums"}
+
+For sequences $\{ x_{n} \},\{ y_{n} \}$ (with no $\infty-\infty$),
+$$
+\sup_{n}(x_{n}+y_{n})\leq \sup_{n}{x_{n}}+\sup_{n}{y_{n}},\qquad
+\inf_{n}{(x_{n}+y_{n})}\geq \inf_{n}{x_{n}}+\inf_{n}{y_{n}}.
+$$
+
+:::
+
+:::{.proof}
+For every $n$, $x_n+y_n\leq\sup_kx_k+\sup_ky_k$, so the right-hand side is an
+upper bound of $\{x_n+y_n\}$ and hence dominates its supremum. The infimum
+statement is analogous. (We cannot argue with an index $m$ attaining the
+supremum, as the supremum need not be attained.)
+:::
+
+:::{.theorem data-title="Inequalities of Products"}
+
+For **nonnegative** sequences $\{ x_{n} \}, \{ y_{n} \}$,
+$$
+\sup_{n}{(x_{n}y_{n})}\leq \sup_{n}{x_{n}}\cdot \sup_{n}{y_{n}},\qquad
+\inf_{n}{(x_{n}y_{n})}\geq \inf_{n}{x_{n}}\cdot \inf_{n}{y_{n}}.
+$$
+
+:::
+
+:::{.proof}
+As for sums, using $0\leq x_n\leq\sup_kx_k$ and $0\leq y_n\leq\sup_ky_k$ to bound
+$x_ny_n$, and similarly with the infima. Nonnegativity is needed: for $x_n=y_n=-n$ we have
+$\sup x_n=\sup y_n=-1$, but $\sup_n x_ny_n=\sup_n n^2=+\infty>1$.
+:::

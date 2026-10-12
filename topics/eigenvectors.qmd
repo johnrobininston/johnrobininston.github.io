@@ -3,6 +3,7 @@ title: Eigenvectors and Eigenvalues
 author: John Robin Inston
 date: 2026-09-06
 number-sections: true
+title-block-banner: false
 ---
 
 ## Eigenvalues and Eigenvectors
@@ -70,3 +71,41 @@ $$
 $$
 
 These are useful for understanding properties of the hat matrix later.
+
+
+## Eigenvalues of a Linear Operator
+
+The definitions above apply to any linear operator $P:\mathcal{V}\to\mathcal{V}$ (see
+[[linear-maps]]): $\vec{x}\neq\vec{0}$ is an **eigenvector** with **eigenvalue**
+$\lambda\in F$ if $P\vec{x}=\lambda\vec{x}$. For a matrix $A$ the eigenvalues are the
+roots in $F$ of the **characteristic polynomial**
+$c_A(\lambda)=\det(A-\lambda I_n)$, since $A-\lambda I_n$ has a nontrivial kernel
+exactly when it is singular. The set $\ker(A-\lambda I_n)$ is the **eigenspace**
+of $\lambda$. Similar matrices have the same characteristic polynomial, so
+eigenvalues are properties of the operator and not of the chosen basis.
+
+## Diagonalisation
+
+:::{.theorem data-title="Diagonalisation"}
+
+If $\mathcal{V}$ has a basis $\mathcal{B}=(\vec{x}_1,\dots,\vec{x}_n)$ of
+eigenvectors of $P$, then
+$$
+[P]_{\mathcal{B}}=\operatorname{diag}(\lambda_1,\dots,\lambda_n),
+$$
+where $\lambda_i$ is the eigenvalue of $\vec{x}_i$. Conversely, if $[P]_{\mathcal{B}}$
+is diagonal then $\mathcal{B}$ consists of eigenvectors.
+
+:::
+
+:::{.proof}
+Since $P\vec{x}_i=\lambda_i\vec{x}_i$, the $i$-th column of $[P]_{\mathcal{B}}$ is
+$[P\vec{x}_i]_{\mathcal{B}}=\lambda_i\vec{e}_i$, with $\lambda_i$ in position $i$ and
+zeros elsewhere. The converse reads the same computation backwards.
+:::
+
+In matrix form, if $S$ has the eigenvectors as columns then $A=S\Lambda S^{-1}$
+with $\Lambda=\operatorname{diag}(\lambda_i)$, by the change of basis formula. Not
+every matrix is diagonalisable (for instance $\begin{bmatrix}1&1\\0&1\end{bmatrix}$ has
+only one eigenvector direction), but symmetric matrices always are, see
+[[matrix-decompositions]].

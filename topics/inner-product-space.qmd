@@ -3,6 +3,7 @@ title: Inner Product Space
 author: John Robin Inston
 date: 2026-09-06
 number-sections: true
+title-block-banner: false
 ---
 
 ## Inner Product
@@ -43,7 +44,7 @@ $v \in \mathcal{V}$ such that $\lim_{n \to \infty} v_{n} = v$.
 
 :::
 
-A complete inner product space is known as a [[hilbert-space]].
+A complete inner product space is known as a [[hilbert-spaces|Hilbert space]].
 
 ### Inner Product Space Results
 
@@ -53,3 +54,84 @@ Some important inner-product space results include:
    \rvert\leq \lVert v_{1} \rVert \cdot \lVert v_{2} \rVert$.
 2. The [[triangle-inequality]]: $\lVert  v_{1}+v_{2} \rVert \leq \lVert v_{1} 
    \rVert + \lVert  v_{2} \rVert$.
+
+
+## Bilinear Forms
+
+:::{.definition data-title="Bilinear Form"}
+
+A function $\langle\cdot,\cdot\rangle:\mathcal{V}\times\mathcal{V}\to F$ on a vector
+space $(\mathcal{V},F)$ is a **bilinear form** if it is linear in each argument:
+$\langle\alpha\vec{x}+\vec{y},\vec{z}\rangle=\alpha\langle\vec{x},\vec{z}\rangle+\langle\vec{y},\vec{z}\rangle$
+and $\langle\vec{x},\alpha\vec{y}+\vec{z}\rangle=\alpha\langle\vec{x},\vec{y}\rangle+\langle\vec{x},\vec{z}\rangle$.
+It is **symmetric** if $\langle\vec{x},\vec{y}\rangle=\langle\vec{y},\vec{x}\rangle$ and
+**positive definite** if $\langle\vec{x},\vec{x}\rangle>0$ for all $\vec{x}\neq\vec{0}$.
+
+:::
+
+Every bilinear form on $\mathbb{R}^n$ has the form $\langle\vec{x},\vec{y}\rangle_A=\vec{x}^\top A\vec{y}$
+for a unique $A\in M_n(\mathbb{R})$, and conversely every such $A$ defines one. The
+form is symmetric if and only if $A$ is symmetric, and positive definite if and
+only if $A$ is [[matrices#Quadratic Forms and Positive Definiteness|positive definite]].
+Thus an **inner product on a real vector space is exactly a symmetric positive
+definite bilinear form**.
+
+## Euclidean Space
+
+:::{.example data-title="Euclidean Space"}
+
+On $\mathbb{R}^n$ the **dot product** $\langle\vec{x},\vec{y}\rangle=\sum_{i=1}^nx_iy_i$
+is an inner product (the matrix $A=I_n$). It induces the **Euclidean norm**
+$\lVert\vec{x}\rVert=\sqrt{\langle\vec{x},\vec{x}\rangle}=\left(\sum_ix_i^2\right)^{1/2}$,
+the **metric** $d(\vec{x},\vec{y})=\lVert\vec{x}-\vec{y}\rVert$, and the **angle**
+$\theta$ between nonzero vectors via
+$\cos\theta=\frac{\langle\vec{x},\vec{y}\rangle}{\lVert\vec{x}\rVert\lVert\vec{y}\rVert}$.
+The angle is well defined because of Cauchy-Schwarz below.
+
+:::
+
+## Cauchy-Schwarz and the Induced Norm
+
+:::{.theorem data-title="Cauchy-Schwarz Inequality"}
+
+For any $\vec{x},\vec{y}$ in an inner product space,
+$$
+\lvert\langle\vec{x},\vec{y}\rangle\rvert\leq\lVert\vec{x}\rVert\,\lVert\vec{y}\rVert,
+$$
+with equality if and only if $\vec{x},\vec{y}$ are linearly dependent.
+
+:::
+
+:::{.proof}
+If $\vec{y}=\vec{0}$ both sides are $0$. Otherwise let
+$\vec{z}=\vec{x}-\frac{\langle\vec{x},\vec{y}\rangle}{\langle\vec{y},\vec{y}\rangle}\vec{y}$. Then
+$$
+0\leq\langle\vec{z},\vec{z}\rangle=\langle\vec{x},\vec{x}\rangle-\frac{\langle\vec{x},\vec{y}\rangle^2}{\langle\vec{y},\vec{y}\rangle},
+$$
+which rearranges to the inequality. Equality holds iff $\vec{z}=\vec{0}$, that is,
+$\vec{x}$ is a multiple of $\vec{y}$.
+:::
+
+:::{.theorem data-title="Induced Norm"}
+
+$\lVert\vec{v}\rVert=\sqrt{\langle\vec{v},\vec{v}\rangle}$ is a [[normed-space#Norm|norm]],
+and it satisfies the **parallelogram law**
+$$
+\lVert\vec{x}+\vec{y}\rVert^2+\lVert\vec{x}-\vec{y}\rVert^2=2\lVert\vec{x}\rVert^2+2\lVert\vec{y}\rVert^2.
+$$
+
+:::
+
+:::{.proof}
+Positivity and homogeneity are immediate. For the triangle inequality, by
+Cauchy-Schwarz
+$$
+\lVert\vec{x}+\vec{y}\rVert^2=\lVert\vec{x}\rVert^2+2\langle\vec{x},\vec{y}\rangle+\lVert\vec{y}\rVert^2\leq(\lVert\vec{x}\rVert+\lVert\vec{y}\rVert)^2.
+$$
+The parallelogram law follows by expanding both squares, as the cross terms
+$\pm2\langle\vec{x},\vec{y}\rangle$ cancel.
+:::
+
+The parallelogram law characterises the norms that come from an inner product.
+For orthogonality, Gram-Schmidt and projections see
+[[orthogonality-and-projections]].

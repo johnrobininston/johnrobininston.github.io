@@ -1,0 +1,60 @@
+---
+title: Matrix Decompositions
+author: John Robin Inston
+date: 2026-10-11
+number-sections: true
+title-block-banner: false
+---
+
+## Matrix Decompositions
+
+A **matrix decomposition** (or factorisation) writes a matrix as a product of
+simpler matrices, such as triangular, orthogonal or diagonal ones. Each is used
+to solve systems, compute inverses or determinants, or reveal structure.
+
+| Decomposition | Form | Applies to | Used for |
+|---|---|---|---|
+| LU | $A=LU$ ($L$ lower, $U$ upper triangular, up to row permutation) | square matrices | solving $A\vec{x}=\vec{b}$ by Gaussian elimination |
+| QR | $A=QR$ ($Q$ orthonormal columns, $R$ upper triangular) | any $A\in M_{n\times m}$, $n\geq m$ | least squares, via Gram-Schmidt |
+| Cholesky | $A=LL^\top$ | symmetric positive definite | solving systems, simulating correlated Gaussians, see [[cholesky-decomposition]] |
+| Spectral | $A=Q\Lambda Q^\top$ | symmetric | diagonalisation, quadratic forms |
+| SVD | $A=U\Sigma V^\top$ | any matrix | rank, low-rank approximation, pseudoinverse |
+
+## Spectral Decomposition
+
+:::{.theorem data-title="Spectral Theorem"}
+
+If $A\in M_n(\mathbb{R})$ is symmetric then there is an orthogonal matrix $Q$ and a
+diagonal matrix $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ with real
+entries such that
+$$
+A=Q\Lambda Q^\top.
+$$
+The columns of $Q$ are orthonormal eigenvectors of $A$.
+
+:::
+
+*Proof outline.* A symmetric matrix has a real eigenvalue $\lambda$ with unit
+eigenvector $\vec{q}$ (the maximum of $\vec{x}^\top A\vec{x}$ on the unit sphere).
+The subspace $\vec{q}^\perp$ is invariant under $A$ since
+$\langle A\vec{x},\vec{q}\rangle=\langle\vec{x},A\vec{q}\rangle=0$ for
+$\vec{x}\perp\vec{q}$, so we can repeat the argument on it by induction.
+
+Consequences: $A$ is positive definite if and only if all $\lambda_i>0$, and
+$\operatorname{Tr}(A)=\sum\lambda_i$, $\det(A)=\prod\lambda_i$. See also
+[[eigenvectors]].
+
+## Singular Value Decomposition
+
+Every $A\in M_{n\times m}(\mathbb{R})$ factors as $A=U\Sigma V^\top$ with $U,V$
+orthogonal and $\Sigma$ diagonal (rectangular) with nonnegative **singular
+values** $\sigma_1\geq\sigma_2\geq\cdots\geq0$, where $\sigma_i^2$ are the
+eigenvalues of $A^\top A$. The number of nonzero singular values is
+$\operatorname{rank}(A)$.
+
+## Related Topics
+
+- [[eigenvectors]]
+- [[orthogonality-and-projections]]
+- [[cholesky-decomposition]]
+- [[matrices]]

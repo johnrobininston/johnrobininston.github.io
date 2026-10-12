@@ -1,0 +1,266 @@
+---
+title: "Limit Supremum & Limit Infimum"
+author: John Robin Inston
+date: 2026-09-25
+number-sections: true
+title-block-banner: false
+---
+
+## Review: Supremum and Infimum
+
+For a full treatment see [[supremum-infimum]]. We work in the extended reals
+$\overline{\mathbb{R}}=\mathbb{R}\cup\{\pm\infty\}$, where every subset has a
+supremum and an infimum.
+
+:::{.definition data-title="Supremum & Infimum"}
+
+Let $A\subseteq\overline{\mathbb{R}}$. The **supremum** $\sup A$ is the least
+upper bound of $A$ and the **infimum** $\inf A$ is the greatest lower bound of
+$A$. Equivalently, $s=\sup A$ if and only if $a\leq s$ for all $a\in A$ and, for
+every $\epsilon>0$ (when $s<\infty$), there is $a\in A$ with $a>s-\epsilon$.
+
+:::
+
+The supremum and infimum need not be attained, unlike the max and min. For
+example $\sup(0,1)=1\notin(0,1)$. Also $\inf A\leq\sup A$ for nonempty $A$, and
+$A\subseteq B\implies\sup A\leq\sup B$ and $\inf A\geq\inf B$.
+
+## Limit Supremum & Infimum of a Sequence
+
+Let $\{x_n\}_{n\in\mathbb{N}}\subseteq\overline{\mathbb{R}}$. The sequence of
+**tail suprema** $s_n:=\sup_{m\geq n}x_m$ is decreasing, since we take the
+supremum over fewer terms as $n$ grows. Dually the **tail infima**
+$i_n:=\inf_{m\geq n}x_m$ are increasing. Monotone sequences in
+$\overline{\mathbb{R}}$ always have a limit, which motivates the following.
+
+:::{.definition data-title="Limsup & Liminf of a Sequence"}
+
+$$
+\limsup_{n\to\infty}x_n:=\lim_{n\to\infty}\sup_{m\geq n}x_m=\inf_{n\geq1}\sup_{m\geq n}x_m,
+\qquad
+\liminf_{n\to\infty}x_n:=\lim_{n\to\infty}\inf_{m\geq n}x_m=\sup_{n\geq1}\inf_{m\geq n}x_m.
+$$
+
+:::
+
+Both always exist in $\overline{\mathbb{R}}$ (even when $\lim x_n$ does not).
+For example, $x_n=(-1)^n$ has $\limsup x_n=1$ and $\liminf x_n=-1$.
+
+## Limit Supremum & Infimum of a Sequence of Sets
+
+Order subsets of $X$ by inclusion. A least upper bound of $\{A_n\}$ is the
+smallest set containing every $A_n$, and a greatest lower bound is the largest
+set contained in every $A_n$. Hence
+$$
+\sup_{n\geq1}A_n=\bigcup_{n=1}^\infty A_n,\qquad\inf_{n\geq1}A_n=\bigcap_{n=1}^\infty A_n.
+$$
+Mimicking the definition for sequences, the tail supremum
+$B_n=\bigcup_{m\geq n}A_m$ is decreasing and the tail infimum
+$C_n=\bigcap_{m\geq n}A_m$ is increasing. A decreasing sequence of sets
+converges to its intersection and an increasing sequence to its union.
+
+:::{.definition data-title="Limsup & Liminf of a Sequence of Sets"}
+
+$$
+\limsup_{n\to\infty}A_n:=\bigcap_{n=1}^\infty\bigcup_{m=n}^\infty A_m,
+\qquad
+\liminf_{n\to\infty}A_n:=\bigcup_{n=1}^\infty\bigcap_{m=n}^\infty A_m.
+$$
+
+:::
+
+The two definitions are the same under the dictionary
+$\sup\leftrightarrow\cup$, $\inf\leftrightarrow\cap$, $\leq\leftrightarrow\subseteq$.
+This is made precise by indicator functions.
+
+:::{.proposition data-title="Indicator Functions"}
+
+$\mathbf{1}_{\limsup A_n}=\limsup\mathbf{1}_{A_n}$ and
+$\mathbf{1}_{\liminf A_n}=\liminf\mathbf{1}_{A_n}$ pointwise.
+
+:::
+
+The proof follows from the characterisations in the next section: $\mathbf{1}_{A_n}(x)\in\{0,1\}$,
+so its limsup is $1$ exactly when it equals $1$ infinitely often.
+
+## Equivalent Ways to Think About Limsup & Liminf
+
+### Sets: "infinitely often" and "eventually"
+
+:::{.theorem data-title="Limsup & Liminf of Sets"}
+
+$$
+\begin{align}
+\limsup_{n\to\infty}A_n&=\{x: x\in A_n\text{ for infinitely many }n\}=\{A_n\text{ i.o.}\},\\
+\liminf_{n\to\infty}A_n&=\{x: x\in A_n\text{ for all but finitely many }n\}=\{A_n\text{ eventually}\}.
+\end{align}
+$$
+
+:::
+
+:::{.proof}
+$x\in\limsup A_n$ iff for every $n$ there is $m\geq n$ with $x\in A_m$, iff
+$\{m: x\in A_m\}$ is unbounded, iff it is infinite. Also $x\in\liminf A_n$ iff
+there is $n$ with $x\in A_m$ for all $m\geq n$, iff $\{m: x\notin A_m\}$ is
+bounded, iff it is finite.
+:::
+
+So $\limsup$ is the set of points that keep returning to the sets, whereas
+$\liminf$ is the set of points that eventually stay in the sets forever. In
+probability, $\limsup A_n$ is the event "$A_n$ occurs infinitely often" and
+$\liminf A_n$ is "$A_n$ occurs eventually", the starting point for the
+[[borel-cantelli-lemma]].
+
+### Sequences: "frequently" and "eventually"
+
+:::{.theorem data-title="Characterisation of Limsup & Liminf"}
+
+Let $L\in\overline{\mathbb{R}}$. Then $L=\limsup x_n$ if and only if
+
+1. for every $a>L$, $x_n<a$ for all but finitely many $n$ (eventually), and
+2. for every $a<L$, $x_n>a$ for infinitely many $n$ (frequently).
+
+Dually, $\ell=\liminf x_n$ if and only if for every $a<\ell$, $x_n>a$
+eventually, and for every $a>\ell$, $x_n<a$ infinitely often.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) If $a>L=\inf_ns_n$ there is $N$ with $s_N<a$, so $x_m<a$ for all
+$m\geq N$. If $a<L$ then $s_n\geq L>a$ for every $n$, so for every $n$ there is
+$m\geq n$ with $x_m>a$, hence $x_m>a$ for infinitely many $m$.
+
+($\Leftarrow$) Assume 1 and 2. If $a>L$, 1 gives $s_n\leq a$ eventually, so
+$\limsup x_n\leq a$, hence $\limsup x_n\leq L$. If $a<L$, 2 gives $s_n\geq a$ for
+all $n$, so $\limsup x_n\geq a$, hence $\limsup x_n\geq L$.
+
+The liminf statement follows by applying this to $-x_n$ using the duality below.
+:::
+
+### Sequences: subsequential limits
+
+:::{.theorem data-title="Limsup as the Largest Subsequential Limit"}
+
+$\limsup x_n$ is the largest and $\liminf x_n$ the smallest limit (in
+$\overline{\mathbb{R}}$) of a subsequence of $\{x_n\}$.
+
+:::
+
+:::{.proof}
+If $x_{n_k}\to\ell$ then $x_{n_k}\leq s_{n_k}$ and $s_{n_k}\to\limsup x_n$, so
+$\ell\leq\limsup x_n$. Conversely, for $L=\limsup x_n$ finite, characterisation
+2 with $a=L-1/k$, together with characterisation 1 with $a=L+1/k$, lets us
+choose $n_1<n_2<\cdots$ with $L-1/k<x_{n_k}<L+1/k$, so $x_{n_k}\to L$. The cases
+$L=\pm\infty$ are similar. The liminf is analogous.
+:::
+
+### Summary
+
+| | $\limsup$ | $\liminf$ |
+|---|---|---|
+| Sequences | $\inf_n\sup_{m\geq n}x_m$ | $\sup_n\inf_{m\geq n}x_m$ |
+| Sets | $\bigcap_n\bigcup_{m\geq n}A_m$ | $\bigcup_n\bigcap_{m\geq n}A_m$ |
+| Meaning | frequently / infinitely often | eventually / all but finitely many |
+| Subsequences | largest limit point | smallest limit point |
+
+## Basic Inequalities and Identities
+
+### For sequences
+
+:::{.theorem data-title="Liminf $\leq$ Limsup"}
+
+$\liminf x_n\leq\limsup x_n$.
+
+:::
+
+:::{.proof}
+For every $n$, $i_n=\inf_{m\geq n}x_m\leq x_n\leq\sup_{m\geq n}x_m=s_n$. Hence
+$i_n\leq s_n$, and taking $n\to\infty$ gives the claim.
+:::
+
+:::{.theorem data-title="Convergence"}
+
+$\{x_n\}$ converges in $\overline{\mathbb{R}}$ if and only if
+$\liminf x_n=\limsup x_n$, in which case
+$\lim x_n=\liminf x_n=\limsup x_n$.
+
+:::
+
+:::{.proof}
+($\Rightarrow$) Let $x_n\to x$. For finite $x$ and $\epsilon>0$ we have
+$x-\epsilon<x_n<x+\epsilon$ eventually, so $x-\epsilon\leq i_n\leq s_n\leq x+\epsilon$
+eventually. Hence $x-\epsilon\leq\liminf x_n\leq\limsup x_n\leq x+\epsilon$, and
+$\epsilon\to0$ gives equality. If $x=+\infty$, then for every $M$ we have $x_n>M$
+eventually, so $\liminf x_n\geq M$ for all $M$, hence
+$\liminf x_n=\limsup x_n=+\infty$ (similarly for $-\infty$).
+
+($\Leftarrow$) Let $L=\liminf x_n=\limsup x_n$ and take $a<L<b$ in
+$\overline{\mathbb{R}}$. By the characterisation theorem, $x_n<b$ eventually
+(applied to the limsup) and $x_n>a$ eventually (applied to the liminf). So
+$x_n\in(a,b)$ eventually, which is the definition of $x_n\to L$ in the topology
+of $\overline{\mathbb{R}}$.
+:::
+
+:::{.theorem data-title="Duality, Monotonicity, Sums"}
+
+For sequences in $\overline{\mathbb{R}}$:
+
+1. $\limsup(-x_n)=-\liminf x_n$.
+2. If $x_n\leq y_n$ for all $n$, then $\limsup x_n\leq\limsup y_n$ and
+   $\liminf x_n\leq\liminf y_n$.
+3. $\limsup(x_n+y_n)\leq\limsup x_n+\limsup y_n$ and
+   $\liminf(x_n+y_n)\geq\liminf x_n+\liminf y_n$, whenever the right-hand sides
+   are defined (no $\infty-\infty$).
+
+:::
+
+:::{.proof}
+(1) $\sup_{m\geq n}(-x_m)=-\inf_{m\geq n}x_m$; take the limit. (2) Each tail
+supremum (resp. infimum) is monotone in the sequence, so pass to the limit. (3)
+For $m\geq n$, $x_m+y_m\leq\sup_{k\geq n}x_k+\sup_{k\geq n}y_k$, so
+$\sup_{m\geq n}(x_m+y_m)\leq s_n^x+s_n^y$; let $n\to\infty$. The liminf statement
+follows from (1) applied to the first.
+:::
+
+> *Note:* The inequality in (3) can be strict, e.g. $x_n=(-1)^n$,
+$y_n=-(-1)^n$ gives $x_n+y_n=0$ but $\limsup x_n+\limsup y_n=2$. If $x_n$
+converges then equality holds.
+
+### For sets
+
+:::{.theorem data-title="Properties for Sets"}
+
+1. $\liminf A_n\subseteq\limsup A_n$.
+2. **Duality:** $(\limsup A_n)^c=\liminf A_n^c$ and
+   $(\liminf A_n)^c=\limsup A_n^c$.
+3. $\limsup(A_n\cup B_n)=\limsup A_n\cup\limsup B_n$ and
+   $\liminf(A_n\cap B_n)=\liminf A_n\cap\liminf B_n$.
+4. If $A_n\uparrow A$ or $A_n\downarrow A$ then $\lim A_n$ exists and equals
+   $A$, i.e. $\liminf A_n=\limsup A_n=A$.
+
+:::
+
+:::{.proof}
+(1) A point in all but finitely many $A_n$ is in infinitely many $A_n$. (2) By
+[[set-theory-fundamentals#Algebra of Sets|De Morgan's laws]], $\left(\bigcap_n\bigcup_{m\geq n}A_m\right)^c=\bigcup_n\bigcap_{m\geq n}A_m^c$,
+and similarly for the second. (3) $x\in A_n\cup B_n$ for infinitely many $n$ iff
+$x\in A_n$ infinitely often or $x\in B_n$ infinitely often, as an infinite subset
+of $\mathbb{N}$ covered by two sets has an infinite part in one of them. Likewise
+$x$ is in both $A_n$ and $B_n$ for all but finitely many $n$ iff the exceptional
+indices for $A_n$ and $B_n$ are each finite, since a union of two finite sets is
+finite. (4) If $A_n\uparrow A$ then $\bigcap_{m\geq n}A_m=A_n$, so
+$\liminf A_n=\bigcup_nA_n=A$, and $\bigcup_{m\geq n}A_m=A$ for all $n$, so
+$\limsup A_n=A$. The decreasing case is dual.
+:::
+
+## Limsup & Liminf and Measure
+
+For the relationship between $\mu(\limsup A_n)$, $\mu(\liminf A_n)$ and the
+limsup/liminf of $\mu(A_n)$, and the Borel-Cantelli lemmas, see
+[[limsup-liminf-and-measure]].
+
+## Related Topics
+
+- [[supremum-infimum]]
+- [[set-theory-fundamentals]]
+- [[limsup-liminf-and-measure]]

@@ -3,11 +3,55 @@ title: Normed Space
 author: John Robin Inston
 date: 2026-09-25
 number-sections: true
-title-block-banner: true
+title-block-banner: false
 ---
 
-**Definition (Normed Space)**
-The pair $(V, ||\cdot||)$ consisting of a
-[[vector-space-linear-space|vector space]] and a [[norm|norm]] $||\cdot||$ is
-called a **normed space**.
+## Norm
 
+:::{.definition data-title="Norm"}
+
+For a [[vector-spaces|vector space]] $V$ over $\mathbb{R}$, a
+**norm** is a function $\lVert\cdot\rVert:V\to\mathbb{R}$ satisfying, for all
+$v,w\in V$ and $\alpha\in\mathbb{R}$:
+
+1. $\lVert v\rVert\geq0$;
+2. $\lVert v\rVert=0$ if and only if $v=0$;
+3. $\lVert\alpha v\rVert=\lvert\alpha\rvert\lVert v\rVert$ (homogeneity);
+4. $\lVert v+w\rVert\leq\lVert v\rVert+\lVert w\rVert$ (triangle inequality).
+
+:::
+
+## Normed Space
+
+:::{.definition data-title="Normed Space"}
+
+The pair $(V,\lVert\cdot\rVert)$ of a vector space and a norm is a **normed
+space**. A **Banach space** is a normed space that is complete, that is, every
+Cauchy sequence converges (see [[metric-spaces]]).
+
+:::
+
+:::{.theorem data-title="Norms Induce Metrics"}
+
+If $\lVert\cdot\rVert$ is a norm on $V$ then $d(v,w):=\lVert v-w\rVert$ is a
+metric on $V$.
+
+:::
+
+:::{.proof}
+Positivity and $d(v,w)=0\iff v=w$ follow from norm axioms 1 and 2. Symmetry
+follows from axiom 3 with $\alpha=-1$. The triangle inequality for $d$ follows
+from axiom 4 applied to $v-u=(v-w)+(w-u)$.
+:::
+
+## Examples
+
+- $\mathbb{R}^n$ with the $p$-norm $\lVert x\rVert_p=\left(\sum_i\lvert x_i\rvert^p\right)^{1/p}$
+  for $p\geq1$, see [[lp-norm]].
+- $C([0,1])$ with the sup norm $\lVert f\rVert_\infty=\sup_{x}\lvert f(x)\rvert$,
+  which is a Banach space, and with the integral norm
+  $\lVert f\rVert_1=\int_0^1\lvert f\rvert$, which is not complete.
+
+An [[inner-product-space|inner product]] always induces a norm
+$\lVert v\rVert=\sqrt{\langle v,v\rangle}$; a complete inner product space is a
+[[hilbert-spaces|Hilbert space]].

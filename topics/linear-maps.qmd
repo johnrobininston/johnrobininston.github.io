@@ -1,0 +1,138 @@
+---
+title: Linear Maps
+author: John Robin Inston
+date: 2026-10-11
+number-sections: true
+title-block-banner: false
+---
+
+## Linear Maps
+
+A **linear map** (or linear operator, linear transformation) is a function
+between [[vector-spaces|vector spaces]] that respects their structure. In finite
+dimensions every linear map is represented by a [[matrices|matrix]], and the
+choice of basis changes the matrix but not the map.
+
+:::{.definition data-title="Linear Map"}
+
+For vector spaces $\mathcal{V},\mathcal{W}$ over the same field $F$, a map
+$P:\mathcal{V}\to\mathcal{W}$ is **linear** if for all $\vec{v}_1,\vec{v}_2\in\mathcal{V}$
+and $\alpha_1,\alpha_2\in F$
+$$
+P(\alpha_1\vec{v}_1+\alpha_2\vec{v}_2)=\alpha_1P(\vec{v}_1)+\alpha_2P(\vec{v}_2).
+$$
+
+:::
+
+A linear map preserves addition and scalar multiplication: it does not matter
+whether we apply $P$ before or after those operations. In particular
+$P(\vec{0})=\vec{0}$. Linear maps are the morphisms between vector spaces.
+
+## Matrix of a Linear Map
+
+:::{.definition data-title="Matrix of a Linear Map"}
+
+Let $\mathcal{B}=(\vec{b}_1,\dots,\vec{b}_m)$ be a basis of $\mathcal{V}$ and
+$\mathcal{C}=(\vec{c}_1,\dots,\vec{c}_n)$ a basis of $\mathcal{W}$. The **matrix**
+of $P:\mathcal{V}\to\mathcal{W}$ is the $n\times m$ matrix
+$$
+[P]_{\mathcal{C},\mathcal{B}}=\begin{bmatrix}[P(\vec{b}_1)]_{\mathcal{C}}&\cdots&[P(\vec{b}_m)]_{\mathcal{C}}\end{bmatrix},
+$$
+whose $j$-th column is the coordinate vector of $P(\vec{b}_j)$ in the basis
+$\mathcal{C}$. When $\mathcal{W}=\mathcal{V}$ and $\mathcal{C}=\mathcal{B}$ we
+write $[P]_{\mathcal{B}}$.
+
+:::
+
+By linearity $[P\vec{v}]_{\mathcal{C}}=[P]_{\mathcal{C},\mathcal{B}}[\vec{v}]_{\mathcal{B}}$,
+so once bases are fixed, $n\times m$ matrices are in bijective correspondence with
+linear maps $\mathcal{V}\to\mathcal{W}$.
+
+## Change of Basis
+
+Let $\mathcal{B},\mathcal{B}'$ be two bases of $\mathcal{V}$ and let $S$ be the
+invertible matrix whose columns are the coordinates of the vectors of
+$\mathcal{B}'$ in the basis $\mathcal{B}$, so that
+$[\vec{v}]_{\mathcal{B}}=S[\vec{v}]_{\mathcal{B}'}$.
+
+:::{.theorem data-title="Change of Basis"}
+
+For a linear operator $P:\mathcal{V}\to\mathcal{V}$,
+$$
+[P]_{\mathcal{B}'}=S^{-1}[P]_{\mathcal{B}}S.
+$$
+
+:::
+
+:::{.proof}
+For any $\vec{v}$, $[P\vec{v}]_{\mathcal{B}'}=S^{-1}[P\vec{v}]_{\mathcal{B}}=S^{-1}[P]_{\mathcal{B}}[\vec{v}]_{\mathcal{B}}=S^{-1}[P]_{\mathcal{B}}S[\vec{v}]_{\mathcal{B}'}$.
+:::
+
+Matrices related by $A'=S^{-1}AS$ are called **similar**; they represent the same
+operator in different bases. Choosing a basis in which the matrix is diagonal is
+the goal of [[eigenvectors|diagonalisation]].
+
+## Image, Kernel and Rank
+
+:::{.definition data-title="Image, Kernel, Rank"}
+
+For a linear map $P:\mathcal{V}\to\mathcal{W}$, the **image** and **kernel** are
+$$
+\operatorname{im}(P)=\{P(\vec{x}):\vec{x}\in\mathcal{V}\}\subseteq\mathcal{W},\qquad
+\ker(P)=\{\vec{x}\in\mathcal{V}:P(\vec{x})=\vec{0}\}\subseteq\mathcal{V}.
+$$
+The **rank** is $\operatorname{rank}(P)=\dim\operatorname{im}(P)$ and the
+**nullity** is $\dim\ker(P)$. The image and kernel of a matrix are those of the map
+$\vec{x}\mapsto A\vec{x}$.
+
+:::
+
+The image and kernel are subspaces (if $P\vec{x}=P\vec{y}=\vec{0}$ then
+$P(\alpha\vec{x}+\vec{y})=\vec{0}$, and similarly for images), and $P$ is injective
+if and only if $\ker(P)=\{\vec{0}\}$, since $P\vec{x}=P\vec{y}\iff P(\vec{x}-\vec{y})=\vec{0}$.
+
+:::{.theorem data-title="Row and Column Operations"}
+
+For a matrix $A\in M_{n\times m}(F)$, elementary row operations do not change the
+kernel, and elementary column operations do not change the image.
+
+:::
+
+:::{.proof}
+A row operation replaces $A$ by $EA$ with $E$ invertible, and $EA\vec{x}=\vec{0}$
+if and only if $A\vec{x}=\vec{0}$. A column operation replaces $A$ by $AE$, and
+$\operatorname{im}(AE)=\operatorname{im}(A)$ since $E$ is invertible.
+:::
+
+## Rank-Nullity
+
+:::{.theorem data-title="Dimension (Rank-Nullity) Theorem"}
+
+For a linear map $P:\mathcal{V}\to\mathcal{W}$ with $\mathcal{V}$ finite-dimensional,
+$$
+\dim\operatorname{im}(P)+\dim\ker(P)=\dim\mathcal{V}.
+$$
+
+:::
+
+:::{.proof}
+Let $\vec{u}_1,\dots,\vec{u}_k$ be a basis of $\ker(P)$ and extend it to a basis
+$\vec{u}_1,\dots,\vec{u}_k,\vec{w}_1,\dots,\vec{w}_r$ of $\mathcal{V}$, so
+$\dim\mathcal{V}=k+r$. We claim $P\vec{w}_1,\dots,P\vec{w}_r$ is a basis of
+$\operatorname{im}(P)$.
+
+*Spanning:* for $\vec{v}=\sum a_i\vec{u}_i+\sum b_j\vec{w}_j$ we have
+$P\vec{v}=\sum b_jP\vec{w}_j$, since $P\vec{u}_i=\vec{0}$.
+
+*Independence:* if $\sum b_jP\vec{w}_j=\vec{0}$ then $\sum b_j\vec{w}_j\in\ker(P)$, so
+$\sum b_j\vec{w}_j=\sum c_i\vec{u}_i$ for some $c_i$. Independence of the basis of
+$\mathcal{V}$ forces all $b_j=0$.
+
+Hence $\dim\operatorname{im}(P)=r$ and $r+k=\dim\mathcal{V}$.
+:::
+
+## Related Topics
+
+- [[vector-spaces]]
+- [[matrices]]
+- [[eigenvectors]]

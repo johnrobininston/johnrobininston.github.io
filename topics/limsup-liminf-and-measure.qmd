@@ -1,0 +1,113 @@
+---
+author: "John Robin Inston"
+date: 2026-10-11
+number-sections: true
+title: "Limsup, Liminf and Measure"
+title-block-banner: false
+---
+
+## Limsup, Liminf and Measure
+
+For events $A_n$ in a probability space, $\mathbb{P}(\limsup A_n)$ is the
+probability that $A_n$ occurs infinitely often. This note relates the
+limsup/liminf of the measures $\mu(A_n)$ to the measure of the limsup/liminf of
+the sets $A_n$. We recall the definitions from [[limsup-liminf]],
+$$
+\limsup_{n\to\infty}A_n=\bigcap_{n=1}^\infty\bigcup_{m=n}^\infty A_m,
+\qquad
+\liminf_{n\to\infty}A_n=\bigcup_{n=1}^\infty\bigcap_{m=n}^\infty A_m,
+$$
+and use continuity from above and below of measures, see [[measure-spaces]].
+
+## Inequalities
+
+:::{.theorem data-title="Measure of Limsup & Liminf"}
+
+Let $(X,\mathcal{M},\mu)$ be a measure space and $A_n\in\mathcal{M}$.
+
+1. $\mu(\liminf A_n)\leq\liminf\mu(A_n)$.
+2. If $\mu\left(\bigcup_{m\geq N}A_m\right)<\infty$ for some $N$ (e.g. $\mu$ is
+   finite or a probability measure), then
+   $\limsup\mu(A_n)\leq\mu(\limsup A_n)$.
+
+In particular for a probability measure
+$$
+\mathbb{P}\left(\liminf_{n\to\infty}A_n\right)\leq\liminf_{n\to\infty}\mathbb{P}(A_n)\leq\limsup_{n\to\infty}\mathbb{P}(A_n)\leq\mathbb{P}\left(\limsup_{n\to\infty}A_n\right).
+$$
+
+:::
+
+:::{.proof}
+(1) Let $C_n=\bigcap_{m\geq n}A_m$, so $C_n\uparrow\liminf A_n$. By continuity
+from below and since $C_n\subseteq A_n$,
+$$
+\mu(\liminf A_n)=\lim_{n\to\infty}\mu(C_n)\leq\liminf_{n\to\infty}\mu(A_n).
+$$
+
+(2) Let $B_n=\bigcup_{m\geq n}A_m$, so $B_n\downarrow\limsup A_n$ and
+$\mu(B_N)<\infty$. For $m\geq n$ we have $A_m\subseteq B_n$, so
+$\mu(B_n)\geq\sup_{m\geq n}\mu(A_m)$. By continuity from above,
+$$
+\mu(\limsup A_n)=\lim_{n\to\infty}\mu(B_n)\geq\lim_{n\to\infty}\sup_{m\geq n}\mu(A_m)=\limsup_{n\to\infty}\mu(A_n).
+$$
+
+The middle inequality in the probabilistic statement is
+$\liminf\leq\limsup$ for the sequence $\mathbb{P}(A_n)$.
+:::
+
+Part (1) is the set version of [[fatou-lemma]] and part (2) is a reverse
+version.
+
+:::{.theorem data-title="Lower Bound for Infinitely Often"}
+
+If $\mu$ is finite and $\mu(A_n)\geq c>0$ for all $n$, then
+$\mu(\limsup A_n)\geq c$.
+
+:::
+
+:::{.proof}
+By part (2), $\mu(\limsup A_n)\geq\limsup\mu(A_n)\geq c$.
+:::
+
+## Borel-Cantelli Lemmas
+
+:::{.theorem data-title="First Borel-Cantelli Lemma"}
+
+If $\sum_{n}\mu(A_n)<\infty$ then $\mu(\limsup A_n)=0$.
+
+:::
+
+:::{.proof}
+For every $n$, $\limsup A_n\subseteq\bigcup_{m\geq n}A_m$, so by monotonicity and
+countable subadditivity
+$$
+\mu(\limsup A_n)\leq\sum_{m\geq n}\mu(A_m)\to0\quad(n\to\infty),
+$$
+as the tails of a convergent series tend to zero.
+:::
+
+:::{.theorem data-title="Second Borel-Cantelli Lemma"}
+
+If $A_n$ are independent events with $\sum_n\mathbb{P}(A_n)=\infty$, then
+$\mathbb{P}(\limsup A_n)=1$.
+
+:::
+
+:::{.proof}
+By [[set-theory-fundamentals#Algebra of Sets|De Morgan's laws]], $(\limsup A_n)^c=\bigcup_n\bigcap_{m\geq n}A_m^c$. Since
+the $A_m^c$ are independent and $1-p\leq e^{-p}$, for any $N\geq n$
+$$
+\mathbb{P}\left(\bigcap_{m=n}^NA_m^c\right)=\prod_{m=n}^N(1-\mathbb{P}(A_m))\leq\exp\left(-\sum_{m=n}^N\mathbb{P}(A_m)\right)\to0\quad(N\to\infty).
+$$
+By continuity from above, $\mathbb{P}\left(\bigcap_{m\geq n}A_m^c\right)=0$ for
+every $n$, so by countable subadditivity $\mathbb{P}((\limsup A_n)^c)=0$.
+:::
+
+See also [[borel-cantelli-lemma]].
+
+## Related Topics
+
+- [[limsup-liminf]]
+- [[measure-spaces]]
+- [[fatou-lemma]]
+- [[borel-cantelli-lemma]]

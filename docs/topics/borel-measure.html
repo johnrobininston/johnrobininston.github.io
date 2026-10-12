@@ -2,22 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
 
-<title>Borel Measure – John Robin Inston</title>
+<title>Borel σ-Algebra and Measure – John Robin Inston</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -42,14 +45,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-fb4a9282b86645371e32e145ab504756.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-376ab18753412261721dbd96cf4cde6f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -81,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -278,7 +281,7 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -347,35 +350,7 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Borel Measure</h1>
-                      </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>John Robin Inston </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">September 25, 2026</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -383,22 +358,107 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#borel-measure" id="toc-borel-measure" class="nav-link active" data-scroll-target="#borel-measure"><span class="header-section-number">1</span> Borel Measure</a></li>
+  <li><a href="#borel-σ-algebra" id="toc-borel-σ-algebra" class="nav-link active" data-scroll-target="#borel-σ-algebra"><span class="header-section-number">1</span> Borel σ-Algebra</a></li>
+  <li><a href="#generating-sets-of-the-borel-σ-algebra" id="toc-generating-sets-of-the-borel-σ-algebra" class="nav-link" data-scroll-target="#generating-sets-of-the-borel-σ-algebra"><span class="header-section-number">2</span> Generating Sets of the Borel σ-Algebra</a></li>
+  <li><a href="#borel-measure" id="toc-borel-measure" class="nav-link" data-scroll-target="#borel-measure"><span class="header-section-number">3</span> Borel Measure</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Borel σ-Algebra and Measure</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Robin Inston </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 25, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
-<section id="borel-measure" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="borel-measure"><span class="header-section-number">1</span> Borel Measure</h2>
-<p>(<span class="math inline">\(\star\)</span>) <strong>Definition (Borel Measure):</strong> A measure <span class="math inline">\(\mu:\mathcal{B}_{\mathbb{R}}\to[0,+\infty]\)</span> mapping from the <em>Borel set</em> on <span class="math inline">\(\mathbb{R}\)</span> <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> are named Borel measures on <span class="math inline">\(\mathbb{R}\)</span>.</p>
-<p>Our aim for this section is to construct the family of <em>Borel measures</em>. Our procedure will be to construct a measure <span class="math inline">\(\mu\)</span> starting from an increasing, right-continuous function <span class="math inline">\(F\)</span> using the building blocks of left-open, right-closed intervals in <span class="math inline">\(\mathbb{R}\)</span> i.e.&nbsp;sets of the form <span class="math inline">\((a,b]\)</span> or <span class="math inline">\((a,\infty)\)</span> or <span class="math inline">\(\emptyset\)</span> where <span class="math inline">\(-\infty \leq a&lt;b&lt;\infty\)</span>, referred to as <strong><span class="math inline">\(h\)</span>-intervals</strong> (half-open intervals).</p>
+
+<section id="borel-σ-algebra" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="borel-σ-algebra"><span class="header-section-number">1</span> Borel σ-Algebra</h2>
+<p>To construct a measure for the real numbers <span class="math inline">\(\mathbb{R}\)</span> we need to first construct a suitable <span class="math inline">\(\sigma\)</span>-algebra, known as the <strong>Borel σ-algebra</strong> (of the real numbers). First, we recall the following definition of a <a href="../topics/topology.html">Topology</a>, a collection of open sets.</p>
+<div class="definition" data-title="Topology">
+<p>A <strong>topology</strong> <span class="math inline">\(\mathcal{T}\)</span> on <span class="math inline">\(X\)</span> is a collection of subsets of <span class="math inline">\(X\)</span> that is closed under arbitrary unions and finite intersections. The elements of <span class="math inline">\(\mathcal{T}\)</span> are <strong>open sets</strong>. The pair <span class="math inline">\((X,\mathcal{T})\)</span> is a <strong>topological space</strong>.</p>
+</div>
+<div class="definition" data-title="Borel σ-Algebra">
+<p>Let <span class="math inline">\((X,\mathcal{T})\)</span> be a topological space. The <strong>Borel σ-algebra</strong> of <span class="math inline">\(X\)</span>, <span class="math inline">\(\mathcal{B}_{X}\)</span> is the <span class="math inline">\(\sigma\)</span>-algebra generated by <span class="math inline">\(\mathcal{T}\)</span>. Its members are known as <strong>Borel sets</strong>.</p>
+</div>
+</section>
+<section id="generating-sets-of-the-borel-σ-algebra" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="generating-sets-of-the-borel-σ-algebra"><span class="header-section-number">2</span> Generating Sets of the Borel σ-Algebra</h2>
+<p>To gain a deeper understanding of what the Borel sets look like we briefly consider the Borel hierarchy. In mathematical logic, the Borel hierarchy is a stratification of the Borel algebra. A countable intersection of open sets is called a <span class="math inline">\(G_{\delta}\)</span> set; a countable union of closed sets is called an <span class="math inline">\(F_{\sigma}\)</span> set; a countable union of <span class="math inline">\(G_{\delta}\)</span> sets is called a <span class="math inline">\(G_{\delta\sigma}\)</span> set; a countable intersection of <span class="math inline">\(F_{\sigma}\)</span> sets is called an <span class="math inline">\(F_{\sigma\delta}\)</span> set; and so forth.</p>
+<blockquote class="blockquote">
+<p><em>Note:</em> In mathematical etymology the <span class="math inline">\(\delta\)</span> and <span class="math inline">\(\sigma\)</span> stand for the German Durchschnitt and Summe, that is, intersection and union.</p>
+</blockquote>
+<div class="theorem" data-title="Borel σ-Algebra Generating Sets">
+<p>The Borel <span class="math inline">\(\sigma\)</span>-algebra of <span class="math inline">\(\mathbb{R}\)</span>, <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> is generated by:</p>
+<ol type="1">
+<li>Open intervals <span class="math inline">\(\mathcal{E}_{1}:=\{ (a,b):a&lt;b \}\)</span>;</li>
+<li>Closed intervals <span class="math inline">\(\mathcal{E}_{2}:=\{ [a,b]:a&lt;b \}\)</span>;</li>
+<li>Half-open intervals <span class="math inline">\(\mathcal{E}_{3}:=\{ (a,b]:a&lt;b \}\)</span>;</li>
+<li>Open rays <span class="math inline">\(\mathcal{E}_{4}:=\{ (a, \infty):a\in \mathbb{R} \}\)</span>;</li>
+<li>Closed rays <span class="math inline">\(\mathcal{E}_{5}:=\{ [a,\infty):a\in \mathbb{R} \}\)</span>.</li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>The Borel <span class="math inline">\(\sigma\)</span>-algebra <span class="math inline">\(\mathcal{B}_{\mathbb{R}}:=\sigma(\mathcal{E}_{1})\)</span> is generated from the set of open intervals <span class="math display">\[
+\mathcal{E}_{1}:=\{ (a,b):a&lt;b \}.
+\]</span> <strong>(1)</strong> Considering arbitrary <span class="math inline">\((a,b]\in\mathcal{E}_{3}\)</span> we note that since open sets are in <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> and <span class="math inline">\(\sigma\)</span>-algebra are closed under countable intersection we have that <span class="math display">\[
+(a,b]=\bigcap_{n=1}^\infty \left( a,b+\frac{1}{n} \right)\in\mathcal{B}_{\mathbb{R}}\implies \mathcal{E}_{3}\subseteq\mathcal{B}_{\mathbb{R}\implies}\sigma(\mathcal{E}_{3})\subseteq \mathcal{B}_{\mathbb{R}}.
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in\mathcal{E}_{1}\)</span><br>
+<span class="math display">\[
+(a,b)=\bigcup_{n=1}^\infty \left(a,b-\frac{1}{n}\right]\in \sigma(\mathcal{E}_{3})\implies\mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{3})\implies\mathcal{B}_{\mathbb{R}}\subseteq \mathcal{E}_{3}.
+\]</span> <strong>(2)</strong> Considering arbitrary <span class="math inline">\((a,+\infty)\in \mathcal{E}_{5}\)</span> we note that <span class="math display">\[
+(a,+\infty)=\bigcup_{n=1}^\infty (a,n)\in \mathcal{B}_{\mathbb{R}}\implies\mathcal{E}_{5}\subseteq\mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{5})\subseteq\mathcal{B}_{\mathbb{R}}.
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in\mathcal{E}_{1}\)</span> since <span class="math inline">\(\sigma\)</span>-algebra are closed under countable intersections <span class="math display">\[
+\begin{align}
+(a,b)&amp;=(a,+\infty)\cap[b,+\infty)=(a,+\infty)\cap \bigcap_{n=1}^\infty \left( b-\frac{1}{n},+\infty \right)\in\sigma(\mathcal{E}_{5}) \\
+\implies &amp; \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{5})\implies \mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{5}).
+\end{align}
+\]</span> <strong>(3)</strong> Considering arbitrary <span class="math inline">\([a,+\infty)\in\mathcal{E}_{7}\)</span> we note that <span class="math display">\[
+\begin{align}
+[a,+\infty)&amp;=\bigcap_{n=1}^\infty[a,n)=\bigcap_{n=1}^\infty \bigcap_{m=1}^\infty\left( a-\frac{1}{m}, n \right)\in \mathcal{B}_{\mathbb{R}} \\
+\implies &amp; \mathcal{E}_{7}\subseteq \mathcal{B}_{\mathbb{R}}\implies \sigma(\mathcal{E}_{7})\subseteq\mathcal{B}_{\mathbb{R}}.
+\end{align}
+\]</span> Similarly, considering arbitrary <span class="math inline">\((a,b)\in \mathcal{E}_{1}\)</span>, since <span class="math inline">\(\sigma\)</span>-algebra are closed under countable unions and complements we have that <span class="math display">\[
+\begin{align}
+(a,b)&amp;=(-\infty,b)\cap(-\infty,a)=([b,+\infty)^c\cup[a,+\infty)^c)^c\subseteq \sigma(\mathcal{E}_{7}) \\
+\implies &amp; \mathcal{E}_{1}\subseteq \sigma(\mathcal{E}_{7})\implies\mathcal{B}_{\mathbb{R}}\subseteq \sigma(\mathcal{E}_{7}).
+\end{align}
+\]</span></p>
+</div>
+</section>
+<section id="borel-measure" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="borel-measure"><span class="header-section-number">3</span> Borel Measure</h2>
+<div class="definition" data-title="Borel Measure">
+<p>A measure <span class="math inline">\(\mu:\mathcal{B}_{\mathbb{R}}\to[0,+\infty]\)</span> are named Borel measures on <span class="math inline">\(\mathbb{R}\)</span>.</p>
+</div>
+<p>We wish to construct the family of <em>Borel measures</em>. Our procedure will be to construct a measure <span class="math inline">\(\mu\)</span> starting from an increasing, [[right-and-left-continuity|right-continuous]] function <span class="math inline">\(F\)</span> using the building blocks of left-open,right-closed intervals in <span class="math inline">\(\mathbb{R}\)</span> i.e.&nbsp;sets of the form <span class="math inline">\((a,b]\)</span> or <span class="math inline">\((a,\infty)\)</span> or <span class="math inline">\(\emptyset\)</span> where <span class="math inline">\(-\infty \leq a&lt;b&lt;\infty\)</span>, referred to as <strong><span class="math inline">\(h\)</span>-intervals</strong> (half-open intervals).</p>
 <p>Some preliminary observations, clearly the intersection of two <span class="math inline">\(h\)</span>-intervals is a <span class="math inline">\(h\)</span>-interval and the complement of a <span class="math inline">\(h\)</span>-interval is either a <span class="math inline">\(h\)</span>-interval or the disjoint union of two <span class="math inline">\(h\)</span>-intervals. Further, the collection <span class="math inline">\(\mathcal{A}\)</span> if finite disjoint unions of <span class="math inline">\(h\)</span>-intervals is an algebra and the <span class="math inline">\(\sigma\)</span>-algebra generated by <span class="math inline">\(\mathcal{A}\)</span> is <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span>.</p>
 <p><strong>Proposition:</strong> Let <span class="math inline">\(F:\mathbb{R} \to \mathbb{R}\)</span> be increasing and right-continuous. If <span class="math inline">\((a_{j}, b_{j}]\)</span> for <span class="math inline">\(j=1,\dots,n\)</span> are disjoint <span class="math inline">\(h\)</span>-intervals, define <span class="math display">\[
 \mu_{0}\left( \bigcup_{j=1}^n (a_{j}, b_{j}] \right)=\sum_{j=1}^n (F(b_{j})-F(a_{j})),
@@ -423,7 +483,10 @@ F(x)=\begin{cases}
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/analysis.html">Analysis</a></li>
 <li><a href="../topics/measure-theory.html">Measure Theory</a></li>
+<li><a href="../topics/metric-spaces.html">Metric Spaces</a></li>
+<li><a href="../topics/set-functions.html">Set Functions</a></li>
 </ul>
 </div>
 </section>

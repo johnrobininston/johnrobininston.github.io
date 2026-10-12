@@ -2,7 +2,7 @@
 title: Vector Spaces
 author: John Robin Inston
 date: 2026-09-06
-title-block-banner: true
+title-block-banner: false
 number-sections: true
 ---
 
@@ -18,7 +18,7 @@ expressed by a single number (scalars).
 
 :::{.definition data-title="Vector"}
 
-A **vector** is an ordered list of elements of a [[Fields|field]] $F$ 
+A **vector** is an ordered list of elements of a [[fields|field]] $F$ 
 
 $$
 \vec{v}:=(v_{1}, \dots, v_{n})=\begin{bmatrix} v_{1}\\ \vdots \\ v_{n} \end{bmatrix},
@@ -184,3 +184,59 @@ and vector addition, otherwise known as linear transforms. Linear spaces are
 desirable because linear transformations can stretch, shrink, rotate, or
 reflect a space whilst always preserves straight lines and keeping the origin
 fixed.
+
+
+## Basis and Dimension
+
+:::{.definition data-title="Basis"}
+
+A **basis** of a vector space $(\mathcal{V},F)$ is a set of vectors
+$\{\vec{b}_1,\dots,\vec{b}_n\}$ that is linearly independent and spans
+$\mathcal{V}$.
+
+:::
+
+:::{.theorem data-title="Unique Coordinates"}
+
+If $\mathcal{B}=(\vec{b}_1,\dots,\vec{b}_n)$ is a basis then every
+$\vec{v}\in\mathcal{V}$ can be written uniquely as
+$\vec{v}=\sum_{i=1}^n\alpha_i\vec{b}_i$. The scalars $(\alpha_1,\dots,\alpha_n)$
+are the **coordinates** $[\vec{v}]_{\mathcal{B}}$ of $\vec{v}$ in the basis
+$\mathcal{B}$.
+
+:::
+
+:::{.proof}
+Existence is spanning. For uniqueness, if $\sum\alpha_i\vec{b}_i=\sum\beta_i\vec{b}_i$
+then $\sum(\alpha_i-\beta_i)\vec{b}_i=\vec{0}$, so $\alpha_i=\beta_i$ by linear
+independence.
+:::
+
+:::{.theorem data-title="Dimension"}
+
+If $\vec{v}_1,\dots,\vec{v}_n$ span $\mathcal{V}$ and $\vec{w}_1,\dots,\vec{w}_m$ are
+linearly independent in $\mathcal{V}$, then $m\leq n$. Hence any two bases of a
+finite-dimensional space have the same number of elements, called the
+**dimension** $\dim\mathcal{V}$.
+
+:::
+
+:::{.proof}
+Write $\vec{w}_j=\sum_{i=1}^na_{ij}\vec{v}_i$ and suppose $m>n$. The homogeneous
+system $\sum_{j=1}^ma_{ij}c_j=0$ for $i=1,\dots,n$ has more unknowns than
+equations, so has a nonzero solution $(c_j)$ (see [[matrices]] on row reduction).
+Then $\sum_jc_j\vec{w}_j=\sum_i\left(\sum_ja_{ij}c_j\right)\vec{v}_i=\vec{0}$,
+contradicting independence. If $\mathcal{B},\mathcal{B}'$ are bases, applying this
+in both directions gives $\lvert\mathcal{B}\rvert\leq\lvert\mathcal{B}'\rvert\leq\lvert\mathcal{B}\rvert$.
+:::
+
+:::{.example data-title="Dimensions"}
+
+$\dim F^n=n$ with the standard basis $\vec{e}_1,\dots,\vec{e}_n$,
+$\dim M_{n\times m}(F)=nm$, and the polynomials of degree at most $k$ have
+dimension $k+1$ with basis $1,x,\dots,x^k$.
+
+:::
+
+For maps between vector spaces see [[linear-maps]], and for norms on vector
+spaces see [[normed-space]].
