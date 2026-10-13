@@ -1,0 +1,289 @@
+---
+author: "John Robin Inston"
+date: 2026-10-13
+number-sections: true
+title: "PDE Characteristics"
+title-block-banner: false
+---
+
+# PDE Characteristics
+
+**Characteristics** are special curves (or surfaces in higher dimensions) in
+the domain of a [[partial-differential-equations|PDE]] along which information
+travels and along which the PDE simplifies. They serve two purposes:
+
+- For **first-order** PDEs they reduce the problem to a family of
+  [[ordinary-differential-equations|ODEs]], which is the
+  [[method-of-characteristics]].
+- For **second-order** PDEs they determine the *type* of the equation (hyperbolic,
+  parabolic or elliptic), and with it the qualitative behaviour of solutions.
+
+The guiding picture is the [[transport-equation]] $u_t+cu_x=0$: the solution
+is constant along the lines $x-ct=\text{const}$, so these lines carry the
+information, and all that matters is to follow them back to the initial data.
+
+# First-Order PDEs
+
+## Characteristic Curves
+
+Consider the quasilinear first-order PDE for $u(x,y)$
+$$
+a(x,y,u)\,u_x+b(x,y,u)\,u_y=c(x,y,u).
+$$
+The left-hand side is a derivative of $u$ in the direction $(a,b)$ (see
+[[gradient#Directional Derivative|directional derivative]]), so the PDE only
+involves the behaviour of $u$ along that direction field. Follow a curve
+$(x(s),y(s))$ whose tangent is $(a,b)$ and set $U(s)=u(x(s),y(s))$. By the
+[[chain-rule|chain rule]]
+$$
+\frac{dU}{ds}=u_x\frac{dx}{ds}+u_y\frac{dy}{ds}=au_x+bu_y=c.
+$$
+
+:::{.definition data-title="Characteristic Equations"}
+
+The **characteristic equations** of the PDE above are the ODE system
+$$
+\frac{dx}{ds}=a(x,y,u),\qquad\frac{dy}{ds}=b(x,y,u),\qquad\frac{du}{ds}=c(x,y,u).
+$$
+Their solution curves $(x(s),y(s),u(s))$ are the **characteristic curves**, and
+their projections $(x(s),y(s))$ to the $(x,y)$-plane are the **characteristics**
+(or *base characteristics*).
+
+:::
+
+> *Note:* In the *linear* case $a,b$ do not depend on $u$, so the base
+> characteristics can be found first from $dy/dx=b/a$ and the equation for $u$
+> is then solved along them. In the *quasilinear* case the three equations are
+> coupled and must be solved together.
+
+## Examples
+
+:::{.example data-title="Constant Coefficients"}
+
+For $u_t+cu_x=0$: $\dot t=1$, $\dot x=c$, $\dot u=0$. The characteristics are
+the lines $x-ct=x_0$ and $u$ is constant on each, so
+$u=\varphi(x-ct)$ for any function $\varphi$.
+
+:::
+
+:::{.example data-title="Rotation"}
+
+For $yu_x-xu_y=0$: $\dot x=y$, $\dot y=-x$, $\dot u=0$. Since
+$\frac{d}{ds}(x^2+y^2)=2xy-2xy=0$, the characteristics are circles
+$x^2+y^2=r^2$ about the origin and $u$ is constant on each circle. The general
+solution is
+$$
+u(x,y)=\varphi(x^2+y^2),
+$$
+a radially symmetric function, as we expect since the operator
+$y\partial_x-x\partial_y$ is the generator of rotations.
+
+:::
+
+:::{.example data-title="Burgers' Equation (Characteristics Cross)"}
+
+For $u_t+uu_x=0$ the speed depends on $u$: $\dot t=1$, $\dot x=u$, $\dot u=0$.
+So $u$ is constant on each characteristic, which are therefore *straight* lines
+$$
+x=x_0+u_0(x_0)\,t,
+$$
+with slope determined by the initial data, and the solution is
+$u(t,x)=u_0(x_0)$ where $x_0$ solves this equation. Take $u_0(x)=-x$. Then
+$x=x_0(1-t)$, so
+$$
+u(t,x)=-\frac{x}{1-t}.
+$$
+All characteristics meet at the origin at $t=1$, where the solution blows up.
+Beyond that time the classical solution breaks down (a *shock* forms). For
+$u_0$ with $u_0'<0$ somewhere the breaking time is $t^*=-1/\min u_0'$.
+
+:::
+
+## Data on a Curve
+To determine a solution we prescribe $u$ on an initial curve
+$\Gamma:(x_0(r),y_0(r))$, $u=u_0(r)$, and take the characteristic through each
+point of $\Gamma$ as the starting point of the ODE system.
+
+:::{.theorem data-title="Non-characteristic Condition"}
+
+If $a,b,c$ are smooth and the data curve $\Gamma$ is **transversal** to the
+characteristics,
+$$
+a\,y_0'(r)-b\,x_0'(r)\neq0,
+$$
+then there is a unique local solution through $\Gamma$. If $\Gamma$ is itself a
+characteristic, then either no solution exists or infinitely many do.
+
+:::
+
+:::{.proof}
+
+The map $(r,s)\mapsto(x(r,s),y(r,s))$ obtained by solving the characteristic
+equations from $\Gamma$ has Jacobian at $s=0$
+$$
+\det\begin{pmatrix}x_r&x_s\\y_r&y_s\end{pmatrix}=x_0'\,b-y_0'\,a\neq0,
+$$
+so by the inverse function theorem it is locally invertible, and
+$u(x,y)=U(r(x,y),s(x,y))$ is a well-defined solution. If $\Gamma$ is
+characteristic, $a y_0'-bx_0'=0$ and the map degenerates.
+
+:::
+
+:::{.example data-title="Data on a Characteristic"}
+
+For $u_x+u_y=0$ the solutions are $u=\varphi(x-y)$ and the characteristics are
+the lines $y=x+\text{const}$. If we prescribe $u(x,x)=g(x)$ on the
+characteristic $y=x$ then $\varphi(0)=g(x)$ for all $x$, so there is no solution
+unless $g$ is a constant and then there are infinitely many ($\varphi$ is
+arbitrary away from $0$). Prescribing instead $u(x,0)=g(x)$ on the transversal
+line $y=0$ gives the unique solution $u=g(x-y)$.
+
+:::
+
+# Second-Order PDEs
+
+## Characteristic Curves
+Consider the second-order PDE in two variables
+$$
+Au_{xx}+2Bu_{xy}+Cu_{yy}+(\text{lower order terms})=0,
+$$
+with coefficients $A,B,C$ functions of $(x,y)$. Seek new coordinates
+$\xi=\xi(x,y)$ for which $u_{\xi\xi}$ does not appear. Substituting
+$u(x,y)=v(\xi(x,y),\eta(x,y))$, the coefficient of $v_{\xi\xi}$ is
+$$
+A\xi_x^2+2B\xi_x\xi_y+C\xi_y^2,
+$$
+so we need $\xi$ to satisfy the first-order PDE $A\xi_x^2+2B\xi_x\xi_y+C\xi_y^2=0$.
+Level sets $\xi=\text{const}$ are curves $y=y(x)$ with slope
+$dy/dx=-\xi_x/\xi_y$, and substituting $\xi_x/\xi_y=-dy/dx$ gives:
+
+:::{.definition data-title="Characteristic Equation"}
+
+The **characteristic curves** of $Au_{xx}+2Bu_{xy}+Cu_{yy}+\dots=0$ are the
+curves $y(x)$ solving
+$$
+A\left(\frac{dy}{dx}\right)^2-2B\frac{dy}{dx}+C=0
+\quad\Longleftrightarrow\quad
+\frac{dy}{dx}=\frac{B\pm\sqrt{B^2-AC}}{A}.
+$$
+
+:::
+
+The number of real characteristic families is determined by the sign of the
+**discriminant** $D=B^2-AC$.
+
+## Classification
+
+:::{.definition data-title="Hyperbolic, Parabolic and Elliptic"}
+
+At a point the equation is
+
+- **hyperbolic** if $B^2-AC>0$: two real families of characteristics,
+- **parabolic** if $B^2-AC=0$: one real family,
+- **elliptic** if $B^2-AC<0$: no real characteristics.
+
+:::
+
+Using the characteristics as coordinates reduces the equation to a
+**canonical form**:
+
+| Type | Characteristic coordinates | Canonical form | Model |
+|---|---|---|---|
+| Hyperbolic | $\xi,\eta$ the two families | $v_{\xi\eta}+\dots=0$ | [[wave-equation]] |
+| Parabolic | $\eta$ the single family, $\xi$ any independent | $v_{\xi\xi}+\dots=0$ | [[heat-equation]] |
+| Elliptic | $\xi\pm i\eta$ complex family | $v_{\xi\xi}+v_{\eta\eta}+\dots=0$ | [[laplace-equation]] |
+
+:::{.example data-title="The Model Equations"}
+
+- *Wave equation* $u_{tt}-c^2u_{xx}=0$. In the variables $(t,x)$ we have
+  $A=1,B=0,C=-c^2$, so $D=c^2>0$ and $dx/dt=\pm c$: the characteristics are
+  $x\pm ct=\text{const}$. Taking these as coordinates gives $u_{\xi\eta}=0$, as
+  in d'Alembert's solution.
+- *Heat equation* $u_t=ku_{xx}$. In $(x,t)$, $A=k$ and $B=C=0$ so $D=0$:
+  parabolic, with the single family $dt/dx=0$, i.e. the lines $t=\text{const}$.
+- *Laplace equation* $u_{xx}+u_{yy}=0$. $A=C=1,B=0$ so $D=-1<0$: elliptic,
+  with no real characteristics ($dy/dx=\pm i$).
+
+:::
+
+:::{.example data-title="Reduction to Canonical Form"}
+
+Consider $u_{xx}+2u_{xy}-3u_{yy}=0$. Here $A=1,B=1,C=-3$ and $D=4>0$, so it is
+hyperbolic, with
+$$
+\frac{dy}{dx}=1\pm2\in\{3,-1\}\quad\Longrightarrow\quad
+\xi=y-3x,\quad\eta=y+x.
+$$
+By the chain rule, $u_x=-3v_\xi+v_\eta$ and $u_y=v_\xi+v_\eta$, so
+$$
+\begin{aligned}
+u_{xx}&=9v_{\xi\xi}-6v_{\xi\eta}+v_{\eta\eta},\\
+u_{xy}&=-3v_{\xi\xi}-2v_{\xi\eta}+v_{\eta\eta},\\
+u_{yy}&=v_{\xi\xi}+2v_{\xi\eta}+v_{\eta\eta},
+\end{aligned}
+$$
+and the equation becomes $-16v_{\xi\eta}=0$. Hence $v=F(\xi)+G(\eta)$ and
+$$
+u(x,y)=F(y-3x)+G(y+x).
+$$
+
+:::
+
+## Mixed Type
+When the coefficients depend on position, the type can change from point to
+point. The *Tricomi equation* $u_{xx}+xu_{yy}=0$ has $D=-x$, so it is
+elliptic for $x>0$, parabolic on the line $x=0$ and hyperbolic for $x<0$. This
+occurs for example in transonic flow, where the flow changes from subsonic
+(elliptic) to supersonic (hyperbolic).
+
+## Several Variables
+For $\sum_{i,j}a_{ij}u_{x_ix_j}+\dots=0$ a surface $\{\phi=\text{const}\}$ is
+**characteristic** if
+$$
+\sum_{i,j}a_{ij}\,\phi_{x_i}\phi_{x_j}=0.
+$$
+For the wave equation this reads $\phi_t^2=c^2|\nabla\phi|^2$ (the *eikonal
+equation*), whose solutions include the light cones $|x-x_0|=c(t-t_0)$. The type
+is read from the signs of the eigenvalues of $(a_{ij})$: all the same sign is
+elliptic, one sign differing from the rest is hyperbolic, and a zero eigenvalue
+is parabolic.
+
+# Interpretation
+
+:::{.theorem data-title="Characteristics Carry Information"}
+
+For a hyperbolic equation:
+
+1. A discontinuity in the data (or in derivatives of the solution) is propagated
+   *only* along the characteristics.
+2. The solution at $(x_0,t_0)$ depends only on the data in the region bounded
+   by the characteristics through that point (the *domain of dependence*), and
+   influences only the region between the characteristics going forward (the
+   *domain of influence*).
+
+:::
+
+| Type | Real characteristics | Information speed | Singularities | Example |
+|---|---|---|---|---|
+| Hyperbolic | two families | finite | travel along characteristics | wave |
+| Parabolic | one family | infinite | smoothed out instantly | heat |
+| Elliptic | none | no propagation | solutions smooth in the interior | Laplace |
+
+Elliptic equations have no characteristics, so no direction is special: the
+solution at a point depends on the data on the whole boundary and is as smooth
+as the coefficients allow. This is why elliptic problems are posed as boundary
+value problems and hyperbolic and parabolic ones as initial value problems.
+
+> *Note:* An initial curve being characteristic is exactly the degenerate case
+> in which the Cauchy problem fails. For the wave equation the data
+> $u,u_t$ on $t=0$ is fine, since $t=0$ is never a characteristic for $c<\infty$,
+> but data on the light line $x=ct$ does not determine the solution.
+
+# Related Topics
+
+- [[method-of-characteristics]]
+- [[transport-equation]]
+- [[wave-equation]]
+- [[heat-equation]]
+- [[laplace-equation]]
+- [[quasilinear-partial-differential-equations]]

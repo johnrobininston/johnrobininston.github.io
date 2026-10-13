@@ -1,0 +1,994 @@
+---
+title: "Lecture 9: Simple Linear Regression"
+subtitle: "PSTAT100: Data Science — Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        html-math-method: katex
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Understand **regression** as estimation of the conditional expectation $\mathbb{E}[Y \mid X]$.
+- Specify the **simple linear regression (SLR) model** and the Gauss-Markov assumptions.
+- Derive the **ordinary least squares (OLS)** estimators analytically.
+- Understand the **properties** of OLS: unbiasedness, sampling variance, and BLUE.
+- Conduct **inference** — $t$-tests and confidence intervals — on regression coefficients.
+- Measure **goodness of fit** using the SST/SSR/SSE decomposition and $R^2$.
+- Distinguish **confidence intervals** from **prediction intervals** for new data.
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+In this lecture we will be using the following libraries:
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import t as t_dist
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+
+
+
+# Introduction to Linear Regression
+
+## 🔍 What is Regression?
+
+### Connecting to what we know
+
+:::{.fragment}
+
+- In **Lecture 7** we introduced the conditional expectation $\mathbb{E}[Y \mid X = x]$: the expected value
+  of $Y$ when $X$ is fixed at $x$.
+- This is the **regression function** — the theoretically optimal prediction of $Y$ given $X$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+:::{.callout-important title="Regression"}
+**Regression** is the task of estimating the conditional expectation function
+$\mu(x) = \mathbb{E}[Y \mid X = x]$ from observed data
+$(x_1, y_1), \ldots, (x_n, y_n)$.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Why impose linearity?
+
+- The true function $\mu(x)$ could take any shape, but we cannot estimate it without assumptions.
+- **Linear regression** restricts the model to $\mu(x) = \beta_0 + \beta_1 x$ — a straight line.
+- This is a **modelling choice**: it is interpretable, tractable with small $n$, and often a reasonable local approximation.
+
+:::
+
+## Types of Regression
+
+:::{.fragment}
+
+### Simple vs. multiple
+
+- **Simple linear regression (SLR)**: one predictor $X$. This lecture.
+- **Multiple linear regression (MLR)**: $p$ predictors $X_1, \ldots, X_p$. Lecture 11.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Linear vs. nonlinear
+
+- "Linear" refers to linearity in the **parameters** $\beta$, not necessarily in $X$ itself.
+  - $Y = \beta_0 + \beta_1 X^2$ is still a linear model (we treat $X' = X^2$ as the predictor).
+  - $Y = \beta_0 \exp(\beta_1 X)$ is nonlinear in $\beta$ and requires different methods.
+- Much of machine learning can be viewed as flexible, nonlinear regression.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Regression in the supervised learning framework
+
+| Task | Response $Y$ | Example |
+|---|---|---|
+| **Regression** | Continuous | House price, temperature, body mass |
+| **Classification** | Categorical | Spam / not-spam, tumour type |
+
+:::
+
+# The Simple Linear Regression Model
+
+## 📐 The Statistical Model
+
+:::{.fragment}
+
+:::{.callout-important title="Simple Linear Regression Model"}
+We assume the data-generating process is:
+$$Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \qquad i = 1, \ldots, n,$$
+where:
+
+- $x_i$ is the **observed** predictor value (treated as fixed / non-random).
+- $Y_i$ is the **response** (random).
+- $\beta_0$ is the **intercept** — the expected value of $Y$ when $x = 0$.
+- $\beta_1$ is the **slope** — the expected change in $Y$ per one-unit increase in $x$.
+- $\varepsilon_i$ is the **error** — the deviation of $Y_i$ from the line; captures all unexplained variability.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Two components of the model
+
+- **Systematic part** $\beta_0 + \beta_1 x_i$: the signal we want to estimate.
+- **Random part** $\varepsilon_i$: the noise we want to characterise and account for.
+
+:::
+
+## The Gauss-Markov Assumptions
+
+### Four conditions for classical linear regression
+
+1. **Linearity**: $\mathbb{E}[\varepsilon_i] = 0$ for all $i$.
+   - The true conditional mean is a linear function of $x$.
+
+2. **Independence**: $\varepsilon_1, \ldots, \varepsilon_n$ are mutually independent.
+   - Errors from different observations do not influence one another.
+
+3. **Homoscedasticity**: $\text{Var}(\varepsilon_i) = \sigma^2$ for all $i$.
+   - The spread of errors is constant across all values of $x$.
+
+4. **Normality**: $\varepsilon_i \sim \mathcal{N}(0, \sigma^2)$.
+   - Errors are normally distributed. Required for exact inference with small $n$; asymptotically
+  justified by the CLT for large $n$.
+
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+Together, 1–4 imply that 
+$$
+Y_i \stackrel{\text{iid}}\sim \mathcal{N}
+(\beta_0 + \beta_1 x_i,\, \sigma^2).
+$$
+
+:::
+
+## Visualising the SLR Model
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Simulated data from Y = 2 + 1.5x + ε (ε ~ N(0, 2.5²)). The true line is shown in red."
+
+rng = np.random.default_rng(42)
+n, beta0_true, beta1_true, sigma_true = 80, 2.0, 1.5, 2.5
+x = rng.uniform(0, 10, size=n)
+y = beta0_true + beta1_true * x + rng.normal(0, sigma_true, size=n)
+
+x_line = np.linspace(0, 10, 200)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.scatter(x, y, alpha=0.6, color='steelblue', label='Observed data $(x_i, Y_i)$', zorder=3)
+ax.plot(x_line, beta0_true + beta1_true * x_line, color='crimson', lw=2.5,
+        label=rf'True line: $\mu(x) = {beta0_true} + {beta1_true}x$')
+ax.set_xlabel('$x$')
+ax.set_ylabel('$Y$')
+ax.set_title('Simulated SLR Data')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Visualising the Error Term
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Errors εᵢ are the vertical deviations of each observation from the true line."
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.scatter(x, y, alpha=0.5, color='steelblue', zorder=3)
+ax.plot(x_line, beta0_true + beta1_true * x_line, color='crimson', lw=2.5,
+        label='True line $\\mu(x)$')
+
+# Show errors for a selection of points
+rng_idx = np.random.default_rng(0)
+show_idx = rng_idx.choice(n, size=14, replace=False)
+for i in show_idx:
+    mu_i = beta0_true + beta1_true * x[i]
+    ax.plot([x[i], x[i]], [mu_i, y[i]], color='darkorange', lw=1.5, zorder=2)
+
+ax.plot(
+  [], [],
+  color='darkorange',
+  lw=1.5,
+  label='Error $\\varepsilon_i = Y_i - \\mu(x_i)$'
+  )
+ax.set_xlabel('$x$')
+ax.set_ylabel('$Y$')
+ax.set_title('Errors: Vertical Deviations from the True Line')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+# Ordinary Least Squares Estimation
+
+## 🎯 The OLS Criterion
+
+### Choosing the best-fitting line
+
+- In practice $\beta_0$ and $\beta_1$ are **unknown** and must be **estimated** 
+  from data.
+- For any candidate line $\hat{y} = b_0 + b_1 x$, the **residual** for 
+  observation $i$ is: $$e_i = y_i - (b_0 + b_1 x_i).$$
+
+:::{.fragment}
+
+:::{.callout-important title="Ordinary Least Squares (OLS)"}
+The **OLS estimators** $\hat{\beta}_0$ and $\hat{\beta}_1$ minimise the
+**residual sum of squares**:
+$$\text{RSS}(b_0, b_1) = \sum_{i=1}^n \bigl(y_i - b_0 - b_1 x_i\bigr)^2.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- Squaring makes the criterion **differentiable** and penalises large 
+  deviations heavily.
+- It yields **closed-form** estimators — we can solve **analytically** by 
+  setting derivatives to zero.
+
+:::
+
+## Deriving the OLS Estimators
+
+### Setting partial derivatives to zero
+
+:::{.fragment}
+
+Taking $\partial \text{RSS}/\partial b_0 = 0$ and 
+$\partial \text{RSS}/\partial b_1 = 0$:
+
+$$
+-2\sum_{i=1}^n (y_i - b_0 - b_1 x_i) = 0,\quad \& \quad 
+  -2\sum_{i=1}^n x_i(y_i - b_0 - b_1 x_i) = 0.
+$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+Solving these **normal equations** gives:
+
+$$
+\boxed{\hat{\beta}_1 = \frac{S_{xy}}{S_{xx}}, \qquad
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\,\bar{x},}
+$$
+
+where $S_{xx} = \sum_{i=1}^n (x_i - \bar{x})^2$ and 
+$\quad S_{xy} = \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Key insights
+
+- The OLS line always passes through the **sample means** $(\bar{x}, \bar{y})$.
+- $\hat{\beta}_1$ is proportional to the **sample covariance** of $x$ and $y$.
+
+:::
+
+## Relationship to MLE under Normality
+
+:::{.fragment}
+
+If we assume GM1–GM4 then
+$$
+Y_i \sim \mathcal{N}(\beta_0 + \beta_1 x_i,\, \sigma^2), 
+  \quad i = 1, \ldots, n.
+$$
+
+:::
+
+:::{.fragment}
+
+The **likelihood function** is:
+$$
+\begin{aligned}
+L(\beta_0, \beta_1, \sigma^2) = \prod_{i=1}^n f_Y(y_i)
+  = (2\pi\sigma^2)^{-\frac{n}{2}} 
+  \exp\left(-\frac{1}{2\sigma^2}
+    \sum_{i=1}^n(y_i - \beta_0 - \beta_1 x_i)^2\right).
+\end{aligned}
+$$
+
+:::
+
+:::{.fragment}
+The **log-likelihood function** is:
+$$
+l(\beta_0, \beta_1, \sigma^2) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2} \underbrace{\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2}_{\text{RSS}}.
+$$
+:::
+
+:::{.fragment}
+
+Maximizing $L$ with respect to $\beta_0$ and $\beta_1$ is **equivalent** to 
+minimizing the RSS, so:
+$$
+\hat{\beta}_0^{\text{MLE}} = \hat{\beta}_0^{\text{OLS}}, \qquad 
+  \hat{\beta}_1^{\text{MLE}} = \hat{\beta}_1^{\text{OLS}}.
+$$
+
+:::
+
+## Computing OLS from Scratch
+
+```{python}
+#| output-location: slide
+#| fig-cap: "OLS estimated line (navy dashed) vs. the true line (red). With n=80 observations the estimate is very close."
+#| code-line-numbers: "1-5|7-9|11-12|"
+
+# Step 1: Compute the sufficient statistics
+x_bar = x.mean()
+y_bar = y.mean()
+S_xx = np.sum((x - x_bar)**2)
+S_xy = np.sum((x - x_bar) * (y - y_bar))
+
+# Step 2: OLS slope and intercept
+beta1_hat = S_xy / S_xx
+beta0_hat = y_bar - beta1_hat * x_bar
+
+print(f"True:      β₀ = {beta0_true:.2f},  β₁ = {beta1_true:.2f}")
+print(f"Estimated: β̂₀ = {beta0_hat:.3f}, β̂₁ = {beta1_hat:.3f}")
+
+# Step 3: Plot
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.scatter(x, y, alpha=0.4, color='steelblue', label='Data', zorder=3)
+ax.plot(x_line, beta0_true + beta1_true * x_line, 'crimson', lw=2, label='True line')
+ax.plot(x_line, beta0_hat + beta1_hat * x_line, 'navy', lw=2, linestyle='--',
+        label=f'OLS fit: $\\hat{{y}} = {beta0_hat:.2f} + {beta1_hat:.2f}x$')
+ax.set_xlabel('$x$'); ax.set_ylabel('$Y$')
+ax.legend(); plt.tight_layout(); plt.show()
+```
+
+## Fitted Values and Residuals
+
+:::{.fragment}
+
+:::{.callout-important title="Fitted Values and Residuals"}
+The **fitted value** for observation $i$ is $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i$.
+
+The **residual** is the difference between the observed and fitted response:
+$$e_i = y_i - \hat{y}_i.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- The residuals satisfy the following properties:
+  - $\sum_{i=1}^n e_i = 0$: residuals sum to zero.
+  - $\sum_{i=1}^n x_i e_i = 0$: residuals are uncorrelated with $x$.
+  - $\sum_{i=1}^n \hat{y}_i\, e_i = 0$: residuals are uncorrelated with fitted values.
+
+- These three identities follow directly from the normal equations.
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+y_hat = beta0_hat + beta1_hat * x
+residuals = y - y_hat
+print(f"Σ eᵢ = {residuals.sum():.2e}")
+print(f"Σ xᵢ eᵢ = {(x * residuals).sum():.2e}")
+print(f"Σ ŷᵢ eᵢ = {(y_hat * residuals).sum():.2e}")
+```
+
+:::
+
+## Visualising Residuals
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Residuals eᵢ are the vertical distances from each data point to the OLS line."
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.scatter(x, y, alpha=0.4, color='steelblue', zorder=3, label='Data')
+ax.plot(x_line, beta0_hat + beta1_hat * x_line, 'navy', lw=2, label='OLS fit')
+
+rng_idx2 = np.random.default_rng(1)
+show_idx2 = rng_idx2.choice(n, size=16, replace=False)
+for i in show_idx2:
+    ax.plot([x[i], x[i]], [y_hat[i], y[i]], color='darkorange', lw=1.5, zorder=2)
+
+ax.plot([], [], color='darkorange', lw=1.5, label='Residual $e_i = y_i - \\hat{y}_i$')
+ax.set_xlabel('$x$'); ax.set_ylabel('$Y$')
+ax.set_title('OLS Residuals: Vertical Deviations from the Fitted Line')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+# Properties of OLS Estimators
+
+## ✅ Unbiasedness
+
+### OLS recovers the true parameters on average
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+We can write $\hat{\beta}_1 = \sum_{i=1}^n c_i Y_i$ where 
+$c_i = (x_i - \bar{x})/S_{xx}$ (linear combination).
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+Since $Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$ and $\mathbb{E}[\varepsilon_i] = 0$:
+
+$$
+\begin{aligned}
+\mathbb{E}[\hat{\beta}_1] & = \sum_{i=1}^n c_i \mathbb{E}[Y_i] 
+  = \beta_0\underbrace{\sum_{i=1}^n c_i}_{=\frac{n\bar{x}-n\bar{x}}{S_{xx}}=0} 
+    + \beta_1 \underbrace{\sum_{i=1}^nc_ix_i}_{=\frac{S_{xx}}{S_{xx}}=1}
+  = \beta_1. \quad \checkmark
+\end{aligned}
+$$
+
+An analogous argument gives $\mathbb{E}[\hat{\beta}_0] = \beta_0$.
+
+- Both estimators are **unbiased** under GM1–GM3. **Normality (GM4) is not needed.**
+- On average across many datasets, OLS will return the true parameter values.
+
+:::
+
+## Sampling Variance of OLS Estimators
+
+:::{.fragment}
+
+Under GM1–GM4, the exact sampling variances are:
+
+$$\text{Var}(\hat{\beta}_1) = \frac{\sigma^2}{S_{xx}}, \qquad \text{Var}(\hat{\beta}_0) = \sigma^2\!\left(\frac{1}{n} + \frac{\bar{x}^2}{S_{xx}}\right).$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### What drives precision?
+
+| Factor | Effect on $\text{Var}(\hat{\beta}_1)$ |
+|---|---|
+| More spread in $x$ (↑ $S_{xx}$) | ↓ Variance — better leverage |
+| Larger sample size (↑ $n$) | ↓ Variance — more information |
+| Less noise (↓ $\sigma^2$) | ↓ Variance — cleaner signal |
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Estimating $\sigma^2$
+
+Since $\sigma^2$ is unknown, we estimate it with the **residual variance**:
+$$\hat{\sigma}^2 = \frac{\text{RSS}}{n - 2}.$$
+
+We divide by $n - 2$ (not $n$) because estimating $\hat{\beta}_0$ and $\hat{\beta}_1$ costs **two degrees of freedom**.
+
+:::
+
+## The Gauss-Markov Theorem
+
+:::{.fragment}
+
+:::{.callout-important title="Gauss-Markov Theorem"}
+Under assumptions GM1–GM3 (linearity, independence, homoscedasticity — **normality is not
+required**), the OLS estimators $\hat{\beta}_0$ and $\hat{\beta}_1$ are **BLUE**:
+
+**B**est **L**inear **U**nbiased **E**stimators.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Unpacking "BLUE"
+
+- **Linear**: the estimator is a linear function of the responses $Y_1, \ldots, Y_n$.
+- **Unbiased**: $\mathbb{E}[\hat{\beta}_j] = \beta_j$ (as shown above).
+- **Best**: among *all* linear unbiased estimators, OLS has the **smallest variance**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The practical message
+
+- We don't need normality for OLS to be the optimal linear estimator.
+- Normality is only needed for **exact** $t$-based inference in small samples.
+- For large $n$, the CLT justifies normal-based inference regardless.
+
+:::
+
+## Simulating OLS Properties
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Sampling distribution of β̂₁ across 2 000 simulated datasets. The estimator is centred on the true value β₁ = 1.5."
+
+rng2 = np.random.default_rng(7)
+beta1_sims = []
+for _ in range(2000):
+    y_sim   = beta0_true + beta1_true * x + rng2.normal(0, sigma_true, size=n)
+    S_xy_s  = np.sum((x - x_bar) * (y_sim - y_sim.mean()))
+    beta1_sims.append(S_xy_s / S_xx)
+
+beta1_sims      = np.array(beta1_sims)
+theoretical_se  = sigma_true / np.sqrt(S_xx)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.histplot(beta1_sims, bins=45, kde=True, color='steelblue', ax=ax)
+ax.axvline(beta1_true, color='crimson', lw=2.5, linestyle='--',
+           label=f'True β1 = {beta1_true}')
+ax.axvline(beta1_sims.mean(), color='navy', lw=2, linestyle=':',
+label=f'Mean β̂1 = {beta1_sims.mean():.3f}  (unbiased: True)')
+ax.set_xlabel(r'$\hat{\beta}_1$'); ax.set_ylabel('Density')
+ax.set_title(f'Sampling Distribution of $\\hat{{\\beta}}_1$   '
+             f'(theoretical SE = {theoretical_se:.3f},  empirical SE = {beta1_sims.std():.3f})')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+# Statistical Inference for Regression
+
+## 📊 The Sampling Distribution of $\hat{\beta}_1$
+
+### Under normality (GM4)
+
+:::{.fragment}
+
+Since $\hat{\beta}_1 = \sum_i c_i Y_i$ is a linear combination of independent normals:
+
+$$\hat{\beta}_1 \sim \mathcal{N}\!\left(\beta_1,\; \frac{\sigma^2}{S_{xx}}\right).$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Replacing $\sigma$ with sample standard deviation $s_x$ 
+
+Because we estimate $\sigma^2$ from the same data, we incur extra uncertainty. This leads to:
+
+$$
+T = \frac{\hat{\beta}_1 - \beta_1}{s_{\hat{\beta}_1}} 
+  \sim t_{n-2}, \qquad s_{\hat{\beta}_1} 
+  = \frac{s_x}{\sqrt{S_{xx}}}.
+  $$
+
+- The degrees of freedom are $n - 2$ because we estimated **two** parameters ($\beta_0$ and $\beta_1$).
+- An analogous result holds for $\hat{\beta}_0$ with its own standard error.
+
+:::
+
+## $t$-Tests for Regression Coefficients
+
+### Testing whether a predictor has a linear effect
+
+:::{.fragment}
+
+The most common test is:
+$$H_0: \beta_1 = 0 \quad \text{vs.} \quad H_1: \beta_1 \neq 0.$$
+
+If $\beta_1 = 0$, then $X$ has **no linear association** with $Y$ in the population.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Test statistic and $p$-value
+
+$$T = \frac{\hat{\beta}_1}{s_{\hat{\beta}_1}} \sim t_{n-2} \quad \text{under } H_0.$$
+
+$p\text{-value} = 2\mathbb{P}(t_{n-2} \geq |T_{\text{obs}}|).$
+
+:::
+
+:::{.fragment}
+
+```{python}
+#| output-location: column-fragment
+RSS = np.sum(residuals**2)
+sigma_hat = np.sqrt(RSS / (n - 2))
+SE_b1 = sigma_hat / np.sqrt(S_xx)
+SE_b0 = sigma_hat * np.sqrt(1/n + x_bar**2 / S_xx)
+
+t_b1 = beta1_hat / SE_b1
+p_b1 = 2 * t_dist.sf(abs(t_b1), df=n - 2)
+print(f"β̂₁ = {beta1_hat:.4f},  SE = {SE_b1:.4f}")
+print(f"t  = {t_b1:.3f},   p  = {p_b1:.2e}")
+```
+
+:::
+
+## Confidence Intervals for the Coefficients
+
+:::{.fragment}
+
+A $(1 - \alpha) \times 100\%$ confidence interval for $\beta_j$ is:
+
+$$
+\hat{\beta}_j \;\pm\; t_{\alpha/2,\, n-2} \cdot s_{\hat{\beta}_j}.
+$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Interpretation
+
+- Values of $\beta_j$ **outside** the CI are inconsistent with the data at the $\alpha$ level.
+- If the CI for $\beta_1$ **excludes zero**, we reject $H_0: \beta_1 = 0$ at the same level.
+- Reporting a CI is more informative than a $p$-value alone — it communicates **magnitude and uncertainty**, not just significance.
+
+:::
+
+:::{.fragment}
+
+```{python}
+alpha  = 0.05
+t_crit = t_dist.ppf(1 - alpha/2, df=n - 2)
+
+CI_b1 = (beta1_hat - t_crit * SE_b1, beta1_hat + t_crit * SE_b1)
+CI_b0 = (beta0_hat - t_crit * SE_b0, beta0_hat + t_crit * SE_b0)
+
+print(f"95% CI for β₁: ({CI_b1[0]:.3f}, {CI_b1[1]:.3f})")
+print(f"95% CI for β₀: ({CI_b0[0]:.3f}, {CI_b0[1]:.3f})")
+print(f"True β₁ = {beta1_true}  ← inside CI? {CI_b1[0] < beta1_true < CI_b1[1]}")
+```
+
+:::
+
+# Goodness of Fit
+
+## 📏 Decomposing Variation
+
+### How much of $Y$'s variability does $X$ explain?
+
+:::{.fragment}
+
+:::{.callout-important title="Variance Decomposition (ANOVA Identity)"}
+$$\underbrace{\sum_{i=1}^n (y_i - \bar{y})^2}_{\text{SST (Total)}} = \underbrace{\sum_{i=1}^n (\hat{y}_i - \bar{y})^2}_{\text{SSR (Regression)}} + \underbrace{\sum_{i=1}^n e_i^2}_{\text{SSE (Residual)}}.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+| Quantity | Name | Degrees of Freedom | What it measures |
+|---|---|---|---|
+| SST | Total SS | $n - 1$ | Total variability in $Y$ |
+| SSR | Regression SS | $1$ | Variability **explained** by the model |
+| SSE | Residual SS | $n - 2$ | Variability **unexplained** (error) |
+
+:::
+
+## The $R^2$ Statistic
+
+:::{.fragment}
+
+:::{.callout-important title="Coefficient of Determination $R^2$"}
+$$R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}.$$
+$R^2$ is the **proportion of variance in $Y$ explained by the linear model**.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Properties of $R^2$
+
+- $0 \leq R^2 \leq 1$.
+- $R^2 = 0$: the model explains nothing (the flat line $\hat{y} = \bar{y}$ fits just as well).
+- $R^2 = 1$: all points lie exactly on the line — perfect fit.
+- For SLR only: $R^2 = r^2$, the **square of the Pearson correlation coefficient**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+- A high $R^2$ does **not** mean the model assumptions are satisfied.
+- $R^2$ always increases when predictors are added — addressed with **adjusted $R^2$** in Lecture 11.
+
+:::
+
+## Computing $R^2$ and the Decomposition
+
+```{python}
+#| output-location: slide
+#| fig-cap: "The variance decomposition for one point: SST (red) = SSR (green) + SSE (orange)."
+
+SST   = np.sum((y - y_bar)**2)
+SSE_v = np.sum(residuals**2)
+SSR   = SST - SSE_v
+R2    = SSR / SST
+r     = np.corrcoef(x, y)[0, 1]
+
+print(f"SST = {SST:.2f}  (total)")
+print(f"SSR = {SSR:.2f}  (explained)")
+print(f"SSE = {SSE_v:.2f}  (residual)")
+print(f"R²  = SSR/SST = {R2:.4f}")
+print(f"r   = {r:.4f}  →  r² = {r**2:.4f}  ✓")
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.scatter(x, y, alpha=0.35, color='steelblue', zorder=3, label='Data')
+ax.plot(x_line, beta0_hat + beta1_hat * x_line, 'navy', lw=2, label='OLS fit $\\hat{y}$')
+ax.axhline(y_bar, color='gray', lw=1.5, linestyle='--', label='$\\bar{y}$')
+
+i0 = np.argmin(np.abs(x - 6.8))
+ax.annotate('', xy=(x[i0], y[i0]),     xytext=(x[i0], y_bar),
+            arrowprops=dict(arrowstyle='<->', color='crimson',    lw=2))
+ax.annotate('', xy=(x[i0], y_hat[i0]), xytext=(x[i0], y_bar),
+            arrowprops=dict(arrowstyle='<->', color='seagreen',   lw=2))
+ax.annotate('', xy=(x[i0], y[i0]),     xytext=(x[i0], y_hat[i0]),
+            arrowprops=dict(arrowstyle='<->', color='darkorange', lw=2))
+
+ax.plot([], [], color='crimson',    label='$y_i - \\bar{y}$  (SST component)')
+ax.plot([], [], color='seagreen',   label='$\\hat{y}_i - \\bar{y}$  (SSR component)')
+ax.plot([], [], color='darkorange', label='$e_i$  (SSE component)')
+ax.legend(fontsize=9); plt.tight_layout(); plt.show()
+```
+
+# Prediction
+
+## 🔮 Point Predictions
+
+### Using the fitted model for new data
+
+:::{.fragment}
+
+For a new input $x^*$, the **point prediction** is:
+$$\hat{y}^* = \hat{\beta}_0 + \hat{\beta}_1 x^*.$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Two different prediction questions
+
+We may want to estimate:
+
+1. The **average response** at $x^*$: $\mathbb{E}[Y \mid X = x^*] = \beta_0 + \beta_1 x^*$.
+2. A **single new observation** $Y^*$: $Y^* = \beta_0 + \beta_1 x^* + \varepsilon^*$.
+
+:::
+
+:::{.fragment}
+
+Both share the same point estimate $\hat{y}^*$, but they involve **fundamentally different uncertainties**.
+
+:::
+
+
+
+## Confidence Intervals vs. Prediction Intervals
+
+:::{.fragment}
+
+**Confidence interval for $\mathbb{E}[Y \mid X = x^*]$** — uncertainty in the *mean response*:
+
+$$\hat{y}^* \;\pm\; t_{\alpha/2,\, n-2}\;\hat{\sigma}\sqrt{\frac{1}{n} + \frac{(x^* - \bar{x})^2}{S_{xx}}}.$$
+
+:::
+
+:::{.fragment}
+
+**Prediction interval for a new observation $Y^*$** — uncertainty in a *single future value*:
+
+$$\hat{y}^* \;\pm\; t_{\alpha/2,\, n-2}\;\hat{\sigma}\sqrt{1 + \frac{1}{n} + \frac{(x^* - \bar{x})^2}{S_{xx}}}.$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Key differences
+
+- The prediction interval carries an extra $\hat{\sigma}^2$ for the **new irreducible error** $\varepsilon^*$.
+- Prediction intervals are **always wider** than confidence intervals.
+- Both intervals **widen as $x^*$ moves away from $\bar{x}$** — extrapolation is less certain.
+
+:::
+
+## CI vs. PI in Python
+
+```{python}
+#| output-location: slide
+#| fig-cap: "95% confidence band (dark fill) vs. 95% prediction band (light fill). The prediction band is wider because it also accounts for individual observation error."
+
+x_pred  = np.linspace(0, 10, 300)
+y_pred  = beta0_hat + beta1_hat * x_pred
+t_crit2 = t_dist.ppf(0.975, df=n - 2)
+
+se_mean = sigma_hat * np.sqrt(1/n     + (x_pred - x_bar)**2 / S_xx)
+se_pi   = sigma_hat * np.sqrt(1 + 1/n + (x_pred - x_bar)**2 / S_xx)
+
+fig, ax = plt.subplots(figsize=(11, 5))
+ax.scatter(x, y, alpha=0.4, color='steelblue', label='Data', zorder=3)
+ax.plot(x_pred, y_pred, 'navy', lw=2, label='OLS fit')
+ax.fill_between(x_pred,
+                y_pred - t_crit2 * se_mean,
+                y_pred + t_crit2 * se_mean,
+                alpha=0.35, color='navy', label='95% CI for $\\mathbb{E}[Y|x^*]$')
+ax.fill_between(x_pred,
+                y_pred - t_crit2 * se_pi,
+                y_pred + t_crit2 * se_pi,
+                alpha=0.12, color='steelblue', label='95% Prediction interval')
+ax.set_xlabel('$x$'); ax.set_ylabel('$Y$')
+ax.set_title('Confidence Interval for the Mean Response vs. Prediction Interval')
+ax.legend()
+plt.tight_layout()
+plt.show()
+```
+
+## Summary: The SLR Workflow
+
+:::{.fragment}
+
+| Step | Task | Key Formula / Tool |
+|---|---|---|
+| 1. Specify | Write down the statistical model | $Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$ |
+| 2. Estimate | Minimise RSS | $\hat{\beta}_1 = S_{xy}/S_{xx}$,  $\hat{\beta}_0 = \bar{y} - \hat{\beta}_1\bar{x}$ |
+| 3. Check properties | Verify unbiasedness, invoke Gauss-Markov | BLUE under GM1–GM3 |
+| 4. Inference | $t$-tests and CIs for coefficients | $T = \hat{\beta}_1 / \widehat{\text{SE}}(\hat{\beta}_1) \sim t_{n-2}$ |
+| 5. Fit quality | Decompose variation | $R^2 = \text{SSR}/\text{SST}$ |
+| 6. Predict | Point estimate + interval | CI for mean vs. PI for new obs. |
+
+:::
+
+## Conclusion
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ What we covered
+
+- **Regression** as estimation of $\mathbb{E}[Y \mid X]$ — connecting to Lectures 7 & 8.
+- The **SLR statistical model** $Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i$ and the four Gauss-Markov assumptions.
+- **OLS estimation**: deriving $\hat{\beta}_0$ and $\hat{\beta}_1$ in closed form by minimising RSS.
+- **Properties**: unbiasedness, sampling variances, and the Gauss-Markov theorem (BLUE).
+- **Inference**: $t$-tests and confidence intervals for regression coefficients.
+- **Goodness of fit**: SST/SSR/SSE decomposition and the $R^2$ statistic.
+- **Prediction**: the distinction between CIs for the mean response and prediction intervals.
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 What's next?
+
+- Applying SLR end-to-end in Python using a real dataset.
+- Fitting a model with `statsmodels` and reading every line of the regression summary.
+- Checking the Gauss-Markov assumptions through residual diagnostic plots.
+
+:::
+
+## References

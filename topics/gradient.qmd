@@ -6,9 +6,7 @@ number-sections: true
 title-block-banner: false
 ---
 
-# Gradient
-
-## Gradients of Vector Fields
+# Gradients of Vector Fields
 A **vector field** is an assignment of a vector to each point in a space. On a
 Euclidean plane $\mathbb{R}^2$ we can visualize the field as a collection of
 arrows with given magnitudes and directions, each attached to a point on the
@@ -17,21 +15,22 @@ plane.
 <!-- TODO: image "Pasted image 20250715150758.png" not found in vault -->
 *Figure: Vector field visualization.*
 
-The **gradient** of a scalar-valued differentiable function $f$ of several
-variables is the vector field $\nabla f$ whose value at a point $p$ gives the
-direction and the rate of fastest increase.
+The **gradient** of a scalar-valued function $f$ of several variables which is
+differentiable at a point $p$ is the vector $\nabla f(p)$ giving the direction
+and the rate of fastest increase of $f$ at $p$. Letting $p$ vary, $\nabla f$ is
+a vector field.
 
-## Cartesian Gradient
+# Cartesian Gradient
 
 :::{.definition data-title="Euclidean Gradient"}
 
-In $n$-dimensional Cartesian coordinates with Euclidean metric the gradient, if
-it exists, is given by
+In $n$-dimensional Cartesian coordinates with Euclidean metric the gradient, at
+any point where $f$ is differentiable, is given by
 $$
 \nabla f:=\sum_{i=1}^{n} \frac{{\partial f}}{\partial x_{i}}\boldsymbol{i}_{i},
 $$
-where $\boldsymbol{i}_{j}$ is the standard unit vector in the directions of the
-$x_{j}$ coordinate respectively.  
+where $\boldsymbol{i}_{j}$ is the standard unit vector in the direction of the
+$x_{j}$ coordinate.
 
 :::
 
@@ -45,32 +44,132 @@ $$
 \end{bmatrix}=\left[ \frac{{\partial f}}{\partial x_{i}} \right]_{i=1,..,n}.
 $$
 
-**Example (Cartesian Gradient):**
-We consider the function $f(x,y,z)=2x+3xy^2-\sin (z)$.  The gradient is
+:::{.example}
+
+**Cartesian Gradient.** Consider the function $f(x,y,z)=2x+3xy^2-\sin (z)$. The
+gradient is
 $$
-\nabla f:=\begin{bmatrix}
+\nabla f=\begin{bmatrix}
 2+3y^2 \\
 6xy \\
 -\cos(z)
 \end{bmatrix}.
 $$
-## General Coordinate Gradient
+
+:::
+
+# General Coordinate Gradient
 Consider general coordinates in an $n$-dimensional space
-$x=(x^i)_{i=1,\dots,n}$ and let $f$ be a scalar-valued differentiable function
-$f(x):=f(x^1, \dots, x^n)$. The gradient of $f$ is given by
+$x=(x^i)_{i=1,\dots,n}$ and let $f$ be a scalar-valued function
+$f(x):=f(x^1, \dots, x^n)$ differentiable at the point of interest. The
+gradient of $f$ is given by
 $$
 \nabla f= \frac{{\partial f}}{\partial x^i}g^{ij}\boldsymbol{e}_{j},
 $$
-where $\boldsymbol{e}^i=dx^i$ and
-$\boldsymbol{e}_{i}=\frac{{\partial \boldsymbol{x}}}{\partial x^i}$ refer to
-the *unnormalized local covariant and contravariant bases* respectively,
-$g^{i,j}$ is the *inverse metric tensor*, and the Einstein summation convention
-implies summation over $i$ and $j$.
+where $\boldsymbol{e}_{i}=\frac{{\partial \boldsymbol{x}}}{\partial x^i}$ is
+the (unnormalized) local *tangent basis* and $\boldsymbol{e}^i=dx^i$ is the
+dual *cobasis* of differentials, $g^{ij}$ is the *inverse metric tensor*, and
+the Einstein summation convention implies summation over $i$ and $j$.
 
-## Gradient Results
-### Relationship to Total Derivative
-The gradient is closely related to the **total derivative** $df$ in that they
-are transpose of one another
+:::{.example}
+
+**Polar Coordinates.** Take $(x^1,x^2)=(r,\theta)$ with
+$\boldsymbol{x}=(r\cos\theta,\, r\sin\theta)$. The tangent basis is
+$\boldsymbol{e}_r=\hat{\boldsymbol{r}}$ and
+$\boldsymbol{e}_\theta=r\hat{\boldsymbol{\theta}}$, and the metric is
+$g=\mathrm{diag}(1,r^2)$ so $g^{-1}=\mathrm{diag}(1,r^{-2})$. Hence
 $$
-\nabla f=df^T
+\nabla f = \frac{\partial f}{\partial r}\hat{\boldsymbol{r}}
++\frac{1}{r}\frac{\partial f}{\partial \theta}\hat{\boldsymbol{\theta}}.
 $$
+
+:::
+
+The same computation gives the other standard cases.
+
+| Coordinates | $\nabla f$ |
+|---|---|
+| Cylindrical $(\rho,\varphi,z)$ | $f_\rho\,\hat{\boldsymbol{\rho}}+\frac{1}{\rho}f_\varphi\,\hat{\boldsymbol{\varphi}}+f_z\,\hat{\boldsymbol{z}}$ |
+| Spherical $(r,\theta,\varphi)$, $\theta$ the polar angle | $f_r\,\hat{\boldsymbol{r}}+\frac{1}{r}f_\theta\,\hat{\boldsymbol{\theta}}+\frac{1}{r\sin\theta}f_\varphi\,\hat{\boldsymbol{\varphi}}$ |
+
+# Gradient Results
+
+## Relationship to Total Derivative
+The gradient is closely related to the **total derivative** $df$. For a
+differentiable $f$, $df_p$ is the linear map with
+$$
+df_p(\boldsymbol{v})=\nabla f(p)\cdot\boldsymbol{v}\quad\text{for all }\boldsymbol{v},
+$$
+so $\nabla f(p)$ is the vector representing the linear functional $df_p$ via
+the metric. In index notation $\nabla f=g^{-1}df$, which in an orthonormal basis
+(e.g. Cartesian coordinates) reduces to the transpose
+$$
+\nabla f=df^T.
+$$
+
+## Directional Derivative
+
+:::{.definition data-title="Directional Derivative"}
+
+The derivative of $f$ at $p$ in the direction of a unit vector
+$\boldsymbol{v}$ is
+$$
+\frac{\partial f}{\partial \boldsymbol{v}}(p)
+:=\lim_{h\to 0}\frac{f(p+h\boldsymbol{v})-f(p)}{h}
+=\nabla f(p)\cdot\boldsymbol{v},
+$$
+the second equality holding when $f$ is differentiable at $p$.
+
+:::
+
+## Geometric Properties
+
+:::{.theorem data-title="Geometry of the Gradient"}
+
+Let $f$ be differentiable at $p$ with $\nabla f(p)\neq 0$. Then:
+
+- $\nabla f(p)$ points in the direction of steepest ascent of $f$, and
+  $|\nabla f(p)|$ is the maximal rate of increase.
+- $\nabla f(p)$ is orthogonal to the level set $\{f=f(p)\}$ through $p$.
+
+If $p$ is an interior local extremum of $f$, then $\nabla f(p)=0$.
+
+:::
+
+:::{.proof}
+
+For a unit vector $\boldsymbol{v}$ the
+[[cauchy-schwartz-inequality|Cauchy-Schwarz inequality]] gives
+$$
+\frac{\partial f}{\partial \boldsymbol{v}}=\nabla f\cdot\boldsymbol{v}
+\le |\nabla f|,
+$$
+with equality iff $\boldsymbol{v}=\nabla f/|\nabla f|$. If $\gamma(t)$ is a
+curve in the level set with $\gamma(0)=p$ then $f(\gamma(t))$ is constant, so
+by the [[chain-rule|chain rule]] $\nabla f(p)\cdot\gamma'(0)=0$. Finally, at an
+interior local maximum (or minimum) every directional derivative vanishes, as
+$t\mapsto f(p+t\boldsymbol{v})$ has a local extremum at $t=0$. Thus
+$\nabla f(p)\cdot\boldsymbol{v}=0$ for all $\boldsymbol{v}$, i.e.
+$\nabla f(p)=0$.
+
+:::
+
+## Calculation Rules
+For differentiable $f,g$, a constant $c$ and a differentiable $h:\mathbb{R}\to\mathbb{R}$:
+
+- $\nabla(f+g)=\nabla f+\nabla g$ and $\nabla(cf)=c\nabla f$,
+- $\nabla(fg)=f\nabla g+g\nabla f$,
+- $\nabla(h\circ f)=h'(f)\nabla f$.
+
+# Related Notions
+Applying other differential operators to $\nabla f$ gives the
+[[divergence|divergence]] of the gradient, which is the
+[[laplace-operator|Laplacian]] $\Delta f=\nabla\cdot\nabla f$. The matrix of
+second derivatives of $f$ is the Hessian, see
+[[jacobian-and-hessian|Jacobian and Hessian]]. Further identities are collected
+in [[vector-calculus-identities|vector calculus identities]].
+
+Vector fields of the form $\boldsymbol{F}=\nabla f$ are called *conservative*,
+with potential $f$. Gradients also appear in physical laws such as Fourier's law
+of diffusion, where the flux is $-\nabla u$, and in optimisation, where gradient
+descent follows $-\nabla f$.

@@ -358,8 +358,19 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#transport-equation" id="toc-transport-equation" class="nav-link active" data-scroll-target="#transport-equation"><span class="header-section-number">1</span> Transport Equation</a></li>
-  <li><a href="#calculus-formula-for-transport-equation" id="toc-calculus-formula-for-transport-equation" class="nav-link" data-scroll-target="#calculus-formula-for-transport-equation"><span class="header-section-number">2</span> Calculus Formula for Transport Equation</a></li>
+  <li><a href="#definition" id="toc-definition" class="nav-link active" data-scroll-target="#definition"><span class="header-section-number">1</span> Definition</a>
+  <ul class="collapse">
+  <li><a href="#derivative-along-a-vector" id="toc-derivative-along-a-vector" class="nav-link" data-scroll-target="#derivative-along-a-vector"><span class="header-section-number">1.1</span> Derivative Along a Vector</a></li>
+  </ul></li>
+  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution"><span class="header-section-number">2</span> Solution</a></li>
+  <li><a href="#generalizations" id="toc-generalizations" class="nav-link" data-scroll-target="#generalizations"><span class="header-section-number">3</span> Generalizations</a>
+  <ul class="collapse">
+  <li><a href="#damping-and-source-terms" id="toc-damping-and-source-terms" class="nav-link" data-scroll-target="#damping-and-source-terms"><span class="header-section-number">3.1</span> Damping and Source Terms</a></li>
+  <li><a href="#variable-velocity" id="toc-variable-velocity" class="nav-link" data-scroll-target="#variable-velocity"><span class="header-section-number">3.2</span> Variable Velocity</a></li>
+  <li><a href="#conservative-form" id="toc-conservative-form" class="nav-link" data-scroll-target="#conservative-form"><span class="header-section-number">3.3</span> Conservative Form</a></li>
+  <li><a href="#non-linear-case" id="toc-non-linear-case" class="nav-link" data-scroll-target="#non-linear-case"><span class="header-section-number">3.4</span> Non-Linear Case</a></li>
+  </ul></li>
+  <li><a href="#derivation-from-conservation-laws" id="toc-derivation-from-conservation-laws" class="nav-link" data-scroll-target="#derivation-from-conservation-laws"><span class="header-section-number">4</span> Derivation From Conservation Laws</a></li>
   </ul>
 </nav>
     </div>
@@ -398,40 +409,89 @@ window.Quarto = {
 </header>
 
 
-<section id="transport-equation" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="transport-equation"><span class="header-section-number">1</span> Transport Equation</h2>
+<section id="definition" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Definition</h1>
 <div class="definition" data-title="Transport Equation">
-<p>The <strong>transport equation</strong> is a <strong>first-order</strong> <a href="../topics/partial-differential-equations.html">PDE</a> that describes how a quantity is carried along by a flow without being created or destroyed. In its simplest form, with constant velocity <span class="math inline">\(c\)</span>, the transport equation is given by</p>
-<p><span class="math display">\[
+<p>The <strong>transport equation</strong> is a <strong>first-order</strong> [[partial-differential-equations|PDE]] that describes how a quantity is carried along by a flow without being created or destroyed. In its simplest form, with constant velocity <span class="math inline">\(c\in\mathbb{R}^n\)</span>, the transport equation with initial data <span class="math inline">\(u_0\)</span> is given by <span class="math display">\[
 \begin{cases}
-\partial_t u + c\cdot \nabla u = 0 \\
-u(x,o) = u_0(x).
+\partial_t u + c\cdot \nabla u = 0, &amp; t&gt;0,\ x\in\mathbb{R}^n, \\
+u(0,x) = u_0(x).
 \end{cases}
 \]</span></p>
 </div>
-<p><strong>Solution:</strong> The equation says that <span class="math inline">\(u\)</span> is constant along the lines <span class="math inline">\(x-ct = \text{constant}\)</span> (the characteristics of the PDE), to the initial profile simple translates</p>
-<p><span class="math display">\[
-u(x,t) = u_0(x-ct).
-\]</span></p>
-<p>The following are some generalizations of this simple case:</p>
-<ul>
-<li><p><em>Variable velocity:</em> <span class="math inline">\(\partial_t u + b(x,t) \cdot \nabla u = 0\)</span>.<br>
-Characteristics solve tdhe ODE <span class="math inline">\(\partial_t x = b(x,t)\)</span>, and <span class="math inline">\(u\)</span> is constant along these characteristics.</p></li>
-<li><p><em>Conservative form:</em> <span class="math inline">\(\partial_t\rho + \nabla \cdot (\rho  b) = 0\)</span>. This it the continuity equation for a density <span class="math inline">\(\pho\)</span> being advected by the field <span class="math inline">\(b\)</span>. It differs from the form above when <span class="math inline">\(\nabla \cdot b \neq 0\)</span>, since the density can then compress or expand.</p></li>
-<li><p><em>Source / decay terms:</em> <span class="math inline">\(\partial_t u + c \partial x u = f(x,t)\)</span> or <span class="math inline">\(\partial_t u + c \partial_x + \lambda_u = 0\)</span>. Along characteristics, these reduce to ODEs.</p></li>
-<li><p><em>Non-linear case:</em> <span class="math inline">\(\partial t + c(u) \partial_x u = 0\)</span>. Characteristics can cross, producing shocks, which is where weak solutions and entropy conditions come in.</p></li>
-</ul>
-</section>
-<section id="calculus-formula-for-transport-equation" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="calculus-formula-for-transport-equation"><span class="header-section-number">2</span> Calculus Formula for Transport Equation</h2>
+<p>In one space dimension this reads <span class="math inline">\(u_t+cu_x=0\)</span>.</p>
+<section id="derivative-along-a-vector" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="derivative-along-a-vector"><span class="header-section-number">1.1</span> Derivative Along a Vector</h2>
 <div class="definition" data-title="Derivative along a vector">
-<p>For a vector <span class="math inline">\(\vec V\)</span> and <span class="math inline">\(u=u(x)\)</span> be a multivariable function with <span class="math inline">\(x \coloneqq  (x_1, \ldots , x_n)\)</span>. Then the <strong>derivative of <span class="math inline">\(u\)</span> along the vector <span class="math inline">\(\vec V\)</span></strong> is defined as</p>
-<p><span class="math display">\[
-\partial_{\vec V}  \coloneqq \nabla u \cdot \vec V = \sum_{i=1}^n \partial_{x_i} u V_i.
+<p>Let <span class="math inline">\(\vec V\)</span> be a vector and <span class="math inline">\(u=u(x)\)</span> a differentiable function of <span class="math inline">\(x=(x_1,\ldots,x_n)\)</span>. The <strong>derivative of <span class="math inline">\(u\)</span> along <span class="math inline">\(\vec V\)</span></strong> is <span class="math display">\[
+\partial_{\vec V}u \coloneqq \nabla u \cdot \vec V = \sum_{i=1}^n V_i\,\partial_{x_i} u.
 \]</span></p>
 </div>
+<p>The transport equation is therefore the statement that <span class="math inline">\(u\)</span> has zero derivative along the space-time vector <span class="math inline">\((1,c)\)</span>, i.e.&nbsp;<span class="math inline">\(\partial_{(1,c)}u=0\)</span> for <span class="math inline">\(u=u(t,x)\)</span>. See <a href="../topics/gradient.html#directional-derivative">directional derivative</a>.</p>
+</section>
+</section>
+<section id="solution" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Solution</h1>
+<div class="theorem" data-title="Solution of the Transport Equation">
+<p>If <span class="math inline">\(u_0\in C^1\)</span>, the unique <span class="math inline">\(C^1\)</span> solution of the transport equation is <span class="math display">\[
+u(t,x)=u_0(x-ct).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Fix <span class="math inline">\(x_0\)</span> and consider the line <span class="math inline">\(x(s)=x_0+cs\)</span> in space. By the <a href="../topics/chain-rule.html">chain rule</a> <span class="math display">\[
+\frac{d}{ds}u(s,x(s))=u_t+c\cdot\nabla u=0,
+\]</span> so <span class="math inline">\(u\)</span> is constant along the line, hence <span class="math inline">\(u(t,x_0+ct)=u(0,x_0)=u_0(x_0)\)</span>. Every point <span class="math inline">\((t,x)\)</span> lies on exactly one such line, namely the one through <span class="math inline">\(x_0=x-ct\)</span>, which gives <span class="math inline">\(u(t,x)=u_0(x-ct)\)</span> and shows uniqueness. Conversely this function satisfies the equation by the chain rule.</p>
+</div>
+<p>The lines <span class="math inline">\(x=x_0+ct\)</span> are the <strong>characteristics</strong> of the PDE (see <a href="../topics/method-of-characteristics.html">Method of Characteristics</a>). The solution is the initial profile translated at speed <span class="math inline">\(c\)</span> without changing shape. In the <span class="math inline">\((x,t)\)</span> plane these are parallel lines of slope <span class="math inline">\(1/c\)</span>, and the value of <span class="math inline">\(u\)</span> at a point is read off by following the characteristic back to <span class="math inline">\(t=0\)</span>.</p>
+<div class="example">
+<p><strong>Rescaled equation.</strong> For <span class="math inline">\(a\,u_t+b\,u_x=0\)</span> with <span class="math inline">\(a\neq0\)</span> divide by <span class="math inline">\(a\)</span> to get speed <span class="math inline">\(c=b/a\)</span>, so <span class="math inline">\(u(t,x)=u_0\!\left(x-\tfrac{b}{a}t\right)\)</span>. For <span class="math inline">\(2u_t+3u_x=0\)</span> the characteristics are <span class="math inline">\(x=\tfrac32t+x_0\)</span>.</p>
+</div>
+</section>
+<section id="generalizations" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Generalizations</h1>
+<section id="damping-and-source-terms" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="damping-and-source-terms"><span class="header-section-number">3.1</span> Damping and Source Terms</h2>
+<p>For <span class="math inline">\(u_t+cu_x+\lambda u=f(t,x)\)</span> the PDE becomes an ODE along each characteristic, with <span class="math inline">\(U(s)=u(s,x_0+cs)\)</span>: <span class="math display">\[
+U'(s)+\lambda U(s)=f(s,x_0+cs),\qquad U(0)=u_0(x_0).
+\]</span> Solving with the integrating factor <span class="math inline">\(e^{\lambda s}\)</span> and setting <span class="math inline">\(x_0=x-ct\)</span>, <span class="math display">\[
+u(t,x)=e^{-\lambda t}u_0(x-ct)+\int_0^t e^{-\lambda(t-s)}f\big(s,\,x-c(t-s)\big)\,ds.
+\]</span></p>
+<p>In particular, pure decay (<span class="math inline">\(f=0\)</span>) gives <span class="math inline">\(u=e^{-\lambda t}u_0(x-ct)\)</span>: the profile translates and its amplitude decays exponentially, and a source (<span class="math inline">\(\lambda=0\)</span>) adds the accumulated contributions along the characteristic.</p>
+</section>
+<section id="variable-velocity" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="variable-velocity"><span class="header-section-number">3.2</span> Variable Velocity</h2>
+<p>For <span class="math inline">\(u_t+b(t,x)\cdot\nabla u=0\)</span> the characteristics solve the ODE <span class="math display">\[
+\dot x(s)=b(s,x(s)),
+\]</span> and <span class="math inline">\(u\)</span> is constant along each of them. They are no longer straight lines, and the solution is <span class="math inline">\(u(t,x)=u_0(X_0)\)</span> where <span class="math inline">\(X_0\)</span> is the starting point of the characteristic passing through <span class="math inline">\((t,x)\)</span>.</p>
+</section>
+<section id="conservative-form" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="conservative-form"><span class="header-section-number">3.3</span> Conservative Form</h2>
+<p><span class="math display">\[
+\partial_t\rho+\nabla\cdot(\rho b)=0
+\]</span> is the continuity equation for a density <span class="math inline">\(\rho\)</span> advected by the field <span class="math inline">\(b\)</span>. Expanding the divergence, <span class="math display">\[
+\partial_t\rho+b\cdot\nabla\rho=-\rho\,\nabla\cdot b,
+\]</span> so it differs from the form above when <span class="math inline">\(\nabla\cdot b\neq0\)</span>, since the density can then compress or expand.</p>
+</section>
+<section id="non-linear-case" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="non-linear-case"><span class="header-section-number">3.4</span> Non-Linear Case</h2>
+<p>For <span class="math inline">\(u_t+c(u)u_x=0\)</span> the characteristics are still straight lines, with slope determined by the data, <span class="math display">\[
+x=x_0+c(u_0(x_0))\,t,
+\]</span> and <span class="math inline">\(u\)</span> is constant on each, giving the implicit solution <span class="math inline">\(u=u_0\big(x-c(u)t\big)\)</span>. Characteristics can cross, producing shocks, at which point classical solutions fail and weak solutions and entropy conditions are needed.</p>
+</section>
+</section>
+<section id="derivation-from-conservation-laws" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Derivation From Conservation Laws</h1>
+<p>Let <span class="math inline">\(u(t,x)\)</span> be the density of a quantity in a medium moving with velocity <span class="math inline">\(V\)</span>. Conservation of mass on an arbitrary region <span class="math inline">\(\Omega\)</span> states that the rate of change of the amount in <span class="math inline">\(\Omega\)</span> equals minus the flux through <span class="math inline">\(\partial\Omega\)</span>: <span class="math display">\[
+\frac{d}{dt}\int_\Omega u\,dx=-\int_{\partial\Omega}\vec J\cdot\vec n\,dS
+=-\int_\Omega\nabla\cdot\vec J\,dx,
+\]</span> by the divergence theorem. Since <span class="math inline">\(\Omega\)</span> is arbitrary, <span class="math display">\[
+u_t+\nabla\cdot\vec J=0.
+\]</span></p>
 <ul>
-<li>[ ]</li>
+<li><strong>Pure transport:</strong> <span class="math inline">\(\vec J=u\vec V\)</span> gives <span class="math inline">\(u_t+\nabla\cdot(u\vec V)=0\)</span>, which is <span class="math inline">\(u_t+\vec V\cdot\nabla u=0\)</span> for constant <span class="math inline">\(\vec V\)</span>.</li>
+<li><strong>Transport and diffusion:</strong> adding the diffusion flux <span class="math inline">\(-k\nabla u\)</span> (Fourier’s law, see <a href="../topics/heat-equation.html">Heat Equation</a>) gives <span class="math inline">\(\vec J=u\vec V-k\nabla u\)</span> and so <span class="math display">\[
+u_t+\vec V\cdot\nabla u=k\,\Delta u
+\]</span> for constant <span class="math inline">\(\vec V\)</span>.</li>
 </ul>
 
 
@@ -440,7 +500,11 @@ Characteristics solve tdhe ODE <span class="math inline">\(\partial_t x = b(x,t)
 Backlinks
 </div>
 <ul>
-<li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a></li>
+<li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a></li>
+<li><a href="../topics/heat-equation.html">Heat Equation</a></li>
+<li><a href="../topics/pde-characteristics.html">PDE Characteristics</a></li>
+<li><a href="../topics/wave-equation.html">Wave Equation</a></li>
 </ul>
 </div>
 </section>

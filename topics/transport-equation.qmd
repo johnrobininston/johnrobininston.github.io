@@ -9,66 +9,153 @@ title: "Transport Equation"
 title-block-banner: false
 ---
 
-## Transport Equation
+# Definition
 
 :::{.definition data-title="Transport Equation"}
 
-The **transport equation** is a **first-order** 
-[[partial-differential-equations|PDE]] that describes how a quantity is carried 
-along by a flow without being created or destroyed.  In its simplest form, with
-constant velocity $c$, the transport equation is given by
-
+The **transport equation** is a **first-order**
+[[partial-differential-equations|PDE]] that describes how a quantity is carried
+along by a flow without being created or destroyed. In its simplest form, with
+constant velocity $c\in\mathbb{R}^n$, the transport equation with initial data
+$u_0$ is given by
 $$
 \begin{cases}
-\partial_t u + c\cdot \nabla u = 0 \\
-u(x,o) = u_0(x).
+\partial_t u + c\cdot \nabla u = 0, & t>0,\ x\in\mathbb{R}^n, \\
+u(0,x) = u_0(x).
 \end{cases}
 $$
 
 :::
 
-**Solution:** The equation says that $u$ is constant along the lines 
-$x-ct = \text{constant}$ (the characteristics of the PDE), to the initial 
-profile simple translates 
+In one space dimension this reads $u_t+cu_x=0$.
 
-$$
-u(x,t) = u_0(x-ct). 
-$$
-
-The following are some generalizations of this simple case:
-
-* *Variable velocity:* $\partial_t u + b(x,t) \cdot \nabla u = 0$.  
-  Characteristics solve tdhe ODE $\partial_t x = b(x,t)$, and $u$ is constant 
-  along these characteristics.
-
-* *Conservative form:* $\partial_t\rho + \nabla \cdot (\rho  b) = 0$. This it
-  the continuity equation for a density $\pho$ being advected by the field $b$. 
-  It differs from the form above when $\nabla \cdot b \neq 0$, since the 
-  density can then compress or expand.
-
-* *Source / decay terms:* $\partial_t u + c \partial x u = f(x,t)$ or 
-  $\partial_t u + c \partial_x + \lambda_u = 0$.  Along characteristics, these 
-  reduce to ODEs.
-
-* *Non-linear case:* $\partial t + c(u) \partial_x u = 0$. Characteristics can
-  cross, producing shocks, which is where weak solutions and entropy conditions
-  come in.
-
-## Calculus Formula for Transport Equation
+## Derivative Along a Vector
 
 :::{.definition data-title="Derivative along a vector"}
 
-For a vector $\vec V$ and $u=u(x)$ be a multivariable function with 
-$x \coloneqq  (x_1, \ldots , x_n)$.  Then the **derivative of $u$ along the 
-vector $\vec V$** is defined as
-
+Let $\vec V$ be a vector and $u=u(x)$ a differentiable function of
+$x=(x_1,\ldots,x_n)$. The **derivative of $u$ along $\vec V$** is
 $$
-\partial_{\vec V}  \coloneqq \nabla u \cdot \vec V = \sum_{i=1}^n \partial_{x_i} u V_i.
+\partial_{\vec V}u \coloneqq \nabla u \cdot \vec V = \sum_{i=1}^n V_i\,\partial_{x_i} u.
 $$
 
 :::
 
-- [ ] 
+The transport equation is therefore the statement that $u$ has zero derivative
+along the space-time vector $(1,c)$, i.e. $\partial_{(1,c)}u=0$ for
+$u=u(t,x)$. See [[gradient#Directional Derivative|directional derivative]].
 
+# Solution
 
+:::{.theorem data-title="Solution of the Transport Equation"}
 
+If $u_0\in C^1$, the unique $C^1$ solution of the transport equation is
+$$
+u(t,x)=u_0(x-ct).
+$$
+
+:::
+
+:::{.proof}
+
+Fix $x_0$ and consider the line $x(s)=x_0+cs$ in space. By the
+[[chain-rule|chain rule]]
+$$
+\frac{d}{ds}u(s,x(s))=u_t+c\cdot\nabla u=0,
+$$
+so $u$ is constant along the line, hence $u(t,x_0+ct)=u(0,x_0)=u_0(x_0)$. Every
+point $(t,x)$ lies on exactly one such line, namely the one through
+$x_0=x-ct$, which gives $u(t,x)=u_0(x-ct)$ and shows uniqueness. Conversely
+this function satisfies the equation by the chain rule.
+
+:::
+
+The lines $x=x_0+ct$ are the **characteristics** of the PDE (see
+[[method-of-characteristics]]). The solution is the initial profile translated
+at speed $c$ without changing shape. In the $(x,t)$ plane these are parallel
+lines of slope $1/c$, and the value of $u$ at a point is read off by following
+the characteristic back to $t=0$.
+
+:::{.example}
+
+**Rescaled equation.** For $a\,u_t+b\,u_x=0$ with $a\neq0$ divide by $a$ to get
+speed $c=b/a$, so $u(t,x)=u_0\!\left(x-\tfrac{b}{a}t\right)$. For
+$2u_t+3u_x=0$ the characteristics are $x=\tfrac32t+x_0$.
+
+:::
+
+# Generalizations
+
+## Damping and Source Terms
+
+For $u_t+cu_x+\lambda u=f(t,x)$ the PDE becomes an ODE along each
+characteristic, with $U(s)=u(s,x_0+cs)$:
+$$
+U'(s)+\lambda U(s)=f(s,x_0+cs),\qquad U(0)=u_0(x_0).
+$$
+Solving with the integrating factor $e^{\lambda s}$ and setting $x_0=x-ct$,
+$$
+u(t,x)=e^{-\lambda t}u_0(x-ct)+\int_0^t e^{-\lambda(t-s)}f\big(s,\,x-c(t-s)\big)\,ds.
+$$
+
+In particular, pure decay ($f=0$) gives $u=e^{-\lambda t}u_0(x-ct)$: the profile
+translates and its amplitude decays exponentially, and a source ($\lambda=0$)
+adds the accumulated contributions along the characteristic.
+
+## Variable Velocity
+
+For $u_t+b(t,x)\cdot\nabla u=0$ the characteristics solve the ODE
+$$
+\dot x(s)=b(s,x(s)),
+$$
+and $u$ is constant along each of them. They are no longer straight lines, and
+the solution is $u(t,x)=u_0(X_0)$ where $X_0$ is the starting point of the
+characteristic passing through $(t,x)$.
+
+## Conservative Form
+
+$$
+\partial_t\rho+\nabla\cdot(\rho b)=0
+$$
+is the continuity equation for a density $\rho$ advected by the field $b$.
+Expanding the divergence,
+$$
+\partial_t\rho+b\cdot\nabla\rho=-\rho\,\nabla\cdot b,
+$$
+so it differs from the form above when $\nabla\cdot b\neq0$, since the density
+can then compress or expand.
+
+## Non-Linear Case
+
+For $u_t+c(u)u_x=0$ the characteristics are still straight lines, with slope
+determined by the data,
+$$
+x=x_0+c(u_0(x_0))\,t,
+$$
+and $u$ is constant on each, giving the implicit solution
+$u=u_0\big(x-c(u)t\big)$. Characteristics can cross, producing shocks, at which
+point classical solutions fail and weak solutions and entropy conditions are
+needed.
+
+# Derivation From Conservation Laws
+
+Let $u(t,x)$ be the density of a quantity in a medium moving with velocity $V$.
+Conservation of mass on an arbitrary region $\Omega$ states that the rate of
+change of the amount in $\Omega$ equals minus the flux through $\partial\Omega$:
+$$
+\frac{d}{dt}\int_\Omega u\,dx=-\int_{\partial\Omega}\vec J\cdot\vec n\,dS
+=-\int_\Omega\nabla\cdot\vec J\,dx,
+$$
+by the divergence theorem. Since $\Omega$ is arbitrary,
+$$
+u_t+\nabla\cdot\vec J=0.
+$$
+
+- **Pure transport:** $\vec J=u\vec V$ gives $u_t+\nabla\cdot(u\vec V)=0$, which
+  is $u_t+\vec V\cdot\nabla u=0$ for constant $\vec V$.
+- **Transport and diffusion:** adding the diffusion flux $-k\nabla u$ (Fourier's
+  law, see [[heat-equation]]) gives $\vec J=u\vec V-k\nabla u$ and so
+  $$
+  u_t+\vec V\cdot\nabla u=k\,\Delta u
+  $$
+  for constant $\vec V$.

@@ -1,0 +1,1180 @@
+---
+title: "PSTAT 10 Data Science Principles"
+subtitle: "Lecture 15: Aliasing and Logicals"
+author:
+  - name: "John Robin Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+bibliography: static/references.bib
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        include-in-header: assets/theme-init.js
+        include-after-body: assets/theme-toggle.js
+        incremental: true
+execute:
+  echo: true
+  warning: false
+knitr:
+  opts_chunk:
+    fig.align: center
+    dev: png
+---
+
+# Introduction
+
+## 🔁 Review: Lecture 14
+
+::: {.spacer-sm}
+:::
+
+👈 Last lecture we looked at:
+
+- Relational databases
+  - Data structure
+  - Data integrity
+  - Data manipulation
+- Database connections
+- Basic SQL queries
+
+## 👀 Outline: Lecture 15
+
+::: {.spacer-sm}
+:::
+
+👇 Today we will emphasize querying and modifying data:
+
+- [Complex data selections]{.accent}
+- [SQL functions]{.accent}
+- SQL syntax and convention
+
+# Chinook Database
+
+## 🕸️ Relation Network
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+We will continue working with the `Chinook` database with [structure]{.accent}:
+
+![Relation Network](static/img/relation_network.png){.slide-img-center width="450"}
+
+Each [arrow]{.accent} represents a [foreign-key relationship]{.accent} — it shows how a column in one table [references]{.accent} the primary key of another, letting us connect data across tables.
+
+:::
+
+## 🔌 Connecting
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Last time we learned how to connect to an [external database]{.accent}. Make sure you have the appropriate [libraries]{.accent} loaded.
+
+```{r}
+library(DBI)
+library(RSQLite)
+library(sqldf)
+library(tidyverse)
+```
+
+Then create an appropriate [database object]{.accent}:
+
+```{r}
+chinook_db <- dbConnect(
+    SQLite(), 
+    "data/Chinook_Sqlite.sqlite"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+
+📌 Things to watch out for:
+
+- If you do not have an appropriate file path pointing to the `.sqlite` file, R will populate an [empty database]{.accent} object. 
+
+- If you wish to avoid working with file paths, place the `.sqlite` file in your current working directory.
+
+
+:::
+
+:::
+
+## 📝 SQL Query Structure
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Recall our [basic SQL query]{.accent} from last lecture that had the following [structure]{.accent}:
+
+```{r}
+#| eval: false
+SELECT attributes
+FROM relations
+WHERE conditions
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We also saw the `INSERT` and `LIMIT` arguments in these SQL queries.
+
+```{r}
+#| output-location: column
+chinook_db |>
+  dbGetQuery(
+    "SELECT InvoiceId, BillingCity 
+    FROM Invoice 
+    LIMIT 5"
+  )
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+Here is a second example using `WHERE` and a different relation:
+
+```{r}
+#| output-location: column
+
+chinook_db |> 
+  dbGetQuery(
+    "SELECT Name, AlbumId, GenreId
+    FROM Track
+    WHERE AlbumId = 3 AND GenreId = 1"
+  )
+```
+
+:::
+
+
+## 🔍 Specialized Selection
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Suppose we wanted to [select all attributes]{.accent} of the `invoice` table.
+
+```{r}
+#| output-location: column
+chinook_db |>
+  dbListFields("invoice")
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+‼️ This is going to be a [hefty query]{.accent} — but we know how to write it!
+
+![So get typing!](static/img/typing.gif){.slide-img-center width="600"}
+
+:::
+
+## ⭐ Selecting All Attributes
+
+::: {.spacer-sm}
+:::
+
+### 📋 Too Many Attributes
+
+::: {.fragment}
+
+Written out in full we have:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT InvoiceId, CustomerId, InvoiceDate,
+   BillingAddress, BillingCity, BillingState, 
+   BillingCountry, BillingPostalCode, Total
+   FROM invoice 
+   LIMIT 2"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### `*` Syntax
+
+Instead, to [select all attributes]{.accent} we can use the `*` symbol:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT * 
+  FROM Invoice 
+  LIMIT 2"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 When in doubt, keep your queries [simple]{.accent}! 👍
+:::
+
+:::
+
+## 🔗 Combining SQL and R
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### Using `select()`
+
+Sometimes it may be helpful to [combine functionality]{.accent} across [different languages]{.accent}:
+
+- Load `tidyverse` if you have not already done so; and
+- Load `sqldf` if you have not already done so.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+chinook_db |>
+  dbGetQuery(
+    "SELECT * 
+    FROM Invoice"
+  ) |>
+    select(InvoiceId, BillingCity, Total) |> 
+    str()
+```
+
+Remember, `dbGetQuery()` returns the query result as a [dataframe]{.accent}:
+
+* Here we [piped]{.accent} the `select()` function to select columns. 
+* Then we used the structure `str()` function to examine our results.
+
+:::
+
+## 🔍 Querying Data
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### We have used `WHERE` before...
+
+The syntax `WHERE` allows us to work with [logicals]{.accent}. Make sure 
+to think carefully about the logic you are trying to implement.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice WHERE Total > 20"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 🔀 Logicals in SQL
+
+The syntax `AND` and `OR` allow us to select [intersections]{.accent} and [unions]{.accent} respectively:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total 
+   FROM Invoice
+   WHERE Total > 20 AND BillingCity = 'Budapest'"
+)
+```
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice 
+   WHERE Total > 20 OR BillingCountry = 'Italy' 
+   LIMIT 3"
+)
+```
+
+:::
+
+## 🔀 Combining Logicals
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+[Combine]{.accent} clauses similarly to combining R logical expressions.
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice
+   WHERE Total > 20 OR BillingCountry = 'Italy'
+   AND BillingCity = 'Rome'
+   LIMIT 4"
+)
+```
+
+- This query returns all invoices with a total greater than 20, or all invoices from Italy where the billing city is Rome.
+  - Notice the [order of operations]{.accent} — `AND` is evaluated before `OR`.
+
+:::
+
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice
+   WHERE (Total > 20 OR BillingCountry = 'Italy') 
+   AND BillingCity = 'Rome' 
+   LIMIT 6"
+)
+```
+
+- With the parentheses, the query returns all invoices from Rome where the total is greater than 20 or the billing country is Italy.
+
+:::
+
+## 🚫 Exclusion
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Sometimes we wish to [exclude]{.accent} specific values. Suppose we wanted all invoices [where]{.accent} the total is NOT .99:
+
+```{r}
+#| output-location: column
+chinook_db |>
+  dbGetQuery(
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice
+   WHERE NOT Total = .99
+   LIMIT 5"
+)
+```
+
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+This `NOT` syntax is [very powerful]{.accent} when [combined]{.accent} with the `AND`, `OR` commands.
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice
+   WHERE BillingCountry = 'USA'
+   LIMIT 3"
+  )
+```
+
+:::
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT BillingCity, BillingCountry, Total
+   FROM Invoice
+   WHERE BillingCountry = 'USA' 
+    AND NOT BillingCity = 'Boston'
+   LIMIT 3"
+)
+```
+
+:::
+
+## 🗣️ Logical Syntax
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+SQL tries to closely [mimic human language]{.accent}:
+
+- `AND`, `OR`, `NOT` used rather than `&`, `|`, `!`
+- The `NOT` [(negated clause)]{.accent} operator breaks (English) language convention slightly. SQL also allows the `<>` operator to mean [**not equal**]{.accent}:
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: column
+dbGetQuery(chinook_db,
+  "SELECT BillingCity, BillingCountry, Total 
+   FROM Invoice
+   WHERE BillingCountry = 'USA' 
+    AND BillingCity <> 'Boston' 
+   LIMIT 1"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 The syntax `!=` does work in SQLite but not universally. Please use the `<>` convention whenever possible.
+:::
+
+:::
+
+## 💪 Exercise — Involved Queries
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 4)
+```
+
+Write and execute a SQL query that retrieves the `InvoiceId`, `InvoiceDate`, `BillingCity`, `BillingState` and `Total` for all invoices of customers based in the `United States` who spent between `$15` and `$20`.
+
+## ✅ Solution — Involved Queries
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT InvoiceId, InvoiceDate, BillingCity, BillingState, Total
+   FROM Invoice
+   WHERE BillingCountry = 'USA'
+   AND Total >= 15 AND Total <= 20"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+This query works, i.e. it returns the desired values — but:
+
+- We want to make queries as [simple as possible]{.accent}.
+- Use available functionality — `BETWEEN` is helpful.
+
+:::
+
+## ✅ Better Solution — Involved Queries
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+A better solution uses `BETWEEN`:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT InvoiceId, InvoiceDate, BillingCity, BillingState, Total
+   FROM Invoice
+   WHERE BillingCountry = 'USA'
+   AND Total BETWEEN 15 AND 20"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Why is this better?
+
+- `BETWEEN` is [inclusive]{.accent} of both bounds — equivalent to `>= 15 AND <= 20`.
+- It replaces [two comparisons]{.accent} with a [single clause]{.accent}.
+- It reads almost exactly like the prompt: "[between]{.accent} `$15` and `$20`".
+
+:::
+
+## 🔎 Table Exploration
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+It is often useful to know which attribute values exist in a table.
+
+- `SELECT DISTINCT` allows us to pick only [unique values]{.accent}.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+chinook_db |>
+dbGetQuery(
+  "SELECT DISTINCT BillingCountry
+  FROM Invoice
+  LIMIT 5"
+)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### 🔎 Distinct Combinations
+
+- [Combining]{.accent} attribute values looks for [distinct combinations]{.accent}.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT DISTINCT BillingCountry,
+     BillingState
+   FROM Invoice
+   LIMIT 5"
+)
+```
+
+:::
+
+## 🔢 Counting and Ordering 
+
+::: {.spacer-sm}
+:::
+
+### Counting Unique Values
+
+::: {.fragment}
+
+Sometimes we wish to know the [number of unique values]{.accent} using the syntax `COUNT`:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+    "SELECT COUNT(DISTINCT BillingCountry) 
+    FROM Invoice"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+`COUNT` can also be used independently of `DISTINCT`:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT COUNT(*) 
+  FROM Invoice"
+)
+```
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 🔃 Ordering Values
+
+Suppose we want to see the invoice totals [ordered]{.accent} from [minimum]{.accent} to [maximum]{.accent}.  We can use the `ORDER BY` query.
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCountry, BillingCity, Total 
+  FROM Invoice
+  ORDER BY Total 
+  LIMIT 3"
+)
+```
+
+:::
+
+## 🔃 Descending Order, Minimum and Maximum
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### Sorting in Descending Order
+
+To sort in [descending]{.accent} order we would write:
+
+```{r}
+#| output-location: column
+chinook_db |>
+dbGetQuery(
+  "SELECT BillingCountry, BillingCity, Total
+  FROM Invoice
+  ORDER BY Total DESC
+  LIMIT 6"
+)
+```
+
+:::
+
+:::{.fragment}
+
+:::{spacer-sm}
+:::
+
+### 📉 `MIN()` and `MAX()` Functions
+
+The `MIN()` and `MAX()` functions isolate the [smallest]{.accent} and [largest]{.accent} values:
+
+```{r}
+#| output-location: column
+chinook_db |> dbGetQuery(
+  "SELECT BillingCountry, BillingCity, MIN(Total) 
+  FROM Invoice"
+)
+```
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT BillingCountry, BillingCity, MAX(Total) 
+  FROM Invoice"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 Note the behavior in the case of ties.
+:::
+
+:::
+
+## 💪 Exercise — Multifaceted Queries
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 5)
+```
+
+Write and execute an SQL query that:
+
+::: {.nonincremental}
+1. Pulls the `TrackId`, `Name`, `AlbumId`, `GenreId` attributes of `Track`.
+2. Only returns tracks [between]{.accent} 200 and 300 seconds (200000 and 300000 milliseconds) long.
+3. Only returns tracks [between]{.accent} 2000000 and 5000000 bytes.
+4. Returns tracks in [descending order]{.accent} by [price]{.accent}.
+5. Prints no more than 5 rows to the console.
+:::
+
+## ✅ Solution — Multifaceted Queries
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT TrackId, Name, AlbumId, GenreId
+  FROM Track 
+  WHERE Milliseconds BETWEEN 200000 AND 300000
+    AND Bytes Between 2000000 AND 5000000
+  ORDER BY UnitPrice DESC
+  LIMIT 5"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Breaking it down:
+
+- Two `BETWEEN` filters joined with `AND` — one on [duration]{.accent} (`Milliseconds`), one on [size]{.accent} (`Bytes`).
+- `ORDER BY UnitPrice DESC` returns tracks in [descending order]{.accent} by price.
+- `LIMIT 5` caps the output at [five rows]{.accent}.
+
+:::
+
+## 🐛 Bug or Feature
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Error messages are good. Odd returns are much worse!
+
+- Errors direct you to a specific problem.
+- Errors are google-able and often immediately fixable.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+What's happening here?
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT 'ucsb' 
+  FROM Track 
+  WHERE AlbumId = 3"
+)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 This is [not an error]{.accent}:
+  - `SELECT 'ucsb'` returns the [string literal]{.accent} `'ucsb'` for [every matched row]{.accent}. `
+  - SELECT` can return more than just column values.
+:::
+
+:::
+
+## ⭐ Understanding SELECT
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### `SELECT` is an [incredibly flexible]{.accent} tool!
+
+```{r}
+#| layout-ncol: 2
+dbGetQuery(
+  chinook_db,
+  "SELECT Name, AlbumId FROM Track WHERE AlbumId = 3"
+)
+dbGetQuery(
+  chinook_db,
+  "SELECT 'ucsb', Name, AlbumId FROM Track WHERE AlbumId = 3"
+)
+```
+
+:::
+
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### `SELECT` can also return [computed values]{.accent}:
+
+```{r}
+#| layout-ncol: 2
+dbGetQuery(
+  chinook_db,
+  "SELECT 'ucsb', power(2, 5), Name FROM Track WHERE AlbumId = 3"
+)
+dbGetQuery(
+  chinook_db,
+  "SELECT Bytes / Milliseconds, Name FROM Track WHERE AlbumId = 3"
+)
+```
+
+:::
+
+## 🏷️ Aliasing
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+::: definition
+
+[Aliasing]{.accent} assigns a [temporary name]{.accent} to a column (or table) that exists for the [duration of the query only]{.accent}.
+
+:::
+
+```{r}
+#| output-location: column
+dbGetQuery(chinook_db,"SELECT Name AS Good_Music FROM Track LIMIT 2")
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+- Aliasing [does not change column names]{.accent}; they exist for the query only.
+- A [table]{.accent} can also be aliased with the `FROM table AS alias` syntax.
+- [Query-defined columns]{.accent} can also be aliased.
+- `WHERE` clauses can [reference columns by alias]{.accent}.
+
+:::
+
+## 🔍 Pattern Selection
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Sometimes we don't know quite what we're looking for.
+
+- Real-world data is often [messy]{.accent}.
+- Searching for [exact matches]{.accent} often misses things.
+- [Pattern matching]{.accent} lets us search for [partial]{.accent} or [approximate]{.accent} values.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+SQLite gives us two [pattern-matching operators]{.accent}:
+
+- `LIKE` — simple wildcards (`%`, `_`), [case-insensitive]{.accent}.
+- `GLOB` — Unix-style wildcards (`*`, `?`), [case-sensitive]{.accent}.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 Reach for `LIKE` first — it is [simpler]{.accent} and covers most cases. Use `GLOB` when you need [case sensitivity]{.accent} or [finer control]{.accent}.
+:::
+
+:::
+
+## 🔍 `LIKE`
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+### First Letter Selection
+
+Selection based on [first letter]{.accent} only:
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT BillingCountry, BillingState, Total
+   FROM Invoice
+   WHERE BillingCountry LIKE 'u%'
+   LIMIT 5"
+)
+```
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### 🔍 `LIKE` — Intermediate Strings
+
+Selection based on [intermediate string]{.accent}:
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT BillingCountry, BillingState, Total
+  FROM Invoice
+  WHERE BillingCountry LIKE '%an%'
+  LIMIT 5"
+)
+```
+
+:::
+
+## 🔍 `GLOB` Precision
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+::: definition
+
+SQLite's [`GLOB` operator]{.accent} matches text values against a pattern using [wildcards]{.accent} — `*` for any sequence of characters and `?` for a single character.
+
+:::
+
+`GLOB` allows further precision and refinement in these queries:
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT TrackId, Name
+  FROM Track
+  WHERE Name GLOB '?ere*'
+  LIMIT 5"
+)
+```
+
+:::
+
+## 💪 Exercise — Combining Techniques
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 5)
+```
+
+Write and execute an SQL query that:
+
+::: {.nonincremental}
+1. Retrieves the `TrackId` and `Name` of all tracks with `AlbumId = 30`.
+2. Also retrieves the length of the song in seconds (ms/1000) in a column called `Seconds`.
+3. Also retrieves the size of the song in megabytes ($1\text{MB} = 10^{-6}$ bytes) in a column called `MB`.
+4. Lists the tracks in ascending order by length (seconds).
+5. Only includes songs containing the word `and` in their names.
+:::
+
+## ✅ Solution — Combining Techniques
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+```{r}
+#| output-location: column
+dbGetQuery(
+  chinook_db,
+  "SELECT TrackId, Name, Milliseconds/1000 AS Seconds, Bytes*power(10, -6) AS MB
+  FROM Track
+  WHERE AlbumId = 30 AND Name LIKE '% and %'
+  ORDER BY Seconds ASC")
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+Breaking it down:
+
+- We compute [new columns]{.accent} inside `SELECT` with arithmetic and [alias]{.accent} them — `Milliseconds/1000 AS Seconds` and `Bytes*power(10, -6) AS MB`.
+- `LIKE '% and %'` uses [surrounding spaces]{.accent} to match the [word]{.accent} "and", not substrings like "l**and**".
+- `ORDER BY Seconds ASC` sorts by the [alias]{.accent} we just defined.
+
+:::
+
+## 🎨 Styling SQL
+
+::: {.spacer-sm}
+:::
+
+::: {.fragment}
+
+Much like R, SQL code works without [proper styling]{.accent}.
+
+- It can be [extremely]{.accent} tough to read.
+- SQL is [designed for readability]{.accent} — don't squander it!
+
+:::
+
+:::{.fragment}
+
+[Indentation]{.accent} should follow logical functions:
+
+```{r}
+#| eval: false
+SELECT item_1, item_2, ... , item_k
+FROM table_1 WHERE logical_1 AND OR logical_2 ... AND OR logical_m
+ORDER BY order_1, ... , order_n ASC/DESC
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 Specific indentation is subjective, but your focus should be to make your code as [readable as possible]{.accent}.
+:::
+
+:::
+
+# Summary
+
+## ✅ Topics Covered
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤔 This lecture covered many aspects of SQL code and syntax:
+
+- [Logical operations]{.accent} with `WHERE`
+- Functionality associated with `SELECT`
+- [Aliasing]{.accent}
+- Various other functions / operators (`LIMIT`, `ORDER BY`, `*`, etc.)
+
+:::
+
+:::{.fragment}
+
+:::{.emphasize}
+📌 In general you shouldn't focus on memorizing syntax — instead focus on understanding it and using it to solve problems.
+:::
+
+:::
+
+## 📅 Next Class
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤩 Next class we will almost entirely focus on two topics:
+
+- Aggregation (continuing from `COUNT`, `MIN`, `MAX`, etc.)
+- [Joins]{.accent}
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+Then, in lectures 17 and 18, we will cover a selection of more advanced SQL topics:
+
+- Nested `SELECT` statements
+- Table creation and data insertion
+- Database design
+
+:::

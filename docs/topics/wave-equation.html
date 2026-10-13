@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2026-10-13">
+
+<title>Wave Equation – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#wave-equation" id="toc-wave-equation" class="nav-link active" data-scroll-target="#wave-equation"><span class="header-section-number">1</span> Wave Equation</a>
+  <ul class="collapse">
+  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition"><span class="header-section-number">1.1</span> Intuition</a></li>
+  </ul></li>
+  <li><a href="#derivation" id="toc-derivation" class="nav-link" data-scroll-target="#derivation"><span class="header-section-number">2</span> Derivation</a></li>
+  <li><a href="#initial-and-boundary-conditions" id="toc-initial-and-boundary-conditions" class="nav-link" data-scroll-target="#initial-and-boundary-conditions"><span class="header-section-number">3</span> Initial and Boundary Conditions</a></li>
+  <li><a href="#dalemberts-solution" id="toc-dalemberts-solution" class="nav-link" data-scroll-target="#dalemberts-solution"><span class="header-section-number">4</span> d’Alembert’s Solution</a>
+  <ul class="collapse">
+  <li><a href="#the-general-solution" id="toc-the-general-solution" class="nav-link" data-scroll-target="#the-general-solution"><span class="header-section-number">4.1</span> The General Solution</a></li>
+  <li><a href="#solving-the-initial-value-problem" id="toc-solving-the-initial-value-problem" class="nav-link" data-scroll-target="#solving-the-initial-value-problem"><span class="header-section-number">4.2</span> Solving the Initial Value Problem</a></li>
+  </ul></li>
+  <li><a href="#properties" id="toc-properties" class="nav-link" data-scroll-target="#properties"><span class="header-section-number">5</span> Properties</a></li>
+  <li><a href="#standing-waves-on-a-finite-string" id="toc-standing-waves-on-a-finite-string" class="nav-link" data-scroll-target="#standing-waves-on-a-finite-string"><span class="header-section-number">6</span> Standing Waves on a Finite String</a></li>
+  <li><a href="#higher-dimensions" id="toc-higher-dimensions" class="nav-link" data-scroll-target="#higher-dimensions"><span class="header-section-number">7</span> Higher Dimensions</a></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">8</span> Related Topics</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Wave Equation</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Robin Inston </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 13, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="wave-equation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Wave Equation</h1>
+<p>The <strong>wave equation</strong> describes how disturbances propagate through a medium at a finite speed: vibrations of a string or drum, sound in air, and light and other electromagnetic waves. It is the prototypical <strong>hyperbolic</strong> [[partial-differential-equations|PDE]], in contrast to the parabolic <a href="../topics/heat-equation.html">Heat Equation</a>.</p>
+<div class="definition" data-title="Wave Equation">
+<p>The <strong>wave equation</strong> for <span class="math inline">\(u(t,\boldsymbol{x})\)</span> with wave speed <span class="math inline">\(c&gt;0\)</span> is <span class="math display">\[
+u_{tt}-c^2\Delta u=0,
+\]</span> where <span class="math inline">\(\Delta\)</span> is the <a href="../topics/laplace-operator.html">Laplace Operator</a>. In one dimension this is <span class="math inline">\(u_{tt}=c^2u_{xx}\)</span>. The <strong>non-homogeneous</strong> equation is <span class="math inline">\(u_{tt}-c^2\Delta u=f\)</span>, where <span class="math inline">\(f\)</span> is an external force.</p>
+</div>
+<section id="intuition" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1.1</span> Intuition</h2>
+<p>Think of a stretched string, with <span class="math inline">\(u(t,x)\)</span> the vertical displacement. The second derivative <span class="math inline">\(u_{xx}\)</span> is the curvature, and a curved string pulls on itself:</p>
+<ul>
+<li>At a local peak (<span class="math inline">\(u_{xx}&lt;0\)</span>) the tension pulls the string back down, so <span class="math inline">\(u_{tt}&lt;0\)</span>.</li>
+<li>At a local trough (<span class="math inline">\(u_{xx}&gt;0\)</span>) it is pulled up, so <span class="math inline">\(u_{tt}&gt;0\)</span>.</li>
+<li>Where the string is straight (<span class="math inline">\(u_{xx}=0\)</span>) the two pulls balance and there is no acceleration.</li>
+</ul>
+<p>Compare with the heat equation where curvature gives the <strong>velocity</strong> <span class="math inline">\(u_t\)</span>. Here curvature gives the <strong>acceleration</strong> <span class="math inline">\(u_{tt}\)</span>, so the solution overshoots and oscillates rather than relaxing, and information travels along with the disturbance rather than spreading everywhere instantly. The speed <span class="math inline">\(c=\sqrt{T/\rho}\)</span> is larger for a tighter (larger tension <span class="math inline">\(T\)</span>) or lighter (smaller density <span class="math inline">\(\rho\)</span>) string.</p>
+</section>
+</section>
+<section id="derivation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Derivation</h1>
+<p>Consider a string of constant density <span class="math inline">\(\rho\)</span> (mass per unit length) under constant tension <span class="math inline">\(T\)</span>, with small vertical displacements <span class="math inline">\(u(t,x)\)</span>. Take a small piece between <span class="math inline">\(x\)</span> and <span class="math inline">\(x+dx\)</span>. Let <span class="math inline">\(\theta(x)\)</span> be the angle the string makes with the horizontal, so <span class="math display">\[
+\tan\theta=u_x.
+\]</span></p>
+<p><strong>Vertical forces.</strong> The tension <span class="math inline">\(T\)</span> acts along the string at both ends, so the net vertical force on the piece is <span class="math display">\[
+T\sin\theta(x+dx)-T\sin\theta(x).
+\]</span> For small displacements <span class="math inline">\(\theta\)</span> is small, so <span class="math inline">\(\sin\theta\approx\tan\theta=u_x\)</span> (and <span class="math inline">\(\cos\theta\approx1\)</span>, so the horizontal forces cancel). The vertical force is therefore <span class="math display">\[
+T\big(u_x(t,x+dx)-u_x(t,x)\big)\approx Tu_{xx}~dx.
+\]</span></p>
+<p><strong>Newton’s law.</strong> The mass of the piece is <span class="math inline">\(\rho~dx\)</span> and its acceleration is <span class="math inline">\(u_{tt}\)</span>, so <span class="math display">\[
+\rho~dx~u_{tt}=Tu_{xx}~dx\implies u_{tt}=c^2u_{xx},\qquad c^2=\frac{T}{\rho}.
+\]</span></p>
+<p>In higher dimensions the same argument for a membrane (drum) gives <span class="math inline">\(u_{tt}=c^2\Delta u\)</span>. Sound waves follow from conservation of mass and momentum for a gas, linearised about a state of rest, with <span class="math inline">\(c\)</span> the speed of sound.</p>
+</section>
+<section id="initial-and-boundary-conditions" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Initial and Boundary Conditions</h1>
+<p>The wave equation is second order in time, so <strong>two</strong> initial conditions are needed, the initial shape and the initial velocity: <span class="math display">\[
+u(0,x)=\varphi(x),\qquad u_t(0,x)=\psi(x).
+\]</span> On a string <span class="math inline">\(0&lt;x&lt;L\)</span> the usual boundary conditions are:</p>
+<ul>
+<li><strong>Dirichlet:</strong> <span class="math inline">\(u(t,0)=0\)</span>, a fixed end (like a guitar string).</li>
+<li><strong>Neumann:</strong> <span class="math inline">\(u_x(t,0)=0\)</span>, a free end (the end can slide freely on a pole).</li>
+</ul>
+</section>
+<section id="dalemberts-solution" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> d’Alembert’s Solution</h1>
+<section id="the-general-solution" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-general-solution"><span class="header-section-number">4.1</span> The General Solution</h2>
+<p>The equation factorises as <span class="math display">\[
+\left(\partial_t-c\partial_x\right)\left(\partial_t+c\partial_x\right)u=0,
+\]</span> so it is built from two <a href="../topics/transport-equation.html">transport equations</a>, one moving left and one moving right. To solve it change variables to <span class="math display">\[
+\xi=x-ct,\qquad\eta=x+ct.
+\]</span> By the <a href="../topics/chain-rule.html">chain rule</a>, <span class="math inline">\(\partial_x=\partial_\xi+\partial_\eta\)</span> and <span class="math inline">\(\partial_t=-c\partial_\xi+c\partial_\eta\)</span>, so <span class="math display">\[
+u_{tt}-c^2u_{xx}=c^2\left(\partial_\eta-\partial_\xi\right)^2u-c^2\left(\partial_\eta+\partial_\xi\right)^2u=-4c^2u_{\xi\eta}.
+\]</span> Hence the equation becomes <span class="math inline">\(u_{\xi\eta}=0\)</span>. Integrating in <span class="math inline">\(\eta\)</span> shows <span class="math inline">\(u_\xi\)</span> depends only on <span class="math inline">\(\xi\)</span>, and then integrating in <span class="math inline">\(\xi\)</span> gives <span class="math display">\[
+u(t,x)=F(x-ct)+G(x+ct)
+\]</span> for arbitrary (twice differentiable) functions <span class="math inline">\(F,G\)</span>: a wave travelling right at speed <span class="math inline">\(c\)</span> plus a wave travelling left at speed <span class="math inline">\(c\)</span>.</p>
+</section>
+<section id="solving-the-initial-value-problem" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="solving-the-initial-value-problem"><span class="header-section-number">4.2</span> Solving the Initial Value Problem</h2>
+<div class="theorem" data-title="d'Alembert's Formula">
+<p>The problem <span class="math inline">\(u_{tt}=c^2u_{xx}\)</span> on <span class="math inline">\(\mathbb{R}\)</span> with <span class="math inline">\(u(0,x)=\varphi(x)\)</span> and <span class="math inline">\(u_t(0,x)=\psi(x)\)</span> has the solution <span class="math display">\[
+u(t,x)=\frac12\big[\varphi(x+ct)+\varphi(x-ct)\big]+\frac{1}{2c}\int_{x-ct}^{x+ct}\psi(s)~ds.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Write <span class="math inline">\(u=F(x-ct)+G(x+ct)\)</span>. At <span class="math inline">\(t=0\)</span>, <span class="math display">\[
+F(x)+G(x)=\varphi(x),\qquad -cF'(x)+cG'(x)=\psi(x).
+\]</span> Integrating the second, <span class="math inline">\(G(x)-F(x)=\frac1c\int_0^x\psi(s)~ds+C\)</span>. Solving with the first, <span class="math display">\[
+G(x)=\frac12\varphi(x)+\frac{1}{2c}\int_0^x\psi+\frac C2,\qquad
+F(x)=\frac12\varphi(x)-\frac{1}{2c}\int_0^x\psi-\frac C2.
+\]</span> Therefore <span class="math display">\[
+F(x-ct)+G(x+ct)=\frac12\big[\varphi(x-ct)+\varphi(x+ct)\big]+\frac{1}{2c}\left(\int_0^{x+ct}\psi-\int_0^{x-ct}\psi\right),
+\]</span> which is the claimed formula.</p>
+</div>
+<div class="example" data-title="Initial Displacement Only">
+<p>A string at rest (<span class="math inline">\(\psi=0\)</span>) is released from the shape <span class="math inline">\(\varphi\)</span>. Then <span class="math display">\[
+u(t,x)=\tfrac12\varphi(x-ct)+\tfrac12\varphi(x+ct),
+\]</span> so the initial shape <strong>splits into two copies of half the height</strong>, one travelling right and one left at speed <span class="math inline">\(c\)</span>. For a plucked string with a triangular bump, two smaller triangles move apart, and they pass through each other without changing shape (linearity).</p>
+</div>
+<div class="example" data-title="Initial Velocity Only">
+<p>If <span class="math inline">\(\varphi=0\)</span> and <span class="math inline">\(\psi\equiv1\)</span> then <span class="math display">\[
+u(t,x)=\frac{1}{2c}\int_{x-ct}^{x+ct}1~ds=t,
+\]</span> so the whole string rises at the constant speed <span class="math inline">\(1\)</span> it was given. More generally a localised initial velocity produces a region that spreads outward at speed <span class="math inline">\(c\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="properties" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Properties</h1>
+<div class="theorem" data-title="Properties of the Wave Equation">
+<ol type="1">
+<li><strong>Linearity and superposition:</strong> sums of solutions are solutions, so waves pass through one another unchanged.</li>
+<li><strong>Finite speed of propagation:</strong> the value <span class="math inline">\(u(t_0,x_0)\)</span> depends only on the data in the interval <span class="math inline">\([x_0-ct_0,\,x_0+ct_0]\)</span> (the <em>domain of dependence</em>). Equivalently, data at <span class="math inline">\(x_0\)</span> influences only the cone <span class="math inline">\(|x-x_0|\le ct\)</span>.</li>
+<li><strong>Energy conservation:</strong> for solutions on <span class="math inline">\([0,L]\)</span> with Dirichlet (or Neumann) ends, the energy <span class="math display">\[
+E(t)=\frac12\int_0^L\left(u_t^2+c^2u_x^2\right)dx
+\]</span> is constant in time. Hence the solution is unique.</li>
+<li><strong>Time reversibility:</strong> if <span class="math inline">\(u(t,x)\)</span> is a solution, so is <span class="math inline">\(u(-t,x)\)</span>.</li>
+<li><strong>No smoothing:</strong> singularities in the data travel along the characteristics <span class="math inline">\(x\pm ct=\text{const}\)</span> and are not removed.</li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><em>(2)</em> is immediate from d’Alembert’s formula, which uses <span class="math inline">\(\varphi\)</span> only at <span class="math inline">\(x\pm ct\)</span> and <span class="math inline">\(\psi\)</span> only on <span class="math inline">\([x-ct,x+ct]\)</span>.</p>
+<p><em>(3)</em> Differentiating and integrating by parts, <span class="math display">\[
+E'(t)=\int_0^L\left(u_tu_{tt}+c^2u_xu_{xt}\right)dx
+=\int_0^Lu_t\big(u_{tt}-c^2u_{xx}\big)dx+c^2\big[u_xu_t\big]_0^L=0,
+\]</span> where the boundary term vanishes since <span class="math inline">\(u_t=0\)</span> at a fixed end and <span class="math inline">\(u_x=0\)</span> at a free end. If <span class="math inline">\(u_1,u_2\)</span> solve the same problem, then <span class="math inline">\(w=u_1-u_2\)</span> has <span class="math inline">\(E(0)=0\)</span>, so <span class="math inline">\(E\equiv0\)</span>, so <span class="math inline">\(w_t=w_x=0\)</span> and <span class="math inline">\(w\equiv0\)</span>.</p>
+</div>
+<blockquote class="blockquote">
+<p><em>Note:</em> Compare with the <a href="../topics/heat-equation.html">Heat Equation</a>, where the energy <span class="math inline">\(\int u^2\)</span> decays (smoothing, irreversible, infinite speed) whereas here <span class="math inline">\(E\)</span> is conserved (waves persist and are reversible, finite speed).</p>
+</blockquote>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Heat equation</th>
+<th>Wave equation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Equation</td>
+<td><span class="math inline">\(u_t=ku_{xx}\)</span></td>
+<td><span class="math inline">\(u_{tt}=c^2u_{xx}\)</span></td>
+</tr>
+<tr class="even">
+<td>Type</td>
+<td>parabolic</td>
+<td>hyperbolic</td>
+</tr>
+<tr class="odd">
+<td>Initial data</td>
+<td><span class="math inline">\(u\)</span></td>
+<td><span class="math inline">\(u\)</span> and <span class="math inline">\(u_t\)</span></td>
+</tr>
+<tr class="even">
+<td>Speed of influence</td>
+<td>infinite</td>
+<td><span class="math inline">\(c\)</span></td>
+</tr>
+<tr class="odd">
+<td>Smoothing</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr class="even">
+<td>Time reversible</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="standing-waves-on-a-finite-string" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Standing Waves on a Finite String</h1>
+<p>For <span class="math inline">\(u_{tt}=c^2u_{xx}\)</span> on <span class="math inline">\((0,L)\)</span> with <span class="math inline">\(u(t,0)=u(t,L)=0\)</span>, separate variables <span class="math inline">\(u=T(t)X(x)\)</span>. Then <span class="math display">\[
+\frac{T''}{c^2T}=\frac{X''}{X}=-\lambda,
+\]</span> and as for the heat equation the boundary conditions force <span class="math inline">\(X_n(x)=\sin(n\pi x/L)\)</span> with <span class="math inline">\(\lambda_n=(n\pi/L)^2\)</span>. Now <span class="math inline">\(T''+c^2\lambda_nT=0\)</span> is an oscillator rather than a decay, so <span class="math display">\[
+u(t,x)=\sum_{n=1}^\infty\left(A_n\cos\frac{n\pi ct}{L}+B_n\sin\frac{n\pi ct}{L}\right)\sin\frac{n\pi x}{L},
+\]</span> and matching <span class="math inline">\(u(0,x)=\varphi\)</span>, <span class="math inline">\(u_t(0,x)=\psi\)</span> gives <span class="math display">\[
+A_n=\frac2L\int_0^L\varphi(x)\sin\frac{n\pi x}{L}~dx,\qquad
+B_n=\frac{2}{n\pi c}\int_0^L\psi(x)\sin\frac{n\pi x}{L}~dx.
+\]</span></p>
+<div class="example" data-title="Fundamental Mode">
+<p>For <span class="math inline">\(\varphi=\sin(\pi x/L)\)</span> and <span class="math inline">\(\psi=0\)</span> only <span class="math inline">\(A_1=1\)</span> survives and <span class="math display">\[
+u(t,x)=\cos\frac{\pi ct}{L}\sin\frac{\pi x}{L}.
+\]</span> This is a <strong>standing wave</strong>: the shape never moves, it just oscillates up and down with frequency <span class="math inline">\(c/(2L)\)</span>. The <span class="math inline">\(n\)</span>th mode oscillates at <span class="math inline">\(n\)</span> times this frequency, which are the <strong>harmonics</strong> that give a string its musical pitch. By <span class="math inline">\(\sin a\cos b=\frac12[\sin(a+b)+\sin(a-b)]\)</span> this equals <span class="math inline">\(\frac12\sin\frac{\pi(x+ct)}{L}+\frac12\sin\frac{\pi(x-ct)}{L}\)</span>, consistent with d’Alembert: two travelling waves that reflect off the ends.</p>
+</div>
+</section>
+<section id="higher-dimensions" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Higher Dimensions</h1>
+<p>In <span class="math inline">\(\mathbb{R}^3\)</span> the solution of <span class="math inline">\(u_{tt}=c^2\Delta u\)</span> is given by Kirchhoff’s formula, which depends only on the data on the <strong>sphere</strong> of radius <span class="math inline">\(ct\)</span> about the point, so a sharp pulse stays sharp and sound is heard clearly (Huygens’ principle). In <span class="math inline">\(\mathbb{R}^2\)</span> the solution depends on the whole disc, so a pulse leaves a lingering tail, as ripples on a pond do.</p>
+</section>
+<section id="related-topics" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Related Topics</h1>
+<ul>
+<li><a href="../topics/heat-equation.html">Heat Equation</a></li>
+<li><a href="../topics/transport-equation.html">Transport Equation</a></li>
+<li><a href="../topics/laplace-equation.html">Laplace Equation</a></li>
+<li><a href="../topics/method-of-characteristics.html">Method of Characteristics</a></li>
+</ul>
+
+
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
+<ul>
+<li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a></li>
+<li><a href="../topics/heat-equation.html">Heat Equation</a></li>
+<li><a href="../topics/laplace-equation.html">Laplace Equation</a></li>
+<li><a href="../topics/laplace-operator.html">Laplace Operator</a></li>
+<li><a href="../topics/pde-characteristics.html">PDE Characteristics</a></li>
+</ul>
+</div>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

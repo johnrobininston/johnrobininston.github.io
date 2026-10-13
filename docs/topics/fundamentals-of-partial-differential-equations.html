@@ -361,12 +361,13 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
   <li><a href="#partial-derivatives" id="toc-partial-derivatives" class="nav-link" data-scroll-target="#partial-derivatives"><span class="header-section-number">2</span> Partial Derivatives</a></li>
   <li><a href="#partial-differential-equations" id="toc-partial-differential-equations" class="nav-link" data-scroll-target="#partial-differential-equations"><span class="header-section-number">3</span> Partial Differential Equations</a></li>
-  <li><a href="#classification-of-pdes" id="toc-classification-of-pdes" class="nav-link" data-scroll-target="#classification-of-pdes"><span class="header-section-number">4</span> Classification of PDEs</a>
+  <li><a href="#differential-operators" id="toc-differential-operators" class="nav-link" data-scroll-target="#differential-operators"><span class="header-section-number">4</span> Differential Operators</a></li>
+  <li><a href="#linear-and-nonlinear-pdes" id="toc-linear-and-nonlinear-pdes" class="nav-link" data-scroll-target="#linear-and-nonlinear-pdes"><span class="header-section-number">5</span> Linear and Nonlinear PDEs</a></li>
+  <li><a href="#classification-of-pdes" id="toc-classification-of-pdes" class="nav-link" data-scroll-target="#classification-of-pdes"><span class="header-section-number">6</span> Classification of PDEs</a>
   <ul class="collapse">
-  <li><a href="#classification-by-mathematical-structure" id="toc-classification-by-mathematical-structure" class="nav-link" data-scroll-target="#classification-by-mathematical-structure"><span class="header-section-number">4.1</span> Classification by Mathematical Structure</a></li>
-  <li><a href="#classification-by-physical-phenomena" id="toc-classification-by-physical-phenomena" class="nav-link" data-scroll-target="#classification-by-physical-phenomena"><span class="header-section-number">4.2</span> Classification by Physical Phenomena</a></li>
+  <li><a href="#classification-by-mathematical-structure" id="toc-classification-by-mathematical-structure" class="nav-link" data-scroll-target="#classification-by-mathematical-structure"><span class="header-section-number">6.1</span> Classification by Mathematical Structure</a></li>
+  <li><a href="#classification-by-physical-phenomena" id="toc-classification-by-physical-phenomena" class="nav-link" data-scroll-target="#classification-by-physical-phenomena"><span class="header-section-number">6.2</span> Classification by Physical Phenomena</a></li>
   </ul></li>
-  <li><a href="#linear-pdes" id="toc-linear-pdes" class="nav-link" data-scroll-target="#linear-pdes"><span class="header-section-number">5</span> Linear PDEs</a></li>
   </ul>
 </nav>
     </div>
@@ -407,8 +408,8 @@ window.Quarto = {
 
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>Partial Differential Equations (PDEs) are equations that involve an unknown function of several variables and their partial derivatives. PDEs are used to formulate many applied problems in physics, engineering and optimization including head transfer, wave propogation, fluid flow and elasticity. In this series of notes we will cover the fundamentals of PDEs including their classification, solution methods and applications.</p>
-<p>The study of PDEs is quite complicated and draws on many areas of matHhematics. It is recommended to have studied the following topics before tackling PDEs:</p>
+<p>Partial Differential Equations (PDEs) are equations that involve an unknown function of several variables and their partial derivatives. PDEs are used to formulate many applied problems in physics, engineering and optimization including heat transfer, wave propagation, fluid flow and elasticity. In this series of notes we will cover the fundamentals of PDEs including their classification, solution methods and applications.</p>
+<p>The study of PDEs is quite complicated and draws on many areas of mathematics. It is recommended to have studied the following topics before tackling PDEs:</p>
 <ul>
 <li>Multivariate Calculus</li>
 <li>Ordinary Differential Equations</li>
@@ -436,7 +437,7 @@ window.Quarto = {
 \]</span></p>
 <p>also written as <span class="math inline">\(D_j u\)</span>, <span class="math inline">\(\partial_{x_{j}}\)</span> or <span class="math inline">\(u_{x_j}\)</span>.</p>
 </div>
-<p>Here we have referenced the differential operator <span class="math inline">\(D^n_j\)</span> to denote the <span class="math inline">\(n\)</span>-th partial derivative with respect to the <span class="math inline">\(j\)</span>-th variable.</p>
+<p>We also write <span class="math inline">\(\partial_j^k\)</span> (or <span class="math inline">\(D_j^k\)</span>) for the <span class="math inline">\(k\)</span>-th partial derivative with respect to the <span class="math inline">\(j\)</span>-th variable.</p>
 <div class="definition" data-title="Multi-Index">
 <p>A <strong>multi-index</strong> <span class="math inline">\(\alpha = (\alpha_1, \ldots, \alpha_n)\)</span> is an <span class="math inline">\(n\)</span>-tuple of non-negative integers. The <strong>order</strong> of a multi-index is given by <span class="math inline">\(\| \alpha \| = \alpha_1 + \ldots  + \alpha_n\)</span>. We define</p>
 <p><span class="math display">\[
@@ -468,7 +469,7 @@ F(x, u(x), (D^\alpha u)(x)) = 0,
 \begin{align*}
 \cos (u) + 3u_{x} + 2u\cdot u_{xy} &amp; = 0 \\
 \cos (u) + 3 \partial_ x u + 2 u\cdot \partial _{xy} u &amp; = 0\\
-\cos (u) + 3Dx + 2u\cdot D_x D_y u &amp; = 0.
+\cos (u) + 3D_x u + 2u\cdot D_x D_y u &amp; = 0.
 \end{align*}
 \]</span></p>
 </div>
@@ -479,33 +480,77 @@ F(x, u(x), (D^\alpha u)(x)) = 0,
 <p>The order of our last example is 2 since the highest order partial derivative is <span class="math inline">\(u_{xy}\)</span>.</p>
 </div>
 </section>
-<section id="classification-of-pdes" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="classification-of-pdes"><span class="header-section-number">4</span> Classification of PDEs</h2>
-<p>There are two lenses through which to view PDEs: the mathematical structure and the physical phenomena they model.</p>
-<section id="classification-by-mathematical-structure" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="classification-by-mathematical-structure"><span class="header-section-number">4.1</span> Classification by Mathematical Structure</h3>
-<p>Let’s first consider mathematical structure of a PDEs up to second order. We write the principal part (the highest-order terms) as</p>
-<p><span class="math display">\[
-Lu = \sum_{i,j=1}^{n} a_{ij}(x) u_{x_i x_j} + (\text{lower order terms}),
-\quad A = (a_{ij})_{i,j=1}^{n}~ \text{(symmetric)}.
+<section id="differential-operators" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="differential-operators"><span class="header-section-number">4</span> Differential Operators</h2>
+<p>To write PDEs compactly we think of differentiation as an operation applied to a function.</p>
+<div class="definition" data-title="Differential Operator">
+<p>A <strong>differential operator</strong> of order <span class="math inline">\(m\)</span> is a map <span class="math inline">\(L\)</span> that takes a sufficiently differentiable function <span class="math inline">\(u\)</span> to the function <span class="math display">\[
+Lu(x)=\sum_{\|\alpha\|\le m}a_\alpha(x)\,(D^\alpha u)(x),
+\]</span> where the <span class="math inline">\(a_\alpha\)</span> are given functions called the <strong>coefficients</strong>.</p>
+</div>
+<div class="example">
+<p>On functions <span class="math inline">\(u(x,y)\)</span> the operators <span class="math inline">\(Lu=u_x+xu_y\)</span> and <span class="math inline">\(Mu=u_{xx}+3u_{xy}+2u_x+5u\)</span> are differential operators of orders <span class="math inline">\(1\)</span> and <span class="math inline">\(2\)</span> with coefficients <span class="math inline">\(a_{(1,0)}=1,a_{(0,1)}=x\)</span> and <span class="math inline">\(a_{(2,0)}=1,a_{(1,1)}=3,a_{(1,0)}=2,a_{(0,0)}=5\)</span> respectively. The Laplacian <span class="math inline">\(\Delta=\sum_i\partial_{x_i}^2\)</span> is the second-order operator with all coefficients <span class="math inline">\(1\)</span> (see <a href="../topics/laplace-operator.html">Laplace Operator</a>).</p>
+</div>
+<div class="definition" data-title="Linear Operator">
+<p>A map <span class="math inline">\(L:V\to W\)</span> between vector spaces is a <strong>linear operator</strong> if for all <span class="math inline">\(u,v\in V\)</span> and scalars <span class="math inline">\(c\)</span> <span class="math display">\[
+L(cu+v)=cL(u)+L(v).
 \]</span></p>
-<p>The type depends on the eigenvalues of <span class="math inline">\(A\)</span>:</p>
+</div>
+<div class="example">
+<p>We show the operator <span class="math inline">\(Mu=u_{xx}+3u_{xy}+2u_x+5u\)</span> above is linear. Differentiation is linear, <span class="math inline">\(\partial(cu+v)=c\,\partial u+\partial v\)</span>, and multiplying by a function <span class="math inline">\(a(x)\)</span> is linear, so each term <span class="math inline">\(a_\alpha D^\alpha u\)</span> is linear in <span class="math inline">\(u\)</span>, and a sum of linear maps is linear. Directly, <span class="math display">\[
+M(cu+v)=c\,u_{xx}+v_{xx}+3(cu_{xy}+v_{xy})+2(cu_x+v_x)+5(cu+v)=cMu+Mv.
+\]</span></p>
+<p>By contrast, <span class="math inline">\(Nu=u_x+u^2\)</span> is not linear since <span class="math inline">\(N(2u)=2u_x+4u^2\neq2Nu\)</span>, and neither is <span class="math inline">\(Nu=u_x+1\)</span> since <span class="math inline">\(N(0)\neq0\)</span>.</p>
+</div>
+<p>Every differential operator <span class="math inline">\(Lu=\sum a_\alpha D^\alpha u\)</span> whose coefficients depend only on <span class="math inline">\(x\)</span> is linear. This is the case of interest in the next section.</p>
+</section>
+<section id="linear-and-nonlinear-pdes" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="linear-and-nonlinear-pdes"><span class="header-section-number">5</span> Linear and Nonlinear PDEs</h2>
+<div class="definition" data-title="Linear PDE">
+<p>A PDE is <strong>linear</strong> of order <span class="math inline">\(m\)</span> if it can be written as <span class="math display">\[
+Lu=\sum_{\|\alpha\|\le m}a_\alpha(x)\,(D^\alpha u)(x)=f(x),\qquad x\in\Omega,
+\]</span> where <span class="math inline">\(L\)</span> is a linear differential operator and <span class="math inline">\(a_\alpha\)</span>, <span class="math inline">\(f\)</span> are given functions. A PDE which is not linear is called <strong>nonlinear</strong>.</p>
+</div>
+<div class="definition" data-title="Homogeneous PDE">
+<p>A linear PDE is <strong>homogeneous</strong> if <span class="math inline">\(f\equiv0\)</span>, that is, it can be written as <span class="math display">\[
+Lu=0.
+\]</span> Equivalently, every term contains the unknown function <span class="math inline">\(u\)</span> or one of its derivatives. Otherwise the PDE is <strong>inhomogeneous</strong>.</p>
+</div>
+<p>Linearity gives the important <strong>superposition principle</strong>: if <span class="math inline">\(Lu_1=0\)</span> and <span class="math inline">\(Lu_2=0\)</span> then <span class="math inline">\(L(c_1u_1+c_2u_2)=0\)</span>, so the solutions of a homogeneous linear PDE form a vector space. If <span class="math inline">\(u_p\)</span> is any solution of <span class="math inline">\(Lu=f\)</span> then <em>all</em> solutions are <span class="math inline">\(u=u_p+u_h\)</span> with <span class="math inline">\(Lu_h=0\)</span>.</p>
+<p>Nonlinear PDEs are divided according to how nonlinear the highest-order derivatives are:</p>
+<ul>
+<li><strong>Semilinear:</strong> the highest-order derivatives appear linearly with coefficients depending only on <span class="math inline">\(x\)</span>, e.g.&nbsp;<span class="math inline">\(\Delta u=u^3\)</span>.</li>
+<li><strong>Quasilinear:</strong> the highest-order derivatives appear linearly but the coefficients may depend on <span class="math inline">\(u\)</span> and lower-order derivatives, e.g.&nbsp;Burgers’ equation <span class="math inline">\(u_t+uu_x=0\)</span>.</li>
+<li><strong>Fully nonlinear:</strong> nonlinear in the highest-order derivatives, e.g.&nbsp;the eikonal equation <span class="math inline">\(u_x^2+u_y^2=1\)</span>.</li>
+</ul>
+<div class="example">
+<p>Order and type of <span class="math inline">\(u_t-u_{xx}+xu=0\)</span>: second order, linear homogeneous. Of <span class="math inline">\(u_t-u_{xx}+1=0\)</span>: second order, linear inhomogeneous (<span class="math inline">\(f=-1\)</span>). Of <span class="math inline">\(u_t+u_{xxx}+\sqrt{1+u}=0\)</span>: third order, semilinear (hence nonlinear).</p>
+</div>
+</section>
+<section id="classification-of-pdes" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="classification-of-pdes"><span class="header-section-number">6</span> Classification of PDEs</h2>
+<p>There are two lenses through which to view PDEs: the mathematical structure and the physical phenomena they model.</p>
+<section id="classification-by-mathematical-structure" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="classification-by-mathematical-structure"><span class="header-section-number">6.1</span> Classification by Mathematical Structure</h3>
+<p>The classification below is for <strong>second-order linear</strong> PDEs (it extends to quasilinear ones by freezing the coefficients at a given solution). Write <span class="math display">\[
+Lu=\underbrace{\sum_{i,j=1}^{n}a_{ij}(x)\,u_{x_ix_j}}_{\text{principal part}}+\underbrace{\sum_ib_i(x)u_{x_i}+c(x)u}_{\text{lower-order terms}},
+\qquad A=(a_{ij})_{i,j=1}^{n}\ \text{symmetric}.
+\]</span> The <strong>principal part</strong> consists of the highest-order terms, which are the ones that determine the qualitative behaviour. The type at a point <span class="math inline">\(x\)</span> depends on the eigenvalues of <span class="math inline">\(A(x)\)</span>:</p>
 <ol type="1">
-<li>Elliptic PDEs - all eigenvalues of <span class="math inline">\(A\)</span> are non-zero and have the same sign.</li>
-<li>Parabolic PDEs - one eigenvalue of <span class="math inline">\(A\)</span> is zero and the rest have the same sign.</li>
-<li>Hyperbolic PDEs - one eigenvalue of <span class="math inline">\(A\)</span> has a different sign than the rest.</li>
+<li><strong>Elliptic</strong> - all eigenvalues of <span class="math inline">\(A\)</span> are non-zero and have the same sign.</li>
+<li><strong>Parabolic</strong> - one eigenvalue of <span class="math inline">\(A\)</span> is zero and the rest are non-zero with the same sign.</li>
+<li><strong>Hyperbolic</strong> - one eigenvalue of <span class="math inline">\(A\)</span> has a different sign than the rest (and none is zero).</li>
 </ol>
-<p>In two dimensions, the classification can be determined by the discriminant of the principal part of the PDE. For a second-order PDE in two variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> of the form</p>
-<p><span class="math display">\[
+<p>In two dimensions, the classification can be determined by the discriminant of the principal part. For a second-order PDE in two variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> of the form <span class="math display">\[
 a u_{xx} + b u_{xy} + c u_{yy} + (\ \text{lower order terms}) = 0,
-\]</span> the PDE is classified as follows:</p>
-<p><span class="math display">\[
+\]</span> the PDE is classified as follows: <span class="math display">\[
 \begin{cases}
 b^2 - 4ac &lt; 0 &amp; \text{elliptic} \\
 b^2 - 4ac = 0 &amp; \text{parabolic} \\
 b^2 - 4ac &gt; 0 &amp; \text{hyperbolic}.
 \end{cases}
 \]</span></p>
+<p>(This is the eigenvalue test for <span class="math inline">\(A=\begin{pmatrix}a&amp;b/2\\b/2&amp;c\end{pmatrix}\)</span>, whose determinant is <span class="math inline">\(ac-b^2/4\)</span>.) The type is tied to the existence of <em>characteristic curves</em>, see <a href="../topics/pde-characteristics.html">PDE Characteristics</a>.</p>
 <p>The prototypical examples of each type of PDE are given in Table 1 below.</p>
 <table class="caption-top table">
 <colgroup>
@@ -529,19 +574,20 @@ b^2 - 4ac &gt; 0 &amp; \text{hyperbolic}.
 <tr class="even">
 <td>Parabolic</td>
 <td>Heat Equation: <span class="math inline">\(u_t = \Delta u\)</span></td>
-<td>Smoothing, irreversible in time, infinite propogation speed, initial-boundary value problems.</td>
+<td>Smoothing, irreversible in time, infinite propagation speed, initial-boundary value problems.</td>
 </tr>
 <tr class="odd">
 <td>Hyperbolic</td>
 <td>Wave Equation: <span class="math inline">\(u_{tt}=c^2\Delta u\)</span></td>
-<td>Finite propogation speed, real characteristics, singularities travel, time-reversible.</td>
+<td>Finite propagation speed, real characteristics, singularities travel, time-reversible.</td>
 </tr>
 </tbody>
 </table>
+<p>See <a href="../topics/laplace-equation.html">Laplace Equation</a>, <a href="../topics/heat-equation.html">Heat Equation</a> and <a href="../topics/wave-equation.html">Wave Equation</a>.</p>
 </section>
-<section id="classification-by-physical-phenomena" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="classification-by-physical-phenomena"><span class="header-section-number">4.2</span> Classification by Physical Phenomena</h3>
-<p>Alternatively, PDEs can be classified by asking what a solution does as time evolves. A good way to see the distinction is to test each equation on a plane wave <span class="math inline">\(u=\exp (i(kx - \omega  t)\)</span>, which gives a dispersion relation <span class="math inline">\(\omega  = \omega (k)\)</span>.</p>
+<section id="classification-by-physical-phenomena" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="classification-by-physical-phenomena"><span class="header-section-number">6.2</span> Classification by Physical Phenomena</h3>
+<p>Alternatively, PDEs can be classified by asking what a solution does as time evolves. A good way to see the distinction is to test each equation on a plane wave <span class="math inline">\(u=\exp (i(kx - \omega  t))\)</span>, which gives a dispersion relation <span class="math inline">\(\omega  = \omega (k)\)</span>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 19%">
@@ -568,10 +614,10 @@ b^2 - 4ac &gt; 0 &amp; \text{hyperbolic}.
 <td>Diffusion</td>
 <td><span class="math inline">\(u_t = D u_{xx}\)</span></td>
 <td><span class="math inline">\(\omega = -iDk^2\)</span></td>
-<td>Modes decay like <span class="math inline">\(\exp(-iDk^2)\)</span>, so high frequencies die fastest and the profile smooths and spreads.</td>
+<td>Modes decay like <span class="math inline">\(\exp(-Dk^2t)\)</span>, so high frequencies die fastest and the profile smooths and spreads.</td>
 </tr>
 <tr class="odd">
-<td>Wave Propogation</td>
+<td>Wave Propagation</td>
 <td><span class="math inline">\(u_{tt} = c^2 u_{xx}\)</span></td>
 <td><span class="math inline">\(\omega = \pm ck\)</span></td>
 <td>Two transport waves, profile moves rigidly at speed <span class="math inline">\(c\)</span>: <span class="math inline">\(u = f(x-ct) + g(x+ct)\)</span>.</td>
@@ -584,23 +630,7 @@ b^2 - 4ac &gt; 0 &amp; \text{hyperbolic}.
 </tr>
 </tbody>
 </table>
-</section>
-</section>
-<section id="linear-pdes" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="linear-pdes"><span class="header-section-number">5</span> Linear PDEs</h2>
-<div class="definition" data-title="Linear PDE">
-<p>The general form of a <strong>linear PDE</strong> of order <span class="math inline">\(m\)</span> is given by</p>
-<p><span class="math display">\[
-\sum_{|\alpha| \le m} a_\alpha(x) (D^\alpha u)(x) = f(x), \quad x \in \Omega,
-\]</span></p>
-<p>where <span class="math inline">\(a_\alpha\)</span> and <span class="math inline">\(f\)</span> are given functions, <span class="math inline">\(\alpha\)</span> is a multi-index, and <span class="math inline">\(D^\alpha u\)</span> denotes the partial derivative of <span class="math inline">\(u\)</span> corresponding to the multi-index <span class="math inline">\(\alpha\)</span>.</p>
-</div>
-<div class="definition" data-title="Linear Operator">
-<p>A <strong>linear operator</strong> <span class="math inline">\(L\)</span> is a mapping from a vector space <span class="math inline">\(V\)</span> to itself that satisfies the following properties for all <span class="math inline">\(u, v \in V\)</span> and scalars <span class="math inline">\(c\)</span>:</p>
-<p><span class="math display">\[
-L(cu+v) = cL(u) + L(v).
-\]</span></p>
-</div>
+<p>See <a href="../topics/transport-equation.html">Transport Equation</a>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -608,9 +638,11 @@ L(cu+v) = cL(u) + L(v).
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/calculus.html">Calculus</a></li>
 <li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

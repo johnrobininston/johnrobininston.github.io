@@ -6,54 +6,261 @@ number-sections: true
 title-block-banner: false
 ---
 
-## Heat Equation
+# Heat Equation
 *References:*
 [Stanford Notes](https://web.stanford.edu/class/math220b/handouts/heateqn.pdf)
 
-The (homogeneous) **heat equation** describes the diffusion of heat in general
-$n$-dimensional continuous medium.
+The (homogeneous) **heat equation** describes the diffusion of heat in a
+general $n$-dimensional continuous medium. The same equation governs any
+quantity that spreads out from high to low concentration, such as dye in a
+liquid or a pollutant in air. It is the prototypical **parabolic**
+[[partial-differential-equations|PDE]].
 
 :::{.definition data-title="Heat Equation"}
 
 Denoting the heat of material at location $\boldsymbol{x}$ at time $t$ by
-$u(t,x)$ the **heat equation** (**diffusion equation**) gives the heat
-diffusion dynamics as
+$u(t,\boldsymbol{x})$ the **heat equation** (**diffusion equation**) gives the
+heat diffusion dynamics as
 $$
-u_{t}-\Delta u=0,
+u_{t}-k\Delta u=0,\qquad k>0,
 $$
-where $\Delta$ denotes the [[laplace-operator]].
+where $\Delta$ denotes the [[laplace-operator]] and $k$ is the *diffusivity*.
+The **non-homogeneous heat equation** is $u_{t}-k\Delta u=f$, where $f$
+represents a heat source.
 
 :::
 
-The **non-homogeneous heat equation** is
-$$
-u_{t}-\Delta u=f,
-$$
-subject to appropriate initial boundary conditions. Considering the
-1-dimensional case for intuition we have
-$$
-u_{t}-ku_{xx}=0;~~k>0,
-$$
-where $u(x, t)$ represents the temperature at point $x$ and time $t$ in a long,
-thin, perfectly insulated bar of material. Some of the elementary properties of
-the diffusion equation are:
+In one dimension this is $u_t=ku_{xx}$, where $u(t,x)$ is the temperature at
+position $x$ and time $t$ in a long, thin, perfectly insulated bar. Scaling
+time by $k$ allows us to take $k=1$ without loss of generality.
 
-1. **Linearity:** If $u_{1}$ and $u_{2}$ are solutions, then so to is
-   $c_{1}u_{1}+c_{2}u_{2}$ for any constants $c_{1}$ and $c_{2}$;
-2. **Second Order Equation**;
-3. **Parabolic Equation:** Characteristics are given by $\tau=\text{constant}$
-   thus information propagates along these lines in $(x,\tau)$ spaces, and if
-   change is made to $u$ at some point, its effect is felt instantaneously
-   everywhere else;
-4. **Analytic Function Solutions.**
+## Intuition
 
+The Laplacian measures how much $u$ at a point differs from its average over a
+small neighbourhood. In one dimension
+$$
+u_{xx}(x)=\lim_{h\to0}\frac{u(x+h)+u(x-h)-2u(x)}{h^2}
+=\lim_{h\to0}\frac{2}{h^2}\left(\frac{u(x+h)+u(x-h)}{2}-u(x)\right),
+$$
+so $u_t=ku_{xx}$ says that **each point moves towards the average of its
+neighbours**, at a rate proportional to how far it is from that average.
+
+- Where $u$ is a local peak ($u_{xx}<0$) the temperature falls.
+- Where $u$ is a local trough ($u_{xx}>0$) the temperature rises.
+- Where $u$ is linear ($u_{xx}=0$) nothing changes, as heat flowing in from
+  the hot side exactly matches the heat flowing out to the cold side.
+
+The result is that bumps flatten out and sharp features are smoothed
+immediately, which is why the equation is irreversible. Probabilistically, $u$
+is the density of a cloud of particles each performing independent random walks
+([[brownian-motion]]), and the equation describes how the cloud spreads.
+
+# Derivation
 To derive the heat (diffusion) equation consider the diffusion of dye through a
-liquid, where the dye moves from high concentration to low concentration. Let
-$u(x,t)$ be the concentration (mass per unit length) of th dye at position $x$
-in the pipe at time $t$. The total mass of dye in the pipe from $x_{0}$ to
-$x_{1}$ at time $t$ is given by
+liquid in a thin pipe, where the dye moves from high concentration to low
+concentration. Let $u(t,x)$ be the concentration (mass per unit length) of the
+dye at position $x$ in the pipe at time $t$. The total mass of dye in the pipe
+from $x_{0}$ to $x_{1}$ at time $t$ is given by
 $$
 M(t)=\int_{x_{0}}^{x_{1}}{u(x,t)}~d{x} \implies \frac{\partial M}{\partial t}=\int_{x_{0}}^{x_{1}}{u_{t}(x,t)}~d{x}.
 $$
 
+**Conservation of mass.** Dye is neither created nor destroyed, so the mass
+changes only through the flux $J(t,x)$ (mass per unit time, positive to the
+right) through the two ends:
+$$
+\frac{\partial M}{\partial t}=J(t,x_0)-J(t,x_1)=-\int_{x_0}^{x_1}J_x(t,x)~dx.
+$$
+Comparing the two expressions for $\partial M/\partial t$, which hold for all
+$x_0<x_1$, gives the **continuity equation**
+$$
+u_t+J_x=0.
+$$
 
+**Fick's (Fourier's) law.** Material flows from high to low concentration at a
+rate proportional to the steepness of the gradient,
+$$
+J=-ku_x,\qquad k>0.
+$$
+For heat this is Fourier's law, with $u$ the temperature, $J$ the heat flux, and
+$k=\kappa/(\rho c)$ built from the conductivity $\kappa$, the density $\rho$ and
+the specific heat $c$.
+
+Substituting gives $u_t=ku_{xx}$. In $n$ dimensions the same argument on a
+region $\Omega$ uses the divergence theorem:
+$$
+\frac{d}{dt}\int_\Omega u~dx=-\int_{\partial\Omega}\vec J\cdot\vec n~dS
+=-\int_\Omega\nabla\cdot\vec J~dx,
+$$
+so $u_t+\nabla\cdot\vec J=0$, and with $\vec J=-k\nabla u$ (see
+[[gradient]]) this becomes $u_t=k\nabla\cdot\nabla u=k\Delta u$. If the medium is
+also moving with velocity $\vec V$, then $\vec J=u\vec V-k\nabla u$ and one
+gets the transport-diffusion equation $u_t+\vec V\cdot\nabla u=k\Delta u$ (see
+[[transport-equation]]).
+
+# Initial and Boundary Conditions
+The heat equation is first order in time, so one initial condition
+$u(0,x)=u_0(x)$ is required. On a bar $0<x<L$ we also need one condition at each
+end. The standard ones are:
+
+- **Dirichlet:** the temperature is prescribed, $u(t,0)=a$. (End held in a bath.)
+- **Neumann:** the flux is prescribed, $u_x(t,0)=g$. With $g=0$ this is a
+  perfectly insulated end.
+- **Robin:** $u_x+\alpha u=g$, where the end loses heat to the surroundings at
+  a rate proportional to the temperature difference.
+
+:::{.example data-title="A Modelling Problem"}
+
+A laterally insulated rod of length $L$ has initial temperature $50$. At $t=0$
+the end $x=0$ is placed in icy water ($0$) and the end $x=L$ in boiling water
+($100$). The problem is
+$$
+\begin{cases}
+u_t=ku_{xx}, & 0<x<L,\ t>0,\\
+u(0,x)=50,\\
+u(t,0)=0,\quad u(t,L)=100.
+\end{cases}
+$$
+
+:::
+
+# Properties
+
+:::{.theorem data-title="Properties of the Heat Equation"}
+
+Let $u$ solve $u_t=ku_{xx}$ on $[0,L]$. Then:
+
+1. **Linearity:** if $u_{1}$ and $u_{2}$ are solutions, then so is
+   $c_{1}u_{1}+c_{2}u_{2}$ for any constants $c_{1}$ and $c_{2}$.
+2. **Maximum principle:** the maximum and minimum of $u$ over
+   $[0,T]\times[0,L]$ are attained at $t=0$ or at $x=0$ or $x=L$.
+3. **Uniqueness:** for given initial and Dirichlet data there is at most one
+   solution.
+4. **Smoothing and infinite speed:** for $t>0$ the solution is smooth (indeed
+   analytic in $x$), and a disturbance at one point is felt instantaneously
+   everywhere.
+5. **Conservation (insulated ends):** if $u_x(t,0)=u_x(t,L)=0$ then
+   $\int_0^Lu~dx$ is constant in time.
+
+:::
+
+:::{.proof}
+
+*(3)* If $u_1,u_2$ are two solutions then $w=u_1-u_2$ solves the problem with
+zero data. Let $E(t)=\int_0^Lw^2~dx\ge0$. Then, integrating by parts and using
+$w=0$ at $x=0,L$,
+$$
+E'(t)=2\int_0^Lww_t~dx=2k\int_0^Lww_{xx}~dx=-2k\int_0^Lw_x^2~dx\le0.
+$$
+Since $E(0)=0$ and $E\ge0$ is non-increasing, $E\equiv0$, so $w\equiv0$.
+
+*(5)* $\frac{d}{dt}\int_0^Lu~dx=k\int_0^Lu_{xx}~dx=k[u_x]_0^L=0$.
+
+:::
+
+> *Note:* The maximum principle matches intuition: heat cannot pile up in the
+> interior of the bar, because every interior point is moving towards the
+> average of its neighbours.
+
+# Solutions
+
+## Steady State
+A solution with $u_t=0$ satisfies $u_{xx}=0$, so is linear in $x$. For the rod
+problem above the steady state is $u_\infty(x)=100x/L$, which is where the
+temperature settles as $t\to\infty$. Writing $u=u_\infty+v$ then reduces to a
+problem for $v$ with zero boundary data.
+
+## Separation of Variables
+For $u_t=ku_{xx}$ on $(0,L)$ with $u(t,0)=u(t,L)=0$ look for solutions of the
+form $u=T(t)X(x)$. Substitution gives
+$$
+\frac{T'}{kT}=\frac{X''}{X}=-\lambda,
+$$
+since the left side depends only on $t$ and the right only on $x$, so both are
+constant. The boundary conditions give $X''+\lambda X=0$, $X(0)=X(L)=0$ which
+has non-trivial solutions only for
+$$
+\lambda_n=\left(\frac{n\pi}{L}\right)^2,\qquad X_n(x)=\sin\frac{n\pi x}{L},\qquad n=1,2,\dots
+$$
+and $T_n(t)=e^{-k\lambda_nt}$. By linearity
+$$
+u(t,x)=\sum_{n=1}^\infty b_n\,e^{-k(n\pi/L)^2t}\sin\frac{n\pi x}{L},\qquad
+b_n=\frac{2}{L}\int_0^Lu_0(x)\sin\frac{n\pi x}{L}~dx,
+$$
+where the $b_n$ are the Fourier sine coefficients of the initial data.
+
+:::{.example data-title="Single Mode"}
+
+If $u_0(x)=\sin(\pi x/L)$ then only $b_1=1$ is non-zero and
+$$
+u(t,x)=e^{-k\pi^2t/L^2}\sin\frac{\pi x}{L}.
+$$
+The profile keeps its shape and simply decays, with time constant
+$L^2/(k\pi^2)$. Higher modes $\sin(n\pi x/L)$ decay $n^2$ times faster, which
+explains the smoothing: rough features are made of high modes which vanish
+first.
+
+:::
+
+## The Whole Line
+
+:::{.definition data-title="Heat Kernel"}
+
+The **heat kernel** (fundamental solution) on $\mathbb{R}$ is
+$$
+\Phi(t,x)=\frac{1}{\sqrt{4\pi kt}}\,e^{-x^2/4kt},\qquad t>0.
+$$
+
+:::
+
+:::{.theorem data-title="Solution on the Real Line"}
+
+For bounded continuous $u_0$ the problem $u_t=ku_{xx}$, $u(0,x)=u_0(x)$ on
+$\mathbb{R}$ has the solution
+$$
+u(t,x)=\int_{-\infty}^\infty\Phi(t,x-y)\,u_0(y)~dy=(\Phi(t,\cdot)*u_0)(x).
+$$
+
+:::
+
+:::{.proof}
+
+*$\Phi$ solves the equation.* Differentiating,
+$$
+\Phi_t=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),\qquad
+k\Phi_{xx}=k\Phi\left(-\frac{1}{2kt}+\frac{x^2}{4k^2t^2}\right)
+=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),
+$$
+so $\Phi_t=k\Phi_{xx}$, and the same holds for the translates $\Phi(t,x-y)$ and
+hence, differentiating under the integral, for $u$.
+
+*$\Phi$ has unit mass.* By the [[gaussian-integral]],
+$\int_{-\infty}^\infty e^{-(x-y)^2/4kt}~dy=\sqrt{4\pi kt}$, so
+$\int\Phi~dy=1$. The kernel concentrates at $x$ as $t\to0$ (its width is
+$\sim\sqrt{kt}$ and its height grows) so it approximates a delta function, and
+$u(t,x)\to u_0(x)$.
+
+:::
+
+> *Note:* $\Phi(t,\cdot)$ is the density of the
+> [[normal-distribution]] $\mathcal{N}(0,2kt)$. The solution is the average of
+> the initial data against a Gaussian whose width $\sqrt{2kt}$ grows like the
+> square root of time. This is the diffusive scaling of
+> [[brownian-motion]]. The tails are positive for every $t>0$, which is the
+> infinite propagation speed.
+
+:::{.example data-title="Spreading of a Heat Spike"}
+
+Let $u_0=\delta_0$ be an initial unit of heat concentrated at the origin. Then
+$u(t,x)=\Phi(t,x)$: a Gaussian whose peak $1/\sqrt{4\pi kt}$ falls like
+$t^{-1/2}$ while its width grows like $t^{1/2}$, so the total heat stays equal
+to $1$.
+
+:::
+
+# Related Topics
+
+- [[wave-equation]]
+- [[transport-equation]]
+- [[laplace-equation]] (the steady state of the heat equation in higher dimensions)
+- [[convolution]]

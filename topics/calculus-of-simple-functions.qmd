@@ -1,0 +1,343 @@
+---
+id: calculus-of-simple-functions
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-13
+number-sections: true
+title: "Calculus of Simple Functions"
+title-block-banner: false
+---
+
+## Calculus of Simple Functions
+
+This note collects the derivatives, integrals, identities, limits and series of
+the elementary functions (polynomials, exponentials and logarithms,
+trigonometric and hyperbolic functions and their inverses) for quick reference.
+For the general theory see [[chain-rule]], [[quotient-rule]],
+[[implicit-differentiation]], [[riemann-integral]] and [[taylor-series]].
+Throughout, $a>0$, $a\neq1$ is a constant, $C$ is a constant of integration and
+results hold on the natural domain of the functions involved.
+
+## Differentiation Rules
+
+:::{.theorem data-title="Rules of Differentiation"}
+
+For differentiable $f,g$ and constants $c_1,c_2$:
+
+- **Linearity:** $(c_1f+c_2g)'=c_1f'+c_2g'$.
+- **Product rule:** $(fg)'=f'g+fg'$.
+- **Quotient rule:** $\left(\dfrac fg\right)'=\dfrac{f'g-fg'}{g^2}$ for $g\neq0$.
+- **Chain rule:** $(f\circ g)'(x)=f'(g(x))\,g'(x)$.
+- **Inverse functions:** $(f^{-1})'(y)=\dfrac{1}{f'(x)}$ where $y=f(x)$ and
+  $f'(x)\neq0$.
+- **Logarithmic differentiation:** $f'=f\,(\ln f)'$ for $f>0$, useful for
+  $f(x)^{g(x)}$.
+
+:::
+
+## Polynomials and Powers
+
+| $f(x)$ | $f'(x)$ | $\int f(x)\,dx$ |
+|---|---|---|
+| $c$ | $0$ | $cx+C$ |
+| $x^n$, $n\neq-1$ | $nx^{n-1}$ | $\dfrac{x^{n+1}}{n+1}+C$ |
+| $\dfrac1x$ | $-\dfrac1{x^2}$ | $\ln\lvert x\rvert+C$ |
+| $\sqrt x$ | $\dfrac1{2\sqrt x}$ | $\dfrac23x^{3/2}+C$ |
+
+The power rule holds for every real exponent $n$ (for $x>0$ when $n$ is not an
+integer). A polynomial $\sum_{k=0}^na_kx^k$ is differentiated and integrated
+termwise:
+$$
+\frac{d}{dx}\sum_{k=0}^na_kx^k=\sum_{k=1}^nka_kx^{k-1},\qquad
+\int\sum_{k=0}^na_kx^k\,dx=\sum_{k=0}^n\frac{a_k}{k+1}x^{k+1}+C.
+$$
+
+The binomial theorem is the main algebraic identity:
+$$
+(x+y)^n=\sum_{k=0}^n\binom nkx^{n-k}y^k.
+$$
+
+## Exponentials and Logarithms
+
+### Rules
+
+$$
+a^{x+y}=a^xa^y,\quad (a^x)^y=a^{xy},\quad a^x=e^{x\ln a},
+$$
+$$
+\ln(xy)=\ln x+\ln y,\quad\ln\frac xy=\ln x-\ln y,\quad\ln x^r=r\ln x,\quad
+\log_ax=\frac{\ln x}{\ln a}.
+$$
+
+## Derivatives and Integrals
+
+| $f(x)$ | $f'(x)$ | $\int f(x)\,dx$ |
+|---|---|---|
+| $e^x$ | $e^x$ | $e^x+C$ |
+| $e^{kx}$ | $ke^{kx}$ | $\dfrac1ke^{kx}+C$ |
+| $a^x$ | $a^x\ln a$ | $\dfrac{a^x}{\ln a}+C$ |
+| $\ln\lvert x\rvert$ | $\dfrac1x$ | $x\ln\lvert x\rvert-x+C$ |
+| $\log_a\lvert x\rvert$ | $\dfrac1{x\ln a}$ | $\dfrac{x\ln\lvert x\rvert-x}{\ln a}+C$ |
+| $x^x$ ($x>0$) | $x^x(\ln x+1)$ | |
+
+:::{.proof data-title="Derivative of $e^x$ and $\ln x$"}
+
+Define $e$ by $\lim_{h\to0}(e^h-1)/h=1$. Then
+$$
+\frac{d}{dx}e^x=\lim_{h\to0}\frac{e^{x+h}-e^x}{h}=e^x\lim_{h\to0}\frac{e^h-1}{h}=e^x.
+$$
+Since $\ln$ is the inverse of $\exp$, the inverse function rule with
+$y=\ln x$, $x=e^y$ gives
+$$
+(\ln x)'=\frac{1}{e^y}=\frac1x.
+$$
+
+:::
+
+:::{.example data-title="Logarithmic Differentiation"}
+
+To differentiate $f(x)=x^x$ write $\ln f=x\ln x$, so $f'/f=\ln x+1$ and
+$f'=x^x(\ln x+1)$.
+
+:::
+
+### Growth and Limits
+
+$$
+\ln x\ll x^p\ll e^x\quad(x\to\infty,\ p>0),\qquad
+\lim_{x\to\infty}\frac{x^p}{e^x}=0,\qquad\lim_{x\to0^+}x^p\ln x=0,
+$$
+$$
+\lim_{x\to0}\frac{e^x-1}{x}=1,\qquad\lim_{x\to0}\frac{\ln(1+x)}{x}=1,\qquad
+\lim_{n\to\infty}\left(1+\frac xn\right)^n=e^x.
+$$
+
+## Trigonometric Functions
+
+### Identities
+
+$$
+\sin^2x+\cos^2x=1,\qquad1+\tan^2x=\sec^2x,\qquad1+\cot^2x=\csc^2x,
+$$
+$$
+\tan x=\frac{\sin x}{\cos x},\quad\sec x=\frac1{\cos x},\quad\csc x=\frac1{\sin x},\quad\cot x=\frac1{\tan x}.
+$$
+
+**Parity and shifts:** $\sin(-x)=-\sin x$, $\cos(-x)=\cos x$,
+$\sin(x+\pi/2)=\cos x$, $\cos(x+\pi/2)=-\sin x$, and all are $2\pi$-periodic
+($\tan$ is $\pi$-periodic).
+
+**Angle addition:**
+$$
+\sin(x\pm y)=\sin x\cos y\pm\cos x\sin y,\qquad
+\cos(x\pm y)=\cos x\cos y\mp\sin x\sin y.
+$$
+
+**Double angle and power reduction:**
+$$
+\sin2x=2\sin x\cos x,\qquad\cos2x=\cos^2x-\sin^2x=1-2\sin^2x=2\cos^2x-1,
+$$
+$$
+\sin^2x=\frac{1-\cos2x}{2},\qquad\cos^2x=\frac{1+\cos2x}{2}.
+$$
+
+**Product to sum:**
+$$
+\sin x\cos y=\tfrac12[\sin(x+y)+\sin(x-y)],\quad
+\cos x\cos y=\tfrac12[\cos(x-y)+\cos(x+y)],
+$$
+$$
+\sin x\sin y=\tfrac12[\cos(x-y)-\cos(x+y)].
+$$
+
+**Euler's formula:** $e^{ix}=\cos x+i\sin x$, so
+$\cos x=\frac{e^{ix}+e^{-ix}}{2}$ and $\sin x=\frac{e^{ix}-e^{-ix}}{2i}$.
+
+### Special Values
+
+| $x$ | $0$ | $\pi/6$ | $\pi/4$ | $\pi/3$ | $\pi/2$ | $\pi$ |
+|---|---|---|---|---|---|---|
+| $\sin x$ | $0$ | $\tfrac12$ | $\tfrac{\sqrt2}2$ | $\tfrac{\sqrt3}2$ | $1$ | $0$ |
+| $\cos x$ | $1$ | $\tfrac{\sqrt3}2$ | $\tfrac{\sqrt2}2$ | $\tfrac12$ | $0$ | $-1$ |
+| $\tan x$ | $0$ | $\tfrac{\sqrt3}3$ | $1$ | $\sqrt3$ | undefined | $0$ |
+
+### Derivatives and Integrals
+
+| $f(x)$ | $f'(x)$ | $\int f(x)\,dx$ |
+|---|---|---|
+| $\sin x$ | $\cos x$ | $-\cos x+C$ |
+| $\cos x$ | $-\sin x$ | $\sin x+C$ |
+| $\tan x$ | $\sec^2x$ | $-\ln\lvert\cos x\rvert+C$ |
+| $\cot x$ | $-\csc^2x$ | $\ln\lvert\sin x\rvert+C$ |
+| $\sec x$ | $\sec x\tan x$ | $\ln\lvert\sec x+\tan x\rvert+C$ |
+| $\csc x$ | $-\csc x\cot x$ | $-\ln\lvert\csc x+\cot x\rvert+C$ |
+| $\sec^2x$ | | $\tan x+C$ |
+| $\csc^2x$ | | $-\cot x+C$ |
+| $\sin^2x$ | $\sin2x$ | $\dfrac x2-\dfrac{\sin2x}4+C$ |
+| $\cos^2x$ | $-\sin2x$ | $\dfrac x2+\dfrac{\sin2x}4+C$ |
+
+:::{.proof data-title="Derivative of $\sin x$ and $\tan x$"}
+
+Using the angle addition formula,
+$$
+\frac{\sin(x+h)-\sin x}{h}=\sin x\,\frac{\cos h-1}{h}+\cos x\,\frac{\sin h}{h}\to\cos x
+$$
+as $h\to0$, since $\sin h/h\to1$ and $(\cos h-1)/h\to0$. Similarly
+$(\cos x)'=-\sin x$. By the quotient rule
+$$
+(\tan x)'=\frac{\cos x\cos x-\sin x(-\sin x)}{\cos^2x}=\frac1{\cos^2x}=\sec^2x.
+$$
+
+:::
+
+### Limits
+
+$$
+\lim_{x\to0}\frac{\sin x}{x}=1,\qquad\lim_{x\to0}\frac{1-\cos x}{x^2}=\frac12,\qquad
+\lim_{x\to0}\frac{\tan x}{x}=1.
+$$
+
+## Inverse Trigonometric Functions
+
+| $f(x)$ | Domain | $f'(x)$ |
+|---|---|---|
+| $\arcsin x$ | $[-1,1]$ | $\dfrac1{\sqrt{1-x^2}}$ |
+| $\arccos x$ | $[-1,1]$ | $-\dfrac1{\sqrt{1-x^2}}$ |
+| $\arctan x$ | $\mathbb{R}$ | $\dfrac1{1+x^2}$ |
+| $\operatorname{arccot}x$ | $\mathbb{R}$ | $-\dfrac1{1+x^2}$ |
+| $\operatorname{arcsec}x$ | $\lvert x\rvert\ge1$ | $\dfrac1{\lvert x\rvert\sqrt{x^2-1}}$ |
+| $\operatorname{arccsc}x$ | $\lvert x\rvert\ge1$ | $-\dfrac1{\lvert x\rvert\sqrt{x^2-1}}$ |
+
+with $\arcsin x+\arccos x=\pi/2$. The corresponding **standard integrals** ($a>0$)
+are
+$$
+\int\frac{dx}{\sqrt{a^2-x^2}}=\arcsin\frac xa+C,\qquad
+\int\frac{dx}{a^2+x^2}=\frac1a\arctan\frac xa+C.
+$$
+
+:::{.proof data-title="Derivative of $\arctan x$"}
+
+Let $y=\arctan x$, so $x=\tan y$. Then by the inverse function rule
+$$
+\frac{dy}{dx}=\frac1{\sec^2y}=\frac1{1+\tan^2y}=\frac1{1+x^2}.
+$$
+
+:::
+
+## Hyperbolic Functions
+
+### Definitions and Identities
+
+$$
+\sinh x=\frac{e^x-e^{-x}}2,\quad\cosh x=\frac{e^x+e^{-x}}2,\quad
+\tanh x=\frac{\sinh x}{\cosh x},\quad\operatorname{sech}x=\frac1{\cosh x},
+$$
+$$
+\cosh^2x-\sinh^2x=1,\qquad1-\tanh^2x=\operatorname{sech}^2x,
+$$
+$$
+\sinh(x\pm y)=\sinh x\cosh y\pm\cosh x\sinh y,\qquad
+\cosh(x\pm y)=\cosh x\cosh y\pm\sinh x\sinh y,
+$$
+$$
+\sinh2x=2\sinh x\cosh x,\qquad\cosh2x=\cosh^2x+\sinh^2x.
+$$
+
+The parametrisation $(\cosh t,\sinh t)$ traces the hyperbola $x^2-y^2=1$, as
+$(\cos t,\sin t)$ traces the circle. The relation to the trigonometric functions
+is $\cosh x=\cos(ix)$ and $\sinh x=-i\sin(ix)$, so identities for $\sin,\cos$
+turn into those for $\sinh,\cosh$ by flipping the sign of every product of two
+$\sinh$'s (Osborn's rule).
+
+### Derivatives and Integrals
+
+| $f(x)$ | $f'(x)$ | $\int f(x)\,dx$ |
+|---|---|---|
+| $\sinh x$ | $\cosh x$ | $\cosh x+C$ |
+| $\cosh x$ | $\sinh x$ | $\sinh x+C$ |
+| $\tanh x$ | $\operatorname{sech}^2x$ | $\ln\cosh x+C$ |
+| $\coth x$ | $-\operatorname{csch}^2x$ | $\ln\lvert\sinh x\rvert+C$ |
+| $\operatorname{sech}x$ | $-\operatorname{sech}x\tanh x$ | $\arctan(\sinh x)+C$ |
+| $\operatorname{csch}x$ | $-\operatorname{csch}x\coth x$ | $\ln\lvert\tanh(x/2)\rvert+C$ |
+| $\operatorname{sech}^2x$ | | $\tanh x+C$ |
+
+### Inverse Hyperbolic Functions
+
+| $f(x)$ | Logarithmic form | $f'(x)$ |
+|---|---|---|
+| $\operatorname{arsinh}x$ | $\ln\left(x+\sqrt{x^2+1}\right)$ | $\dfrac1{\sqrt{x^2+1}}$ |
+| $\operatorname{arcosh}x$, $x\ge1$ | $\ln\left(x+\sqrt{x^2-1}\right)$ | $\dfrac1{\sqrt{x^2-1}}$ |
+| $\operatorname{artanh}x$, $\lvert x\rvert<1$ | $\tfrac12\ln\dfrac{1+x}{1-x}$ | $\dfrac1{1-x^2}$ |
+
+with standard integrals ($a>0$)
+$$
+\int\frac{dx}{\sqrt{x^2+a^2}}=\operatorname{arsinh}\frac xa+C,\qquad
+\int\frac{dx}{\sqrt{x^2-a^2}}=\ln\left\lvert x+\sqrt{x^2-a^2}\right\rvert+C,
+$$
+$$
+\int\frac{dx}{a^2-x^2}=\frac1{2a}\ln\left\lvert\frac{a+x}{a-x}\right\rvert+C.
+$$
+
+:::{.proof data-title="Derivatives of $\sinh x$ and $\operatorname{arsinh}x$"}
+
+Directly, $(\sinh x)'=\frac{e^x+e^{-x}}{2}=\cosh x$ and likewise
+$(\cosh x)'=\sinh x$. For the inverse set $y=\operatorname{arsinh}x$, $x=\sinh y$:
+$$
+\frac{dy}{dx}=\frac1{\cosh y}=\frac1{\sqrt{1+\sinh^2y}}=\frac1{\sqrt{1+x^2}},
+$$
+since $\cosh y>0$.
+
+:::
+
+## Useful Substitutions
+
+Standard integrals involving square roots can be reduced by a
+trigonometric or hyperbolic substitution:
+
+| Expression | Substitution | Uses |
+|---|---|---|
+| $\sqrt{a^2-x^2}$ | $x=a\sin\theta$ | $1-\sin^2\theta=\cos^2\theta$ |
+| $\sqrt{a^2+x^2}$ | $x=a\tan\theta$ or $a\sinh t$ | $1+\tan^2\theta=\sec^2\theta$ |
+| $\sqrt{x^2-a^2}$ | $x=a\sec\theta$ or $a\cosh t$ | $\sec^2\theta-1=\tan^2\theta$ |
+| rational in $\sin,\cos$ | $t=\tan(x/2)$ | $\sin x=\frac{2t}{1+t^2}$, $\cos x=\frac{1-t^2}{1+t^2}$ |
+
+:::{.example data-title="Area of a Semicircle"}
+
+With $x=a\sin\theta$,
+$$
+\int_{-a}^a\sqrt{a^2-x^2}\,dx=\int_{-\pi/2}^{\pi/2}a^2\cos^2\theta\,d\theta
+=\frac{a^2}2\int_{-\pi/2}^{\pi/2}(1+\cos2\theta)\,d\theta=\frac{\pi a^2}2.
+$$
+
+:::
+
+## Taylor Series
+
+Maclaurin series of the elementary functions ([[taylor-series]]):
+
+| Function | Series | Converges for |
+|---|---|---|
+| $e^x$ | $\displaystyle\sum_{n\ge0}\frac{x^n}{n!}$ | all $x$ |
+| $\sin x$ | $\displaystyle\sum_{n\ge0}\frac{(-1)^nx^{2n+1}}{(2n+1)!}$ | all $x$ |
+| $\cos x$ | $\displaystyle\sum_{n\ge0}\frac{(-1)^nx^{2n}}{(2n)!}$ | all $x$ |
+| $\sinh x$ | $\displaystyle\sum_{n\ge0}\frac{x^{2n+1}}{(2n+1)!}$ | all $x$ |
+| $\cosh x$ | $\displaystyle\sum_{n\ge0}\frac{x^{2n}}{(2n)!}$ | all $x$ |
+| $\dfrac1{1-x}$ | $\displaystyle\sum_{n\ge0}x^n$ ([[geometric-series]]) | $\lvert x\rvert<1$ |
+| $\ln(1+x)$ | $\displaystyle\sum_{n\ge1}\frac{(-1)^{n+1}x^n}{n}$ | $-1<x\le1$ |
+| $\arctan x$ | $\displaystyle\sum_{n\ge0}\frac{(-1)^nx^{2n+1}}{2n+1}$ | $\lvert x\rvert\le1$ |
+| $(1+x)^\alpha$ | $\displaystyle\sum_{n\ge0}\binom\alpha nx^n$ | $\lvert x\rvert<1$ |
+
+> *Note:* Comparing the series of $e^x$, $\sin x$ and $\cos x$ term by term
+> proves Euler's formula $e^{ix}=\cos x+i\sin x$. See [[power-series]] and
+> [[radius-of-convergence]] for convergence.
+
+## Related Topics
+
+- [[calculus]]
+- [[chain-rule]]
+- [[quotient-rule]]
+- [[implicit-differentiation]]
+- [[taylor-series]]
+- [[riemann-integral]]
+- [[gamma-function]]

@@ -1,0 +1,1131 @@
+---
+title: "Lecture 7: Probability"
+subtitle: "PSTAT100: Data Science - Concepts and Analysis"
+author:
+  - name: "John Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+embed-resources: true
+bibliography: references.bib
+execute:
+    echo: true
+    output-location: column-fragment
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        incremental: true
+---
+
+## 🚁 Overview
+
+:::{.columns}
+:::{.column width="50%" .fragment}
+:::{.spacer-sm}
+:::
+
+### Aims of the lecture
+
+- Understand what **models** are and why we build them.
+- Distinguish between the **four categories of models**: deterministic, 
+  probabilistic, statistical, and machine learning.
+- Recap **probability theory** foundations needed for statistical modelling:
+  - Random variables and distributions.
+  - Expectation and variance.
+  - Conditional probability and conditional expectation.
+  - Key standard distributions.
+
+:::
+
+:::{.column width="50%" .fragment}
+
+:::{.spacer-sm}
+:::
+
+### 📚 Required Libraries
+
+In this lecture we will be using the following libraries:
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+from scipy.stats import binom, norm, multivariate_normal
+```
+
+### 💅 Figure Styles
+
+```{python}
+sns.set_style('whitegrid')
+sns.set_palette('Set2')
+```
+
+:::
+:::
+
+# Introduction to Modelling
+
+## 🧮 What is a Model?
+
+### The idea of a model
+
+:::{.fragment}
+
+:::{.callout-important title="Model"}
+A **model** is a simplified, mathematical representation of a real-world system 
+or process. It captures the essential features of the system while abstracting 
+away unnecessary detail.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Examples of models in data science
+
+- A **regression equation** predicting house prices from square footage.
+- A **probability distribution** describing the heights of adult males.
+- A **decision tree** classifying emails as spam or not-spam.
+- A **differential equation** modelling the spread of a disease.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### A key trade-off
+
+- All models are wrong — but some are **useful** (Box, 1979).
+- A good model is **simple enough** to understand and **accurate enough** to be informative.
+
+:::
+
+## Why Build Models?
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Reasons for modelling
+
+- **Understand**: Reveal the relationships and mechanisms underlying observed data.
+- **Predict**: Forecast future or unobserved outcomes from observed inputs.
+- **Infer**: Draw conclusions about **populations** from **samples** (statistical inference).
+- **Simulate**: Study hypothetical scenarios and their consequences.
+- **Communicate**: Express complex patterns in data concisely and precisely.
+
+:::
+
+## Categories of Models
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Four broad categories
+
+- **Deterministic models**: 
+  - Given fixed inputs, always produce the same output 
+  - No randomness.
+- **Probabilistic models**: 
+  - Incorporate randomness; outputs are described by probability distributions.
+  - Model outputs *distributions* rather than *point estimates* 
+    (discussed this week).
+- **Statistical models**: 
+  - Probabilistic models whose **parameters are estimated from data**.
+  - Assumed underlying (mathematical) structure.
+- **Machine learning models**: 
+  - Data-driven models that learn flexible patterns directly from data.
+  - Prioritise predictive power over interpretability.
+  - Structure learned algorithmically, typically too complex to interpret.
+
+:::
+
+## Deterministic Models
+
+### What is a deterministic model?
+
+:::{.fragment}
+
+:::{.callout-important title="Deterministic Model"}
+A **deterministic model** produces the same output for the same input — there is 
+**no randomness** in the model.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Examples
+
+- **Physics**: $F = ma$ (Newton's second law).
+- **Finance**: Compound interest $A = P(1 + r)^t$.
+- **Data science**: A fixed threshold rule, e.g. "classify as positive if 
+  score $> 0.5$".
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Limitation
+
+- Real-world data always contains **noise** and **variability**.
+- Deterministic models cannot represent or quantify this uncertainty.
+
+:::
+
+## Probabilistic Models
+
+### What is a probabilistic model?
+
+:::{.fragment}
+
+:::{.callout-important title="Probabilistic Model"}
+A **probabilistic model** introduces **randomness** explicitly. Outputs are 
+described by **probability distributions** rather than fixed values.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Examples
+
+- Number of heads in 10 coin flips: $X \sim \text{Binomial}(10, 0.5)$.
+- Measurement error: $\varepsilon \sim \text{Normal}(0, \sigma^2)$.
+- Time between arrivals: $T \sim \text{Exponential}(\lambda)$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Key insight
+
+- Probabilistic models let us **quantify uncertainty** in our conclusions and 
+  predictions.
+
+:::
+
+## Statistical Models
+
+### What is a statistical model?
+
+:::{.fragment}
+
+:::{.callout-important title="Statistical Model"}
+A **statistical model** is a probabilistic model whose **parameters are unknown** 
+and estimated from data. The process of finding parameter values that best explain 
+the data is called **model fitting**.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Example: Simple linear regression
+
+We assume the data-generating process is: 
+
+$$
+Y_i = \beta_0 + \beta_1 x_i + \varepsilon_i, \qquad 
+  \varepsilon_i \sim \text{Normal}(0, \sigma^2).
+$$
+
+The **parameters** $\beta_0, \beta_1, \sigma^2$ are unknown and **estimated** 
+from the observed data $(x_1, y_1), \ldots, (x_n, y_n)$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### What statistical models support
+
+- **Estimation**: What are the parameter values?
+- **Uncertainty quantification**: How confident are we in our estimates?
+- **Hypothesis testing**: Are parameters consistent with some null hypothesis?
+- **Prediction**: What is $Y$ for a new $x$?
+
+:::
+
+## Machine Learning Models
+
+### What is a machine learning model?
+
+:::{.fragment}
+
+:::{.callout-important title="Machine Learning Model"}
+A **machine learning model** learns patterns directly from data using optimization 
+algorithms. These models are often highly flexible and prioritise 
+**predictive performance** over interpretability.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Examples
+
+- **Supervised**: Decision trees, random forests, gradient boosting, neural networks.
+- **Unsupervised**: $k$-means clustering, principal component analysis (PCA), LLMs.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+
+| | Statistical Models | Machine Learning |
+|---|---|---|
+| **Primary goal** | Inference & understanding | Prediction |
+| **Interpretability** | High | Often low |
+| **Assumptions** | Explicit | Implicit |
+| **Sample size** | Can work with small $n$ | Often requires large $n$ |
+| **Uncertainty** | Quantified | Often not |
+
+:::
+
+# Probability Theory
+
+## 🎲 Why Probability?
+
+- Statistical and ML models are **grounded in probability theory**.
+- Probability provides the mathematical language to:
+  - Describe **uncertainty** and **variability** in data.
+  - Define **distributions** over possible outcomes.
+  - Reason formally about **relationships** between variables.
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Road map for this section
+
+1. Sample spaces and probability axioms
+2. Random variables (discrete and continuous)
+3. PMF, PDF, and CDF
+4. Expectation and variance
+5. Conditional probability and Bayes' theorem
+6. Conditional expectation
+7. Joint and marginal distributions
+8. Standard distributions
+
+:::
+
+## Sample Spaces and Events
+
+### Setting up a probability space
+
+:::{.fragment}
+
+:::{.callout-important title="Sample Space and Events"}
+The **sample space** $\Omega$ is the set of all possible outcomes of a random 
+experiment. An **event** is any subset $A \subseteq \Omega$ (i.e. a collection 
+of outcomes).
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Probability measure
+
+A **probability measure** $\mathbb{P}$ assigns a number in $[0, 1]$ to each event 
+and satisfies the **Kolmogorov Axioms**:
+
+- **Non-negativity**: $\mathbb{P}(A) \geq 0$ for all events $A$.
+- **Normalization**: $\mathbb{P}(\Omega) = 1$.
+- **Countable additivity**: For mutually exclusive events $A_1, A_2, \ldots$: 
+  $\mathbb{P}\left(\bigcup_{i=1}^\infty A_i\right) = 
+    \sum_{i=1}^\infty \mathbb{P}(A_i).$
+
+:::
+
+:::{.fragment}
+
+> Don't worry too much about these definitions, you will not need to write 
+  proofs for this class!
+
+:::
+
+## Random Variables
+
+### What is a random variable?
+
+:::{.fragment}
+
+:::{.callout-important title="Random Variable"}
+A **random variable** $X$ is a function $X \colon \Omega \to \mathbb{R}$ that maps each outcome in the sample space to a real number.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Discrete vs. continuous
+
+- A **discrete** random variable takes values in a **countable** set $\{x_1, x_2, \ldots\}$.
+  - Example: the number of heads in 5 coin flips.
+- A **continuous** random variable can take any value in an interval (or union of intervals).
+  - Example: the height of a randomly selected person.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Why random variables?
+
+- They give us a unified, numerical framework for describing uncertainty — 
+  regardless of what the underlying sample space looks like.
+
+:::
+
+## Probability Mass Functions
+
+### Discrete distributions
+
+:::{.fragment}
+
+:::{.callout-important title="Probability Mass Function (PMF)"}
+The **PMF** of a discrete random variable $X$ is: $$p(x) = \mathbb{P}(X = x), \quad \text{for all } x \text{ in the support of } X.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Properties
+
+- $0\leq p(x) \leq 1$ for all $x$.
+- $\displaystyle\sum_x p(x) = 1$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+:::
+
+
+## Example: Fair Die
+
+- Define the random variable $X$ describing the result of a random experiment 
+whereby we throw a fair 6-sided dice.
+
+  - The support of $X$ is $\{1, ..., 6\}$, which is discrete.
+  - The PMF is: $$p(x)=\frac{1}{6},\quad \forall x\in\{1,...,6\}.$$
+  - This is an example of a **discrete uniform random variable**.
+
+- We will often need to work with random variables in `python`:
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Probability mass function of a uniform random variable representing a fair dice"
+x = np.arange(1, 7)
+pmf = np.ones(6) / 6
+plt.bar(x, pmf, color='steelblue', edgecolor='white', width=0.6)
+plt.xlabel('x')
+plt.ylabel('P(X = x)')
+plt.title('PMF of a Fair Die')
+plt.xticks(x)
+plt.ylim(0, 0.25)
+plt.tight_layout()
+plt.show()
+```
+:::
+
+## Probability Density Functions
+
+### Continuous distributions
+
+:::{.fragment}
+
+:::{.callout-important title="Probability Density Function (PDF)"}
+The **PDF** of a continuous random variable $X$ is a function $f(x) \geq 0$ 
+such that: $$P(a \leq X \leq b) = \int_a^b f(x)\, dx.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Properties
+
+- $f(x) \geq 0$ for all $x$.
+- $\displaystyle\int_{-\infty}^{\infty} f(x)\, dx = 1$.
+- For a continuous random variable: $P(X = x) = 0$ for any single point $x$.
+  - Probabilities are **areas** under the curve, not heights.
+
+:::
+
+## Example: Waiting times
+
+- Consider a bus service that arrives every 30 minutes at a stop. A person
+  arrives at the stop but they do not know the time.
+- Define the random variable $Y$ to describe the waiting times of such a person:
+  - The support is $x\in[0,30]$.
+  - All waiting times in this interval are equally likely.
+  - The PDF is: $$f(x)=\frac{1}{30},\quad \forall x\in[0,30].$$
+  - This is an example of a continuous uniform distribution.
+
+:::{.fragment}
+
+```{python}
+#| output-location: slide
+x = np.linspace(0,30,1000)
+y = np.ones(1000)/30
+plt.plot(x, y)
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.title("Density plot for continuous uniform bus waiting times.")
+plt.show()
+```
+:::
+
+
+## Cumulative Distribution Function
+
+:::{.fragment}
+
+:::{.callout-important title="Cumulative Distribution Function (CDF)"}
+The **CDF** of a random variable $X$ is: $$F(x) = P(X \leq x), \quad x \in \mathbb{R}.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Properties
+
+- $F$ is **non-decreasing**: $x_1 \leq x_2 \Rightarrow F(x_1) \leq F(x_2)$.
+- $\lim_{x \to -\infty} F(x) = 0$ and $\lim_{x \to \infty} F(x) = 1$.
+- For a continuous $X$: $f(x) = F'(x)$ (the PDF is the derivative of the CDF).
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Useful identity
+
+$$P(a < X \leq b) = F(b) - F(a).$$
+
+:::
+
+## Expectation
+
+### Expected value of a random variable
+
+:::{.fragment}
+
+:::{.callout-important title="Expectation"}
+The **expectation** (or **mean**) of a random variable $X$ is:
+$$\mathbb{E}[X] = \begin{cases} \displaystyle\sum_x x \cdot p(x) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} x \cdot f(x)\, dx & \text{(continuous).} \end{cases}$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Intuition
+
+- $\mathbb{E}[X]$ is the **long-run average** value of $X$ over many independent repetitions of the experiment.
+
+:::
+
+
+## Linearity of expectation
+
+- For constants $a, b$ and random variables $X, Y$: $$\mathbb{E}[aX + bY] = a\,\mathbb{E}[X] + b\,\mathbb{E}[Y].$$
+- This holds regardless of whether $X$ and $Y$ are **independent**.
+- This property comes in handy in linear regression.
+
+
+## Variance
+
+### Measuring spread around the mean
+
+:::{.fragment}
+
+:::{.callout-important title="Variance"}
+The **variance** of a random variable $X$ is: $$\text{Var}(X) = \mathbb{E}\!\left[(X - \mathbb{E}[X])^2\right] = \mathbb{E}[X^2] - \bigl(\mathbb{E}[X]\bigr)^2.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Standard deviation
+
+- The **standard deviation** is $\text{SD}(X) = \sqrt{\text{Var}(X)}$, which has the same units as $X$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Key properties
+
+- $\text{Var}(aX + b) = a^2\,\text{Var}(X)$ (shifting does not affect spread; scaling does).
+- For **independent** $X, Y$: $\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)$.
+
+:::
+
+## Conditional Probability
+
+### Updating probabilities with new information
+
+:::{.fragment}
+
+:::{.callout-important title="Conditional Probability"}
+The **conditional probability** of event $A$ given event $B$ (with $P(B) > 0$) is: $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Intuition
+
+- $P(A \mid B)$ is the probability of $A$ **once we know** that $B$ has occurred — we restrict attention to the sub-universe where $B$ is true.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Multiplication rule
+
+$$P(A \cap B) = P(A \mid B)\, P(B) = P(B \mid A)\, P(A).$$
+
+:::
+
+## Bayes' Theorem
+
+### Inverting conditional probabilities
+
+:::{.fragment}
+
+:::{.callout-important title="Bayes' Theorem"}
+$$P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Terminology in statistical modelling
+
+- $P(A)$: **prior** — our belief about $A$ before observing $B$.
+- $P(B \mid A)$: **likelihood** — how probable is $B$ if $A$ is true?
+- $P(A \mid B)$: **posterior** — our updated belief after observing $B$.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Why it matters
+
+- Bayes' theorem is the foundation of **Bayesian statistics** and many probabilistic classifiers (e.g. Naive Bayes).
+- It formalises the idea of **learning from data**: updating beliefs in light of evidence.
+
+:::
+
+## Independence
+
+### When variables carry no information about each other
+
+:::{.fragment}
+
+:::{.callout-important title="Independence"}
+Events $A$ and $B$ are **independent** if: $$P(A \cap B) = P(A)\, P(B), \quad \text{equivalently} \quad P(A \mid B) = P(A).$$
+
+Random variables $X$ and $Y$ are **independent** if knowing the value of one provides **no information** about the other.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Independence vs. uncorrelatedness
+
+- **Independent** $\Rightarrow$ zero covariance (uncorrelated). The converse is **not** generally true.
+- Recall from EDA: two variables can have correlation $\approx 0$ yet exhibit a strong non-linear relationship.
+
+:::
+
+## Conditional Expectation
+
+### Expected value given additional information
+
+:::{.fragment}
+
+:::{.callout-important title="Conditional Expectation"}
+The **conditional expectation** of $Y$ given $X = x$ is:
+$$\mathbb{E}[Y \mid X = x] = \begin{cases} \displaystyle\sum_y y \cdot P(Y = y \mid X = x) & \text{(discrete)} \\[6pt] \displaystyle\int_{-\infty}^{\infty} y \cdot f_{Y \mid X}(y \mid x)\, dy & \text{(continuous).} \end{cases}$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Conditional expectation as a function
+
+- $\mathbb{E}[Y \mid X]$ is itself a **random variable** — a function of $X$.
+- In regression, $\mathbb{E}[Y \mid X = x]$ is the **regression function**: the best prediction of $Y$ given $X = x$.
+
+:::
+
+
+## Conditional Expectation Properties
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Linearity of Conditional Expectation
+
+$$\mathbb{E}[aX+bY|X] = aX + b\mathbb{E}[Y|X].$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Law of Total Expectation
+
+$$\mathbb{E}[Y] = \mathbb{E}\!\bigl[\mathbb{E}[Y \mid X]\bigr].$$
+
+Averaging conditional expectations over $X$ recovers the unconditional mean.
+
+:::
+
+## Joint and Marginal Distributions
+
+### Describing multiple random variables together
+
+:::{.fragment}
+
+:::{.callout-important title="Joint Distribution"}
+The **joint distribution** of $(X, Y)$ describes the probability of all pairs of outcomes simultaneously.
+
+- **Discrete**: $p(x, y) = P(X = x,\, Y = y)$.
+- **Continuous**: $f(x, y)$ such that $P\!\bigl((X, Y) \in A\bigr) = \iint_A f(x, y)\, dx\, dy$.
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Marginal distributions
+
+The **marginal distribution** of $X$ is obtained by integrating (or summing) out $Y$:
+
+:::{.columns}
+:::{.column width="50%"}
+
+- **Discrete**: $p_X(x) = \displaystyle\sum_y p(x, y)$.
+
+:::
+:::{.column width="50%"}
+
+- **Continuous**: $f_X(x) = \displaystyle\int_{-\infty}^{\infty} f(x, y)\, dy$.
+
+:::
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Conditional distribution
+
+$$f_{Y \mid X}(y \mid x) = \frac{f(x, y)}{f_X(x)}, \quad f_X(x) > 0.$$
+
+:::
+
+# Standard Distributions
+
+## 📊 The Binomial Distribution
+
+### Counting successes in repeated trials
+
+:::{.fragment}
+
+:::{.callout-important title="Binomial Distribution"}
+If $X$ counts the number of **successes** in $n$ independent **Bernoulli trials**, each with success probability $p$, then $X \sim \text{Binomial}(n, p)$ with PMF: $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \quad k = 0, 1, \ldots, n.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Mean and variance
+
+$$\mathbb{E}[X] = np, \qquad \text{Var}(X) = np(1-p).$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Applications in data science
+
+- Modelling **click-through rates**, **defect counts**, **disease incidence**.
+- Foundation for **logistic regression** (modelling binary outcomes).
+
+:::
+
+## Binomial Distribution in Python
+
+```{python}
+#| output-location: slide
+#| fig-cap: "PMFs of the Binomial distribution for different parameter values."
+fig, axes = plt.subplots(1, 3, figsize=(14, 4), sharey=False)
+params = [(10, 0.3), (10, 0.5), (20, 0.7)]
+
+for ax, (n, p) in zip(axes, params):
+    k = np.arange(0, n + 1)
+    ax.bar(k, binom.pmf(k, n, p), color='steelblue', edgecolor='white', width=0.6)
+    ax.axvline(n * p, color='crimson', linestyle='--', label=f'Mean = {n*p:.1f}')
+    ax.set_title(f'Binomial(n={n}, p={p})')
+    ax.set_xlabel('k'); ax.set_ylabel('P(X = k)')
+    ax.legend(fontsize=9)
+
+plt.tight_layout()
+plt.show()
+```
+
+## 📊 The Gaussian (Normal) Distribution
+
+### The most important continuous distribution
+
+:::{.fragment}
+
+:::{.callout-important title="Gaussian (Normal) Distribution"}
+A random variable $X \sim \text{Normal}(\mu, \sigma^2)$ has PDF: $$f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right), \quad x \in \mathbb{R}.$$
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Mean and variance
+
+$$\mathbb{E}[X] = \mu, \qquad \text{Var}(X) = \sigma^2.$$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Why the Gaussian is everywhere
+
+- **Central Limit Theorem**: the standardised sum of many i.i.d. random variables converges in distribution to $\text{Normal}(0,1)$.
+- Many natural phenomena (heights, measurement errors, noise) are approximately Gaussian.
+
+:::
+
+## The Standard Normal and the 68-95-99.7 Rule
+
+:::{.fragment}
+
+### Standardisation
+
+- If $X \sim \text{Normal}(\mu, \sigma^2)$, then $Z = \dfrac{X - \mu}{\sigma} \sim \text{Normal}(0, 1)$ is the **standard normal**.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### The 68-95-99.7 Rule
+
+- $P(\mu - \sigma \leq X \leq \mu + \sigma) \approx 0.68$
+- $P(\mu - 2\sigma \leq X \leq \mu + 2\sigma) \approx 0.95$
+- $P(\mu - 3\sigma \leq X \leq \mu + 3\sigma) \approx 0.997$
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Connecting to EDA
+
+- We introduced the normal distribution in Lecture 6 to interpret **skewness** and **kurtosis** — a distribution is symmetric and mesokurtic when it is Gaussian.
+
+:::
+
+## Gaussian Distribution in Python
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Normal PDFs with different parameters (left) and the 68-95-99.7 rule (right)."
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Left: varying parameters
+x = np.linspace(-7, 7, 500)
+for mu, sigma, color, label in [(0, 1, 'steelblue', 'μ=0, σ=1'),
+                                  (0, 2, 'crimson',   'μ=0, σ=2'),
+                                  (2, 1, 'seagreen',  'μ=2, σ=1')]:
+    axes[0].plot(x, norm.pdf(x, mu, sigma), color=color, lw=2, label=label)
+axes[0].set_title('Normal Distributions')
+axes[0].set_xlabel('x'); axes[0].set_ylabel('f(x)')
+axes[0].legend()
+
+# Right: 68-95-99.7 rule
+x2 = np.linspace(-4, 4, 500)
+axes[1].plot(x2, norm.pdf(x2), 'k', lw=2)
+for n_sig, color, label in [(3, '#d0e8ff', '±3σ  (99.7%)'),
+                              (2, '#85b9f5', '±2σ  (95%)'),
+                              (1, '#2f6fbd', '±1σ  (68%)')]:
+    xf = np.linspace(-n_sig, n_sig, 300)
+    axes[1].fill_between(xf, norm.pdf(xf), alpha=0.65, color=color, label=label)
+axes[1].set_title('68-95-99.7 Rule')
+axes[1].set_xlabel('x'); axes[1].set_ylabel('f(x)')
+axes[1].legend()
+
+plt.tight_layout()
+plt.show()
+```
+
+## 📊 The Multivariate Gaussian Distribution
+
+### Extending the Normal to multiple dimensions
+
+:::{.fragment}
+
+:::{.callout-important title="Multivariate Gaussian Distribution"}
+A random vector $\mathbf{X} = (X_1, \ldots, X_d)^\top \sim \text{Normal}(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ has PDF: $$f(\mathbf{x}) = \frac{1}{(2\pi)^{d/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})\right),$$
+where $\boldsymbol{\mu} \in \mathbb{R}^d$ is the **mean vector** and $\boldsymbol{\Sigma} \in \mathbb{R}^{d \times d}$ is the **covariance matrix** (symmetric, positive semi-definite).
+:::
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Parameters
+
+- $\mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}$: the mean of each component.
+- $\text{Cov}(X_i, X_j) = \Sigma_{ij}$: off-diagonal entries capture linear co-movement; diagonal entries are variances $\sigma_i^2$.
+- When $\boldsymbol{\Sigma}$ is diagonal, the components are **uncorrelated** (and, for Gaussians, independent).
+
+:::
+
+## Multivariate Gaussian in Python
+
+```{python}
+#| output-location: slide
+#| fig-cap: "Bivariate Gaussian densities with different covariance structures."
+fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+configs = [
+    {'title': 'Independent\n(Σ = I)',          'cov': [[1,    0   ], [0,    1   ]]},
+    {'title': 'Positive correlation\n(ρ = 0.8)', 'cov': [[1,    0.8 ], [0.8,  1   ]]},
+    {'title': 'Negative correlation\n(ρ = −0.8)', 'cov': [[1,   -0.8 ], [-0.8, 1   ]]},
+]
+x1, x2 = np.mgrid[-3:3:0.05, -3:3:0.05]
+pos = np.dstack((x1, x2))
+
+for ax, cfg in zip(axes, configs):
+    rv = multivariate_normal(mean=[0, 0], cov=cfg['cov'])
+    ax.contourf(x1, x2, rv.pdf(pos), levels=15, cmap='Blues')
+    ax.set_title(cfg['title'])
+    ax.set_xlabel('$X_1$'); ax.set_ylabel('$X_2$')
+
+plt.tight_layout()
+plt.show()
+```
+
+- The shape of the contours reflects the **covariance structure**: circular for independence, elliptical for correlated components.
+- The MVN is the building block of **multivariate regression**, **Gaussian processes**, and **PCA**.
+
+## Other Important Distributions
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Discrete distributions
+
+- **Bernoulli$(p)$**: single binary trial; $P(X=1) = p$. Special case of Binomial($n=1$, $p$).
+- **Poisson$(\lambda)$**: counts events in a fixed interval; $P(X=k) = e^{-\lambda}\lambda^k / k!$. Mean = Variance = $\lambda$.
+- **Geometric$(p)$**: number of trials until the first success.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+### Continuous distributions
+
+- **Uniform$(a,b)$**: equal density across $[a,b]$; $f(x) = \frac{1}{b-a}$.
+- **Exponential$(\lambda)$**: time until first Poisson event; $f(x) = \lambda e^{-\lambda x}$, $x \geq 0$.
+- **Beta$(\alpha, \beta)$**: supported on $[0,1]$; models probabilities; used extensively in Bayesian statistics.
+- **Chi-squared, $t$, $F$**: arise as transformations of Gaussians; fundamental in classical hypothesis testing.
+
+:::
+
+## Probability Theory: Summary
+
+:::{.fragment}
+
+| Concept | Formula | Role in Modelling |
+|---|---|---|
+| PMF / PDF | $p(x)$, $f(x)$ | Describes the distribution of $X$ |
+| CDF | $F(x) = P(X \leq x)$ | Computes probabilities |
+| Expectation | $\mathbb{E}[X]$ | Population mean |
+| Variance | $\text{Var}(X) = \mathbb{E}[(X-\mathbb{E}X)^2]$ | Population spread |
+| Conditional Prob. | $P(A \mid B) = P(A\cap B)/P(B)$ | Updating beliefs |
+| Conditional Exp. | $\mathbb{E}[Y \mid X]$ | Regression function |
+| Joint / Marginal | $f(x,y)$, $f_X(x)$ | Multivariate models |
+
+:::
+
+## Conclusion
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### ✅ What we covered
+
+- **Introduction to modelling**: what models are and why we build them.
+- **Model categories**: deterministic, probabilistic, statistical, and machine learning.
+- **Probability theory** foundations:
+  - Sample spaces, events, and the Kolmogorov axioms.
+  - Random variables: discrete and continuous.
+  - PMF, PDF, and CDF.
+  - Expectation and variance.
+  - Conditional probability and Bayes' theorem.
+  - Independence and conditional expectation.
+  - Joint and marginal distributions.
+  - Standard distributions: Binomial, Gaussian, Multivariate Gaussian.
+
+:::
+
+:::{.fragment}
+
+::: {.spacer-sm}
+:::
+
+### 📅 What's next?
+
+- Statistical inference.
+- Estimation and hypothesis testing.
+
+:::
+
+## References

@@ -1,0 +1,269 @@
+---
+id: wave-equation
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-13
+number-sections: true
+title: "Wave Equation"
+title-block-banner: false
+---
+
+# Wave Equation
+
+The **wave equation** describes how disturbances propagate through a medium at
+a finite speed: vibrations of a string or drum, sound in air, and light and
+other electromagnetic waves. It is the prototypical **hyperbolic**
+[[partial-differential-equations|PDE]], in contrast to the parabolic
+[[heat-equation]].
+
+:::{.definition data-title="Wave Equation"}
+
+The **wave equation** for $u(t,\boldsymbol{x})$ with wave speed $c>0$ is
+$$
+u_{tt}-c^2\Delta u=0,
+$$
+where $\Delta$ is the [[laplace-operator]]. In one dimension this is
+$u_{tt}=c^2u_{xx}$. The **non-homogeneous** equation is $u_{tt}-c^2\Delta u=f$,
+where $f$ is an external force.
+
+:::
+
+## Intuition
+
+Think of a stretched string, with $u(t,x)$ the vertical displacement. The second
+derivative $u_{xx}$ is the curvature, and a curved string pulls on itself:
+
+- At a local peak ($u_{xx}<0$) the tension pulls the string back down, so
+  $u_{tt}<0$.
+- At a local trough ($u_{xx}>0$) it is pulled up, so $u_{tt}>0$.
+- Where the string is straight ($u_{xx}=0$) the two pulls balance and there is
+  no acceleration.
+
+Compare with the heat equation where curvature gives the **velocity** $u_t$.
+Here curvature gives the **acceleration** $u_{tt}$, so the solution overshoots
+and oscillates rather than relaxing, and information travels along with the
+disturbance rather than spreading everywhere instantly. The speed
+$c=\sqrt{T/\rho}$ is larger for a tighter (larger tension $T$) or lighter
+(smaller density $\rho$) string.
+
+# Derivation
+Consider a string of constant density $\rho$ (mass per unit length) under
+constant tension $T$, with small vertical displacements $u(t,x)$. Take a small
+piece between $x$ and $x+dx$. Let $\theta(x)$ be the angle the string makes with
+the horizontal, so
+$$
+\tan\theta=u_x.
+$$
+
+**Vertical forces.** The tension $T$ acts along the string at both ends, so the
+net vertical force on the piece is
+$$
+T\sin\theta(x+dx)-T\sin\theta(x).
+$$
+For small displacements $\theta$ is small, so $\sin\theta\approx\tan\theta=u_x$
+(and $\cos\theta\approx1$, so the horizontal forces cancel). The vertical force
+is therefore
+$$
+T\big(u_x(t,x+dx)-u_x(t,x)\big)\approx Tu_{xx}~dx.
+$$
+
+**Newton's law.** The mass of the piece is $\rho~dx$ and its acceleration is
+$u_{tt}$, so
+$$
+\rho~dx~u_{tt}=Tu_{xx}~dx\implies u_{tt}=c^2u_{xx},\qquad c^2=\frac{T}{\rho}.
+$$
+
+In higher dimensions the same argument for a membrane (drum) gives
+$u_{tt}=c^2\Delta u$. Sound waves follow from conservation of mass and momentum
+for a gas, linearised about a state of rest, with $c$ the speed of sound.
+
+# Initial and Boundary Conditions
+The wave equation is second order in time, so **two** initial conditions are
+needed, the initial shape and the initial velocity:
+$$
+u(0,x)=\varphi(x),\qquad u_t(0,x)=\psi(x).
+$$
+On a string $0<x<L$ the usual boundary conditions are:
+
+- **Dirichlet:** $u(t,0)=0$, a fixed end (like a guitar string).
+- **Neumann:** $u_x(t,0)=0$, a free end (the end can slide freely on a pole).
+
+# d'Alembert's Solution
+
+## The General Solution
+The equation factorises as
+$$
+\left(\partial_t-c\partial_x\right)\left(\partial_t+c\partial_x\right)u=0,
+$$
+so it is built from two [[transport-equation|transport equations]], one moving
+left and one moving right. To solve it change variables to
+$$
+\xi=x-ct,\qquad\eta=x+ct.
+$$
+By the [[chain-rule|chain rule]], $\partial_x=\partial_\xi+\partial_\eta$ and
+$\partial_t=-c\partial_\xi+c\partial_\eta$, so
+$$
+u_{tt}-c^2u_{xx}=c^2\left(\partial_\eta-\partial_\xi\right)^2u-c^2\left(\partial_\eta+\partial_\xi\right)^2u=-4c^2u_{\xi\eta}.
+$$
+Hence the equation becomes $u_{\xi\eta}=0$. Integrating in $\eta$ shows $u_\xi$
+depends only on $\xi$, and then integrating in $\xi$ gives
+$$
+u(t,x)=F(x-ct)+G(x+ct)
+$$
+for arbitrary (twice differentiable) functions $F,G$: a wave travelling right
+at speed $c$ plus a wave travelling left at speed $c$.
+
+## Solving the Initial Value Problem
+
+:::{.theorem data-title="d'Alembert's Formula"}
+
+The problem $u_{tt}=c^2u_{xx}$ on $\mathbb{R}$ with $u(0,x)=\varphi(x)$ and
+$u_t(0,x)=\psi(x)$ has the solution
+$$
+u(t,x)=\frac12\big[\varphi(x+ct)+\varphi(x-ct)\big]+\frac{1}{2c}\int_{x-ct}^{x+ct}\psi(s)~ds.
+$$
+
+:::
+
+:::{.proof}
+
+Write $u=F(x-ct)+G(x+ct)$. At $t=0$,
+$$
+F(x)+G(x)=\varphi(x),\qquad -cF'(x)+cG'(x)=\psi(x).
+$$
+Integrating the second, $G(x)-F(x)=\frac1c\int_0^x\psi(s)~ds+C$. Solving with
+the first,
+$$
+G(x)=\frac12\varphi(x)+\frac{1}{2c}\int_0^x\psi+\frac C2,\qquad
+F(x)=\frac12\varphi(x)-\frac{1}{2c}\int_0^x\psi-\frac C2.
+$$
+Therefore
+$$
+F(x-ct)+G(x+ct)=\frac12\big[\varphi(x-ct)+\varphi(x+ct)\big]+\frac{1}{2c}\left(\int_0^{x+ct}\psi-\int_0^{x-ct}\psi\right),
+$$
+which is the claimed formula.
+
+:::
+
+:::{.example data-title="Initial Displacement Only"}
+
+A string at rest ($\psi=0$) is released from the shape $\varphi$. Then
+$$
+u(t,x)=\tfrac12\varphi(x-ct)+\tfrac12\varphi(x+ct),
+$$
+so the initial shape **splits into two copies of half the height**, one
+travelling right and one left at speed $c$. For a plucked string with a
+triangular bump, two smaller triangles move apart, and they pass through each
+other without changing shape (linearity).
+
+:::
+
+:::{.example data-title="Initial Velocity Only"}
+
+If $\varphi=0$ and $\psi\equiv1$ then
+$$
+u(t,x)=\frac{1}{2c}\int_{x-ct}^{x+ct}1~ds=t,
+$$
+so the whole string rises at the constant speed $1$ it was given. More
+generally a localised initial velocity produces a region that spreads outward
+at speed $c$.
+
+:::
+
+# Properties
+
+:::{.theorem data-title="Properties of the Wave Equation"}
+
+1. **Linearity and superposition:** sums of solutions are solutions, so
+   waves pass through one another unchanged.
+2. **Finite speed of propagation:** the value $u(t_0,x_0)$ depends only on the
+   data in the interval $[x_0-ct_0,\,x_0+ct_0]$ (the *domain of dependence*).
+   Equivalently, data at $x_0$ influences only the cone $|x-x_0|\le ct$.
+3. **Energy conservation:** for solutions on $[0,L]$ with Dirichlet (or
+   Neumann) ends, the energy
+   $$
+   E(t)=\frac12\int_0^L\left(u_t^2+c^2u_x^2\right)dx
+   $$
+   is constant in time. Hence the solution is unique.
+4. **Time reversibility:** if $u(t,x)$ is a solution, so is $u(-t,x)$.
+5. **No smoothing:** singularities in the data travel along the
+   characteristics $x\pm ct=\text{const}$ and are not removed.
+
+:::
+
+:::{.proof}
+
+*(2)* is immediate from d'Alembert's formula, which uses $\varphi$ only at
+$x\pm ct$ and $\psi$ only on $[x-ct,x+ct]$.
+
+*(3)* Differentiating and integrating by parts,
+$$
+E'(t)=\int_0^L\left(u_tu_{tt}+c^2u_xu_{xt}\right)dx
+=\int_0^Lu_t\big(u_{tt}-c^2u_{xx}\big)dx+c^2\big[u_xu_t\big]_0^L=0,
+$$
+where the boundary term vanishes since $u_t=0$ at a fixed end and $u_x=0$ at a
+free end. If $u_1,u_2$ solve the same problem, then $w=u_1-u_2$ has $E(0)=0$, so
+$E\equiv0$, so $w_t=w_x=0$ and $w\equiv0$.
+
+:::
+
+> *Note:* Compare with the [[heat-equation]], where the energy
+> $\int u^2$ decays (smoothing, irreversible, infinite speed) whereas here
+> $E$ is conserved (waves persist and are reversible, finite speed).
+
+| | Heat equation | Wave equation |
+|---|---|---|
+| Equation | $u_t=ku_{xx}$ | $u_{tt}=c^2u_{xx}$ |
+| Type | parabolic | hyperbolic |
+| Initial data | $u$ | $u$ and $u_t$ |
+| Speed of influence | infinite | $c$ |
+| Smoothing | yes | no |
+| Time reversible | no | yes |
+
+# Standing Waves on a Finite String
+For $u_{tt}=c^2u_{xx}$ on $(0,L)$ with $u(t,0)=u(t,L)=0$, separate variables
+$u=T(t)X(x)$. Then
+$$
+\frac{T''}{c^2T}=\frac{X''}{X}=-\lambda,
+$$
+and as for the heat equation the boundary conditions force
+$X_n(x)=\sin(n\pi x/L)$ with $\lambda_n=(n\pi/L)^2$. Now
+$T''+c^2\lambda_nT=0$ is an oscillator rather than a decay, so
+$$
+u(t,x)=\sum_{n=1}^\infty\left(A_n\cos\frac{n\pi ct}{L}+B_n\sin\frac{n\pi ct}{L}\right)\sin\frac{n\pi x}{L},
+$$
+and matching $u(0,x)=\varphi$, $u_t(0,x)=\psi$ gives
+$$
+A_n=\frac2L\int_0^L\varphi(x)\sin\frac{n\pi x}{L}~dx,\qquad
+B_n=\frac{2}{n\pi c}\int_0^L\psi(x)\sin\frac{n\pi x}{L}~dx.
+$$
+
+:::{.example data-title="Fundamental Mode"}
+
+For $\varphi=\sin(\pi x/L)$ and $\psi=0$ only $A_1=1$ survives and
+$$
+u(t,x)=\cos\frac{\pi ct}{L}\sin\frac{\pi x}{L}.
+$$
+This is a **standing wave**: the shape never moves, it just oscillates up and
+down with frequency $c/(2L)$. The $n$th mode oscillates at $n$ times this
+frequency, which are the **harmonics** that give a string its musical pitch.
+By $\sin a\cos b=\frac12[\sin(a+b)+\sin(a-b)]$ this equals
+$\frac12\sin\frac{\pi(x+ct)}{L}+\frac12\sin\frac{\pi(x-ct)}{L}$, consistent
+with d'Alembert: two travelling waves that reflect off the ends.
+
+:::
+
+# Higher Dimensions
+In $\mathbb{R}^3$ the solution of $u_{tt}=c^2\Delta u$ is given by Kirchhoff's
+formula, which depends only on the data on the **sphere** of radius $ct$ about
+the point, so a sharp pulse stays sharp and sound is heard clearly (Huygens'
+principle). In $\mathbb{R}^2$ the solution depends on the whole disc, so a pulse
+leaves a lingering tail, as ripples on a pond do.
+
+# Related Topics
+
+- [[heat-equation]]
+- [[transport-equation]]
+- [[laplace-equation]]
+- [[method-of-characteristics]]

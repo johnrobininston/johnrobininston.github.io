@@ -358,7 +358,20 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#heat-equation" id="toc-heat-equation" class="nav-link active" data-scroll-target="#heat-equation"><span class="header-section-number">1</span> Heat Equation</a></li>
+  <li><a href="#heat-equation" id="toc-heat-equation" class="nav-link active" data-scroll-target="#heat-equation"><span class="header-section-number">1</span> Heat Equation</a>
+  <ul class="collapse">
+  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition"><span class="header-section-number">1.1</span> Intuition</a></li>
+  </ul></li>
+  <li><a href="#derivation" id="toc-derivation" class="nav-link" data-scroll-target="#derivation"><span class="header-section-number">2</span> Derivation</a></li>
+  <li><a href="#initial-and-boundary-conditions" id="toc-initial-and-boundary-conditions" class="nav-link" data-scroll-target="#initial-and-boundary-conditions"><span class="header-section-number">3</span> Initial and Boundary Conditions</a></li>
+  <li><a href="#properties" id="toc-properties" class="nav-link" data-scroll-target="#properties"><span class="header-section-number">4</span> Properties</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions"><span class="header-section-number">5</span> Solutions</a>
+  <ul class="collapse">
+  <li><a href="#steady-state" id="toc-steady-state" class="nav-link" data-scroll-target="#steady-state"><span class="header-section-number">5.1</span> Steady State</a></li>
+  <li><a href="#separation-of-variables" id="toc-separation-of-variables" class="nav-link" data-scroll-target="#separation-of-variables"><span class="header-section-number">5.2</span> Separation of Variables</a></li>
+  <li><a href="#the-whole-line" id="toc-the-whole-line" class="nav-link" data-scroll-target="#the-whole-line"><span class="header-section-number">5.3</span> The Whole Line</a></li>
+  </ul></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">6</span> Related Topics</a></li>
   </ul>
 </nav>
     </div>
@@ -397,31 +410,161 @@ window.Quarto = {
 </header>
 
 
-<section id="heat-equation" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="heat-equation"><span class="header-section-number">1</span> Heat Equation</h2>
+<section id="heat-equation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Heat Equation</h1>
 <p><em>References:</em> <a href="https://web.stanford.edu/class/math220b/handouts/heateqn.pdf">Stanford Notes</a></p>
-<p>The (homogeneous) <strong>heat equation</strong> describes the diffusion of heat in general <span class="math inline">\(n\)</span>-dimensional continuous medium.</p>
+<p>The (homogeneous) <strong>heat equation</strong> describes the diffusion of heat in a general <span class="math inline">\(n\)</span>-dimensional continuous medium. The same equation governs any quantity that spreads out from high to low concentration, such as dye in a liquid or a pollutant in air. It is the prototypical <strong>parabolic</strong> [[partial-differential-equations|PDE]].</p>
 <div class="definition" data-title="Heat Equation">
-<p>Denoting the heat of material at location <span class="math inline">\(\boldsymbol{x}\)</span> at time <span class="math inline">\(t\)</span> by <span class="math inline">\(u(t,x)\)</span> the <strong>heat equation</strong> (<strong>diffusion equation</strong>) gives the heat diffusion dynamics as <span class="math display">\[
-u_{t}-\Delta u=0,
-\]</span> where <span class="math inline">\(\Delta\)</span> denotes the <a href="../topics/laplace-operator.html">Laplace Operator</a>.</p>
+<p>Denoting the heat of material at location <span class="math inline">\(\boldsymbol{x}\)</span> at time <span class="math inline">\(t\)</span> by <span class="math inline">\(u(t,\boldsymbol{x})\)</span> the <strong>heat equation</strong> (<strong>diffusion equation</strong>) gives the heat diffusion dynamics as <span class="math display">\[
+u_{t}-k\Delta u=0,\qquad k&gt;0,
+\]</span> where <span class="math inline">\(\Delta\)</span> denotes the <a href="../topics/laplace-operator.html">Laplace Operator</a> and <span class="math inline">\(k\)</span> is the <em>diffusivity</em>. The <strong>non-homogeneous heat equation</strong> is <span class="math inline">\(u_{t}-k\Delta u=f\)</span>, where <span class="math inline">\(f\)</span> represents a heat source.</p>
 </div>
-<p>The <strong>non-homogeneous heat equation</strong> is <span class="math display">\[
-u_{t}-\Delta u=f,
-\]</span> subject to appropriate initial boundary conditions. Considering the 1-dimensional case for intuition we have <span class="math display">\[
-u_{t}-ku_{xx}=0;~~k&gt;0,
-\]</span> where <span class="math inline">\(u(x, t)\)</span> represents the temperature at point <span class="math inline">\(x\)</span> and time <span class="math inline">\(t\)</span> in a long, thin, perfectly insulated bar of material. Some of the elementary properties of the diffusion equation are:</p>
-<ol type="1">
-<li><strong>Linearity:</strong> If <span class="math inline">\(u_{1}\)</span> and <span class="math inline">\(u_{2}\)</span> are solutions, then so to is <span class="math inline">\(c_{1}u_{1}+c_{2}u_{2}\)</span> for any constants <span class="math inline">\(c_{1}\)</span> and <span class="math inline">\(c_{2}\)</span>;</li>
-<li><strong>Second Order Equation</strong>;</li>
-<li><strong>Parabolic Equation:</strong> Characteristics are given by <span class="math inline">\(\tau=\text{constant}\)</span> thus information propagates along these lines in <span class="math inline">\((x,\tau)\)</span> spaces, and if change is made to <span class="math inline">\(u\)</span> at some point, its effect is felt instantaneously everywhere else;</li>
-<li><strong>Analytic Function Solutions.</strong></li>
-</ol>
-<p>To derive the heat (diffusion) equation consider the diffusion of dye through a liquid, where the dye moves from high concentration to low concentration. Let <span class="math inline">\(u(x,t)\)</span> be the concentration (mass per unit length) of th dye at position <span class="math inline">\(x\)</span> in the pipe at time <span class="math inline">\(t\)</span>. The total mass of dye in the pipe from <span class="math inline">\(x_{0}\)</span> to <span class="math inline">\(x_{1}\)</span> at time <span class="math inline">\(t\)</span> is given by <span class="math display">\[
+<p>In one dimension this is <span class="math inline">\(u_t=ku_{xx}\)</span>, where <span class="math inline">\(u(t,x)\)</span> is the temperature at position <span class="math inline">\(x\)</span> and time <span class="math inline">\(t\)</span> in a long, thin, perfectly insulated bar. Scaling time by <span class="math inline">\(k\)</span> allows us to take <span class="math inline">\(k=1\)</span> without loss of generality.</p>
+<section id="intuition" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1.1</span> Intuition</h2>
+<p>The Laplacian measures how much <span class="math inline">\(u\)</span> at a point differs from its average over a small neighbourhood. In one dimension <span class="math display">\[
+u_{xx}(x)=\lim_{h\to0}\frac{u(x+h)+u(x-h)-2u(x)}{h^2}
+=\lim_{h\to0}\frac{2}{h^2}\left(\frac{u(x+h)+u(x-h)}{2}-u(x)\right),
+\]</span> so <span class="math inline">\(u_t=ku_{xx}\)</span> says that <strong>each point moves towards the average of its neighbours</strong>, at a rate proportional to how far it is from that average.</p>
+<ul>
+<li>Where <span class="math inline">\(u\)</span> is a local peak (<span class="math inline">\(u_{xx}&lt;0\)</span>) the temperature falls.</li>
+<li>Where <span class="math inline">\(u\)</span> is a local trough (<span class="math inline">\(u_{xx}&gt;0\)</span>) the temperature rises.</li>
+<li>Where <span class="math inline">\(u\)</span> is linear (<span class="math inline">\(u_{xx}=0\)</span>) nothing changes, as heat flowing in from the hot side exactly matches the heat flowing out to the cold side.</li>
+</ul>
+<p>The result is that bumps flatten out and sharp features are smoothed immediately, which is why the equation is irreversible. Probabilistically, <span class="math inline">\(u\)</span> is the density of a cloud of particles each performing independent random walks (<a href="../topics/brownian-motion.html">Brownian Motion</a>), and the equation describes how the cloud spreads.</p>
+</section>
+</section>
+<section id="derivation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Derivation</h1>
+<p>To derive the heat (diffusion) equation consider the diffusion of dye through a liquid in a thin pipe, where the dye moves from high concentration to low concentration. Let <span class="math inline">\(u(t,x)\)</span> be the concentration (mass per unit length) of the dye at position <span class="math inline">\(x\)</span> in the pipe at time <span class="math inline">\(t\)</span>. The total mass of dye in the pipe from <span class="math inline">\(x_{0}\)</span> to <span class="math inline">\(x_{1}\)</span> at time <span class="math inline">\(t\)</span> is given by <span class="math display">\[
 M(t)=\int_{x_{0}}^{x_{1}}{u(x,t)}~d{x} \implies \frac{\partial M}{\partial t}=\int_{x_{0}}^{x_{1}}{u_{t}(x,t)}~d{x}.
 \]</span></p>
+<p><strong>Conservation of mass.</strong> Dye is neither created nor destroyed, so the mass changes only through the flux <span class="math inline">\(J(t,x)\)</span> (mass per unit time, positive to the right) through the two ends: <span class="math display">\[
+\frac{\partial M}{\partial t}=J(t,x_0)-J(t,x_1)=-\int_{x_0}^{x_1}J_x(t,x)~dx.
+\]</span> Comparing the two expressions for <span class="math inline">\(\partial M/\partial t\)</span>, which hold for all <span class="math inline">\(x_0&lt;x_1\)</span>, gives the <strong>continuity equation</strong> <span class="math display">\[
+u_t+J_x=0.
+\]</span></p>
+<p><strong>Fick’s (Fourier’s) law.</strong> Material flows from high to low concentration at a rate proportional to the steepness of the gradient, <span class="math display">\[
+J=-ku_x,\qquad k&gt;0.
+\]</span> For heat this is Fourier’s law, with <span class="math inline">\(u\)</span> the temperature, <span class="math inline">\(J\)</span> the heat flux, and <span class="math inline">\(k=\kappa/(\rho c)\)</span> built from the conductivity <span class="math inline">\(\kappa\)</span>, the density <span class="math inline">\(\rho\)</span> and the specific heat <span class="math inline">\(c\)</span>.</p>
+<p>Substituting gives <span class="math inline">\(u_t=ku_{xx}\)</span>. In <span class="math inline">\(n\)</span> dimensions the same argument on a region <span class="math inline">\(\Omega\)</span> uses the divergence theorem: <span class="math display">\[
+\frac{d}{dt}\int_\Omega u~dx=-\int_{\partial\Omega}\vec J\cdot\vec n~dS
+=-\int_\Omega\nabla\cdot\vec J~dx,
+\]</span> so <span class="math inline">\(u_t+\nabla\cdot\vec J=0\)</span>, and with <span class="math inline">\(\vec J=-k\nabla u\)</span> (see <a href="../topics/gradient.html">Gradient</a>) this becomes <span class="math inline">\(u_t=k\nabla\cdot\nabla u=k\Delta u\)</span>. If the medium is also moving with velocity <span class="math inline">\(\vec V\)</span>, then <span class="math inline">\(\vec J=u\vec V-k\nabla u\)</span> and one gets the transport-diffusion equation <span class="math inline">\(u_t+\vec V\cdot\nabla u=k\Delta u\)</span> (see <a href="../topics/transport-equation.html">Transport Equation</a>).</p>
+</section>
+<section id="initial-and-boundary-conditions" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Initial and Boundary Conditions</h1>
+<p>The heat equation is first order in time, so one initial condition <span class="math inline">\(u(0,x)=u_0(x)\)</span> is required. On a bar <span class="math inline">\(0&lt;x&lt;L\)</span> we also need one condition at each end. The standard ones are:</p>
+<ul>
+<li><strong>Dirichlet:</strong> the temperature is prescribed, <span class="math inline">\(u(t,0)=a\)</span>. (End held in a bath.)</li>
+<li><strong>Neumann:</strong> the flux is prescribed, <span class="math inline">\(u_x(t,0)=g\)</span>. With <span class="math inline">\(g=0\)</span> this is a perfectly insulated end.</li>
+<li><strong>Robin:</strong> <span class="math inline">\(u_x+\alpha u=g\)</span>, where the end loses heat to the surroundings at a rate proportional to the temperature difference.</li>
+</ul>
+<div class="example" data-title="A Modelling Problem">
+<p>A laterally insulated rod of length <span class="math inline">\(L\)</span> has initial temperature <span class="math inline">\(50\)</span>. At <span class="math inline">\(t=0\)</span> the end <span class="math inline">\(x=0\)</span> is placed in icy water (<span class="math inline">\(0\)</span>) and the end <span class="math inline">\(x=L\)</span> in boiling water (<span class="math inline">\(100\)</span>). The problem is <span class="math display">\[
+\begin{cases}
+u_t=ku_{xx}, &amp; 0&lt;x&lt;L,\ t&gt;0,\\
+u(0,x)=50,\\
+u(t,0)=0,\quad u(t,L)=100.
+\end{cases}
+\]</span></p>
+</div>
+</section>
+<section id="properties" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Properties</h1>
+<div class="theorem" data-title="Properties of the Heat Equation">
+<p>Let <span class="math inline">\(u\)</span> solve <span class="math inline">\(u_t=ku_{xx}\)</span> on <span class="math inline">\([0,L]\)</span>. Then:</p>
+<ol type="1">
+<li><strong>Linearity:</strong> if <span class="math inline">\(u_{1}\)</span> and <span class="math inline">\(u_{2}\)</span> are solutions, then so is <span class="math inline">\(c_{1}u_{1}+c_{2}u_{2}\)</span> for any constants <span class="math inline">\(c_{1}\)</span> and <span class="math inline">\(c_{2}\)</span>.</li>
+<li><strong>Maximum principle:</strong> the maximum and minimum of <span class="math inline">\(u\)</span> over <span class="math inline">\([0,T]\times[0,L]\)</span> are attained at <span class="math inline">\(t=0\)</span> or at <span class="math inline">\(x=0\)</span> or <span class="math inline">\(x=L\)</span>.</li>
+<li><strong>Uniqueness:</strong> for given initial and Dirichlet data there is at most one solution.</li>
+<li><strong>Smoothing and infinite speed:</strong> for <span class="math inline">\(t&gt;0\)</span> the solution is smooth (indeed analytic in <span class="math inline">\(x\)</span>), and a disturbance at one point is felt instantaneously everywhere.</li>
+<li><strong>Conservation (insulated ends):</strong> if <span class="math inline">\(u_x(t,0)=u_x(t,L)=0\)</span> then <span class="math inline">\(\int_0^Lu~dx\)</span> is constant in time.</li>
+</ol>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><em>(3)</em> If <span class="math inline">\(u_1,u_2\)</span> are two solutions then <span class="math inline">\(w=u_1-u_2\)</span> solves the problem with zero data. Let <span class="math inline">\(E(t)=\int_0^Lw^2~dx\ge0\)</span>. Then, integrating by parts and using <span class="math inline">\(w=0\)</span> at <span class="math inline">\(x=0,L\)</span>, <span class="math display">\[
+E'(t)=2\int_0^Lww_t~dx=2k\int_0^Lww_{xx}~dx=-2k\int_0^Lw_x^2~dx\le0.
+\]</span> Since <span class="math inline">\(E(0)=0\)</span> and <span class="math inline">\(E\ge0\)</span> is non-increasing, <span class="math inline">\(E\equiv0\)</span>, so <span class="math inline">\(w\equiv0\)</span>.</p>
+<p><em>(5)</em> <span class="math inline">\(\frac{d}{dt}\int_0^Lu~dx=k\int_0^Lu_{xx}~dx=k[u_x]_0^L=0\)</span>.</p>
+</div>
+<blockquote class="blockquote">
+<p><em>Note:</em> The maximum principle matches intuition: heat cannot pile up in the interior of the bar, because every interior point is moving towards the average of its neighbours.</p>
+</blockquote>
+</section>
+<section id="solutions" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Solutions</h1>
+<section id="steady-state" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="steady-state"><span class="header-section-number">5.1</span> Steady State</h2>
+<p>A solution with <span class="math inline">\(u_t=0\)</span> satisfies <span class="math inline">\(u_{xx}=0\)</span>, so is linear in <span class="math inline">\(x\)</span>. For the rod problem above the steady state is <span class="math inline">\(u_\infty(x)=100x/L\)</span>, which is where the temperature settles as <span class="math inline">\(t\to\infty\)</span>. Writing <span class="math inline">\(u=u_\infty+v\)</span> then reduces to a problem for <span class="math inline">\(v\)</span> with zero boundary data.</p>
+</section>
+<section id="separation-of-variables" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="separation-of-variables"><span class="header-section-number">5.2</span> Separation of Variables</h2>
+<p>For <span class="math inline">\(u_t=ku_{xx}\)</span> on <span class="math inline">\((0,L)\)</span> with <span class="math inline">\(u(t,0)=u(t,L)=0\)</span> look for solutions of the form <span class="math inline">\(u=T(t)X(x)\)</span>. Substitution gives <span class="math display">\[
+\frac{T'}{kT}=\frac{X''}{X}=-\lambda,
+\]</span> since the left side depends only on <span class="math inline">\(t\)</span> and the right only on <span class="math inline">\(x\)</span>, so both are constant. The boundary conditions give <span class="math inline">\(X''+\lambda X=0\)</span>, <span class="math inline">\(X(0)=X(L)=0\)</span> which has non-trivial solutions only for <span class="math display">\[
+\lambda_n=\left(\frac{n\pi}{L}\right)^2,\qquad X_n(x)=\sin\frac{n\pi x}{L},\qquad n=1,2,\dots
+\]</span> and <span class="math inline">\(T_n(t)=e^{-k\lambda_nt}\)</span>. By linearity <span class="math display">\[
+u(t,x)=\sum_{n=1}^\infty b_n\,e^{-k(n\pi/L)^2t}\sin\frac{n\pi x}{L},\qquad
+b_n=\frac{2}{L}\int_0^Lu_0(x)\sin\frac{n\pi x}{L}~dx,
+\]</span> where the <span class="math inline">\(b_n\)</span> are the Fourier sine coefficients of the initial data.</p>
+<div class="example" data-title="Single Mode">
+<p>If <span class="math inline">\(u_0(x)=\sin(\pi x/L)\)</span> then only <span class="math inline">\(b_1=1\)</span> is non-zero and <span class="math display">\[
+u(t,x)=e^{-k\pi^2t/L^2}\sin\frac{\pi x}{L}.
+\]</span> The profile keeps its shape and simply decays, with time constant <span class="math inline">\(L^2/(k\pi^2)\)</span>. Higher modes <span class="math inline">\(\sin(n\pi x/L)\)</span> decay <span class="math inline">\(n^2\)</span> times faster, which explains the smoothing: rough features are made of high modes which vanish first.</p>
+</div>
+</section>
+<section id="the-whole-line" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="the-whole-line"><span class="header-section-number">5.3</span> The Whole Line</h2>
+<div class="definition" data-title="Heat Kernel">
+<p>The <strong>heat kernel</strong> (fundamental solution) on <span class="math inline">\(\mathbb{R}\)</span> is <span class="math display">\[
+\Phi(t,x)=\frac{1}{\sqrt{4\pi kt}}\,e^{-x^2/4kt},\qquad t&gt;0.
+\]</span></p>
+</div>
+<div class="theorem" data-title="Solution on the Real Line">
+<p>For bounded continuous <span class="math inline">\(u_0\)</span> the problem <span class="math inline">\(u_t=ku_{xx}\)</span>, <span class="math inline">\(u(0,x)=u_0(x)\)</span> on <span class="math inline">\(\mathbb{R}\)</span> has the solution <span class="math display">\[
+u(t,x)=\int_{-\infty}^\infty\Phi(t,x-y)\,u_0(y)~dy=(\Phi(t,\cdot)*u_0)(x).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><em><span class="math inline">\(\Phi\)</span> solves the equation.</em> Differentiating, <span class="math display">\[
+\Phi_t=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),\qquad
+k\Phi_{xx}=k\Phi\left(-\frac{1}{2kt}+\frac{x^2}{4k^2t^2}\right)
+=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),
+\]</span> so <span class="math inline">\(\Phi_t=k\Phi_{xx}\)</span>, and the same holds for the translates <span class="math inline">\(\Phi(t,x-y)\)</span> and hence, differentiating under the integral, for <span class="math inline">\(u\)</span>.</p>
+<p><em><span class="math inline">\(\Phi\)</span> has unit mass.</em> By the <a href="../topics/gaussian-integral.html">Gaussian Integral</a>, <span class="math inline">\(\int_{-\infty}^\infty e^{-(x-y)^2/4kt}~dy=\sqrt{4\pi kt}\)</span>, so <span class="math inline">\(\int\Phi~dy=1\)</span>. The kernel concentrates at <span class="math inline">\(x\)</span> as <span class="math inline">\(t\to0\)</span> (its width is <span class="math inline">\(\sim\sqrt{kt}\)</span> and its height grows) so it approximates a delta function, and <span class="math inline">\(u(t,x)\to u_0(x)\)</span>.</p>
+</div>
+<blockquote class="blockquote">
+<p><em>Note:</em> <span class="math inline">\(\Phi(t,\cdot)\)</span> is the density of the <a href="../topics/normal-distribution.html">Normal Distribution</a> <span class="math inline">\(\mathcal{N}(0,2kt)\)</span>. The solution is the average of the initial data against a Gaussian whose width <span class="math inline">\(\sqrt{2kt}\)</span> grows like the square root of time. This is the diffusive scaling of <a href="../topics/brownian-motion.html">Brownian Motion</a>. The tails are positive for every <span class="math inline">\(t&gt;0\)</span>, which is the infinite propagation speed.</p>
+</blockquote>
+<div class="example" data-title="Spreading of a Heat Spike">
+<p>Let <span class="math inline">\(u_0=\delta_0\)</span> be an initial unit of heat concentrated at the origin. Then <span class="math inline">\(u(t,x)=\Phi(t,x)\)</span>: a Gaussian whose peak <span class="math inline">\(1/\sqrt{4\pi kt}\)</span> falls like <span class="math inline">\(t^{-1/2}\)</span> while its width grows like <span class="math inline">\(t^{1/2}\)</span>, so the total heat stays equal to <span class="math inline">\(1\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="related-topics" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Related Topics</h1>
+<ul>
+<li><a href="../topics/wave-equation.html">Wave Equation</a></li>
+<li><a href="../topics/transport-equation.html">Transport Equation</a></li>
+<li><a href="../topics/laplace-equation.html">Laplace Equation</a> (the steady state of the heat equation in higher dimensions)</li>
+<li><a href="../topics/convolution.html">Convolution</a></li>
+</ul>
 
 
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
+<ul>
+<li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a></li>
+<li><a href="../topics/laplace-equation.html">Laplace Equation</a></li>
+<li><a href="../topics/pde-characteristics.html">PDE Characteristics</a></li>
+<li><a href="../topics/transport-equation.html">Transport Equation</a></li>
+<li><a href="../topics/wave-equation.html">Wave Equation</a></li>
+</ul>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

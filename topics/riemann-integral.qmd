@@ -1,16 +1,19 @@
 ---
-title: Riemann Integral
-author: John Robin Inston
+id: riemann-integral
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Riemann Integral"
 title-block-banner: false
 ---
 
-# Riemann Integral
+# Riemann Integration
 
 Let $f:[a,b]\to \mathbb{R}$ be a bounded (not necessarily continuous) function
 on a compact (closed, bounded) interval. We will define what it means for $f$
-to be Riemann integrable on $[a,b]$ and, in that case, define its Riemann
+to be **Riemann integrable** on $[a,b]$ and, in that case, define its Riemann
 integral $\int_a^b f$. The integral of $f$ on $[a,b]$ is a real number whose
 geometrical interpretation is the signed area under the graph $y=f(x)$ for
 $a\leq x\leq b$.
@@ -18,7 +21,7 @@ $a\leq x\leq b$.
 The Riemann integral is the simplest integral to define and it allows one to
 integrate every continuous function as well as some not-too-badly discontinuous
 functions. For highly discontinuous functions however it is insufficient and we
-instead turn to the Lebesgue integral which is more flexible with better
+instead turn to the [[lebesgue-integral]] which is more flexible with better
 mathematical properties.
 
 ## Riemann Integral
@@ -28,7 +31,7 @@ only at a common endpoint.
 
 :::{.definition data-title="Partition"}
 
-Let $I$ be a nonempty compact interval. A partition of $I$ is a finite
+Let $I$ be a nonempty compact interval. A **partition** of $I$ is a finite
 collection $\{I_1, ..., I_n\}$ of almost disjoint, nonempty, compact
 subintervals whose union is $I$.
 
@@ -80,7 +83,10 @@ approaches some constant. That common limit (if it exists) is denoted by
 $$
 \int_a^b f(x)~dx.
 $$
-![Reimann Sums](reimann-integral.png)
+
+![Reimann Sums (Source: [Wikimedia](https://commons.wikimedia.org/wiki/File:Integral_Riemann_sum.png))](https://upload.wikimedia.org/wikipedia/commons/2/2c/Integral_Riemann_sum.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original){width=400}
+
+
 ## Riemann Integrability
 
 Riemann integrals are the first type of integrals we are introduced to in our
@@ -96,10 +102,200 @@ only if it is continuous almost everywhere.
 :::
 
 
-## Properties of Reimann Integrals
+## Properties of Riemann Integrals
 
-The Riemann integral is a linear transformation, that is, if $f$ and $g$ are
-Riemann-integrable on $[a,b]$ and $\alpha$ and $\beta$ are constants, then
+Throughout, $f$ and $g$ are Riemann integrable on $[a,b]$. The proofs below use
+the definition of the integral as a limit of Riemann sums, together with the
+criterion above for integrability (continuity almost everywhere).
+
+:::{.theorem data-title="Algebraic Properties"}
+
+For constants $\alpha,\beta$ and $a<c<b$:
+
+1. **Linearity:** $\alpha f+\beta g$ is integrable and
+   $$
+   \int_a^b (\alpha f(x)+\beta g(x))~dx = \alpha\int_a^bf(x)~dx + \beta \int_a^b g(x) ~ dx.
+   $$
+2. **Additivity over intervals:**
+   $\displaystyle\int_a^bf=\int_a^cf+\int_c^bf$.
+3. **Products and absolute values:** $fg$ and $|f|$ are integrable.
+
+:::
+
+:::{.proof}
+
+(1) A Riemann sum is linear in the function,
+$\sum(\alpha f+\beta g)(\xi_i)\Delta x_i=\alpha\sum f(\xi_i)\Delta x_i+\beta\sum g(\xi_i)\Delta x_i$,
+and limits are linear.
+
+(2) Take partitions of $[a,b]$ that contain $c$ as a node (refining a partition
+by adding a point does not change the limit as the mesh tends to $0$). Such a
+Riemann sum splits into a sum over $[a,c]$ and a sum over $[c,b]$, and the limit
+of each piece is the corresponding integral.
+
+(3) If $f$ and $g$ are bounded and continuous almost everywhere then so is $fg$,
+and $|f|$ is continuous wherever $f$ is, so both are integrable by the
+criterion.
+
+:::
+
+:::{.theorem data-title="Order Properties"}
+
+1. **Monotonicity:** if $f\le g$ on $[a,b]$ then $\int_a^bf\le\int_a^bg$.
+   In particular $f\ge0$ implies $\int_a^bf\ge0$.
+2. **Bounds:** if $m\le f\le M$ then
+   $$
+   m(b-a)\le\int_a^bf\le M(b-a).
+   $$
+3. **Triangle inequality:** $\left|\displaystyle\int_a^bf\right|\le\displaystyle\int_a^b|f|$.
+
+:::
+
+:::{.proof}
+
+(1) If $f\le g$ then every Riemann sum of $f$ is at most the corresponding sum
+of $g$, since $\Delta x_i>0$, and the inequality is preserved in the limit.
+
+(2) Apply (1) to the constants $m\le f\le M$ and use $\int_a^bc=c(b-a)$, which
+is clear since every Riemann sum of a constant equals $c(b-a)$.
+
+(3) We have $-|f|\le f\le|f|$, and $|f|$ is integrable, so by (1) and linearity
+$-\int|f|\le\int f\le\int|f|$.
+
+:::
+
+**Orientation convention.** We define $\int_b^af:=-\int_a^bf$ for $a<b$ and
+$\int_a^af:=0$. With this, additivity $\int_a^bf=\int_a^cf+\int_c^bf$ holds for
+any ordering of $a,b,c$.
+
+:::{.theorem data-title="Mean Value Theorem for Integrals"}
+
+If $f$ is continuous on $[a,b]$ there exists $c\in[a,b]$ with
 $$
-\int_a^b (\alpha f(x)+\beta g(x))~dx = \alpha\int_a^bf(x)~dx + \beta \int_a^b g(x) ~ dx.
+f(c)=\frac1{b-a}\int_a^bf(x)~dx,
 $$
+that is, $f$ attains its average value.
+
+:::
+
+:::{.proof}
+
+Let $m,M$ be the minimum and maximum of $f$ on $[a,b]$, which exist since $f$
+is continuous on a compact interval. By the bounds above the average
+$\frac1{b-a}\int_a^bf$ lies in $[m,M]$, and by the intermediate value theorem
+$f$ takes every value in $[m,M]$.
+
+:::
+
+### Which Functions are Integrable?
+By the criterion above, the following are Riemann integrable on $[a,b]$:
+
+- every **continuous** function,
+- every **monotone** function (it has at most countably many discontinuities),
+- every bounded function with **finitely many** (or countably many)
+  discontinuities.
+
+Changing the values of an integrable function at finitely many points changes
+neither its integrability nor the value of its integral.
+
+### The Fundamental Theorem of Calculus
+The Riemann integral and the derivative are inverse operations.
+
+:::{.theorem data-title="Fundamental Theorem of Calculus"}
+
+Let $f$ be integrable on $[a,b]$.
+
+1. Define $F(x)=\int_a^xf(t)~dt$. Then $F$ is continuous on $[a,b]$, and if $f$
+   is continuous at $x$ then $F$ is differentiable at $x$ with $F'(x)=f(x)$.
+2. If $G$ is differentiable on $[a,b]$ with $G'=f$, then
+   $$
+   \int_a^bf(x)~dx=G(b)-G(a).
+   $$
+
+:::
+
+:::{.proof}
+
+(1) For $f$ bounded by $K$, $|F(x+h)-F(x)|=\left|\int_x^{x+h}f\right|\le K|h|$,
+so $F$ is continuous. If $f$ is continuous at $x$ then
+$$
+\left|\frac{F(x+h)-F(x)}{h}-f(x)\right|
+=\left|\frac1h\int_x^{x+h}\big(f(t)-f(x)\big)dt\right|
+\le\sup_{|t-x|\le|h|}|f(t)-f(x)|\to0
+$$
+as $h\to0$.
+
+(2) For any partition $\{x_0<\dots<x_n\}$ the mean value theorem for $G$ gives
+points $\xi_i\in(x_{i-1},x_i)$ with
+$G(x_i)-G(x_{i-1})=f(\xi_i)(x_i-x_{i-1})$. Summing (the left side telescopes),
+$$
+G(b)-G(a)=\sum_{i=1}^nf(\xi_i)(x_i-x_{i-1}),
+$$
+which is a Riemann sum of $f$. Letting $\|\mathcal{P}\|\to0$ the right side
+tends to $\int_a^bf$.
+
+:::
+
+Part (2) turns the evaluation of integrals into finding antiderivatives; see
+[[calculus-of-simple-functions]] for tables of standard ones, and
+[[leibniz-integral-rule]] for differentiating integrals that depend on a
+parameter.
+
+## Examples
+
+:::{.example data-title="An Integral from the Definition"}
+
+Compute $\int_0^1x^2~dx$ directly from Riemann sums. Since $f(x)=x^2$ is
+continuous it is integrable, so the limit can be computed along any sequence of
+partitions with mesh $\to0$. Take the uniform partition $x_i=i/n$, so
+$\Delta x_i=1/n$, with right endpoints $\xi_i=i/n$:
+$$
+S_n=\sum_{i=1}^n\left(\frac in\right)^2\frac1n=\frac1{n^3}\sum_{i=1}^ni^2
+=\frac{1}{n^3}\cdot\frac{n(n+1)(2n+1)}{6}=\frac{(n+1)(2n+1)}{6n^2}.
+$$
+As $n\to\infty$ (mesh $=1/n\to0$)
+$$
+S_n=\frac{2n^2+3n+1}{6n^2}\to\frac26=\frac13.
+$$
+This agrees with the fundamental theorem: $\int_0^1x^2dx=\left[\tfrac{x^3}3\right]_0^1=\tfrac13$.
+
+:::
+
+:::{.example data-title="A Function with a Jump"}
+
+Let $f=1$ on $[0,\tfrac12]$ and $f=2$ on $(\tfrac12,1]$. It is bounded with one
+discontinuity, so it is integrable, and by additivity
+$$
+\int_0^1f=\int_0^{1/2}1~dx+\int_{1/2}^12~dx=\tfrac12+2\cdot\tfrac12=\tfrac32.
+$$
+Note that $f$ has no antiderivative on $[0,1]$ (derivatives satisfy the
+intermediate value property and $f$ skips the values between $1$ and $2$), yet
+it is integrable. So the integral exists in cases where part (2) of the
+fundamental theorem does not apply.
+
+:::
+
+:::{.example data-title="A Function that is Not Riemann Integrable"}
+
+The **Dirichlet function** on $[0,1]$,
+$$
+f(x)=\begin{cases}1&x\in\mathbb{Q},\\0&x\notin\mathbb{Q},\end{cases}
+$$
+is bounded but is discontinuous at *every* point, so it is not Riemann
+integrable. Directly: every subinterval of any partition contains both rational
+and irrational points. Choosing all sample points $\xi_i$ rational gives every
+Riemann sum equal to $\sum\Delta x_i=1$, while choosing them all irrational
+gives $0$. The sums therefore do not converge to a single number as the mesh
+tends to $0$.
+
+The [[lebesgue-integral]] handles this function: it equals $0$ except on the
+countable set $\mathbb{Q}$ of measure zero, so its Lebesgue integral is $0$.
+
+:::
+
+## Related Topics
+
+- [[lebesgue-integral]]
+- [[leibniz-integral-rule]]
+- [[calculus-of-simple-functions]]
+- [[change-of-variables-formula]]

@@ -1,0 +1,996 @@
+---
+title: "PSTAT 10 Data Science Principles"
+subtitle: "Lecture 8: Plotting"
+author:
+  - name: "John Robin Inston"
+    email: "johninston@ucsb.edu"
+    orcid: "0009-0001-7285-6823"
+    affiliation: "University of California, Santa Barbara"
+date: today
+date-format: "long"
+bibliography: static/references.bib
+format:
+    revealjs:
+        theme: custom.scss
+        slide-number: c/t
+        include-in-header: assets/theme-init.js
+        include-after-body: assets/theme-toggle.js
+        incremental: true
+execute:
+  echo: true
+  warning: false
+knitr:
+  opts_chunk:
+    fig.align: center
+    dev: png
+---
+
+```{r}
+#| echo: false
+library(tidyverse)
+```
+
+# Introduction
+
+## 🔁 Review: Lecture 7
+
+::: {.spacer-sm}
+:::
+
+👈 Last lecture we studied the following topics:
+
+- [Tibble Objects]{.accent};
+- [Tibble Manipulation]{.accent};
+  - Selecting;
+  - Filtering;
+  - Mutating;
+- [Reading Data]{.accent}
+  - `.txt`;
+  - `.csv`; and
+  - `.xlsx`.
+
+## 👀 Outline: Lecture 8
+
+::: {.spacer-sm}
+:::
+
+👇 Today we will continue looking at [describing]{.accent} and [visualizing]{.accent} external data, specifically:
+
+- Descriptive statistics
+- Base R Plotting
+- Probability
+- Discrete and Continuous Random Variables
+
+# Exploring Real Data
+
+## 📄 `.csv` Files
+
+::: {.fragment}
+
+**File Types Recap**
+
+Last lecture we looked at several different file types that data can be stored as, including:
+
+- `.txt` files
+- `.csv` files
+- `.xlsx` files
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Why `.csv`?**
+
+In this course we shall be using `.csv` files almost exclusively, and so we typically will only need the `read.csv()` function to load real world data.
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Loading `Michelson.csv`**
+
+The `Michelson` data is a famous dataset measuring the speed of light. I keep my data in a `data` subfolder, hence the path name below.
+
+```{r}
+Michelson <- read.csv("data/Michelson.csv")
+head(Michelson, 3)
+```
+
+:::
+
+## 🌪️ Messy Data Problems
+
+::: {.fragment}
+
+**The Reality of Real Data**
+
+Real data is rarely clean and well behaved. It is often [messy]{.accent} and [unintuitive]{.accent}, and it is our job as data scientists and statisticians to [understand]{.accent}, [interpret]{.accent} and [draw meaning]{.accent} from the mess.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Key Tools**
+
+To accomplish this goal we begin with several key tools:
+
+- Summary Statistics
+- Graphical Tools
+- Statistical Measures (Correlation, Standard Deviation)
+- Prior Knowledge
+- Qualitative Analysis (understanding where the data comes from)
+
+:::
+
+## 📖 Statistics Terminology
+
+::: {.fragment}
+
+**Population & Sample**
+
+Data consists of information from [observations]{.accent}, [counts]{.accent}, [measurements]{.accent} or [responses]{.accent}.
+
+- The [population]{.accent} is the complete collection of all observations.
+- The [sample]{.accent} is a representative group selected from a population.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Parameters & Statistics**
+
+- A [parameter]{.accent} describes a [population characteristic]{.accent}; a [statistic]{.accent} describes a [sample characteristic]{.accent}.
+- [Descriptive]{.accent} statistics summarize data.
+- [Inferential]{.accent} statistics [test hypotheses]{.accent} (PSTAT 126).
+
+:::
+
+## 📊 Summary Statistics
+
+::: {.fragment}
+
+[Summary statistics]{.accent} are the key statistics of a sample that we always generate to get an idea about the [shape]{.accent} and [location]{.accent} of the data.
+
+**Key Statistics**
+
+1. Minimum
+2. Lower Quartile
+3. Median
+4. Mean
+5. Upper Quartile
+6. Maximum
+7. Spread Measures (Standard Deviation, Variance)
+8. Outliers
+9. Variable Correlation
+
+:::
+
+## 💪 Exercise — Summary Statistics
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 2)
+```
+
+The `summary()` function provides the first 6 statistics. The correlation and standard deviation are given by the `cor()` and `sd()` functions respectively.
+
+::: {.nonincremental}
+1. Change the `Michelson` object to a tibble using the function `tibble()`.
+2. Select the column `ds16` using the `select()` function and apply the function `summary()`.
+:::
+
+## ✅ Solution — Summary Statistics
+
+::: {.fragment}
+
+- [Convert]{.accent} `Michelson` to a tibble using `tibble()`.
+- [Select]{.accent} the `ds16` column using `select()`.
+- [Apply]{.accent} `summary()` to obtain the key summary statistics.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+Michelson <- Michelson |> tibble()
+
+Michelson |>
+  select(ds16) |>
+  summary()
+```
+
+:::
+
+## 📦 Boxplots
+
+::: {.fragment}
+
+[Boxplots]{.accent} are a graphical visualization of most of the information provided by the `summary()` function.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: "center"
+#| out-height: "60%"
+boxplot(iris[,-5], col = 2:5, xlab="Length/Width",
+        main="Boxplot of Iris Variables")
+```
+
+:::
+
+## 📈 Descriptive Statistics
+
+::: {.fragment}
+
+[Descriptive statistics]{.accent} help to summarize key characteristics of the data such as:
+
+- its [location]{.accent}
+- its [spread]{.accent}
+- if its distribution has one peak ([unimodal]{.accent}) or many peaks
+- how sharp these peaks are ([kurtosis]{.accent})
+- whether the data is [skewed]{.accent} one way or the other
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+:::{.emphasize}
+📌 In this course we only consider location and spread.
+:::
+
+:::
+
+## ⚖️ Measures of Centrality & Spread
+
+::: {.fragment}
+
+**Measures of Centrality**
+
+- [Arithmetic average]{.accent} or [mean]{.accent} — use the function `mean()`
+- Data midpoint, a.k.a. the [median]{.accent} — use the function `median()`
+- Most frequent value, a.k.a. the [mode]{.accent} — use the function `mode()`
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Measures of Spread**
+
+- [Range]{.accent} (difference between maximum and minimum) — use the function `range()`
+- [Interquartile Range]{.accent} (difference between upper and lower quartile)
+- [Variance]{.accent} and [Standard Deviation]{.accent} — use the functions `var()` and `sd()`
+
+:::
+
+## 🧮 Sample Mean & Standard Deviation
+
+::: {.fragment}
+
+**Sample Mean**
+
+The [sample mean]{.accent} is just the arithmetic average. For a sample $(x_1, ..., x_n)$ the sample mean $\bar{x}$ is given by
+
+$$
+\bar{x} = \frac{1}{n}\sum_{i=1}^nx_i=\frac{x_1 +x_2 + \cdots + x_n}{n}
+$$
+
+:::{.emphasize}
+📌 This is only an estimate of the [(true) population mean]{.accent}, which we denote $\mu$.
+:::
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Sample Standard Deviation**
+
+The [sample standard deviation]{.accent} $s$ is:
+
+$$
+s = \sqrt{\frac{1}{n-1}\sum_{i=1}^n(x_i-\bar{x})^2}
+$$
+
+:::{.emphasize}
+📌 This estimates the [(true) population standard deviation]{.accent} $\sigma$ (recall $\sigma^2$ is the [variance]{.accent}).
+:::
+
+:::
+
+## 🔗 Relation Measures
+
+::: {.fragment}
+
+:::{.emphasize}
+📌 [Relation measures]{.accent} describe how [two variables change together]{.accent} — i.e. how does one variable change if we change the value of another?
+:::
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Intuition**
+
+- Both [increase]{.accent} together → [positive relationship]{.accent} (e.g. height & weight).
+- One [increases]{.accent} as the other [decreases]{.accent} → [negative relationship]{.accent} (e.g. price & demand).
+- No consistent pattern → [unrelated]{.accent} (e.g. shoe size & IQ).
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Formal Measures**
+
+[Covariance]{.accent} measures the joint variability of two variables, and leads to [correlation]{.accent} — a measure of the strength of their linear relationship.
+
+```{r}
+cov(iris$Petal.Length, iris$Petal.Width)
+cor(iris$Petal.Length, iris$Petal.Width)
+```
+
+:::
+
+## 📈 Example — Correlation Plot
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-cap: "Scatter plot with line of best fit."
+plot(iris$Petal.Length, iris$Petal.Width, pch = 20,
+  col = "darkgreen", xlab = "Petal Length", ylab = "Petal Width",
+  main = "Correlation between petal length and petal width.")
+abline(lm(iris$Petal.Width ~ iris$Petal.Length), col = "red",
+  lty = "dashed")
+text(x = 5, y = 0.5, col = "red", labels = paste("Correlation:",
+  cor(iris$Petal.Length, iris$Petal.Width) |> round(2)))
+```
+
+:::
+
+## 🧮 Covariance & Correlation
+
+::: {.fragment}
+
+**Covariance**
+
+The [covariance]{.accent} between two variables $x:= (x_1, ..., x_n)$ and $y:= (y_1, ..., y_n)$ is given by
+
+$$
+\text{Cov}(x,y)=\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})(y_i-\bar{y})
+$$
+
+:::{.emphasize}
+📌 The [covariance can be negative]{.accent}, which indicates a negative linear relationship (one goes up means the other goes down).
+:::
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Correlation**
+
+From the definition of covariance we naturally define [correlation]{.accent}, denoted by the Greek letter rho $\rho$, of two variables $x$ and $y$ as
+
+$$
+\rho_{XY} = \frac{\text{Cov}(x,y)}{s_x \cdot s_y}
+$$
+
+We can compute the correlation between two vectors in R using the function `cor()`.
+
+:::
+
+## 💪 Exercise — Computing Summary Statistics
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 5)
+```
+
+We shall be considering the `faithful.csv` dataset, which contains a list of waiting times between eruptions and the duration of eruptions for the Old Faithful geyser in Yellowstone National Park.
+
+::: {.nonincremental}
+1. Download the data from Canvas and save it to your working directory.
+2. Load the data into R and save it to the object `faithful`. Convert this to a `tibble()` object.
+3. Using the functions `mean()` and `sd()`, compute the mean of `eruptions` and the standard deviation of `waiting`.
+4. Use the functions `cov()` and `cor()` to compute both the covariance and the correlation between `eruptions` and `waiting`.
+:::
+
+## ✅ Solution — Computing Summary Statistics
+
+::: {.fragment}
+
+- [Load]{.accent} `faithful.csv` and convert it to a tibble.
+- [Compute]{.accent} the mean of `eruptions` and the standard deviation of `waiting` using `mean()` and `sd()`.
+- [Compute]{.accent} the covariance and correlation between `eruptions` and `waiting` using `cov()` and `cor()`.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| layout-ncol: 4
+# load data
+faithful <- read.csv("data/faithful.csv") |> tibble()
+# mean
+faithful$eruptions |> mean()
+# standard deviation
+faithful$waiting |> sd()
+# covariance
+cov(faithful$eruptions, faithful$waiting)
+# correlation
+cor(faithful$eruptions, faithful$waiting)
+```
+
+:::
+
+## ⚠️ Problems with Descriptive Statistics
+
+::: {.fragment}
+
+**The Problem**
+
+It is very important to practice [caution]{.accent} when using summary and descriptive statistics. They are very [simplistic]{.accent} and are easily fooled by more complex data patterns.
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+**Example Data**
+
+To demonstrate some of the problems you may run into we consider `problem.csv`, which can be found on Canvas.
+
+```{r}
+# load problem data
+problem <- read.csv("data/problem.csv") |>
+  tibble()
+# inspect data
+problem |> head(8)
+```
+
+:::
+
+## ⚠️ Interpreting the Summary
+
+::: {.fragment}
+
+Applying `summary()` to `problem` we obtain the following summary statistics:
+
+```{r}
+#| output-location: column
+summary(problem)
+```
+
+:::
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+We might make the following quick observations:
+
+- The variable `x` is clustered around 48.
+- The variable `y` is clustered around 405.
+
+:::
+
+:::{.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+cor(problem$a, problem$b)
+```
+
+:::{.spacer-sm}
+:::
+
+Furthermore we might conclude that there is a significant linear relationship between variables `a` and `b`, as their correlation is `r round(cor(problem$a, problem$b), 2)`.
+
+:::
+
+## ⚠️ A Closer Look — Histogram
+
+A closer look at `x` and `y`:
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| fig-align: "center"
+par(mfrow = c(1,2))
+hist(problem$x, breaks = 30)
+hist(problem$y, breaks = 30)
+```
+
+
+
+## ⚠️ A Closer Look — Scatter Plot 
+
+The relationship between `a` and `b` does not appear to be linear!
+
+```{r}
+#| fig-align: "center"
+#| fig-width: 12
+#| fig-height: 6
+#| out-width: "60%"
+#| echo: false
+plot(problem$a, problem$b, pch = 20, col = "darkgreen", xlab = "a", ylab = "b",
+main="Scatter plot with line of best fit.")
+abline(lm(problem$b ~ problem$a), col = "red", lty = "dashed")
+```
+
+# Plotting in Base R
+
+## 🖼️ Types of Plots
+
+::: {.fragment}
+
+There are a wide variety of plots which all have their uses for data visualization and interpretation, including:
+
+:::
+
+::: {.columns}
+
+::: {.column width="45%"}
+
+::: {.fragment}
+
+- Scatterplots
+- Boxplots
+- Histograms
+- Barcharts
+- Pie Charts
+- Q-Q plots
+
+:::
+
+:::
+
+::: {.column width="55%"}
+
+::: {.fragment}
+
+```{r}
+#| fig-width: 15
+#| fig-height: 8
+#| out-width: "100%"
+#| fig-align: "center"
+#| echo: false
+par(mfrow = c(2, 2))
+boxplot(iris$Sepal.Length, main = "Boxplot", col = "darkgreen")
+hist(iris$Sepal.Length, main = "Histogram", col = "darkgreen")
+plot(iris$Sepal.Length, iris$Sepal.Width,
+  main = "Scatterplot", pch = 20, col = "darkgreen")
+barplot(table(iris$Species), main = "Barchart", col = "darkgreen")
+```
+
+:::
+
+:::
+
+:::
+
+::: {.fragment}
+
+**Example Data**
+
+For an example we consider the `airquality` data in the `datasets` library.
+
+```{r}
+#| output-location: column
+# load data
+airquality <- datasets::airquality |>
+  tibble()
+airquality |> head(3)
+```
+
+:::
+
+
+## 😬 An "Unprofessional" Plot
+
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**A Basic Scatter Plot**
+
+We produce a [scatter plot]{.accent} of `Wind` against `Temp` using the `plot()` function.
+
+```{r}
+#| fig-align: "center"
+#| fig-cap: "A very basic scatter plot!"
+#| fig-width: 12
+#| fig-height: 6
+#| out-width: "60%"
+plot(airquality$Wind, airquality$Temp)
+```
+
+- The axes are not labelled and there is no title.
+- There is no formatting.
+
+:::
+
+## 🎨 A More Professional Plot
+
+::: {.fragment}
+
+This is fine but not very professional. Fortunately, `plot()` has a lot of arguments we can use to tune our plot.
+
+```{r}
+#| fig-align: "center"
+#| fig-width: 12
+#| fig-height: 6
+#| out-width: "60%"
+#| fig-cap: "A more professional plot!"
+plot(airquality$Wind, airquality$Temp,
+  main = "Wind and Temperature in NYC, 1973",
+  xlab = "Wind (mph)",
+  ylab = "Temperature (degrees F)",
+  pch = 20,
+  col = "darkgreen",
+  panel.first = grid()
+)
+```
+
+:::
+
+## 🎨 Further Improvements
+
+::: {.fragment}
+
+**What We Changed**
+
+- Defined a plot [title]{.accent} using `main="..."`;
+- Defined x and y [axis labels]{.accent} using `xlab="..."` and `ylab="..."`;
+- Formatted our [point type]{.accent} to be solid `pch=20` and dark green `col="darkgreen"`.
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Line of Best Fit**
+
+We also might want to overlay a [line of best fit]{.accent} using the [linear model]{.accent} `lm()` function.
+
+We will not cover the `lm()` function in this course, but in summary it fits a linear regression model between the `x` and `y` variables and we use this model to plot the line of best fit.
+
+We add this line to our plot using the function `abline()`.
+
+:::
+
+## 📉 Line of Best Fit
+
+::: {.fragment}
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "A more professional plot with a line of best fit!"
+#| out-height: "90%"
+# A more professional plot with best fit line
+plot(airquality$Wind, airquality$Temp,
+  main = "Wind and Temperature in NYC, 1973",
+  xlab = "Wind (mph)",
+  ylab = "Temperature (degrees F)",
+  pch = 20,
+  col = "darkgreen",
+  panel.first = grid()
+)
+abline(lm(airquality$Temp ~ airquality$Wind), col = "red")
+```
+
+:::
+
+## 📐 Formula Notation
+
+::: {.fragment}
+
+Notice in `lm()` we used R's [formula notation]{.accent} `y ~ x`. It is recommended to use formula notation for your plots as it makes your code clearer.
+
+**Key Syntax**
+
+- `y ~ x` reads as "[y modeled by x]{.accent}" — the [response]{.accent} goes on the left of `~`, [predictors]{.accent} go on the right.
+- The `data = ...` argument lets you refer to columns [by name]{.accent} directly, without repeating `dataframe$` in front of every variable.
+- Multiple predictors can be combined with `+`, e.g. `y ~ x1 + x2`.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "A more professional plot with a line of best fit!"
+#| out-height: "90%"
+# A more professional plot with best fit line
+plot(Temp ~ Wind, data = airquality,
+  main = "Wind and Temperature in NYC, 1973",
+  xlab = "Wind (mph)",
+  ylab = "Temperature (degrees F)",
+  pch = 20,
+  col = "darkgreen"
+)
+grid()
+abline(lm(airquality$Temp ~ airquality$Wind), col = "red")
+```
+
+:::
+
+## 〰️ Plotting Continuous Functions
+
+::: {.fragment}
+
+**Discretizing**
+
+- Computers think in [discrete terms]{.accent} and cannot represent [continuous time]{.accent}.
+- To plot continuous functions, e.g. `sin()` or `exp()`, we [discretize]{.accent} them — redefining the interval as a sequence with [very fine discrete jumps]{.accent}.
+- For example, on the interval $[0,10]$ we could define:
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: column
+x <- seq(0, 10, by = 0.01)
+head(x)
+```
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Cosine Wave Example**
+
+- We compute `cos(x)` and specify `type="l"`, which plots a [smooth line]{.accent} between the points rather than the points themselves.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "Cosine Wave"
+#| out-height: "90%"
+plot(x, cos(x),
+  main = "Cosine Wave",
+  xlab = "x",
+  ylab = "cos(x)",
+  col = "darkgreen",
+  type = "l"
+)
+```
+
+:::
+
+## ➕ Overlaying Lines
+
+::: {.fragment}
+
+**Using `lines()`**
+
+- We can [overlay several lines]{.accent} one on top of the other using the `lines()` function.
+- `lines()` takes broadly the [same arguments]{.accent} as `plot()` (e.g. `col`, `type`, `lty`).
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+**Adding a Legend**
+
+- We add a [legend]{.accent} using the function `legend()`.
+- The first argument (e.g. `"bottomleft"`) sets the [position]{.accent} of the legend.
+- `legend = c(...)` gives the [labels]{.accent} for each line.
+- `col = ...` and `lty = ...` should [match the plotted lines]{.accent} so the legend correctly identifies each one.
+
+:::
+
+::: {.fragment}
+
+:::{.spacer-sm}
+:::
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "Cosine & Sin Waves"
+#| out-height: "90%"
+# A more professional plot with best fit line
+plot(x, cos(x),
+  main = "Cosine Wave",
+  xlab = "x", ylab = "f(x)",
+  col = "darkgreen", type = "l"
+)
+lines(x, sin(x), col = "red")
+legend("bottomleft",
+  legend = c("sin(x)", "cos(x)"),
+  col = c("darkgreen", "red"), lty = 1)
+```
+
+:::
+
+## 🔁 Iterating Function Plotting
+
+::: {.fragment}
+
+For a bit of fun we conclude by demonstrating how a `for` loop can be used to iteratively produce complicated plots:
+
+- We first plot the [base cosine wave]{.accent}, then loop `i` from 1 to 100.
+- Each iteration draws a [phase-shifted sine wave]{.accent} `sin(x + i/10)` using `lines()`.
+- Setting `col = i` cycles through R's [default color palette]{.accent}, giving each new line a different color.
+- The result is a dense fan of overlapping waves, all built up from a [single simple plotting call repeated]{.accent} inside the loop.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "Lots and lots of waves!"
+#| out-height: "90%"
+# A more professional plot with best fit line
+plot(x, cos(x),
+  main = "Cosine Waves",
+  xlab = "x",
+  ylab = "f(x)",
+  col = "darkgreen",
+  type = "l"
+)
+for(i in 1:100){
+  lines(x, sin(x+(i/10)),
+  col = i)
+}
+```
+
+:::
+
+## 💪 Exercise — Plotting in R
+
+```{r}
+#| echo: false
+library(countdown)
+countdown(minutes = 5)
+```
+
+Produce plots for $x^3$ and $e^x$ for `x` between 1 and 10.
+
+::: {.nonincremental}
+1. Define your `x` as a discretized sequence of values.
+2. Define `x_cubed` as $x^3$ and `exp_x` as $e^x$.
+3. Construct a plot of `x` against `x_cubed`, adjusting formatting as desired.
+4. Add an additional line to the plot representing $e^x$.
+5. Add an appropriate legend.
+:::
+
+## ✅ Solution — Plotting in R
+
+::: {.fragment}
+
+- [Discretize]{.accent} `x` between 1 and 10, then define `x_cubed` as $x^3$ and `x_exp` as $e^x$.
+- [Plot]{.accent} `x` against `x_cubed` as a line, then [overlay]{.accent} `x_exp` using `lines()`.
+- [Add]{.accent} a legend identifying each line.
+
+:::
+
+:::{.fragment}
+
+```{r}
+#| output-location: slide
+#| fig-align: "center"
+#| fig-width: 10
+#| fig-height: 6
+#| fig-cap: "Exercise Plot"
+#| out-height: "90%"
+# define variables
+x <- seq(1, 10, by = 0.01)
+x_cubed <- x^3
+x_exp <- exp(x)
+# produce plot
+plot(
+  x, x_cubed,
+  main = "Exercise Plot",
+  xlab = "x", ylab = "f(x)",
+  type = "l", col = "darkgreen"
+)
+lines(x, x_exp, col = "red", lty = 2)
+legend(
+  "topleft",
+  legend = c("x^3", "exp(x)"),
+  col = c("darkgreen", "red"), lty = 1:2
+)
+```
+
+:::
+
+# Summary
+
+## ✅ Topics Covered
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤔 Today we looked into:
+
+- Descriptive statistics
+- Base R Plotting
+
+:::
+
+## 📅 Next Class
+
+::: {.fragment}
+
+::: {.spacer-sm}
+:::
+
+🤩 Next class we will temporarily leave behind data science topics as we study probability theory! The next four classes will be (roughly) split as follows:
+
+1. Introduction to Probability
+2. Discrete Random Variables
+3. Continuous Random Variables
+4. Monte Carlo Methods
+
+:::

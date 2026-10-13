@@ -372,7 +372,8 @@ window.Quarto = {
   <li><a href="#what-is-an-energy-based-model-ebm" id="toc-what-is-an-energy-based-model-ebm" class="nav-link" data-scroll-target="#what-is-an-energy-based-model-ebm"><span class="header-section-number">1.3.1</span> What is an Energy Based Model (EBM)?</a></li>
   <li><a href="#training-ebms-link-to-dgms" id="toc-training-ebms-link-to-dgms" class="nav-link" data-scroll-target="#training-ebms-link-to-dgms"><span class="header-section-number">1.3.2</span> Training EBMs (Link to DGMs)</a></li>
   <li><a href="#score-matching" id="toc-score-matching" class="nav-link" data-scroll-target="#score-matching"><span class="header-section-number">1.3.3</span> Score Matching</a></li>
-  <li><a href="#denoising-score-matching" id="toc-denoising-score-matching" class="nav-link" data-scroll-target="#denoising-score-matching"><span class="header-section-number">1.3.4</span> Denoising Score Matching</a></li>
+  <li><a href="#sampling-with-langevin-dynamics" id="toc-sampling-with-langevin-dynamics" class="nav-link" data-scroll-target="#sampling-with-langevin-dynamics"><span class="header-section-number">1.3.4</span> Sampling with Langevin Dynamics</a></li>
+  <li><a href="#denoising-score-matching" id="toc-denoising-score-matching" class="nav-link" data-scroll-target="#denoising-score-matching"><span class="header-section-number">1.3.5</span> Denoising Score Matching</a></li>
   </ul></li>
   <li><a href="#score-sde-framework" id="toc-score-sde-framework" class="nav-link" data-scroll-target="#score-sde-framework"><span class="header-section-number">1.4</span> Score SDE Framework</a></li>
   <li><a href="#flow-based-models" id="toc-flow-based-models" class="nav-link" data-scroll-target="#flow-based-models"><span class="header-section-number">1.5</span> Flow-Based Models</a>
@@ -594,8 +595,8 @@ s(x):=\nabla _{x}\log p(x).
 s^*(\cdot)=\nabla_{x}\log p(\cdot).
 \]</span></p>
 </div>
-<p><em>Proof:</em></p>
-<p>First, let us expand the squared difference inside the expectation</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>First, let us expand the squared difference inside the expectation</p>
 <p><span class="math display">\[
 \begin{aligned} \mathcal{L}_{\text{SM}}(\phi) &amp; = \frac{1}{2}\mathbb{E}_{x\sim p} \left[ \lVert s_{\phi}(x) \rVert _{2}^2 -2\left&lt; s_{\phi}(x), s(x) \right&gt; +\lVert s(x) \rVert_{2}^2\right] \\ &amp;= \frac{1}{2}\mathbb{E}_{x\sim p}\left[\lVert s_{\phi}(x) \rVert _{2}^2\right] - \mathbb{E}_{x\sim p}[\left&lt; s_{\phi}(x), s(x) \right&gt; ] + \frac{1}{2}\mathbb{E}_{x\sim p}[\lVert s(x) \rVert_{2}^2 ]. \end{aligned}
 \]</span></p>
@@ -624,10 +625,13 @@ s_{\phi}=\left( s_{\phi}^{(1)}, \dots, s_{\phi}^{(D)} \right).
 \]</span></p>
 <p>Combining all results, we obtain</p>
 <p><span class="math display">\[ \begin{aligned} \mathcal{L}_{SM}(\phi) &amp; = \underbrace{\mathbb{E}_{x\sim p}\left[\text{Tr}\left(\nabla_x s_\phi(x) \right)+ \frac{1}{2}|s_\phi(x)|_2^2\right]}_{\tilde{\mathcal{L}}_ {\text{SM}}(\phi)} + \underbrace{\frac{1}{2}\mathbb{E}_{x\sim p} \left[|s(x)|_2^2\right]}_{C}. \end{aligned} \]</span></p>
-<p><span class="math inline">\(\square\)</span> ### Sampling with Langevin Dynamics</p>
+</div>
+</section>
+<section id="sampling-with-langevin-dynamics" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="sampling-with-langevin-dynamics"><span class="header-section-number">1.3.4</span> Sampling with Langevin Dynamics</h3>
 <p>Sampling from EBMs defined by energy function <span class="math inline">\(E_{\phi}(x)\)</span> can be performed using <strong>Langevin dynamics</strong>. In Langevin dynamics we make use of the score function to sample by first generating noise and then using the score to guide us to regions of high density.</p>
-<section id="discrete-time-langevin-dynamics" class="level4" data-number="1.3.3.1">
-<h4 data-number="1.3.3.1" class="anchored" data-anchor-id="discrete-time-langevin-dynamics"><span class="header-section-number">1.3.3.1</span> Discrete-Time Langevin Dynamics</h4>
+<section id="discrete-time-langevin-dynamics" class="level4" data-number="1.3.4.1">
+<h4 data-number="1.3.4.1" class="anchored" data-anchor-id="discrete-time-langevin-dynamics"><span class="header-section-number">1.3.4.1</span> Discrete-Time Langevin Dynamics</h4>
 <p>The <strong>discrete-time</strong> Langevin update is</p>
 <p><span class="math display">\[
 x_{n+1}=x_{n}-\eta \nabla_{x}E_{\phi}(x_{n})+\sqrt{ 2\eta }\epsilon_{n}; \quad (n=0,1,2,\dots),\tag{$\star$}
@@ -643,8 +647,8 @@ x_{n+1} = x_n + \eta \nabla_{x} \log p_\phi(x_n) + \sqrt{2\eta} \epsilon_n,
 \]</span></p>
 <p>where the score function guides the samples toward high-density regions. This formulation is central to diffusion models, as will be detailed later.</p>
 </section>
-<section id="continuous-time-langevin-dynamics" class="level4" data-number="1.3.3.2">
-<h4 data-number="1.3.3.2" class="anchored" data-anchor-id="continuous-time-langevin-dynamics"><span class="header-section-number">1.3.3.2</span> ⏱ Continuous-Time Langevin Dynamics</h4>
+<section id="continuous-time-langevin-dynamics" class="level4" data-number="1.3.4.2">
+<h4 data-number="1.3.4.2" class="anchored" data-anchor-id="continuous-time-langevin-dynamics"><span class="header-section-number">1.3.4.2</span> ⏱ Continuous-Time Langevin Dynamics</h4>
 <p>As the step size <span class="math inline">\(\eta\)</span> approaches zero, the discrete Langevin updates naturally converge to a continuous-time process described by the <strong>Langevin Stochastic Differential Equation (SDE)</strong></p>
 <p><span class="math display">\[
 dx(t) = \nabla_{x}\log p_{\phi}(x(t))~dt + \sqrt{ 2 }~dw(t),
@@ -655,10 +659,10 @@ dx(t) = \nabla_{x}\log p_{\phi}(x(t))~dt + \sqrt{ 2 }~dw(t),
 </div>
 </section>
 </section>
-<section id="denoising-score-matching" class="level3" data-number="1.3.4">
-<h3 data-number="1.3.4" class="anchored" data-anchor-id="denoising-score-matching"><span class="header-section-number">1.3.4</span> Denoising Score Matching</h3>
-<section id="sliced-score-matching" class="level4" data-number="1.3.4.1">
-<h4 data-number="1.3.4.1" class="anchored" data-anchor-id="sliced-score-matching"><span class="header-section-number">1.3.4.1</span> Sliced Score Matching</h4>
+<section id="denoising-score-matching" class="level3" data-number="1.3.5">
+<h3 data-number="1.3.5" class="anchored" data-anchor-id="denoising-score-matching"><span class="header-section-number">1.3.5</span> Denoising Score Matching</h3>
+<section id="sliced-score-matching" class="level4" data-number="1.3.5.1">
+<h4 data-number="1.3.5.1" class="anchored" data-anchor-id="sliced-score-matching"><span class="header-section-number">1.3.5.1</span> Sliced Score Matching</h4>
 <p>From <strong>Hyvärinen’s Tractable Form of SM</strong> we still are required to compute the trace of the Jacobian</p>
 <p><span class="math display">\[
 \mathrm{Tr}(\nabla_{x}s_{\phi}(x)),
@@ -675,8 +679,8 @@ dx(t) = \nabla_{x}\log p_{\phi}(x(t))~dt + \sqrt{ 2 }~dw(t),
 \]</span></p>
 <p>This objective can be evaluated efficiently with automatic differentiation using <strong><em>Jacobian- and vector-Jacobian-product operations (JVP/VJP)</em></strong> instead of explicitly computing large Jacobian or Hessian matrices.</p>
 </section>
-<section id="denoising-score-matching-1" class="level4" data-number="1.3.4.2">
-<h4 data-number="1.3.4.2" class="anchored" data-anchor-id="denoising-score-matching-1"><span class="header-section-number">1.3.4.2</span> Denoising Score Matching</h4>
+<section id="denoising-score-matching-1" class="level4" data-number="1.3.5.2">
+<h4 data-number="1.3.5.2" class="anchored" data-anchor-id="denoising-score-matching-1"><span class="header-section-number">1.3.5.2</span> Denoising Score Matching</h4>
 <p>Hyvärinen’s trick still struggles in high dimensions because the score of a distribution supported on raw data is poorly behaved (the data distribution is often concentrated on a low-dimensional manifold, making gradients unstable or undefined in most of space).</p>
 <p>A more robust alternative is <strong>Denoising Score Matching (DSM)</strong> <a href="obsidian://open?vault=Brain&amp;file=Articles%2FVincent2011a.pdf">(Vincent, 2011)</a>, which is principled and scalable. By picking a noise distribution <span class="math inline">\(p_\sigma(\tilde{x} | x)\)</span> — typically Gaussian, so <span class="math inline">\(\tilde{x} = x + \sigma\epsilon\)</span> with <span class="math inline">\(\epsilon \sim \mathcal{N}(0, I)\)</span> - you slightly corrupt the data and instead of trying to learn the score of <span class="math inline">\(p_{\text{data}}\)</span>, you learn the score of the <em>smoothed distribution</em></p>
 <p><span class="math display">\[p_\sigma(\tilde{x}) = \int p_\sigma(\tilde{x}|x), p_{\text{data}}(x), dx.\]</span></p>

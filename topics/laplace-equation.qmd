@@ -1,0 +1,138 @@
+---
+id: laplace-equation
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-13
+number-sections: true
+title: "Laplace Equation"
+title-block-banner: false
+---
+
+## Laplace Equation
+
+:::{.definition data-title="Laplace Equation"}
+
+The **Laplace equation** states that the [[laplace-operator|Laplacian]] of a 
+twice-differentiable function $u$ is zero
+
+$$
+\Delta u = 0, \quad \Delta = \nabla^2 = \sum_{i=1}^{n} \frac{\partial^2}{\partial x_i^2}.
+$$
+
+:::
+
+In 2D, the Laplace equation is
+
+$$
+u_{xx} + u_{yy} = 0.
+$$
+
+It is a linear, homogenous, second-order PDE and is the prototypical elliptic 
+PDE equation.  Solutions of the Laplace equation are called **harmonic
+functions**.  The inhomogenous version $\Delta u=f$ is called the 
+**Poisson equation**.
+
+### Where does it come from?
+
+- The Laplace equation describes the steady state (no time dependence) of 
+diffusion and wave phenomena. Setting $u_t=0$ in the 
+[[heat-equation|heat equation]] or the [[wave-equation|wave equation]] gives
+$\Delta u = 0$.  
+- It also governs electrostatic potential in charge-free 
+regions, gravitational potential in vacuum, and the velocity potential of 
+incompressible, irrotational fluid flow.
+
+## Properties of Harmonic Functions
+
+### Mean Value Property
+
+If $u$ is harmonic on a ball $B_r(x)$, then
+
+$$
+u(x) = \frac{1}{|\partial B_r|}\int_{\partial B_r(x)} u(y)\,dS(y)
+=\frac{1}{|B_r|}\int_{B_r(x)} u\,dy.
+$$
+
+where $|\partial B_r|$ is the surface area of the boundary of the ball and 
+$dS$ is the surface measure.  In other words, the value at the center equals 
+the average over the sphere or the ball.
+
+### Maximum Principle
+
+On a bounded domain $\Omega$ with $u\in C^2(\Omega)\subset C(\overline{\Omega})$ 
+harmonic then 
+
+$$
+\max _{\overline{\Omega}} u = \max_{\partial \Omega} u, \quad
+$$
+
+so there are no local maxima or minima in the interior of the domain.  
+
+### Smoothness
+
+Harmonic functions are automatically $C^\infty$ (infinitely differentiable),
+and are in fact real-analytic.
+
+### Liouville's Theorem
+
+A bounded harmonic function on all of $\mathbb{R}^n$ is constant.
+
+## Boundary Value Problems
+
+### Dirichlet problem
+
+$\Delta u = 0$ in $\Omega$, $u = g$ on $\partial\Omega$. 
+
+The solution is unique.
+
+### Neumann Problem
+$\Delta u = 0$ in $\Omega$, $\partial_\nu u = h$ on $\partial\Omega$. The solution is unique only up to an additive constant, and a solution exists only if $\int_{\partial\Omega} h\, dS = 0$.
+
+## Fundamental solution
+
+The radially symmetric solutions away from the origin are
+
+$$
+\Phi(x) =
+\begin{cases}
+-\dfrac{1}{2\pi}\ln|x|, & n=2,\\[2mm]
+\dfrac{1}{n(n-2)\alpha(n)}\,|x|^{2-n}, & n\ge 3,
+\end{cases}
+$$
+
+where $\alpha(n)$ is the volume of the unit ball in $\mathbb{R}^n$. It satisfies $-\Delta\Phi = \delta_0$, and convolving with it gives solutions of Poisson’s equation: $u = \Phi * f$ solves $-\Delta u = f$.
+
+:::{.example data-title="Dirichlet problem on the unit disk"}
+
+In polar coordinates the equation becomes
+
+$$
+u_{rr} + \frac1r u_r + \frac{1}{r^2}u_{\theta\theta} = 0.
+$$
+
+Separation of variables with $u = R(r)\Theta(\theta)$ and $2\pi$-periodicity gives the bounded solutions
+
+$$u(r,\theta) = \frac{a_0}{2} + \sum_{k=1}^\infty r^k\left(a_k\cos k\theta + b_k \sin k\theta\right),$$
+
+where $a_k, b_k$ are the Fourier coefficients of the boundary data $g(\theta)$. Summing the series yields the Poisson integral formula:
+
+$$u(r,\theta) = \frac{1}{2\pi}\int_0^{2\pi} \frac{1-r^2}{1-2r\cos(\theta-\phi)+r^2}\, g(\phi)\, d\phi.$$
+
+For instance, with $g(\theta) = \cos\theta$ the solution is $u = r\cos\theta = x$, which is clearly harmonic.
+
+:::
+
+## Connection to complex analysis
+
+In 2D, the real and imaginary parts of any holomorphic function $f = u + iv$ are harmonic. This follows from the Cauchy–Riemann equations $u_x = v_y$, $u_y = -v_x$, which give $u_{xx} + u_{yy} = v_{yx} - v_{xy} = 0$. This is why conformal mapping is such a powerful tool for 2D Laplace problems.
+
+## References
+
+1. Wikipedia: Laplace’s equation
+2. Wikipedia: Harmonic function
+3. Paul’s Online Math Notes: Laplace’s Equation
+4. Evans, Partial Differential Equations, Section 2.2 (fundamental solution, mean value property, and properties of harmonic functions)
+5. Claude
+
+

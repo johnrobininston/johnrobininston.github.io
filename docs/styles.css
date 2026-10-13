@@ -1,7 +1,25 @@
 /* css styles */
 
+/* Body: Helvetica Neue Light (ships with macOS/iOS; other systems fall back to
+   the next font, which has no light weight). To revert to the previous system
+   stack use:
+   -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI",
+   "Helvetica Neue", "Lucida Grande", Arial, sans-serif; with weight 400. */
 body {
-  font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+  font-family: "Helvetica Neue", "HelveticaNeue-Light", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+b, strong, th {
+  font-weight: 600;
+}
+
+/* Serif headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.quarto-title .title,
+#toc-title, .sidebar nav[role=doc-toc] > h2 {
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-weight: 600;
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -12,6 +30,10 @@ body {
    ───────────────────────────────────────────────────────────────── */
 body.quarto-light { --surface: #fcfcfc; }   /* near-white */
 body.quarto-dark  { --surface: #26282e; }   /* neutral space grey */
+
+/* Very light shade shared by theorem/definition boxes and table header bars */
+body.quarto-light { --box-shade: rgba(76, 79, 105, 0.06); }
+body.quarto-dark  { --box-shade: rgba(255, 255, 255, 0.06); }
 
 body.quarto-light,
 body.quarto-dark {
@@ -130,10 +152,9 @@ body.quarto-dark .quarto-category {
   border-radius: 6px;
 }
 
-/* Section heading accent — left border on all h2 headings */
+/* Section heading spacing for h2 headings (accent bar removed; the default
+   underline rule is kept) */
 main h2 {
-  border-left: 4px solid var(--bs-primary, #0d6efd);
-  padding-left: 0.75rem;
   margin-top: 2.5rem;
   margin-bottom: 1.25rem;
 }
@@ -185,10 +206,11 @@ main h2 {
 .theorem {
   --env-accent: var(--bs-primary, #1e66f5);
   margin: 1.25rem 0;
-  padding: 0.7rem 1rem 0.55rem;
-  border-left: 4px solid var(--env-accent);
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--env-accent) 7%, transparent);
+  padding: 1rem;                       /* equal padding on all four sides */
+  border: 2px solid var(--bs-border-color, #acb0be);
+  border-radius: 8px;
+  background: var(--box-shade);
+  font-style: italic;                  /* all text inside is italic */
 }
 .theorem {
   --env-accent: #8839ef; /* catppuccin latte mauve */
@@ -197,11 +219,13 @@ body.quarto-dark .theorem {
   --env-accent: #ca9ee6; /* catppuccin frappe mauve */
 }
 
-/* Bold label line above the body */
+/* Serif heading line above the body */
 .definition::before,
 .theorem::before {
   display: block;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.5rem;
+  font-size: calc(1em + 1pt);
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
   font-weight: 700;
   color: var(--env-accent);
 }
@@ -252,11 +276,25 @@ body.quarto-dark .theorem {
    Author with:  ::: {.proof} ... :::                                     */
 .proof {
   margin: 1.1rem 0;
+  display: flow-root;          /* contain the floated QED box so it cannot
+                                  spill into the next block (e.g. a theorem) */
 }
-/* QED box appended to the last line of the proof, flush right */
-.proof > :last-child::after {
+/* QED box appended to the last line of the proof, flush right. If the proof
+   ends in a list (e.g. "(1) ... (2) ..." parses as an ordered list) the box
+   goes on the last item rather than after the list. */
+.proof > :last-child:not(ol):not(ul)::after,
+.proof > :is(ol, ul):last-child > li:last-child:not(:has(> p))::after,
+.proof > :is(ol, ul):last-child > li:last-child > p:last-child::after {
   content: "\00A0\25A1";       /* nbsp + □ (matches LaTeX \square) */
   float: right;
+}
+/* Italic "Proof." label (same wording as the peek preview) */
+.proof::before {
+  content: "Proof.";
+  display: block;
+  margin-bottom: 0.35rem;
+  font-style: italic;
+  font-weight: 600;
 }
 .proof > :first-child { margin-top: 0; }
 .proof > :last-child { margin-bottom: 0; }
@@ -289,3 +327,10 @@ body.quarto-dark .theorem {
 #quarto-backlinks.quarto-backlinks--sidebar li { margin-bottom: 0.3rem; }
 #quarto-backlinks.quarto-backlinks--sidebar a { text-decoration: none; }
 #quarto-backlinks.quarto-backlinks--sidebar a:hover { text-decoration: underline; }
+
+/* Table header bars share the box shade (!important beats Bootstrap's
+   .table > :not(caption) > * > * cell background) */
+table thead th,
+.table > thead > tr > th {
+  background-color: var(--box-shade) !important;
+}

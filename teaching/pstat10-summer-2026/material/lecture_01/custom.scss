@@ -1,0 +1,700 @@
+/*-- scss:defaults --*/
+
+@import url("https://fonts.googleapis.com/css2?family=Carlito:wght@300;400;600&display=swap");
+
+// Typography
+$font-family-sans-serif: Calibri, Carlito, "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$presentation-heading-font: "Alegreya", "Palatino Linotype", "Book Antiqua", Palatino, serif !default;
+$presentation-font-size-root: 25px !default;
+$presentation-line-height: 1.28 !default;
+
+// Color system (compiled light-mode defaults; runtime dark mode overrides
+// the equivalent --r-* custom properties below, see [data-theme="dark"]).
+$body-bg: #f7f9fc !default;
+$body-color: #1e2430 !default;
+$link-color: #2f5aa8 !default;
+$selection-bg: #dce9ff !default;
+
+$presentation-heading-color: #5d6778 !default;
+$presentation-h1-font-size: 2.05em !default;
+$presentation-h2-font-size: 1.38em !default;
+$presentation-h3-font-size: 1.1em !default;
+$presentation-title-slide-text-align: left !default;
+
+/*-- scss:rules --*/
+
+// --- Theme tokens ----------------------------------------------------------
+// Every color used below is drawn from these custom properties so a single
+// attribute switch ([data-theme="dark"] on <html>) can re-theme the deck.
+:root {
+  --r-main-font: Calibri, Carlito, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --accent: #2f5aa8;
+  --accent-2: #a43d7a;
+  --accent-soft: #e8f0ff;
+  --border-subtle: #d5deec;
+  --text-muted: #5d6778;
+
+  --bg-canvas: #f7f9fc;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #eef4ff;
+  --text-main: #1e2430;
+  --strong-color: #1f3f75;
+  --emphasize-text: #1f3458;
+
+  --code-bg: #eef2f7;
+  --code-color: #274a84;
+  --pre-bg: #f2f5fa;
+  --callout-bg: #f5f7fb;
+
+  --title-color: #142d57;
+  --footer-color: #5d6778;
+
+  --slide-number-bg: rgba(232, 240, 255, 0.84);
+  --slide-number-border: #c7d8f6;
+  --slide-number-color: #31445f;
+
+  --profile-border: rgba(47, 90, 168, 0.25);
+  --profile-bg: #e9edf5;
+
+  --link-underline: rgba(47, 90, 168, 0.35);
+
+  --theme-toggle-bg: rgba(255, 255, 255, 0.85);
+  --theme-toggle-border: #c7d8f6;
+  --theme-toggle-color: #31445f;
+}
+
+// Dark mode palette. Toggled at runtime by assets/theme-toggle.js, which
+// sets data-theme="dark" | "light" on <html> and remembers the choice.
+:root[data-theme="dark"] {
+  --r-background-color: #12161f;
+  --r-main-color: #e7ebf3;
+  --r-heading-color: #c3ccdf;
+  --r-link-color: #86adf0;
+  --r-link-color-dark: #5f8ad6;
+  --r-link-color-hover: #a9c6f7;
+  --r-selection-background-color: #2a3a57;
+  --r-selection-color: #eaf1ff;
+
+  --accent: #86adf0;
+  --accent-2: #e79bcb;
+  --accent-soft: rgba(134, 173, 240, 0.16);
+  --border-subtle: #313d54;
+  --text-muted: #a7b1c7;
+
+  --bg-canvas: #12161f;
+  --bg-surface: #1a2030;
+  --bg-surface-2: #1c2439;
+  --text-main: #e7ebf3;
+  --strong-color: #bcd3f7;
+  --emphasize-text: #dde7fb;
+
+  --code-bg: #1c2331;
+  --code-color: #a3c4f3;
+  --pre-bg: #171d29;
+  --callout-bg: #1a2030;
+
+  --title-color: #eaf1ff;
+  --footer-color: #a7b1c7;
+
+  --slide-number-bg: rgba(28, 36, 57, 0.8);
+  --slide-number-border: #313d54;
+  --slide-number-color: #cdd8ee;
+
+  --profile-border: rgba(134, 173, 240, 0.35);
+  --profile-bg: #202940;
+
+  --link-underline: rgba(134, 173, 240, 0.4);
+
+  --theme-toggle-bg: rgba(26, 32, 48, 0.85);
+  --theme-toggle-border: #313d54;
+  --theme-toggle-color: #cdd8ee;
+}
+
+// Smooth crossfade when the toggle flips theme.
+html,
+.reveal-viewport,
+.reveal .slides section {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-weight: 300;
+  color: var(--text-main);
+
+  .slides section {
+    text-align: left;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--text-muted);
+    letter-spacing: 0.015em;
+    text-wrap: balance;
+    margin-bottom: 0.35em;
+  }
+
+  // Add breathing room before in-slide headings (not the first heading on slide).
+  .slides section h1:not(:first-child),
+  .slides section h2:not(:first-child),
+  .slides section h3:not(:first-child) {
+    margin-top: 0.9em;
+  }
+
+  p,
+  li {
+    max-width: 44em;
+  }
+
+  // Keep list text the same size as body text.
+  p,
+  ul,
+  ol,
+  li {
+    font-size: 1em;
+  }
+
+  // More readable list spacing for lecture bullets.
+  ul,
+  ol {
+    margin-top: 0.3em;
+  }
+
+  // Tighten spacing when a list follows body text.
+  p + ul,
+  p + ol {
+    margin-top: 0.05em;
+  }
+
+  // Use open circles for second-level unordered bullets.
+  ul {
+    list-style-type: disc;
+  }
+
+  ul ul {
+    list-style-type: circle;
+  }
+
+  li {
+    margin: 0.2em 0;
+    padding-left: 0.1em;
+  }
+
+  // Wide pandas preview tables (e.g. mammals.csv) stay on-slide without crowding.
+  .cell.mammals-preview-table table.dataframe {
+    font-size: 0.58em;
+  }
+
+  p {
+    margin: 0.35em 0 0.55em;
+  }
+
+  a {
+    line-height: 1.25em;
+    text-decoration-color: var(--link-underline);
+    text-underline-offset: 0.12em;
+  }
+
+  strong {
+    color: var(--strong-color);
+    font-weight: 600;
+  }
+
+  blockquote {
+    border-left: 0.18em solid var(--accent);
+    background: var(--bg-surface-2);
+    color: var(--emphasize-text);
+    padding: 0.55em 0.8em;
+    border-radius: 0.2em;
+    box-shadow: 0 0 0 1px rgba(47, 90, 168, 0.08);
+  }
+
+  code:not(.sourceCode code) {
+    background: var(--code-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.25em;
+    padding: 0.08em 0.35em;
+    color: var(--code-color);
+    font-size: 0.88em;
+  }
+
+  pre code {
+    background: var(--pre-bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.35em;
+    box-shadow: none;
+  }
+
+  // Optional semantic emphasis in slide markdown: [text]{.accent}
+  .accent {
+    color: var(--accent-2);
+    font-weight: 600;
+  }
+
+  // Optional muted text helper: [text]{.muted}
+  .muted {
+    color: var(--text-muted);
+  }
+
+  // Small vertical spacer: ::: {.spacer-sm} :::
+  .spacer-sm {
+    height: 0.4em;
+  }
+
+  // --- Academic components -------------------------------------------------
+  // Usage examples in QMD:
+  // ::: definition
+  // Definition content
+  // :::
+  //
+  // ::: theorem
+  // ::: example
+  // ::: question
+
+  .definition,
+  .theorem,
+  .example,
+  .question {
+    border-radius: 0.3em;
+    border: 1px solid var(--border-subtle);
+    padding: 0.55em 0.75em;
+    margin: 0.6em 0;
+    background: var(--callout-bg);
+    font-size: 0.96em;
+  }
+
+  .definition::before,
+  .theorem::before,
+  .example::before,
+  .question::before {
+    display: block;
+    font-family: $presentation-heading-font;
+    font-size: 0.8em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.2em;
+    color: var(--text-muted);
+  }
+
+  .definition::before {
+    content: "Definition";
+  }
+
+  .theorem::before {
+    content: "Theorem";
+  }
+
+  .example::before {
+    content: "Example";
+  }
+
+  .question::before {
+    content: "Question";
+  }
+}
+
+// Centered figure on a slide (sections default to text-align: left).
+// Constrain size so images stay on-slide (width + height), preserving aspect ratio.
+.reveal .slide-img-center {
+  text-align: center;
+  margin: 0.4em 0;
+  max-width: 100%;
+
+  p {
+    text-align: center;
+    margin: 0.35em 0;
+  }
+
+  img {
+    display: inline-block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    // Leave room for headings / body text above; cap for large viewports.
+    max-height: min(52vh, 480px);
+    object-fit: contain;
+    object-position: center;
+    vertical-align: middle;
+  }
+}
+
+// Profile pictures
+.reveal .profile-hex {
+  width: min(78%, 280px);
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: center;
+
+  // Rounded hexagon shape.
+  clip-path: polygon(
+    25% 6.5%,
+    75% 6.5%,
+    96% 50%,
+    75% 93.5%,
+    25% 93.5%,
+    4% 50%
+  );
+  border-radius: 18px;
+  border: 2px solid var(--profile-border);
+  box-shadow: 0 7px 24px rgba(28, 44, 75, 0.12);
+  background: var(--profile-bg);
+}
+
+// Profile picture with simple rounded corners (no hexagon clip).
+.reveal .profile-rounded {
+  width: min(78%, 280px);
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 22px;
+  border: 2px solid var(--profile-border);
+  box-shadow: 0 7px 24px rgba(28, 44, 75, 0.12);
+  background: var(--profile-bg);
+}
+
+// Small circular avatar + name/details row (e.g. TA list entries).
+.reveal .ta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0.3em 0;
+}
+
+.reveal .profile-circle {
+  width: 3.6em;
+  height: 3.6em;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid var(--profile-border);
+  box-shadow: 0 4px 14px rgba(28, 44, 75, 0.14);
+  background: var(--profile-bg);
+}
+
+.reveal .ta-info {
+  min-width: 0;
+}
+
+.reveal .ta-info .ta-name {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.15em;
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.reveal .ta-info ul {
+  margin-top: 0.1em;
+}
+
+// Teaching staff slide: top-align text + photo column.
+.reveal #teaching-staff .columns {
+  align-items: flex-start;
+}
+
+// Teaching staff slide: three hex portraits, zigzag (left / right / left).
+.reveal #teaching-staff .staff-photo-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.45em;
+  width: 100%;
+  padding: 0.15em 0;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex {
+  width: min(58%, 168px);
+  max-width: 100%;
+  margin: 0;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(1) {
+  align-self: flex-start;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(2) {
+  align-self: flex-end;
+}
+
+.reveal #teaching-staff .staff-photo-stack .profile-hex:nth-child(3) {
+  align-self: flex-start;
+}
+
+// Column layout
+.columns {
+  align-items: center;
+  column-gap: 1.2rem;
+}
+
+// Center content in a single column (e.g. slide logos).
+.reveal .column.column-center {
+  text-align: center;
+}
+
+.reveal .column.column-center img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+// Title slide accents
+#title-slide {
+  h1 {
+    color: var(--title-color);
+    line-height: 1.1;
+    margin-bottom: 0.2em;
+  }
+
+  .subtitle,
+  .quarto-title-author-name,
+  .date {
+    color: var(--text-muted);
+  }
+
+  .quarto-title-author-name {
+    font-weight: 600;
+  }
+
+  // Decorative rule under title for visual identity.
+  h1::after {
+    content: "";
+    display: block;
+    width: 3.2em;
+    height: 0.09em;
+    background: linear-gradient(90deg, var(--accent), #7aa2e5);
+    margin-top: 0.28em;
+    border-radius: 99px;
+  }
+}
+
+// Progress bar + slide number polish
+.reveal .progress {
+  color: var(--accent);
+  height: 0.28rem;
+}
+
+.reveal .slide-number {
+  color: var(--slide-number-color);
+  background: var(--slide-number-bg);
+  border: 1px solid var(--slide-number-border);
+  border-radius: 0.28em;
+  padding: 0.08em 0.35em;
+  bottom: 0.42em;
+  right: 0.8em;
+  font-size: 0.54em;
+}
+
+// Fixed course footer (left + center text). Slide number remains on the right.
+.reveal .footer {
+  position: fixed;
+  left: 0.8em;
+  right: 0.8em;
+  bottom: 0.42em;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  pointer-events: none;
+  z-index: 15;
+  color: var(--footer-color);
+  font-size: 0.54em;
+  line-height: 1;
+}
+
+// Emphasize block.
+.reveal .emphasize {
+  border-left: 0.18em solid var(--accent);
+  background: linear-gradient(90deg, rgba(47, 90, 168, 0.1), rgba(47, 90, 168, 0.03));
+  color: var(--emphasize-text);
+  padding: 0.34em 0.62em;
+  border-radius: 0.22em;
+  margin: 0.1em 0 0.55em;
+  font-weight: 400;
+}
+
+// Horizontal row of pill-shaped "bubbles" (e.g. academic integrity list).
+// Each item is a .fragment so with a row wrapper (not a real <ol>/<ul>),
+// so items need the .fragment class explicitly - `incremental: true` only
+// auto-fragments real list items. Document order = left-to-right reveal order.
+.reveal .integrity-bubbles {
+  counter-reset: bubble-counter;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55em;
+  margin: 0.9em 0;
+}
+
+.reveal .integrity-bubbles .bubble {
+  counter-increment: bubble-counter;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.48em 1em 0.48em 0.6em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border-subtle);
+  color: var(--emphasize-text);
+  font-weight: 600;
+  font-size: 0.85em;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(47, 90, 168, 0.1);
+}
+
+.reveal .integrity-bubbles .bubble::before {
+  content: counter(bubble-counter);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  // Flips light/dark with the theme so it stays readable against
+  // --accent, which itself flips from dark (light mode) to light (dark mode).
+  color: var(--bg-canvas);
+  font-size: 0.78em;
+  font-weight: 700;
+}
+
+// Callouts (note/tip/warning/caution/important): body matches slide body
+// (--r-main-font-size); title slightly larger.
+// Note: each callout type also needs its own class (.callout.callout-note,
+// etc.) to match Quarto's built-in per-type callout CSS specificity —
+// a bare .callout selector loses that tie-break and gets overridden.
+.reveal .slides section .callout.callout-note,
+.reveal .slides section .callout.callout-tip,
+.reveal .slides section .callout.callout-warning,
+.reveal .slides section .callout.callout-caution,
+.reveal .slides section .callout.callout-important {
+  font-size: var(--r-main-font-size, 25px);
+  background: var(--callout-bg);
+  border-color: var(--border-subtle);
+  color: var(--text-main);
+
+  .callout-body {
+    font-size: inherit;
+  }
+
+  .callout-content {
+    font-size: 1em;
+    line-height: inherit;
+  }
+
+  .callout-content p {
+    font-size: inherit;
+  }
+
+  // Quarto's built-in theme always paints the title bar with a pale
+  // per-type tint (note = light blue, warning = light yellow, ...)
+  // regardless of light/dark mode, and sets its text color directly on
+  // the inner <p> (which beats our --text-main rule on the parent, since
+  // an explicit rule on the element itself always wins over inheritance).
+  // Keep the title text a fixed dark color so it stays readable against
+  // that permanently-light background in dark mode.
+  .callout-title {
+    font-size: 1.12em;
+    line-height: 1.28;
+    color: #1e2430;
+  }
+
+  .callout-title p {
+    font-size: inherit;
+    margin: 0;
+    color: inherit;
+  }
+
+  // Quarto wraps the title text in <strong>, and the global `strong`
+  // color rule (set directly on that element) would otherwise beat the
+  // inherited dark title color above.
+  .callout-title strong {
+    color: inherit;
+  }
+}
+
+// Intro slide two-column profile styling.
+.reveal section.intro-two-col {
+  .welcome-lead {
+    border-left: 0.18em solid var(--accent);
+    background: linear-gradient(90deg, rgba(47, 90, 168, 0.1), rgba(47, 90, 168, 0.03));
+    color: var(--emphasize-text);
+    padding: 0.34em 0.62em;
+    border-radius: 0.22em;
+    margin: 0.1em 0 0.55em;
+    font-weight: 400;
+  }
+
+  .columns {
+    align-items: center;
+    column-gap: 1.2rem;
+  }
+
+  .profile-hex {
+    width: min(78%, 280px);
+    aspect-ratio: 1 / 1;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    object-position: center;
+
+    // Rounded hexagon shape.
+    clip-path: polygon(
+      25% 6.5%,
+      75% 6.5%,
+      96% 50%,
+      75% 93.5%,
+      25% 93.5%,
+      4% 50%
+    );
+    border-radius: 18px;
+    border: 2px solid var(--profile-border);
+    box-shadow: 0 7px 24px rgba(28, 44, 75, 0.12);
+    background: var(--profile-bg);
+  }
+}
+
+// --- Light / dark mode toggle ----------------------------------------------
+// Button injected by assets/theme-toggle.js. Fixed to the top-right corner
+// so it never collides with the slide-number badge (bottom-right) or the
+// built-in reveal menu button (top-left).
+#theme-toggle {
+  position: fixed;
+  top: 0.6em;
+  right: 0.7em;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  border: 1px solid var(--theme-toggle-border);
+  background: var(--theme-toggle-bg);
+  color: var(--theme-toggle-color);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(28, 44, 75, 0.12);
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.08);
+}
+
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+// Hide on the print/PDF export layout where it serves no purpose.
+.print-pdf #theme-toggle {
+  display: none;
+}
