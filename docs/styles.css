@@ -192,8 +192,8 @@ main h2 {
      ::: {.proof} ... :::
    data-title is optional. Each type is numbered per page automatically.
    Definition & theorem are boxed; example is deliberately subtler.
-   Proof is unnumbered: an italic "Proof:" label on its own line, the
-   argument below it, and a QED box (□) flush to the end of the last line.
+   Proof is unnumbered: a bold inline "Proof." label followed by the
+   argument, and a QED box (□) flush to the end of the last line.
    =================================================================== */
 
 /* Per-page counters, reset on the article body */
@@ -264,6 +264,32 @@ body.quarto-dark .theorem {
   content: "Example " counter(qexm) " (" attr(data-title) ").";
 }
 
+/* Titles containing LaTeX: assets/math-titles.html swaps the CSS-generated
+   heading (::before) for a real .env-head element so MathJax can typeset it.
+   The counter moves onto the box itself. */
+.definition.has-math-title { counter-increment: qdef; }
+.theorem.has-math-title    { counter-increment: qthm; }
+.example.has-math-title    { counter-increment: qexm; }
+.has-math-title[data-title]::before { content: none; }
+.definition .env-label::before { content: "Definition " counter(qdef) " ("; }
+.theorem .env-label::before    { content: "Theorem " counter(qthm) " ("; }
+.example .env-label::before    { content: "Example " counter(qexm) " ("; }
+.definition > .env-head,
+.theorem > .env-head {
+  margin-bottom: 0.5rem;
+  font-size: calc(1em + 1pt);
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  color: var(--env-accent);
+}
+.example > .env-head {
+  margin-bottom: 0.2rem;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 0.9em;
+  opacity: 0.75;
+}
+
 /* Trim stray margins on the first/last child so the box hugs its content */
 .definition > :first-child,
 .theorem > :first-child,
@@ -288,13 +314,12 @@ body.quarto-dark .theorem {
   content: "\00A0\25A1";       /* nbsp + □ (matches LaTeX \square) */
   float: right;
 }
-/* Italic "Proof." label (same wording as the peek preview) */
-.proof::before {
-  content: "Proof.";
-  display: block;
-  margin-bottom: 0.35rem;
-  font-style: italic;
-  font-weight: 600;
+/* Inline bold "Proof." label: Quarto already emits span.proof-title
+   (italic "Proof. "), so style it rather than adding a second label. */
+.proof .proof-title,
+.proof .proof-title em {
+  font-style: normal;
+  font-weight: 700;
 }
 .proof > :first-child { margin-top: 0; }
 .proof > :last-child { margin-bottom: 0; }
