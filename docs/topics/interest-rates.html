@@ -359,7 +359,11 @@ window.Quarto = {
    
   <ul>
   <li><a href="#yield-curve" id="toc-yield-curve" class="nav-link active" data-scroll-target="#yield-curve"><span class="header-section-number">0.1</span> Yield Curve</a></li>
-  <li><a href="#libor-rates" id="toc-libor-rates" class="nav-link" data-scroll-target="#libor-rates"><span class="header-section-number">0.2</span> LIBOR Rates</a></li>
+  <li><a href="#libor-rates" id="toc-libor-rates" class="nav-link" data-scroll-target="#libor-rates"><span class="header-section-number">0.2</span> [[libor-rates]]</a></li>
+  <li><a href="#instantaneous-forward-rate" id="toc-instantaneous-forward-rate" class="nav-link" data-scroll-target="#instantaneous-forward-rate"><span class="header-section-number">0.3</span> Instantaneous Forward Rate</a></li>
+  <li><a href="#libr-forward-rate" id="toc-libr-forward-rate" class="nav-link" data-scroll-target="#libr-forward-rate"><span class="header-section-number">0.4</span> LIBR FORWARD RATE</a></li>
+  <li><a href="#libor-spot-rate" id="toc-libor-spot-rate" class="nav-link" data-scroll-target="#libor-spot-rate"><span class="header-section-number">0.5</span> LIBOR SPOT RATE</a></li>
+  <li><a href="#yield-curve-1" id="toc-yield-curve-1" class="nav-link" data-scroll-target="#yield-curve-1"><span class="header-section-number">1</span> Yield Curve</a></li>
   </ul>
 </nav>
     </div>
@@ -399,7 +403,7 @@ window.Quarto = {
 
 
 <section id="yield-curve" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="yield-curve"><span class="header-section-number">0.1</span> <a href="../topics/yield-curve.html">Yield Curve</a></h3>
+<h3 data-number="0.1" class="anchored" data-anchor-id="yield-curve"><span class="header-section-number">0.1</span> <a href="../topics/yield-curve.qmd">Yield Curve</a></h3>
 <p>Assume that a zero-coupon bond that pays 1 at time <span class="math inline">\(T\)</span> has price <span class="math inline">\(p(t,T)\)</span> contracted at time <span class="math inline">\(t\)</span>. Naturally, for all <span class="math inline">\(t\)</span>, <span class="math inline">\(p(t,t)=1\)</span> and <span class="math inline">\(p(t,T)\)</span> is well-defined for all <span class="math inline">\(t\in \mathbb{R}\)</span>. Assume that <span class="math inline">\(p(t,T)\)</span> is also well-defined for all <span class="math inline">\(T\in \mathbb{R}\)</span> and is differentiable w.r.t <span class="math inline">\(T\)</span>.</p>
 <p>If the accumulation of interest can be described by a constant continuous-time interest rate on <span class="math inline">\([t,T]\)</span> denoted <span class="math inline">\(y(t,T)\)</span>, then <span class="math display">\[
 p(t,T)e^{y(t,T)(T-t)}=1,
@@ -408,7 +412,7 @@ y(t,T)=- \frac{1}{T-t}\log p(t,T),
 \]</span> called the <strong>yield curve</strong> viewed as a function in <span class="math inline">\(T\)</span> after fixing <span class="math inline">\(t\)</span>.</p>
 </section>
 <section id="libor-rates" class="level3" data-number="0.2">
-<h3 data-number="0.2" class="anchored" data-anchor-id="libor-rates"><span class="header-section-number">0.2</span> <a href="../topics/libor-rates.html">LIBOR Rates</a></h3>
+<h3 data-number="0.2" class="anchored" data-anchor-id="libor-rates"><span class="header-section-number">0.2</span> [[libor-rates]]</h3>
 <p>Consider time <span class="math inline">\(t\)</span> with two maturity dates <span class="math inline">\(S&lt;T\)</span>. We consider the forward interest rate of <span class="math inline">\([S,T]\)</span> contracted at time <span class="math inline">\(t\)</span>. A riskless portfolio can be constructed with no initial endowment that at time <span class="math inline">\(t\)</span> one can short 1 unit of bond that matures at <span class="math inline">\(S\)</span>. This brings immediately cashflow <span class="math inline">\(p(t,S)\)</span> and a debt returning 1 at time <span class="math inline">\(S\)</span>.</p>
 <p>However, one can long <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> unit of bond that matures at <span class="math inline">\(T\)</span> using the <span class="math inline">\(p(t,S)\)</span> immediate cashflow, this brings a cashflow of <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> at time <span class="math inline">\(T\)</span>. In all, this portfolio has no immediate cashflow, but we have to pay 1 at time <span class="math inline">\(S\)</span> and receive <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> at time <span class="math inline">\(T\)</span>. If there exists a constant simple interest rate on <span class="math inline">\([S,T]\)</span> denoted <span class="math inline">\(L(t;S,T)\)</span>, then <span class="math display">\[
 1\cdot[1+L(t;S,T)(T-S)]= \frac{p(t,S)}{p(t,T)},
@@ -424,6 +428,50 @@ L(S;S,T) &amp; = \frac{1}{T-S}\left(  \frac{1}{p(S,T)} -1\right) \\
 R(S;S,T) &amp; =  \frac{1}{T-S}\log\left(  \frac{1}{P(S,T)} \right)
 \end{align}
 \]</span> where <span class="math inline">\(L(S;S,T)\)</span> is called the <strong>LIBOR spot rate</strong>.</p>
+</section>
+<section id="instantaneous-forward-rate" class="level3" data-number="0.3">
+<h3 data-number="0.3" class="anchored" data-anchor-id="instantaneous-forward-rate"><span class="header-section-number">0.3</span> Instantaneous Forward Rate</h3>
+<p>The <strong>instantaneous forward rate</strong> <span class="math inline">\(f(t,T)\)</span> describes the forward rate in <span class="math inline">\([T,T+d]\)</span> contracted at <span class="math inline">\(t\)</span> when <span class="math inline">\(dt\)</span> is small enough. All instantaneous rates are built upon the continuously compounded interest model. From the definition we hav that <span class="math display">\[
+f(t,t)=\lim_{ dt \to 0 }R(t,T, T+dt)=\lim_{ dt \to 0 }\frac{1}{dt} \log\left(  \frac{p(t,T)}{p(t,T+dt)} \right)=- \frac{{\partial \log p(t,T)}}{\partial T} .
+\]</span> ### Instantaneous Short Rate The <strong>instantaneous short rate</strong> <span class="math inline">\(r(t)\)</span> describes the spot rate in <span class="math inline">\([t,t+dt]\)</span> contracted at <span class="math inline">\(t\)</span> when <span class="math inline">\(dt\)</span> is small enough. Clearly plugging <span class="math inline">\(T=t\)</span> into the instantaneous forward rate <span class="math inline">\(f(t,T)\)</span> gives <span class="math display">\[
+r(t)=f(t,t).
+\]</span> We can interpret this as the spot interest rate in a future infinitesimal time interval, so it is exactly the risk-free interest rate <span class="math inline">\(r\)</span> we refer to in the context of options pricing.</p>
+<p>When one opens a savings account, denote the amount of money in the account at time <span class="math inline">\(t\)</span> as <span class="math inline">\(S_{t}^0\)</span>, then it is clear that <span class="math display">\[
+dS_{t}^0=r_{t}S_{t}^0dt,
+\]</span> where <span class="math inline">\(r_{t}=r(t)\)</span> is the short rate. As a result, <span class="math inline">\(S_{t}^0\)</span> can be represented in terms of the short rate as <span class="math display">\[
+S_{t}^0=\exp\left( \int _{0}^tr_{s} \, ds  \right),
+\]</span> which tells us how to discount using the short rate.</p>
+</section>
+<section id="libr-forward-rate" class="level3" data-number="0.4">
+<h3 data-number="0.4" class="anchored" data-anchor-id="libr-forward-rate"><span class="header-section-number">0.4</span> LIBR FORWARD RATE</h3>
+<p>Consider time <span class="math inline">\(t\)</span> with two maturity dates <span class="math inline">\(S&lt;T\)</span>. We consider the forward interest rate of <span class="math inline">\([S,T]\)</span> contracted at time <span class="math inline">\(t\)</span>. A riskless portfolio can be constructed with no initial endowment that at time <span class="math inline">\(t\)</span> one can short 1 unit of bond that matures at <span class="math inline">\(S\)</span>. This brings immediately cashflow <span class="math inline">\(p(t,S)\)</span> and a debt returning 1 at time <span class="math inline">\(S\)</span>.</p>
+<p>However, one can long <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> unit of bond that matures at <span class="math inline">\(T\)</span> using the <span class="math inline">\(p(t,S)\)</span> immediate cashflow, this brings a cashflow of <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> at time <span class="math inline">\(T\)</span>. In all, this portfolio has no immediate cashflow, but we have to pay 1 at time <span class="math inline">\(S\)</span> and receive <span class="math inline">\(\frac{p(t,S)}{p(t,T)}\)</span> at time <span class="math inline">\(T\)</span>. If there exists a constant simple interest rate on <span class="math inline">\([S,T]\)</span> denoted <span class="math inline">\(L(t;S,T)\)</span>, then <span class="math display">\[
+1\cdot[1+L(t;S,T)(T-S)]= \frac{p(t,S)}{p(t,T)},
+\]</span> solves <span class="math display">\[
+L(t;S,T)= \frac{1}{T-S}\left(  \frac{p(t,S)}{p(t,T)}-1 \right),
+\]</span> called the simple forward rate on <span class="math inline">\([S,T]\)</span> contracted at <span class="math inline">\(t\)</span>, also called the <strong>LIBOR Forward Rate</strong>.</p>
+</section>
+<section id="libor-spot-rate" class="level3" data-number="0.5">
+<h3 data-number="0.5" class="anchored" data-anchor-id="libor-spot-rate"><span class="header-section-number">0.5</span> LIBOR SPOT RATE</h3>
+<p>If one uses the continuous-time compounded interest rate mode instead and denote the rate as <span class="math inline">\(R(t;S,T)\)</span> then <span class="math display">\[
+1\cdot e^{R(t;S,T)(T-S)}= \frac{p(t,S)}{p(t,T)}
+\]</span> solves <span class="math display">\[
+R(t;S,T)= \frac{1}{T-S}\log\left( \frac{p(t,S)}{p(t,T)}\right).
+\]</span> The spot rates on <span class="math inline">\([S,T]\)</span> is just the forward rate contracted at time <span class="math inline">\(S\)</span> i.e. by setting <span class="math inline">\(t=S\)</span>, we get the spot rates <span class="math display">\[
+\begin{align}
+L(S;S,T) &amp; = \frac{1}{T-S}\left(  \frac{1}{p(S,T)} -1\right) \\
+R(S;S,T) &amp; =  \frac{1}{T-S}\log\left(  \frac{1}{P(S,T)} \right)
+\end{align}
+\]</span> where <span class="math inline">\(L(S;S,T)\)</span> is called the <strong>LIBOR spot rate</strong>.</p>
+</section>
+<section id="yield-curve-1" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="yield-curve-1"><span class="header-section-number">1</span> Yield Curve</h2>
+<p>Assume that a zero-coupon bond that pays 1 at time <span class="math inline">\(T\)</span> has price <span class="math inline">\(p(t,T)\)</span> contracted at time <span class="math inline">\(t\)</span>. Naturally, for all <span class="math inline">\(t\)</span>, <span class="math inline">\(p(t,t)=1\)</span> and <span class="math inline">\(p(t,T)\)</span> is well-defined for all <span class="math inline">\(t\in \mathbb{R}\)</span>. Assume that <span class="math inline">\(p(t,T)\)</span> is also well-defined for all <span class="math inline">\(T\in \mathbb{R}\)</span> and is differentiable w.r.t <span class="math inline">\(T\)</span>.</p>
+<p>If the accumulation of interest can be described by a constant continuous-time interest rate on <span class="math inline">\([t,T]\)</span> denoted <span class="math inline">\(y(t,T)\)</span>, then <span class="math display">\[
+p(t,T)e^{y(t,T)(T-t)}=1,
+\]</span> solves <span class="math display">\[
+y(t,T)=- \frac{1}{T-t}\log p(t,T),
+\]</span> called the <strong>yield curve</strong> viewed as a function in <span class="math inline">\(T\)</span> after fixing <span class="math inline">\(t\)</span>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
