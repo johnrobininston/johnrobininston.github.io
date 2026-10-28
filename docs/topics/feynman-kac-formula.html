@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -358,7 +358,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#feynman-kac-formula" id="toc-feynman-kac-formula" class="nav-link active" data-scroll-target="#feynman-kac-formula"><span class="header-section-number">1</span> Feynman-Kac Formula</a></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#feynman-kac-formula" id="toc-feynman-kac-formula" class="nav-link" data-scroll-target="#feynman-kac-formula"><span class="header-section-number">2</span> Feynman-Kac Formula</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">3</span> Examples</a></li>
+  <li><a href="#where-it-is-used" id="toc-where-it-is-used" class="nav-link" data-scroll-target="#where-it-is-used"><span class="header-section-number">4</span> Where it is used</a></li>
   </ul>
 </nav>
     </div>
@@ -397,13 +400,100 @@ window.Quarto = {
 </header>
 
 
-<section id="feynman-kac-formula" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="feynman-kac-formula"><span class="header-section-number">1</span> Feynman-Kac Formula</h2>
-<p>References: <a href="https://en.wikipedia.org/wiki/Feynman–Kac_formula">Wikipedia</a>.</p>
-<p>The <strong>Feynman-Kac Formula</strong> establishes a link between [[parabolic-partial-differential-equations]] and [[knowledge-mathematics-analysis-probability-theory-stochastic-processes-stochastic-processes|Stochastic Processes]]. It offers a method of solving certain PDEs by simulating random paths of a stochastic process. Conversely, an important class of expectations of random processes can be computed by deterministic methods.</p>
-<div class="theorem" data-title="Feynman-Kac Formula">
-<p>Consider the PDE <span class="math display">\[u_{t}(x,t)+\mu(x,t)u_{x}(x,t)+\frac{1}{2}\sigma^2(x,t)u_{xx}(x,t)-V(x,t)u(x,t)+f(x,t)=0,\]</span>defined for all <span class="math inline">\(x \in \mathbb{R}\)</span> and <span class="math inline">\(t \in [0,T]\)</span> subject to the terminal condition <span class="math display">\[u(x,T)=\psi (x)\]</span>where <span class="math inline">\(\mu,\sigma,\psi,V,f\)</span> are known functions, <span class="math inline">\(T\)</span> is a parameter, and <span class="math inline">\(u:\mathbb{R}\times[0,T]\to \mathbb{R}\)</span> is the unknown. The the Feyman-Kac formula expresses <span class="math inline">\(u(x,t)\)</span> as a conditional expectation under probability measure <span class="math inline">\(\mathbb{Q}\)</span> <span class="math display">\[u(x,t)=\mathbb{E}^\mathbb{Q}\left[ g_{\tau}(t,T)\psi(X_{T})+\int_{t}^{T}{g_{s}(t,\tau)f(X_{\tau, \tau})}~d{\tau}\middle| X_{t}=x \right], \]</span>where <span class="math inline">\(X\)</span> is an <a href="../topics/ito-process.html">Itô Process</a> satisfying <span class="math display">\[dX_{t}=\mu(X_{t},t)dt+\sigma(X_{t},t)dW_{t}^\mathbb{Q},\]</span> <span class="math inline">\(g_{\tau}.g_{s}\)</span> are functions defined by <span class="math display">\[g_{\kappa}(a,b)=\exp \left( -\int_{a}^{b}{V(X_{\kappa}, \kappa)}~d{\kappa} \right) \]</span> for <span class="math inline">\(\kappa=\tau,s\)</span> and <span class="math inline">\(W_{t}^\mathbb{Q}\)</span> is <a href="../topics/brownian-motion.html">Brownian Motion</a> under <span class="math inline">\(\mathbb{Q}\)</span>.</p>
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p>The <strong>Feynman-Kac Formula</strong> establishes a link between <a href="../topics/calculus.html">Parabolic PDEs</a> and <a href="../topics/probability-theory.html">stochastic processes</a>. It offers a method of solving certain PDEs by simulating random paths of a stochastic process. Conversely, an important class of expectations of random processes can be computed by deterministic methods.</p>
+<div class="intuition" data-title="Averaging over random paths">
+<p>Think of the PDE as describing how a quantity <span class="math inline">\(u\)</span> is <em>transported and smoothed</em> backwards in time from the terminal value <span class="math inline">\(\psi\)</span>. The drift <span class="math inline">\(\mu\)</span> moves information along, and the diffusion <span class="math inline">\(\sigma\)</span> blurs it, exactly as in the <a href="../topics/heat-equation.html">Heat Equation</a>. Instead of solving for <span class="math inline">\(u\)</span> everywhere at once, we can release a particle at <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>, let it wander according to the <a href="../topics/ito-process.html">Itô Process</a> <span class="math inline">\(X\)</span>, and <em>average</em> what it collects along the way:</p>
+<ul>
+<li><span class="math inline">\(\psi(X_T)\)</span> is the payoff it collects at the end,</li>
+<li><span class="math inline">\(f(X_s,s)\)</span> is a reward collected continuously along the path,</li>
+<li><span class="math inline">\(V(X_s,s)\)</span> is a rate at which the collected amount is discounted (or the particle is “killed”).</li>
+</ul>
+<p>The average of all of this over many paths is <span class="math inline">\(u(x,t)\)</span>.</p>
 </div>
+</section>
+<section id="feynman-kac-formula" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="feynman-kac-formula"><span class="header-section-number">2</span> Feynman-Kac Formula</h2>
+<div class="theorem" data-title="Feynman-Kac Formula">
+<p>Consider the PDE</p>
+<p><span class="math display">\[
+\begin{aligned}
+u_{t}(x,t) &amp; +\mu(x,t)u_{x}(x,t)+\frac{1}{2}\sigma^2(x,t)u_{xx}(x,t) \\
+&amp; -V(x,t)u(x,t)+f(x,t)=0,
+\end{aligned}
+\]</span></p>
+<p>defined for all <span class="math inline">\(x \in \mathbb{R}\)</span> and <span class="math inline">\(t \in [0,T]\)</span> subject to the terminal condition <span class="math display">\[
+u(x,T)=\psi (x),
+\]</span> where <span class="math inline">\(\mu,\sigma,\psi,V,f\)</span> are known functions, <span class="math inline">\(T\)</span> is a parameter, and <span class="math inline">\(u:\mathbb{R}\times[0,T]\to \mathbb{R}\)</span> is the unknown. The Feynman-Kac formula expresses <span class="math inline">\(u(x,t)\)</span> as a conditional expectation under a probability measure <span class="math inline">\(\mathbb{Q}\)</span> <span class="math display">\[
+u(x,t)=\mathbb{E}^\mathbb{Q}\left[
+e^{-\int_{t}^{T}V(X_{r},r)\,dr}\,\psi(X_{T})
++\int_{t}^{T}e^{-\int_{t}^{s}V(X_{r},r)\,dr}f(X_{s},s)\,ds
+\,\middle|\, X_{t}=x \right],
+\]</span> where <span class="math inline">\(X\)</span> is an <a href="../topics/ito-process.html">Itô Process</a> satisfying <span class="math display">\[
+dX_{s}=\mu(X_{s},s)ds+\sigma(X_{s},s)dW_{s}^\mathbb{Q},
+\]</span> and <span class="math inline">\(W^\mathbb{Q}\)</span> is <a href="../topics/brownian-motion.html">Brownian Motion</a> under <span class="math inline">\(\mathbb{Q}\)</span>.</p>
+</div>
+<p><em>Remark.</em> The operator <span class="math inline">\(\mathcal{L}u=\mu u_{x}+\frac{1}{2}\sigma^2u_{xx}\)</span> appearing in the PDE is the <a href="../topics/infinitesimal-generator.html">Infinitesimal Generator</a> of <span class="math inline">\(X\)</span>, so the PDE can be written compactly as <span class="math inline">\(u_{t}+\mathcal{L}u-Vu+f=0\)</span>. The formula says that the solution of this backward equation is an expectation over the diffusion with that generator.</p>
+<p>The statement is valid under standard regularity conditions (e.g.&nbsp;<span class="math inline">\(\mu,\sigma\)</span> Lipschitz with linear growth, <span class="math inline">\(u\)</span> of class <span class="math inline">\(C^{1,2}\)</span> and <span class="math inline">\(\mathbb{E}\int_t^T\sigma^2u_x^2\,ds&lt;\infty\)</span> so that the stochastic integral below is a true martingale).</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Fix <span class="math inline">\((x,t)\)</span> and write <span class="math inline">\(A_{s}=\int_{t}^{s}V(X_{r},r)\,dr\)</span>, so that <span class="math inline">\(dA_{s}=V(X_{s},s)ds\)</span>. Apply the <a href="../topics/ito-formula.html">Itô Formula</a> to the process <span class="math inline">\(e^{-A_{s}}u(X_{s},s)\)</span> for <span class="math inline">\(s\in[t,T]\)</span>: <span class="math display">\[
+\begin{aligned}
+d\left(e^{-A_{s}}u(X_{s},s)\right)
+&amp; = e^{-A_{s}}\left(u_{t}+\mu u_{x}+\tfrac{1}{2}\sigma^2u_{xx}-Vu\right)ds
++e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+\end{aligned}
+\]</span> The PDE says the bracket equals <span class="math inline">\(-f(X_{s},s)\)</span>, so <span class="math display">\[
+d\left(e^{-A_{s}}u(X_{s},s)\right)
+=-e^{-A_{s}}f(X_{s},s)\,ds+e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+\]</span> Integrating from <span class="math inline">\(t\)</span> to <span class="math inline">\(T\)</span>, using <span class="math inline">\(A_{t}=0\)</span>, <span class="math inline">\(X_{t}=x\)</span> and <span class="math inline">\(u(X_{T},T)=\psi(X_{T})\)</span>, <span class="math display">\[
+e^{-A_{T}}\psi(X_{T})-u(x,t)
+=-\int_{t}^{T}e^{-A_{s}}f(X_{s},s)\,ds
++\int_{t}^{T}e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+\]</span> Take <span class="math inline">\(\mathbb{E}^\mathbb{Q}[\,\cdot\mid X_{t}=x]\)</span>. The Itô integral is a martingale started at zero, so its expectation vanishes, and rearranging gives <span class="math display">\[
+u(x,t)=\mathbb{E}^\mathbb{Q}\left[e^{-A_{T}}\psi(X_{T})
++\int_{t}^{T}e^{-A_{s}}f(X_{s},s)\,ds\,\middle|\,X_{t}=x\right],
+\]</span> which is the claim, since <span class="math inline">\(e^{-A_{s}}=e^{-\int_{t}^{s}V(X_{r},r)dr}\)</span>.</p>
+</div>
+<p>In other words, the process <span class="math display">\[
+M_{s}=e^{-A_{s}}u(X_{s},s)+\int_{t}^{s}e^{-A_{r}}f(X_{r},r)\,dr
+\]</span> is a <a href="../topics/martingale-theory.html">martingale</a>, and the formula is just <span class="math inline">\(\mathbb{E}[M_{T}]=M_{t}\)</span>. The proof only shows that a smooth solution <em>must</em> have this form (uniqueness); existence of a smooth solution needs extra conditions on the coefficients.</p>
+</section>
+<section id="examples" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="examples"><span class="header-section-number">3</span> Examples</h2>
+<div class="example" data-title="Heat equation">
+<p>Take <span class="math inline">\(X=W\)</span> (so <span class="math inline">\(\mu=0\)</span>, <span class="math inline">\(\sigma=1\)</span>), <span class="math inline">\(V=f=0\)</span> and <span class="math inline">\(\psi(x)=x^2\)</span>. The PDE is the backward <a href="../topics/heat-equation.html">Heat Equation</a> <span class="math display">\[
+u_{t}+\tfrac{1}{2}u_{xx}=0,\qquad u(x,T)=x^2.
+\]</span> The formula gives <span class="math display">\[
+u(x,t)=\mathbb{E}\left[W_{T}^2\mid W_{t}=x\right]
+=x^2+(T-t),
+\]</span> since <span class="math inline">\(W_{T}=x+(W_{T}-W_{t})\)</span> with <span class="math inline">\(W_{T}-W_{t}\sim N(0,T-t)\)</span>. Check: <span class="math inline">\(u_{t}=-1\)</span> and <span class="math inline">\(\tfrac{1}{2}u_{xx}=1\)</span>, so the PDE holds.</p>
+</div>
+<div class="example" data-title="Running reward">
+<p>Take <span class="math inline">\(X=W\)</span>, <span class="math inline">\(V=0\)</span>, <span class="math inline">\(\psi=0\)</span> and <span class="math inline">\(f=1\)</span>. Then <span class="math display">\[
+u(x,t)=\mathbb{E}\left[\int_{t}^{T}1\,ds\right]=T-t,
+\]</span> which indeed solves <span class="math inline">\(u_{t}+\tfrac{1}{2}u_{xx}+1=0\)</span> with <span class="math inline">\(u(x,T)=0\)</span>.</p>
+</div>
+<div class="example" data-title="Discounting">
+<p>Take <span class="math inline">\(X=W\)</span>, <span class="math inline">\(f=0\)</span>, <span class="math inline">\(\psi=1\)</span> and constant <span class="math inline">\(V=\lambda\)</span>. The formula gives <span class="math inline">\(u(x,t)=e^{-\lambda(T-t)}\)</span>, which solves <span class="math inline">\(u_{t}+\tfrac{1}{2}u_{xx}-\lambda u=0\)</span>. The term <span class="math inline">\(V\)</span> is a pure discount (or killing) rate.</p>
+</div>
+<div class="example" data-title="Black-Scholes">
+<p>Let <span class="math inline">\(X=S\)</span> follow a <a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a> under the <a href="../topics/risk-neutral-measure.html">Risk-Neutral Measure</a>, <span class="math inline">\(dS=rS\,dt+\sigma S\,dW^\mathbb{Q}\)</span>, with <span class="math inline">\(V=r\)</span> and <span class="math inline">\(f=0\)</span>. The PDE becomes <span class="math display">\[
+u_{t}+rxu_{x}+\tfrac{1}{2}\sigma^2x^2u_{xx}-ru=0,\qquad u(x,T)=\psi(x),
+\]</span> which is the <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE</a>, and the formula reads <span class="math display">\[
+u(S_{t},t)=e^{-r(T-t)}\,\mathbb{E}^\mathbb{Q}\left[\psi(S_{T})\mid S_{t}\right],
+\]</span> the familiar statement that an option price is the discounted risk-neutral expectation of its payoff. For a call, <span class="math inline">\(\psi(x)=(x-K)^+\)</span>.</p>
+</div>
+</section>
+<section id="where-it-is-used" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="where-it-is-used"><span class="header-section-number">4</span> Where it is used</h2>
+<ul>
+<li><strong>Financial mathematics.</strong> The link between the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> PDE and risk-neutral pricing, and its extensions to stochastic volatility, interest rate and barrier models (<a href="../topics/barrier-options.html">Barrier Options</a>). Here <span class="math inline">\(V\)</span> is the short rate and <span class="math inline">\(f\)</span> a dividend or coupon stream.</li>
+<li><strong>Numerical methods.</strong> In high dimensions, grid-based PDE solvers fail (curse of dimensionality) but the expectation can be estimated by Monte Carlo: simulate paths of <span class="math inline">\(X\)</span> (<a href="../topics/sde-simulation.html">SDE Simulation</a>) and average the payoff. Conversely, low-dimensional expectations can be computed by a PDE solver.</li>
+<li><strong>Quantum mechanics.</strong> With <span class="math inline">\(\mu=0\)</span> and <span class="math inline">\(\sigma^2=\hbar/m\)</span> (and imaginary time) the PDE is the <a href="../topics/schrodinger-equation.html">Schrodinger Equation</a> with potential <span class="math inline">\(V\)</span>; the formula is the Feynman path integral made rigorous by Kac, hence the name.</li>
+<li><strong>Probability and PDE theory.</strong> Probabilistic representations of solutions to PDEs (e.g.&nbsp;the <a href="../topics/diffusion-equation.html">Diffusion Equation</a>), killing rates and survival probabilities, and links to the backward <a href="../topics/kolmogorov-equations.html">Kolmogorov Equations</a> and the <a href="../topics/fokker-planck-equation.html">Fokker-Planck Equation</a>.</li>
+<li><strong>Stochastic control.</strong> The same argument applied to a controlled process leads to the Hamilton-Jacobi-Bellman equation (<a href="../topics/stochastic-control.html">Stochastic Control</a>).</li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -412,7 +502,10 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
 <li><a href="../topics/financial-mathematics.html">Financial Mathematics</a></li>
+<li><a href="../topics/probability-theory.html">Probability Theory</a></li>
+<li><a href="../topics/schrodinger-equation.html">Schrodinger Equation</a></li>
 <li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a></li>
 <li><a href="../topics/stochastic-differential-equations.html">Stochastic Differential Equations</a></li>
 </ul>
@@ -442,6 +535,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

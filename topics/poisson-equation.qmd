@@ -1,0 +1,228 @@
+---
+title: Poisson Equation
+author: John Robin Inston
+date: 2026-10-15
+number-sections: true
+title-block-banner: false
+---
+
+## Poisson Equation
+
+*References:* Evans, *Partial Differential Equations*, Sections 2.2 and 2.2.4
+(Green's functions).
+
+The **Poisson equation** is the inhomogeneous version of the
+[[laplace-equation]]. It is the prototypical **elliptic**
+[[partial-differential-equations|PDE]] and describes the equilibrium of a
+system subject to a distributed source.
+
+:::{.definition data-title="Poisson Equation"}
+
+Let $\Omega\subset\mathbb{R}^n$ be open and $f:\Omega\to\mathbb{R}$. The
+**Poisson equation** is
+$$
+-\Delta u = f \quad \text{in } \Omega,
+$$
+where $\Delta$ is the [[laplace-operator]]. When $f\equiv0$ it reduces to the
+Laplace equation, whose solutions are the harmonic functions.
+
+:::
+
+The minus sign is a convention which makes $-\Delta$ a *positive* operator
+(see below). Many texts write $\Delta u=f$ instead, so always check the sign.
+
+## Where does it come from?
+
+- **Steady state of diffusion.** Setting $u_t=0$ in the non-homogeneous
+  [[heat-equation]] $u_t-k\Delta u=f$ gives $-k\Delta u=f$, so $u$ is the
+  equilibrium temperature (or concentration) under a constant source $f$.
+- **Electrostatics.** The electric potential $\varphi$ with charge density
+  $\rho$ satisfies $-\Delta\varphi=\rho/\varepsilon_0$.
+- **Gravity.** The gravitational potential $\Phi$ with mass density $\rho$
+  satisfies $\Delta\Phi=4\pi G\rho$.
+- **Probability.** If $B_t$ is a [[brownian-motion]] started at $x$ and $\tau$
+  is its exit time from $\Omega$, then $u(x)=\mathbb{E}_x[\tau]$ solves
+  $-\tfrac12\Delta u=1$ with $u=0$ on $\partial\Omega$.
+
+:::{.example data-title="Electrostatic Potential"}
+
+Gauss' law $\nabla\cdot\vec E=\rho/\varepsilon_0$ together with
+$\vec E=-\nabla\varphi$ (see [[gradient]]) gives
+$$
+\nabla\cdot(-\nabla\varphi)=\frac{\rho}{\varepsilon_0}
+\implies -\Delta\varphi=\frac{\rho}{\varepsilon_0}.
+$$
+
+:::
+
+## Boundary Value Problems
+
+As the equation is elliptic it is posed on a bounded domain with one condition
+on all of $\partial\Omega$.
+
+- **Dirichlet:** $u=g$ on $\partial\Omega$.
+- **Neumann:** $\partial_\nu u=h$ on $\partial\Omega$, where $\nu$ is the outward
+  unit normal.
+- **Robin:** $\partial_\nu u+\alpha u=h$ on $\partial\Omega$.
+
+:::{.theorem data-title="Uniqueness"}
+
+The Dirichlet problem $-\Delta u=f$ in $\Omega$, $u=g$ on $\partial\Omega$ has
+at most one solution $u\in C^2(\Omega)\cap C(\overline\Omega)$. The Neumann
+problem has a solution only if the compatibility condition
+$$
+\int_\Omega f~dx=-\int_{\partial\Omega}h~dS
+$$
+holds, and then it is unique only up to an additive constant.
+
+:::
+
+:::{.proof}
+
+If $u_1,u_2$ are two solutions of the Dirichlet problem then $w=u_1-u_2$
+satisfies $-\Delta w=0$ and $w=0$ on $\partial\Omega$. Multiplying by $w$ and
+integrating by parts (Green's first identity),
+$$
+0=-\int_\Omega w\Delta w~dx=\int_\Omega|\nabla w|^2~dx
+-\int_{\partial\Omega}w\,\partial_\nu w~dS=\int_\Omega|\nabla w|^2~dx.
+$$
+So $\nabla w\equiv0$, $w$ is constant, and since $w=0$ on the boundary,
+$w\equiv0$.
+
+For the Neumann compatibility, integrate the equation and apply the divergence
+theorem: $\int_\Omega f~dx=-\int_\Omega\Delta u~dx=-\int_{\partial\Omega}\partial_\nu u~dS$.
+
+:::
+
+> *Note:* The compatibility condition is a conservation law. In the
+> steady-state heat problem it says that the total heat generated inside must
+> equal the total heat flowing out through the boundary.
+
+## Properties
+
+:::{.theorem data-title="Properties of the Poisson Equation"}
+
+1. **Linearity:** if $-\Delta u_i=f_i$ then $-\Delta(c_1u_1+c_2u_2)=c_1f_1+c_2f_2$.
+   Hence the difference of two solutions with the same $f$ is harmonic.
+2. **Weak maximum principle:** if $-\Delta u\le0$ ($u$ is *subharmonic*) then
+   $\max_{\overline\Omega}u=\max_{\partial\Omega}u$. If $-\Delta u\ge0$
+   ($u$ is *superharmonic*) the minimum is attained on the boundary.
+3. **Regularity:** if $f\in C^\infty$ then $u\in C^\infty$ in the interior,
+   even if the boundary data is rough (elliptic regularity).
+4. **Positivity of $-\Delta$:** with Dirichlet conditions,
+   $\int_\Omega u(-\Delta u)~dx=\int_\Omega|\nabla u|^2~dx\ge0$.
+
+:::
+
+:::{.example data-title="A One-Dimensional Problem"}
+
+Solve $-u''=1$ on $(0,1)$ with $u(0)=u(1)=0$. Integrating twice,
+$u=-x^2/2+ax+b$ and the boundary conditions give $b=0$, $a=1/2$, so
+$$
+u(x)=\frac{x(1-x)}{2}.
+$$
+This is the equilibrium temperature of a rod with uniform heating and both ends
+held at zero. By the maximum principle for superharmonic functions $u\ge0$,
+and the maximum $u(1/2)=1/8$ is in the interior, which is allowed because
+$-u''\ge0$ makes $u$ superharmonic, not subharmonic.
+
+:::
+
+## Solutions
+
+### Fundamental Solution
+
+:::{.definition data-title="Fundamental Solution"}
+
+The **fundamental solution** of the Laplacian on $\mathbb{R}^n$ is
+$$
+\Phi(x)=
+\begin{cases}
+-\dfrac{1}{2\pi}\ln|x|, & n=2,\\[2mm]
+\dfrac{1}{n(n-2)\alpha(n)}|x|^{2-n}, & n\ge3,
+\end{cases}
+$$
+where $\alpha(n)$ is the volume of the unit ball in $\mathbb{R}^n$. It
+satisfies $-\Delta\Phi=\delta_0$.
+
+:::
+
+For $n=3$ this is $\Phi(x)=1/(4\pi|x|)$, the Coulomb potential of a unit point
+charge.
+
+:::{.theorem data-title="Solution on the Whole Space"}
+
+If $f\in C_c^2(\mathbb{R}^n)$ then
+$$
+u(x)=(\Phi*f)(x)=\int_{\mathbb{R}^n}\Phi(x-y)f(y)~dy
+$$
+is $C^2$ and solves $-\Delta u=f$ on $\mathbb{R}^n$.
+
+:::
+
+> *Note:* This is the elliptic analogue of the heat kernel solution. Each
+> point source $f(y)\delta_y$ produces the potential $f(y)\Phi(x-y)$, and by
+> linearity the solution is the superposition of all of these (see
+> [[convolution]]). For the charge distribution $\rho$ this is exactly
+> Coulomb's law.
+
+### Green's Function
+
+On a bounded domain the point source must also satisfy the boundary
+condition. The **Green's function** is $G(x,y)=\Phi(x-y)-h^y(x)$ where the
+*corrector* $h^y$ is harmonic with $h^y=\Phi(\cdot-y)$ on $\partial\Omega$, so
+that
+$$
+-\Delta_xG(x,y)=\delta_y(x)\ \text{in }\Omega,\qquad G(x,y)=0\ \text{for }x\in\partial\Omega.
+$$
+The solution of the Dirichlet problem is then
+$$
+u(x)=\int_\Omega G(x,y)f(y)~dy-\int_{\partial\Omega}g(y)\,\partial_{\nu_y}G(x,y)~dS(y).
+$$
+$G$ is symmetric, $G(x,y)=G(y,x)$, and is explicitly known for the half-space
+and ball (by the method of images), where it reproduces the Poisson integral
+formula on the disk from the [[laplace-equation]] note.
+
+### Separation of Variables and Eigenfunctions
+
+Let $\{\varphi_k\}$ be the Dirichlet eigenfunctions $-\Delta\varphi_k=\lambda_k\varphi_k$,
+$\varphi_k=0$ on $\partial\Omega$, with $0<\lambda_1\le\lambda_2\le\cdots$.
+Expanding $f=\sum f_k\varphi_k$ and $u=\sum u_k\varphi_k$ gives
+$\lambda_ku_k=f_k$, so
+$$
+u=\sum_{k=1}^\infty\frac{f_k}{\lambda_k}\varphi_k,\qquad f_k=\langle f,\varphi_k\rangle.
+$$
+The Green's function is $G(x,y)=\sum_k\varphi_k(x)\varphi_k(y)/\lambda_k$.
+
+:::{.example data-title="Rod Revisited"}
+
+On $(0,1)$ the eigenfunctions are $\sin(k\pi x)$ with $\lambda_k=(k\pi)^2$. For
+$f=1$ the sine coefficients (normalised, $\sqrt2\sin k\pi x$) are
+$f_k=\sqrt2\,(1-(-1)^k)/(k\pi)$, which vanish for even $k$. Hence
+$$
+u(x)=\sum_{k\text{ odd}}\frac{4}{(k\pi)^3}\sin(k\pi x),
+$$
+which converges to $x(1-x)/2$ from the previous example.
+
+:::
+
+### Numerical Solution
+
+On a uniform grid with spacing $h$ in two dimensions the five-point stencil
+approximates the Laplacian,
+$$
+\Delta u(x,y)\approx\frac{u_{i+1,j}+u_{i-1,j}+u_{i,j+1}+u_{i,j-1}-4u_{i,j}}{h^2},
+$$
+which leads to a sparse linear system $A\boldsymbol u=\boldsymbol f$ with $A$
+symmetric positive definite, matching the positivity of $-\Delta$. Each
+interior value is a discrete mean value property: $u_{i,j}$ is the average of
+its four neighbours plus $h^2f_{i,j}/4$. See
+[[finite-difference-methods]].
+
+## Related Topics
+
+- [[laplace-equation]]
+- [[heat-equation]]
+- [[diffusion-equation]]
+- [[laplace-operator]]
+- [[partial-differential-equations]]

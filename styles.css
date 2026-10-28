@@ -189,6 +189,7 @@ main h2 {
      ::: {.definition data-title="Sample Space"} ... :::
      ::: {.theorem   data-title="Bayes' Theorem"} ... :::
      ::: {.example   data-title="Medical test"}   ... :::
+     ::: {.intuition} ... :::     (unnumbered, tinted background)
      ::: {.proof} ... :::
    data-title is optional. Each type is numbered per page automatically.
    Definition & theorem are boxed; example is deliberately subtler.
@@ -203,7 +204,8 @@ main h2 {
 
 /* Boxed environments: definition + theorem */
 .definition,
-.theorem {
+.theorem,
+.intuition {
   --env-accent: var(--bs-primary, #1e66f5);
   margin: 1.25rem 0;
   padding: 1rem;                       /* equal padding on all four sides */
@@ -212,16 +214,41 @@ main h2 {
   background: var(--box-shade);
   font-style: italic;                  /* all text inside is italic */
 }
+.definition {
+  --env-accent: #1e66f5; /* catppuccin latte blue */
+}
+body.quarto-dark .definition {
+  --env-accent: #8caaee; /* catppuccin frappe blue */
+}
 .theorem {
-  --env-accent: #8839ef; /* catppuccin latte mauve */
+  --env-accent: #40a02b; /* catppuccin latte green */
 }
 body.quarto-dark .theorem {
-  --env-accent: #ca9ee6; /* catppuccin frappe mauve */
+  --env-accent: #a6d189; /* catppuccin frappe green */
+}
+/* Splash of colour behind each box, taken from its accent */
+.definition,
+.theorem {
+  background: color-mix(in srgb, var(--env-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--env-accent) 55%, transparent);
+}
+
+/* Intuition: same box as a theorem, unnumbered, with a splash of colour
+   (catppuccin yellow, mixed into the box shade) behind it.
+     ::: {.intuition data-title="Optional"} ... ::: */
+.intuition {
+  --env-accent: #df8e1d; /* catppuccin latte yellow */
+  background: color-mix(in srgb, var(--env-accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--env-accent) 55%, transparent);
+}
+body.quarto-dark .intuition {
+  --env-accent: #e5c890; /* catppuccin frappe yellow */
 }
 
 /* Serif heading line above the body */
 .definition::before,
-.theorem::before {
+.theorem::before,
+.intuition::before {
   display: block;
   margin-bottom: 0.5rem;
   font-size: calc(1em + 1pt);
@@ -242,6 +269,12 @@ body.quarto-dark .theorem {
 }
 .theorem[data-title]::before {
   content: "Theorem " counter(qthm) " (" attr(data-title) ").";
+}
+.intuition::before {
+  content: "\1F914  Intuition.";
+}
+.intuition[data-title]::before {
+  content: "\1F914  Intuition (" attr(data-title) ").";
 }
 
 /* Example: no fill, thin rule, muted italic label — a quiet aside */
@@ -274,8 +307,10 @@ body.quarto-dark .theorem {
 .definition .env-label::before { content: "Definition " counter(qdef) " ("; }
 .theorem .env-label::before    { content: "Theorem " counter(qthm) " ("; }
 .example .env-label::before    { content: "Example " counter(qexm) " ("; }
+.intuition .env-label::before   { content: "\1F914  Intuition ("; }
 .definition > .env-head,
-.theorem > .env-head {
+.theorem > .env-head,
+.intuition > .env-head {
   margin-bottom: 0.5rem;
   font-size: calc(1em + 1pt);
   font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
@@ -293,9 +328,11 @@ body.quarto-dark .theorem {
 /* Trim stray margins on the first/last child so the box hugs its content */
 .definition > :first-child,
 .theorem > :first-child,
+.intuition > :first-child,
 .example > :first-child { margin-top: 0; }
 .definition > :last-child,
 .theorem > :last-child,
+.intuition > :last-child,
 .example > :last-child { margin-bottom: 0; }
 
 /* Proof: unnumbered, QED box at the end of the last line.

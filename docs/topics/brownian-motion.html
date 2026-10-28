@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -358,11 +358,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#brownian-motion" id="toc-brownian-motion" class="nav-link active" data-scroll-target="#brownian-motion"><span class="header-section-number">1</span> Brownian Motion</a>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#link-to-random-walks" id="toc-link-to-random-walks" class="nav-link" data-scroll-target="#link-to-random-walks"><span class="header-section-number">2</span> Link to random walks</a></li>
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition"><span class="header-section-number">3</span> Definition</a>
   <ul class="collapse">
-  <li><a href="#what-is-brownian-motion" id="toc-what-is-brownian-motion" class="nav-link" data-scroll-target="#what-is-brownian-motion"><span class="header-section-number">1.1</span> What is Brownian Motion?</a></li>
-  <li><a href="#properties-of-brownian-motion" id="toc-properties-of-brownian-motion" class="nav-link" data-scroll-target="#properties-of-brownian-motion"><span class="header-section-number">1.2</span> Properties of Brownian Motion</a></li>
+  <li><a href="#brownian-motion-with-respect-to-a-measure" id="toc-brownian-motion-with-respect-to-a-measure" class="nav-link" data-scroll-target="#brownian-motion-with-respect-to-a-measure"><span class="header-section-number">3.1</span> Brownian motion with respect to a measure</a></li>
   </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">4</span> Results</a></li>
   </ul>
 </nav>
     </div>
@@ -401,49 +403,93 @@ window.Quarto = {
 </header>
 
 
-<section id="brownian-motion" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Brownian Motion</h1>
-<section id="what-is-brownian-motion" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="what-is-brownian-motion"><span class="header-section-number">1.1</span> What is Brownian Motion?</h2>
-<p>Consider a continuous-time and continuous state stochastic process <span class="math inline">\(B:=(B_{t})_{t&gt;0}\)</span> taking values in <span class="math inline">\(\mathbb{R}\)</span> with initial value <span class="math inline">\(B_{0}=0\)</span> almost surely (i.e.&nbsp;<span class="math inline">\(\mathbb{P}(B_{0}\neq 0)=0\)</span>).</p>
-<p>We define general <span class="math inline">\(n\)</span>-increments for <span class="math inline">\(0\leq t&lt;t+n\)</span> by</p>
-<p><span class="math display">\[
-\Delta_{n}B_{t}=B_{t+n}-B_{t}.
-\]</span></p>
-<p>We define the <strong>increments</strong> for subsequence of times <span class="math inline">\(0&lt;t_{1}&lt;\dots&lt;t_{n}\)</span> by</p>
-<p><span class="math display">\[
-\Delta B_{t_{i}}=B_{t_{i+1}}-B_{t_{i}}.
-\]</span></p>
-<div class="definition" data-title="Independent Increments">
-<p>The process <span class="math inline">\(B\)</span> is said have independent increments if for a sequence of times <span class="math inline">\(0 &lt; t_{1}&lt; \dots &lt; t_{n}\)</span> the increments <span class="math inline">\(\Delta B_{t_{i}}\)</span> are <strong>mutually independent</strong> random variables, that is, for any <span class="math inline">\(i\neq j\)</span> <span class="math display">\[
-\Delta B_{t_{j}}\perp \Delta B_{t_{i}}.
-\]</span></p>
-</div>
-<blockquote class="blockquote">
-<p><strong><em>Note:</em></strong> The joint distribution factors into a product of distributions. The key point to understand is that intervals that do not overlap contain no information about each other.</p>
-</blockquote>
-<div class="definition" data-title="Normal Stationary Increments">
-<p>The process <span class="math inline">\(B\)</span> has normal stationary increments if for all <span class="math inline">\(0\leq s &lt; t\)</span> we have that <span class="math display">\[
-\Delta_{n} B_{t}\sim \text{Normal}(0, n\sigma^2).
-\]</span></p>
-</div>
-<div class="definition" data-title="Continuous Paths">
-<p>The process <span class="math inline">\(B\)</span> is said to have continuous paths if <span class="math inline">\(\omega \mapsto B_{t}(\omega)\)</span> is a continuous function of <span class="math inline">\(t\)</span> on <span class="math inline">\(\mathbb{R}\)</span> almost surely.</p>
-</div>
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p><strong>Brownian motion</strong> is the continuous-time limit of a random walk. It was first observed as the erratic motion of pollen grains in water, which are kicked about by a huge number of tiny, independent molecular collisions. Each kick is small and unpredictable, and the total displacement over a time interval is a sum of many independent contributions, so by the <a href="../topics/central-limit-theorem.html">Central Limit Theorem</a> it should be Gaussian. Two features follow:</p>
+<ul>
+<li>the displacement over an interval depends only on the <em>length</em> of the interval, not on when it starts (stationarity);</li>
+<li>displacements over disjoint intervals are unrelated (independence).</li>
+</ul>
+<p>Brownian motion is the unique continuous process with these two properties (up to a choice of drift and scale). It is the basic source of randomness in <a href="../topics/stochastic-calculus.html">Stochastic Calculus</a>, <a href="../topics/stochastic-differential-equations.html">Stochastic Differential Equations</a> and <a href="../topics/financial-mathematics.html">Financial Mathematics</a>.</p>
+</section>
+<section id="link-to-random-walks" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="link-to-random-walks"><span class="header-section-number">2</span> Link to random walks</h2>
+<p>Let <span class="math inline">\(\xi_{1},\xi_{2},\dots\)</span> be i.i.d. with <span class="math inline">\(\mathbb{E}[\xi_{i}]=0\)</span> and <span class="math inline">\(\mathrm{Var}(\xi_{i})=1\)</span>, and let <span class="math inline">\(S_{k}=\xi_{1}+\dots+\xi_{k}\)</span> be the <a href="../topics/random-walks.html">random walk</a>. Rescale time by <span class="math inline">\(n\)</span> and space by <span class="math inline">\(\sqrt{n}\)</span> and interpolate linearly: <span class="math display">\[
+B^{(n)}_{t}=\frac{1}{\sqrt{n}}S_{\lfloor nt\rfloor},\qquad t\geq 0.
+\]</span> For fixed <span class="math inline">\(t\)</span> the <a href="../topics/central-limit-theorem.html">Central Limit Theorem</a> gives <span class="math inline">\(B^{(n)}_{t}\to\mathcal{N}(0,t)\)</span>, and independence of the steps gives independence of the increments. <strong>Donsker’s theorem</strong> (the functional CLT) upgrades this to convergence of whole paths, <span class="math display">\[
+B^{(n)}\xrightarrow{d}B\quad\text{as }n\to\infty,
+\]</span> so Brownian motion is the universal scaling limit of every finite-variance random walk. The square-root scaling is the key point: variance grows linearly in time, so the typical size of <span class="math inline">\(B_{t}\)</span> is <span class="math inline">\(\sqrt{t}\)</span>.</p>
+</section>
+<section id="definition" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="definition"><span class="header-section-number">3</span> Definition</h2>
+<p>Consider a continuous-time, continuous-state stochastic process <span class="math inline">\(B:=(B_{t})_{t\geq 0}\)</span> taking values in <span class="math inline">\(\mathbb{R}\)</span>. For <span class="math inline">\(s&lt;t\)</span> the <strong>increment</strong> over <span class="math inline">\([s,t]\)</span> is <span class="math inline">\(B_{t}-B_{s}\)</span>.</p>
 <div class="definition" data-title="Brownian Motion">
-<p>The process <span class="math inline">\(B\)</span> is said to be a <strong>Wiener process</strong> (follow a <strong>Brownian motion</strong>) if it satisfies the following:</p>
+<p>A <strong>Brownian motion</strong> (BM) or <strong>Wiener process</strong> is a stochastic process <span class="math inline">\((B_{t})_{t \geq 0}\)</span> taking values in <span class="math inline">\(\mathbb{R}\)</span> such that:</p>
 <ol type="1">
-<li><span class="math inline">\(B\)</span> has independent increments.</li>
-<li><span class="math inline">\(B\)</span> has normal stationary increments.</li>
-<li><span class="math inline">\(B\)</span> has continuous paths almost surely.</li>
+<li><span class="math inline">\(B_{0}=0\)</span> almost surely (starts at zero);</li>
+<li>for all <span class="math inline">\(0 \leq t_{1}&lt;\dots&lt;t_{n}\)</span> the increments <span class="math inline">\(B_{t_{2}}-B_{t_{1}},\dots,B_{t_{n}}-B_{t_{n-1}}\)</span> are mutually independent (independent increments);</li>
+<li>for all <span class="math inline">\(s &lt; t\)</span>, <span class="math inline">\(B_{t}-B_{s}\sim\mathcal{N}(0,t-s)\)</span> (normal stationary increments);</li>
+<li><span class="math inline">\(t\mapsto B_{t}(\omega)\)</span> is continuous for almost every <span class="math inline">\(\omega\)</span> (continuous paths, no jumps).</li>
 </ol>
 </div>
-</section>
-<section id="properties-of-brownian-motion" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="properties-of-brownian-motion"><span class="header-section-number">1.2</span> Properties of Brownian Motion</h2>
-<div class="definition" data-title="Brownian Motion">
-<p>A <strong>Brownian motion</strong> (BM) or a <strong>Wiener process</strong> with variance parameter <span class="math inline">\(\sigma^2&gt;0\)</span> is a stochastic process <span class="math inline">\((B_{t})_{t \geq 0}\)</span> taking values in <span class="math inline">\(\mathbb{R}\)</span> that satisfies: 4. <span class="math inline">\(B_{0}=0~a.s.\)</span> (starts at zero); 5. <span class="math inline">\(\forall~0 &lt; t_{1}&lt;\dots&lt;t_{n},~B_{t_{1}}-B_{0}, B_{t_{2}}-B_{t_{1}}, \dots, B_{t_{n}}-B_{t_{n-1}}\)</span> are independent (independent increments); 6. <span class="math inline">\(\forall s &lt; t, B_{t}-B_{s}\sim\mathcal{N}(0,\sigma^2(t-s))\)</span> (normal stationary increments); 7. <span class="math inline">\(\omega\mapsto B_{t}(\omega)\)</span> is a continuous function of <span class="math inline">\(t\)</span> on <span class="math inline">\(\mathbb{R}_{+}\)</span> almost surely (continuous paths no jumps).</p>
+<p><em>Note:</em> independent increments means that non-overlapping intervals carry no information about each other. If <span class="math inline">\(\sigma^2\neq 1\)</span> in (3) we speak of a BM with variance parameter <span class="math inline">\(\sigma^2\)</span>; this is just <span class="math inline">\(\sigma B\)</span> for a standard BM <span class="math inline">\(B\)</span>. A BM with drift <span class="math inline">\(\mu\)</span> is <span class="math inline">\(\mu t+\sigma B_{t}\)</span>.</p>
+<section id="brownian-motion-with-respect-to-a-measure" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="brownian-motion-with-respect-to-a-measure"><span class="header-section-number">3.1</span> Brownian motion with respect to a measure</h3>
+<p>Conditions (1)-(4) are statements about <em>probabilities</em>, so “being a Brownian motion” is not a property of the paths alone, it depends on the probability measure and, for stochastic calculus, on the filtration.</p>
+<div class="definition" data-title="Brownian motion under $\mathbb{P}$">
+<p>Let <span class="math inline">\((\Omega,\mathcal{F},(\mathcal{F}_{t})_{t\geq 0},\mathbb{P})\)</span> be a filtered probability space (<a href="../topics/filtration.html">Filtration</a>). A process <span class="math inline">\(W\)</span> is an <span class="math inline">\((\mathcal{F}_{t})\)</span>-<strong>Brownian motion under <span class="math inline">\(\mathbb{P}\)</span></strong> (a <span class="math inline">\(\mathbb{P}\)</span>-BM) if it is adapted, has continuous paths, <span class="math inline">\(W_{0}=0\)</span>, and for all <span class="math inline">\(s&lt;t\)</span> <span class="math display">\[
+W_{t}-W_{s}\perp \mathcal{F}_{s}\quad\text{and}\quad
+W_{t}-W_{s}\sim\mathcal{N}(0,t-s)\ \text{ under }\mathbb{P}.
+\]</span></p>
 </div>
+<p>What this means in practice:</p>
+<ul>
+<li>The probabilities (independence and the <span class="math inline">\(\mathcal{N}(0,t-s)\)</span> law) are all computed with <span class="math inline">\(\mathbb{P}\)</span>. The <em>same</em> process <span class="math inline">\(W\)</span> can fail to be a Brownian motion under another measure <span class="math inline">\(\mathbb{Q}\)</span> that weights paths differently.</li>
+<li>Independence of <span class="math inline">\(\mathcal{F}_{s}\)</span> (rather than only of earlier increments) says the future increments are unpredictable given <em>everything</em> known at time <span class="math inline">\(s\)</span>. This is what makes <span class="math inline">\(\int H\,dW\)</span> well defined for adapted <span class="math inline">\(H\)</span> (<a href="../topics/ito-integral.html">Itô Integral</a>).</li>
+<li>Changing measure changes the drift but not the volatility. By <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a>, if <span class="math inline">\(\mathrm{d}\mathbb{Q}/\mathrm{d}\mathbb{P}\)</span> is built from a process <span class="math inline">\(\theta\)</span> (see <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a>), then <span class="math display">\[
+W^\mathbb{Q}_{t}=W_{t}+\int_{0}^{t}\theta_{s}\,ds
+\]</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-BM, while <span class="math inline">\(W\)</span> itself is a <span class="math inline">\(\mathbb{Q}\)</span>-BM with drift <span class="math inline">\(-\theta\)</span>.</li>
+</ul>
+<div class="example" data-title="Drifted process">
+<p>Under <span class="math inline">\(\mathbb{P}\)</span> let <span class="math inline">\(W\)</span> be a BM and fix <span class="math inline">\(\mu\in\mathbb{R}\)</span>. The process <span class="math inline">\(X_{t}=W_{t}+\mu t\)</span> has <span class="math inline">\(X_{t}-X_{s}\sim\mathcal{N}(\mu(t-s),t-s)\)</span> so it is <strong>not</strong> a <span class="math inline">\(\mathbb{P}\)</span>-BM. Define <span class="math inline">\(\mathbb{Q}\)</span> by <span class="math display">\[
+\frac{d\mathbb{Q}}{d\mathbb{P}}=\exp\left(-\mu W_{T}-\tfrac{1}{2}\mu^2T\right)
+\]</span> on <span class="math inline">\(\mathcal{F}_{T}\)</span>. Then <span class="math inline">\(X\)</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-BM on <span class="math inline">\([0,T]\)</span>: the density tilts the probability of paths exactly enough to cancel the drift. This is the mechanism behind the <a href="../topics/risk-neutral-measure.html">Risk-Neutral Measure</a> in <a href="../topics/financial-mathematics.html">Financial Mathematics</a>, where asset prices acquire the risk-free drift under <span class="math inline">\(\mathbb{Q}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="results" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="results"><span class="header-section-number">4</span> Results</h2>
+<p>Throughout <span class="math inline">\(B\)</span> is a standard BM under <span class="math inline">\(\mathbb{P}\)</span>.</p>
+<div class="theorem" data-title="Basic properties">
+<ol type="1">
+<li><strong>Gaussian process:</strong> <span class="math inline">\(B\)</span> is a <a href="../topics/gaussian-processes.html">Gaussian process</a> with mean <span class="math inline">\(0\)</span> and covariance <span class="math inline">\(\mathrm{Cov}(B_{s},B_{t})=\min(s,t)\)</span>.</li>
+<li><strong>Martingales:</strong> <span class="math inline">\(B_{t}\)</span>, <span class="math inline">\(B_{t}^2-t\)</span> and <span class="math inline">\(\exp(\lambda B_{t}-\tfrac{1}{2}\lambda^2t)\)</span> are <a href="../topics/martingale-theory.html">martingales</a>.</li>
+<li><strong>Markov property:</strong> for any <span class="math inline">\(s\)</span>, <span class="math inline">\((B_{s+t}-B_{s})_{t\geq 0}\)</span> is a BM independent of <span class="math inline">\(\mathcal{F}_{s}\)</span> (<a href="../topics/markov-property.html">Markov Property</a>). The same holds at <a href="../topics/stopping-times.html">Stopping Times</a>.</li>
+<li><strong>Scaling:</strong> for <span class="math inline">\(c&gt;0\)</span>, <span class="math inline">\((c^{-1/2}B_{ct})_{t\geq 0}\)</span> is a BM.</li>
+<li><strong>Time inversion:</strong> <span class="math inline">\(tB_{1/t}\)</span> (with value <span class="math inline">\(0\)</span> at <span class="math inline">\(t=0\)</span>) is a BM.</li>
+<li><strong>Reflection principle:</strong> for <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(\mathbb{P}\left(\max_{s\leq t}B_{s}\geq a\right)=2\,\mathbb{P}(B_{t}\geq a)\)</span>.</li>
+</ol>
+</div>
+<div class="theorem" data-title="Path properties">
+<p>Almost surely, the paths of <span class="math inline">\(B\)</span></p>
+<ul>
+<li>are continuous but <strong>nowhere differentiable</strong>;</li>
+<li>have <strong>infinite total variation</strong> on every interval;</li>
+<li>have <strong>quadratic variation</strong> <span class="math inline">\([B]_{t}=t\)</span>, i.e.&nbsp;for partitions <span class="math inline">\(0=t_{0}&lt;\dots&lt;t_{n}=t\)</span> with mesh going to zero, <span class="math inline">\(\sum_{i}(B_{t_{i+1}}-B_{t_{i}})^2\to t\)</span> in <span class="math inline">\(L^2\)</span>;</li>
+<li>oscillate without bound and return to <span class="math inline">\(0\)</span> infinitely often (recurrence in one dimension).</li>
+</ul>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><em>Sketch for quadratic variation.</em> Write <span class="math inline">\(\Delta_{i}=B_{t_{i+1}}-B_{t_{i}}\)</span>. Then <span class="math inline">\(\mathbb{E}[\Delta_{i}^2]=t_{i+1}-t_{i}\)</span> so <span class="math inline">\(\mathbb{E}\sum_{i}\Delta_{i}^2=t\)</span>, and by independence <span class="math display">\[
+\mathrm{Var}\left(\sum_{i}\Delta_{i}^2\right)
+=\sum_{i}2(t_{i+1}-t_{i})^2\leq 2t\max_{i}(t_{i+1}-t_{i})\to 0.
+\]</span> A random variable with variance tending to zero converges in <span class="math inline">\(L^2\)</span> to its mean, giving <span class="math inline">\([B]_{t}=t\)</span>. Infinite variation follows because finite variation would force the quadratic variation to be zero.</p>
+</div>
+<p>The identity <span class="math inline">\((dB_{t})^2=dt\)</span> is the source of the extra second-order term in the <a href="../topics/ito-formula.html">Itô Formula</a>, and it is why ordinary calculus fails for Brownian paths.</p>
+<div class="theorem" data-title="Lévy's characterisation">
+<p>A continuous adapted process <span class="math inline">\(W\)</span> with <span class="math inline">\(W_{0}=0\)</span> is an <span class="math inline">\((\mathcal{F}_{t})\)</span>-BM under <span class="math inline">\(\mathbb{P}\)</span> if and only if both <span class="math inline">\(W_{t}\)</span> and <span class="math inline">\(W_{t}^2-t\)</span> are continuous <span class="math inline">\(\mathbb{P}\)</span>-martingales (equivalently <span class="math inline">\(W\)</span> is a continuous martingale with <span class="math inline">\([W]_{t}=t\)</span>).</p>
+</div>
+<p>Lévy’s characterisation is the standard way to verify that a process is a Brownian motion under a new measure, and it is what drives the proof of the <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -451,18 +497,19 @@ window.Quarto = {
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
 <li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
 <li><a href="../topics/filtrations-and-adapted-processes.html">Filtrations and Adapted Processes</a></li>
 <li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
 <li><a href="../topics/heat-equation.html">Heat Equation</a></li>
 <li><a href="../topics/ito-integral.html">Itô Integral</a></li>
 <li><a href="../topics/ito-process.html">Itô Process</a></li>
+<li><a href="../topics/poisson-equation.html">Poisson Equation</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
 <li><a href="../topics/sde-simulation.html">SDE Simulation</a></li>
 <li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
@@ -488,6 +535,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

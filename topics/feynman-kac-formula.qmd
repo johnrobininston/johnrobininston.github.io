@@ -1,26 +1,202 @@
 ---
-title: Feynman-Kac Formula
-author: John Robin Inston
+id: feynman-kac-formula
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Feynman-Kac Formula"
 title-block-banner: false
 ---
 
-## Feynman-Kac Formula
-References: [Wikipedia](https://en.wikipedia.org/wiki/Feynman–Kac_formula).
+## Intuition
 
 The **Feynman-Kac Formula** establishes a link between
-[[parabolic-partial-differential-equations]] and
-[[knowledge-mathematics-analysis-probability-theory-stochastic-processes-stochastic-processes|Stochastic Processes]].
+[[calculus|Parabolic PDEs]] and
+[[probability-theory|stochastic processes]].
 It offers a method of solving certain PDEs by simulating random paths of a
 stochastic process. Conversely, an important class of expectations of random
 processes can be computed by deterministic methods.
 
-:::{.theorem data-title="Feynman-Kac Formula"}
+:::{.intuition data-title="Averaging over random paths"}
 
-Consider the PDE $$u_{t}(x,t)+\mu(x,t)u_{x}(x,t)+\frac{1}{2}\sigma^2(x,t)u_{xx}(x,t)-V(x,t)u(x,t)+f(x,t)=0,$$defined for all $x \in \mathbb{R}$ and $t \in [0,T]$ subject to the terminal condition $$u(x,T)=\psi (x)$$where $\mu,\sigma,\psi,V,f$ are known functions, $T$ is a parameter, and $u:\mathbb{R}\times[0,T]\to \mathbb{R}$ is the unknown.  The the Feyman-Kac formula expresses $u(x,t)$ as a conditional expectation under probability measure $\mathbb{Q}$ $$u(x,t)=\mathbb{E}^\mathbb{Q}\left[ g_{\tau}(t,T)\psi(X_{T})+\int_{t}^{T}{g_{s}(t,\tau)f(X_{\tau, \tau})}~d{\tau}\middle| X_{t}=x \right], $$where $X$ is an [[ito-process]] satisfying $$dX_{t}=\mu(X_{t},t)dt+\sigma(X_{t},t)dW_{t}^\mathbb{Q},$$ $g_{\tau}.g_{s}$ are functions defined by $$g_{\kappa}(a,b)=\exp \left( -\int_{a}^{b}{V(X_{\kappa}, \kappa)}~d{\kappa} \right) $$ for $\kappa=\tau,s$ and $W_{t}^\mathbb{Q}$ is [[brownian-motion]] under $\mathbb{Q}$.
+Think of the PDE as describing how a quantity $u$ is *transported and
+smoothed* backwards in time from the terminal value $\psi$. The drift
+$\mu$ moves information along, and the diffusion $\sigma$ blurs it, exactly as
+in the [[heat-equation]]. Instead of solving for $u$ everywhere at once, we
+can release a particle at $x$ at time $t$, let it wander according to the
+[[ito-process]] $X$, and *average* what it collects along the way:
+
+- $\psi(X_T)$ is the payoff it collects at the end,
+- $f(X_s,s)$ is a reward collected continuously along the path,
+- $V(X_s,s)$ is a rate at which the collected amount is discounted (or the
+  particle is "killed").
+
+The average of all of this over many paths is $u(x,t)$.
 
 :::
 
+## Feynman-Kac Formula
 
+:::{.theorem data-title="Feynman-Kac Formula"}
 
+Consider the PDE
+
+$$
+\begin{aligned}
+u_{t}(x,t) & +\mu(x,t)u_{x}(x,t)+\frac{1}{2}\sigma^2(x,t)u_{xx}(x,t) \\
+& -V(x,t)u(x,t)+f(x,t)=0,
+\end{aligned}
+$$
+
+defined for all $x \in \mathbb{R}$ and $t \in [0,T]$ subject to the terminal
+condition
+$$
+u(x,T)=\psi (x),
+$$
+where $\mu,\sigma,\psi,V,f$ are known functions, $T$ is a parameter, and
+$u:\mathbb{R}\times[0,T]\to \mathbb{R}$ is the unknown. The Feynman-Kac
+formula expresses $u(x,t)$ as a conditional expectation under a probability
+measure $\mathbb{Q}$
+$$
+u(x,t)=\mathbb{E}^\mathbb{Q}\left[
+e^{-\int_{t}^{T}V(X_{r},r)\,dr}\,\psi(X_{T})
++\int_{t}^{T}e^{-\int_{t}^{s}V(X_{r},r)\,dr}f(X_{s},s)\,ds
+\,\middle|\, X_{t}=x \right],
+$$
+where $X$ is an [[ito-process]] satisfying
+$$
+dX_{s}=\mu(X_{s},s)ds+\sigma(X_{s},s)dW_{s}^\mathbb{Q},
+$$
+and $W^\mathbb{Q}$ is [[brownian-motion]] under $\mathbb{Q}$.
+
+:::
+
+*Remark.* The operator
+$\mathcal{L}u=\mu u_{x}+\frac{1}{2}\sigma^2u_{xx}$ appearing in the PDE is the
+[[infinitesimal-generator]] of $X$, so the PDE can be written compactly as
+$u_{t}+\mathcal{L}u-Vu+f=0$. The formula says that the solution of this
+backward equation is an expectation over the diffusion with that generator.
+
+The statement is valid under standard regularity conditions (e.g. $\mu,\sigma$
+Lipschitz with linear growth, $u$ of class $C^{1,2}$ and
+$\mathbb{E}\int_t^T\sigma^2u_x^2\,ds<\infty$ so that the stochastic integral
+below is a true martingale).
+
+:::{.proof}
+
+Fix $(x,t)$ and write $A_{s}=\int_{t}^{s}V(X_{r},r)\,dr$, so that
+$dA_{s}=V(X_{s},s)ds$. Apply the [[ito-formula]] to the process
+$e^{-A_{s}}u(X_{s},s)$ for $s\in[t,T]$:
+$$
+\begin{aligned}
+d\left(e^{-A_{s}}u(X_{s},s)\right)
+& = e^{-A_{s}}\left(u_{t}+\mu u_{x}+\tfrac{1}{2}\sigma^2u_{xx}-Vu\right)ds
++e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+\end{aligned}
+$$
+The PDE says the bracket equals $-f(X_{s},s)$, so
+$$
+d\left(e^{-A_{s}}u(X_{s},s)\right)
+=-e^{-A_{s}}f(X_{s},s)\,ds+e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+$$
+Integrating from $t$ to $T$, using $A_{t}=0$, $X_{t}=x$ and $u(X_{T},T)=\psi(X_{T})$,
+$$
+e^{-A_{T}}\psi(X_{T})-u(x,t)
+=-\int_{t}^{T}e^{-A_{s}}f(X_{s},s)\,ds
++\int_{t}^{T}e^{-A_{s}}\sigma u_{x}\,dW_{s}^\mathbb{Q}.
+$$
+Take $\mathbb{E}^\mathbb{Q}[\,\cdot\mid X_{t}=x]$. The Itô integral is a
+martingale started at zero, so its expectation vanishes, and rearranging gives
+$$
+u(x,t)=\mathbb{E}^\mathbb{Q}\left[e^{-A_{T}}\psi(X_{T})
++\int_{t}^{T}e^{-A_{s}}f(X_{s},s)\,ds\,\middle|\,X_{t}=x\right],
+$$
+which is the claim, since $e^{-A_{s}}=e^{-\int_{t}^{s}V(X_{r},r)dr}$.
+:::
+
+In other words, the process
+$$
+M_{s}=e^{-A_{s}}u(X_{s},s)+\int_{t}^{s}e^{-A_{r}}f(X_{r},r)\,dr
+$$
+is a [[martingale-theory|martingale]], and the formula is just
+$\mathbb{E}[M_{T}]=M_{t}$. The proof only shows that a smooth solution *must*
+have this form (uniqueness); existence of a smooth solution needs extra
+conditions on the coefficients.
+
+## Examples
+
+:::{.example data-title="Heat equation"}
+
+Take $X=W$ (so $\mu=0$, $\sigma=1$), $V=f=0$ and $\psi(x)=x^2$. The PDE is
+the backward [[heat-equation]]
+$$
+u_{t}+\tfrac{1}{2}u_{xx}=0,\qquad u(x,T)=x^2.
+$$
+The formula gives
+$$
+u(x,t)=\mathbb{E}\left[W_{T}^2\mid W_{t}=x\right]
+=x^2+(T-t),
+$$
+since $W_{T}=x+(W_{T}-W_{t})$ with $W_{T}-W_{t}\sim N(0,T-t)$. Check:
+$u_{t}=-1$ and $\tfrac{1}{2}u_{xx}=1$, so the PDE holds.
+
+:::
+
+:::{.example data-title="Running reward"}
+
+Take $X=W$, $V=0$, $\psi=0$ and $f=1$. Then
+$$
+u(x,t)=\mathbb{E}\left[\int_{t}^{T}1\,ds\right]=T-t,
+$$
+which indeed solves $u_{t}+\tfrac{1}{2}u_{xx}+1=0$ with $u(x,T)=0$.
+
+:::
+
+:::{.example data-title="Discounting"}
+
+Take $X=W$, $f=0$, $\psi=1$ and constant $V=\lambda$. The formula gives
+$u(x,t)=e^{-\lambda(T-t)}$, which solves
+$u_{t}+\tfrac{1}{2}u_{xx}-\lambda u=0$. The term $V$ is a pure discount (or
+killing) rate.
+
+:::
+
+:::{.example data-title="Black-Scholes"}
+
+Let $X=S$ follow a [[geometric-brownian-motion]] under the
+[[risk-neutral-measure]], $dS=rS\,dt+\sigma S\,dW^\mathbb{Q}$, with $V=r$ and
+$f=0$. The PDE becomes
+$$
+u_{t}+rxu_{x}+\tfrac{1}{2}\sigma^2x^2u_{xx}-ru=0,\qquad u(x,T)=\psi(x),
+$$
+which is the [[black-scholes-pde-bspde|Black-Scholes PDE]], and the formula
+reads
+$$
+u(S_{t},t)=e^{-r(T-t)}\,\mathbb{E}^\mathbb{Q}\left[\psi(S_{T})\mid S_{t}\right],
+$$
+the familiar statement that an option price is the discounted risk-neutral
+expectation of its payoff. For a call, $\psi(x)=(x-K)^+$.
+
+:::
+
+## Where it is used
+
+- **Financial mathematics.** The link between the
+  [[black-scholes-merton-model]] PDE and risk-neutral pricing, and its
+  extensions to stochastic volatility, interest rate and barrier models
+  ([[barrier-options]]). Here $V$ is the short rate and $f$ a dividend or
+  coupon stream.
+- **Numerical methods.** In high dimensions, grid-based PDE solvers fail
+  (curse of dimensionality) but the expectation can be estimated by Monte
+  Carlo: simulate paths of $X$ ([[sde-simulation]]) and average the payoff.
+  Conversely, low-dimensional expectations can be computed by a PDE solver.
+- **Quantum mechanics.** With $\mu=0$ and $\sigma^2=\hbar/m$ (and imaginary
+  time) the PDE is the [[schrodinger-equation]] with potential $V$; the
+  formula is the Feynman path integral made rigorous by Kac, hence the name.
+- **Probability and PDE theory.** Probabilistic representations of solutions
+  to PDEs (e.g. the [[diffusion-equation]]), killing rates and survival
+  probabilities, and links to the backward
+  [[kolmogorov-equations]] and the [[fokker-planck-equation]].
+- **Stochastic control.** The same argument applied to a controlled process
+  leads to the Hamilton-Jacobi-Bellman equation ([[stochastic-control]]).

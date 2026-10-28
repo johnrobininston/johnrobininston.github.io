@@ -1,0 +1,265 @@
+---
+title: Diffusion Equation
+author: John Robin Inston
+date: 2026-10-15
+number-sections: true
+title-block-banner: false
+---
+
+## Diffusion Equation
+
+*References:* Evans, *Partial Differential Equations*, Section 2.3; Strauss,
+*Partial Differential Equations*, Chapter 2; Crank, *The Mathematics of
+Diffusion*.
+
+The **diffusion equation** describes how a conserved quantity (concentration,
+heat, probability) spreads from regions of high to low density. The
+constant-coefficient case is the [[heat-equation]], which is treated there in
+detail. This note covers the general form with variable diffusivity, drift and
+reaction terms, its microscopic origin, and its link to
+[[brownian-motion]] and the [[fokker-planck-equation]].
+
+:::{.definition data-title="Diffusion Equation"}
+
+Let $u(t,x)$ be the density of a quantity in $\Omega\subset\mathbb{R}^n$. The
+**diffusion equation** is
+$$
+u_t=\nabla\cdot\left(D(x)\nabla u\right),
+$$
+where $D(x)>0$ is the **diffusion coefficient** (diffusivity). When $D$ is a
+constant this is $u_t=D\Delta u$, the heat equation with $k=D$.
+
+:::
+
+The equation is the combination of two ingredients:
+
+1. a **conservation law** $u_t+\nabla\cdot\vec J=0$; and
+2. a **constitutive law** $\vec J=-D\nabla u$ (Fick's first law).
+
+## Derivation
+
+### From Conservation of Mass
+
+Let $\Omega'\subset\Omega$ be any subregion. The mass changes only through
+flux across its boundary, so by the divergence theorem
+$$
+\frac{d}{dt}\int_{\Omega'}u~dx=-\int_{\partial\Omega'}\vec J\cdot\vec n~dS
+=-\int_{\Omega'}\nabla\cdot\vec J~dx.
+$$
+Since $\Omega'$ is arbitrary, $u_t+\nabla\cdot\vec J=0$. Fick's law
+$\vec J=-D\nabla u$ states that the flux points down the gradient with
+strength proportional to its steepness, giving
+$u_t=\nabla\cdot(D\nabla u)$.
+
+### From a Random Walk
+
+Consider a particle on the lattice $h\mathbb{Z}$ which, every $\tau$ units of
+time, jumps one step left or right with probability $1/2$. If $p(t,x)$ is the
+probability of being at $x$ at time $t$ then
+$$
+p(t+\tau,x)=\tfrac12p(t,x+h)+\tfrac12p(t,x-h).
+$$
+Subtracting $p(t,x)$ and Taylor expanding,
+$$
+\frac{p(t+\tau,x)-p(t,x)}{\tau}=\frac{h^2}{2\tau}\cdot
+\frac{p(t,x+h)+p(t,x-h)-2p(t,x)}{h^2}.
+$$
+Taking $h,\tau\to0$ with $h^2/(2\tau)\to D$ fixed gives $p_t=Dp_{xx}$. The
+**diffusive scaling** $h\sim\sqrt\tau$ is what produces a non-trivial limit and
+is the discrete version of the scaling of Brownian motion.
+
+> *Note:* The microscopic derivation shows that $D$ has units of
+> length$^2$/time, and that diffusion is the macroscopic shadow of independent
+> random motion of many particles. The equation is therefore also the law of
+> the probability density of a single particle.
+
+## Generalisations
+
+:::{.definition data-title="Advection-Diffusion-Reaction Equation"}
+
+Adding a velocity field $\vec V$ and a source/reaction term $R(u)$,
+$$
+u_t+\nabla\cdot(\vec Vu)=\nabla\cdot(D\nabla u)+R(u).
+$$
+
+:::
+
+The terms are, in order, the time derivative, **advection** (transport, see
+[[transport-equation]]), **diffusion** and **reaction**. Important cases:
+
+- **Pure advection-diffusion** ($R=0$): $u_t+\vec V\cdot\nabla u=D\Delta u$
+  for constant $\vec V$ with $\nabla\cdot\vec V=0$.
+- **Fisher-KPP equation** ($R=ru(1-u)$): logistic growth plus diffusion,
+  producing travelling population fronts with speed $2\sqrt{rD}$.
+- **Non-linear diffusion** ($D=D(u)$): e.g. the porous medium equation
+  $u_t=\Delta(u^m)$, which has finite speed of propagation.
+- **Anisotropic diffusion:** $D$ is a positive definite matrix and the equation
+  is $u_t=\nabla\cdot(D\nabla u)$ with $D=D(x)\in\mathbb{R}^{n\times n}$.
+
+:::{.example data-title="Drift-Diffusion in One Dimension"}
+
+The equation $u_t+vu_x=Du_{xx}$ with constant $v$ is solved from the heat
+kernel by moving to the frame $y=x-vt$. Setting $u(t,x)=w(t,x-vt)$ gives
+$w_t=Dw_{yy}$, so
+$$
+u(t,x)=\int_{-\infty}^\infty\frac{1}{\sqrt{4\pi Dt}}
+e^{-(x-vt-y)^2/4Dt}u_0(y)~dy.
+$$
+The cloud translates at speed $v$ while spreading like $\sqrt{2Dt}$.
+
+:::
+
+## Link with Stochastic Processes
+
+Let $X_t$ solve the [[stochastic-differential-equations|SDE]]
+$dX_t=\mu(X_t)~dt+\sigma(X_t)~dW_t$. Its transition density $p(t,x)$ solves
+the **Fokker-Planck (forward Kolmogorov) equation**
+$$
+p_t=-\nabla\cdot(\mu p)+\frac12\sum_{i,j}\partial_{ij}\left((\sigma\sigma^\top)_{ij}p\right).
+$$
+With $\mu=0$ and $\sigma=\sqrt{2D}$ this is the diffusion equation, so
+$X_t=\sqrt{2D}W_t$ has the density $\mathcal{N}(0,2Dt)$ (the heat kernel). See
+[[fokker-planck-equation]] and [[kolmogorov-equations]].
+
+The reverse direction is the **Feynman-Kac formula**, which represents the
+solution of $u_t=D\Delta u+c(x)u$ as an expectation over Brownian paths (see
+[[feynman-kac-formula]]). The [[black-scholes-pde-bspde|Black-Scholes PDE]] is
+a diffusion equation after a change of variables.
+
+:::{.theorem data-title="Mean Square Displacement"}
+
+Let $u$ solve $u_t=D\Delta u$ on $\mathbb{R}^n$ with $u(0,\cdot)=\delta_0$.
+Then
+$$
+\int_{\mathbb{R}^n}|x|^2u(t,x)~dx=2nDt.
+$$
+
+:::
+
+:::{.proof}
+
+Let $M(t)=\int|x|^2u~dx$. Differentiating under the integral and integrating
+by parts twice (boundary terms vanish by Gaussian decay),
+$$
+M'(t)=D\int|x|^2\Delta u~dx=D\int\Delta(|x|^2)u~dx=2nD\int u~dx=2nD,
+$$
+since $\Delta|x|^2=2n$ and the total mass is $1$. With $M(0)=0$ the claim
+follows.
+
+:::
+
+> *Note:* The linear growth of the mean square displacement in $t$ is the
+> signature of ordinary diffusion and is how $D$ is measured experimentally.
+> The Einstein relation $D=k_BT/\gamma$ links $D$ to the temperature $T$ and the
+> friction coefficient $\gamma$.
+
+## Properties
+
+:::{.theorem data-title="Properties of the Diffusion Equation"}
+
+Let $u_t=\nabla\cdot(D\nabla u)$ with $D\ge D_{\min}>0$ on a bounded domain.
+
+1. **Conservation:** with no-flux boundary conditions
+   $\vec J\cdot\vec n=0$, the total mass $\int_\Omega u~dx$ is constant.
+2. **Maximum principle:** $\min u_0\le u\le\max u_0$ (with zero source, and
+   absent flux through the boundary or Dirichlet data in this range).
+3. **Energy decay:** with Dirichlet or no-flux boundaries,
+   $\frac{d}{dt}\int u^2~dx=-2\int D|\nabla u|^2~dx\le0$.
+4. **Irreversibility:** the equation is not invariant under $t\to-t$ and
+   backward problems are ill-posed.
+5. **Convergence to equilibrium:** with no-flux boundaries $u\to\bar u$, the
+   mean of $u_0$, exponentially fast at a rate given by the smallest non-zero
+   Neumann eigenvalue of $-\nabla\cdot(D\nabla)$.
+
+:::
+
+:::{.proof}
+
+*(3)* Multiply by $u$ and integrate, using the divergence theorem,
+$$
+\frac12\frac{d}{dt}\int u^2=\int u\nabla\cdot(D\nabla u)
+=\int_{\partial\Omega}uD\partial_\nu u~dS-\int D|\nabla u|^2,
+$$
+and the boundary term vanishes for either type of boundary condition.
+
+*(5)* Expand $u=\sum_ka_k(t)\varphi_k$ in eigenfunctions of the Neumann
+problem. Then $a_k'=-\mu_ka_k$, so $a_k(t)=a_k(0)e^{-\mu_kt}$. The first
+eigenvalue is $\mu_0=0$ with $\varphi_0$ constant, which carries the mean, and
+all other modes decay at rate at least $\mu_1>0$.
+
+:::
+
+> *Note:* Property 4 is the mathematical expression of the second law of
+> thermodynamics. Mode $k$ decays at rate $\mu_k\sim k^2$, so running the
+> equation backwards would amplify high frequencies without bound, which is
+> why deblurring (the inverse of diffusion) is an ill-posed problem.
+
+## Solutions
+
+### Similarity (Scaling) Solution
+
+The equation $u_t=Du_{xx}$ is invariant under $x\to\lambda x$, $t\to\lambda^2t$.
+It therefore admits solutions of the form
+$$
+u(t,x)=t^{-1/2}\,g\!\left(\frac{x}{\sqrt t}\right).
+$$
+Substituting $\xi=x/\sqrt t$ gives the ODE $Dg''+\tfrac12\xi g'+\tfrac12g=0$,
+that is $(Dg'+\tfrac12\xi g)'=0$, whose integrable solution is
+$g(\xi)=Ce^{-\xi^2/4D}$ and recovers the heat kernel
+$$
+\Phi(t,x)=\frac{1}{\sqrt{4\pi Dt}}e^{-x^2/4Dt}.
+$$
+
+### Fourier Transform
+
+On $\mathbb{R}^n$ take the Fourier transform
+$\hat u(t,\xi)=\int e^{-i\xi\cdot x}u(t,x)~dx$ so that $\Delta\to-|\xi|^2$.
+The equation becomes the ODE $\hat u_t=-D|\xi|^2\hat u$ with solution
+$\hat u=e^{-D|\xi|^2t}\hat u_0$. Inverting,
+$$
+u(t,x)=\int_{\mathbb{R}^n}\frac{1}{(4\pi Dt)^{n/2}}e^{-|x-y|^2/4Dt}u_0(y)~dy.
+$$
+Each Fourier mode decays at its own rate $D|\xi|^2$, which makes the
+smoothing property transparent: high-frequency content is damped fastest.
+
+### Bounded Domain
+
+For $u_t=Du_{xx}$ on $(0,L)$ with Neumann (insulated) ends the eigenfunctions
+are $\cos(n\pi x/L)$ and
+$$
+u(t,x)=\frac{a_0}{2}+\sum_{n=1}^\infty a_ne^{-D(n\pi/L)^2t}\cos\frac{n\pi x}{L},
+$$
+with $a_n=\frac2L\int_0^Lu_0\cos\frac{n\pi x}{L}~dx$. As $t\to\infty$
+$u\to a_0/2$, the average of $u_0$, which is the equilibrium.
+
+:::{.example data-title="Time to Equilibrate"}
+
+The slowest non-trivial mode decays like $e^{-D\pi^2t/L^2}$, so the
+equilibration time scales as $L^2/(D\pi^2)$. Doubling the length of the domain
+multiplies the time by four. This is why diffusion is efficient at cell scales
+(microseconds over micrometres) but hopelessly slow at macroscopic scales
+(years over metres for a typical liquid).
+
+:::
+
+### Numerical Solution
+
+The explicit (forward Euler, central difference) scheme in one dimension is
+$$
+u_i^{n+1}=u_i^n+r\left(u_{i+1}^n-2u_i^n+u_{i-1}^n\right),\qquad
+r=\frac{D\Delta t}{\Delta x^2}.
+$$
+It is stable only if $r\le\frac12$, which is a severe restriction on the time
+step. The implicit (backward Euler) and Crank-Nicolson schemes are
+unconditionally stable and require solving a tridiagonal system at each step.
+See [[finite-difference-methods]].
+
+## Related Topics
+
+- [[heat-equation]]
+- [[poisson-equation]] (the steady state with a source)
+- [[laplace-equation]]
+- [[fokker-planck-equation]]
+- [[transport-equation]]
+- [[schrodinger-equation]] (the diffusion equation with imaginary diffusivity)
+- [[brownian-motion]]

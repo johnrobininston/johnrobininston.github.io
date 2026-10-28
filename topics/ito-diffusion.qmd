@@ -1,0 +1,82 @@
+---
+id: ito-diffusion
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-09-25
+number-sections: true
+title: "Itô Diffusion"
+title-block-banner: false
+---
+
+## Itô Diffusions
+
+Time-homogeneous solutions of SDEs, the processes underlying the
+[[infinitesimal-generator]], the Kolmogorov equations and the
+[[feynman-kac-formula]].
+
+:::{.definition data-title="Itô Diffusion"}
+
+A **(time-homogeneous) Itô diffusion** in $\mathbb{R}^n$ is a stochastic
+process $(X_{t})$ defined on space $(\Omega, \mathcal{F},\mathbb{P})$ that
+satisfies the stochastic differential equation
+$$
+\begin{cases} dX_{t}=b(X_{t})dt+\sigma(X_{t})dB_{t} \\ X_{s}=x \end{cases}
+$$
+where $X_{t}\in \mathbb{R}^n$, $B_{t}\in \mathbb{R}^m$,
+$b:\mathbb{R}^n\to\mathbb{R}^n$,
+$\sigma:\mathbb{R}^n\to \mathbb{R}^{n \times m}$ where it is assumed that
+$b,\sigma$ are both [[lipschitz-continuity|Lipschitz]] on $\mathbb{R}^n$ (to
+ensure the existence and uniqueness of strong solutions).
+
+:::
+
+The distinguishing feature of diffusions is that the drift and diffusion
+coefficients $b,\sigma$ are time independent and the Lipschitz condition is
+here to ensure the existence and uniqueness of the strong solution. Next we
+detail the results outlining the key properties of Itô diffusions.
+
+:::{.theorem data-title="Time Homogeneity of Itô Diffusions"}
+
+Denoting the solution to the SDE above with initial condition $X_{s}=x$ as an
+Itô diffusion by $X_{s+h}^{s,x}$ then
+$$
+\forall s \geq 0,~x \in \mathbb{R}^n,~\{ X_{s+t}^{s,x} \}_{t \geq 0}\stackrel{\mathcal{L}}{=}\{  X_{t}^{0,x} \}_{t \geq 0}.
+$$
+
+:::
+
+*Proof (sketch):* The increments $B_{s+t}-B_{s}$, $t\geq 0$ form a BM, so
+$X^{s,x}_{s+\cdot}$ solves the same SDE as $X^{0,x}_{\cdot}$ driven by a BM. Since
+$b,\sigma$ do not depend on time, uniqueness of strong solutions gives equality
+in law.
+
+:::{.theorem data-title="Flow Property of Itô Diffusion"}
+
+For an Itô diffusion $X$ we have
+$$
+\forall t,h \geq 0,~ X_{h}^{0,X_{t}^{0,x}}\stackrel{a.s.}{=}X_{t+h}^{0,x}.
+$$
+
+:::
+
+*Proof:* By construction, both are strong solutions to the same SDE
+$$
+X_{t+h}^{0,x}=X_{t}^{0,x}+\int_{t}^{t+h}{b(X_{s}^{0,x})}~d{s}+\int_{t}^{t+h}{\sigma(X_{s}^{0,x})}~d{B_{s}}.
+$$
+By uniqueness of strong solutions the two processes are indistinguishable.
+
+## Further Properties
+
+- Markov property and strong Markov property ([[markov-process]])
+- [[infinitesimal-generator]] of an Itô diffusion
+- Dynkin formula
+- [[kolmogorov-equations]] (backward and forward / [[fokker-planck-equation]])
+- [[feynman-kac-formula]]
+- [[girsanov-theorem]]
+
+## Related Notes
+
+- [[stochastic-differential-equations]]
+- [[ito-formula]]
+- [[stochastic-calculus]]

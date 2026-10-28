@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -401,7 +401,7 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 <li><strong>Multivariable differentiation:</strong>
 <ul>
-<li>Partial derivatives and multi-indices (see <a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a>)</li>
+<li>Partial derivatives and multi-indices (see [[pde-fundamentals]])</li>
 <li><a href="../topics/gradient.html">Gradient</a> and directional derivatives</li>
 <li>Derivative matrices: <a href="../topics/jacobian-matrix.html">Jacobian Matrix</a>, <a href="../topics/hessian-matrix.html">Hessian Matrix</a>, <a href="../topics/jacobian-and-hessian.html">Jacobian and Hessian Matrices</a></li>
 <li>Multivariable chain rule and implicit function theorem</li>
@@ -492,7 +492,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><strong>Fundamentals:</strong>
 <ul>
-<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a> (partial derivatives, order, linearity, homogeneity, classification)</li>
+<li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a> (partial derivatives, order, linearity, homogeneity, classification)</li>
 <li>Well-posedness (existence, uniqueness, stability)</li>
 <li>Boundaries and Initial Values (Dirichlet, Neumann, Robin)</li>
 </ul></li>
@@ -514,7 +514,7 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>Hyperbolic PDEs:</strong>
 <ul>
 <li><a href="../topics/wave-equation.html">Wave Equation</a></li>
-<li>D’Alembert’s formula</li>
+<li><a href="../topics/dalemberts-formula.html">D’Alembert’s Formula</a></li>
 <li>Domain of dependence, energy methods</li>
 </ul></li>
 <li><strong>Parabolic PDEs:</strong>
@@ -554,8 +554,15 @@ Backlinks
 <ul>
 <li><a href="../topics/calculus-of-simple-functions.html">Calculus of Simple Functions</a></li>
 <li><a href="../topics/chain-rule.html">Chain Rule</a></li>
+<li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li><a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a></li>
+<li><a href="../topics/implicit-differentiation.html">Implicit Differentiation</a></li>
 <li><a href="../topics/jacobian-matrix.html">Jacobian Matrix</a></li>
+<li><a href="../topics/laplace-transform.html">Laplace Transform</a></li>
 <li><a href="../topics/leibniz-integral-rule.html">Leibniz Integral Rule</a></li>
+<li><a href="../topics/lipschitz-continuity.html">Lipschitz Continuity</a></li>
+<li><a href="../topics/quasilinear-partial-differential-equations.html">Quasilinear Partial Differential Equations</a></li>
+<li><a href="../topics/quotient-rule.html">Quotient Rule</a></li>
 <li><a href="../topics/index.html">Topics</a></li>
 <li><a href="../topics/topics.html">Topics</a></li>
 </ul>
@@ -585,6 +592,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

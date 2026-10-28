@@ -373,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="method-of-characteristics" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Method of Characteristics</h1>
-<p>The <strong>method of characteristics</strong> is a technique for solving certain [[partial-differential-equations]]. Typically, it applies to <strong>first-order equations</strong> though in general can be found for [[hyperbolic-partial-differential-equations]] and [[parabolic-partial-differential-equations]].</p>
+<p>The <strong>method of characteristics</strong> is a technique for solving certain <a href="../topics/partial-differential-equations.html">Partial Differential Equations</a>. Typically, it applies to <strong>first-order equations</strong> though in general can be found for [[hyperbolic-partial-differential-equations]] and [[parabolic-partial-differential-equations]].</p>
 <p>The method involves reducing a PDE to a family of <a href="../topics/ordinary-differential-equations.html">ODEs</a> along which the solution can be integrated from some initial data given on a suitable <strong>hypersurface</strong>.</p>
 <section id="characteristics-of-first-order-pdes" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="characteristics-of-first-order-pdes"><span class="header-section-number">1.1</span> Characteristics of First-Order PDEs</h2>
@@ -387,6 +387,7 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/dalemberts-formula.html">D'Alambert's Formula</a></li>
 <li><a href="../topics/pde-characteristics.html">PDE Characteristics</a></li>
 <li><a href="../topics/transport-equation.html">Transport Equation</a></li>
 <li><a href="../topics/wave-equation.html">Wave Equation</a></li>
@@ -418,6 +419,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -418,7 +418,7 @@ V(0)=D_{T}\mathbb{E}_{\mathbb{Q}}[\Phi(S_{[0:T]})]=\frac{d\mathbb{Q}}{d\mathbb{P
 dS_{t}=\mu S_{t}dt + \sigma S_{t}dW_{t}^\mathbb{P},
 \]</span> where: <span class="math inline">\(\mu\)</span> is the drift term (expected return under real measure <span class="math inline">\(\mathbb{P}\)</span>), <span class="math inline">\(\sigma\)</span> is the diffusion term and <span class="math inline">\(W_{t}^\mathbb{P}\)</span> is a Weiner process under the real measure. The solution is known to be <span class="math display">\[
 S_{t}=S_{0}\exp\left( \left( \mu+\frac{1}{2}\sigma^2 \right)t+\sigma W_{t}^\mathbb{P} \right).
-\]</span> We wish to define new measure <span class="math inline">\(\mathbb{Q}\)</span> such that the discounted stock price <span class="math inline">\(e^{-rt}S_{t}\)</span> is a <a href="../topics/martingale-theory.html">martingale</a> under <span class="math inline">\(\mathbb{Q}\)</span>. <a href="../topics/girsanovs-theorem.html">Girsanov's Theorem</a> allows us to define a new Brownian motion under <span class="math inline">\(\mathbb{Q}\)</span> such that <span class="math display">\[
+\]</span> We wish to define new measure <span class="math inline">\(\mathbb{Q}\)</span> such that the discounted stock price <span class="math inline">\(e^{-rt}S_{t}\)</span> is a <a href="../topics/martingale-theory.html">martingale</a> under <span class="math inline">\(\mathbb{Q}\)</span>. <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a> allows us to define a new Brownian motion under <span class="math inline">\(\mathbb{Q}\)</span> such that <span class="math display">\[
 dW_{t}^\mathbb{Q}=dW_{t}^\mathbb{P}+\theta dt.
 \]</span> We define the <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a> <span class="math inline">\(Z_{t}\)</span> of <span class="math inline">\(\mathbb{Q}\)</span> with respect to <span class="math inline">\(\mathbb{P}\)</span> as <span class="math display">\[
 Z_{t}= \frac{d\mathbb{Q}}{d\mathbb{P}}\Big|_{\mathcal{F}_{t}}=\exp\left( -\theta W_{t}^\mathbb{P}- \frac{1}{2}\theta^2 t \right),
@@ -438,6 +438,9 @@ d(e^{-rt}S_{t})=e^{-rt}\sigma S_{t}dW_{t}^\mathbb{Q}.
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/brownian-motion.html">Brownian Motion</a></li>
+<li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li><a href="../topics/financial-models.html">Financial Models</a></li>
 <li><a href="../topics/heston-model.html">Heston Model</a></li>
 <li><a href="../topics/option-greeks.html">Option Greeks</a></li>
 </ul>
@@ -468,6 +471,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

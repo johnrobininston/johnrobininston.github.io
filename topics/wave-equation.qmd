@@ -90,31 +90,11 @@ On a string $0<x<L$ the usual boundary conditions are:
 - **Neumann:** $u_x(t,0)=0$, a free end (the end can slide freely on a pole).
 
 # d'Alembert's Solution
-
-## The General Solution
-The equation factorises as
-$$
-\left(\partial_t-c\partial_x\right)\left(\partial_t+c\partial_x\right)u=0,
-$$
-so it is built from two [[transport-equation|transport equations]], one moving
-left and one moving right. To solve it change variables to
-$$
-\xi=x-ct,\qquad\eta=x+ct.
-$$
-By the [[chain-rule|chain rule]], $\partial_x=\partial_\xi+\partial_\eta$ and
-$\partial_t=-c\partial_\xi+c\partial_\eta$, so
-$$
-u_{tt}-c^2u_{xx}=c^2\left(\partial_\eta-\partial_\xi\right)^2u-c^2\left(\partial_\eta+\partial_\xi\right)^2u=-4c^2u_{\xi\eta}.
-$$
-Hence the equation becomes $u_{\xi\eta}=0$. Integrating in $\eta$ shows $u_\xi$
-depends only on $\xi$, and then integrating in $\xi$ gives
-$$
-u(t,x)=F(x-ct)+G(x+ct)
-$$
-for arbitrary (twice differentiable) functions $F,G$: a wave travelling right
-at speed $c$ plus a wave travelling left at speed $c$.
-
-## Solving the Initial Value Problem
+In one dimension the wave equation is solved explicitly by **d'Alembert's
+formula**. Its general solution is a right-moving plus a left-moving wave,
+$u(t,x)=F(x-ct)+G(x+ct)$, and fitting the initial data gives the following
+(see [[dalemberts-formula]] for the derivation, intuition, applications and
+examples).
 
 :::{.theorem data-title="d'Alembert's Formula"}
 
@@ -126,50 +106,8 @@ $$
 
 :::
 
-:::{.proof}
-
-Write $u=F(x-ct)+G(x+ct)$. At $t=0$,
-$$
-F(x)+G(x)=\varphi(x),\qquad -cF'(x)+cG'(x)=\psi(x).
-$$
-Integrating the second, $G(x)-F(x)=\frac1c\int_0^x\psi(s)~ds+C$. Solving with
-the first,
-$$
-G(x)=\frac12\varphi(x)+\frac{1}{2c}\int_0^x\psi+\frac C2,\qquad
-F(x)=\frac12\varphi(x)-\frac{1}{2c}\int_0^x\psi-\frac C2.
-$$
-Therefore
-$$
-F(x-ct)+G(x+ct)=\frac12\big[\varphi(x-ct)+\varphi(x+ct)\big]+\frac{1}{2c}\left(\int_0^{x+ct}\psi-\int_0^{x-ct}\psi\right),
-$$
-which is the claimed formula.
-
-:::
-
-:::{.example data-title="Initial Displacement Only"}
-
-A string at rest ($\psi=0$) is released from the shape $\varphi$. Then
-$$
-u(t,x)=\tfrac12\varphi(x-ct)+\tfrac12\varphi(x+ct),
-$$
-so the initial shape **splits into two copies of half the height**, one
-travelling right and one left at speed $c$. For a plucked string with a
-triangular bump, two smaller triangles move apart, and they pass through each
-other without changing shape (linearity).
-
-:::
-
-:::{.example data-title="Initial Velocity Only"}
-
-If $\varphi=0$ and $\psi\equiv1$ then
-$$
-u(t,x)=\frac{1}{2c}\int_{x-ct}^{x+ct}1~ds=t,
-$$
-so the whole string rises at the constant speed $1$ it was given. More
-generally a localised initial velocity produces a region that spreads outward
-at speed $c$.
-
-:::
+For example, a string released from rest ($\psi=0$) splits into two copies of
+half the height travelling in opposite directions at speed $c$.
 
 # Properties
 

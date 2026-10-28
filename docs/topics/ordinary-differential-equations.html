@@ -426,7 +426,7 @@ F(x,y,y',\dots,y^{(n)})=0,
 y(x_{0})=y_{0};~~\text{for some }(x_{0},y_{0})\in\mathscr{D},
 \]</span> where <span class="math inline">\(\mathscr{D}\)</span> is the function domain.</p>
 </div>
-<p>When more than one independent variable is involved, the equation is known as a [[partial-differential-equations|partial differential equation]] which are reserved for their own note. Further, there can be more than one function involved <span class="math inline">\(y_{1}(x), y_{2}(x), \dots\)</span> in which case there will be multiple equations relating them allowing us to solve the system of equations (i.e. determine the solution space for functions <span class="math inline">\(y_{j}\)</span> for all <span class="math inline">\(j\)</span>).</p>
+<p>When more than one independent variable is involved, the equation is known as a <a href="../topics/partial-differential-equations.html">partial differential equation</a> which are reserved for their own note. Further, there can be more than one function involved <span class="math inline">\(y_{1}(x), y_{2}(x), \dots\)</span> in which case there will be multiple equations relating them allowing us to solve the system of equations (i.e. determine the solution space for functions <span class="math inline">\(y_{j}\)</span> for all <span class="math inline">\(j\)</span>).</p>
 <div class="definition" data-title="Order">
 <p>The <strong>order</strong> of an ODE is the order of the highest derivative that it contains</p>
 </div>
@@ -597,6 +597,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

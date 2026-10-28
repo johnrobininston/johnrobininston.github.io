@@ -414,7 +414,7 @@ window.Quarto = {
 
 <section id="pde-characteristics" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> PDE Characteristics</h1>
-<p><strong>Characteristics</strong> are special curves (or surfaces in higher dimensions) in the domain of a [[partial-differential-equations|PDE]] along which information travels and along which the PDE simplifies. They serve two purposes:</p>
+<p><strong>Characteristics</strong> are special curves (or surfaces in higher dimensions) in the domain of a <a href="../topics/partial-differential-equations.html">PDE</a> along which information travels and along which the PDE simplifies. They serve two purposes:</p>
 <ul>
 <li>For <strong>first-order</strong> PDEs they reduce the problem to a family of <a href="../topics/ordinary-differential-equations.html">ODEs</a>, which is the <a href="../topics/method-of-characteristics.html">Method of Characteristics</a>.</li>
 <li>For <strong>second-order</strong> PDEs they determine the <em>type</em> of the equation (hyperbolic, parabolic or elliptic), and with it the qualitative behaviour of solutions.</li>
@@ -640,7 +640,8 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
-<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a></li>
+<li><a href="../topics/dalemberts-formula.html">D'Alambert's Formula</a></li>
+<li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a></li>
 </ul>
 </div>
 </section>
@@ -668,6 +669,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

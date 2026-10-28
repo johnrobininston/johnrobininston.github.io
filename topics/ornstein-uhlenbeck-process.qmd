@@ -1,0 +1,116 @@
+---
+id: ornstein-uhlenbeck-process
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-09-25
+number-sections: true
+title: "Ornstein-Uhlenbeck Process"
+title-block-banner: false
+---
+
+## Definition
+
+The **Ornstein-Uhlenbeck (OU) process** has dynamics described by the stochastic
+differential equation
+$$
+dX_{t}=-\theta X_{t}dt+\sigma dW_{t},
+$$
+where $\theta>0$, $\sigma>0$ and $W_{t}$ is a BM. It is a mean reverting
+stochastic process that is a Gaussian process, is Markov and is temporally
+stationary. This process can be used to describe the fluctuation of interest
+rate around the mean interest rate $M$ with the speed of the regression
+described by $\theta$.
+
+:::{.definition data-title="Ornstein-Uhlenbeck Process"}
+
+The Ornstein-Uhlenbeck process $(X_{t})$ with drift has dynamics described by
+the stochastic differential equation
+$$
+dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}
+$$
+where $\theta,\sigma>0$, $\mu \in \mathbb{R}$ are all constant and $B_{t}$ is a
+BM.
+
+:::
+
+## Solution
+
+### Change of Variable
+
+Consider such a process with a deterministic starting value $X_{0}$. To find a
+solution to this SDE we first change the variable to set the regression level
+to 0 with $Y_{t}=X_{t}-\mu$. From Itô's formula we have
+$$
+dY_{t}=dX_{t}=\theta(\mu-X_{t})dt+\sigma dB_{t}=-\theta Y_{t}dt+\sigma dB_{t}.
+$$
+Considering when $\sigma=0$ we have the ODE $dY_{t}=-\theta Y_{t}dt$ with the
+solution $Y_{t}=Y_{0}\cdot e^{-\theta t}$ and so replacing this constant
+$Y_{0}$ with some yet to define process $C_{t}$ we have
+$Y_{t}=C_{t}e^{-\theta t}$ and from Itô's formula we have
+$$
+dY_{t}=-\theta e^{-\theta t}C_{t}dt+e^{-\theta t}dC_{t}=-\theta Y_{t}dt+e^{-\theta t}dC_{t}.
+$$
+We therefore can define $dC_{t}=\sigma e^{\theta t}dB_{t}$ and so
+$C_{0}=Y_{0}=X_{0}-\mu$ and
+$$
+\begin{align}
+C_{t}-C_{0} & = \int_{0}^t\sigma e^{\theta s}dB_{s} \\
+ \implies C_{t} & =X_{0}-\mu+\sigma \int_{0}^te^{\theta s}dB_{s} \\
+\implies Y_{t} & = (X_{0}-\mu)e^{-\theta t}+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s} \\
+\implies X_{t} & = (X_{0}-\mu)e^{-\theta t}+\mu+\sigma e^{-\theta t}\int_{0}^te^{\theta s}dB_{s}.
+\end{align}
+$$
+
+### Variation of Parameters
+
+The process can be formally solved by **variation of parameters**.  
+We can define $f(t,X_{t})=e^{\theta t}X_{t}$ and applying [[ito-formula]] we 
+have that
+
+$$
+\begin{align}
+d(e^{\theta t}X_{t}) & =\theta e^{\theta t}X_{t}dt+e^{\theta t}dX_{t} \\
+ & =e^{\theta t}\theta \mu dt+\sigma e^{\theta t}dW_{t} .
+\end{align}
+$$
+
+Integrating from $0$ to $t$ we get
+
+$$
+\begin{align}
+X_{t}e^{\theta t} & = X_{0}+\int _{0}^te^{\theta s}\theta \mu  \, ds + 
+  \int _{0}^t\sigma e^{\theta s} \, dW_{s} \\
+\implies X_{t} & =  X_{0}e^{-\theta t}+\mu(1-e^{-\theta t})+
+  \sigma \int _{0}^te^{-\theta(t-s)} \, dW_{s.}  
+\end{align}
+$$
+
+## Langevin Equation Form
+
+The process is sometimes also written as a Langevin equation of the form
+
+$$
+\frac{dX_{t}}{dt}=-\theta X_{t}+\sigma \eta(t),
+$$
+
+where $\eta(t)$, also known as white noise, stands in for the supposed 
+derivative $\frac{dW_{t}}{dt}$ of BM - which doesn't exist as BM is nowhere 
+differentiable, this is a common representation by tacitly assuming that the 
+noise term is a derivative of a differentiable (e.g. Fourier) interpolation 
+of BM.
+
+## Kolmogorov Equation
+
+The [[infinitesimal-generator]] of the process is
+
+$$
+Lf=-\theta(x-\mu)f'+ \frac{1}{2}\sigma^2 f''.
+$$
+
+## Related Notes
+
+- [[geometric-brownian-motion]]
+- [[cox-ingersoll-ross-cir-model]]
+- [[infinitesimal-generator]]
+- [[stochastic-differential-equations]]

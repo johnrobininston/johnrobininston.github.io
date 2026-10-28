@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -409,7 +409,7 @@ window.Quarto = {
 \left| \frac{1}{2}f+ \frac{1}{2}g\right|^p\leq \left| \frac{1}{2}|f|+ \frac{1}{2}|g|\right|^p\leq \frac{1}{2}|f|^p+\frac{1}{2}|g|^p,
 \]</span> which means that <span class="math display">\[
 |f+g|^p \leq \frac{1}{2}|2f|^p+ \frac{1}{2}|2g|^p=2^{p-1}|f|^p+2^{p-1}|g|^p.
-\]</span> Next, considering <span class="math inline">\(\|f+g\|_{p}\)</span>. If it is zero, then Minkowski’s inequality holds. Assuming that <span class="math inline">\(\|f+g\|_p\)</span> is not zero, using the <a href="../topics/triangle-inequality.html">triangle inequality</a> and then <a href="../topics/holders-inequality.html">Hölder's Inequality</a> we have that <span class="math display">\[
+\]</span> Next, considering <span class="math inline">\(\|f+g\|_{p}\)</span>. If it is zero, then Minkowski’s inequality holds. Assuming that <span class="math inline">\(\|f+g\|_p\)</span> is not zero, using the <a href="../topics/triangle-inequality.html">triangle inequality</a> and then <a href="../topics/holder-inequality.html">Hölder Inequality</a> we have that <span class="math display">\[
 \begin{align}
 \|f+g\|_{p}^p &amp; = \int |f+g|^p \, d\mu = \int |f+g|\cdot |f+g|^{p-1} \, d\mu\leq \int (|f|+|g|)|f+g|^{p-1} \, d\mu    \\
 &amp; = \int |f\mid f+g|^{p-1} \, d\mu +\int |g\mid f+g|^{p-1} \, d\mu  \\
@@ -422,7 +422,7 @@ window.Quarto = {
 </div>
 <p><em>Proof:</em> First, we notice that <span class="math display">\[
 \mathbb{E}|X+Y|^p = \mathbb{E}[|X+Y| |X+Y|^{p-1}]\leq \mathbb{E}[|X| |X+Y|^{p-1}]+\mathbb{E}[|Y| |X+Y|^{p-1}].
-\]</span> Using <a href="../topics/holders-inequality.html">Hölder's Inequality</a> on the right hand terms for <span class="math inline">\(q\)</span> selected to satisfy <span class="math inline">\(\frac{1}{p}+\frac{1}{q}=1\)</span> gives <span class="math display">\[
+\]</span> Using <a href="../topics/holder-inequality.html">Hölder Inequality</a> on the right hand terms for <span class="math inline">\(q\)</span> selected to satisfy <span class="math inline">\(\frac{1}{p}+\frac{1}{q}=1\)</span> gives <span class="math display">\[
 \begin{align}
 \mathbb{E}|X+Y|^p &amp; \leq (\mathbb{E}|X|^p)^{1/p}(\mathbb{E}|X+Y|^{q(p-1)})^{1/q}+(\mathbb{E}|Y|^p)^{1/p}(\mathbb{E}|X+Y|^{q(p-1)})^{1/q} \\
 \implies\frac{\mathbb{E}|X+Y|^p}{(\mathbb{E}|X+Y|^{q(p-1)})^{1/q}} &amp;\leq (\mathbb{E}|X|^p)^{1/p}+(\mathbb{E}|Y|^p)^{1/p},
@@ -465,6 +465,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

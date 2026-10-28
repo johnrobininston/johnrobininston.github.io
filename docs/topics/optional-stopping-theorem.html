@@ -50,9 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-81ea19f4b382697124623ad76ede1642.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-b5915167f1b0690d566483364dcfb6d9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
 <link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -438,7 +438,7 @@ window.Quarto = {
 <h3 data-number="4.1" class="anchored" data-anchor-id="optional-sampling-theorem"><span class="header-section-number">4.1</span> Optional Sampling Theorem</h3>
 <p>The <strong>Optional Sampling Theorem</strong> is closely related to OST and states that a subsequence of a <a href="../topics/martingale-theory.html">submartingale</a> defined by stopping times is itself a submartingale.</p>
 <div class="theorem" data-title="Optional Sampling Theorem">
-<p>Let <span class="math inline">\((X_{n}, \mathcal{F}_{n})\)</span> be a submartingale. 1. If <span class="math inline">\(T\)</span> is a <a href="../topics/stopping-time.html">stopping time</a> with respect to <span class="math inline">\((\mathcal{F}_{n})\)</span> and <span class="math inline">\(\mathbb{P}(T \leq N)=1\)</span> for some deterministic <span class="math inline">\(N\)</span>, then <span class="math inline">\(\mathbb{E}|X_{T}|&lt; \infty\)</span> and <span class="math inline">\(\mathbb{E}[X_{T}|\mathcal{F}_{0}]\geq X_{0}\)</span>. 2. If <span class="math inline">\(T_{1}\leq T_{2}\leq \dots \leq \infty\)</span> is a sequence of stopping times with respect to <span class="math inline">\((\mathcal{F}_{n})\)</span> such that <span class="math inline">\(\mathbb{P}(T_{j} \leq N_{j})=1\)</span> for some deterministic sequence <span class="math inline">\(\{  N_{j} \}\)</span> then <span class="math inline">\((Z_{n}, \mathcal{H}_{n})\)</span> defined by <span class="math display">\[
+<p>Let <span class="math inline">\((X_{n}, \mathcal{F}_{n})\)</span> be a submartingale. 1. If <span class="math inline">\(T\)</span> is a <a href="../topics/stopping-times.html">stopping time</a> with respect to <span class="math inline">\((\mathcal{F}_{n})\)</span> and <span class="math inline">\(\mathbb{P}(T \leq N)=1\)</span> for some deterministic <span class="math inline">\(N\)</span>, then <span class="math inline">\(\mathbb{E}|X_{T}|&lt; \infty\)</span> and <span class="math inline">\(\mathbb{E}[X_{T}|\mathcal{F}_{0}]\geq X_{0}\)</span>. 2. If <span class="math inline">\(T_{1}\leq T_{2}\leq \dots \leq \infty\)</span> is a sequence of stopping times with respect to <span class="math inline">\((\mathcal{F}_{n})\)</span> such that <span class="math inline">\(\mathbb{P}(T_{j} \leq N_{j})=1\)</span> for some deterministic sequence <span class="math inline">\(\{  N_{j} \}\)</span> then <span class="math inline">\((Z_{n}, \mathcal{H}_{n})\)</span> defined by <span class="math display">\[
    Z_{0}=X_{0},~\mathcal{H}_{0}=\mathcal{F}_{0}, Z_{n}=X_{T_{n}}, \mathcal{H}_{n}=\mathcal{F}_{T_{n}},
    \]</span> is a submartingale.</p>
 </div>
@@ -554,6 +554,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

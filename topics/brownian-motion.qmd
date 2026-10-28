@@ -9,92 +9,188 @@ title: "Brownian Motion"
 title-block-banner: false
 ---
 
-# Brownian Motion
+## Intuition
 
-## What is Brownian Motion?
+**Brownian motion** is the continuous-time limit of a random walk. It was
+first observed as the erratic motion of pollen grains in water, which are
+kicked about by a huge number of tiny, independent molecular collisions. Each
+kick is small and unpredictable, and the total displacement over a time
+interval is a sum of many independent contributions, so by the
+[[central-limit-theorem]] it should be Gaussian. Two features follow:
 
-Consider a continuous-time and continuous state stochastic process
-$B:=(B_{t})_{t>0}$ taking values in $\mathbb{R}$ with initial value $B_{0}=0$
-almost surely (i.e. $\mathbb{P}(B_{0}\neq 0)=0$).  
+- the displacement over an interval depends only on the *length* of the
+  interval, not on when it starts (stationarity);
+- displacements over disjoint intervals are unrelated (independence).
 
-We define general $n$-increments for $0\leq t<t+n$ by
+Brownian motion is the unique continuous process with these two properties
+(up to a choice of drift and scale). It is the basic source of randomness in
+[[stochastic-calculus]], [[stochastic-differential-equations]] and
+[[financial-mathematics]].
 
+## Link to random walks
+
+Let $\xi_{1},\xi_{2},\dots$ be i.i.d. with $\mathbb{E}[\xi_{i}]=0$ and
+$\mathrm{Var}(\xi_{i})=1$, and let $S_{k}=\xi_{1}+\dots+\xi_{k}$ be the
+[[random-walks|random walk]]. Rescale time by $n$ and space by $\sqrt{n}$ and
+interpolate linearly:
 $$
-\Delta_{n}B_{t}=B_{t+n}-B_{t}.
+B^{(n)}_{t}=\frac{1}{\sqrt{n}}S_{\lfloor nt\rfloor},\qquad t\geq 0.
 $$
-
-We define the **increments** for subsequence of times $0<t_{1}<\dots<t_{n}$ by
-
+For fixed $t$ the [[central-limit-theorem]] gives
+$B^{(n)}_{t}\to\mathcal{N}(0,t)$, and independence of the steps gives
+independence of the increments. **Donsker's theorem** (the functional CLT)
+upgrades this to convergence of whole paths,
 $$
-\Delta B_{t_{i}}=B_{t_{i+1}}-B_{t_{i}}.
+B^{(n)}\xrightarrow{d}B\quad\text{as }n\to\infty,
 $$
+so Brownian motion is the universal scaling limit of every finite-variance
+random walk. The square-root scaling is the key point: variance grows
+linearly in time, so the typical size of $B_{t}$ is $\sqrt{t}$.
 
-:::{.definition data-title="Independent Increments"}
+## Definition
 
-The process $B$ is said have independent increments if for a sequence of times
-$0 < t_{1}< \dots < t_{n}$ the increments $\Delta B_{t_{i}}$ are **mutually
-independent** random variables, that is, for any $i\neq j$
-$$
-\Delta B_{t_{j}}\perp \Delta B_{t_{i}}.
-$$
-
-:::
-
-> ***Note:*** The joint distribution factors into a product of distributions.  The key point to understand is that intervals that do not overlap contain no information about each other.
-
-:::{.definition data-title="Normal Stationary Increments"}
-
-The process $B$ has normal stationary increments if for all $0\leq s < t$ we
-have that
-$$
-\Delta_{n} B_{t}\sim \text{Normal}(0, n\sigma^2).
-$$
-
-:::
-
-:::{.definition data-title="Continuous Paths"}
-
-The process $B$ is said to have continuous paths if
-$\omega \mapsto B_{t}(\omega)$ is a continuous function of $t$ on $\mathbb{R}$
-almost surely.
-
-:::
-
-
-
+Consider a continuous-time, continuous-state stochastic process
+$B:=(B_{t})_{t\geq 0}$ taking values in $\mathbb{R}$. For $s<t$ the
+**increment** over $[s,t]$ is $B_{t}-B_{s}$.
 
 :::{.definition data-title="Brownian Motion"}
 
-The process $B$ is said to be a **Wiener process** (follow a **Brownian
-motion**) if it satisfies the following:
+A **Brownian motion** (BM) or **Wiener process** is a stochastic process
+$(B_{t})_{t \geq 0}$ taking values in $\mathbb{R}$ such that:
 
-1. $B$ has independent increments.
-2. $B$ has normal stationary increments.
-3. $B$ has continuous paths almost surely.
-
-:::
-
-
-## Properties of Brownian Motion
-
-
-
-
-
-
-:::{.definition data-title="Brownian Motion"}
-
-A **Brownian motion** (BM) or a **Wiener process** with variance parameter
-$\sigma^2>0$ is a stochastic process $(B_{t})_{t \geq 0}$ taking values in
-$\mathbb{R}$ that satisfies:
-4. $B_{0}=0~a.s.$ (starts at zero);
-5. $\forall~0 < t_{1}<\dots<t_{n},~B_{t_{1}}-B_{0}, B_{t_{2}}-B_{t_{1}}, \dots, B_{t_{n}}-B_{t_{n-1}}$
-   are independent (independent increments);
-6. $\forall s < t, B_{t}-B_{s}\sim\mathcal{N}(0,\sigma^2(t-s))$ (normal
-   stationary increments);
-7. $\omega\mapsto B_{t}(\omega)$ is a continuous function of $t$ on
-   $\mathbb{R}_{+}$ almost surely (continuous paths no jumps).
+1. $B_{0}=0$ almost surely (starts at zero);
+2. for all $0 \leq t_{1}<\dots<t_{n}$ the increments
+   $B_{t_{2}}-B_{t_{1}},\dots,B_{t_{n}}-B_{t_{n-1}}$ are mutually independent
+   (independent increments);
+3. for all $s < t$, $B_{t}-B_{s}\sim\mathcal{N}(0,t-s)$ (normal stationary
+   increments);
+4. $t\mapsto B_{t}(\omega)$ is continuous for almost every $\omega$
+   (continuous paths, no jumps).
 
 :::
 
+*Note:* independent increments means that non-overlapping intervals carry no
+information about each other. If $\sigma^2\neq 1$ in (3) we speak of a BM with
+variance parameter $\sigma^2$; this is just $\sigma B$ for a standard BM $B$.
+A BM with drift $\mu$ is $\mu t+\sigma B_{t}$.
 
+### Brownian motion with respect to a measure
+
+Conditions (1)-(4) are statements about *probabilities*, so "being a Brownian
+motion" is not a property of the paths alone, it depends on the probability
+measure and, for stochastic calculus, on the filtration.
+
+:::{.definition data-title="Brownian motion under $\mathbb{P}$"}
+
+Let $(\Omega,\mathcal{F},(\mathcal{F}_{t})_{t\geq 0},\mathbb{P})$ be a
+filtered probability space ([[filtration]]). A process $W$ is an
+$(\mathcal{F}_{t})$-**Brownian motion under $\mathbb{P}$** (a
+$\mathbb{P}$-BM) if it is adapted, has continuous paths, $W_{0}=0$, and for
+all $s<t$
+$$
+W_{t}-W_{s}\perp \mathcal{F}_{s}\quad\text{and}\quad
+W_{t}-W_{s}\sim\mathcal{N}(0,t-s)\ \text{ under }\mathbb{P}.
+$$
+
+:::
+
+What this means in practice:
+
+- The probabilities (independence and the $\mathcal{N}(0,t-s)$ law) are all
+  computed with $\mathbb{P}$. The *same* process $W$ can fail to be a
+  Brownian motion under another measure $\mathbb{Q}$ that weights paths
+  differently.
+- Independence of $\mathcal{F}_{s}$ (rather than only of earlier increments)
+  says the future increments are unpredictable given *everything* known at
+  time $s$. This is what makes $\int H\,dW$ well defined for adapted $H$
+  ([[ito-integral]]).
+- Changing measure changes the drift but not the volatility. By
+  [[girsanov-theorem]], if $\mathrm{d}\mathbb{Q}/\mathrm{d}\mathbb{P}$ is built
+  from a process $\theta$ (see [[radon-nikodym-derivative]]), then
+  $$
+  W^\mathbb{Q}_{t}=W_{t}+\int_{0}^{t}\theta_{s}\,ds
+  $$
+  is a $\mathbb{Q}$-BM, while $W$ itself is a $\mathbb{Q}$-BM with drift
+  $-\theta$.
+
+:::{.example data-title="Drifted process"}
+
+Under $\mathbb{P}$ let $W$ be a BM and fix $\mu\in\mathbb{R}$. The process
+$X_{t}=W_{t}+\mu t$ has $X_{t}-X_{s}\sim\mathcal{N}(\mu(t-s),t-s)$ so it is
+**not** a $\mathbb{P}$-BM. Define $\mathbb{Q}$ by
+$$
+\frac{d\mathbb{Q}}{d\mathbb{P}}=\exp\left(-\mu W_{T}-\tfrac{1}{2}\mu^2T\right)
+$$
+on $\mathcal{F}_{T}$. Then $X$ is a $\mathbb{Q}$-BM on $[0,T]$: the density
+tilts the probability of paths exactly enough to cancel the drift. This is
+the mechanism behind the [[risk-neutral-measure]] in
+[[financial-mathematics]], where asset prices acquire the risk-free drift
+under $\mathbb{Q}$.
+
+:::
+
+## Results
+
+Throughout $B$ is a standard BM under $\mathbb{P}$.
+
+:::{.theorem data-title="Basic properties"}
+
+1. **Gaussian process:** $B$ is a [[gaussian-processes|Gaussian process]]
+   with mean $0$ and covariance $\mathrm{Cov}(B_{s},B_{t})=\min(s,t)$.
+2. **Martingales:** $B_{t}$, $B_{t}^2-t$ and
+   $\exp(\lambda B_{t}-\tfrac{1}{2}\lambda^2t)$ are
+   [[martingale-theory|martingales]].
+3. **Markov property:** for any $s$, $(B_{s+t}-B_{s})_{t\geq 0}$ is a BM
+   independent of $\mathcal{F}_{s}$ ([[markov-property]]). The same holds at
+   [[stopping-times]].
+4. **Scaling:** for $c>0$, $(c^{-1/2}B_{ct})_{t\geq 0}$ is a BM.
+5. **Time inversion:** $tB_{1/t}$ (with value $0$ at $t=0$) is a BM.
+6. **Reflection principle:** for $a>0$,
+   $\mathbb{P}\left(\max_{s\leq t}B_{s}\geq a\right)=2\,\mathbb{P}(B_{t}\geq a)$.
+
+:::
+
+:::{.theorem data-title="Path properties"}
+
+Almost surely, the paths of $B$
+
+- are continuous but **nowhere differentiable**;
+- have **infinite total variation** on every interval;
+- have **quadratic variation** $[B]_{t}=t$, i.e. for partitions
+  $0=t_{0}<\dots<t_{n}=t$ with mesh going to zero,
+  $\sum_{i}(B_{t_{i+1}}-B_{t_{i}})^2\to t$ in $L^2$;
+- oscillate without bound and return to $0$ infinitely often
+  (recurrence in one dimension).
+
+:::
+
+:::{.proof}
+
+*Sketch for quadratic variation.* Write $\Delta_{i}=B_{t_{i+1}}-B_{t_{i}}$.
+Then $\mathbb{E}[\Delta_{i}^2]=t_{i+1}-t_{i}$ so
+$\mathbb{E}\sum_{i}\Delta_{i}^2=t$, and by independence
+$$
+\mathrm{Var}\left(\sum_{i}\Delta_{i}^2\right)
+=\sum_{i}2(t_{i+1}-t_{i})^2\leq 2t\max_{i}(t_{i+1}-t_{i})\to 0.
+$$
+A random variable with variance tending to zero converges in $L^2$ to its
+mean, giving $[B]_{t}=t$. Infinite variation follows because finite variation
+would force the quadratic variation to be zero.
+
+:::
+
+The identity $(dB_{t})^2=dt$ is the source of the extra second-order term in
+the [[ito-formula]], and it is why ordinary calculus fails for Brownian paths.
+
+:::{.theorem data-title="Lévy's characterisation"}
+
+A continuous adapted process $W$ with $W_{0}=0$ is an
+$(\mathcal{F}_{t})$-BM under $\mathbb{P}$ if and only if both $W_{t}$ and
+$W_{t}^2-t$ are continuous $\mathbb{P}$-martingales (equivalently $W$ is a
+continuous martingale with $[W]_{t}=t$).
+
+:::
+
+Lévy's characterisation is the standard way to verify that a process is a
+Brownian motion under a new measure, and it is what drives the proof of the
+[[girsanov-theorem]].

@@ -1,31 +1,238 @@
 ---
-title: Itô Formula
-author: John Robin Inston
+id: ito-formula
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Itô Formula"
 title-block-banner: false
 ---
 
-### Itô Formula
 
-:::{.definition data-title="Itô Formula"}
+## Itô Process
 
-For an [[ito-process]] that satisfies the
-[[stochastic-calculus|stochastic differential equation]]
+Let $B_{t}$ be a 1-dimensional Brownian motion on
+$(\Omega, \mathcal{F}, \mathbb{P})$. A (1-dimensional) **Itô process** (or
+stochastic integral) is a stochastic process $X_{t}$ on
+$(\Omega, \mathcal{F}, \mathbb{P})$ of the form
 $$
-dX_t=\mu_tdt+\sigma_tdB_t
+X_{t}=x+\int_{0}^{t}{u(s, \omega )}~d{s} + \int_{0}^{t}{v(s,\omega)}~d{B_{s}},
 $$
-where $B_t$ is a [[wiener-process-brownian-motion]], for a twice-differentiable
-scalar function $f(t,x)$ of two real variables $t$ and $x$ one has
+where we say that $u$ is the **drift coefficient** (controls the growth of the
+process) and $v$ is the **diffusion coefficient** (controls the size of the
+noise). Sometimes this is written in the shorter differential form
 $$
-df(t,X_t)=\frac{\partial f}{\partial t}dt+\frac{\partial f}{\partial x}dX_t+\frac{1}{2}\frac{\partial^2f}{\partial x^2}dX_t^2
+dX_{t}=udt+vdB_{t}.
 $$
-where $dX_t^2$ denotes the [[p-th-variation|quadratic variation]] of $X_t$.  
+
+## Itô Formula
+
+See also [[stochastic-integrals]] for the Itô integral and [[stochastic-calculus]] for the wider picture.
+
+Itô's formula or Itô's lemma is an identity used in Itô calculus to find the
+differential of a time-dependent function of a stochastic process. It serves as
+the stochastic calculus counterpart of the chain rule.
+
+:::{.theorem data-title="1-Dimensional Itô Formula"}
+
+Let $X_{t}$ be an Itô process given by
+$$
+dX_{t}=udt+vdB_{t}.
+$$
+Further, let $g(t,x)\in C^2([0,\infty)\times \mathbb{R})$ (i.e. twice
+differentiable on $[0,\infty)\times \mathbb{R}$). Then
+$$
+Y_{t}=g(t,X_{t})
+$$
+is again an Itô process and
+$$
+dY_{t}=g_{t}(t, X_{t})dt+g_{x}(t, X_{t})dX_{t}+ \frac{1}{2}g_{x x}(t, X_{t})d\left< X,X \right>_{t}.
+$$
 
 :::
 
-We evaluate $(dX_{t})^2 = (dX_{t})\cdot (dX_{t})$ is computed according to the
-rules
+Here $d\left< X,X \right>_{t}=(dX_{t})\cdot(dX_{t})$ is computed according to
+the following:
 $$
-dt\cdot dt = dt\cdot dB_{t}=dB_{t}\cdot dt=0,\quad dB_{t}\cdot dB_{t}=dt.
+dt\cdot dt=dt\cdot dB_{t}=dB_{t}\cdot dt=0,\quad dB_{t}\cdot dB_{t}=dt.
 $$
+
+:::{.proof}
+
+Substituting $dX_{t}=udt+vdB_{t}$ into the Itô formula we get
+$$
+\begin{align}
+g(t,X_{t}) & = g(0,X_{0}) + \int_{0}^t\left(  \frac{{\partial g}}{\partial s}(s,X_{s})+u_{s}\frac{{\partial g}}{\partial x}(s,X_{s})+ \frac{1}{2} v_{s}^2 \frac{{\partial^2g}}{\partial x^2}(s,X_{s}) \right)ds \\
+ & + \int_{0}^t v_{s} \frac{{\partial g}}{\partial x}(s,X_{s})dB_{s}.
+\end{align}
+$$
+We may assume that $g, g_{t}, g_{x}, g_{x x}$ are bounded for each $n$ and
+converge uniformly on compact subsets of $[0,\infty)\times \mathbb{R}$ to
+$g,g_{t},g_{x},g_{x x}$ respectively. Moreover, we may assume that $u,v$ are
+elementary functions. Using Taylor's theorem we get
+$$
+\begin{align}
+g(t,X_{t}) & = g(0,X_{0}) + \sum_{j}\Delta g(t_{j}, X_{j})  \\
+ & = g(0,X_{0})+\sum_{j} \frac{{\partial g}}{\partial t} \Delta t_{j}+\sum_{j} \frac{{\partial g}}{\partial x}\Delta X_{j}+ \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial t^2}(\Delta t_{j}^2)  \\
+ & \qquad + \sum_{j} \frac{{\partial^2g}}{\partial t\partial x}(\Delta t_{j})(\Delta X_{j}) + \frac{1}{2}\sum_{j} \frac{{\partial^2g}}{\partial x^2}(\Delta X_{j})^2 + \sum_{j}R_{j},
+\end{align}
+$$
+where $\frac{{\partial g}}{\partial t}, \frac{{\partial g}}{\partial x}$ etc.
+are evaluated at the points $(t_{j}, X_{t_{j}})$,
+$$
+\begin{align}
+\Delta t_{j} & =t_{j+1}-t_{j} \\
+\Delta X_{j} & = X_{t_{j+1}}-X_{t_{j}} \\
+\Delta g(t_{j},X_{j}) & = g(t_{j+1},X_{t_{j+1}})-g(t_{j},X_{j}),
+\end{align}
+$$
+and $R_{j}=o(\lvert \Delta t_{j} \rvert^2+\lvert \Delta X_{j} \rvert^2)$ for
+all $j$. If $\Delta t_{j}\to 0$ then
+$$
+\begin{align}
+\sum_{j} \frac{{\partial g}}{\partial t}\Delta t_{j} & =\sum_{j} \frac{{\partial g}}{\partial t}(t_{j}, X_{j})\Delta t_{j} \to \int_{0}^t \frac{{\partial g}}{\partial t}(s,X_{s})~ds \\
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2} \Delta X_{j} & = \sum_{j} \frac{{\partial g}}{\partial x}(t_{j}, X_{j})\Delta X_{j} \to \int_{0}^t \frac{{\partial g}}{\partial x}(s,X_{s})dX_{s}.
+\end{align}
+$$
+Moreover, since $u$ and $v$ are elementary we get
+$$
+\begin{align}
+\sum_{j} \frac{{\partial^2 g}}{\partial x^2}(\Delta X_{j})^2  & = \underbrace{\sum_{j} \frac{{\partial^2g}}{\partial x^2}u_{j}^2 (\Delta t_{j})^2}_{\to 0\text{ as }\Delta t_{j}\to 0} + \underbrace{2 \sum_{j} \frac{{\partial^2g}}{\partial x^2} u_{j}v_{j}(\Delta t_{j})(\Delta B_{j})}_{\to 0\text{ as }\Delta t_{j}\to 0} +\sum_{j} \frac{{\partial^2g}}{\partial x^2}v_{j}^2 \cdot (\Delta B_{j})^2,
+\end{align}
+$$
+where $u_{j}=u(t_{j},\omega)$ and $v_{j}=v(t_{j},\omega)$ and convergence in
+$L_2$. We claim the third term tends to
+$$
+\int_{0}^t \frac{{\partial^2g}}{\partial x^2}v^2~ds.
+$$
+To prove this put
+$a(t)= \frac{{\partial^2g}}{\partial x^2}(t,X_{t})v^2(t,\omega)$,
+$a_{j}=a(t_{j})$ and consider
+$$
+\mathbb{E}\left[ \left( \sum_{j} a_{j}(\Delta B_{j})^2-\sum_{j}a_{j}\Delta t_{j} \right)^2 \right] = \sum_{i,j} \mathbb{E}[a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})((\Delta B_{j})^2 - \Delta t_{j})].
+$$
+If $i<j$ then $a_{i}a_{j}((\Delta B_{i})^2-\Delta t_{i})$ and
+$(\Delta B_{j})^2-\Delta t_{j}$ are independent so the terms vanish, and
+similarly if $i>j$. This leaves
+$$
+\begin{align}
+\sum_{j}\mathbb{E}[a_{j}^2((\Delta B_{j})^2-\Delta t_{j})^2]  & = \sum_{j}\mathbb{E}[a_{j}^2] \cdot \mathbb{E}[(\Delta B_{j})^4-2(\Delta B_{j})^2\Delta t_{j} + (\Delta t_{j})^2]  \\
+ & = \sum_{j}\mathbb{E}[a_{j}^2]\cdot (3(\Delta t_{j})^2 - 2(\Delta t_{j})^2+(\Delta t_{j})^2)  \\
+ & =2\sum_{j}\mathbb{E}[a_{j}^2]\cdot(\Delta t_{j})^2  \\
+ & \to 0\quad (\Delta t_{j}\to 0).
+\end{align}
+$$
+Thus we have established that
+$$
+\sum_{j}a_{j}(\Delta B_{j})^2 \to \int_{0}^t a(s)ds,
+$$
+which is often expressed as
+$$
+(dB_{t})^2=dt.
+$$
+The argument above also proves that $\sum R_{j}\to 0$ as $\Delta t_{j}\to_{0}$.
+
+:::
+
+**Example (Itô Formula Application I)**
+Consider the integral
+$$
+Y_{t}=\int_{0}^tB_{s}dB_{s}.
+$$
+Assuming we can write $Y_{t}=g(t, B_{t})$ from Itô's formula we have
+$$
+dY_{t}=\left[ g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t,B_{t}) \right] dt+g_{B}(t,B_{t})dB_{t},
+$$
+which written in integral form gives
+$$
+Y_{t}-Y_{0}=\int_{0}^t\left[ g_{t}(s,B_{s})+\frac{1}{2}g_{B B}(s,B_{s}) \right]ds+\int_{0}^t g_{B}(s, B_{s})dB_{s}. 
+$$
+Hence we need some $g(t,B_{t})$ such that
+$$
+(1)~~g_{t}(t,B_{t})+\frac{1}{2}g_{BB}(t, B_{t})=0\quad \&\quad (2)~~ g_{B}(t,B_{t})=B_{t}.
+$$
+Since $g_{B}=B_{t}\implies g_{BB}=1$ and so $g_{t}=-\frac{1}{2}$. An obvious
+candidate therefore is
+$$
+g(t,B_{t})=\frac{1}{2}B_{t}^2 - \frac{1}{2}t,
+$$
+which in fact is the result, as can be verified by plugging into Itô's formula.
+
+**Example (Itô Formula Application II)**
+Consider the Itô process
+$$
+g(t,B_{t})=\exp(bt+\sigma B_{t}),
+$$
+where $b,\sigma$ are constants for drift and diffusion. To compute $dg$ we
+apply the Itô formula
+$$
+\begin{align}
+dg(t,B_{t}) & =b\exp(bt+\sigma B_{t})dt+\sigma \exp(bt+\sigma B_{t})dB_{t}+ \frac{1}{2} \sigma^2\exp(bt+\sigma B_{t})d\left< B,B \right>_{t}  \\
+ & = g(t,B_{t})\left\{ \left( b+ \frac{1}{2} \sigma^2 \right)dt+\sigma dB_{t} \right\}. 
+\end{align}
+$$
+The process $X_{t}=g(t,B_{t})$ defines **geometric BM** and is used to simulate
+the change of the stock price in the **Black-Scholes-Merton Model** ($\mu$ as
+mean return and $\sigma$ as volatility).
+
+:::{.theorem data-title="Itô Integration by Parts"}
+
+For a continuous function $f(s,\omega)$ that is of bounded variation with
+respect to $s \in [0,t]$ almost surely we have that
+$$
+\int_{0}^t f(s)dB_{s}=f(t)B_{t}-\int_{0}^t B_{s}df_{s}.
+$$
+
+:::
+
+## Multi-dimensional Itô Formula
+
+Considering the situation in higher dimensions we define a $d$-dimensional Itô
+process as the integral with respect to the $m$-dimensional BM as
+$$
+X_{t}^i=x_{0}^i+\int_{0}^t\psi_{s}^ids+\sum_{k=1}^m \int_{0}^t \varphi_{s}^{i,k}dB_{s}^k,
+$$
+for $k = 1, \dots, m$ and $i = 1, \dots, d$ where we note that such an Itô
+process exists in $\mathbb{R}^d$ and is constructed with respect to BM
+$B_{s}=(B_{s}^1, \dots, B_{s}^m)$. To write this in a more compact form
+$$
+X_{t}=x_{0}+\int_{0}^t \psi_{s}ds+\int_{0}^t\varphi_{s}\cdot dB_{s},
+$$
+where $X_{t}, x_{0},\psi_{s} \in \mathbb{R}^d$ and
+$\varphi_{s}\in \mathbb{R}^{d \times m}$ and here $\varphi_{s}^{i,k}$ stands
+for the process $\varphi$ used to construct the $i$-th coordinate of the Itô
+process as a stochastic integral with respect to the $k$-th coordinate of the
+$m$-dimensional BM.
+
+:::{.theorem data-title="Multi-Dimensional Itô Formula"}
+
+For some vector-valued function
+$g:\mathbb{R}_{+}\times \mathbb{R}^d\to \mathbb{R}^p \in C^{1,2}$, then the
+multi-dimensional Itô formula holds
+$$
+\begin{align}dg^i(t,X_{t}) & =\partial_{t}g^i(t,X_{t})dt+\nabla_{x} g^i(t,X_{t})\cdot dX_{t}+ \frac{1}{2}\mathrm{Tr}(\varphi_{t}^T H \varphi_{t})dt \\ & = \partial_{t}g^i(t,X_{t})dt+\sum_{k=1}^{d}\partial_{x_{k}}g^i(t,X_{t})dX_{t}^k+ \frac{1}{2}\sum_{j,k = 1}^{d}\partial_{x_{j},  x_{k}}g^i(t,X_{t})d\left< X^j, X^k \right> _{t},\end{align}
+$$
+where $\nabla _x f$ denotes the gradient of $f$ with respect to vector $x$,
+$\varphi_{t}\in \mathbb{R}^{d \times m}$ is a matrix and $H_{d \times d}$ is
+the Hessian of $g$ restricted on its action on $x \in \mathbb{R}^d$ at
+$(t, X_{t})$. The bracket
+$d\left< X^j, X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+
+:::
+
+:::{.proof}
+
+The structure of the proof is still exactly the same as the 1-dimensional case.
+We need only verify that $dB_{t}^pdB_{t}^q=0$ for $p \neq q$ and
+$d\left< X^j,X^k \right>_{t}=\sum_{l=1}^{m}\varphi_{t}^{j,l}\varphi_{t}^{k,l}dt$.
+
+:::
+
+## Related Notes
+
+- [[martingale-representation-theorem]]
+- [[stochastic-differential-equations]]
+- [[stochastic-integration-by-parts]]
+- [[geometric-brownian-motion]]
+- [[black-scholes-merton-model]]

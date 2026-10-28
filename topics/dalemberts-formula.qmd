@@ -1,0 +1,212 @@
+---
+id: dalamberts-formula
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-15
+number-sections: true
+title: "D'Alambert's Formula"
+title-block-banner: false
+---
+
+## What is D'Alembert's Formula?
+
+**D'Alembert's formula** is the explicit solution of the one-dimensional
+[[wave-equation|wave equation]] on the whole real line,
+$u_{tt}=c^2u_{xx}$, in terms of the initial shape $\varphi$ and initial
+velocity $\psi$ of the string.
+
+:::{.theorem data-title="D'Alembert's Formula"}
+
+The problem $u_{tt}=c^2u_{xx}$ on $\mathbb{R}$ with $u(0,x)=\varphi(x)$ and
+$u_t(0,x)=\psi(x)$ has the solution
+$$
+u(t,x) = \frac12\big[\varphi(x+ct)+\varphi(x-ct)\big]+
+  \frac{1}{2c}\int_{x-ct}^{x+ct}\psi(s)~ds.
+$$
+
+:::
+
+## Derivation of the General Solution
+
+The equation factorises as
+
+$$
+\left(\partial_t-c\partial_x\right)\left(\partial_t+c\partial_x\right)u=0,
+$$
+
+so it is built from two [[transport-equation|transport equations]], one moving
+left and one moving right. To solve it change variables to
+
+$$
+\xi=x-ct,\qquad\eta=x+ct.
+$$
+By the [[chain-rule|chain rule]], $\partial_x=\partial_\xi+\partial_\eta$ and
+$\partial_t=-c\partial_\xi+c\partial_\eta$, so
+$$
+u_{tt}-c^2u_{xx} = c^2\left(\partial_\eta-\partial_\xi\right)^2u - 
+  c^2\left(\partial_\eta+\partial_\xi\right)^2u=-4c^2u_{\xi\eta}.
+$$
+Hence the equation becomes $u_{\xi\eta}=0$. Integrating in $\eta$ shows $u_\xi$
+depends only on $\xi$, and then integrating in $\xi$ gives
+$$
+u(t,x)=F(x-ct)+G(x+ct)
+$$
+for arbitrary (twice differentiable) functions $F,G$: a wave travelling right
+at speed $c$ plus a wave travelling left at speed $c$.
+
+## The Initial Value Problem
+
+:::{.proof}
+
+Write $u=F(x-ct)+G(x+ct)$. At $t=0$,
+
+$$
+F(x)+G(x)=\varphi(x),\qquad -cF'(x)+cG'(x)=\psi(x).
+$$
+
+Integrating the second, $G(x)-F(x)=\frac1c\int_0^x\psi(s)~ds+C$. Solving with
+the first,
+
+$$
+G(x)=\frac12\varphi(x)+\frac{1}{2c}\int_0^x\psi+\frac C2,\qquad
+F(x)=\frac12\varphi(x)-\frac{1}{2c}\int_0^x\psi-\frac C2.
+$$
+
+Therefore
+
+$$
+F(x-ct)+G(x+ct)=\frac12\big[\varphi(x-ct)+\varphi(x+ct)\big]+
+\frac{1}{2c}\left(\int_0^{x+ct}\psi-\int_0^{x-ct}\psi\right),
+$$
+
+which is the claimed formula.
+
+:::
+
+:::{.example data-title="Initial Displacement Only"}
+
+A string at rest ($\psi=0$) is released from the shape $\varphi$. Then
+$$
+u(t,x)=\tfrac12\varphi(x-ct)+\tfrac12\varphi(x+ct),
+$$
+so the initial shape **splits into two copies of half the height**, one
+travelling right and one left at speed $c$. For a plucked string with a
+triangular bump, two smaller triangles move apart, and they pass through each
+other without changing shape (linearity).
+
+:::
+
+:::{.example data-title="Initial Velocity Only"}
+
+If $\varphi=0$ and $\psi\equiv1$ then
+$$
+u(t,x)=\frac{1}{2c}\int_{x-ct}^{x+ct}1~ds=t,
+$$
+so the whole string rises at the constant speed $1$ it was given. More
+generally a localised initial velocity produces a region that spreads outward
+at speed $c$.
+
+:::
+
+:::{.example data-title="Square Pulse of Displacement"}
+
+Let $\psi=0$ and $\varphi=\mathbf 1_{[-1,1]}$ (a block of height $1$). Then
+$u=\tfrac12\mathbf 1_{[-1,1]}(x-ct)+\tfrac12\mathbf 1_{[-1,1]}(x+ct)$. At
+$t=0$ the two blocks sit on top of each other (height $\tfrac12+\tfrac12=1$).
+They separate, so for $t<1/c$ there is a region of height $1$ in the middle
+and two shoulders of height $\tfrac12$. For $t>1/c$ the blocks have fully
+separated into two pulses of height $\tfrac12$ centred at $\pm ct$, and the
+string between them is back at rest, $u=0$.
+
+:::
+
+:::{.example data-title="Initial Velocity Pulse"}
+
+Let $\varphi=0$ and $\psi=\mathbf 1_{[-1,1]}$ (the string is struck on
+$[-1,1]$). Then
+$$
+u(t,x)=\frac{1}{2c}\,\Big|[x-ct,x+ct]\cap[-1,1]\Big|.
+$$
+For large $t$ and $|x|<ct-1$ the interval $[x-ct,x+ct]$ contains all of
+$[-1,1]$, so $u=\frac{2}{2c}=\frac1c$. Unlike the displacement case, the
+disturbance does **not** leave the string at rest behind it: two fronts move
+outward at speed $c$ and between them the string is permanently raised to
+height $1/c$.
+
+:::
+
+:::{.example data-title="Both Data Together"}
+
+Take $c=1$, $\varphi(x)=\cos x$ and $\psi(x)=\sin x$. Then
+$$
+u(t,x)=\tfrac12\big[\cos(x+t)+\cos(x-t)\big]+\tfrac12\int_{x-t}^{x+t}\sin s~ds
+=\tfrac12\big[\cos(x+t)+\cos(x-t)\big]+\tfrac12\big[\cos(x-t)-\cos(x+t)\big]
+=\cos(x-t).
+$$
+This is a single right-moving wave: the data was chosen so that $G\equiv0$,
+which is a useful check that the formula agrees with $u=F(x-ct)+G(x+ct)$.
+
+:::
+
+:::{.example data-title="Half-line with a Fixed End"}
+
+For $u_{tt}=c^2u_{xx}$ on $x>0$ with $u(t,0)=0$, extend $\varphi,\psi$ to
+**odd** functions on $\mathbb R$ and apply D'Alembert. The solution stays odd,
+so it vanishes at $x=0$. For $x>ct$ nothing changes, but for $0<x<ct$
+$$
+u(t,x)=\tfrac12\big[\varphi(x+ct)-\varphi(ct-x)\big]+\frac{1}{2c}\int_{ct-x}^{x+ct}\psi(s)~ds.
+$$
+The term $-\varphi(ct-x)$ is the left-moving pulse reflecting off the wall and
+coming back **upside down**. A free (Neumann) end uses the **even** extension
+instead, and the pulse reflects the right way up.
+
+:::
+
+## Intuition
+
+The formula says the value at $(t,x)$ is built from the initial data at just
+two points and one interval:
+
+- **Shape:** the average $\tfrac12[\varphi(x-ct)+\varphi(x+ct)]$ of the initial
+  height at the two points a distance $ct$ away. Trace the two characteristics
+  $x\pm ct=\text{const}$ back to $t=0$: half the initial shape has travelled to
+  you from the left and half from the right.
+- **Velocity:** $\frac1{2c}\int_{x-ct}^{x+ct}\psi$ is $t$ times the average of
+  the initial velocity over $[x-ct,x+ct]$ (an interval of length $2ct$).
+  Velocity data is accumulated over everything the wave could have reached you
+  from, rather than carried along unchanged.
+- **Why the $\tfrac12$:** a stationary shape ($\psi=0$) has no preferred
+  direction, so it splits evenly into a left and a right mover.
+
+In the $(x,t)$ plane this is a **backward cone**: the solution at a point
+depends only on the data on the base interval $[x-ct,x+ct]$, and the shape
+part depends only on its two endpoints.
+
+## Applications
+
+- **Explicit solution in 1D:** no series or transforms are needed, so it is the
+  standard way to see how waves on an infinite string behave.
+- **Domain of dependence and finite speed:** it makes the cone of influence
+  exact.
+- **Stability:** $|u|\le\sup|\varphi|+t\sup|\psi|$, so small changes in the data
+  give small changes in the solution (the problem is well posed).
+- **Propagation of singularities:** a kink or jump in $\varphi$ is carried along
+  $x\pm ct=\text{const}$ unchanged, which is why $\varphi\in C^2$ is needed for a
+  classical solution.
+- **Boundary problems by reflection:** the odd/even extension trick above solves
+  half-line problems, and a finite string is the same idea with a periodic
+  extension of period $2L$, matching the standing waves below.
+- **Method of characteristics:** it is the model case of
+  [[method-of-characteristics]] for a second order hyperbolic equation, and
+  appears in [[pde-characteristics]].
+- **Limits:** it is specific to one space dimension. In higher dimensions the
+  analogues are Kirchhoff's formula ($\mathbb R^3$) and Poisson's formula
+  ($\mathbb R^2$).
+
+## Related Topics
+
+- [[wave-equation]]
+- [[method-of-characteristics]]
+- [[pde-characteristics]]
+- [[transport-equation]]

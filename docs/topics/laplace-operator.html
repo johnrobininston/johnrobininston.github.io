@@ -402,10 +402,10 @@ window.Quarto = {
 <p>The <strong>Laplace Operator (Laplacian)</strong> <span class="math inline">\(\Delta\)</span> is a <strong>differential operator</strong> given by the <strong>divergence</strong> of the gradient of a scalar function on Euclidean space. In a Cartesian coordinate system the Laplacian is given by the sum of second partial derivatives of the function with respect to each independent variable. Informally, the laplacian <span class="math inline">\(\Delta f(p)\)</span> of a function <span class="math inline">\(f\)</span> at a point <span class="math inline">\(p\)</span> measures by how much the average value of <span class="math inline">\(f\)</span> over small balls centered at <span class="math inline">\(p\)</span> deviates from <span class="math inline">\(f(p)\)</span>.</p>
 <p>The Laplacian occurs in many <a href="../topics/ordinary-differential-equations.html">differential equations</a> describing physical phenomena including:</p>
 <ol type="1">
-<li>[[poisson-equation]] - describing electric and gravitational potentials;</li>
-<li>[[diffusion-equation]] - describing heat and fluid flow;</li>
+<li><a href="../topics/poisson-equation.html">Poisson Equation</a> - describing electric and gravitational potentials;</li>
+<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a> - describing heat and fluid flow;</li>
 <li><a href="../topics/wave-equation.html">Wave Equation</a> - describing wave propagation; and</li>
-<li>[[schrodinger-equation]] - describing the wave function in quantum mechanics.</li>
+<li><a href="../topics/schrodinger-equation.html">Schrodinger Equation</a> - describing the wave function in quantum mechanics.</li>
 </ol>
 <div class="definition" data-title="Laplace Operator">
 <p>The <strong>Laplace operator (Laplacian)</strong> is a second-order differential operator in the <span class="math inline">\(n\)</span>-dimensional Euclidean space, defined as the <a href="../topics/divergence.html">Divergence</a> <span class="math inline">\((\nabla \cdot)\)</span> of the <a href="../topics/gradient.html">Gradient</a> <span class="math inline">\((\nabla f)\)</span>. This if <span class="math inline">\(f\)</span> is a twice-differentiable real function, then the Laplacian is the real-valued function defined by <span class="math display">\[
@@ -422,11 +422,13 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
-<li><a href="../topics/pde-fundamentals.html">Fundamentals of Partial Differential Equations</a></li>
 <li><a href="../topics/gradient.html">Gradient</a></li>
 <li><a href="../topics/heat-equation.html">Heat Equation</a></li>
 <li><a href="../topics/infinitesimal-generator.html">Infinitesimal Generator</a></li>
 <li><a href="../topics/laplace-equation.html">Laplace Equation</a></li>
+<li><a href="../topics/partial-differential-equations.html">Partial Differential Equations</a></li>
+<li><a href="../topics/poisson-equation.html">Poisson Equation</a></li>
+<li><a href="../topics/schrodinger-equation.html">Schrodinger Equation</a></li>
 <li><a href="../topics/wave-equation.html">Wave Equation</a></li>
 </ul>
 </div>
@@ -455,6 +457,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

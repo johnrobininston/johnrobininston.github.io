@@ -358,20 +358,22 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#hamiltonian" id="toc-hamiltonian" class="nav-link active" data-scroll-target="#hamiltonian"><span class="header-section-number">1</span> Hamiltonian</a>
+  <li><a href="#what-is-the-hamiltonian" id="toc-what-is-the-hamiltonian" class="nav-link active" data-scroll-target="#what-is-the-hamiltonian"><span class="header-section-number">1</span> What is the Hamiltonian?</a></li>
+  <li><a href="#hamiltonian-control-problem" id="toc-hamiltonian-control-problem" class="nav-link" data-scroll-target="#hamiltonian-control-problem"><span class="header-section-number">2</span> Hamiltonian Control Problem</a>
   <ul class="collapse">
-  <li><a href="#hamiltonian-formal-definition" id="toc-hamiltonian-formal-definition" class="nav-link" data-scroll-target="#hamiltonian-formal-definition"><span class="header-section-number">1.1</span> Hamiltonian Formal Definition</a></li>
-  <li><a href="#intuitive-breakdown" id="toc-intuitive-breakdown" class="nav-link" data-scroll-target="#intuitive-breakdown"><span class="header-section-number">1.2</span> Intuitive Breakdown</a></li>
-  <li><a href="#worked-example-linear-quadratic-regulator-lqr" id="toc-worked-example-linear-quadratic-regulator-lqr" class="nav-link" data-scroll-target="#worked-example-linear-quadratic-regulator-lqr"><span class="header-section-number">1.3</span> Worked Example: Linear-Quadratic Regulator (LQR)</a>
+  <li><a href="#control-problem-formulation" id="toc-control-problem-formulation" class="nav-link" data-scroll-target="#control-problem-formulation"><span class="header-section-number">2.1</span> Control Problem Formulation</a></li>
+  <li><a href="#solution-method" id="toc-solution-method" class="nav-link" data-scroll-target="#solution-method"><span class="header-section-number">2.2</span> Solution Method</a></li>
+  <li><a href="#necessary-conditions-for-optimality" id="toc-necessary-conditions-for-optimality" class="nav-link" data-scroll-target="#necessary-conditions-for-optimality"><span class="header-section-number">2.3</span> Necessary Conditions for Optimality</a></li>
+  </ul></li>
+  <li><a href="#worked-example-linear-quadratic-regulator-lqr" id="toc-worked-example-linear-quadratic-regulator-lqr" class="nav-link" data-scroll-target="#worked-example-linear-quadratic-regulator-lqr"><span class="header-section-number">3</span> Worked Example: Linear-Quadratic Regulator (LQR)</a>
   <ul class="collapse">
-  <li><a href="#step-1-define-the-hamiltonian" id="toc-step-1-define-the-hamiltonian" class="nav-link" data-scroll-target="#step-1-define-the-hamiltonian"><span class="header-section-number">1.3.1</span> Step 1: Define the Hamiltonian</a></li>
-  <li><a href="#step-2-find-optimal-control-utut" id="toc-step-2-find-optimal-control-utut" class="nav-link" data-scroll-target="#step-2-find-optimal-control-utut"><span class="header-section-number">1.3.2</span> Step 2: Find optimal control&nbsp;u∗(t)u∗(t)</a></li>
-  <li><a href="#step-3-state-and-adjoint-equations" id="toc-step-3-state-and-adjoint-equations" class="nav-link" data-scroll-target="#step-3-state-and-adjoint-equations"><span class="header-section-number">1.3.3</span> Step 3: State and Adjoint Equations</a></li>
-  <li><a href="#step-4-solve-system" id="toc-step-4-solve-system" class="nav-link" data-scroll-target="#step-4-solve-system"><span class="header-section-number">1.3.4</span> Step 4: Solve System</a></li>
+  <li><a href="#step-1-define-the-hamiltonian" id="toc-step-1-define-the-hamiltonian" class="nav-link" data-scroll-target="#step-1-define-the-hamiltonian"><span class="header-section-number">3.1</span> Step 1: Define the Hamiltonian</a></li>
+  <li><a href="#step-2-find-the-optimal-control" id="toc-step-2-find-the-optimal-control" class="nav-link" data-scroll-target="#step-2-find-the-optimal-control"><span class="header-section-number">3.2</span> Step 2: Find the optimal control</a></li>
+  <li><a href="#step-3-state-and-adjoint-equations" id="toc-step-3-state-and-adjoint-equations" class="nav-link" data-scroll-target="#step-3-state-and-adjoint-equations"><span class="header-section-number">3.3</span> Step 3: State and adjoint equations</a></li>
+  <li><a href="#step-4-solve-the-system" id="toc-step-4-solve-the-system" class="nav-link" data-scroll-target="#step-4-solve-the-system"><span class="header-section-number">3.4</span> Step 4: Solve the system</a></li>
   </ul></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.4</span> Summary</a></li>
-  <li><a href="#linked-topics" id="toc-linked-topics" class="nav-link" data-scroll-target="#linked-topics"><span class="header-section-number">1.5</span> Linked Topics:</a></li>
-  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4</span> Summary</a></li>
+  <li><a href="#linked-topics" id="toc-linked-topics" class="nav-link" data-scroll-target="#linked-topics"><span class="header-section-number">5</span> Linked Topics:</a></li>
   </ul>
 </nav>
     </div>
@@ -410,103 +412,128 @@ window.Quarto = {
 </header>
 
 
-<section id="hamiltonian" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Hamiltonian</h1>
+<section id="what-is-the-hamiltonian" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-is-the-hamiltonian"><span class="header-section-number">1</span> What is the Hamiltonian?</h2>
 <p>In <a href="../topics/control-theory.html">Control Theory</a> the <strong>Hamiltonian</strong> is a function used to solve for the <strong>optimal control of a dynamic system</strong>. Specifically, the Hamiltonian is a central object that encodes both the <strong>system dynamics</strong> and the <strong>optimization objective</strong>. It can be understood as the instantaneous increment of the <a href="../topics/lagrange-multiplier-method.html">Lagrangian</a> expression of the problem that is to be optimized over a certain time period.</p>
-<section id="hamiltonian-formal-definition" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="hamiltonian-formal-definition"><span class="header-section-number">1.1</span> Hamiltonian Formal Definition</h2>
-<p>We have a system with dynamics given by <span class="math inline">\(n\)</span> <a href="../topics/ordinary-differential-equations.html">first-order ODEs</a> <span class="math display">\[
-\frac{d\boldsymbol{x}(t)}{dt}=\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t)),
-\]</span> where: (1) <span class="math inline">\(\boldsymbol{x}(t)=[x_{1}(t), \dots, x_{n}(t)]^T\)</span> is the vector of <strong>state variables</strong>; and <span class="math inline">\(\boldsymbol{u}(t):=[u_{1}(t), \dots, u_{r}(t)]^T\)</span> is the vector of <strong>control variables</strong>. We specify initial conditions <span class="math inline">\(\boldsymbol{x}(t_{0})=\boldsymbol{x}_{0}\)</span> and control <span class="math inline">\(\boldsymbol{u}(t)\)</span>. Our aim is to find a solution known as a <strong>trajectory</strong> <span class="math inline">\(\boldsymbol{x}(t;\boldsymbol{x}_{0}, t_{0})\)</span> can be found.</p>
-<p><strong>Problem Formulation:</strong> The problem of optimal control is to choose <span class="math inline">\(\boldsymbol{u}(t)\in\mathcal{U}\subseteq \mathbb{R}^r\)</span> so that <span class="math inline">\(\boldsymbol{x}(t)\)</span> maximizes or minimizes a certain objective function over a specified time interval <span class="math inline">\([t_{0},t_{1}]\)</span>. We define the <strong>cost functional</strong> as <span class="math display">\[
-J(u)=\int_{t_{0}}^{t_{1}}{L()}~d{}
+</section>
+<section id="hamiltonian-control-problem" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="hamiltonian-control-problem"><span class="header-section-number">2</span> Hamiltonian Control Problem</h2>
+<p>We have a system with dynamics given by <span class="math inline">\(n\)</span> <a href="../topics/ordinary-differential-equations.html">first-order ODEs</a></p>
+<p><span class="math display">\[
+\dot{\boldsymbol{x}}(t)=\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t),t), \quad \mathbf{x}(t_0)=\mathbf{x}_0,
 \]</span></p>
-<p>Specifically, the goal to optimize over a performance index <span class="math inline">\(I(\boldsymbol{x}(t),\boldsymbol{u}(t),t)\)</span> defined at each point in time <span class="math display">\[
-\max_{\boldsymbol{u}(t)}\int_{t_{0}}^{t_{1}}{I[\boldsymbol{}(t),\boldsymbol{u}(t),t]}~d{t}
-\]</span> subject to the above equations of motion of the state variables. The solution method involves defining an ancillary function known as the <strong>control Hamiltonian</strong> <span class="math display">\[
-H(\boldsymbol{x}(t), \boldsymbol{u}(t), \lambda(t),t)=I(\boldsymbol{x}(t), \boldsymbol{u}(t), t) + \lambda^T(t)\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t),t),
-\]</span> which combines the objective function and the state equations much like a <a href="../topics/lagrange-multiplier-method.html">Lagrangian</a> in a static optimization problem only that multipliers <span class="math inline">\(\lambda(t)\)</span> - referred to as <strong>costate variables</strong> - are functions of time rather than constants.</p>
-<p>The goal</p>
-<p>Let’s consider a control system:</p>
+<p>where:</p>
 <ul>
-<li><strong>State variable:</strong>&nbsp;<span class="math inline">\(x(t)∈\mathbb{R}^n\)</span></li>
-<li><strong>Control variable:</strong>&nbsp;<span class="math inline">\(u(t)∈U⊆\mathbb{R}^m\)</span></li>
-<li><strong>Dynamics:</strong> <span class="math inline">\(\cdot{x}(t)=f(x(t),u(t),t)\)</span></li>
-<li><strong>Cost functional (objective):</strong> <span class="math inline">\(J(u)=∫_{t_{0}}^{t_{f}}L(x(t),u(t),t) dt+ϕ(x(tf))\)</span></li>
+<li><span class="math inline">\(\boldsymbol{x}(t)=(x_{1}(t), \dots, x_{n}(t))^T\)</span> is the <strong>state vector</strong>,</li>
+<li><span class="math inline">\(\boldsymbol{u}(t):=(u_{1}(t), \dots, u_{r}(t))^T\)</span> is <strong>control vector</strong>.</li>
 </ul>
-<p>The&nbsp;<strong>Hamiltonian</strong>&nbsp;is a function defined by:</p>
-<p>H(x,u,λ,t)=L(x,u,t)+λ⊤f(x,u,t)H(x,u,λ,t)=L(x,u,t)+λ⊤f(x,u,t)</p>
-<p>Where:</p>
-<ul>
-<li>λ(t)∈Rnλ(t)∈Rn is the <strong>costate</strong> or <strong>adjoint variable</strong>, analogous to Lagrange multipliers in constrained optimization.</li>
-</ul>
+<p>We denote by <span class="math inline">\(\mathcal{X}\subseteq\mathbb{R}^n\)</span> and <span class="math inline">\(\mathcal{U}\subseteq\mathbb{R}^r\)</span> the sets of admissible states and controls respectively. The solution of the ODEs, given some initial conditions <span class="math inline">\(\mathbf{x}_0\)</span> and controls <span class="math inline">\(\mathbf{u}(t)\)</span> is a <strong>trajectory</strong> <span class="math inline">\(\boldsymbol{x}(t;
+\boldsymbol{x}_{0}, t_{0})\)</span>.</p>
+<section id="control-problem-formulation" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="control-problem-formulation"><span class="header-section-number">2.1</span> Control Problem Formulation</h3>
+<p>The problem of optimal control is to choose control vector <span class="math inline">\(\boldsymbol{u}(t)\in\mathcal{U}\)</span> so that <span class="math inline">\(\boldsymbol{x}(t)\)</span> minimizes (or maximizes) a certain <strong>objective</strong> over a specified time interval <span class="math inline">\([t_{0},t_{1}]\)</span>. We define the <strong>cost functional</strong> as</p>
+<p><span class="math display">\[
+J(\boldsymbol{u})=\int_{t_{0}}^{t_{1}}{L(\boldsymbol{x}(t),\boldsymbol{u}(t),t)}~d{t}+\phi(\boldsymbol{x}(t_{1})),
+\]</span></p>
+<p>where <span class="math inline">\(L\)</span> is the <strong>running cost</strong> (performance index) incurred at each point in time and <span class="math inline">\(\phi\)</span> is a <strong>terminal cost</strong>. The problem is then <span class="math display">\[
+\min_{\boldsymbol{u}(t)\in\mathcal{U}}J(\boldsymbol{u})
+\quad\text{subject to}\quad
+\dot{\boldsymbol{x}}(t)=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),t),
+\quad\boldsymbol{x}(t_{0})=\boldsymbol{x}_{0}.
+\]</span></p>
 </section>
-<section id="intuitive-breakdown" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="intuitive-breakdown"><span class="header-section-number">1.2</span> Intuitive Breakdown</h2>
-<p>The Hamiltonian combines:</p>
-<ul>
-<li><p>The&nbsp;<strong>instantaneous cost</strong>&nbsp;(via&nbsp;LL), and</p></li>
-<li><p>The&nbsp;<strong>effect of your control on future costs</strong>, via the adjoint&nbsp;λ⊤fλ⊤f.</p></li>
-</ul>
-<p>Intuition:</p>
-<ul>
-<li>You want to choose a control u(t)u(t) that not only optimizes immediate reward/cost, but also drives the system in a direction (via ff) that’s favorable in the long run — as reflected by the costate λ(t)λ(t).</li>
-</ul>
-<p>In optimal control:</p>
-<ul>
-<li><p>You solve for x(t)x(t) (the state) <strong>forward in time</strong> using the system dynamics.</p></li>
-<li><p>You solve for&nbsp;λ(t)λ(t)&nbsp;<strong>backward in time</strong>&nbsp;using the adjoint equation:</p>
-<p>λ˙(t)=−∂H∂xλ˙(t)=−∂x∂H​</p></li>
-<li><p>The optimal control&nbsp;u∗(t)u∗(t)&nbsp;minimizes (or maximizes) the Hamiltonian:</p>
-<p>u∗(t)=arg⁡min⁡uH(x(t),u,λ(t),t)u∗(t)=argumin​H(x(t),u,λ(t),t)</p>
-<p>(or maximize, depending on formulation — usually minimization for cost problems)</p></li>
-</ul>
+<section id="solution-method" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="solution-method"><span class="header-section-number">2.2</span> Solution Method</h3>
+<div class="definition" data-title="Control Hamiltonian">
+<p>The solution method involves defining an ancillary function known as the <strong>control Hamiltonian</strong></p>
+<p><span class="math display">\[
+H(\boldsymbol{x}(t), \boldsymbol{u}(t), \boldsymbol{\lambda}(t),t)=L(\boldsymbol{x}(t), \boldsymbol{u}(t), t) + \boldsymbol{\lambda}^T(t)\boldsymbol{f}(\boldsymbol{x}(t), \boldsymbol{u}(t),t),
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\lambda}(t)\in\mathbb{R}^n\)</span> is the <strong>costate</strong> (or <strong>adjoint</strong>) <strong>vector</strong>.</p>
+</div>
+<p>This combines the objective function and the state equations much like a <a href="../topics/lagrange-multiplier-method.html">Lagrangian</a> in a static optimization problem only that the multipliers <span class="math inline">\(\boldsymbol{\lambda}(t)\in\mathbb{R}^n\)</span> - referred to as <strong>costate</strong> (or <strong>adjoint</strong>) <strong>variables</strong> - are functions of time rather than constants.</p>
+<div class="intuition">
+<p>The Hamiltonian combines the <strong>instantaneous cost</strong>, via <span class="math inline">\(L\)</span>; and the <strong>effect of the control on the future</strong>, via <span class="math inline">\(\boldsymbol{\lambda}^T\boldsymbol{f}\)</span>. We want to choose a control <span class="math inline">\(\boldsymbol{u}(t)\)</span> that not only optimizes the immediate cost, but also drives the system (via <span class="math inline">\(\boldsymbol{f}\)</span>) in a direction that is favourable in the long run, as reflected by the costate <span class="math inline">\(\boldsymbol{\lambda}(t)\)</span>.</p>
+</div>
 </section>
-<section id="worked-example-linear-quadratic-regulator-lqr" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="worked-example-linear-quadratic-regulator-lqr"><span class="header-section-number">1.3</span> Worked Example: Linear-Quadratic Regulator (LQR)</h2>
+<section id="necessary-conditions-for-optimality" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="necessary-conditions-for-optimality"><span class="header-section-number">2.3</span> Necessary Conditions for Optimality</h3>
+<div class="theorem" data-title="Pontryagin Maximum Principle">
+<p>The <strong>Pontryagin Maximum Principle</strong> states that an optimal pair <span class="math inline">\((\boldsymbol{x}^*,\boldsymbol{u}^*)\)</span> must satisfy, for some costate <span class="math inline">\(\boldsymbol{\lambda}(t)\)</span>:</p>
+<ul>
+<li><strong>State equation</strong> (solved forward in time from <span class="math inline">\(\boldsymbol{x}(t_{0})\)</span>): <span class="math display">\[
+\dot{\boldsymbol{x}}(t)=\frac{\partial H}{\partial \boldsymbol{\lambda}}=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),t).
+\]</span></li>
+<li><strong>Adjoint (costate) equation</strong> (solved backward in time from the terminal condition): <span class="math display">\[
+\dot{\boldsymbol{\lambda}}(t)=-\frac{\partial H}{\partial \boldsymbol{x}},
+\qquad
+\boldsymbol{\lambda}(t_{1})=\frac{\partial \phi}{\partial \boldsymbol{x}}(\boldsymbol{x}(t_{1})).
+\]</span></li>
+<li><strong>Optimality condition:</strong> the optimal control minimizes the Hamiltonian at each point in time <span class="math display">\[
+\boldsymbol{u}^*(t)=\arg\min_{\boldsymbol{u}\in\mathcal{U}}H(\boldsymbol{x}^*(t),\boldsymbol{u},\boldsymbol{\lambda}(t),t).
+\]</span> For an unconstrained interior solution this reduces to <span class="math inline">\(\partial H/\partial \boldsymbol{u}=\boldsymbol{0}\)</span>. For a maximization problem the <span class="math inline">\(\arg\min\)</span> becomes an <span class="math inline">\(\arg\max\)</span>.</li>
+</ul>
+</div>
+<p>Since <span class="math inline">\(\boldsymbol{x}\)</span> has a condition at <span class="math inline">\(t_{0}\)</span> and <span class="math inline">\(\boldsymbol{\lambda}\)</span> has one at <span class="math inline">\(t_{1}\)</span>, this is a <strong>two-point boundary value problem</strong>.</p>
+</section>
+</section>
+<section id="worked-example-linear-quadratic-regulator-lqr" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="worked-example-linear-quadratic-regulator-lqr"><span class="header-section-number">3</span> Worked Example: Linear-Quadratic Regulator (LQR)</h2>
 <p><strong>Problem Setup:</strong></p>
 <ul>
-<li><p>System:</p>
-<p>x˙(t)=ax(t)+bu(t)x˙(t)=ax(t)+bu(t)</p></li>
-<li><p>Cost functional:</p>
-<p>J(u)=∫0T(12qx(t)2+12ru(t)2) dtJ(u)=∫0T​(21​qx(t)2+21​ru(t)2)dt</p></li>
+<li>System (scalar case): <span class="math display">\[
+\dot{x}(t)=ax(t)+bu(t).
+\]</span></li>
+<li>Cost functional: <span class="math display">\[
+J(u)=\int_{0}^{T}\left(\tfrac{1}{2}q\,x(t)^2+\tfrac{1}{2}r\,u(t)^2\right)dt,
+\qquad q\geq 0,~r&gt;0.
+\]</span></li>
 </ul>
-<p>Let’s find the optimal control&nbsp;u(t)u(t)&nbsp;that minimizes&nbsp;J(u)J(u).</p>
-<section id="step-1-define-the-hamiltonian" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="step-1-define-the-hamiltonian"><span class="header-section-number">1.3.1</span> Step 1: Define the Hamiltonian</h3>
-<p>Let&nbsp;λ(t)∈Rλ(t)∈R&nbsp;(scalar case):</p>
-<p>H(x,u,λ,t)=12qx2+12ru2+λ(ax+bu)H(x,u,λ,t)=21​qx2+21​ru2+λ(ax+bu)</p>
+<p>We find the optimal control <span class="math inline">\(u^*(t)\)</span> that minimizes <span class="math inline">\(J(u)\)</span>.</p>
+<section id="step-1-define-the-hamiltonian" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="step-1-define-the-hamiltonian"><span class="header-section-number">3.1</span> Step 1: Define the Hamiltonian</h3>
+<p>With scalar costate <span class="math inline">\(\lambda(t)\in\mathbb{R}\)</span>, <span class="math display">\[
+H(x,u,\lambda,t)=\tfrac{1}{2}q x^2+\tfrac{1}{2}r u^2+\lambda(ax+bu).
+\]</span></p>
 </section>
-<section id="step-2-find-optimal-control-utut" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="step-2-find-optimal-control-utut"><span class="header-section-number">1.3.2</span> Step 2: Find optimal control&nbsp;u∗(t)u∗(t)</h3>
-<p>We minimize&nbsp;HH&nbsp;with respect to&nbsp;uu:</p>
-<p>∂H∂u=ru+λb=0⇒u∗(t)=−brλ(t)∂u∂H​=ru+λb=0⇒u∗(t)=−rb​λ(t)</p>
+<section id="step-2-find-the-optimal-control" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="step-2-find-the-optimal-control"><span class="header-section-number">3.2</span> Step 2: Find the optimal control</h3>
+<p>We minimize <span class="math inline">\(H\)</span> with respect to <span class="math inline">\(u\)</span>: <span class="math display">\[
+\frac{\partial H}{\partial u}=ru+\lambda b=0
+\quad\Rightarrow\quad
+u^*(t)=-\frac{b}{r}\lambda(t).
+\]</span></p>
 </section>
-<section id="step-3-state-and-adjoint-equations" class="level3" data-number="1.3.3">
-<h3 data-number="1.3.3" class="anchored" data-anchor-id="step-3-state-and-adjoint-equations"><span class="header-section-number">1.3.3</span> Step 3: State and Adjoint Equations</h3>
+<section id="step-3-state-and-adjoint-equations" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="step-3-state-and-adjoint-equations"><span class="header-section-number">3.3</span> Step 3: State and adjoint equations</h3>
 <ul>
-<li><p>State:</p>
-<p>x˙(t)=ax(t)+bu∗(t)=ax(t)−b2rλ(t)x˙(t)=ax(t)+bu∗(t)=ax(t)−rb2​λ(t)</p></li>
-<li><p>Adjoint:</p>
-<p>λ˙(t)=−∂H∂x=−qx(t)−λ(t)aλ˙(t)=−∂x∂H​=−qx(t)−λ(t)a</p></li>
+<li>State: <span class="math display">\[
+\dot{x}(t)=ax(t)+bu^*(t)=ax(t)-\frac{b^2}{r}\lambda(t).
+\]</span></li>
+<li>Adjoint: <span class="math display">\[
+\dot{\lambda}(t)=-\frac{\partial H}{\partial x}=-qx(t)-a\lambda(t),
+\qquad \lambda(T)=0.
+\]</span></li>
 </ul>
 </section>
-<section id="step-4-solve-system" class="level3" data-number="1.3.4">
-<h3 data-number="1.3.4" class="anchored" data-anchor-id="step-4-solve-system"><span class="header-section-number">1.3.4</span> Step 4: Solve System</h3>
-<p>This gives a coupled system of ODEs for x(t)x(t) and λ(t)λ(t). Solving it (typically via Riccati equations in LQR) gives the optimal state and control trajectories.</p>
+<section id="step-4-solve-the-system" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="step-4-solve-the-system"><span class="header-section-number">3.4</span> Step 4: Solve the system</h3>
+<p>This gives a coupled system of ODEs for <span class="math inline">\(x(t)\)</span> and <span class="math inline">\(\lambda(t)\)</span>. Posing <span class="math inline">\(\lambda(t)=P(t)x(t)\)</span> and substituting into the adjoint equation yields the <strong>Riccati equation</strong> <span class="math display">\[
+-\dot{P}(t)=2aP(t)-\frac{b^2}{r}P(t)^2+q,\qquad P(T)=0,
+\]</span> and the optimal control takes the feedback form <span class="math inline">\(u^*(t)=-\frac{b}{r}P(t)x(t)\)</span>.</p>
 </section>
 </section>
-<section id="summary" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.4</span> Summary</h2>
+<section id="summary" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="summary"><span class="header-section-number">4</span> Summary</h2>
 <ul>
-<li><p><strong>Hamiltonian</strong>&nbsp;in control theory is a function combining cost and dynamics.</p></li>
-<li><p>It’s used to formulate necessary conditions for optimality via the <strong>Pontryagin Maximum Principle</strong>.</p></li>
-<li><p>The optimal control minimizes the Hamiltonian, with the state and adjoint evolving according to the system and adjoint dynamics.</p></li>
-<li><p>In problems like LQR, it leads to elegant analytic solutions.</p></li>
+<li>The <strong>Hamiltonian</strong> in control theory is a function combining cost and dynamics.</li>
+<li>It is used to formulate necessary conditions for optimality via the <strong>Pontryagin Maximum Principle</strong>.</li>
+<li>The optimal control minimizes the Hamiltonian, with the state and costate evolving according to the system and adjoint dynamics.</li>
+<li>In problems like LQR, it leads to elegant analytic solutions.</li>
 </ul>
 </section>
-<section id="linked-topics" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="linked-topics"><span class="header-section-number">1.5</span> Linked Topics:</h2>
+<section id="linked-topics" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="linked-topics"><span class="header-section-number">5</span> Linked Topics:</h2>
 <ul>
 <li>Pontryagin Maximum Principle</li>
 </ul>
@@ -522,7 +549,6 @@ Backlinks
 <li><a href="../topics/stochastic-control-theory.html">Stochastic Control Theory</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
@@ -548,6 +574,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>

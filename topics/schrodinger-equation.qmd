@@ -1,0 +1,291 @@
+---
+title: Schrodinger Equation
+author: John Robin Inston
+date: 2026-10-15
+number-sections: true
+title-block-banner: false
+---
+
+## Schrodinger Equation
+
+*References:* Griffiths, *Introduction to Quantum Mechanics*, Chapters 1-2;
+Evans, *Partial Differential Equations*, Section 4.3 (dispersion).
+
+The **Schrodinger equation** is the fundamental equation of non-relativistic
+quantum mechanics. It governs the evolution of the **wave function**
+$\psi(t,x)$ of a particle, whose squared modulus is the probability density of
+finding the particle at position $x$. Mathematically it is a linear
+**dispersive** [[partial-differential-equations|PDE]] and is the diffusion
+equation with an imaginary diffusivity.
+
+:::{.definition data-title="Time-Dependent Schrodinger Equation"}
+
+For a particle of mass $m$ in a potential $V(x)$ the **Schrodinger equation**
+is
+$$
+i\hbar\,\psi_t=-\frac{\hbar^2}{2m}\Delta\psi+V\psi=\hat H\psi,
+$$
+where $\hbar$ is the reduced Planck constant, $\Delta$ is the
+[[laplace-operator]] and $\hat H=-\frac{\hbar^2}{2m}\Delta+V$ is the
+**Hamiltonian operator**. The wave function $\psi(t,\cdot)$ lies in
+$L^2(\mathbb{R}^n;\mathbb{C})$ and is normalised so that
+$$
+\int_{\mathbb{R}^n}|\psi(t,x)|^2~dx=1.
+$$
+
+:::
+
+In units with $\hbar=m=1$ and $V=0$ this becomes the **free Schrodinger
+equation** $i\psi_t=-\frac12\Delta\psi$.
+
+## Interpretation
+
+- **Born rule:** $|\psi(t,x)|^2$ is the probability density of the particle at
+  $x$, so $\mathbb{P}(X_t\in A)=\int_A|\psi|^2~dx$.
+- **Observables** are self-adjoint operators on $L^2$. Position is
+  multiplication by $x$, momentum is $\hat p=-i\hbar\nabla$ and energy is
+  $\hat H$. The expected value of an observable $\hat A$ is
+  $\langle\psi,\hat A\psi\rangle$.
+- **Classical limit.** Writing $\psi=\sqrt\rho\,e^{iS/\hbar}$ and letting
+  $\hbar\to0$, the phase $S$ solves the [[hamilton-jacobi-equation]]
+  $S_t+|\nabla S|^2/2m+V=0$, so classical mechanics is the geometric-optics
+  limit of the wave equation.
+
+> *Note:* The Schrodinger equation is first order in time and complex, so
+> $\psi(0,\cdot)$ determines the whole evolution, in contrast to the real
+> second-order [[wave-equation]].
+
+## Heuristic Derivation
+
+The equation cannot be derived from classical mechanics, but is motivated by
+the de Broglie relations: a free particle of momentum $p$ and energy $E$ has
+the plane wave
+$$
+\psi(t,x)=e^{i(kx-\omega t)},\qquad p=\hbar k,\quad E=\hbar\omega.
+$$
+Since $E=p^2/2m$ classically, $\hbar\omega=\hbar^2k^2/2m$. Now
+$$
+i\hbar\psi_t=\hbar\omega\psi=E\psi,\qquad-\frac{\hbar^2}{2m}\psi_{xx}=\frac{\hbar^2k^2}{2m}\psi,
+$$
+so the plane wave solves $i\hbar\psi_t=-\frac{\hbar^2}{2m}\psi_{xx}$. Adding the
+potential energy $V$ to $E$ gives the full equation, and linearity allows us to
+superpose plane waves.
+
+## Properties
+
+:::{.theorem data-title="Properties of the Schrodinger Equation"}
+
+Let $\psi$ solve $i\hbar\psi_t=\hat H\psi$ with real $V$.
+
+1. **Linearity (superposition):** if $\psi_1,\psi_2$ are solutions then so is
+   $c_1\psi_1+c_2\psi_2$ for any $c_1,c_2\in\mathbb{C}$.
+2. **Conservation of probability:** $\|\psi(t)\|_{L^2}=\|\psi(0)\|_{L^2}$ for all
+   $t$.
+3. **Conservation of energy:** $\langle\psi,\hat H\psi\rangle$ is constant in
+   time.
+4. **Time reversibility:** if $\psi(t,x)$ is a solution then so is
+   $\overline{\psi(-t,x)}$.
+5. **Unitary evolution:** $\psi(t)=e^{-it\hat H/\hbar}\psi(0)$ where
+   $e^{-it\hat H/\hbar}$ is a unitary group on $L^2$.
+
+:::
+
+:::{.proof}
+
+*(2)* Let $\rho=|\psi|^2=\psi\bar\psi$. Using $\psi_t=\frac{1}{i\hbar}\hat H\psi$
+and its conjugate,
+$$
+\rho_t=\psi_t\bar\psi+\psi\bar\psi_t=\frac{1}{i\hbar}\left(\bar\psi\hat H\psi-\psi\overline{\hat H\psi}\right)
+=\frac{-\hbar}{2mi}\left(\bar\psi\Delta\psi-\psi\Delta\bar\psi\right),
+$$
+since the real potential terms $V|\psi|^2$ cancel. The right side is
+$-\nabla\cdot\vec J$ with the **probability current**
+$$
+\vec J=\frac{\hbar}{2mi}\left(\bar\psi\nabla\psi-\psi\nabla\bar\psi\right)=\frac{\hbar}{m}\operatorname{Im}(\bar\psi\nabla\psi).
+$$
+This is a continuity equation $\rho_t+\nabla\cdot\vec J=0$ exactly as in the
+[[diffusion-equation]]. Integrating over $\mathbb{R}^n$ and using decay of
+$\psi$ at infinity, $\frac{d}{dt}\int\rho~dx=0$.
+
+*(3)* Differentiating $\langle\psi,\hat H\psi\rangle$ and using that $\hat H$ is
+self-adjoint,
+$\frac{d}{dt}\langle\psi,\hat H\psi\rangle=2\operatorname{Re}\langle\hat H\psi,\psi_t\rangle=2\operatorname{Re}\langle\hat H\psi,\tfrac{1}{i\hbar}\hat H\psi\rangle=0$,
+as $\langle\hat H\psi,\hat H\psi\rangle$ is real and is multiplied by $1/(i\hbar)$.
+
+:::
+
+> *Note:* Compare with the heat equation. There $\int u^2$ *decays* and the
+> evolution is irreversible and smoothing. Here the factor $i$ turns decay
+> into rotation, so the evolution is unitary and information is never lost.
+> Mathematically $e^{t\Delta}$ is a contraction semigroup and $e^{it\Delta}$ is
+> a unitary group.
+
+## Stationary States
+
+### Time-Independent Equation
+
+When $V$ does not depend on $t$, separate variables as $\psi=T(t)\varphi(x)$:
+$$
+\frac{i\hbar T'}{T}=\frac{\hat H\varphi}{\varphi}=E.
+$$
+Both sides must equal a constant $E$ (the energy), so $T(t)=e^{-iEt/\hbar}$ and
+$$
+\hat H\varphi=E\varphi,\qquad\text{i.e.}\qquad -\frac{\hbar^2}{2m}\Delta\varphi+V\varphi=E\varphi.
+$$
+This is the **time-independent Schrodinger equation**, an eigenvalue problem
+for $\hat H$. The solutions $\psi=e^{-iEt/\hbar}\varphi(x)$ are **stationary
+states**, because $|\psi|^2=|\varphi|^2$ does not depend on $t$. The general
+solution is the superposition
+$$
+\psi(t,x)=\sum_nc_ne^{-iE_nt/\hbar}\varphi_n(x),\qquad c_n=\langle\varphi_n,\psi(0)\rangle,
+$$
+with $\sum|c_n|^2=1$. This is the analogue of the Fourier series solution of
+the [[heat-equation]], where the decay factors $e^{-k\lambda_nt}$ are replaced
+by the phases $e^{-iE_nt/\hbar}$.
+
+### Particle in a Box
+
+:::{.example data-title="Infinite Square Well"}
+
+Let $V=0$ on $(0,L)$ and $V=\infty$ outside, so that $\varphi(0)=\varphi(L)=0$.
+The problem $-\frac{\hbar^2}{2m}\varphi''=E\varphi$ is solved exactly as for
+the heat equation on a bar:
+$$
+\varphi_n(x)=\sqrt{\frac2L}\sin\frac{n\pi x}{L},\qquad
+E_n=\frac{\hbar^2\pi^2n^2}{2mL^2},\qquad n=1,2,\dots
+$$
+The energy is **quantised** and the lowest energy $E_1>0$ is not zero (the
+zero-point energy). The boundary conditions are what force the discreteness,
+just as they force the eigenvalues $\lambda_n=(n\pi/L)^2$ in the diffusion
+problem.
+
+:::
+
+### Harmonic Oscillator
+
+:::{.example data-title="Quantum Harmonic Oscillator"}
+
+For $V(x)=\frac12m\omega^2x^2$ the eigenvalues are
+$$
+E_n=\hbar\omega\left(n+\tfrac12\right),\qquad n=0,1,2,\dots
+$$
+with eigenfunctions $\varphi_n\propto H_n(\xi)e^{-\xi^2/2}$ where
+$\xi=\sqrt{m\omega/\hbar}\,x$ and $H_n$ are the Hermite polynomials. The ground
+state is the Gaussian $\varphi_0\propto e^{-m\omega x^2/2\hbar}$, which has the
+form of the [[normal-distribution]] density.
+
+:::
+
+## The Free Particle
+
+### Plane Wave Solutions and Dispersion
+
+For $V=0$ the plane waves $e^{i(kx-\omega t)}$ solve the equation if
+$$
+\omega(k)=\frac{\hbar k^2}{2m}.
+$$
+This **dispersion relation** is non-linear in $k$, so waves of different
+wavelengths travel at different speeds. The phase velocity is $\omega/k=\hbar k/2m$
+and the group velocity, the speed at which a wave packet moves, is
+$$
+\frac{d\omega}{dk}=\frac{\hbar k}{m}=\frac pm,
+$$
+which is the classical velocity. By contrast the [[wave-equation]] has
+$\omega=ck$ with no dispersion.
+
+### Fourier Solution
+
+Take the Fourier transform in $x$, $\hat\psi(t,k)=\int e^{-ikx}\psi(t,x)~dx$.
+Since $\partial_{xx}\to-k^2$, the equation becomes
+$i\hbar\hat\psi_t=\frac{\hbar^2k^2}{2m}\hat\psi$ with solution
+$$
+\hat\psi(t,k)=e^{-i\hbar k^2t/2m}\hat\psi_0(k),
+$$
+so that
+$$
+\psi(t,x)=\frac{1}{2\pi}\int_{-\infty}^\infty e^{i(kx-\hbar k^2t/2m)}\hat\psi_0(k)~dk.
+$$
+Each mode only rotates in phase, so $|\hat\psi|$ is unchanged and the $L^2$ norm
+is conserved. Compare with $\hat u=e^{-Dk^2t}\hat u_0$ for the
+[[diffusion-equation]].
+
+### Free Propagator
+
+:::{.theorem data-title="Free Schrodinger Kernel"}
+
+For $V=0$ in one dimension,
+$$
+\psi(t,x)=\int_{-\infty}^\infty K(t,x-y)\psi_0(y)~dy,\qquad
+K(t,x)=\sqrt{\frac{m}{2\pi i\hbar t}}\exp\left(\frac{imx^2}{2\hbar t}\right).
+$$
+
+:::
+
+:::{.proof}
+
+*(Sketch)* The heat kernel for $u_t=Du_{xx}$ is
+$(4\pi Dt)^{-1/2}e^{-x^2/4Dt}$. The free Schrodinger equation is
+$\psi_t=\frac{i\hbar}{2m}\psi_{xx}$, which is the heat equation with the
+formal diffusivity $D=i\hbar/2m$. Substituting gives
+$$
+(4\pi Dt)^{-1/2}=\left(\frac{2\pi i\hbar t}{m}\right)^{-1/2},\qquad
+\frac{x^2}{4Dt}=\frac{x^2m}{2i\hbar t}=-\frac{imx^2}{2\hbar t},
+$$
+so $e^{-x^2/4Dt}=e^{imx^2/2\hbar t}$. The result can be justified rigorously
+by computing the inverse Fourier transform of $e^{-i\hbar k^2t/2m}$ as an
+oscillatory Gaussian integral (see [[gaussian-integral]]) with $t$ replaced by
+$t+i\epsilon$ and letting $\epsilon\to0$.
+
+:::
+
+> *Note:* Unlike the real heat kernel, $|K|=\sqrt{m/2\pi\hbar t}$ does not
+> decay in $x$, so $K$ is not a probability density and the evolution does not
+> smooth the data. Instead, the solution disperses: the amplitude at a fixed
+> point decays like $t^{-1/2}$ in one dimension because the wave spreads out,
+> while the norm is conserved.
+
+:::{.example data-title="Spreading of a Gaussian Wave Packet"}
+
+Take $\psi_0(x)=(2\pi\sigma^2)^{-1/4}e^{-x^2/4\sigma^2}$ (so $|\psi_0|^2$ is
+the $\mathcal{N}(0,\sigma^2)$ density). Then $|\psi(t,x)|^2$ is again a
+Gaussian, centred at the origin with variance
+$$
+\sigma(t)^2=\sigma^2\left(1+\frac{\hbar^2t^2}{4m^2\sigma^4}\right).
+$$
+The packet spreads *linearly* in $t$ for large $t$, compared with $\sqrt t$ for
+diffusion. A narrower initial packet spreads faster, consistent with the
+Heisenberg uncertainty principle $\sigma_x\sigma_p\ge\hbar/2$.
+
+:::
+
+## Relation to Other Equations
+
+| Equation | Form | Behaviour |
+|:--|:--|:--|
+| [[heat-equation]] | $u_t=D\Delta u$ | Smoothing, irreversible |
+| Schrodinger | $i\psi_t=-\frac12\Delta\psi$ | Dispersive, reversible, $L^2$-conserving |
+| [[wave-equation]] | $u_{tt}=c^2\Delta u$ | Non-dispersive waves, finite speed |
+
+- **Imaginary time.** Substituting $t=-i\tau$ in the Schrodinger equation
+  gives $\psi_\tau=\frac{\hbar}{2m}\Delta\psi-\frac1\hbar V\psi$, a diffusion
+  equation with a potential term. Under this **Wick rotation** the unitary
+  group $e^{-it\hat H/\hbar}$ becomes $e^{-\tau\hat H/\hbar}$, which projects
+  onto the ground state as $\tau\to\infty$.
+- **Feynman path integral.** The kernel of $e^{-\tau\hat H/\hbar}$ is given by
+  the [[feynman-kac-formula]] as an expectation over Brownian paths. The
+  real-time kernel is the same formula as a formal oscillatory integral over
+  paths weighted by $e^{iS/\hbar}$.
+- **Schrodinger bridges.** The problem of finding the most likely evolution of
+  a diffusion between two marginal distributions, which is used in
+  [[deep-generative-modeling]], takes its name from Schrodinger's coupled
+  forward and backward diffusion equations.
+
+## Related Topics
+
+- [[laplace-operator]]
+- [[heat-equation]]
+- [[diffusion-equation]]
+- [[wave-equation]]
+- [[hamilton-jacobi-equation]]
+- [[hilbert-spaces]]
+- [[partial-differential-equations]]

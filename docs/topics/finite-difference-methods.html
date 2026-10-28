@@ -399,7 +399,7 @@ window.Quarto = {
 
 <section id="finite-difference-methods" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="finite-difference-methods"><span class="header-section-number">1</span> Finite-Difference Methods</h2>
-<p>The <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE</a> for euro-call option with strike price <span class="math inline">\(K\)</span> and terminal time <span class="math inline">\(T\)</span> with value function <span class="math inline">\(u(x,t)\)</span> as a function of asset price <span class="math inline">\(x\)</span> and time <span class="math inline">\(t\)</span> is given by the [[partial-differential-equations|PDE]] <span class="math display">\[
+<p>The <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE</a> for euro-call option with strike price <span class="math inline">\(K\)</span> and terminal time <span class="math inline">\(T\)</span> with value function <span class="math inline">\(u(x,t)\)</span> as a function of asset price <span class="math inline">\(x\)</span> and time <span class="math inline">\(t\)</span> is given by the <a href="../topics/partial-differential-equations.html">PDE</a> <span class="math display">\[
 \begin{cases}
 \frac{{\partial u}}{\partial t}+rx \frac{{\partial u}}{\partial x}+\frac{1}{2}\sigma^2 x^2 \frac{{\partial^2u}}{\partial x ^2}-ru=0\\
 u(T,x)=(x-K)_{+}.\tag{1}
@@ -462,7 +462,9 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
 <li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
+<li><a href="../topics/poisson-equation.html">Poisson Equation</a></li>
 </ul>
 </div>
 </section>
@@ -490,6 +492,45 @@ Backlinks
     document.addEventListener("DOMContentLoaded", place);
   } else {
     place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
   }
 })();
 </script>
