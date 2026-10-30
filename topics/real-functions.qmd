@@ -1,0 +1,204 @@
+---
+id: real-functions
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-30
+description: "Overview of real-valued functions of a real variable: limits, continuity, differentiability and integrability, and how these regularity notions relate."
+number-sections: true
+title: "Real Functions"
+title-block-banner: false
+---
+
+## Real Functions
+
+A **real function** is a function $f:D\to\mathbb{R}$ whose domain $D$ is a
+subset of $\mathbb{R}$, usually an interval. The behavior of such functions is
+studied through a hierarchy of regularity properties, each stronger than the
+last: having a limit, being continuous, being differentiable and being
+integrable. This note introduces each property and how they relate. The
+longer treatments have their own notes.
+
+Some basic terminology. A function $f$ is **bounded** if $f(D)$ is a bounded
+set, **non-decreasing** if $x\le y$ implies $f(x)\le f(y)$ (**monotone** if
+non-decreasing or non-increasing), **even** if $f(-x)=f(x)$ and **odd** if
+$f(-x)=-f(x)$. It is **injective** if distinct points have distinct values,
+and then has an inverse on its range. The image and preimage of subsets under
+$f$ are described in [[images-and-preimages]]. The properties below rely on
+the completeness of the reals, see [[real-numbers]] and [[supremum-infimum]].
+
+## Limits of Functions
+
+:::{.definition data-title="Limit of a Function"}
+
+Let $f:D\to\mathbb{R}$ and let $a$ be a limit point of $D$. We say
+$\lim_{x\to a}f(x)=L$ if for every $\varepsilon>0$ there is $\delta>0$ such
+that
+
+$$
+0<|x-a|<\delta,\ x\in D \implies |f(x)-L|<\varepsilon.
+$$
+
+:::
+
+The value $f(a)$, if defined, plays no role. Variants of the definition give
+**one-sided limits** $\lim_{x\to a^\pm}f(x)$, and limits at infinity
+$\lim_{x\to\infty}f(x)=L$ (for all $\varepsilon>0$ there is $M$ with
+$x>M\implies|f(x)-L|<\varepsilon$), as well as infinite limits. The limit
+exists if and only if both one-sided limits exist and are equal.
+
+:::{.theorem data-title="Sequential Characterization"}
+
+$\lim_{x\to a}f(x)=L$ if and only if $f(x_n)\to L$ for every sequence
+$x_n\to a$ in $D\setminus\{a\}$.
+
+:::
+
+:::{.proof}
+If the limit is $L$ and $x_n\to a$ with $x_n\ne a$, given $\varepsilon$ choose
+$\delta$ as in the definition. Then $0<|x_n-a|<\delta$ for large $n$, so
+$|f(x_n)-L|<\varepsilon$. Conversely, suppose the limit is not $L$. Then there
+is $\varepsilon>0$ such that for each $n$ some $x_n$ has $0<|x_n-a|<1/n$ and
+$|f(x_n)-L|\ge\varepsilon$. Then $x_n\to a$ but $f(x_n)\not\to L$.
+:::
+
+The sequential characterization transfers the limit laws from
+[[sequence-convergence]]: limits respect sums, products and quotients (with a
+non-zero denominator limit), and order is preserved. The
+[[squeeze-theorem]] also holds: if $g\le f\le h$ near $a$ and
+$g,h\to L$, then $f\to L$.
+
+## Continuity
+
+:::{.definition data-title="Continuity"}
+
+A function $f:D\to\mathbb{R}$ is **continuous at** $a\in D$ if for every
+$\varepsilon>0$ there is $\delta>0$ such that
+
+$$
+|x-a|<\delta,\ x\in D \implies |f(x)-f(a)|<\varepsilon.
+$$
+
+It is **continuous** if it is continuous at every point of $D$.
+
+:::
+
+At a limit point $a$ this says $\lim_{x\to a}f(x)=f(a)$. Equivalent
+formulations are
+
+- **sequential:** $x_n\to a$ implies $f(x_n)\to f(a)$,
+- **topological:** $f$ is continuous on $D$ if and only if $f^{-1}(U)$ is open
+  in $D$ for every open $U\subseteq\mathbb{R}$ (see [[topology]] and
+  [[images-and-preimages]]).
+
+The topological formulation is the one that generalizes to metric and
+topological spaces ([[metric-spaces]]) and is the model for
+[[measurable-function|measurable functions]]. Sums, products, quotients (where
+the denominator is non-zero) and compositions of continuous functions are
+continuous, so polynomials, rational functions, $\exp$, $\sin$ and $\cos$ are
+continuous.
+
+Continuous functions on a closed bounded interval $[a,b]$ are very well
+behaved. They are bounded and attain their maximum and minimum (the **extreme
+value theorem**), take every value between $f(a)$ and $f(b)$ (the
+**intermediate value theorem**) and are uniformly continuous. Both the
+extreme value theorem and uniform continuity rely on the
+[[compactness]] of $[a,b]$. These results, and the stronger notions
+[[lipschitz-continuity|Lipschitz continuity]] and uniform continuity, are in
+[[continuity-of-real-functions]].
+
+## Differentiability
+
+:::{.definition data-title="Derivative"}
+
+A function $f$ defined near $a$ is **differentiable at** $a$ if the limit
+
+$$
+f'(a) = \lim_{h\to0}\frac{f(a+h)-f(a)}{h}
+$$
+
+exists. It is **differentiable** if it is differentiable at every point of its
+domain.
+
+:::
+
+Geometrically $f'(a)$ is the slope of the tangent line at $a$, and
+$f(a+h)=f(a)+f'(a)h+o(h)$ is the best linear approximation.
+
+:::{.theorem data-title="Differentiable Implies Continuous"}
+
+If $f$ is differentiable at $a$ then $f$ is continuous at $a$.
+
+:::
+
+:::{.proof}
+For $h\ne0$, $f(a+h)-f(a)=\dfrac{f(a+h)-f(a)}{h}\,h\to f'(a)\cdot0=0$ as
+$h\to0$.
+:::
+
+The converse is false: $f(x)=|x|$ is continuous but not differentiable at $0$.
+Differentiation obeys the sum, product, quotient ([[quotient-rule]]) and chain
+([[chain-rule]]) rules. The main theorems are **Rolle's theorem** and the
+**mean value theorem**: if $f$ is continuous on $[a,b]$ and differentiable on
+$(a,b)$ then $f(b)-f(a)=f'(\xi)(b-a)$ for some $\xi\in(a,b)$. It shows that a
+function with $f'\ge0$ is non-decreasing, and underlies L'Hôpital's rule and
+[[taylor-series|Taylor's theorem]]. See [[differentiability]].
+
+## Integrability
+
+The **Riemann integral** $\int_a^bf(x)\,dx$ of a bounded function on $[a,b]$ is
+defined as the common value of the upper and lower sums, when they agree (see
+[[riemann-integral]]). Every continuous function is Riemann integrable, and so
+is every monotone function and every bounded function with finitely many
+discontinuities. More generally, by Lebesgue's criterion a bounded function is
+Riemann integrable if and only if its set of discontinuities has measure zero.
+
+The **fundamental theorem of calculus** links integration and differentiation.
+If $f$ is continuous on $[a,b]$ then $F(x)=\int_a^xf(t)\,dt$ is differentiable
+with $F'=f$, and $\int_a^bf'(x)\,dx=f(b)-f(a)$ whenever $f'$ is continuous.
+
+Riemann integration fails for functions with too many discontinuities and does
+not interact well with limits. The [[lebesgue-integral]] fixes both
+problems and is the integral used in probability.
+
+## Hierarchy of Regularity
+
+For a function on an interval,
+
+$$
+C^1 \;\Longrightarrow\; \text{differentiable} \;\Longrightarrow\;
+\text{continuous} \;\Longrightarrow\; \text{Riemann integrable on }[a,b],
+$$
+
+where the last implication holds on a closed bounded interval, and no arrow
+reverses. A related chain on a closed bounded interval is
+
+$$
+\text{Lipschitz} \;\Longrightarrow\; \text{uniformly continuous}
+\;\Longrightarrow\; \text{continuous}.
+$$
+
+| Function | Property |
+|:--|:--|
+| $\lvert x\rvert$ | continuous, not differentiable at $0$ |
+| $x^2\sin(1/x)$, $f(0)=0$ | differentiable everywhere, derivative not continuous at $0$ |
+| Weierstrass function | continuous everywhere, differentiable nowhere |
+| $\mathbf{1}_{[0,\infty)}$ | not continuous at $0$, but Riemann integrable |
+| Dirichlet function $\mathbf{1}_{\mathbb{Q}}$ | nowhere continuous, not Riemann integrable, Lebesgue integrable |
+| $\sqrt{x}$ on $[0,1]$ | uniformly continuous, not Lipschitz |
+
+Convex functions ([[convex-function]]) are another class with strong
+regularity: a convex function on an open interval is continuous, and
+differentiable except at countably many points. For sequences of functions
+see [[convergence-of-functions]].
+
+## Related Topics
+
+- [[analysis]]
+- [[calculus]]
+- [[continuity-of-real-functions]]
+- [[differentiability]]
+- [[riemann-integral]]
+- [[lipschitz-continuity]]
+- [[convex-function]]
+- [[convergence-of-functions]]

@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="The constant volatility Black-Scholes-Merton market model.">
 
 <title>Black-Scholes-Merton Model – John Robin Inston</title>
 <style>
@@ -358,11 +359,15 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#black-scholes-merton-model" id="toc-black-scholes-merton-model" class="nav-link active" data-scroll-target="#black-scholes-merton-model"><span class="header-section-number">1</span> Black-Scholes-Merton Model</a></li>
-  <li><a href="#black-scholes-model-option-pricing" id="toc-black-scholes-model-option-pricing" class="nav-link" data-scroll-target="#black-scholes-model-option-pricing"><span class="header-section-number">2</span> Black-Scholes Model Option Pricing</a>
-  <ul class="collapse">
-  <li><a href="#black-scholes-partial-differential-equation-bspde" id="toc-black-scholes-partial-differential-equation-bspde" class="nav-link" data-scroll-target="#black-scholes-partial-differential-equation-bspde"><span class="header-section-number">2.1</span> Black-Scholes Partial Differential Equation (BSPDE)</a></li>
-  </ul></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link active" data-scroll-target="#the-model"><span class="header-section-number">1</span> The Model</a></li>
+  <li><a href="#solution-and-properties" id="toc-solution-and-properties" class="nav-link" data-scroll-target="#solution-and-properties"><span class="header-section-number">2</span> Solution and Properties</a></li>
+  <li><a href="#risk-neutral-dynamics" id="toc-risk-neutral-dynamics" class="nav-link" data-scroll-target="#risk-neutral-dynamics"><span class="header-section-number">3</span> Risk-Neutral Dynamics</a></li>
+  <li><a href="#black-scholes-pde" id="toc-black-scholes-pde" class="nav-link" data-scroll-target="#black-scholes-pde"><span class="header-section-number">4</span> Black-Scholes PDE</a></li>
+  <li><a href="#option-pricing" id="toc-option-pricing" class="nav-link" data-scroll-target="#option-pricing"><span class="header-section-number">5</span> Option Pricing</a></li>
+  <li><a href="#multi-asset-model" id="toc-multi-asset-model" class="nav-link" data-scroll-target="#multi-asset-model"><span class="header-section-number">6</span> Multi-Asset Model</a></li>
+  <li><a href="#limitations-and-extensions" id="toc-limitations-and-extensions" class="nav-link" data-scroll-target="#limitations-and-extensions"><span class="header-section-number">7</span> Limitations and Extensions</a></li>
+  <li><a href="#key-results" id="toc-key-results" class="nav-link" data-scroll-target="#key-results"><span class="header-section-number">8</span> Key Results</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -375,6 +380,11 @@ window.Quarto = {
 <h1 class="title">Black-Scholes-Merton Model</h1>
 </div>
 
+<div>
+  <div class="description">
+    The constant volatility Black-Scholes-Merton market model.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -401,75 +411,155 @@ window.Quarto = {
 </header>
 
 
-<section id="black-scholes-merton-model" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="black-scholes-merton-model"><span class="header-section-number">1</span> Black-Scholes-Merton Model</h2>
-<p>References: <a href="https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf">Columbia Note</a></p>
-<p>The <strong>Black-Scholes-Merton (BS) model</strong> is a <strong>constant volatility model</strong> for a financial market. The model is a fundamental in [[financial-mathematics|mathematical finance]], particularly in <a href="../topics/derivatives-pricing.html">derivatives pricing</a> where it is used to describe the dynamics of the underlying assets of derivatives such as <a href="../topics/options.html">options</a>.</p>
-<div class="definition" data-title="Black-Scholes Model">
-<p>The Black-Scholes model consists of two assets, a risk free asset <span class="math inline">\(B\)</span> and a risky asset (stock) <span class="math inline">\(S\)</span> with price dynamics given by <span class="math display">\[
-\begin{align}dB_{t}&amp;=rB_{t}dt \\dS_{t}&amp; =\alpha S_{t}dt+\sigma S_{t}dW_{t},\end{align}
-\]</span> where <span class="math inline">\(r\)</span>, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\sigma\)</span> are deterministic constants. Here <span class="math inline">\(r\)</span> is the <strong>risk-free interest rate</strong>, <span class="math inline">\(\alpha\)</span> is the <strong>drift coefficient</strong> and <span class="math inline">\(\sigma\)</span> is the <strong>diffusion coefficient</strong>.</p>
+<section id="the-model" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-model"><span class="header-section-number">1</span> The Model</h2>
+<p>The <strong>Black-Scholes-Merton (BSM) model</strong>, introduced by Black and Scholes and by Merton in 1973, is a <strong>constant volatility model</strong> for a financial market. It is a cornerstone of <a href="../topics/quantitative-finance.html">Quantitative Finance</a>, in particular of <a href="../topics/option-pricing.html">Option Pricing</a>, where it describes the dynamics of the underlying assets of derivatives such as <a href="../topics/derivatives.html">options</a>.</p>
+<div class="definition" data-title="Black-Scholes-Merton Model">
+<p>The BSM model consists of two assets, a risk-free asset <span class="math inline">\(B\)</span> and a risky asset (stock) <span class="math inline">\(S\)</span> with price dynamics given by</p>
+<p><span class="math display">\[
+\begin{align}
+dB_t &amp; = rB_t\,dt, \\
+dS_t &amp; = \mu S_t\,dt + \sigma S_t\,dW_t,
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(r\)</span>, <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> are deterministic constants and <span class="math inline">\(W\)</span> is a Brownian motion. Here <span class="math inline">\(r\)</span> is the <strong>risk-free interest rate</strong>, <span class="math inline">\(\mu\)</span> is the <strong>drift coefficient</strong> and <span class="math inline">\(\sigma\)</span> is the <strong>diffusion coefficient</strong> (the <strong>volatility</strong>).</p>
 </div>
+<p>The model assumes that</p>
+<ul>
+<li>the interest rate, drift and volatility are constant,</li>
+<li>the stock pays no dividends (see <a href="a stock that pays dividends.">[black-scholes-model-with-dividends]</a>),</li>
+<li>trading is continuous and there are no transaction costs,</li>
+<li>assets are infinitely divisible and short selling is allowed.</li>
+</ul>
 </section>
-<section id="black-scholes-model-option-pricing" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="black-scholes-model-option-pricing"><span class="header-section-number">2</span> Black-Scholes Model Option Pricing</h2>
-<p>In our note on <a href="../topics/derivatives-pricing.html">Derivatives Pricing</a> we discuss methods for pricing derivatives in which we always assume our underlying assets follow some kind of volatility model. Assuming an asset has dynamics given by the BS Model we are able to compute the fair market price of derivatives of these assets using one of two approaches. The first approach comes from <a href="../topics/partial-differential-equations.html">Partial Differential Equations</a> where one builds a self-financing replicating portfolio which under the no-arbitrage assumption allows us to construct the <strong>Black-Scholes PDE (BSPDE)</strong>. The other approach is probabilistic in that it involves constructing a <strong>risk-neutral measure</strong> and computing the discounted expected payoff under this measure.</p>
-<p>To introduce some notation, assume that an option on asset <span class="math inline">\(S\)</span> has payoff at maturity time <span class="math inline">\(T\)</span> given by <span class="math inline">\(\Phi(T,S)\)</span></p>
-<section id="black-scholes-partial-differential-equation-bspde" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="black-scholes-partial-differential-equation-bspde"><span class="header-section-number">2.1</span> Black-Scholes Partial Differential Equation (BSPDE)</h3>
-<p>We construct a self-financing (i.e.&nbsp;no money is added or removed) replicating portfolio using a stock <span class="math inline">\(S\)</span> and a bond <span class="math inline">\(B\)</span> which has exactly the same payoff as the option.</p>
-<p>The idea is that one can build a self-financing replicating portfolio using stock and bond which has exactly the same payoff as the option. Assuming no arbitrage, the portfolio and the claim must have the same price.</p>
-<p>To be specific, assume the self-financing replicating portfolio <span class="math inline">\(h_{t}\)</span> consists of <span class="math inline">\(a_{t}\)</span> units of stocks and <span class="math inline">\(b_t\)</span> units of bond at time <span class="math inline">\(t\)</span> (assuming the bond has initial price <span class="math inline">\(1\)</span> at time <span class="math inline">\(0\)</span>) so the portfolio value process is <span class="math display">\[
-V_{t}^h=a_{t}S_{t}+b_{t}e^{rt},
-\]</span> where <span class="math inline">\(r\)</span> is the short interest rate. From <a href="../topics/ito-formula.html">Itô Formula</a> we have that the change in the value of the portfolio is given by <span class="math display">\[
-dV_{t}=a_{t}dS_{t}+S_{t}da_{t}+d\langle S,a\rangle_{t}+rb_{t}e^{rt}dt+e^{rt}d_{t}
-\]</span> Inspecting this we see <span class="math inline">\(S_{t}da_{t}+e^{rt}db_{t}\)</span> denotes the change in the value of the portfolio that is due to the change of the position in stock and bond and <span class="math inline">\(d\langle S,a\rangle_{t}\)</span> is the cross variation term. By definition, a self-financing portfolio satisfies <span class="math display">\[
-S_{t}da_{t}+d\langle S,a\rangle_{t}+e^{rt}db_{t}=0.
-\]</span> Hence, the change in value of the process reduces to <span class="math display">\[
-\begin{align}
-dV_{t} &amp; =a_{t}dS_{t}+rb_{t}e^{rt}dt \\
-&amp; = a_{t}(\alpha S_{t}dt+\sigma S_{t}dW_{t})+rb_{t}e^{rt}dt\tag{$\star$}
-\end{align}
-\]</span> with the assumption that <span class="math inline">\(V_{t}=u(t,S_{t})\)</span> has the Markovian form with deterministic time-independent feedback function <span class="math inline">\(u\)</span>. Applying <a href="../topics/ito-formula.html">Itô Formula</a> we have that <span class="math display">\[
-\begin{align}
-dV_{t} &amp; =\partial_{t}udt+\partial_{x}udS_{t}+ \frac{1}{2}\partial_{x x} ud\langle S,S\rangle_{t} \\
-&amp; = \left( \partial _{t}u+\mu S_{t}\partial_{x}u+ \frac{1}{2}\sigma^2S_{t}^2 \partial_{x x}u \right)dt+\sigma S_{t}\partial_{x}udW_{t} \tag{$\star\star$}
-\end{align}
-\]</span> Matching the coefficients of <span class="math inline">\((\star)\)</span> and <span class="math inline">\((\star\star)\)</span> we obtain the following system <span class="math display">\[
+<section id="solution-and-properties" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="solution-and-properties"><span class="header-section-number">2</span> Solution and Properties</h2>
+<p>The risk-free asset solves <span class="math inline">\(B_t = B_0e^{rt}\)</span>, and the stock follows <a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a> with solution</p>
+<p><span class="math display">\[
+S_t = S_0\exp\left( \left( \mu - \frac{\sigma^2}{2} \right)t + \sigma W_t \right).
+\]</span></p>
+<p>Here <span class="math inline">\(\mathcal{N}(m,v)\)</span> denotes the normal distribution with mean <span class="math inline">\(m\)</span> and variance <span class="math inline">\(v\)</span> (not to be confused with the function <span class="math inline">\(N(x)\)</span>, the standard normal cumulative distribution function used in the pricing formulas in <a href="../topics/european-options.html">European Options</a>). Since <span class="math inline">\(W_t \sim \mathcal{N}(0,t)\)</span>, the stock price is <strong>log-normally</strong> distributed,</p>
+<p><span class="math display">\[
+\log S_t \sim \mathcal{N}\left( \log S_0 + \left( \mu - \frac{\sigma^2}{2} \right)t,\;
+\sigma^2 t \right),
+\qquad
+\mathbb{E}[S_t] = S_0e^{\mu t}.
+\]</span></p>
+<p>In particular the price stays positive, and <span class="math inline">\(\sigma\)</span> is the standard deviation of the log-returns per unit of <span class="math inline">\(\sqrt{t}\)</span>.</p>
+</section>
+<section id="risk-neutral-dynamics" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="risk-neutral-dynamics"><span class="header-section-number">3</span> Risk-Neutral Dynamics</h2>
+<p>Under the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> the discounted stock price <span class="math inline">\(e^{-rt}S_t\)</span> is a <a href="../topics/martingale-theory.html">martingale</a>, so the drift <span class="math inline">\(\mu\)</span> is replaced by <span class="math inline">\(r\)</span>,</p>
+<p><span class="math display">\[
+dS_t = rS_t\,dt + \sigma S_t\,dW_t^{\mathbb{Q}},
+\qquad
+S_T = S_0\exp\left( \left( r - \frac{\sigma^2}{2} \right)T
++ \sigma W_T^{\mathbb{Q}} \right).
+\]</span></p>
+<p>Here <span class="math inline">\(W^{\mathbb{Q}}_t = W_t + \frac{\mu - r}{\sigma}t\)</span> is a Brownian motion under <span class="math inline">\(\mathbb{Q}\)</span>. The change of measure, via <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a> and the <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a>, is constructed in <a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a>. Note that the volatility <span class="math inline">\(\sigma\)</span> is the same under <span class="math inline">\(\mathbb{P}\)</span> and <span class="math inline">\(\mathbb{Q}\)</span>.</p>
+</section>
+<section id="black-scholes-pde" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="black-scholes-pde"><span class="header-section-number">4</span> Black-Scholes PDE</h2>
+<p>Consider a derivative with payoff <span class="math inline">\(h(S_T)\)</span> whose price at time <span class="math inline">\(t\)</span> is <span class="math inline">\(V(t,S_t)\)</span>. The idea of Black-Scholes is to <strong>delta-hedge</strong>: trade the underlying stock to eliminate the randomness in the value of the option.</p>
+<p>Hold one option together with <span class="math inline">\(\Delta_t\)</span> shares of stock and <span class="math inline">\(\alpha_t\)</span> units of the bond, with value</p>
+<p><span class="math display">\[
+\Pi_t = V(t,S_t) + \Delta_tS_t + \alpha_tB_t.
+\]</span></p>
+<p>Choose the hedge to be <strong>self-financing</strong>, that is the value changes only through changes in the asset prices and no money is added or removed, so</p>
+<p><span class="math display">\[
+d\Pi_t = dV + \Delta_t\,dS_t + \alpha_t\,dB_t.
+\]</span></p>
+<p>By <a href="../topics/ito-formula.html">Itô Formula</a>, the option price satisfies</p>
+<p><span class="math display">\[
+dV = \left( \partial_t V + \mu S_t\,\partial_S V
++ \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V \right)dt
++ \sigma S_t\,\partial_S V\,dW_t.
+\]</span></p>
+<p>Substituting the dynamics of <span class="math inline">\(S\)</span> and <span class="math inline">\(B\)</span>,</p>
+<p><span class="math display">\[
+d\Pi_t = \left( \partial_t V + \mu S_t(\partial_S V + \Delta_t)
++ \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V + \alpha_trB_t \right)dt
++ \sigma S_t(\partial_S V + \Delta_t)\,dW_t.
+\]</span></p>
+<p>We choose <span class="math inline">\(\Delta_t = -\partial_S V\)</span> so that the coefficient of <span class="math inline">\(dW_t\)</span> is zero. The drift of the stock <span class="math inline">\(\mu\)</span> also cancels, leaving</p>
+<p><span class="math display">\[
+d\Pi_t = \left( \partial_t V + \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V
++ \alpha_trB_t \right)dt.
+\]</span></p>
+<p>The portfolio <span class="math inline">\(\Pi_t = V - S_t\,\partial_S V + \alpha_tB_t\)</span> is now deterministic over <span class="math inline">\(dt\)</span>, so to avoid arbitrage it must grow at the risk-free rate, <span class="math inline">\(d\Pi_t = r\Pi_t\,dt\)</span>. Equating the two expressions for <span class="math inline">\(d\Pi_t\)</span>, the <span class="math inline">\(\alpha_trB_t\)</span> terms cancel and we obtain the Black-Scholes PDE.</p>
+<div class="definition" data-title="Black-Scholes Equation">
+<p>Consider a derivative on a stock paying no dividends with maturity <span class="math inline">\(T\)</span> and payoff <span class="math inline">\(h(S_T)\)</span>. Its price <span class="math inline">\(V(t,S)\)</span> satisfies</p>
+<p><span class="math display">\[
 \begin{cases}
-\sigma a_{t}S_{t}=\sigma S_{t}\partial_{x}u \\
-\mu A_{t}S_{t}+rb_{t}e^{rt}=\partial_{t}u+\mu S_{t}\partial_{x}u+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u,
+\partial_t V + \dfrac{1}{2}\sigma^2S^2\,\partial_{SS}V
++ rS\,\partial_S V - rV = 0, \\[1ex]
+V(T,S) = h(S) \quad \text{for all } S,
 \end{cases}
-\]</span> hence the replicating portfolio <span class="math inline">\(h_t\)</span> is satisfies <span class="math display">\[
-\begin{cases}
-a_{t}=\partial_{x}u(t,S_{t}) \\
-b_{t}=\frac{\partial_{t}u(t,S_{t})+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u(t,S_{t})}{\mathrm{re}^{rt}}.
-\end{cases}
-\]</span> Our only remaining problem is to find the PDS characterization for <span class="math inline">\(u=u(t,x)\)</span> to solve for <span class="math inline">\(u\)</span>. We recall that the self-financing property requires <span class="math display">\[
-a_{t}S_{t}+b_{t}e^{rt}=V_{t}=u(t,S_{t})
-\]</span> into which we plug in <span class="math inline">\(a_{t}\)</span> and <span class="math inline">\(b_{t}\)</span> computed above to get the <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a> as a characterization for <span class="math inline">\(u\)</span> <span class="math display">\[
-\partial_{t}u+rx\partial_{x}u_+\frac{1}{2}\sigma^2x^2\partial_{x x}u-ru=0
-\]</span> paired with the natural terminal condition that <span class="math display">\[
-u(T,x)=h(x),
-\]</span> to match the payoff of the option. As a result, the option price at time <span class="math inline">\(0\)</span> is given by <span class="math inline">\(V_{0}=u(0,S_{0})\)</span>.</p>
-<section id="risk-neutral-pricing" class="level4" data-number="2.1.1">
-<h4 data-number="2.1.1" class="anchored" data-anchor-id="risk-neutral-pricing"><span class="header-section-number">2.1.1</span> Risk Neutral Pricing</h4>
-<p>The arbitrage-free price of a financial derivative is not equal to its discounted expected payoff since one has to compensate the buyers for the risk. However, if we assume the investor is risk-neutral, he has no positive or negative preference on taking any risk thus the price of the derivative is the expected payoff.</p>
-<p>To construct such a risk neutral space we have to make sure that the discounted stock price <span class="math inline">\(\{e^{-rt}S_{t}\}\)</span> is a martingale. As a result, the drift term in the dynamics of <span class="math inline">\(\{S_{t}\}\)</span> shall be <span class="math inline">\(rS_{t}\)</span> and all other extra drift terms shall be absorbed into the diffusion term which leads to a change of measure (<a href="../topics/girsanov-theorem.html">Girsanov Theorem</a>).</p>
-<p>We call the real world probability measure <span class="math inline">\(\mathbb{P}\)</span> and the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span>. We can manipulating our expression to read <span class="math display">\[
-\begin{align}
-dS_{t} &amp; =rS_{t}dt+((\mu-r)S_{t}dt+\sigma S_{t}dW_{t} \\
-&amp; =rS_{t}dt+\sigma S_{t}\left(\frac{\mu-r}{\sigma}dt+dW_{t} \right) \\
-&amp; =rS_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q},
-\end{align}
-\]</span> where <span class="math inline">\(dW_{t}^\mathbb{Q}=\frac{\mu-r}{\sigma}dt+dW_{t}\)</span> is a BM under <span class="math inline">\(\mathbb{Q}\)</span>.</p>
-<p><a href="../topics/girsanov-theorem.html">Girsanov Theorem</a> enables us to find the connection between <span class="math inline">\(\mathbb{P}\)</span> and <span class="math inline">\(\mathbb{Q}\)</span>. We write <span class="math inline">\(L_{t}=-\frac{\mu-r}{\sigma}W_{t}\)</span> such that <span class="math inline">\(\langle W,L\rangle_{t}=-\frac{\mu-r}{\sigma}t,\)</span> then <span class="math display">\[
-W_{t}^\mathbb{Q}=W_{t}-\langle W,L\rangle_{t}
-\]</span> and so by Girsanov the <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a> is given by <span class="math display">\[
-\frac{d\mathbb{Q}}{d\mathbb{P}}=\exp\left\{ L_{T}-\frac{1}{2}\langle L,L\rangle_{T} \right\}=\exp\left\{ - \frac{{\mu-r}}{\sigma}W_{T}- \frac{1}{2}\left( \frac{{\mu-r}}{\sigma} \right)^2T \right\}.
-\]</span> It is simple to check that the RN derivative has expectation 1 so its not only a local martingale but also a martingale, which satisfies the condition of Girsanov’s theorem. In this risk neutral world, the price of the option at time 0 is just the discounted expected payoff <span class="math display">\[
-\exp\{-rT\}\mathbb{E}_{\mathbb{Q}}[h(S_{T})].
-\]</span> ### Key Results - <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a> - <a href="../topics/european-call-option-price.html">European Call Option Price</a> - <a href="../topics/european-put-option-price.html">European Put Option Price</a></p>
+\]</span></p>
+<p>where <span class="math inline">\(r\)</span> is the risk-free interest rate and <span class="math inline">\(\sigma\)</span> is the volatility of the stock.</p>
+</div>
+<p>Note that the drift <span class="math inline">\(\mu\)</span> does not appear: the price of the option does not depend on the expected return of the stock. This is the same reason the risk-neutral measure replaces <span class="math inline">\(\mu\)</span> by <span class="math inline">\(r\)</span>.</p>
+<p><strong>Interpretation.</strong> Rewrite the PDE as</p>
+<p><span class="math display">\[
+\partial_t V + \frac{1}{2}\sigma^2S^2\,\partial_{SS}V
+= r\left( V - S\,\partial_S V \right).
+\]</span></p>
+<p>The right-hand side is the return, over an infinitesimal period, on the cash position: the option premium minus the amount spent on the hedging shares, times the interest rate. The left-hand side is the change in value of the delta-hedged option. The first term captures the effect of the shortening maturity (theta) and the second the effect of the curvature (gamma), which is the risk that remains after the delta is hedged. In terms of the Greeks (see <a href="../topics/option-greeks.html">Option Greeks</a>),</p>
+<p><span class="math display">\[
+\Theta + \frac{1}{2}\sigma^2S^2\,\Gamma + rS\,\Delta - rV = 0.
+\]</span></p>
+<p>The PDE can be reduced to the <a href="../topics/diffusion-equation.html">Diffusion Equation</a> (heat equation) by a change of variables, and by the <a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a> its solution is the risk-neutral expectation <span class="math inline">\(e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}[h(S_T)\mid S_t]\)</span>.</p>
+</section>
+<section id="option-pricing" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="option-pricing"><span class="header-section-number">5</span> Option Pricing</h2>
+<p>For an option with payoff <span class="math inline">\(h(S_T)\)</span> at maturity <span class="math inline">\(T\)</span> the model gives two equivalent ways to find the fair price, both developed in <a href="../topics/option-pricing.html">Option Pricing</a>:</p>
+<ul>
+<li><strong>PDE approach</strong>: build a self-financing portfolio of stock and bond that replicates the payoff. No arbitrage then forces the price to solve the Black-Scholes PDE above.</li>
+<li><strong>Risk-neutral approach</strong>: the price at time <span class="math inline">\(0\)</span> is the discounted expected payoff under <span class="math inline">\(\mathbb{Q}\)</span>, <span class="math display">\[
+e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[h(S_T)].
+\]</span></li>
+</ul>
+<p>For European calls and puts these give closed-form prices. See <a href="../topics/european-options.html">European Options</a>. Their sensitivities are the <a href="../topics/option-greeks.html">Option Greeks</a>.</p>
+</section>
+<section id="multi-asset-model" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="multi-asset-model"><span class="header-section-number">6</span> Multi-Asset Model</h2>
+<p>The model has a vector equivalent. Take <span class="math inline">\(d\)</span> risky assets driven by an <span class="math inline">\(m\)</span>-dimensional Brownian motion <span class="math inline">\(W = (W^1,\dots,W^m)\)</span>,</p>
+<p><span class="math display">\[
+dS_t^i = \mu_i S_t^i\,dt + S_t^i\sum_{j=1}^m \sigma_{ij}\,dW_t^j,
+\qquad i = 1,\dots,d,
+\]</span></p>
+<p>with constant drift vector <span class="math inline">\(\mu \in \mathbb{R}^d\)</span> and volatility matrix <span class="math inline">\(\sigma \in \mathbb{R}^{d\times m}\)</span>. The solution is</p>
+<p><span class="math display">\[
+S_t^i = S_0^i\exp\left( \left( \mu_i - \frac{1}{2}\sum_{j}\sigma_{ij}^2 \right)t
++ \sum_{j}\sigma_{ij}W_t^j \right).
+\]</span></p>
+<p>The log-returns are jointly normal with covariance matrix <span class="math inline">\(\Sigma t\)</span>, where <span class="math inline">\(\Sigma = \sigma\sigma^\top\)</span> has entries <span class="math inline">\(\Sigma_{ik}\)</span> equal to the instantaneous covariance of <span class="math inline">\(\log S^i\)</span> and <span class="math inline">\(\log S^k\)</span>, so correlation between assets enters through <span class="math inline">\(\Sigma\)</span>.</p>
+<p>Under <span class="math inline">\(\mathbb{Q}\)</span> every asset has drift <span class="math inline">\(r\)</span>. A risk-neutral measure exists if there is a <strong>market price of risk</strong> vector <span class="math inline">\(\theta \in \mathbb{R}^m\)</span> with <span class="math inline">\(\sigma\theta = \mu - r\mathbf{1}\)</span>. The market is arbitrage-free if such a <span class="math inline">\(\theta\)</span> exists, and complete if in addition <span class="math inline">\(\sigma\)</span> is invertible (<span class="math inline">\(d = m\)</span>). This model prices multi-asset options such as basket and exchange options.</p>
+</section>
+<section id="limitations-and-extensions" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="limitations-and-extensions"><span class="header-section-number">7</span> Limitations and Extensions</h2>
+<p>The assumption of a constant volatility is not consistent with market prices. Implied volatility varies with strike and maturity, giving the volatility smile or surface (see <a href="../topics/volatility-surfaces.html">Volatility Surfaces</a>). Models that relax it include</p>
+<ul>
+<li></li>
+<li><a href="../topics/cev-model.html">CEV Model</a>,</li>
+<li><a href="../topics/heston-model.html">Heston Model</a>,</li>
+<li></li>
+</ul>
+</section>
+<section id="key-results" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="key-results"><span class="header-section-number">8</span> Key Results</h2>
+<ul>
+<li><a href="../topics/european-options.html">European Options</a></li>
+<li><a href="../topics/option-greeks.html">Option Greeks</a></li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
+<ol type="1">
+<li>Black, F. and Scholes, M. (1973). The Pricing of Options and Corporate Liabilities. <em>Journal of Political Economy</em>, 81(3), 637-654.</li>
+<li>Merton, R. C. (1973). Theory of Rational Option Pricing. <em>Bell Journal of Economics and Management Science</em>, 4(1), 141-183.</li>
+<li><a href="https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf">Columbia Note</a></li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -477,22 +567,27 @@ W_{t}^\mathbb{Q}=W_{t}-\langle W,L\rangle_{t}
 Backlinks
 </div>
 <ul>
-<li><a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a></li>
+<li><a href="../topics/black-scholes-model-with-dividends.html">Black Scholes Model with Dividends</a></li>
+<li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
+<li><a href="../topics/dupires-formula.html">Dupire's Formula</a></li>
 <li><a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a></li>
-<li><a href="../topics/european-call-option-price.html">European Call Option Price</a></li>
-<li><a href="../topics/european-put-option-price.html">European Put Option Price</a></li>
+<li><a href="../topics/european-options.html">European Options</a></li>
 <li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li><a href="../topics/financial-markets.html">Financial Markets</a></li>
+<li><a href="../topics/finite-difference-fd-methods.html">Finite-Difference (FD) Methods</a></li>
+<li><a href="../topics/finite-difference-methods.html">Finite-Difference Methods</a></li>
 <li><a href="../topics/ito-formula.html">Itô Formula</a></li>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
+<li><a href="../topics/martingale-theory.html">Martingale Theory</a></li>
 <li><a href="../topics/option-greeks.html">Option Greeks</a></li>
-<li><a href="../topics/options.html">Options</a></li>
+<li><a href="../topics/option-pricing.html">Option Pricing</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 <li><a href="../topics/sde-simulation.html">SDE Simulation</a></li>
 <li><a href="../topics/time-dependent-volatility-model.html">Time-Dependent Volatility Model</a></li>
 <li><a href="../topics/volatility-models.html">Volatility Models</a></li>
 </ul>
 </div>
-</section>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

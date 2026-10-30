@@ -1,0 +1,127 @@
+---
+id: option-pricing
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-09-25
+description: "Pricing options in the Black-Scholes-Merton model."
+number-sections: true
+title: "Option Pricing"
+title-block-banner: false
+---
+
+## Option Pricing
+
+A **derivative** or **contingent claim** has a **payoff** $h$ that depends on
+the price process $(S_t)$ of an underlying asset, either at maturity,
+$h(S_T)$, as for a [[european-options|European option]], or along the path,
+$h(S_{[0,T]})$, as for an Asian option. See [[derivatives]] for the
+definitions.
+
+The key idea of pricing is the **principle of no arbitrage**, which states
+that we cannot make a profit without risk. To determine the fair price of the
+derivative we describe the dynamics of $(S_t)$ and compute the expected
+payoff, adjusted for the time value of money and for risk. There are two
+equivalent approaches, both developed below for the Black-Scholes-Merton
+model:
+
+- the **risk-neutral approach**, which prices the claim as a discounted
+  expectation under a change of measure,
+- the **PDE approach**, which prices the claim by replicating it with a
+  self-financing portfolio.
+
+## Black-Scholes-Merton Model
+
+:::{.definition data-title="Black-Scholes-Merton Model"}
+
+The Black-Scholes-Merton (BSM) model considers a market consisting of two
+assets: a risk-free asset (e.g. a bond) $(B_t)$ and a risky asset (e.g. a
+stock) $(S_t)$, with dynamics given by [[geometric-brownian-motion]] (GBM)
+
+$$
+\begin{align}
+dB_t & = rB_t\,dt, \tag{1}\\
+dS_t & = \mu S_t\,dt + \sigma S_t\,dW_t, \tag{2}
+\end{align}
+$$
+
+where $r$ is the risk-free interest rate and $\mu$ and $\sigma$ are the
+**drift** and **diffusion** components of the
+[[stochastic-calculus|stochastic differential equation (SDE)]].
+
+:::
+
+Equation $(1)$ is an [[ordinary-differential-equations|ODE]] with solution
+
+$$
+B_t = B_0 e^{rt}, \tag{3}
+$$
+
+and the solution to GBM $(2)$ is
+
+$$
+S_t = S_0 \exp\left( \left( \mu - \frac{\sigma^2}{2} \right)t + \sigma W_t \right).
+\tag{4}
+$$
+
+## Risk-Neutral Approach
+
+Under the real-world measure $\mathbb{P}$, the drift $\mu$ of $(S_t)$ reflects
+the preference of investors for larger returns on riskier assets. The
+arbitrage-free price of a derivative is therefore not its discounted expected
+payoff under $\mathbb{P}$, since buyers must be compensated for risk.
+
+Instead we change to the risk-neutral measure $\mathbb{Q}$, constructed with
+[[girsanov-theorem]], under which the discounted stock price $e^{-rt}S_t$ is a
+[[martingale-theory|martingale]]. The drift of $(S_t)$ becomes $r$,
+
+$$
+dS_t = rS_t\,dt + \sigma S_t\,dW_t^{\mathbb{Q}}, \tag{5}
+$$
+
+where $W^{\mathbb{Q}}$ is a Brownian motion under $\mathbb{Q}$. The
+construction, the density $d\mathbb{Q}/d\mathbb{P}$ and the conditions for it
+to exist are in [[risk-neutral-pricing]]. The price at time $0$ of a claim
+with payoff $h(S_T)$ is the discounted expected payoff
+
+$$
+V_0 = e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[h(S_T)]. \tag{6}
+$$
+
+## PDE Approach
+
+The idea is to build a self-financing replicating portfolio from the stock and
+the bond that has exactly the same payoff as the claim. Assuming no arbitrage,
+the portfolio and the claim must have the same price.
+
+Let the portfolio hold $a_t$ units of stock and $b_t$ units of bond (with
+$B_0=1$), so its value is $V_t = a_tS_t + b_te^{rt}$. Self-financing means
+$dV_t = a_t\,dS_t + rb_te^{rt}\,dt$. Writing $V_t = u(t,S_t)$ and comparing
+this with [[ito-formula]] applied to $u$ gives
+
+$$
+a_t = \partial_x u(t,S_t),
+\qquad
+b_te^{rt} = u(t,S_t) - S_t\,\partial_x u(t,S_t),
+$$
+
+and the function $u$ must solve the Black-Scholes PDE
+
+$$
+\partial_t u + rx\,\partial_x u + \frac{1}{2}\sigma^2x^2\,\partial_{xx}u - ru = 0,
+\qquad u(T,x) = h(x).
+$$
+
+The price of the claim at time $0$ is $V_0 = u(0,S_0)$. The full derivation by
+delta-hedging, and an interpretation of the terms, is in
+[[black-scholes-merton-model|the Black-Scholes PDE section]] of the
+Black-Scholes-Merton note. By the [[feynman-kac-formula]], the solution of
+this PDE is the risk-neutral expectation $(6)$, so the two approaches agree.
+
+## Pricing by Option Type
+
+- [[european-options]]: call and put price formulas, put-call parity and
+  no-arbitrage bounds.
+- [[barrier-options]]
+- [[option-greeks]]: sensitivities of the option price.
+- [[parametric-option-pricing]]

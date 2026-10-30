@@ -1,164 +1,331 @@
 ---
-title: Measurable Function
-author: John Robin Inston
+id: measurable-function
+aliases: [measurable-functions]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+date-modified: 2026-10-30
+description: "Measurable functions between measurable spaces: definition, equivalent conditions, link to random variables, key closure results and examples."
 number-sections: true
+title: "Measurable Function"
 title-block-banner: false
 ---
 
-### Measurable Function
+## Measurable Functions
 
-A core concept of measure theory is the idea of measurable functions.  
+Measurable functions are the structure-preserving maps of measure theory, in
+the same way that continuous functions are the structure-preserving maps of
+[[topology]] and linear maps are those of [[linear-algebra]]. They are the
+functions we are able to integrate (see [[lebesgue-integral]]), and in
+probability theory they are the **random variables**.
+
+The central idea is that a measure assigns a size or a probability to
+*subsets*, not to points, and only to subsets in a chosen
+[[sigma-algebra|$\sigma$-algebra]]. A function $f$ transports the question
+"how large is $A$?" about a set $A$ in its codomain into the question "how
+large is $f^{-1}(A)$?" about a set in its domain. This only makes sense when
+$f^{-1}(A)$ is itself in the $\sigma$-algebra of the domain.
+
+## Definition
 
 :::{.definition data-title="Measurable Function"}
 
-For a [[measure-space|measure space]] $(X,\mathcal{M}, \mu)$, a function
-$Y:\Omega\rightarrow\mathbb{R}^n$ is called **$\mathcal{F}$-measurable** if
+Let $(X,\mathcal{F})$ and $(Y,\mathcal{G})$ be measurable spaces. A function
+$f:X\to Y$ is **$(\mathcal{F},\mathcal{G})$-measurable** if
+
 $$
-Y^{-1}(U):=\{\omega\in\Omega:Y(\omega)\in U\}\in \mathcal{F}
+f^{-1}(B) := \{x\in X : f(x)\in B\} \in \mathcal{F}
+\qquad\text{for all } B\in\mathcal{G}.
 $$
-for all [[metric-spaces#Open and Closed Sets|open sets]]
-$U\in\mathcal{R}^n$.
 
 :::
 
-Intuitively, a function between measure spaces
-### What do we mean by a measurable function?
+When the $\sigma$-algebras are clear we simply say that $f$ is **measurable**,
+or **$\mathcal{F}$-measurable**. If the codomain is $\mathbb{R}$ (or
+$\mathbb{R}^n$), it carries the [[borel-sigma-algebra|Borel
+$\sigma$-algebra]] $\mathcal{B}_{\mathbb{R}}$ by default, so that a function
+$f:X\to\mathbb{R}$ is $\mathcal{F}$-measurable if
+$f^{-1}(B)\in\mathcal{F}$ for every Borel set $B\subseteq\mathbb{R}$.
 
-**We talk about the probability of subsets of Ω, not elements.**
+The definition is the exact analogue of continuity, with $\sigma$-algebras in
+place of topologies: a function is continuous if preimages of open sets are
+open, and measurable if preimages of measurable sets are measurable.
 
-Let's take probability theory as our model of reference. If you have a finite
-set, $\Omega$, you can define a probability $\mu$ in $\Omega$ simply defining
-the probability of each element of $\Omega$. But when you have an uncountable
-set, this approach is not viable anymore as points have no probability mass.
+Two special cases of this definition appear often.
 
-The same reasoning applies if you are considering not probabilities, but the
-length of a set. It is true that if the interval $I$ is the disjoint sum of two
-other intervals $𝐽$ and $𝐾$, then the length of $𝐼$ will be the sum of the
-lengths of $𝐽$ and $𝐾$. But $[0,1]$ is the disjoint union of the sets of the
-form $\{𝑥\}$, whose length is $0$. Nevertheless, the length of $[0,1]$ is not
-$0$. For that reason, we do not talk about the size or the probability of
-points in $\Omega$. We talk about the probabilities or size of subsets of
-$\Omega$.
+- If $X$ and $Y$ are topological spaces, $f$ is **Borel measurable** if it is
+  $(\mathcal{B}_X,\mathcal{B}_Y)$-measurable.
+- A function $f:\mathbb{R}\to\mathbb{R}$ is **Lebesgue measurable** if it is
+  $(\mathcal{F}_{\lambda},\mathcal{B}_{\mathbb{R}})$-measurable, where
+  $\mathcal{F}_{\lambda}$ is the $\sigma$-algebra of Lebesgue measurable sets.
+  Since $\mathcal{B}_{\mathbb{R}}\subsetneq\mathcal{F}_{\lambda}$, every Borel
+  measurable function is Lebesgue measurable, but not conversely.
 
-**We know the size of certain sets (think of the intervals).**
+### Pushforward Measures
 
-Usually, we know the measure of certain subsets. For example, in the case of
-the unit interval [0,1], one usually takes the size of an interval [𝑎,𝑏] to be
-the value 𝑏−𝑎.
+If $f:(X,\mathcal{F},\mu)\to(Y,\mathcal{G})$ is measurable, then
+$\mu\circ f^{-1}$ is well defined on $\mathcal{G}$, and is a measure on $Y$
+called the **pushforward** (or **image**) measure,
 
-**The sets for which we do have a probability defined is the family
-$\mathcal{B}$. Those are the "measurable" sets.**
+$$
+(f_*\mu)(B) = \mu\left(f^{-1}(B)\right), \qquad B\in\mathcal{G}.
+$$
 
-Based on the size of this simple sets, we can manage to EXTEND our measure to
-other sets. The next simpler case is when the set is the finite disjoint union
-of intervals. It happens that, given the constraints we want the measure to
-satisfy, not always it is possible to EXTEND the measure to the whole family of
-subsets of Ω. So, we are happy to limit the domain of our measure 𝜇 to some
-class  of subsets of Ω. We shall use the notation (Ω,) to indicate that we
-are talking about the family  of subsets of Ω. So, the measure is a function
+Measurability is exactly the condition that makes this transport possible.
+For example, let $\Omega=\{1,\dots,6\}$ be the outcomes of a die and let
+$f(\omega)=+10$ if $\omega$ is odd and $-10$ if $\omega$ is even, the payoff of
+a bet. Then $f_*\mathbb{P}(\{10\})=\mathbb{P}(f^{-1}(10))=\mathbb{P}(\{1,3,5\})$,
+and the probability of losing money is $\mathbb{P}(f^{-1}((-\infty,0)))$.
 
-𝜇:→[0,1].
+## Random Variables
 
-**Point 4. A measurable function 𝑓:Ω→𝑋 transports the probability in (Ω,) to a
-probability (𝑋,).**
+Let $(\Omega,\mathcal{F},\mathbb{P})$ be a [[probability-spaces|probability
+space]].
 
-Now, suppose that you have a probability 𝜇:→[0,1] defined for a family of
-subsets of Ω. And also, suppose that you have a function 𝑓:Ω→ℝ. Then, **you may
-wish to TRANSPORT** your probability from Ω to ℝ. For example, suppose that
-Ω={1,…,6} is a dice, and you are gambling. If the value of the dice is odd then
-you get BRL 10, if it is even, then you lose BRL 10. This is the definition of
-𝑓:Ω→{−10,10}. Now, instead of talking about a probability in Ω, we can talk
-about the probability of, in one bet, getting or losing 10 Brazilian Reals. We
-transported the probability in Ω to a probability in ℝ. **This is a measurable
-function!** The probability of getting BRL 10 is the probability of the event
-𝑓−1(10), and the probability of losing BRL 10 is the probability of 𝑓−1(−10).
-The probability of losing money is the probability of the set 𝑓−1((−∞,0)).
+:::{.definition data-title="Random Variable"}
 
-If you think that 𝑓−1 is a function that takes subsets of ℝ to subsets of Ω,
-then you can TRY to compose 𝜇 with 𝑓−1 to get 𝜇∘𝑓−1. In order for this to work,
-if you want to know the probability of a set 𝐴⊂ℝ, you will need that 𝑓−1(𝐴)∈.
+A **random variable** is an $\mathcal{F}$-measurable function
+$X:\Omega\to\mathbb{R}$ (or $\mathbb{R}^n$, in which case $X$ is a random
+vector).
 
-**Point 5. We want 𝑓−1(𝐼) to be measurable.**
+:::
 
-Finally, since we are talking about a function 𝑓:Ω→ℝ, it might happen that we
-want the probabilities to be defined at least for the intervals. That is, given
-an interval 𝐼⊂ℝ, we want 𝑓−1(𝐼) to have a probability associated with it.
+See [[random-variables]]. Measurability is what allows us to speak of the
+probability of events defined by $X$: the set $\{X\le x\}=X^{-1}((-\infty,x])$
+is in $\mathcal{F}$ for every $x$, so $\mathbb{P}(X\le x)$ is defined. The
+pushforward measure of $\mathbb{P}$ is the **distribution** (or **law**) of
+$X$,
 
-**Point 6. We got to a definition of "measurable function" which is easier to
-state without appealing to measure theory.**
+$$
+\mu_X(B) = \mathbb{P}(X\in B) = \mathbb{P}\left(X^{-1}(B)\right),
+\qquad B\in\mathcal{B}_{\mathbb{R}}.
+$$
 
-But 𝑓−1(𝐼) will be measurable for every interval 𝐼 exactly when 𝑓−1([−∞,𝑎)) is
-measurable for every 𝑎.
+Further connections with probability theory:
 
-**Point 7. We can integrate measurable functions (and get the "expected
-value").**
+- **Generated $\sigma$-algebra.** The collection
+  $\sigma(X)=\{X^{-1}(B):B\in\mathcal{B}_{\mathbb{R}}\}$ is the smallest
+  $\sigma$-algebra on $\Omega$ for which $X$ is measurable, and records the
+  information in $X$ (see [[generated-sigma-algebra]]). A random variable $X$
+  is $\mathcal{G}$-measurable if and only if $\sigma(X)\subseteq\mathcal{G}$.
+- **Functions of random variables.** If $X$ is a random variable and $g$ is
+  Borel measurable, then $g(X)$ is a random variable, by the composition
+  result below. This includes all continuous $g$.
+- **Doob-Dynkin lemma.** A random variable $Y$ is $\sigma(X)$-measurable if
+  and only if $Y=g(X)$ for some Borel measurable function $g$. This says that
+  the information in $X$ determines exactly the functions of $X$.
+- **Expectation.** The expectation of $X$ is the Lebesgue integral
+  $\mathbb{E}[X]=\int_\Omega X\,d\mathbb{P}$, which is defined for measurable
+  functions, and satisfies $\mathbb{E}[g(X)]=\int g\,d\mu_X$.
+- **Stochastic processes.** A process $(X_t)$ is **adapted** to a filtration
+  $(\mathcal{F}_t)$ if each $X_t$ is $\mathcal{F}_t$-measurable (see
+  [[filtrations-and-adapted-processes]]), and a conditional expectation
+  $\mathbb{E}[X\mid\mathcal{G}]$ is by definition $\mathcal{G}$-measurable
+  (see [[conditional-expectation-random-variables]]).
 
-With a function 𝑓 like this, we can calculate the mean, that is, the integral
-of the function.
+## Equivalent Conditions
 
-Now, I realise that you are not talking about probabilities, you are talking
-about analysis. But then, you just have to change the terms "probability" by
-measure. And for the same reason, technicalities aside, you can calculate the
-integral of measurable functions. It is just a bit harder to understand because
-now Ω=ℝ.
+It is enough to check measurability on a family that generates the
+$\sigma$-algebra of the codomain.
 
-## Measurability Results
+:::{.theorem data-title="Generating Sets"}
 
-Intuitively, we can *pull back* measurable sets from $Y$ to $X$. This is very
-closely related to the definition of continuity of [[topological-functions]].
-
-**Example (Measurable Functions):**
-Consider the mapping $f(x)=x^2$ mapping within
-$(\mathbb{R},\mathcal{B}_{\mathbb{R}})$
-
-We say that a real function $f:\mathbb{R}\to \mathbb{R}$ is **Lebesgue
-measurable** if it is
-$(\mathcal{F}_{\lambda^*},\mathcal{B}_{\mathbb{R}})$-measurable. Also, given
-topological spaces $X,Y$ we say that $f:X \to Y$ is **Borel measurable** if it
-is $(\mathcal{B}_{X},\mathcal{B}_{Y})$-measurable. We will see that for
-functions $f:\mathbb{R} \to \mathbb{R}$ we have that Borel measurability
-implies Lebesgue measurability since
-$\mathcal{B}_{\mathbb{R}}\subsetneq \mathcal{F}_{\lambda^*}$.
-
-:::{.theorem data-title="$~$"}
-
-Given measurable spaces $(X,\mathcal{F})$ and $(Y,\mathcal{G})$ where
-$\mathcal{G}$ is generated by $\mathcal{E}$, then $f:X \to Y$ is
-$(\mathcal{F},\mathcal{G})$-measurable if and only if
-$\forall E\in \mathcal{E}$, $f^{-1}(E)\in\mathcal{F}$.
+Let $(X,\mathcal{F})$ and $(Y,\mathcal{G})$ be measurable spaces, where
+$\mathcal{G}=\sigma(\mathcal{E})$ is generated by a collection $\mathcal{E}$.
+Then $f:X\to Y$ is $(\mathcal{F},\mathcal{G})$-measurable if and only if
+$f^{-1}(E)\in\mathcal{F}$ for all $E\in\mathcal{E}$.
 
 :::
 
 :::{.proof}
-
-The only if implication is trivial.  For the converse we observe that 
+The only if direction is immediate since $\mathcal{E}\subseteq\mathcal{G}$.
+For the converse, the collection
 $$
-\{ E \subset Y:f^{-1}(E)\in \mathcal{F} \},
+\mathcal{A}=\{B\subseteq Y : f^{-1}(B)\in\mathcal{F}\}
 $$
-is a $\sigma$-algebra that contains $\mathcal{E}$; it therefore contains
-$\mathcal{G}$.
-
+is a $\sigma$-algebra, because preimages commute with complements and
+countable unions, and $\mathcal{F}$ is closed under both. It contains
+$\mathcal{E}$ by assumption, so it contains $\sigma(\mathcal{E})=\mathcal{G}$.
 :::
 
-### Equivalent Conditions
+For real-valued functions this gives several equivalent conditions.
 
-:::{.theorem data-title="Properties of Measurable Functions"}
+:::{.theorem data-title="Equivalent Conditions for Real-Valued Functions"}
 
-For measurable space $(X,\mathcal{F})$ and function $f:X \to \mathbb{R}$ the
+For a measurable space $(X,\mathcal{F})$ and a function $f:X\to\mathbb{R}$ the
 following are equivalent:
+
 1. $f$ is $\mathcal{F}$-measurable;
-2. $f^{-1}((a,\infty))\in \mathcal{F}$ for all $a\in \mathbb{R}$;
-3. $f^{-1}([a,\infty))\in \mathcal{F}$ for all $a \in \mathbb{R}$;
-4. $f^{-1}((-\infty,a))\in \mathcal{F}$ for all $a \in \mathbb{R}$;
-5. $f^{-1}((-\infty,a])\in \mathcal{F}$ for all $a \in \mathbb{R}$.
+2. $f^{-1}((a,\infty))\in\mathcal{F}$ for all $a\in\mathbb{R}$;
+3. $f^{-1}([a,\infty))\in\mathcal{F}$ for all $a\in\mathbb{R}$;
+4. $f^{-1}((-\infty,a))\in\mathcal{F}$ for all $a\in\mathbb{R}$;
+5. $f^{-1}((-\infty,a])\in\mathcal{F}$ for all $a\in\mathbb{R}$.
 
 :::
 
 :::{.proof}
+Condition 1 implies each of 2 to 5, since rays are Borel sets. Conversely, the
+open rays $(a,\infty)$ generate $\mathcal{B}_{\mathbb{R}}$: from them we get
+$(-\infty,b]=(b,\infty)^c$, then $(a,b]=(a,\infty)\cap(-\infty,b]$ and
+$(a,b)=\bigcup_n(a,b-\tfrac1n]$, and every open set is a countable union of
+open intervals. The same holds for the other three families, since each is
+obtained from another by complements or countable intersections and unions,
+for example $[a,\infty)=\bigcap_n(a-\tfrac1n,\infty)$. The result follows from
+the generating sets theorem.
+:::
 
-In our results on [[borel-sigma-algebra]] we proved that the open and closed
-rays generate the Borel σ-Algebra. Thus from previous results we have the
-result.
+The same conditions characterize measurability of functions into the extended
+reals $[-\infty,\infty]$, which is needed for suprema and limits. A function
+$f=(f_1,\dots,f_n):X\to\mathbb{R}^n$ is measurable if and only if each
+component $f_i$ is, since $\mathcal{B}_{\mathbb{R}^n}$ is the
+[[product-sigma-algebra|product $\sigma$-algebra]] of $n$ copies of
+$\mathcal{B}_{\mathbb{R}}$.
+
+## Important Results
+
+:::{.theorem data-title="Composition"}
+
+If $f:(X,\mathcal{F})\to(Y,\mathcal{G})$ and $g:(Y,\mathcal{G})\to(Z,\mathcal{H})$
+are measurable, then $g\circ f$ is $(\mathcal{F},\mathcal{H})$-measurable.
 
 :::
+
+:::{.proof}
+For $C\in\mathcal{H}$, $(g\circ f)^{-1}(C)=f^{-1}(g^{-1}(C))$. Here
+$g^{-1}(C)\in\mathcal{G}$ and so $f^{-1}(g^{-1}(C))\in\mathcal{F}$.
+:::
+
+:::{.theorem data-title="Continuous Functions are Borel Measurable"}
+
+Every continuous function $f:X\to Y$ between topological spaces is Borel
+measurable.
+
+:::
+
+:::{.proof}
+By the generating sets theorem it suffices to check the open sets, which
+generate $\mathcal{B}_Y$. If $U\subseteq Y$ is open then $f^{-1}(U)$ is open
+by continuity, hence in $\mathcal{B}_X$.
+:::
+
+:::{.theorem data-title="Algebra of Measurable Functions"}
+
+If $f,g:X\to\mathbb{R}$ are $\mathcal{F}$-measurable and $c\in\mathbb{R}$, then
+$cf$, $f+g$, $fg$, $|f|$, $\max(f,g)$ and $\min(f,g)$ are measurable. If
+$g\neq0$, then $f/g$ is measurable.
+
+:::
+
+:::{.proof}
+For the sum, note that $f(x)+g(x)>a$ if and only if there is a rational $q$
+with $f(x)>q$ and $g(x)>a-q$, so
+$$
+\{f+g>a\} = \bigcup_{q\in\mathbb{Q}}\{f>q\}\cap\{g>a-q\}\in\mathcal{F}.
+$$
+The remaining cases follow from the composition theorem, since $f\mapsto cf$
+and $f\mapsto|f|$ are continuous, and from
+$fg=\tfrac14\left((f+g)^2-(f-g)^2\right)$ and
+$\max(f,g)=\tfrac12\left(f+g+|f-g|\right)$.
+:::
+
+:::{.theorem data-title="Limits of Measurable Functions"}
+
+If $f_n:X\to[-\infty,\infty]$ are $\mathcal{F}$-measurable, $n\ge1$, then
+$\sup_nf_n$, $\inf_nf_n$, $\limsup_nf_n$ and $\liminf_nf_n$ are measurable.
+In particular, if $f_n\to f$ pointwise, then $f$ is measurable.
+
+:::
+
+:::{.proof}
+We have $\{\sup_nf_n>a\}=\bigcup_n\{f_n>a\}\in\mathcal{F}$, so the supremum is
+measurable, and $\inf_nf_n=-\sup_n(-f_n)$. Then
+$\limsup_nf_n=\inf_{k}\sup_{n\ge k}f_n$ and
+$\liminf_nf_n=\sup_{k}\inf_{n\ge k}f_n$ are measurable, and when the limit
+exists it equals the $\limsup$.
+:::
+
+The last result is a key difference from continuity: pointwise limits of
+continuous functions need not be continuous, but pointwise limits of
+measurable functions are always measurable.
+
+:::{.theorem data-title="Approximation by Simple Functions"}
+
+A **simple function** is a measurable function taking finitely many values.
+Every measurable $f:X\to[0,\infty]$ is the pointwise limit of an increasing
+sequence of non-negative simple functions $0\le s_1\le s_2\le\dots$. If $f$ is
+bounded the convergence is uniform. Every measurable real function is a
+difference of two such limits, $f=f^+-f^-$.
+
+:::
+
+:::{.proof}
+Define
+
+$$
+s_n = \sum_{k=0}^{n2^n-1}\frac{k}{2^n}\,
+\mathbf{1}_{\{k2^{-n}\le f<(k+1)2^{-n}\}} + n\,\mathbf{1}_{\{f\ge n\}}.
+$$
+
+Each set in the sum is the preimage of an interval, so it is in $\mathcal{F}$
+and $s_n$ is simple. Refining the grid from $n$ to $n+1$ rounds $f$ down to a
+finer level, so $s_n\le s_{n+1}\le f$, and $f-s_n\le2^{-n}$ wherever
+$f<n$, which gives $s_n\uparrow f$.
+:::
+
+This result is how the [[lebesgue-integral]] is constructed: the integral is
+defined first for simple functions (see [[calculus-of-simple-functions]]) and
+then extended to measurable functions by this approximation and the
+[[monotone-convergence-theorem]].
+
+## Examples
+
+1. **Constant functions** are measurable for every $\sigma$-algebra, since
+   $f^{-1}(B)$ is either $\emptyset$ or $X$.
+
+2. **Indicator functions.** For $A\subseteq X$, the indicator
+   $\mathbf{1}_A$ is $\mathcal{F}$-measurable if and only if $A\in\mathcal{F}$,
+   because $\mathbf{1}_A^{-1}(B)$ is one of $\emptyset$, $A$, $A^c$ or $X$.
+   Simple functions are finite linear combinations of indicators.
+
+3. **Extreme choices of $\sigma$-algebra.** If $\mathcal{F}=\{\emptyset,X\}$
+   is the trivial $\sigma$-algebra, the only measurable real functions are the
+   constants. If $\mathcal{F}=2^X$ is the power set, every function is
+   measurable. This is why every function on a finite probability space with
+   the power set is a random variable.
+
+4. **A function that is not measurable.** On $\Omega=\{1,\dots,6\}$ with
+   $\mathcal{F}=\{\emptyset,\{1,3,5\},\{2,4,6\},\Omega\}$ (we can only observe
+   whether the roll is odd or even), the function $X(\omega)=\omega$ is not
+   $\mathcal{F}$-measurable, since $X^{-1}(\{1\})=\{1\}\notin\mathcal{F}$. The
+   parity $\mathbf{1}_{\{\text{odd}\}}$ is measurable.
+
+5. **Continuous functions** such as $f(x)=x^2$ and $f(x)=e^x$ are Borel
+   measurable, and so are all polynomials and $\sin$, $\cos$, by the continuity
+   theorem above.
+
+6. **Monotone functions.** If $f:\mathbb{R}\to\mathbb{R}$ is non-decreasing
+   then $\{f>a\}$ is an interval for every $a$, so $f$ is Borel measurable even
+   if it has countably many jumps, such as the floor function.
+
+7. **The Dirichlet function** $\mathbf{1}_{\mathbb{Q}}$ is nowhere continuous,
+   but is Borel measurable because $\mathbb{Q}$ is a countable union of
+   points and hence Borel. It is the pointwise limit
+   $\lim_m\lim_n\cos^{2n}(m!\pi x)$ of continuous functions.
+
+8. **Non-measurable functions** exist but need the axiom of choice. If
+   $V\subset[0,1]$ is a Vitali set, then $\mathbf{1}_V$ is not Lebesgue
+   measurable. See [[vitalli-non-measurability-theorem]].
+
+9. **Stock prices.** If $(\Omega,\mathcal{F},\mathbb{P})$ models a financial
+   market and $S_T=S_0\exp\left((\mu-\frac12\sigma^2)T+\sigma W_T\right)$, then
+   $S_T$ is a random variable, as a continuous function of the random variable
+   $W_T$. So are payoffs such as $(S_T-K)^+$, as continuous functions of $S_T$.
+
+## Related Topics
+
+- [[measure-theory]]
+- [[measure-spaces]]
+- [[random-variables]]
+- [[lebesgue-integral]]
+- [[generated-sigma-algebra]]
+- [[product-sigma-algebra]]

@@ -1,45 +1,158 @@
 ---
-title: European Options
-author: John Robin Inston
+id: european-options
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "European call and put options: payoffs, pricing and put-call parity."
 number-sections: true
+title: European Options
 title-block-banner: false
 ---
 
 ## European Options
 
 **European options** are the simplest kind of financial derivatives after
-forwards and futures. Options have become a standard tool in modern finance
+forwards and futures. Options have become a standard tool in modern finance,
 allowing investors to construct contracts to hedge portfolio risk, take
 advantage of perceived arbitrage and leverage risk.
 
 :::{.definition data-title="European Option"}
 
-A **European put/call option** is a contract giving its holder the right but
-not the obligation to sell/purchase an underlying asset for some specified
+A **European call/put option** is a contract giving its holder the right but
+not the obligation to purchase/sell an underlying asset for some specified
 strike price $K$ at some future maturity time $T$.
 
 :::
 
+For an underlying asset with price $S$, the payoff $h$ of a call and a put
+with strike $K$ at maturity $T$ is
+
+$$
+h_{\text{call}}(S_T) = (S_T - K)^+,
+\qquad
+h_{\text{put}}(S_T) = (K - S_T)^+.
+$$
+
+Throughout, $C(S_t,t)$ and $P(S_t,t)$ denote the call and put prices at time
+$t \le T$, and $r$ is a constant risk-free interest rate. See [[derivatives]]
+for payoff diagrams.
+
 ## Pricing European Options
 
-### Risk-Free Measure Approach
+### Risk-Neutral Approach
 
-Introducing typical mathematical notation, for underlying asset with price $S$
-the payoff function $\Phi$ of a European call option with strike price $K$ at
-maturity time $T$ is given by
-$$
-\Phi(T,S)=(S_{T}-K)_{+}.
-$$
-<!-- TODO: image "Pasted image 20250602123056.png" not found in vault -->
-Therefore from [[derivatives-pricing|risk-neutral pricing]] we have that the
-price of the European call option at present time $t$ is given by the expected
-payoff of the option adjusted for the time-value of money
-$$
-P(t, \Phi) = \mathbb{E}[D_{t}\Phi(T,S)],
-$$
-where $D_{t}$ represents the discounting factor. The specific form of this
-discount depends on the assumed underlying model.
+By [[risk-neutral-pricing|risk-neutral pricing]], the price of a European
+option at time $t$ is the expected payoff under the risk-neutral measure
+$\mathbb{Q}$, adjusted for the time value of money
 
+$$
+V(t) = \mathbb{E}_{\mathbb{Q}}\left[ D_{t,T}\, h(S_T) \mid \mathcal{F}_t \right],
+$$
 
+where $D_{t,T}$ is the discount factor from $T$ to $t$. For a constant rate,
+$D_{t,T} = e^{-r(T-t)}$.
 
+### Black-Scholes Formulas
+
+Let $N$ denote the cumulative distribution function of the standard normal
+distribution,
+
+$$
+N(x) = \mathbb{P}(Z \le x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}}\,e^{-u^2/2}\,du,
+\qquad Z \sim \mathcal{N}(0,1).
+$$
+
+It satisfies $N(x) + N(-x) = 1$.
+
+:::{.theorem data-title="European Call and Put Prices"}
+
+Under the [[black-scholes-merton-model]] the prices of a European vanilla call
+and put option at time $t$ with underlying stock $S_t$, strike $K$ and
+maturity $T$ are
+
+$$
+\begin{aligned}
+C(S_t,t) & = N(d_{+})\,S_t - N(d_{-})\,Ke^{-r(T-t)}, \\
+P(S_t,t) & = N(-d_{-})\,Ke^{-r(T-t)} - N(-d_{+})\,S_t,
+\end{aligned}
+$$
+
+where
+
+$$
+d_{+} = \frac{1}{\sigma\sqrt{T-t}}
+\left( \log\frac{S_t}{K} + \left( r + \frac{\sigma^2}{2} \right)(T-t) \right),
+\qquad
+d_{-} = d_{+} - \sigma\sqrt{T-t}.
+$$
+
+:::
+
+These follow by evaluating the risk-neutral expectation above, using that
+$S_T$ is log-normal under $\mathbb{Q}$. They also solve the
+[[black-scholes-merton-model|Black-Scholes PDE]]. The sensitivities of these prices are the
+[[option-greeks]].
+
+## Put-Call Parity
+
+:::{.theorem data-title="Put-Call Parity"}
+
+For European options on a non-dividend-paying asset with the same strike $K$
+and maturity $T$,
+
+$$
+C(S_t,t) - P(S_t,t) = S_t - Ke^{-r(T-t)}.
+$$
+
+:::
+
+This relation does not depend on the model for $S$. It follows from the
+payoff identity
+
+$$
+(S_T - K)^+ - (K - S_T)^+ = S_T - K,
+$$
+
+since taking the discounted expectation under $\mathbb{Q}$ and using that the
+discounted stock price $e^{-rt}S_t$ is a $\mathbb{Q}$-martingale gives
+
+$$
+C(S_t,t) - P(S_t,t)
+= e^{-r(T-t)}\,\mathbb{E}_{\mathbb{Q}}[S_T - K \mid \mathcal{F}_t]
+= S_t - Ke^{-r(T-t)}.
+$$
+
+The same relation comes from replication. A long call and short put
+replicate a forward contract with delivery price $K$, which is worth
+$S_t - Ke^{-r(T-t)}$ (buy the asset and borrow $Ke^{-r(T-t)}$). Any other
+price would allow an arbitrage.
+
+As a check, the Black-Scholes formulas satisfy parity because
+$N(x) + N(-x) = 1$,
+
+$$
+C - P = S_t\left[N(d_+) + N(-d_+)\right]
+- Ke^{-r(T-t)}\left[N(d_-) + N(-d_-)\right]
+= S_t - Ke^{-r(T-t)}.
+$$
+
+If the asset pays dividends, $S_t$ is replaced by $S_t$ minus the present
+value of the dividends. See [[black-scholes-model-with-dividends]]. Parity
+also follows from the [[carr-madan-formula]].
+
+## No-Arbitrage Bounds
+
+Since option prices are non-negative, parity gives bounds that hold in any
+model
+
+$$
+\max\left(S_t - Ke^{-r(T-t)},\, 0\right) \le C(S_t,t) \le S_t,
+$$
+
+$$
+\max\left(Ke^{-r(T-t)} - S_t,\, 0\right) \le P(S_t,t) \le Ke^{-r(T-t)}.
+$$
+
+The upper bounds hold because the payoffs satisfy $(S_T-K)^+ \le S_T$ and
+$(K-S_T)^+ \le K$.

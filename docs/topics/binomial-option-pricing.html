@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-10-29">
+
+<title>Binomial Option Pricing – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setup-and-notation" id="toc-setup-and-notation" class="nav-link active" data-scroll-target="#setup-and-notation"><span class="header-section-number">1</span> Setup and notation</a></li>
+  <li><a href="#the-one-period-model" id="toc-the-one-period-model" class="nav-link" data-scroll-target="#the-one-period-model"><span class="header-section-number">2</span> The one-period model</a>
+  <ul class="collapse">
+  <li><a href="#replication" id="toc-replication" class="nav-link" data-scroll-target="#replication"><span class="header-section-number">2.1</span> Replication</a></li>
+  <li><a href="#no-arbitrage-condition" id="toc-no-arbitrage-condition" class="nav-link" data-scroll-target="#no-arbitrage-condition"><span class="header-section-number">2.2</span> No-arbitrage condition</a></li>
+  <li><a href="#risk-neutral-pricing" id="toc-risk-neutral-pricing" class="nav-link" data-scroll-target="#risk-neutral-pricing"><span class="header-section-number">2.3</span> Risk-neutral pricing</a></li>
+  <li><a href="#where-do-u-and-d-come-from" id="toc-where-do-u-and-d-come-from" class="nav-link" data-scroll-target="#where-do-u-and-d-come-from"><span class="header-section-number">2.4</span> Where do <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> come from?</a></li>
+  </ul></li>
+  <li><a href="#putcall-parity-in-the-binomial-model" id="toc-putcall-parity-in-the-binomial-model" class="nav-link" data-scroll-target="#putcall-parity-in-the-binomial-model"><span class="header-section-number">3</span> Put–call parity in the binomial model</a></li>
+  <li><a href="#multi-period-trees" id="toc-multi-period-trees" class="nav-link" data-scroll-target="#multi-period-trees"><span class="header-section-number">4</span> Multi-period trees</a>
+  <ul class="collapse">
+  <li><a href="#building-the-tree" id="toc-building-the-tree" class="nav-link" data-scroll-target="#building-the-tree"><span class="header-section-number">4.1</span> Building the tree</a></li>
+  <li><a href="#backward-induction" id="toc-backward-induction" class="nav-link" data-scroll-target="#backward-induction"><span class="header-section-number">4.2</span> Backward induction</a></li>
+  </ul></li>
+  <li><a href="#american-options" id="toc-american-options" class="nav-link" data-scroll-target="#american-options"><span class="header-section-number">5</span> American options</a>
+  <ul class="collapse">
+  <li><a href="#the-early-exercise-rule" id="toc-the-early-exercise-rule" class="nav-link" data-scroll-target="#the-early-exercise-rule"><span class="header-section-number">5.1</span> The early-exercise rule</a></li>
+  <li><a href="#when-is-early-exercise-worth-it" id="toc-when-is-early-exercise-worth-it" class="nav-link" data-scroll-target="#when-is-early-exercise-worth-it"><span class="header-section-number">5.2</span> When is early exercise worth it?</a></li>
+  </ul></li>
+  <li><a href="#options-on-currencies" id="toc-options-on-currencies" class="nav-link" data-scroll-target="#options-on-currencies"><span class="header-section-number">6</span> Options on currencies</a></li>
+  <li><a href="#worked-examples" id="toc-worked-examples" class="nav-link" data-scroll-target="#worked-examples"><span class="header-section-number">7</span> Worked examples</a>
+  <ul class="collapse">
+  <li><a href="#example-a-putcall-parity-in-one-period" id="toc-example-a-putcall-parity-in-one-period" class="nav-link" data-scroll-target="#example-a-putcall-parity-in-one-period"><span class="header-section-number">7.1</span> Example A: Put–call parity in one period</a></li>
+  <li><a href="#example-b-two-period-european-call" id="toc-example-b-two-period-european-call" class="nav-link" data-scroll-target="#example-b-two-period-european-call"><span class="header-section-number">7.2</span> Example B: Two-period European call</a></li>
+  <li><a href="#example-c-two-period-american-put-where-early-exercise-happens" id="toc-example-c-two-period-american-put-where-early-exercise-happens" class="nav-link" data-scroll-target="#example-c-two-period-american-put-where-early-exercise-happens"><span class="header-section-number">7.3</span> Example C: Two-period American put, where early exercise happens</a></li>
+  <li><a href="#example-d-two-period-currency-call-european-vs.-american" id="toc-example-d-two-period-currency-call-european-vs.-american" class="nav-link" data-scroll-target="#example-d-two-period-currency-call-european-vs.-american"><span class="header-section-number">7.4</span> Example D: Two-period currency call, European vs.&nbsp;American</a></li>
+  </ul></li>
+  <li><a href="#checklist-for-the-worksheet" id="toc-checklist-for-the-worksheet" class="nav-link" data-scroll-target="#checklist-for-the-worksheet"><span class="header-section-number">8</span> Checklist for the worksheet</a></li>
+  <li><a href="#appendix-checking-trees-in-python" id="toc-appendix-checking-trees-in-python" class="nav-link" data-scroll-target="#appendix-checking-trees-in-python"><span class="header-section-number">9</span> Appendix: checking trees in Python</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">10</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Binomial Option Pricing</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 29, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Learning objectives
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><strong>The one-period model</strong>: pricing by replication (<span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span>) and by risk-neutral expectation (<span class="math inline">\(p^*\)</span>).</li>
+<li><strong>Put–call parity</strong> inside the binomial model.</li>
+<li><strong>Multi-period trees</strong> and <strong>American options</strong> (early exercise at each node).</li>
+<li><strong>Options on currencies</strong>, where the foreign interest rate plays the role of a dividend yield.</li>
+</ol>
+</div>
+</div>
+<section id="setup-and-notation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Setup and notation</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Symbol</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(S\)</span></td>
+<td style="text-align: left;">current price of the underlying (stock price, or exchange rate in $ per unit of foreign currency)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(K\)</span></td>
+<td style="text-align: left;">strike price</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(r\)</span></td>
+<td style="text-align: left;">continuously compounded risk-free rate (domestic)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\delta\)</span></td>
+<td style="text-align: left;">continuous dividend yield (for currencies: the foreign rate <span class="math inline">\(r_f\)</span>)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(T\)</span></td>
+<td style="text-align: left;">time to expiration (years)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(n\)</span></td>
+<td style="text-align: left;">number of binomial periods</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(h = T/n\)</span></td>
+<td style="text-align: left;">length of one period</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(u, d\)</span></td>
+<td style="text-align: left;">up and down factors, so the price moves to <span class="math inline">\(uS\)</span> or <span class="math inline">\(dS\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(C_u, C_d\)</span></td>
+<td style="text-align: left;">option values in the up and down states next period (similarly <span class="math inline">\(P_u, P_d\)</span>)</td>
+</tr>
+</tbody>
+</table>
+<p>In one period the stock moves from <span class="math inline">\(S\)</span> to either <span class="math inline">\(uS\)</span> or <span class="math inline">\(dS\)</span>, with <span class="math inline">\(d &lt; u\)</span>.</p>
+</section>
+<section id="the-one-period-model" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> The one-period model</h1>
+<section id="replication" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="replication"><span class="header-section-number">2.1</span> Replication</h2>
+<p>The idea is to build a portfolio from the underlying and the risk-free bond that pays exactly what the option pays in both states. We buy <span class="math inline">\(\Delta\)</span> shares and lend <span class="math inline">\(B\)</span> dollars (a negative <span class="math inline">\(B\)</span> means we borrow). Each share pays dividends continuously, which we reinvest in more shares, so <span class="math inline">\(\Delta\)</span> shares today become <span class="math inline">\(\Delta e^{\delta h}\)</span> shares at time <span class="math inline">\(h\)</span>. Matching payoffs in both states gives two equations:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Delta\, uS\, e^{\delta h} + B e^{rh} &amp;= C_u, \\
+\Delta\, dS\, e^{\delta h} + B e^{rh} &amp;= C_d.
+\end{aligned}
+\]</span></p>
+<p>Subtracting the second equation from the first and then solving for <span class="math inline">\(B\)</span> gives</p>
+<p><span class="math display">\[
+\boxed{\;\Delta = e^{-\delta h}\,\frac{C_u - C_d}{S(u-d)}, \qquad
+B = e^{-rh}\,\frac{u\,C_d - d\,C_u}{u-d}.\;}
+\]</span></p>
+<p>By the <strong>law of one price</strong>, the option must cost the same as the replicating portfolio:</p>
+<p><span class="math display">\[
+C = \Delta S + B.
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Interpretation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><span class="math inline">\(\Delta\)</span> measures how sensitive the option is to the underlying. For calls <span class="math inline">\(0 \le \Delta \le e^{-\delta h}\)</span>, and for puts <span class="math inline">\(-e^{-\delta h} \le \Delta \le 0\)</span>.</li>
+<li>A <strong>call</strong> is replicated by buying shares and <strong>borrowing</strong> (<span class="math inline">\(\Delta &gt; 0\)</span>, <span class="math inline">\(B &lt; 0\)</span>).</li>
+<li>A <strong>put</strong> is replicated by short-selling shares and <strong>lending</strong> (<span class="math inline">\(\Delta &lt; 0\)</span>, <span class="math inline">\(B &gt; 0\)</span>).</li>
+<li>These formulas apply to <em>any</em> payoff, not just calls and puts. Replace <span class="math inline">\(C_u, C_d\)</span> with whatever the derivative pays.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="no-arbitrage-condition" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="no-arbitrage-condition"><span class="header-section-number">2.2</span> No-arbitrage condition</h2>
+<p>The model is free of arbitrage if and only if</p>
+<p><span class="math display">\[
+d &lt; e^{(r-\delta)h} &lt; u.
+\]</span></p>
+<p>If <span class="math inline">\(e^{(r-\delta)h} \ge u\)</span>, then shorting the stock and lending the proceeds beats holding the stock in every state, which is an arbitrage. The case <span class="math inline">\(e^{(r-\delta)h} \le d\)</span> gives an arbitrage in the opposite direction. <strong>Always check this condition first.</strong></p>
+</section>
+<section id="risk-neutral-pricing" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="risk-neutral-pricing"><span class="header-section-number">2.3</span> Risk-neutral pricing</h2>
+<p>Substitute <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span> into <span class="math inline">\(C = \Delta S + B\)</span> and collect the <span class="math inline">\(C_u\)</span> and <span class="math inline">\(C_d\)</span> terms. This gives</p>
+<p><span class="math display">\[
+C = e^{-rh}\left[p^* C_u + (1-p^*) C_d\right], \qquad
+p^* = \frac{e^{(r-\delta)h} - d}{u - d}.
+\]</span></p>
+<p>The no-arbitrage condition is exactly the condition that <span class="math inline">\(0 &lt; p^* &lt; 1\)</span>. Note that <span class="math inline">\(p^*\)</span> is <strong>not</strong> the real-world probability of an up move. It is the probability under which the underlying’s total return (price change plus dividends) earns the risk-free rate:</p>
+<p><span class="math display">\[
+e^{-rh}\left[p^*\, uS + (1-p^*)\, dS\right] = S e^{-\delta h}.
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Two routes, one answer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Replication and risk-neutral expectation always give the same price, because the second is derived from the first. On exams, use <span class="math inline">\(p^*\)</span> to get the price quickly and <span class="math inline">\(\Delta, B\)</span> when the question asks for the hedge. When a problem asks for “premium, <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span> at each node”, compute all three and check that <span class="math inline">\(\Delta S + B\)</span> equals the premium. This catches most arithmetic slips.</p>
+</div>
+</div>
+</section>
+<section id="where-do-u-and-d-come-from" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="where-do-u-and-d-come-from"><span class="header-section-number">2.4</span> Where do <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> come from?</h2>
+<p>Problems often give <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> directly, and in that case <strong>use the values given</strong>. When only the volatility <span class="math inline">\(\sigma\)</span> is given, McDonald’s <em>forward tree</em> sets</p>
+<p><span class="math display">\[
+u = e^{(r-\delta)h + \sigma\sqrt{h}}, \qquad d = e^{(r-\delta)h - \sigma\sqrt{h}},
+\]</span></p>
+<p>and the Cox–Ross–Rubinstein tree sets <span class="math inline">\(u = e^{\sigma\sqrt h}\)</span> and <span class="math inline">\(d = e^{-\sigma \sqrt h}\)</span>. If a problem gives both <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(u, d\)</span>, the explicit <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> take precedence, so <span class="math inline">\(\sigma\)</span> is not needed.</p>
+</section>
+</section>
+<section id="putcall-parity-in-the-binomial-model" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Put–call parity in the binomial model</h1>
+<p>For European options with the same strike <span class="math inline">\(K\)</span> and expiry <span class="math inline">\(T\)</span> on an underlying with dividend yield <span class="math inline">\(\delta\)</span>,</p>
+<p><span class="math display">\[
+\boxed{\;C - P = S e^{-\delta T} - K e^{-rT}.\;}
+\]</span></p>
+<p><strong>Proof (one period).</strong> Look at the difference <span class="math inline">\(C - P\)</span>. Its payoff is <span class="math inline">\(\max(S_T - K, 0) - \max(K - S_T, 0) = S_T - K\)</span> in <em>every</em> state, so it is a forward contract. Replicate it with the formulas above, using <span class="math inline">\(V_u = uS - K\)</span> and <span class="math inline">\(V_d = dS - K\)</span>:</p>
+<p><span class="math display">\[
+\Delta_C - \Delta_P = e^{-\delta h}\frac{(uS - K) - (dS - K)}{S(u-d)} = e^{-\delta h},
+\]</span></p>
+<p><span class="math display">\[
+B_C - B_P = e^{-rh}\,\frac{u(dS - K) - d(uS - K)}{u-d} = e^{-rh}\,\frac{-K(u-d)}{u-d} = -K e^{-rh}.
+\]</span></p>
+<p>Therefore <span class="math inline">\(C - P = (\Delta_C - \Delta_P)S + (B_C - B_P) = Se^{-\delta h} - Ke^{-rh}\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<p>The same result comes out of the risk-neutral formula:</p>
+<p><span class="math display">\[
+e^{-rh}\left[p^*(uS - K) + (1-p^*)(dS - K)\right] = e^{-rh}\left[S e^{(r-\delta)h} - K\right] = Se^{-\delta h} - Ke^{-rh}.
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>What to notice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>The parity proof never uses <span class="math inline">\(p^*\)</span> or the values of <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span>, beyond the model being arbitrage-free. Parity is model-free.</li>
+<li>It also gives the <strong>hedges</strong>: <span class="math inline">\(\Delta_C - \Delta_P = e^{-\delta h}\)</span> and <span class="math inline">\(B_C - B_P = -Ke^{-rh}\)</span>. You can use these to check your trees.</li>
+<li>Parity holds <strong>at every node</strong> of a multi-period European tree, with <span class="math inline">\(S\)</span> and the remaining time to expiry at that node.</li>
+<li>Parity does <strong>not</strong> hold as an equality for American options. Instead, <span class="math inline">\(Se^{-\delta T} - K \le C - P \le S - Ke^{-rT}\)</span>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="multi-period-trees" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Multi-period trees</h1>
+<section id="building-the-tree" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="building-the-tree"><span class="header-section-number">4.1</span> Building the tree</h2>
+<p>With <span class="math inline">\(n\)</span> periods, the node reached after <span class="math inline">\(i\)</span> up moves and <span class="math inline">\(j\)</span> down moves has price <span class="math inline">\(S u^i d^j\)</span>. The tree <strong>recombines</strong> (an up move followed by a down move ends at the same price as a down move followed by an up move), so after <span class="math inline">\(k\)</span> periods there are only <span class="math inline">\(k+1\)</span> nodes.</p>
+</section>
+<section id="backward-induction" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="backward-induction"><span class="header-section-number">4.2</span> Backward induction</h2>
+<ol type="1">
+<li><strong>Terminal payoffs.</strong> At expiry, set the option value equal to the payoff, e.g.&nbsp;<span class="math inline">\(C = \max(Su^id^j - K, 0)\)</span>.</li>
+<li><strong>Step back one period.</strong> At each earlier node, apply the one-period formulas using the two values that follow it: <span class="math display">\[
+\Delta = e^{-\delta h}\frac{V_{\text{up}} - V_{\text{down}}}{S_{\text{node}}(u-d)}, \quad
+B = e^{-rh}\frac{u V_{\text{down}} - d V_{\text{up}}}{u-d}, \quad
+V = \Delta S_{\text{node}} + B.
+\]</span></li>
+<li><strong>Repeat</strong> until you reach time 0.</li>
+</ol>
+<p>Since <span class="math inline">\(u\)</span>, <span class="math inline">\(d\)</span>, <span class="math inline">\(r\)</span>, <span class="math inline">\(\delta\)</span> and <span class="math inline">\(h\)</span> are the same at every node, <span class="math inline">\(p^*\)</span> is also the same at every node. <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span>, however, <strong>change from node to node</strong>. This is why replication in a multi-period tree means <strong>rebalancing</strong> the portfolio at each node. The rebalancing is <strong>self-financing</strong>: the portfolio you hold coming into a node is worth exactly the cost of the new portfolio.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Shortcuts that save time
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>If <strong>both</strong> following values are <span class="math inline">\(0\)</span>, then <span class="math inline">\(V = \Delta = B = 0\)</span>.</li>
+<li>If <strong>both</strong> following nodes are in the money for a call, then <span class="math inline">\(\Delta = e^{-\delta h}\)</span> and <span class="math inline">\(B = -Ke^{-rh}\)</span>. The call acts like a forward contract from that node on. For a put the corresponding values are <span class="math inline">\(\Delta = -e^{-\delta h}\)</span> and <span class="math inline">\(B = Ke^{-rh}\)</span>.</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="american-options" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> American options</h1>
+<section id="the-early-exercise-rule" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="the-early-exercise-rule"><span class="header-section-number">5.1</span> The early-exercise rule</h2>
+<p>An American option can be exercised at any node. At each non-terminal node the holder chooses the larger of two values: exercise now, or continue holding.</p>
+<p><span class="math display">\[
+V_{\text{node}} = \max\Big(\underbrace{\text{payoff}(S_{\text{node}})}_{\text{exercise now}},\;
+\underbrace{e^{-rh}\left[p^* V_{\text{up}} + (1-p^*)V_{\text{down}}\right]}_{\text{continuation value}}\Big).
+\]</span></p>
+<p>The <strong>continuation value must be computed from the <em>American</em> values</strong> at the next nodes, not the European ones. This is the most common mistake students make.</p>
+<p>When early exercise is optimal at a node, the option is gone after that node, so no hedge is needed there. These notes report <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span> at such nodes in brackets. The bracketed values are the hedge you would hold if you chose <em>not</em> to exercise.</p>
+</section>
+<section id="when-is-early-exercise-worth-it" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="when-is-early-exercise-worth-it"><span class="header-section-number">5.2</span> When is early exercise worth it?</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Option</th>
+<th style="text-align: left;">Gain from exercising early</th>
+<th style="text-align: left;">Loss from exercising early</th>
+<th style="text-align: left;">Conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Call, <span class="math inline">\(\delta = 0\)</span></td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">interest on <span class="math inline">\(K\)</span> and the insurance the call provides</td>
+<td style="text-align: left;"><strong>Never</strong> exercise early, so American = European</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Call, <span class="math inline">\(\delta &gt; 0\)</span></td>
+<td style="text-align: left;">you start receiving dividends</td>
+<td style="text-align: left;">interest on <span class="math inline">\(K\)</span> and insurance</td>
+<td style="text-align: left;">Early exercise is possible when <span class="math inline">\(\delta\)</span> is large and the call is deep in the money</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Put, any <span class="math inline">\(\delta\)</span></td>
+<td style="text-align: left;">interest earned on <span class="math inline">\(K\)</span></td>
+<td style="text-align: left;">dividends you would keep collecting on the stock until expiry, and insurance</td>
+<td style="text-align: left;">Early exercise is possible when <span class="math inline">\(r\)</span> is large and the put is deep in the money</td>
+</tr>
+</tbody>
+</table>
+<p>For calls, the inequality <span class="math inline">\(C_{\text{Amer}} \ge C_{\text{Eur}} \ge S e^{-\delta T} - Ke^{-rT} &gt; S - K\)</span> (valid when <span class="math inline">\(\delta=0\)</span>, <span class="math inline">\(r&gt;0\)</span>) explains why an American call on a non-dividend-paying stock is never exercised early: you could always sell it for more than its exercise value.</p>
+<p>An American put on a non-dividend stock <em>can</em> be worth exercising early. Whether it is in a given tree depends on the numbers: you have to compare the exercise value with the continuation value at each node.</p>
+</section>
+</section>
+<section id="options-on-currencies" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Options on currencies</h1>
+<p>Let <span class="math inline">\(x\)</span> be the exchange rate in domestic currency per unit of foreign currency (for example, $0.92 per euro). One euro is an asset that pays a continuous “dividend” at the euro interest rate <span class="math inline">\(r_f\)</span>, because a euro held in a euro bank account grows at rate <span class="math inline">\(r_f\)</span>. Therefore <strong>every formula above carries over with <span class="math inline">\(S \to x\)</span> and <span class="math inline">\(\delta \to r_f\)</span></strong>:</p>
+<p><span class="math display">\[
+p^* = \frac{e^{(r - r_f)h} - d}{u-d}, \qquad
+\Delta = e^{-r_f h}\frac{C_u - C_d}{x(u-d)}, \qquad
+B = e^{-rh}\frac{uC_d - dC_u}{u-d}.
+\]</span></p>
+<p>Here <span class="math inline">\(\Delta\)</span> is the number of <strong>euros</strong> to buy today and invest at <span class="math inline">\(r_f\)</span>, and <span class="math inline">\(B\)</span> is the number of <strong>dollars</strong> to lend at <span class="math inline">\(r\)</span>.</p>
+<p>Currency put–call parity reads</p>
+<p><span class="math display">\[
+C - P = x e^{-r_f T} - K e^{-rT}.
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Early exercise of currency options
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>For an American <strong>call</strong>, the foreign rate acts as a dividend yield, so a large <span class="math inline">\(r_f\)</span> makes early exercise more attractive.</li>
+<li>For an American <strong>put</strong>, a large domestic rate <span class="math inline">\(r\)</span> makes early exercise more attractive.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="worked-examples" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Worked examples</h1>
+<section id="example-a-putcall-parity-in-one-period" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="example-a-putcall-parity-in-one-period"><span class="header-section-number">7.1</span> Example A: Put–call parity in one period</h2>
+<p><strong>Data.</strong> <span class="math inline">\(S = 50\)</span>, <span class="math inline">\(K = 50\)</span>, <span class="math inline">\(r = 5\%\)</span>, <span class="math inline">\(\delta = 2\%\)</span>, <span class="math inline">\(u = 1.2\)</span>, <span class="math inline">\(d = 0.85\)</span>, <span class="math inline">\(T = h = 1\)</span>.</p>
+<p><strong>No-arbitrage check.</strong> <span class="math inline">\(e^{(0.05 - 0.02)} = 1.030455\)</span> and <span class="math inline">\(0.85 &lt; 1.030455 &lt; 1.2\)</span>. <span class="math inline">\(\checkmark\)</span></p>
+<p><strong>Risk-neutral probability.</strong> <span class="math display">\[
+p^* = \frac{1.030455 - 0.85}{1.2 - 0.85} = 0.515584.
+\]</span></p>
+<p><strong>Payoffs.</strong> <span class="math inline">\(uS = 60\)</span> and <span class="math inline">\(dS = 42.5\)</span>, so <span class="math inline">\(C_u = 10\)</span>, <span class="math inline">\(C_d = 0\)</span>, <span class="math inline">\(P_u = 0\)</span>, <span class="math inline">\(P_d = 7.5\)</span>.</p>
+<p><strong>Call.</strong> <span class="math display">\[
+\Delta_C = e^{-0.02}\frac{10 - 0}{50(0.35)} = 0.560114, \qquad
+B_C = e^{-0.05}\frac{1.2(0) - 0.85(10)}{0.35} = -23.1013,
+\]</span> <span class="math display">\[
+C = 0.560114(50) - 23.1013 = 4.9044.
+\]</span></p>
+<p><strong>Put.</strong> <span class="math display">\[
+\Delta_P = e^{-0.02}\frac{0 - 7.5}{50(0.35)} = -0.420085, \qquad
+B_P = e^{-0.05}\frac{1.2(7.5) - 0.85(0)}{0.35} = 24.4602,
+\]</span> <span class="math display">\[
+P = -0.420085(50) + 24.4602 = 3.4559.
+\]</span></p>
+<p><strong>Parity check.</strong> <span class="math display">\[
+C - P = 4.9044 - 3.4559 = 1.4485, \qquad
+Se^{-\delta T} - Ke^{-rT} = 50e^{-0.02} - 50e^{-0.05} = 1.4485. \;\checkmark
+\]</span></p>
+<p>The hedges agree with parity as well: <span class="math inline">\(\Delta_C - \Delta_P = 0.980199 = e^{-0.02}\)</span> and <span class="math inline">\(B_C - B_P = -47.5615 = -50e^{-0.05}\)</span>.</p>
+</section>
+<section id="example-b-two-period-european-call" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="example-b-two-period-european-call"><span class="header-section-number">7.2</span> Example B: Two-period European call</h2>
+<p><strong>Data.</strong> <span class="math inline">\(S = 100\)</span>, <span class="math inline">\(K = 95\)</span>, <span class="math inline">\(r = 6\%\)</span>, <span class="math inline">\(\delta = 0\)</span>, <span class="math inline">\(u = 1.25\)</span>, <span class="math inline">\(d = 0.85\)</span>, <span class="math inline">\(T = 1\)</span>, <span class="math inline">\(n = 2\)</span>, so <span class="math inline">\(h = 0.5\)</span>.</p>
+<p><strong>Constants.</strong> <span class="math inline">\(e^{rh} = 1.030455\)</span> and <span class="math inline">\(e^{-rh} = 0.970446\)</span>, so <span class="math display">\[
+p^* = \frac{1.030455 - 0.85}{0.40} = 0.451136.
+\]</span></p>
+<p><strong>Stock prices.</strong> <span class="math inline">\(S_u = 125\)</span>, <span class="math inline">\(S_d = 85\)</span>, <span class="math inline">\(S_{uu} = 156.25\)</span>, <span class="math inline">\(S_{ud} = 106.25\)</span>, <span class="math inline">\(S_{dd} = 72.25\)</span>.</p>
+<p><strong>Terminal payoffs.</strong> <span class="math inline">\(C_{uu} = 61.25\)</span>, <span class="math inline">\(C_{ud} = 11.25\)</span>, <span class="math inline">\(C_{dd} = 0\)</span>.</p>
+<p><strong>Node <span class="math inline">\(u\)</span>.</strong> Both following nodes are in the money, so the call acts like a forward contract from here: <span class="math display">\[
+\Delta_u = \frac{61.25 - 11.25}{125(0.40)} = 1, \qquad
+B_u = 0.970446\cdot\frac{1.25(11.25) - 0.85(61.25)}{0.40} = -92.1923 = -95e^{-0.03},
+\]</span> <span class="math display">\[
+C_u = 125 - 92.1923 = 32.8077.
+\]</span></p>
+<p><strong>Node <span class="math inline">\(d\)</span>.</strong> <span class="math display">\[
+\Delta_d = \frac{11.25 - 0}{85(0.40)} = 0.330882, \qquad
+B_d = 0.970446\cdot\frac{0 - 0.85(11.25)}{0.40} = -23.1997,
+\]</span> <span class="math display">\[
+C_d = 0.330882(85) - 23.1997 = 4.9253.
+\]</span></p>
+<p><strong>Root.</strong> <span class="math display">\[
+\Delta_0 = \frac{32.8077 - 4.9253}{100(0.40)} = 0.697060, \qquad
+B_0 = 0.970446\cdot\frac{1.25(4.9253) - 0.85(32.8077)}{0.40} = -52.7192,
+\]</span> <span class="math display">\[
+C_0 = 69.7060 - 52.7192 = 16.9867.
+\]</span></p>
+<p><span class="math display">\[
+\begin{array}{ccccc}
+\textbf{t = 0} &amp; &amp; \textbf{t = 0.5} &amp; &amp; \textbf{t = 1} \\[6pt]
+&amp; &amp; &amp; &amp; \boxed{\begin{array}{c} S = 156.25 \\ C = 61.25 \end{array}} \\[6pt]
+&amp; &amp; \boxed{\begin{array}{c} S = 125 \\ C = 32.8077 \\ \Delta = 1.0000 \\ B = -92.1923 \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; \\[6pt]
+\boxed{\begin{array}{c} S = 100 \\ C = 16.9867 \\ \Delta = 0.6971 \\ B = -52.7192 \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; &amp; &amp; \boxed{\begin{array}{c} S = 106.25 \\ C = 11.25 \end{array}} \\[6pt]
+&amp; &amp; \boxed{\begin{array}{c} S = 85 \\ C = 4.9253 \\ \Delta = 0.3309 \\ B = -23.1997 \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; \\[6pt]
+&amp; &amp; &amp; &amp; \boxed{\begin{array}{c} S = 72.25 \\ C = 0 \end{array}}
+\end{array}
+\]</span></p>
+<p><strong>Check with <span class="math inline">\(p^*\)</span>.</strong> <span class="math inline">\(C_0 = e^{-2rh}\left[(p^*)^2(61.25) + 2p^*(1-p^*)(11.25)\right] = 16.9867\)</span>. <span class="math inline">\(\checkmark\)</span></p>
+<p>Because <span class="math inline">\(\delta = 0\)</span>, the American call has the same price: at node <span class="math inline">\(u\)</span>, for example, <span class="math inline">\(32.8077 &gt; 30 = 125 - 95\)</span>, so exercising early would throw away value.</p>
+</section>
+<section id="example-c-two-period-american-put-where-early-exercise-happens" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="example-c-two-period-american-put-where-early-exercise-happens"><span class="header-section-number">7.3</span> Example C: Two-period American put, where early exercise happens</h2>
+<p><strong>Data.</strong> <span class="math inline">\(S = 100\)</span>, <span class="math inline">\(K = 110\)</span>, <span class="math inline">\(r = 10\%\)</span>, <span class="math inline">\(\delta = 0\)</span>, <span class="math inline">\(u = 1.2\)</span>, <span class="math inline">\(d = 0.9\)</span>, <span class="math inline">\(T = 1\)</span>, <span class="math inline">\(n = 2\)</span>, so <span class="math inline">\(h = 0.5\)</span>.</p>
+<p><strong>Constants.</strong> <span class="math inline">\(e^{rh} = 1.051271\)</span> and <span class="math inline">\(e^{-rh} = 0.951229\)</span>, so <span class="math inline">\(p^* = (1.051271 - 0.9)/0.3 = 0.504237\)</span>.</p>
+<p><strong>Terminal payoffs.</strong> <span class="math inline">\(S_{uu} = 144\)</span>, <span class="math inline">\(S_{ud} = 108\)</span>, <span class="math inline">\(S_{dd} = 81\)</span>, so <span class="math inline">\(P_{uu} = 0\)</span>, <span class="math inline">\(P_{ud} = 2\)</span>, <span class="math inline">\(P_{dd} = 29\)</span>.</p>
+<p><strong>European put (for comparison).</strong></p>
+<ul>
+<li>Node <span class="math inline">\(u\)</span> (<span class="math inline">\(S = 120\)</span>): <span class="math inline">\(\Delta = -0.055556\)</span>, <span class="math inline">\(B = 7.6098\)</span>, <span class="math inline">\(P = 0.9432\)</span>.</li>
+<li>Node <span class="math inline">\(d\)</span> (<span class="math inline">\(S = 90\)</span>): <span class="math inline">\(\Delta = -1\)</span>, <span class="math inline">\(B = 104.6352\)</span>, <span class="math inline">\(P = 14.6352\)</span>. Both following nodes are in the money, so <span class="math inline">\(B = Ke^{-rh}\)</span>.</li>
+<li>Root: <span class="math inline">\(\Delta = -0.456402\)</span>, <span class="math inline">\(B = 52.9944\)</span>, <span class="math inline">\(P_{\text{Eur}} = 7.3541\)</span>.</li>
+</ul>
+<p><strong>American put.</strong> Work backwards, comparing the two values at each node.</p>
+<ul>
+<li>Node <span class="math inline">\(u\)</span>: exercise value <span class="math inline">\(\max(110 - 120, 0) = 0\)</span>, continuation <span class="math inline">\(0.9432\)</span>. <strong>Hold</strong>, so <span class="math inline">\(V_u = 0.9432\)</span>.</li>
+<li>Node <span class="math inline">\(d\)</span>: exercise value <span class="math inline">\(110 - 90 = 20\)</span>, continuation <span class="math inline">\(14.6352\)</span>. <strong>Exercise</strong>, so <span class="math inline">\(V_d = 20\)</span>.</li>
+<li>Root: the continuation value uses the <em>American</em> values <span class="math inline">\(V_u = 0.9432\)</span> and <span class="math inline">\(V_d = 20\)</span>: <span class="math display">\[
+e^{-rh}\left[p^*(0.9432) + (1-p^*)(20)\right] = 9.8841.
+\]</span> The exercise value is <span class="math inline">\(110 - 100 = 10\)</span>, which is larger. <strong>Exercise immediately</strong>, so <span class="math inline">\(P_{\text{Amer}} = 10\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+\begin{array}{ccccc}
+\textbf{t = 0} &amp; &amp; \textbf{t = 0.5} &amp; &amp; \textbf{t = 1} \\[6pt]
+&amp; &amp; &amp; &amp; \boxed{\begin{array}{c} S = 144 \\ P = 0 \end{array}} \\[6pt]
+&amp; &amp; \boxed{\begin{array}{c} S = 120 \\ P = 0.9432 \\ \Delta = -0.0556 \\ B = 7.6098 \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; \\[6pt]
+\boxed{\begin{array}{c} S = 100 \\ P = 10.0000^{\,\text{ex}} \\ [\Delta = -0.6352] \\ [B = 73.4068] \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; &amp; &amp; \boxed{\begin{array}{c} S = 108 \\ P = 2 \end{array}} \\[6pt]
+&amp; &amp; \boxed{\begin{array}{c} S = 90 \\ P = 20.0000^{\,\text{ex}} \\ [\Delta = -1.0000] \\ [B = 104.6352] \end{array}} &amp; \begin{array}{c}\nearrow \\[14pt] \searrow\end{array} &amp; \\[6pt]
+&amp; &amp; &amp; &amp; \boxed{\begin{array}{c} S = 81 \\ P = 29 \end{array}}
+\end{array}
+\]</span></p>
+<p>A superscript “ex” marks a node where early exercise is optimal. The bracketed <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span> at those nodes are the hedge for the continuation value.</p>
+<p><strong>Why the answer comes out this way.</strong> The interest rate is high (10%) and the put is already in the money. Exercising early lets you collect <span class="math inline">\(K\)</span> now and earn interest on it, and here that interest is worth more than the protection the put still offers. Compare this with Problem 3 on the worksheet, where the same check says <em>don’t</em> exercise.</p>
+</section>
+<section id="example-d-two-period-currency-call-european-vs.-american" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="example-d-two-period-currency-call-european-vs.-american"><span class="header-section-number">7.4</span> Example D: Two-period currency call, European vs.&nbsp;American</h2>
+<p><strong>Data.</strong> <span class="math inline">\(x_0 = 1.25\)</span> dollars per pound, <span class="math inline">\(K = \$1.20\)</span>, <span class="math inline">\(r_{\text{USD}} = 3\%\)</span>, <span class="math inline">\(r_{\text{GBP}} = 8\%\)</span>, <span class="math inline">\(u = 1.15\)</span>, <span class="math inline">\(d = 0.90\)</span>, <span class="math inline">\(T = 0.5\)</span>, <span class="math inline">\(n = 2\)</span>, so <span class="math inline">\(h = 0.25\)</span>.</p>
+<p><strong>Constants.</strong> <span class="math display">\[
+e^{(r_{\text{USD}} - r_{\text{GBP}})h} = e^{-0.0125} = 0.987578, \qquad e^{-r_{\text{USD}} h} = 0.992528, \qquad e^{-r_{\text{GBP}} h} = 0.980199,
+\]</span> <span class="math display">\[
+p^* = \frac{0.987578 - 0.90}{0.25} = 0.350311.
+\]</span></p>
+<p><strong>Exchange-rate tree.</strong> <span class="math inline">\(x_u = 1.4375\)</span>, <span class="math inline">\(x_d = 1.125\)</span>, <span class="math inline">\(x_{uu} = 1.653125\)</span>, <span class="math inline">\(x_{ud} = 1.29375\)</span>, <span class="math inline">\(x_{dd} = 1.0125\)</span>.</p>
+<p><strong>Terminal payoffs.</strong> <span class="math inline">\(C_{uu} = 0.453125\)</span>, <span class="math inline">\(C_{ud} = 0.09375\)</span>, <span class="math inline">\(C_{dd} = 0\)</span>.</p>
+<p><strong>European call.</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Node</th>
+<th style="text-align: right;"><span class="math inline">\(x\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(C\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\Delta\)</span> (£)</th>
+<th style="text-align: right;"><span class="math inline">\(B\)</span> ($)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(u\)</span></td>
+<td style="text-align: right;">1.4375</td>
+<td style="text-align: right;">0.2180</td>
+<td style="text-align: right;">0.980199</td>
+<td style="text-align: right;"><span class="math inline">\(-1.1910\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(d\)</span></td>
+<td style="text-align: right;">1.1250</td>
+<td style="text-align: right;">0.0326</td>
+<td style="text-align: right;">0.326733</td>
+<td style="text-align: right;"><span class="math inline">\(-0.3350\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">root</td>
+<td style="text-align: right;">1.2500</td>
+<td style="text-align: right;">0.0968</td>
+<td style="text-align: right;">0.581550</td>
+<td style="text-align: right;"><span class="math inline">\(-0.6301\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>American call.</strong> At node <span class="math inline">\(u\)</span>, the exercise value <span class="math inline">\(1.4375 - 1.20 = 0.2375\)</span> is larger than the continuation value <span class="math inline">\(0.2180\)</span>, so <strong>exercise early</strong>. At node <span class="math inline">\(d\)</span> the call is out of the money, so hold. At the root, recompute the continuation value with <span class="math inline">\(V_u = 0.2375\)</span>: <span class="math display">\[
+C_{\text{Amer}} = e^{-r_{\text{USD}} h}\left[p^*(0.2375) + (1-p^*)(0.0326)\right] = 0.1036 &gt; 0.05 = x_0 - K,
+\]</span> so hold at the root. The root hedge becomes <span class="math inline">\(\Delta = 0.642708\)</span> and <span class="math inline">\(B = -0.6998\)</span>.</p>
+<p><strong>Why the answer comes out this way.</strong> The pound interest rate (8%) is much higher than the dollar rate (3%). Holding pounds through the call means giving up that 8% “dividend”, so when the call is deep in the money it pays to exercise and start earning it. The early exercise premium is <span class="math inline">\(0.1036 - 0.0968 = 0.0068\)</span> dollars per pound.</p>
+</section>
+</section>
+<section id="checklist-for-the-worksheet" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Checklist for the worksheet</h1>
+<ol type="1">
+<li>Compute <span class="math inline">\(h\)</span>, <span class="math inline">\(e^{(r-\delta)h}\)</span>, <span class="math inline">\(e^{-rh}\)</span>, <span class="math inline">\(e^{-\delta h}\)</span> and <span class="math inline">\(p^*\)</span> once, then reuse them.</li>
+<li>Check <span class="math inline">\(d &lt; e^{(r-\delta)h} &lt; u\)</span>.</li>
+<li>Fill in the price tree and the terminal payoffs.</li>
+<li>Step backwards. At each node, compute <span class="math inline">\(\Delta\)</span>, <span class="math inline">\(B\)</span> and the premium, and check that <span class="math inline">\(\Delta S + B\)</span> equals the premium.</li>
+<li>For American options, compare exercise and continuation values at <strong>every</strong> node, including time 0, and use the American values when stepping back.</li>
+<li>Keep at least 4 decimal places in intermediate steps. In currency problems, use 6, because early-exercise decisions can be close.</li>
+</ol>
+</section>
+<section id="appendix-checking-trees-in-python" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Appendix: checking trees in Python</h1>
+<p>Students can run this short function to check their hand calculations. The block is not executed when this document renders.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binomial(S, K, r, delta, u, d, T, n, kind<span class="op">=</span><span class="st">"call"</span>, american<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return {(i, j): (S, V, Delta, B, exercised)} for an n-step tree.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Node (i, j) is time i*h after j down moves."""</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> T <span class="op">/</span> n</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> (math.exp((r <span class="op">-</span> delta) <span class="op">*</span> h) <span class="op">-</span> d) <span class="op">/</span> (u <span class="op">-</span> d)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    disc <span class="op">=</span> math.exp(<span class="op">-</span>r <span class="op">*</span> h)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    pay <span class="op">=</span> (<span class="kw">lambda</span> s: <span class="bu">max</span>(s <span class="op">-</span> K, <span class="dv">0</span>)) <span class="cf">if</span> kind <span class="op">==</span> <span class="st">"call"</span> <span class="cf">else</span> (<span class="kw">lambda</span> s: <span class="bu">max</span>(K <span class="op">-</span> s, <span class="dv">0</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    V <span class="op">=</span> {(n, j): pay(S <span class="op">*</span> u<span class="op">**</span>(n <span class="op">-</span> j) <span class="op">*</span> d<span class="op">**</span>j) <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(n <span class="op">+</span> <span class="dv">1</span>)}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> {}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n <span class="op">-</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>):</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>            s <span class="op">=</span> S <span class="op">*</span> u<span class="op">**</span>(i <span class="op">-</span> j) <span class="op">*</span> d<span class="op">**</span>j</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            Vu, Vd <span class="op">=</span> V[(i <span class="op">+</span> <span class="dv">1</span>, j)], V[(i <span class="op">+</span> <span class="dv">1</span>, j <span class="op">+</span> <span class="dv">1</span>)]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            Delta <span class="op">=</span> math.exp(<span class="op">-</span>delta <span class="op">*</span> h) <span class="op">*</span> (Vu <span class="op">-</span> Vd) <span class="op">/</span> (s <span class="op">*</span> (u <span class="op">-</span> d))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            B <span class="op">=</span> disc <span class="op">*</span> (u <span class="op">*</span> Vd <span class="op">-</span> d <span class="op">*</span> Vu) <span class="op">/</span> (u <span class="op">-</span> d)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>            cont <span class="op">=</span> disc <span class="op">*</span> (p <span class="op">*</span> Vu <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> p) <span class="op">*</span> Vd)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>            ex <span class="op">=</span> american <span class="kw">and</span> pay(s) <span class="op">&gt;</span> cont</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            V[(i, j)] <span class="op">=</span> pay(s) <span class="cf">if</span> ex <span class="cf">else</span> cont</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            out[(i, j)] <span class="op">=</span> (s, V[(i, j)], Delta, B, ex)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Example C: American put</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> node, vals <span class="kw">in</span> <span class="bu">sorted</span>(binomial(<span class="dv">100</span>, <span class="dv">110</span>, <span class="fl">0.10</span>, <span class="dv">0</span>, <span class="fl">1.2</span>, <span class="fl">0.9</span>, <span class="dv">1</span>, <span class="dv">2</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>                                  kind<span class="op">=</span><span class="st">"put"</span>, american<span class="op">=</span><span class="va">True</span>).items()):</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(node, [<span class="bu">round</span>(v, <span class="dv">4</span>) <span class="cf">if</span> <span class="bu">isinstance</span>(v, <span class="bu">float</span>) <span class="cf">else</span> v <span class="cf">for</span> v <span class="kw">in</span> vals])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="references" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> References</h1>
+<ul>
+<li>McDonald, R. L. <em>Derivatives Markets</em>, 3rd ed.&nbsp;Pearson. Chapter 10 (binomial option pricing: one period, multi-period, American options, currency options) and Chapter 11 (early exercise and the risk-neutral interpretation). The notation in these notes (<span class="math inline">\(\Delta\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(p^*\)</span>, forward tree) follows McDonald.</li>
+<li>Cox, J. C., Ross, S. A., and Rubinstein, M. (1979). Option pricing: A simplified approach. <em>Journal of Financial Economics</em>, 7(3), 229–263. <a href="https://econpapers.repec.org/RePEc:eee:jfinec:v:7:y:1979:i:3:p:229-263">RePEc listing</a> · <a href="https://u.osu.edu/schroeder.9/files/2017/07/CRR79-1yy8av8.pdf">PDF</a></li>
+</ul>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

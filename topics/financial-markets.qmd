@@ -2,17 +2,17 @@
 id: financial-markets
 aliases: []
 tags: []
-author: "John Inston"
+author: "John Robin Inston"
 date: 2026-10-28
-description: "Financial markets, assets and trading."
+description: "Financial markets, assets, indices and trading."
 number-sections: true
 title: "Financial Markets"
 title-block-banner: false
 ---
 
-## Financial Assets
+## Financial Asset
 
-Financial mathematics is a branch of applied mathematics that focuses on 
+[[quantitative-finance]] is a branch of applied mathematics that focuses on
 mathematical models for **financial markets** and the prices of **assets**.
 
 :::{.definition data-title="Financial Asset"}
@@ -20,73 +20,173 @@ A **financial asset** is a tradable resource that has value and can be bought,
 sold, or exchanged.
 :::
 
-A financial asset can be tangible, such as a stock certificate or a bond, 
-or intangible, such as a digital representation of ownership in a company or 
-a cryptocurrency.  Some common examples of financial assets include:
-
-- **Stocks**: Represent ownership in a company and entitle the holder to a 
-  share of the company's profits.
-- **Bonds**: Debt securities issued by governments or corporations that
-  pay interest to the holder over a specified period.
-- **Commodities**: Physical goods such as gold, oil, or agricultural products
-  that can be traded in financial markets.
-- **Currencies**: Foreign exchange (forex) markets allow for the trading of 
-  different currencies.
-- **Derivatives**: Financial instruments whose value is derived from an 
-  underlying asset, index, or rate.
+A financial asset can be tangible, such as a stock certificate or a bond, or
+intangible, such as a digital representation of ownership in a company or a
+cryptocurrency.
 
 :::{.definition data-title="Liquidity"}
 **Liquidity** refers to the ease with which an asset can be bought or sold in
-the market without significantly affecting its price.  Highly liquid assets 
-can be quickly converted to cash, while illiquid assets may take longer to 
+the market without significantly affecting its price. **Highly liquid** assets
+can be quickly converted to cash, while **illiquid assets** may take longer to
 sell and may require a discount to their market value.
 :::
 
+### Equities
+
+A **stock** (or equity) represents ownership in a company. The holder is
+entitled to a share of the company's distributed profits (**dividends**) and
+usually has voting rights. The price of one share at time $t$ is written
+$S_t$.
+
+### Fixed Income
+
+A **bond** is a debt security issued by a government or corporation. The
+issuer pays interest (**coupons**) to the holder over a specified period and
+repays the **face value** at maturity. A **zero-coupon bond** pays no coupons
+and only returns the face value at maturity $T$; its price at time $t$ is
+written $p(t,T)$. See [[interest-rates]] and [[bond-market-model]].
+
+### Funds
+
+A **fund** pools money from many investors into a portfolio. A mutual fund is
+priced once a day at its **net asset value (NAV)**, while an 
+**exchange-traded fund (ETF)** is bought and sold on an exchange throughout 
+the day. Many funds aim to
+replicate an index (see below).
+
+### Commodities
+
+**Commodities** are physical goods such as gold, oil or agricultural products.
+They are often traded through futures contracts rather than by taking delivery
+of the physical good.
+
+### Currencies
+
+In the foreign exchange (forex or FX) market, one currency is traded for
+another. A quote such as EUR/USD $= 1.10$ means that one euro costs $1.10$
+US dollars. The FX market is one of the largest and most liquid markets and
+trades mostly over the counter.
+
+### Digital Assets
+
+**Cryptocurrencies**, such as Bitcoin, are digital assets recorded on a
+blockchain. They trade on exchanges around the clock and are typically much
+more volatile than traditional assets.
+
+### Derivatives
+
+**Derivatives** are financial instruments whose value is derived from an
+underlying asset, index or rate. See [[derivatives]].
+
+## Indices and Benchmarks
+
+:::{.definition data-title="Index"}
+A **financial index** measures the performance of a basket of assets,
+combining their prices into a single number.
+:::
+
+An index is not itself tradable, but it serves as a **benchmark** against which
+the performance of a fund or portfolio is compared. The method used to
+combine the prices is called the **weighting**:
+
+- **Price-weighted**: the index is the sum of the constituent prices divided
+  by a divisor $D$,
+  $$
+  I_t = \frac{1}{D}\sum_{k} S^{(k)}_t.
+  $$
+  An example is the Dow Jones Industrial Average.
+- **Market-capitalization-weighted**: each constituent has a weight
+  proportional to its market capitalization (share price times number of
+  shares outstanding), so larger companies move the index more. An example is
+  the S&P 500, which tracks 500 large US companies.
+
+A **price index** only reflects changes in prices, while a **total return
+index** also assumes that dividends are reinvested. Index funds and ETFs
+replicate an index by holding its constituents, which is how investors gain
+exposure to an index.
+
+Some indices measure a quantity other than a price. The VIX tracks the
+expected volatility of the S&P 500 implied by option prices, and is often
+called the "fear gauge". See [[volatility-surfaces]].
+
+## Trading Venues
+
 Assets can be traded in two ways:
 
-1. **Over-the-counter (OTC)**: Trading that occurs directly between two parties, 
-   without the involvement of an exchange. OTC trading is often used for 
-   customized or less liquid assets.
+1. **Exchange**: trading on a centralized, regulated marketplace (for example
+   the NYSE or Nasdaq) with standardized contracts, publicly visible prices
+   and a clearinghouse that guarantees trades.
+2. **Over-the-counter (OTC)**: trading that occurs directly between two
+   parties, without the involvement of an exchange. OTC trading is often used
+   for customized or less liquid assets, such as bonds, swaps and currencies,
+   and exposes each party to the risk that the other defaults
+   (**counterparty risk**).
 
+Markets are also split by what is being traded. In the **primary market** an
+issuer sells new securities to investors (for example, an initial public
+offering), and the issuer receives the money. In the **secondary market**
+investors trade existing securities with each other, and the issuer is not
+involved.
 
+How prices form and how orders are matched is covered in
+[[limit-order-books]].
 
+## Market Participants
 
-## Derivatives
+Participants are often grouped by their motive for trading:
 
-A financial asset is a tradable resource that has value and can be bought, 
-sold, or exchanged.
+- **Hedgers** use financial instruments to reduce an existing risk, for
+  example an airline fixing the price of future fuel purchases.
+- **Speculators** take on risk in the hope of profit from a view on future
+  prices.
+- **Arbitrageurs** look for riskless profit from price discrepancies. See
+  [[risk-neutral-pricing]].
+- **Market makers** quote both a buying (bid) and a selling (ask) price, which
+  provides liquidity to the market.
 
-:::{.definition data-title="Financial Derivative"}
-A **financial derivative** is a financial instrument whose value 
-is derived from some underlying asset, index, or rate.  
-:::
+## Returns and Prices
 
-Think of a derivative as a **contract** between two parties that 
-specifies the terms notinf a financial transation based on the performance of 
-the underlying asset.
+Prices of different assets are compared through their returns. Given prices
+$S_t$ and $S_{t+1}$, the **simple return** and **log return** over one period
+are
 
-:::{.definition data-title="Forwards, Futures, Options, and Swaps"}
+$$
+R_{t+1} = \frac{S_{t+1} - S_t}{S_t},
+\qquad
+R^{\log}_{t+1} = \ln\frac{S_{t+1}}{S_t} = \ln(1 + R_{t+1}).
+$$
 
-Below we define some common types of financial derivatives:
+Log returns are additive over time, since
+$\ln(S_T/S_0) = \sum_{t=0}^{T-1} R^{\log}_{t+1}$, which makes them convenient
+for modeling.
 
-1. **Forwards**: A forward contract is a customized agreement between two parties to buy or sell an asset at a specified price on a future date. Forwards are traded over-the-counter (OTC) and are not standardized.
+Future prices are uncertain, so we represent the price of an asset over time
+by a [[stochastic-processes|stochastic process]] $(S_t)_{t\ge 0}$. The simplest
+choice is [[geometric-brownian-motion]],
 
-2. **Futures**: A futures contract is a standardized agreement to buy or sell an asset at a predetermined price on a specified future date. Futures are traded on organized exchanges and are subject to daily settlement.
+$$
+dS_t = \mu S_t\,dt + \sigma S_t\,dW_t,
+$$
 
-3. **Options**: An option is a contract that gives the holder the right, but not the obligation, to buy (call option) or sell (put option) an asset at a specified price (strike price) on or before a specified date (expiration date).
+which is the model behind [[black-scholes-merton-model]]. Under it, log
+returns are normally distributed.
 
-4. **Swaps**: A swap is a derivative contract in which two parties agree to exchange cash flows or other financial instruments over a specified period. Common types of swaps include interest rate swaps and currency swaps.
+## The Risk-Free Asset
 
-:::
+Alongside risky assets, models include a **risk-free asset**, such as a bank
+account or government bond. Let $S^0_t$ be the amount in a bank account at
+time $t$ with $S^0_0 = 1$ and short rate $r_t$. Then
 
-## Payoff Functions
+$$
+dS^0_t = r_t S^0_t\,dt,
+\qquad
+S^0_t = \exp\left(\int_0^t r_s\,ds\right),
+$$
 
-We can represent the value of an underlying asset over time 
-using [[stochastic-processes]].  For example, 
-let $S_t$ denote the price of one share of Company XYZ stock at time $t$. 
+which reduces to $S^0_t = e^{rt}$ for a constant rate $r$. See [[interest]]
+and [[interest-rates]].
 
-
-
-
-
-
+A risky asset is expected to earn more than the risk-free rate, and the
+difference is the **risk premium**. In derivatives pricing we change to the
+[[risk-neutral-pricing]], under which all discounted asset prices are
+martingales.

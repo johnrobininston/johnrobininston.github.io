@@ -2,7 +2,7 @@
 id: interest
 aliases: []
 tags: []
-author: "John Inston"
+author: "John Robin Inston"
 date: 2026-09-27
 description: "Interest rates, compounding and the time value of money."
 number-sections: true
@@ -10,32 +10,39 @@ title: Interest
 title-block-banner: false
 ---
 
-## Interest
+## Time Value of Money
 
-In finance you never do anything for free and you would always prefer 
-to have money now rather than later.  For example, if you are loaning 
-someone money, you would expect to be compensated for the fact that you are giving up the opportunity to use that money for some other purpose.  This is the **time value of money** and the compensation is called **interest**.
+In finance you never do anything for free and you would always prefer to have
+money now rather than later. For example, if you loan someone money, you
+expect to be compensated for giving up the opportunity to use that money for
+some other purpose. This is the **time value of money** and the compensation
+is called **interest**.
 
 :::{.definition data-title="Interest"}
 **Interest** is the cost of borrowing money or the return on investment for
-lending money.  It is typically expressed as a percentage of the principal
+lending money. It is typically expressed as a percentage of the principal
 amount over a specified period of time.
 :::
 
-Suppose we loan initial amount (the **principal**) $P$ to a borrower to hold 
-for some period of time.  To compensate us for the use of our money, the 
-borrower agrees to pay us interest at an agreed rate $r$.  Their interest 
-**accrues** when the amount of interest earned on an investment is added 
-to the principal.  The total amount owed at the end of the loan period is 
-called the **future value** $F$ of the loan.  
+Suppose we loan an initial amount (the **principal**) $P$ to a borrower for
+some period of time. To compensate us for the use of our money, the borrower
+agrees to pay interest at an agreed rate. Interest **accrues** as it is earned
+and is added to the principal. The total amount owed at the end of the loan
+is called the **future value** $F$.
 
-How much interest is earned depends on the rate, number of repayments $m$
-(more typically determined from loan duration $T$ and repayment frequency 
-$T/n$), and whether the interest is **simple** or **compound**. 
+How much interest is earned depends on the periodic rate $r$, the number of
+periods $m$ (determined by the loan duration and the payment frequency), and
+whether the interest is **simple** or **compound**.
 
-### Simple vs Compound Interest
+Throughout, $r$ is the rate per period (the effective annual rate when the
+period is one year), $m$ is the number of periods (the number of compounding
+periods per year when we work over one year), $r^{(m)}$ is a nominal annual
+rate compounded $m$ times per year, $\delta$ is the continuously compounded
+rate and $t$ is measured in years.
 
-In **simple interest**, the interest is calculated only on the principal amount
+## Simple vs Compound Interest
+
+In **simple interest**, the interest is calculated only on the principal
 
 $$
 F_s = P(1 + rm).
@@ -43,8 +50,8 @@ $$
 
 :::{.definition data-title="Compound Interest"}
 
-In compound interest, the interest is calculated on the accrued total 
-(principal + interest)
+In **compound interest**, the interest is calculated on the accrued total
+(principal plus interest)
 
 $$
 F_c = P(1 + r)^m.
@@ -52,136 +59,229 @@ $$
 
 :::
 
-:::{.example data-title="Interest Rates"}
-Suppose we loan $P=\$100$ at a monthly interest rate of $r=1.5\%$ for $n=12$ 
-months.  The future value of the loan under simple and compound interest is:
+:::{.example data-title="Simple vs Compound Interest"}
+
+Suppose we loan $P=\$100$ at a monthly interest rate of $r=1.5\%$ for $m=12$
+months. The future value of the loan under simple and compound interest is
 
 $$
 \begin{aligned}
-F_s & = 100(1 + 0.015 \cdot 12) = 100(1 + 0.18) = 100(1.18) = \$118 \\
+F_s & = 100(1 + 0.015 \cdot 12) = 100(1.18) = \$118 \\
 F_c & = 100(1 + 0.015)^{12} \approx 100(1.195618) \approx \$119.56.
 \end{aligned}
 $$
 
 :::
 
-### Annualization
+## Present Value and Discounting
+
+Compounding runs in reverse to give the **present value** of an amount $F$
+received after $m$ periods. Solving $F = P(1+r)^m$ for $P$,
+
+$$
+P = F(1+r)^{-m} = F\,v^m, \qquad v = \frac{1}{1+r},
+$$
+
+where $v$ is the **discount factor** for one period. Discounting is the same
+operation as compounding with the time direction reversed.
+
+The **effective discount rate** is the interest paid in advance, per unit of
+the amount received at the end of the year,
+
+$$
+d = 1 - v = \frac{r}{1+r}.
+$$
+
+:::{.example data-title="Present Value"}
+
+The present value of $\$1000$ received in 5 years at an effective annual rate
+of $8\%$ is $1000(1.08)^{-5} \approx \$680.58$.
+
+:::
+
+In [[interest-rates]] the discount factor over $[t,T]$ becomes the
+zero-coupon bond price $p(t,T)$, which allows the rate to vary with time.
+
+## Annualization
 
 In finance, interest rates are often expressed on an annual basis, even if the
-interest is compounded more frequently. 
+interest is compounded more frequently.
 
 :::{.definition data-title="Nominal Interest Rate"}
 
-The nominal rate $r^{(m)}$ is a stated annual rate that is *compounded $m$ 
+The nominal rate $r^{(m)}$ is a stated annual rate that is *compounded $m$
 times per year*. It is quoted as a yearly figure, but interest is actually
-credited every $1/m$ of a year at the periodic rate
-
-$$
-\text{periodic rate} = \frac{r^{(m)}}{m}.
-$$
+credited every $1/m$ of a year at the periodic rate $r^{(m)}/m$.
 
 :::
 
 :::{.definition data-title="Effective Interest Rate"}
 
-The effective annual rate $r$ is the single once-a-year rate that produces 
+The effective annual rate $r$ is the single once-a-year rate that produces
 the same growth as the nominal rate over one year. Since $1$ dollar grows to
-$\left(1+\frac{r^{(m)}}{m}\right)^m$ after one year with $m$ compounding 
+$\left(1+\frac{r^{(m)}}{m}\right)^m$ after one year with $m$ compounding
 periods,
 
 $$
-1 + r = \left(1 + \frac{r^{(m)}}{m}\right)^m \quad\Longleftrightarrow\quad r = \left(1 + \frac{r^{(m)}}{m}\right)^m - 1.
+1 + r = \left(1 + \frac{r^{(m)}}{m}\right)^m
+\quad\Longleftrightarrow\quad
+r = \left(1 + \frac{r^{(m)}}{m}\right)^m - 1.
 $$
 
 :::
 
-In North American consumer finance, the effective annual rate is called APY (annual percentage yield) for savings. The nominal rate on loans is called APR (annual percentage rate), which is usually just the periodic rate times the number of periods, so it understates the true cost relative to the effective rate.  The process of converting a nomial rate to an effective annual 
-rate is called **annualization**.  The main purpose of annualization is to provide a standardized way to compare interest rates across different financial products and investment opportunities.  It allows investors and borrowers to make informed decisions by understanding the true cost or return of a financial product over a one-year period.
+In North American consumer finance, the effective annual rate is called APY
+(annual percentage yield) for savings. The nominal rate on loans is called APR
+(annual percentage rate), which is usually just the periodic rate times the
+number of periods, so it understates the true cost relative to the effective
+rate. The process of converting a nominal rate to an effective annual rate is
+called **annualization**. Its main purpose is to provide a standardized way to
+compare interest rates across different financial products and investment
+opportunities, so that investors and borrowers can see the true cost or return
+of a product over a one-year period.
 
 :::{.example data-title="Annualization"}
 
 Suppose we take out a loan with a nominal interest rate of $r^{(12)} = 6\%$
-compounded monthly.  The effective annual rate is given by
+compounded monthly. The effective annual rate is
 
 $$
-r = \left(1 + \frac{0.06}{12}\right)^{ 12} - 1 \approx 0.061678 - 1 \approx 0.061678 \approx 6.17\%.
+r = \left(1 + \frac{0.06}{12}\right)^{12} - 1
+\approx 1.061678 - 1 \approx 6.17\%.
 $$
 
 :::
 
-```{r}
-#| echo: false
+To compare two nominal rates with different compounding frequencies, convert
+through the effective rate. Equating $1 + r$ for frequencies $m$ and $k$ gives
 
-library(ggplot2)
+$$
+r^{(k)} = k\left[\left(1 + \frac{r^{(m)}}{m}\right)^{m/k} - 1\right].
+$$
 
+For example, $r^{(12)} = 6\%$ is equivalent to
+$r^{(2)} = 2\left[(1.005)^6 - 1\right] \approx 6.08\%$ compounded
+semi-annually.
 
-```
+## Continuous Compounding
 
-### Continuous Compounding
-
-Continuous compounding is the limit of the nominal-rate setup as the number 
-of compounding periods per year $m \to \infty$. Interest is effectively 
+Continuous compounding is the limit of the nominal-rate setup as the number
+of compounding periods per year $m \to \infty$. Interest is effectively
 credited over infinitesimally small periods, and the effective annual rate
 approaches an upper limit of $e^r - 1$.
 
-Start with $A = P\left(1 + \frac{r}{m}\right)^{mt}$ and take logs:
+Start with the future value after $t$ years at nominal rate $r$ compounded
+$m$ times per year, $F = P\left(1 + \frac{r}{m}\right)^{mt}$, and take logs
 
 $$
-\ln\frac{A}{P} = mt\,\ln\!\left(1+\frac{r}{m}\right) \;\xrightarrow{\,m\to\infty\,}\; rt,
+\ln\frac{F}{P} = mt\,\ln\!\left(1+\frac{r}{m}\right)
+\;\xrightarrow{\,m\to\infty\,}\; rt,
 $$
 
 since $\ln(1+x) \sim x$ as $x \to 0$. Exponentiating gives
 
 $$
-A = P\,e^{rt}.
+F = P\,e^{rt}.
 $$
 
-One can reach the same result by applying L’Hôpital’s rule to the logarithm 
-of the growth factor. There is no $m$ in the formula: a common error is to 
-carry $n$ into the continuous formula, but $e^{rt}$ already accounts for
+One can reach the same result by applying L'Hopital's rule to the logarithm
+of the growth factor. There is no $m$ in the formula: a common error is to
+carry $m$ into the continuous formula, but $e^{rt}$ already accounts for
 infinitely frequent compounding.
 
-In actuarial notation, the continuously compounded rate is called the 
-**force of interest** $\delta$. The accumulation function is 
+In actuarial notation, the continuously compounded rate is called the
+**force of interest** $\delta$. The accumulation function is
 $a(t) = e^{\int_0^t \delta(s)\,ds}$, which reduces to $e^{\delta t}$ when
-$\delta$ is constant. Equivalently, $\delta$ is the logarithmic derivative 
-of the accumulation function: 
+$\delta$ is constant. Equivalently, $\delta$ is the logarithmic derivative
+of the accumulation function
 
 $$
 \delta(t) = \frac{a'(t)}{a(t)}.
 $$
 
-With a constant force of interest,
+When the force of interest varies in time it is called the short rate in
+[[interest-rates]]. With a constant force of interest,
 
 $$
-1 + i = e^{\delta}, \qquad \delta = \ln(1+i), \qquad \delta = \lim_{m\to\infty} i^{(m)}.$$
+1 + r = e^{\delta}, \qquad \delta = \ln(1+r),
+\qquad \delta = \lim_{m\to\infty} r^{(m)}.
+$$
 
-The force of interest is below the effective annual rate but above the 
-effective discount rate. In terms of the nominal rates from before, 
-$i^{(m)}$ decreases toward $\delta$ as $m$ grows:
+The force of interest is below the effective annual rate but above the
+effective discount rate $d$. In terms of the nominal rates from before,
+$r^{(m)}$ decreases toward $\delta$ as $m$ grows
 
-$$i > i^{(2)} > i^{(4)} > i^{(12)} > \cdots > \delta.$$
+$$
+r = r^{(1)} > r^{(2)} > r^{(4)} > r^{(12)} > \cdots > \delta > d.
+$$
 
-Converting a continuous rate to an effective annual rate (APY) is just 
-$e^{r}-1$. At $r = 6\%$ this gives about $6.184\%$. Using the 12% nominal
-example from earlier: calcfyi
+Converting a continuous rate to an effective annual rate (APY) is just
+$e^{r}-1$. At $r = 6\%$ this gives about $6.184\%$. Take a $12\%$ nominal
+rate:
 
-| Compounding	| Effective annual rate |
+| Compounding | Effective annual rate |
 | - | - |
-| Annual ($m=1$) |	$12.000\%$ |
-| Monthly ($m=12$)	| $12.683\%$ |
-| Continuous ($m\to\infty$) |	$e^{0.12}-1 \approx 12.750\%$ |
+| Annual ($m=1$) | $12.000\%$ |
+| Monthly ($m=12$) | $12.683\%$ |
+| Daily ($m=365$) | $12.747\%$ |
+| Continuous ($m\to\infty$) | $e^{0.12}-1 \approx 12.750\%$ |
 
+Most of the gain from more frequent compounding comes by $m=12$. On a
+deposit of $\$1000$ for one year, daily and continuous compounding differ by
+about three cents (\$1127.47 against \$1127.50), so continuous compounding is
+used mainly for mathematical convenience.
 
-Most of the gain from more frequent compounding comes by $m=12$. Daily and continuous compounding differ by under a dollar in one worked example, so continuous compounding is used mainly for mathematical convenience. calcfyi
+```{r}
+#| echo: false
+#| fig-cap: "Effective annual rate against compounding frequency (12% nominal)."
+
+library(ggplot2)
+
+nominal <- 0.12
+df <- data.frame(m = 1:365)
+df$effective <- (1 + nominal / df$m)^df$m - 1
+
+ggplot(df, aes(x = m, y = effective)) +
+  geom_line() +
+  geom_hline(yintercept = exp(nominal) - 1, linetype = "dashed") +
+  scale_x_log10() +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 0.1)) +
+  labs(x = "Compounding periods per year (m)", y = "Effective annual rate") +
+  theme_minimal()
+```
 
 :::{.example data-title="Continuous Compounding"}
 
-Investing $1000 at 8% for 5 years gives $1000\,e^{0.4} \approx \$1491.82$ under continuous compounding, versus $1469.33 with annual compounding. calcfyi
+Investing $\$1000$ at $8\%$ for 5 years gives
+$1000\,e^{0.4} \approx \$1491.82$ under continuous compounding, versus
+$\$1469.33$ with annual compounding.
 
-To find a doubling time, solve $e^{\delta t} = 2$:
+To find a doubling time, solve $e^{\delta t} = 2$
 
-$$t = \frac{\ln 2}{\delta}.$$
+$$
+t = \frac{\ln 2}{\delta}.
+$$
+
+Since $\ln 2 \approx 0.693$, a rate of $R\%$ doubles money in roughly $70/R$
+years. For annually compounded rates the **rule of 72**, $t \approx 72/R$, is
+more accurate: at $6\%$ it gives $12$ years against an exact value of
+$\ln 2 / \ln 1.06 \approx 11.90$.
 
 :::
 
+## Day-Count Conventions
+
+The year fraction $t$ used in practice depends on a market convention, so the
+same quoted rate can accrue slightly different amounts of interest. Common
+choices are
+
+- **Actual/365**: actual days elapsed divided by $365$.
+- **Actual/360**: actual days elapsed divided by $360$, common for money
+  markets and LIBOR.
+- **30/360**: each month is treated as $30$ days and each year as $360$ days,
+  common for bonds.
+
+## Related Notes 
+
+- [[interest-rates]] for the term structure: zero-coupon bonds, the yield
+  curve, forward rates and the short rate.

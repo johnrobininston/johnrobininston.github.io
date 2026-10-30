@@ -409,11 +409,11 @@ window.Quarto = {
 <section id="option-greeks" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="option-greeks"><span class="header-section-number">1</span> Option Greeks</h2>
 <p>References: [[pstat-222-option-notes-pdf|Haosheng PSTAT222 Notes]]. [[bjork-pdf]]</p>
-<p>In mathematical finance, specifically <a href="../topics/derivatives-pricing.html">derivatives pricing</a>, we study methods of determining the prices <span class="math inline">\(V(t,S_{t})\)</span> of derivative contracts. Options have several factors affecting their price: (1) time which is constantly eroding their value, (2) underlying asset price, and (3) underlying asset volatility; and it is important for traders to be able to measure the sensitivity of the option price process to these factors. These sensitivity measures are known as the <strong>option greeks</strong>.</p>
+<p>In mathematical finance, specifically <a href="../topics/option-pricing.html">option pricing</a>, we study methods of determining the prices <span class="math inline">\(V(t,S_{t})\)</span> of derivative contracts. Options have several factors affecting their price: (1) time which is constantly eroding their value, (2) underlying asset price, and (3) underlying asset volatility; and it is important for traders to be able to measure the sensitivity of the option price process to these factors. These sensitivity measures are known as the <strong>option greeks</strong>.</p>
 <div class="definition" data-title="Option Greeks">
 <p>Suppose a derivative on asset <span class="math inline">\(S_{t}\)</span> has value at time <span class="math inline">\(t\)</span> given by <span class="math inline">\(V(t,S_{t})\)</span>. Furthermore, denote the volatility of the asset price process by <span class="math inline">\(\sigma\)</span> and the risk-free rate by <span class="math inline">\(r\)</span>. The <strong>option greeks</strong> are defined as follows: 1. <strong>Delta:</strong> <span class="math inline">\(\Delta= \frac{\partial V}{\partial S}\)</span>; 2. <strong>Gamma:</strong> <span class="math inline">\(\Gamma = \frac{\partial^2V}{\partial S^2}\)</span>; 3. <strong>Theta:</strong> <span class="math inline">\(\Theta=\frac{\partial V}{\partial t}\)</span>; 4. <strong>Vega:</strong> <span class="math inline">\(\mathcal{V}=\frac{\partial V}{\partial \sigma}\)</span>; and 5. <strong>Rho:</strong> <span class="math inline">\(\rho = \frac{\partial V}{\partial r}\)</span>.</p>
 </div>
-<p><em>Intuitively, the greeks are a collection of first and second order partial derivatives of the derivative value process with respect to asset price, asset volatility, time and the risk-free rate. For notes on the use of PDEs in derivatives pricing see our note <a href="../topics/black-scholes-pde-bspde.html">Black-Scholes PDE (BSPDE)</a>.</em></p>
+<p><em>Intuitively, the greeks are a collection of first and second order partial derivatives of the derivative value process with respect to asset price, asset volatility, time and the risk-free rate. For notes on the use of PDEs in derivatives pricing see the Black-Scholes PDE section of <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>.</em></p>
 <section id="option-greeks-of-common-options" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="option-greeks-of-common-options"><span class="header-section-number">1.1</span> Option Greeks of Common Options</h3>
 <p>The derivations of the analytical results for the option Greeks for common options are detailed in our notes for each specific option type:</p>
@@ -431,7 +431,7 @@ window.Quarto = {
 </ul>
 <section id="example---bs-model-euro-call-greeks" class="level5" data-number="1.1.0.1">
 <h5 data-number="1.1.0.1" class="anchored" data-anchor-id="example---bs-model-euro-call-greeks"><span class="header-section-number">1.1.0.1</span> Example - BS Model Euro-Call Greeks</h5>
-<p>Consider a <a href="../topics/options.html">Euro-Call</a> with strike <span class="math inline">\(K\)</span> at maturity <span class="math inline">\(T\)</span> on a stock <span class="math inline">\(S_{t}\)</span> with dynamics given by the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> i.e. <a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a> <em>GBM)</em> <span class="math display">\[
+<p>Consider a <a href="../topics/european-options.html">Euro-Call</a> with strike <span class="math inline">\(K\)</span> at maturity <span class="math inline">\(T\)</span> on a stock <span class="math inline">\(S_{t}\)</span> with dynamics given by the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> i.e. <a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a> <em>GBM)</em> <span class="math display">\[
 \begin{cases}
 dS_{t} = \mu S_{t}dt+\sigma S_{t}dW_{t} \\
 dB_{t} = rB_{t}dt,
@@ -461,9 +461,9 @@ V(t,S_{t})=\mathbb{E}_{\mathbb{Q}}[e^{-r(T-t)}(S_{T}-K)_{+}].
 </section>
 <section id="path-wise-estimation" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="path-wise-estimation"><span class="header-section-number">2.2</span> Path-wise Estimation</h3>
-<p>We can perform <strong>path-wise estimation</strong> of option Greeks by taking the derivative with respect to the option price in the analytic formula before performing our Monte-Carlo simulations. To provide some context, assume for example that we have the <a href="../topics/black-scholes-merton-model.html">BS Model</a> and a <a href="../topics/european-options.html">Euro-Call</a> so the option price at <span class="math inline">\(t=0\)</span> is given under <a href="../topics/risk-neutral-measure.html">risk-neutral measure</a> <span class="math inline">\(\mathbb{Q}\)</span> by <span class="math display">\[
+<p>We can perform <strong>path-wise estimation</strong> of option Greeks by taking the derivative with respect to the option price in the analytic formula before performing our Monte-Carlo simulations. To provide some context, assume for example that we have the <a href="../topics/black-scholes-merton-model.html">BS Model</a> and a <a href="../topics/european-options.html">Euro-Call</a> so the option price at <span class="math inline">\(t=0\)</span> is given under <a href="../topics/risk-neutral-pricing.html">risk-neutral measure</a> <span class="math inline">\(\mathbb{Q}\)</span> by <span class="math display">\[
 \mathbb{E}_{\mathbb{Q}}[e^{-rT}(S_{T}-K)_{+}].
-\]</span> From standard results we details in <a href="../topics/european-call-option-price.html">European Call Option Price</a> we know that under <span class="math inline">\(\mathbb{Q}\)</span> <span class="math display">\[
+\]</span> From standard results we detail in <a href="../topics/european-options.html">European Options</a> we know that under <span class="math inline">\(\mathbb{Q}\)</span> <span class="math display">\[
 S_{T}=S_{0}\exp \left\{ \left( r- \frac{\sigma^2}{2} \right)t+\sigma W_{t} \right\}
 \]</span> and so the option <span class="math inline">\(\Delta\)</span> can be computed through <span class="math display">\[
 \begin{align}
@@ -532,8 +532,10 @@ e^{-rT}\mathbb{E}\left[ \Phi(S_{T})\left(  \frac{\partial \log f}{\partial S_{0}
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/european-options.html">European Options</a></li>
 <li><a href="../topics/numerical-methods-in-financial-mathematics.html">Numerical Methods in Financial Mathematics</a></li>
-<li><a href="../topics/options.html">Options</a></li>
+<li><a href="../topics/option-pricing.html">Option Pricing</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 </ul>
 </div>

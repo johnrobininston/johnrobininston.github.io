@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Measurable functions between measurable spaces: definition, equivalent conditions, link to random variables, key closure results and examples.">
 
 <title>Measurable Function – John Robin Inston</title>
 <style>
@@ -358,11 +359,16 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#measurable-function" id="toc-measurable-function" class="nav-link active" data-scroll-target="#measurable-function"><span class="header-section-number">0.1</span> Measurable Function</a></li>
-  <li><a href="#measurability-results" id="toc-measurability-results" class="nav-link" data-scroll-target="#measurability-results"><span class="header-section-number">1</span> Measurability Results</a>
+  <li><a href="#measurable-functions" id="toc-measurable-functions" class="nav-link active" data-scroll-target="#measurable-functions"><span class="header-section-number">1</span> Measurable Functions</a></li>
+  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition"><span class="header-section-number">2</span> Definition</a>
   <ul class="collapse">
-  <li><a href="#equivalent-conditions" id="toc-equivalent-conditions" class="nav-link" data-scroll-target="#equivalent-conditions"><span class="header-section-number">1.1</span> Equivalent Conditions</a></li>
+  <li><a href="#pushforward-measures" id="toc-pushforward-measures" class="nav-link" data-scroll-target="#pushforward-measures"><span class="header-section-number">2.1</span> Pushforward Measures</a></li>
   </ul></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables"><span class="header-section-number">3</span> Random Variables</a></li>
+  <li><a href="#equivalent-conditions" id="toc-equivalent-conditions" class="nav-link" data-scroll-target="#equivalent-conditions"><span class="header-section-number">4</span> Equivalent Conditions</a></li>
+  <li><a href="#important-results" id="toc-important-results" class="nav-link" data-scroll-target="#important-results"><span class="header-section-number">5</span> Important Results</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">6</span> Examples</a></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">7</span> Related Topics</a></li>
   </ul>
 </nav>
     </div>
@@ -375,6 +381,11 @@ window.Quarto = {
 <h1 class="title">Measurable Function</h1>
 </div>
 
+<div>
+  <div class="description">
+    Measurable functions between measurable spaces: definition, equivalent conditions, link to random variables, key closure results and examples.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -393,6 +404,12 @@ window.Quarto = {
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">October 30, 2026</p>
+    </div>
+  </div>
     
   </div>
   
@@ -401,55 +418,149 @@ window.Quarto = {
 </header>
 
 
-<section id="measurable-function" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="measurable-function"><span class="header-section-number">0.1</span> Measurable Function</h3>
-<p>A core concept of measure theory is the idea of measurable functions.</p>
-<div class="definition" data-title="Measurable Function">
-<p>For a [[measure-space|measure space]] <span class="math inline">\((X,\mathcal{M}, \mu)\)</span>, a function <span class="math inline">\(Y:\Omega\rightarrow\mathbb{R}^n\)</span> is called <strong><span class="math inline">\(\mathcal{F}\)</span>-measurable</strong> if <span class="math display">\[
-Y^{-1}(U):=\{\omega\in\Omega:Y(\omega)\in U\}\in \mathcal{F}
-\]</span> for all <a href="../topics/metric-spaces.html#open-and-closed-sets">open sets</a> <span class="math inline">\(U\in\mathcal{R}^n\)</span>.</p>
-</div>
-<p>Intuitively, a function between measure spaces ### What do we mean by a measurable function?</p>
-<p><strong>We talk about the probability of subsets of&nbsp;Ω, not elements.</strong></p>
-<p>Let’s take probability theory as our model of reference. If you have a finite set, <span class="math inline">\(\Omega\)</span>, you can define a probability <span class="math inline">\(\mu\)</span> in <span class="math inline">\(\Omega\)</span> simply defining the probability of each element of <span class="math inline">\(\Omega\)</span>. But when you have an uncountable set, this approach is not viable anymore as points have no probability mass.</p>
-<p>The same reasoning applies if you are considering not probabilities, but the length of a set. It is true that if the interval <span class="math inline">\(I\)</span> is the disjoint sum of two other intervals <span class="math inline">\(𝐽\)</span> and <span class="math inline">\(𝐾\)</span>, then the length of <span class="math inline">\(𝐼\)</span> will be the sum of the lengths of <span class="math inline">\(𝐽\)</span> and <span class="math inline">\(𝐾\)</span>. But <span class="math inline">\([0,1]\)</span> is the disjoint union of the sets of the form <span class="math inline">\(\{𝑥\}\)</span>, whose length is <span class="math inline">\(0\)</span>. Nevertheless, the length of <span class="math inline">\([0,1]\)</span> is not <span class="math inline">\(0\)</span>. For that reason, we do not talk about the size or the probability of points in <span class="math inline">\(\Omega\)</span>. We talk about the probabilities or size of subsets of <span class="math inline">\(\Omega\)</span>.</p>
-<p><strong>We know the size of certain sets (think of the intervals).</strong></p>
-<p>Usually, we know the measure of certain subsets. For example, in the case of the unit interval [0,1], one usually takes the size of an interval [𝑎,𝑏] to be the value 𝑏−𝑎.</p>
-<p><strong>The sets for which we do have a probability defined is the family <span class="math inline">\(\mathcal{B}\)</span>. Those are the “measurable” sets.</strong></p>
-<p>Based on the size of this simple sets, we can manage to EXTEND our measure to other sets. The next simpler case is when the set is the finite disjoint union of intervals. It happens that, given the constraints we want the measure to satisfy, not always it is possible to EXTEND the measure to the whole family of subsets of Ω. So, we are happy to limit the domain of our measure 𝜇 to some class  of subsets of Ω. We shall use the notation (Ω,) to indicate that we are talking about the family  of subsets of Ω. So, the measure is a function</p>
-<p>𝜇:→[0,1].</p>
-<p><strong>Point 4. A measurable function 𝑓:Ω→𝑋 transports the probability in (Ω,) to a probability (𝑋,).</strong></p>
-<p>Now, suppose that you have a probability 𝜇:→[0,1] defined for a family of subsets of Ω. And also, suppose that you have a function 𝑓:Ω→ℝ. Then, <strong>you may wish to TRANSPORT</strong> your probability from Ω to ℝ. For example, suppose that Ω={1,…,6} is a dice, and you are gambling. If the value of the dice is odd then you get BRL 10, if it is even, then you lose BRL 10. This is the definition of 𝑓:Ω→{−10,10}. Now, instead of talking about a probability in Ω, we can talk about the probability of, in one bet, getting or losing 10 Brazilian Reals. We transported the probability in Ω to a probability in ℝ. <strong>This is a measurable function!</strong> The probability of getting BRL 10 is the probability of the event 𝑓−1(10), and the probability of losing BRL 10 is the probability of 𝑓−1(−10). The probability of losing money is the probability of the set 𝑓−1((−∞,0)).</p>
-<p>If you think that 𝑓−1 is a function that takes subsets of ℝ to subsets of Ω, then you can TRY to compose 𝜇 with 𝑓−1 to get 𝜇∘𝑓−1. In order for this to work, if you want to know the probability of a set 𝐴⊂ℝ, you will need that 𝑓−1(𝐴)∈.</p>
-<p><strong>Point 5. We want&nbsp;𝑓−1(𝐼)&nbsp;to be measurable.</strong></p>
-<p>Finally, since we are talking about a function 𝑓:Ω→ℝ, it might happen that we want the probabilities to be defined at least for the intervals. That is, given an interval 𝐼⊂ℝ, we want 𝑓−1(𝐼) to have a probability associated with it.</p>
-<p><strong>Point 6. We got to a definition of “measurable function” which is easier to state without appealing to measure theory.</strong></p>
-<p>But 𝑓−1(𝐼) will be measurable for every interval 𝐼 exactly when 𝑓−1([−∞,𝑎)) is measurable for every 𝑎.</p>
-<p><strong>Point 7. We can integrate measurable functions (and get the “expected value”).</strong></p>
-<p>With a function 𝑓 like this, we can calculate the mean, that is, the integral of the function.</p>
-<p>Now, I realise that you are not talking about probabilities, you are talking about analysis. But then, you just have to change the terms “probability” by measure. And for the same reason, technicalities aside, you can calculate the integral of measurable functions. It is just a bit harder to understand because now Ω=ℝ.</p>
+<section id="measurable-functions" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="measurable-functions"><span class="header-section-number">1</span> Measurable Functions</h2>
+<p>Measurable functions are the structure-preserving maps of measure theory, in the same way that continuous functions are the structure-preserving maps of <a href="../topics/topology.html">Topology</a> and linear maps are those of <a href="../topics/linear-algebra.html">Linear Algebra</a>. They are the functions we are able to integrate (see <a href="../topics/lebesgue-integral.html">Lebesgue Integral</a>), and in probability theory they are the <strong>random variables</strong>.</p>
+<p>The central idea is that a measure assigns a size or a probability to <em>subsets</em>, not to points, and only to subsets in a chosen [[sigma-algebra|<span class="math inline">\(\sigma\)</span>-algebra]]. A function <span class="math inline">\(f\)</span> transports the question “how large is <span class="math inline">\(A\)</span>?” about a set <span class="math inline">\(A\)</span> in its codomain into the question “how large is <span class="math inline">\(f^{-1}(A)\)</span>?” about a set in its domain. This only makes sense when <span class="math inline">\(f^{-1}(A)\)</span> is itself in the <span class="math inline">\(\sigma\)</span>-algebra of the domain.</p>
 </section>
-<section id="measurability-results" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="measurability-results"><span class="header-section-number">1</span> Measurability Results</h2>
-<p>Intuitively, we can <em>pull back</em> measurable sets from <span class="math inline">\(Y\)</span> to <span class="math inline">\(X\)</span>. This is very closely related to the definition of continuity of [[topological-functions]].</p>
-<p><strong>Example (Measurable Functions):</strong> Consider the mapping <span class="math inline">\(f(x)=x^2\)</span> mapping within <span class="math inline">\((\mathbb{R},\mathcal{B}_{\mathbb{R}})\)</span></p>
-<p>We say that a real function <span class="math inline">\(f:\mathbb{R}\to \mathbb{R}\)</span> is <strong>Lebesgue measurable</strong> if it is <span class="math inline">\((\mathcal{F}_{\lambda^*},\mathcal{B}_{\mathbb{R}})\)</span>-measurable. Also, given topological spaces <span class="math inline">\(X,Y\)</span> we say that <span class="math inline">\(f:X \to Y\)</span> is <strong>Borel measurable</strong> if it is <span class="math inline">\((\mathcal{B}_{X},\mathcal{B}_{Y})\)</span>-measurable. We will see that for functions <span class="math inline">\(f:\mathbb{R} \to \mathbb{R}\)</span> we have that Borel measurability implies Lebesgue measurability since <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\subsetneq \mathcal{F}_{\lambda^*}\)</span>.</p>
-<div class="theorem" data-title="$~$">
-<p>Given measurable spaces <span class="math inline">\((X,\mathcal{F})\)</span> and <span class="math inline">\((Y,\mathcal{G})\)</span> where <span class="math inline">\(\mathcal{G}\)</span> is generated by <span class="math inline">\(\mathcal{E}\)</span>, then <span class="math inline">\(f:X \to Y\)</span> is <span class="math inline">\((\mathcal{F},\mathcal{G})\)</span>-measurable if and only if <span class="math inline">\(\forall E\in \mathcal{E}\)</span>, <span class="math inline">\(f^{-1}(E)\in\mathcal{F}\)</span>.</p>
+<section id="definition" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="definition"><span class="header-section-number">2</span> Definition</h2>
+<div class="definition" data-title="Measurable Function">
+<p>Let <span class="math inline">\((X,\mathcal{F})\)</span> and <span class="math inline">\((Y,\mathcal{G})\)</span> be measurable spaces. A function <span class="math inline">\(f:X\to Y\)</span> is <strong><span class="math inline">\((\mathcal{F},\mathcal{G})\)</span>-measurable</strong> if</p>
+<p><span class="math display">\[
+f^{-1}(B) := \{x\in X : f(x)\in B\} \in \mathcal{F}
+\qquad\text{for all } B\in\mathcal{G}.
+\]</span></p>
+</div>
+<p>When the <span class="math inline">\(\sigma\)</span>-algebras are clear we simply say that <span class="math inline">\(f\)</span> is <strong>measurable</strong>, or <strong><span class="math inline">\(\mathcal{F}\)</span>-measurable</strong>. If the codomain is <span class="math inline">\(\mathbb{R}\)</span> (or <span class="math inline">\(\mathbb{R}^n\)</span>), it carries the [[borel-sigma-algebra|Borel <span class="math inline">\(\sigma\)</span>-algebra]] <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span> by default, so that a function <span class="math inline">\(f:X\to\mathbb{R}\)</span> is <span class="math inline">\(\mathcal{F}\)</span>-measurable if <span class="math inline">\(f^{-1}(B)\in\mathcal{F}\)</span> for every Borel set <span class="math inline">\(B\subseteq\mathbb{R}\)</span>.</p>
+<p>The definition is the exact analogue of continuity, with <span class="math inline">\(\sigma\)</span>-algebras in place of topologies: a function is continuous if preimages of open sets are open, and measurable if preimages of measurable sets are measurable.</p>
+<p>Two special cases of this definition appear often.</p>
+<ul>
+<li>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are topological spaces, <span class="math inline">\(f\)</span> is <strong>Borel measurable</strong> if it is <span class="math inline">\((\mathcal{B}_X,\mathcal{B}_Y)\)</span>-measurable.</li>
+<li>A function <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> is <strong>Lebesgue measurable</strong> if it is <span class="math inline">\((\mathcal{F}_{\lambda},\mathcal{B}_{\mathbb{R}})\)</span>-measurable, where <span class="math inline">\(\mathcal{F}_{\lambda}\)</span> is the <span class="math inline">\(\sigma\)</span>-algebra of Lebesgue measurable sets. Since <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\subsetneq\mathcal{F}_{\lambda}\)</span>, every Borel measurable function is Lebesgue measurable, but not conversely.</li>
+</ul>
+<section id="pushforward-measures" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="pushforward-measures"><span class="header-section-number">2.1</span> Pushforward Measures</h3>
+<p>If <span class="math inline">\(f:(X,\mathcal{F},\mu)\to(Y,\mathcal{G})\)</span> is measurable, then <span class="math inline">\(\mu\circ f^{-1}\)</span> is well defined on <span class="math inline">\(\mathcal{G}\)</span>, and is a measure on <span class="math inline">\(Y\)</span> called the <strong>pushforward</strong> (or <strong>image</strong>) measure,</p>
+<p><span class="math display">\[
+(f_*\mu)(B) = \mu\left(f^{-1}(B)\right), \qquad B\in\mathcal{G}.
+\]</span></p>
+<p>Measurability is exactly the condition that makes this transport possible. For example, let <span class="math inline">\(\Omega=\{1,\dots,6\}\)</span> be the outcomes of a die and let <span class="math inline">\(f(\omega)=+10\)</span> if <span class="math inline">\(\omega\)</span> is odd and <span class="math inline">\(-10\)</span> if <span class="math inline">\(\omega\)</span> is even, the payoff of a bet. Then <span class="math inline">\(f_*\mathbb{P}(\{10\})=\mathbb{P}(f^{-1}(10))=\mathbb{P}(\{1,3,5\})\)</span>, and the probability of losing money is <span class="math inline">\(\mathbb{P}(f^{-1}((-\infty,0)))\)</span>.</p>
+</section>
+</section>
+<section id="random-variables" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="random-variables"><span class="header-section-number">3</span> Random Variables</h2>
+<p>Let <span class="math inline">\((\Omega,\mathcal{F},\mathbb{P})\)</span> be a <a href="../topics/probability-spaces.html">probability space</a>.</p>
+<div class="definition" data-title="Random Variable">
+<p>A <strong>random variable</strong> is an <span class="math inline">\(\mathcal{F}\)</span>-measurable function <span class="math inline">\(X:\Omega\to\mathbb{R}\)</span> (or <span class="math inline">\(\mathbb{R}^n\)</span>, in which case <span class="math inline">\(X\)</span> is a random vector).</p>
+</div>
+<p>See <a href="../topics/random-variables.html">Random Variables and Distribution Functions</a>. Measurability is what allows us to speak of the probability of events defined by <span class="math inline">\(X\)</span>: the set <span class="math inline">\(\{X\le x\}=X^{-1}((-\infty,x])\)</span> is in <span class="math inline">\(\mathcal{F}\)</span> for every <span class="math inline">\(x\)</span>, so <span class="math inline">\(\mathbb{P}(X\le x)\)</span> is defined. The pushforward measure of <span class="math inline">\(\mathbb{P}\)</span> is the <strong>distribution</strong> (or <strong>law</strong>) of <span class="math inline">\(X\)</span>,</p>
+<p><span class="math display">\[
+\mu_X(B) = \mathbb{P}(X\in B) = \mathbb{P}\left(X^{-1}(B)\right),
+\qquad B\in\mathcal{B}_{\mathbb{R}}.
+\]</span></p>
+<p>Further connections with probability theory:</p>
+<ul>
+<li><strong>Generated <span class="math inline">\(\sigma\)</span>-algebra.</strong> The collection <span class="math inline">\(\sigma(X)=\{X^{-1}(B):B\in\mathcal{B}_{\mathbb{R}}\}\)</span> is the smallest <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\(\Omega\)</span> for which <span class="math inline">\(X\)</span> is measurable, and records the information in <span class="math inline">\(X\)</span> (see <a href="../topics/generated-sigma-algebra.html">Generated Sigma Algebra</a>). A random variable <span class="math inline">\(X\)</span> is <span class="math inline">\(\mathcal{G}\)</span>-measurable if and only if <span class="math inline">\(\sigma(X)\subseteq\mathcal{G}\)</span>.</li>
+<li><strong>Functions of random variables.</strong> If <span class="math inline">\(X\)</span> is a random variable and <span class="math inline">\(g\)</span> is Borel measurable, then <span class="math inline">\(g(X)\)</span> is a random variable, by the composition result below. This includes all continuous <span class="math inline">\(g\)</span>.</li>
+<li><strong>Doob-Dynkin lemma.</strong> A random variable <span class="math inline">\(Y\)</span> is <span class="math inline">\(\sigma(X)\)</span>-measurable if and only if <span class="math inline">\(Y=g(X)\)</span> for some Borel measurable function <span class="math inline">\(g\)</span>. This says that the information in <span class="math inline">\(X\)</span> determines exactly the functions of <span class="math inline">\(X\)</span>.</li>
+<li><strong>Expectation.</strong> The expectation of <span class="math inline">\(X\)</span> is the Lebesgue integral <span class="math inline">\(\mathbb{E}[X]=\int_\Omega X\,d\mathbb{P}\)</span>, which is defined for measurable functions, and satisfies <span class="math inline">\(\mathbb{E}[g(X)]=\int g\,d\mu_X\)</span>.</li>
+<li><strong>Stochastic processes.</strong> A process <span class="math inline">\((X_t)\)</span> is <strong>adapted</strong> to a filtration <span class="math inline">\((\mathcal{F}_t)\)</span> if each <span class="math inline">\(X_t\)</span> is <span class="math inline">\(\mathcal{F}_t\)</span>-measurable (see <a href="../topics/filtrations-and-adapted-processes.html">Filtrations and Adapted Processes</a>), and a conditional expectation <span class="math inline">\(\mathbb{E}[X\mid\mathcal{G}]\)</span> is by definition <span class="math inline">\(\mathcal{G}\)</span>-measurable (see <a href="../topics/conditional-expectation-random-variables.html">Conditional Expectation (Random Variables)</a>).</li>
+</ul>
+</section>
+<section id="equivalent-conditions" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="equivalent-conditions"><span class="header-section-number">4</span> Equivalent Conditions</h2>
+<p>It is enough to check measurability on a family that generates the <span class="math inline">\(\sigma\)</span>-algebra of the codomain.</p>
+<div class="theorem" data-title="Generating Sets">
+<p>Let <span class="math inline">\((X,\mathcal{F})\)</span> and <span class="math inline">\((Y,\mathcal{G})\)</span> be measurable spaces, where <span class="math inline">\(\mathcal{G}=\sigma(\mathcal{E})\)</span> is generated by a collection <span class="math inline">\(\mathcal{E}\)</span>. Then <span class="math inline">\(f:X\to Y\)</span> is <span class="math inline">\((\mathcal{F},\mathcal{G})\)</span>-measurable if and only if <span class="math inline">\(f^{-1}(E)\in\mathcal{F}\)</span> for all <span class="math inline">\(E\in\mathcal{E}\)</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>The only if implication is trivial. For the converse we observe that <span class="math display">\[
-\{ E \subset Y:f^{-1}(E)\in \mathcal{F} \},
-\]</span> is a <span class="math inline">\(\sigma\)</span>-algebra that contains <span class="math inline">\(\mathcal{E}\)</span>; it therefore contains <span class="math inline">\(\mathcal{G}\)</span>.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>The only if direction is immediate since <span class="math inline">\(\mathcal{E}\subseteq\mathcal{G}\)</span>. For the converse, the collection <span class="math display">\[
+\mathcal{A}=\{B\subseteq Y : f^{-1}(B)\in\mathcal{F}\}
+\]</span> is a <span class="math inline">\(\sigma\)</span>-algebra, because preimages commute with complements and countable unions, and <span class="math inline">\(\mathcal{F}\)</span> is closed under both. It contains <span class="math inline">\(\mathcal{E}\)</span> by assumption, so it contains <span class="math inline">\(\sigma(\mathcal{E})=\mathcal{G}\)</span>.</p>
 </div>
-<section id="equivalent-conditions" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="equivalent-conditions"><span class="header-section-number">1.1</span> Equivalent Conditions</h3>
-<div class="theorem" data-title="Properties of Measurable Functions">
-<p>For measurable space <span class="math inline">\((X,\mathcal{F})\)</span> and function <span class="math inline">\(f:X \to \mathbb{R}\)</span> the following are equivalent: 1. <span class="math inline">\(f\)</span> is <span class="math inline">\(\mathcal{F}\)</span>-measurable; 2. <span class="math inline">\(f^{-1}((a,\infty))\in \mathcal{F}\)</span> for all <span class="math inline">\(a\in \mathbb{R}\)</span>; 3. <span class="math inline">\(f^{-1}([a,\infty))\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>; 4. <span class="math inline">\(f^{-1}((-\infty,a))\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>; 5. <span class="math inline">\(f^{-1}((-\infty,a])\in \mathcal{F}\)</span> for all <span class="math inline">\(a \in \mathbb{R}\)</span>.</p>
+<p>For real-valued functions this gives several equivalent conditions.</p>
+<div class="theorem" data-title="Equivalent Conditions for Real-Valued Functions">
+<p>For a measurable space <span class="math inline">\((X,\mathcal{F})\)</span> and a function <span class="math inline">\(f:X\to\mathbb{R}\)</span> the following are equivalent:</p>
+<ol type="1">
+<li><span class="math inline">\(f\)</span> is <span class="math inline">\(\mathcal{F}\)</span>-measurable;</li>
+<li><span class="math inline">\(f^{-1}((a,\infty))\in\mathcal{F}\)</span> for all <span class="math inline">\(a\in\mathbb{R}\)</span>;</li>
+<li><span class="math inline">\(f^{-1}([a,\infty))\in\mathcal{F}\)</span> for all <span class="math inline">\(a\in\mathbb{R}\)</span>;</li>
+<li><span class="math inline">\(f^{-1}((-\infty,a))\in\mathcal{F}\)</span> for all <span class="math inline">\(a\in\mathbb{R}\)</span>;</li>
+<li><span class="math inline">\(f^{-1}((-\infty,a])\in\mathcal{F}\)</span> for all <span class="math inline">\(a\in\mathbb{R}\)</span>.</li>
+</ol>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>In our results on [[borel-sigma-algebra]] we proved that the open and closed rays generate the Borel σ-Algebra. Thus from previous results we have the result.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>Condition 1 implies each of 2 to 5, since rays are Borel sets. Conversely, the open rays <span class="math inline">\((a,\infty)\)</span> generate <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span>: from them we get <span class="math inline">\((-\infty,b]=(b,\infty)^c\)</span>, then <span class="math inline">\((a,b]=(a,\infty)\cap(-\infty,b]\)</span> and <span class="math inline">\((a,b)=\bigcup_n(a,b-\tfrac1n]\)</span>, and every open set is a countable union of open intervals. The same holds for the other three families, since each is obtained from another by complements or countable intersections and unions, for example <span class="math inline">\([a,\infty)=\bigcap_n(a-\tfrac1n,\infty)\)</span>. The result follows from the generating sets theorem.</p>
 </div>
+<p>The same conditions characterize measurability of functions into the extended reals <span class="math inline">\([-\infty,\infty]\)</span>, which is needed for suprema and limits. A function <span class="math inline">\(f=(f_1,\dots,f_n):X\to\mathbb{R}^n\)</span> is measurable if and only if each component <span class="math inline">\(f_i\)</span> is, since <span class="math inline">\(\mathcal{B}_{\mathbb{R}^n}\)</span> is the [[product-sigma-algebra|product <span class="math inline">\(\sigma\)</span>-algebra]] of <span class="math inline">\(n\)</span> copies of <span class="math inline">\(\mathcal{B}_{\mathbb{R}}\)</span>.</p>
+</section>
+<section id="important-results" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="important-results"><span class="header-section-number">5</span> Important Results</h2>
+<div class="theorem" data-title="Composition">
+<p>If <span class="math inline">\(f:(X,\mathcal{F})\to(Y,\mathcal{G})\)</span> and <span class="math inline">\(g:(Y,\mathcal{G})\to(Z,\mathcal{H})\)</span> are measurable, then <span class="math inline">\(g\circ f\)</span> is <span class="math inline">\((\mathcal{F},\mathcal{H})\)</span>-measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>For <span class="math inline">\(C\in\mathcal{H}\)</span>, <span class="math inline">\((g\circ f)^{-1}(C)=f^{-1}(g^{-1}(C))\)</span>. Here <span class="math inline">\(g^{-1}(C)\in\mathcal{G}\)</span> and so <span class="math inline">\(f^{-1}(g^{-1}(C))\in\mathcal{F}\)</span>.</p>
+</div>
+<div class="theorem" data-title="Continuous Functions are Borel Measurable">
+<p>Every continuous function <span class="math inline">\(f:X\to Y\)</span> between topological spaces is Borel measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By the generating sets theorem it suffices to check the open sets, which generate <span class="math inline">\(\mathcal{B}_Y\)</span>. If <span class="math inline">\(U\subseteq Y\)</span> is open then <span class="math inline">\(f^{-1}(U)\)</span> is open by continuity, hence in <span class="math inline">\(\mathcal{B}_X\)</span>.</p>
+</div>
+<div class="theorem" data-title="Algebra of Measurable Functions">
+<p>If <span class="math inline">\(f,g:X\to\mathbb{R}\)</span> are <span class="math inline">\(\mathcal{F}\)</span>-measurable and <span class="math inline">\(c\in\mathbb{R}\)</span>, then <span class="math inline">\(cf\)</span>, <span class="math inline">\(f+g\)</span>, <span class="math inline">\(fg\)</span>, <span class="math inline">\(|f|\)</span>, <span class="math inline">\(\max(f,g)\)</span> and <span class="math inline">\(\min(f,g)\)</span> are measurable. If <span class="math inline">\(g\neq0\)</span>, then <span class="math inline">\(f/g\)</span> is measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>For the sum, note that <span class="math inline">\(f(x)+g(x)&gt;a\)</span> if and only if there is a rational <span class="math inline">\(q\)</span> with <span class="math inline">\(f(x)&gt;q\)</span> and <span class="math inline">\(g(x)&gt;a-q\)</span>, so <span class="math display">\[
+\{f+g&gt;a\} = \bigcup_{q\in\mathbb{Q}}\{f&gt;q\}\cap\{g&gt;a-q\}\in\mathcal{F}.
+\]</span> The remaining cases follow from the composition theorem, since <span class="math inline">\(f\mapsto cf\)</span> and <span class="math inline">\(f\mapsto|f|\)</span> are continuous, and from <span class="math inline">\(fg=\tfrac14\left((f+g)^2-(f-g)^2\right)\)</span> and <span class="math inline">\(\max(f,g)=\tfrac12\left(f+g+|f-g|\right)\)</span>.</p>
+</div>
+<div class="theorem" data-title="Limits of Measurable Functions">
+<p>If <span class="math inline">\(f_n:X\to[-\infty,\infty]\)</span> are <span class="math inline">\(\mathcal{F}\)</span>-measurable, <span class="math inline">\(n\ge1\)</span>, then <span class="math inline">\(\sup_nf_n\)</span>, <span class="math inline">\(\inf_nf_n\)</span>, <span class="math inline">\(\limsup_nf_n\)</span> and <span class="math inline">\(\liminf_nf_n\)</span> are measurable. In particular, if <span class="math inline">\(f_n\to f\)</span> pointwise, then <span class="math inline">\(f\)</span> is measurable.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We have <span class="math inline">\(\{\sup_nf_n&gt;a\}=\bigcup_n\{f_n&gt;a\}\in\mathcal{F}\)</span>, so the supremum is measurable, and <span class="math inline">\(\inf_nf_n=-\sup_n(-f_n)\)</span>. Then <span class="math inline">\(\limsup_nf_n=\inf_{k}\sup_{n\ge k}f_n\)</span> and <span class="math inline">\(\liminf_nf_n=\sup_{k}\inf_{n\ge k}f_n\)</span> are measurable, and when the limit exists it equals the <span class="math inline">\(\limsup\)</span>.</p>
+</div>
+<p>The last result is a key difference from continuity: pointwise limits of continuous functions need not be continuous, but pointwise limits of measurable functions are always measurable.</p>
+<div class="theorem" data-title="Approximation by Simple Functions">
+<p>A <strong>simple function</strong> is a measurable function taking finitely many values. Every measurable <span class="math inline">\(f:X\to[0,\infty]\)</span> is the pointwise limit of an increasing sequence of non-negative simple functions <span class="math inline">\(0\le s_1\le s_2\le\dots\)</span>. If <span class="math inline">\(f\)</span> is bounded the convergence is uniform. Every measurable real function is a difference of two such limits, <span class="math inline">\(f=f^+-f^-\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Define</p>
+<p><span class="math display">\[
+s_n = \sum_{k=0}^{n2^n-1}\frac{k}{2^n}\,
+\mathbf{1}_{\{k2^{-n}\le f&lt;(k+1)2^{-n}\}} + n\,\mathbf{1}_{\{f\ge n\}}.
+\]</span></p>
+<p>Each set in the sum is the preimage of an interval, so it is in <span class="math inline">\(\mathcal{F}\)</span> and <span class="math inline">\(s_n\)</span> is simple. Refining the grid from <span class="math inline">\(n\)</span> to <span class="math inline">\(n+1\)</span> rounds <span class="math inline">\(f\)</span> down to a finer level, so <span class="math inline">\(s_n\le s_{n+1}\le f\)</span>, and <span class="math inline">\(f-s_n\le2^{-n}\)</span> wherever <span class="math inline">\(f&lt;n\)</span>, which gives <span class="math inline">\(s_n\uparrow f\)</span>.</p>
+</div>
+<p>This result is how the <a href="../topics/lebesgue-integral.html">Lebesgue Integral</a> is constructed: the integral is defined first for simple functions (see <a href="../topics/calculus-of-simple-functions.html">Calculus of Simple Functions</a>) and then extended to measurable functions by this approximation and the <a href="../topics/monotone-convergence-theorem.html">Monotone Convergence Theorem</a>.</p>
+</section>
+<section id="examples" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="examples"><span class="header-section-number">6</span> Examples</h2>
+<ol type="1">
+<li><p><strong>Constant functions</strong> are measurable for every <span class="math inline">\(\sigma\)</span>-algebra, since <span class="math inline">\(f^{-1}(B)\)</span> is either <span class="math inline">\(\emptyset\)</span> or <span class="math inline">\(X\)</span>.</p></li>
+<li><p><strong>Indicator functions.</strong> For <span class="math inline">\(A\subseteq X\)</span>, the indicator <span class="math inline">\(\mathbf{1}_A\)</span> is <span class="math inline">\(\mathcal{F}\)</span>-measurable if and only if <span class="math inline">\(A\in\mathcal{F}\)</span>, because <span class="math inline">\(\mathbf{1}_A^{-1}(B)\)</span> is one of <span class="math inline">\(\emptyset\)</span>, <span class="math inline">\(A\)</span>, <span class="math inline">\(A^c\)</span> or <span class="math inline">\(X\)</span>. Simple functions are finite linear combinations of indicators.</p></li>
+<li><p><strong>Extreme choices of <span class="math inline">\(\sigma\)</span>-algebra.</strong> If <span class="math inline">\(\mathcal{F}=\{\emptyset,X\}\)</span> is the trivial <span class="math inline">\(\sigma\)</span>-algebra, the only measurable real functions are the constants. If <span class="math inline">\(\mathcal{F}=2^X\)</span> is the power set, every function is measurable. This is why every function on a finite probability space with the power set is a random variable.</p></li>
+<li><p><strong>A function that is not measurable.</strong> On <span class="math inline">\(\Omega=\{1,\dots,6\}\)</span> with <span class="math inline">\(\mathcal{F}=\{\emptyset,\{1,3,5\},\{2,4,6\},\Omega\}\)</span> (we can only observe whether the roll is odd or even), the function <span class="math inline">\(X(\omega)=\omega\)</span> is not <span class="math inline">\(\mathcal{F}\)</span>-measurable, since <span class="math inline">\(X^{-1}(\{1\})=\{1\}\notin\mathcal{F}\)</span>. The parity <span class="math inline">\(\mathbf{1}_{\{\text{odd}\}}\)</span> is measurable.</p></li>
+<li><p><strong>Continuous functions</strong> such as <span class="math inline">\(f(x)=x^2\)</span> and <span class="math inline">\(f(x)=e^x\)</span> are Borel measurable, and so are all polynomials and <span class="math inline">\(\sin\)</span>, <span class="math inline">\(\cos\)</span>, by the continuity theorem above.</p></li>
+<li><p><strong>Monotone functions.</strong> If <span class="math inline">\(f:\mathbb{R}\to\mathbb{R}\)</span> is non-decreasing then <span class="math inline">\(\{f&gt;a\}\)</span> is an interval for every <span class="math inline">\(a\)</span>, so <span class="math inline">\(f\)</span> is Borel measurable even if it has countably many jumps, such as the floor function.</p></li>
+<li><p><strong>The Dirichlet function</strong> <span class="math inline">\(\mathbf{1}_{\mathbb{Q}}\)</span> is nowhere continuous, but is Borel measurable because <span class="math inline">\(\mathbb{Q}\)</span> is a countable union of points and hence Borel. It is the pointwise limit <span class="math inline">\(\lim_m\lim_n\cos^{2n}(m!\pi x)\)</span> of continuous functions.</p></li>
+<li><p><strong>Non-measurable functions</strong> exist but need the axiom of choice. If <span class="math inline">\(V\subset[0,1]\)</span> is a Vitali set, then <span class="math inline">\(\mathbf{1}_V\)</span> is not Lebesgue measurable. See <a href="../topics/vitalli-non-measurability-theorem.html">Vitalli Non-Measurability Theorem</a>.</p></li>
+<li><p><strong>Stock prices.</strong> If <span class="math inline">\((\Omega,\mathcal{F},\mathbb{P})\)</span> models a financial market and <span class="math inline">\(S_T=S_0\exp\left((\mu-\frac12\sigma^2)T+\sigma W_T\right)\)</span>, then <span class="math inline">\(S_T\)</span> is a random variable, as a continuous function of the random variable <span class="math inline">\(W_T\)</span>. So are payoffs such as <span class="math inline">\((S_T-K)^+\)</span>, as continuous functions of <span class="math inline">\(S_T\)</span>.</p></li>
+</ol>
+</section>
+<section id="related-topics" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="related-topics"><span class="header-section-number">7</span> Related Topics</h2>
+<ul>
+<li><a href="../topics/measure-theory.html">Measure Theory</a></li>
+<li><a href="../topics/measure-spaces.html">Measure Spaces</a></li>
+<li><a href="../topics/random-variables.html">Random Variables and Distribution Functions</a></li>
+<li><a href="../topics/lebesgue-integral.html">Lebesgue Integral</a></li>
+<li><a href="../topics/generated-sigma-algebra.html">Generated Sigma Algebra</a></li>
+<li><a href="../topics/product-sigma-algebra.html">Product σ-Algebra</a></li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -463,7 +574,6 @@ Backlinks
 <li><a href="../topics/set-functions.html">Set Functions</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

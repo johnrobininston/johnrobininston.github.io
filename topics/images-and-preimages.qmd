@@ -1,0 +1,198 @@
+---
+id: images-and-preimages
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-30
+description: "Images and preimages of subsets under a function: definitions, how each interacts with set operations, and the relation between them."
+number-sections: true
+title: "Images and Preimages of Functions"
+title-block-banner: false
+---
+
+## Images and Preimages
+
+A function $f:X\to Y$ acts on points, but it also acts on *subsets*. Pushing a
+subset of $X$ forward gives its image, and pulling a subset of $Y$ back gives
+its preimage. Preimages interact very well with set operations, which is why
+they are the right tool in [[measure-theory]]: a [[measurable-function]] is
+defined by the condition that preimages of measurable sets are measurable.
+
+## Definitions
+
+Let $f:X\to Y$ be a function.
+
+:::{.definition data-title="Image and Preimage"}
+
+The **image** of a subset $A\subseteq X$ is
+
+$$
+f(A) = \{f(x) : x\in A\} = \{y\in Y : \exists\,x\in A,\ f(x)=y\}.
+$$
+
+The **preimage** (or **inverse image**) of a subset $B\subseteq Y$ is
+
+$$
+f^{-1}(B) = \{x\in X : f(x)\in B\}.
+$$
+
+:::
+
+The notation $f^{-1}(B)$ does not require $f$ to be invertible. Both
+operations are maps between power sets,
+
+$$
+f:\mathcal{P}(X)\to\mathcal{P}(Y),
+\qquad
+f^{-1}:\mathcal{P}(Y)\to\mathcal{P}(X),
+$$
+
+and both are defined for every function. The **range** of $f$ is the image
+$f(X)$, which can be strictly smaller than the codomain $Y$.
+
+:::{.example data-title="Squaring"}
+
+Let $f(x)=x^2$ on $\mathbb{R}$. Then $f(\mathbb{R})=[0,\infty)$ and
+$f([-2,1])=[0,4]$. For preimages, $f^{-1}([1,4])=[-2,-1]\cup[1,2]$,
+$f^{-1}(\{0\})=\{0\}$ and $f^{-1}((-\infty,0))=\emptyset$.
+
+:::
+
+## Properties of the Preimage
+
+The preimage commutes with all set operations. For subsets $B,B_1,B_2\subseteq Y$
+and a family $(B_i)_{i\in I}$ indexed by an arbitrary set $I$:
+
+| Operation | Identity |
+|:--|:--|
+| Unions | $f^{-1}\left(\bigcup_i B_i\right)=\bigcup_i f^{-1}(B_i)$ |
+| Intersections | $f^{-1}\left(\bigcap_i B_i\right)=\bigcap_i f^{-1}(B_i)$ |
+| Complements | $f^{-1}(Y\setminus B)=X\setminus f^{-1}(B)$ |
+| Differences | $f^{-1}(B_1\setminus B_2)=f^{-1}(B_1)\setminus f^{-1}(B_2)$ |
+| Monotonicity | $B_1\subseteq B_2\implies f^{-1}(B_1)\subseteq f^{-1}(B_2)$ |
+| Composition | $(g\circ f)^{-1}(C)=f^{-1}\left(g^{-1}(C)\right)$ |
+
+:::{.proof}
+The statement $x\in f^{-1}(B)$ means only that $f(x)\in B$, which is a
+pointwise membership test, so it passes through any logical operation. For
+example,
+
+$$
+x\in f^{-1}(B_1\cap B_2)
+\iff f(x)\in B_1 \text{ and } f(x)\in B_2
+\iff x\in f^{-1}(B_1)\cap f^{-1}(B_2),
+$$
+
+and the same argument works for unions, complements and differences.
+:::
+
+This is why preimages are used in measure theory. If $\mathcal{G}$ is a
+$\sigma$-algebra on $Y$, then $\{f^{-1}(B):B\in\mathcal{G}\}$ is a
+$\sigma$-algebra on $X$, and this is why a random variable is defined by
+the condition $X^{-1}(B)\in\mathcal{F}$ (see [[random-variables]] and
+[[generated-sigma-algebra]]).
+
+## Properties of the Image
+
+The image only partly commutes with set operations. For subsets
+$A,A_1,A_2\subseteq X$ and a family $(A_i)_{i\in I}$:
+
+| Operation | Relation |
+|:--|:--|
+| Unions | $f\left(\bigcup_i A_i\right)=\bigcup_i f(A_i)$ |
+| Intersections | $f\left(\bigcap_i A_i\right)\subseteq\bigcap_i f(A_i)$ |
+| Differences | $f(A_1)\setminus f(A_2)\subseteq f(A_1\setminus A_2)$ |
+| Complements | $f(X)\setminus f(A)\subseteq f(X\setminus A)$ |
+| Monotonicity | $A_1\subseteq A_2\implies f(A_1)\subseteq f(A_2)$ |
+| Composition | $(g\circ f)(A)=g\left(f(A)\right)$ |
+
+There is no general relation of the form $f(X\setminus A)=Y\setminus f(A)$.
+One has $Y\setminus f(A)\subseteq f(X\setminus A)$ when $f$ is surjective,
+and equality when $f$ is bijective.
+
+**Why intersections fail.** Take $f(x)=x^2$ on $\mathbb{R}$, $A_1=\{-1\}$ and
+$A_2=\{1\}$. Then $A_1\cap A_2=\emptyset$, so $f(A_1\cap A_2)=\emptyset$, but
+$f(A_1)\cap f(A_2)=\{1\}$. Two different points can collide in the image.
+
+Equality is recovered exactly when $f$ is injective.
+
+:::{.theorem data-title="Images and Injectivity"}
+
+The following are equivalent:
+
+1. $f$ is injective;
+2. $f(A_1\cap A_2)=f(A_1)\cap f(A_2)$ for all $A_1,A_2\subseteq X$;
+3. $f(A_1\setminus A_2)=f(A_1)\setminus f(A_2)$ for all
+   $A_1,A_2\subseteq X$.
+
+:::
+
+:::{.proof}
+The inclusion $\subseteq$ in (2) and the inclusion $\supseteq$ in (3) hold for
+every function. Suppose $f$ is injective. If $y\in f(A_1)\cap f(A_2)$, then
+$y=f(a_1)=f(a_2)$ with $a_i\in A_i$, and injectivity gives $a_1=a_2\in
+A_1\cap A_2$, which proves (2). If $y=f(a)$ with $a\in A_1\setminus A_2$ and
+also $y\in f(A_2)$, then $y=f(a')$ with $a'\in A_2$ and $a=a'$, a
+contradiction, so $y\notin f(A_2)$ and (3) holds.
+
+Conversely, suppose $f$ is not injective, so $f(x_1)=f(x_2)$ for some
+$x_1\neq x_2$. With $A_1=\{x_1\}$ and $A_2=\{x_2\}$, we have
+$f(A_1\cap A_2)=\emptyset\ne f(A_1)\cap f(A_2)$, so (2) fails, and
+$f(A_1\setminus A_2)=f(A_1)\ne\emptyset=f(A_1)\setminus f(A_2)$, so (3) fails.
+:::
+
+## Interaction of Image and Preimage
+
+For $A\subseteq X$ and $B\subseteq Y$,
+
+$$
+A\subseteq f^{-1}\big(f(A)\big),
+\qquad
+f\big(f^{-1}(B)\big)=B\cap f(X)\subseteq B.
+$$
+
+Moreover,
+
+- $f^{-1}(f(A))=A$ for all $A\subseteq X$ if and only if $f$ is injective,
+- $f(f^{-1}(B))=B$ for all $B\subseteq Y$ if and only if $f$ is surjective.
+
+So injectivity and surjectivity are exactly the conditions under which $f$ and
+$f^{-1}$, as maps between power sets, invert each other.
+
+The pair also forms a **Galois connection**,
+
+$$
+f(A)\subseteq B \iff A\subseteq f^{-1}(B).
+$$
+
+This single equivalence encodes the two inclusions above: it means that $f$ is
+the left adjoint of $f^{-1}$ on the power-set lattices. As a right adjoint, the
+preimage preserves all intersections (limits), while the image, as a left
+adjoint, preserves all unions (colimits).
+
+Two more useful identities are
+
+$$
+f\big(A\cap f^{-1}(B)\big)=f(A)\cap B,
+\qquad
+f^{-1}(B)=\emptyset \iff B\cap f(X)=\emptyset.
+$$
+
+## Summary
+
+| Operation | Preimage $f^{-1}$ | Image $f$ |
+|:--|:--|:--|
+| Unions | $=$ | $=$ |
+| Intersections | $=$ | $\subseteq$ ($=$ iff injective) |
+| Complements | $=$ (complement in the matching space) | no general equality |
+| Differences | $=$ | $f(A_1)\setminus f(A_2)\subseteq f(A_1\setminus A_2)$ ($=$ iff injective) |
+
+Preimages are well behaved with respect to all set operations, while images
+are well behaved only with respect to unions.
+
+## Related Topics
+
+- [[measurable-function]]
+- [[random-variables]]
+- [[generated-sigma-algebra]]
+- [[measure-theory]]

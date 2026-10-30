@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="European call and put options: payoffs, pricing and put-call parity.">
 
 <title>European Options – John Robin Inston</title>
 <style>
@@ -361,8 +362,11 @@ window.Quarto = {
   <li><a href="#european-options" id="toc-european-options" class="nav-link active" data-scroll-target="#european-options"><span class="header-section-number">1</span> European Options</a></li>
   <li><a href="#pricing-european-options" id="toc-pricing-european-options" class="nav-link" data-scroll-target="#pricing-european-options"><span class="header-section-number">2</span> Pricing European Options</a>
   <ul class="collapse">
-  <li><a href="#risk-free-measure-approach" id="toc-risk-free-measure-approach" class="nav-link" data-scroll-target="#risk-free-measure-approach"><span class="header-section-number">2.1</span> Risk-Free Measure Approach</a></li>
+  <li><a href="#risk-neutral-approach" id="toc-risk-neutral-approach" class="nav-link" data-scroll-target="#risk-neutral-approach"><span class="header-section-number">2.1</span> Risk-Neutral Approach</a></li>
+  <li><a href="#black-scholes-formulas" id="toc-black-scholes-formulas" class="nav-link" data-scroll-target="#black-scholes-formulas"><span class="header-section-number">2.2</span> Black-Scholes Formulas</a></li>
   </ul></li>
+  <li><a href="#put-call-parity" id="toc-put-call-parity" class="nav-link" data-scroll-target="#put-call-parity"><span class="header-section-number">3</span> Put-Call Parity</a></li>
+  <li><a href="#no-arbitrage-bounds" id="toc-no-arbitrage-bounds" class="nav-link" data-scroll-target="#no-arbitrage-bounds"><span class="header-section-number">4</span> No-Arbitrage Bounds</a></li>
   </ul>
 </nav>
     </div>
@@ -375,6 +379,11 @@ window.Quarto = {
 <h1 class="title">European Options</h1>
 </div>
 
+<div>
+  <div class="description">
+    European call and put options: payoffs, pricing and put-call parity.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -403,20 +412,92 @@ window.Quarto = {
 
 <section id="european-options" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="european-options"><span class="header-section-number">1</span> European Options</h2>
-<p><strong>European options</strong> are the simplest kind of financial derivatives after forwards and futures. Options have become a standard tool in modern finance allowing investors to construct contracts to hedge portfolio risk, take advantage of perceived arbitrage and leverage risk.</p>
+<p><strong>European options</strong> are the simplest kind of financial derivatives after forwards and futures. Options have become a standard tool in modern finance, allowing investors to construct contracts to hedge portfolio risk, take advantage of perceived arbitrage and leverage risk.</p>
 <div class="definition" data-title="European Option">
-<p>A <strong>European put/call option</strong> is a contract giving its holder the right but not the obligation to sell/purchase an underlying asset for some specified strike price <span class="math inline">\(K\)</span> at some future maturity time <span class="math inline">\(T\)</span>.</p>
+<p>A <strong>European call/put option</strong> is a contract giving its holder the right but not the obligation to purchase/sell an underlying asset for some specified strike price <span class="math inline">\(K\)</span> at some future maturity time <span class="math inline">\(T\)</span>.</p>
 </div>
+<p>For an underlying asset with price <span class="math inline">\(S\)</span>, the payoff <span class="math inline">\(h\)</span> of a call and a put with strike <span class="math inline">\(K\)</span> at maturity <span class="math inline">\(T\)</span> is</p>
+<p><span class="math display">\[
+h_{\text{call}}(S_T) = (S_T - K)^+,
+\qquad
+h_{\text{put}}(S_T) = (K - S_T)^+.
+\]</span></p>
+<p>Throughout, <span class="math inline">\(C(S_t,t)\)</span> and <span class="math inline">\(P(S_t,t)\)</span> denote the call and put prices at time <span class="math inline">\(t \le T\)</span>, and <span class="math inline">\(r\)</span> is a constant risk-free interest rate. See <a href="../topics/derivatives.html">Derivatives</a> for payoff diagrams.</p>
 </section>
 <section id="pricing-european-options" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="pricing-european-options"><span class="header-section-number">2</span> Pricing European Options</h2>
-<section id="risk-free-measure-approach" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="risk-free-measure-approach"><span class="header-section-number">2.1</span> Risk-Free Measure Approach</h3>
-<p>Introducing typical mathematical notation, for underlying asset with price <span class="math inline">\(S\)</span> the payoff function <span class="math inline">\(\Phi\)</span> of a European call option with strike price <span class="math inline">\(K\)</span> at maturity time <span class="math inline">\(T\)</span> is given by <span class="math display">\[
-\Phi(T,S)=(S_{T}-K)_{+}.
-\]</span> <!-- TODO: image "Pasted image 20250602123056.png" not found in vault --> Therefore from <a href="../topics/derivatives-pricing.html">risk-neutral pricing</a> we have that the price of the European call option at present time <span class="math inline">\(t\)</span> is given by the expected payoff of the option adjusted for the time-value of money <span class="math display">\[
-P(t, \Phi) = \mathbb{E}[D_{t}\Phi(T,S)],
-\]</span> where <span class="math inline">\(D_{t}\)</span> represents the discounting factor. The specific form of this discount depends on the assumed underlying model.</p>
+<section id="risk-neutral-approach" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="risk-neutral-approach"><span class="header-section-number">2.1</span> Risk-Neutral Approach</h3>
+<p>By <a href="../topics/risk-neutral-pricing.html">risk-neutral pricing</a>, the price of a European option at time <span class="math inline">\(t\)</span> is the expected payoff under the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span>, adjusted for the time value of money</p>
+<p><span class="math display">\[
+V(t) = \mathbb{E}_{\mathbb{Q}}\left[ D_{t,T}\, h(S_T) \mid \mathcal{F}_t \right],
+\]</span></p>
+<p>where <span class="math inline">\(D_{t,T}\)</span> is the discount factor from <span class="math inline">\(T\)</span> to <span class="math inline">\(t\)</span>. For a constant rate, <span class="math inline">\(D_{t,T} = e^{-r(T-t)}\)</span>.</p>
+</section>
+<section id="black-scholes-formulas" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="black-scholes-formulas"><span class="header-section-number">2.2</span> Black-Scholes Formulas</h3>
+<p>Let <span class="math inline">\(N\)</span> denote the cumulative distribution function of the standard normal distribution,</p>
+<p><span class="math display">\[
+N(x) = \mathbb{P}(Z \le x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi}}\,e^{-u^2/2}\,du,
+\qquad Z \sim \mathcal{N}(0,1).
+\]</span></p>
+<p>It satisfies <span class="math inline">\(N(x) + N(-x) = 1\)</span>.</p>
+<div class="theorem" data-title="European Call and Put Prices">
+<p>Under the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> the prices of a European vanilla call and put option at time <span class="math inline">\(t\)</span> with underlying stock <span class="math inline">\(S_t\)</span>, strike <span class="math inline">\(K\)</span> and maturity <span class="math inline">\(T\)</span> are</p>
+<p><span class="math display">\[
+\begin{aligned}
+C(S_t,t) &amp; = N(d_{+})\,S_t - N(d_{-})\,Ke^{-r(T-t)}, \\
+P(S_t,t) &amp; = N(-d_{-})\,Ke^{-r(T-t)} - N(-d_{+})\,S_t,
+\end{aligned}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+d_{+} = \frac{1}{\sigma\sqrt{T-t}}
+\left( \log\frac{S_t}{K} + \left( r + \frac{\sigma^2}{2} \right)(T-t) \right),
+\qquad
+d_{-} = d_{+} - \sigma\sqrt{T-t}.
+\]</span></p>
+</div>
+<p>These follow by evaluating the risk-neutral expectation above, using that <span class="math inline">\(S_T\)</span> is log-normal under <span class="math inline">\(\mathbb{Q}\)</span>. They also solve the <a href="../topics/black-scholes-merton-model.html">Black-Scholes PDE</a>. The sensitivities of these prices are the <a href="../topics/option-greeks.html">Option Greeks</a>.</p>
+</section>
+</section>
+<section id="put-call-parity" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="put-call-parity"><span class="header-section-number">3</span> Put-Call Parity</h2>
+<div class="theorem" data-title="Put-Call Parity">
+<p>For European options on a non-dividend-paying asset with the same strike <span class="math inline">\(K\)</span> and maturity <span class="math inline">\(T\)</span>,</p>
+<p><span class="math display">\[
+C(S_t,t) - P(S_t,t) = S_t - Ke^{-r(T-t)}.
+\]</span></p>
+</div>
+<p>This relation does not depend on the model for <span class="math inline">\(S\)</span>. It follows from the payoff identity</p>
+<p><span class="math display">\[
+(S_T - K)^+ - (K - S_T)^+ = S_T - K,
+\]</span></p>
+<p>since taking the discounted expectation under <span class="math inline">\(\mathbb{Q}\)</span> and using that the discounted stock price <span class="math inline">\(e^{-rt}S_t\)</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-martingale gives</p>
+<p><span class="math display">\[
+C(S_t,t) - P(S_t,t)
+= e^{-r(T-t)}\,\mathbb{E}_{\mathbb{Q}}[S_T - K \mid \mathcal{F}_t]
+= S_t - Ke^{-r(T-t)}.
+\]</span></p>
+<p>The same relation comes from replication. A long call and short put replicate a forward contract with delivery price <span class="math inline">\(K\)</span>, which is worth <span class="math inline">\(S_t - Ke^{-r(T-t)}\)</span> (buy the asset and borrow <span class="math inline">\(Ke^{-r(T-t)}\)</span>). Any other price would allow an arbitrage.</p>
+<p>As a check, the Black-Scholes formulas satisfy parity because <span class="math inline">\(N(x) + N(-x) = 1\)</span>,</p>
+<p><span class="math display">\[
+C - P = S_t\left[N(d_+) + N(-d_+)\right]
+- Ke^{-r(T-t)}\left[N(d_-) + N(-d_-)\right]
+= S_t - Ke^{-r(T-t)}.
+\]</span></p>
+<p>If the asset pays dividends, <span class="math inline">\(S_t\)</span> is replaced by <span class="math inline">\(S_t\)</span> minus the present value of the dividends. See <a href="../topics/black-scholes-model-with-dividends.html">Black Scholes Model with Dividends</a>. Parity also follows from the <a href="../topics/carr-madan-formula.html">Carr-Madan Formula</a>.</p>
+</section>
+<section id="no-arbitrage-bounds" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="no-arbitrage-bounds"><span class="header-section-number">4</span> No-Arbitrage Bounds</h2>
+<p>Since option prices are non-negative, parity gives bounds that hold in any model</p>
+<p><span class="math display">\[
+\max\left(S_t - Ke^{-r(T-t)},\, 0\right) \le C(S_t,t) \le S_t,
+\]</span></p>
+<p><span class="math display">\[
+\max\left(Ke^{-r(T-t)} - S_t,\, 0\right) \le P(S_t,t) \le Ke^{-r(T-t)}.
+\]</span></p>
+<p>The upper bounds hold because the payoffs satisfy <span class="math inline">\((S_T-K)^+ \le S_T\)</span> and <span class="math inline">\((K-S_T)^+ \le K\)</span>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -424,11 +505,13 @@ P(t, \Phi) = \mathbb{E}[D_{t}\Phi(T,S)],
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/carr-madan-formula.html">Carr-Madan Formula</a></li>
 <li><a href="../topics/option-greeks.html">Option Greeks</a></li>
+<li><a href="../topics/option-pricing.html">Option Pricing</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

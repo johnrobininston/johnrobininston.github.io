@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Upcrossings of an interval and Doob’s upcrossing inequality.">
 
 <title>Upcrossing Inequality – John Robin Inston</title>
 <style>
@@ -358,7 +359,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#upcrossing-inequality" id="toc-upcrossing-inequality" class="nav-link active" data-scroll-target="#upcrossing-inequality"><span class="header-section-number">0.1</span> Upcrossing Inequality</a></li>
+  <li><a href="#upcrossings" id="toc-upcrossings" class="nav-link active" data-scroll-target="#upcrossings"><span class="header-section-number">1</span> Upcrossings</a></li>
+  <li><a href="#upcrossing-inequality" id="toc-upcrossing-inequality" class="nav-link" data-scroll-target="#upcrossing-inequality"><span class="header-section-number">2</span> Upcrossing Inequality</a></li>
   </ul>
 </nav>
     </div>
@@ -371,6 +373,11 @@ window.Quarto = {
 <h1 class="title">Upcrossing Inequality</h1>
 </div>
 
+<div>
+  <div class="description">
+    Upcrossings of an interval and Doob’s upcrossing inequality.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -397,17 +404,67 @@ window.Quarto = {
 </header>
 
 
-<section id="upcrossing-inequality" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="upcrossing-inequality"><span class="header-section-number">0.1</span> Upcrossing Inequality</h3>
+<section id="upcrossings" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="upcrossings"><span class="header-section-number">1</span> Upcrossings</h2>
+<p>Let <span class="math inline">\((y_n)\)</span> be a sequence of real numbers and fix an interval <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(a&lt;b\)</span>. Define</p>
+<p><span class="math display">\[
+T_1 = \min\{ n : y_n \le a \},
+\qquad
+T_2 = \min\{ n &gt; T_1 : y_n \ge b \}.
+\]</span></p>
+<p>The interval <span class="math inline">\([T_1, T_2]\)</span> is called an <strong>upcrossing</strong> of <span class="math inline">\([a,b]\)</span>. For <span class="math inline">\(k \ge 2\)</span> define</p>
+<p><span class="math display">\[
+T_{2k-1} = \min\{ n &gt; T_{2k-2} : y_n \le a \},
+\qquad
+T_{2k} = \min\{ n &gt; T_{2k-1} : y_n \ge b \}.
+\]</span></p>
+<p>The <strong>number of upcrossings</strong> of <span class="math inline">\([a,b]\)</span> by the finite sequence <span class="math inline">\((y_0,\dots,y_n)\)</span> is denoted <span class="math inline">\(U_n(a,b;y)\)</span>, and the <strong>total number of upcrossings</strong> of <span class="math inline">\([a,b]\)</span> by the infinite sequence is</p>
+<p><span class="math display">\[
+U(a,b;y) := \lim_{n\to\infty} U_n(a,b;y).
+\]</span></p>
+<p><strong>Downcrossings</strong> are defined similarly by reversing the inequalities and swapping <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
+<div class="theorem" data-title="Upcrossings and Convergence">
+<p>If a sequence of real numbers <span class="math inline">\((y_n)\)</span> diverges, then there exist rational numbers <span class="math inline">\(a&lt;b\)</span> such that <span class="math inline">\(U(a,b;y)=\infty\)</span>.</p>
+</div>
+<p><code>\begin{proof}</code> If <span class="math inline">\((y_n)\)</span> diverges, then <span class="math inline">\(\liminf y_n &lt; \limsup y_n\)</span>, so there are rational numbers <span class="math inline">\(a&lt;b\)</span> with <span class="math inline">\(\liminf y_n &lt; a &lt; b &lt; \limsup y_n\)</span>. Then <span class="math inline">\(y_n \le a\)</span> for infinitely many <span class="math inline">\(n\)</span> and <span class="math inline">\(y_n \ge b\)</span> for infinitely many <span class="math inline">\(n\)</span>, so <span class="math inline">\((y_n)\)</span> crosses <span class="math inline">\([a,b]\)</span> upwards infinitely often, that is <span class="math inline">\(U(a,b;y)=\infty\)</span>. <code>\end{proof}</code></p>
+<p>This reduces convergence of a sequence to finiteness of <span class="math inline">\(U(a,b;y)\)</span> for the countably many rational pairs <span class="math inline">\(a&lt;b\)</span>, which is how the upcrossing inequality is used to prove the <a href="../topics/martingale-convergence-theorems.html">Martingale Convergence Theorems</a>.</p>
+</section>
+<section id="upcrossing-inequality" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="upcrossing-inequality"><span class="header-section-number">2</span> Upcrossing Inequality</h2>
 <div class="theorem" data-title="Upcrossing Inequality">
-<p>Let <span class="math inline">\((X_{n}, \mathcal{F}_{n})\)</span> be a <a href="../topics/martingale-theory.html">submartingale</a>, <span class="math inline">\(a&lt;b\)</span>, and <span class="math inline">\(U_{n}(a,b;X)\)</span> be the number of <a href="../topics/upcrossings.html">upcrossings</a> of <span class="math inline">\([a,b]\)</span> by <span class="math inline">\(X=(X_{n})\)</span> up to time <span class="math inline">\(n\)</span>. Then <span class="math display">\[
-\mathbb{E}[U_{n}(a,b;X)]\leq  \frac{1}{b-a} \mathbb{E}[(X_{n}-a)^+].
+<p>Let <span class="math inline">\((X_n, \mathcal{F}_n)\)</span> be a <a href="../topics/martingale-theory.html">submartingale</a>, <span class="math inline">\(a&lt;b\)</span>, and let <span class="math inline">\(U_n(a,b;X)\)</span> be the number of upcrossings of <span class="math inline">\([a,b]\)</span> by <span class="math inline">\(X=(X_n)\)</span> up to time <span class="math inline">\(n\)</span>. Then</p>
+<p><span class="math display">\[
+\mathbb{E}[U_n(a,b;X)] \le \frac{1}{b-a}\,\mathbb{E}[(X_n-a)^+].
 \]</span></p>
 </div>
-<p><code>\begin{proof}</code></p>
-<p><code>\end{proof}</code></p>
+<p><code>\begin{proof}</code> Put <span class="math inline">\(Y_n = (X_n - a)^+\)</span>. This is a nonnegative submartingale (a convex nondecreasing function of a submartingale), and upcrossings of <span class="math inline">\([a,b]\)</span> by <span class="math inline">\(X\)</span> are upcrossings of <span class="math inline">\([0,b-a]\)</span> by <span class="math inline">\(Y\)</span>, so <span class="math inline">\(U_n(a,b;X) = U_n(0,b-a;Y)\)</span>.</p>
+<p>Define the predictable process <span class="math inline">\(C_1 = \mathbb{1}_{\{Y_0 = 0\}}\)</span> and, for <span class="math inline">\(n \ge 2\)</span>,</p>
+<p><span class="math display">\[
+C_n = \mathbb{1}_{\{C_{n-1}=1\}}\mathbb{1}_{\{Y_{n-1} &lt; b-a\}}
++ \mathbb{1}_{\{C_{n-1}=0\}}\mathbb{1}_{\{Y_{n-1} = 0\}}.
+\]</span></p>
+<p>That is, we start betting when <span class="math inline">\(Y\)</span> hits <span class="math inline">\(0\)</span> and stop once it exceeds <span class="math inline">\(b-a\)</span>. Each completed upcrossing of <span class="math inline">\([0,b-a]\)</span> contributes at least <span class="math inline">\(b-a\)</span> to the transform <span class="math inline">\((C\bullet Y)_n = \sum_{k=1}^n C_k(Y_k - Y_{k-1})\)</span>, and an unfinished final stretch contributes at least <span class="math inline">\(0\)</span> since <span class="math inline">\(Y \ge 0\)</span>. Hence</p>
+<p><span class="math display">\[
+(b-a)\,U_n(0,b-a;Y) \le (C\bullet Y)_n.
+\]</span></p>
+<p>Since <span class="math inline">\(1-C\)</span> is predictable and nonnegative, <span class="math inline">\(((1-C)\bullet Y)\)</span> is a submartingale null at <span class="math inline">\(0\)</span> (see <a href="../topics/martingale-theory.html">Martingale Theory</a>), so <span class="math inline">\(\mathbb{E}[((1-C)\bullet Y)_n] \ge 0\)</span>. Therefore</p>
+<p><span class="math display">\[
+\mathbb{E}[(C\bullet Y)_n]
+= \mathbb{E}[Y_n - Y_0] - \mathbb{E}[((1-C)\bullet Y)_n]
+\le \mathbb{E}[Y_n - Y_0] \le \mathbb{E}[Y_n],
+\]</span></p>
+<p>and combining the two displays gives <span class="math inline">\((b-a)\,\mathbb{E}[U_n(a,b;X)] \le \mathbb{E}[(X_n - a)^+]\)</span>. <code>\end{proof}</code></p>
 
 
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
+<ul>
+<li><a href="../topics/martingale-theory.html">Martingale Theory</a></li>
+<li><a href="../topics/probability-theory.html">Probability Theory</a></li>
+</ul>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

@@ -1,173 +1,258 @@
 ---
-title: Black-Scholes-Merton Model
-author: John Robin Inston
+id: black-scholes-merton-model
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "The constant volatility Black-Scholes-Merton market model."
 number-sections: true
+title: "Black-Scholes-Merton Model"
 title-block-banner: false
 ---
 
-## Black-Scholes-Merton Model
-References:
-[Columbia Note](https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf)
+## The Model
 
-The **Black-Scholes-Merton (BS) model** is a **constant volatility model** for
-a financial market. The model is a fundamental in
-[[financial-mathematics|mathematical finance]], particularly in
-[[derivatives-pricing|derivatives pricing]] where it is used to describe the
-dynamics of the underlying assets of derivatives such as [[options|options]].
+The **Black-Scholes-Merton (BSM) model**, introduced by Black and Scholes and
+by Merton in 1973, is a **constant volatility model** for a financial market.
+It is a cornerstone of [[quantitative-finance]], in particular of
+[[option-pricing]], where it describes the dynamics of the underlying assets
+of derivatives such as [[derivatives|options]].
 
-:::{.definition data-title="Black-Scholes Model"}
+:::{.definition data-title="Black-Scholes-Merton Model"}
 
-The Black-Scholes model consists of two assets, a risk free asset $B$ and a
-risky asset (stock) $S$ with price dynamics given by
+The BSM model consists of two assets, a risk-free asset $B$ and a risky asset
+(stock) $S$ with price dynamics given by
+
 $$
-\begin{align}dB_{t}&=rB_{t}dt \\dS_{t}& =\alpha S_{t}dt+\sigma S_{t}dW_{t},\end{align}
+\begin{align}
+dB_t & = rB_t\,dt, \\
+dS_t & = \mu S_t\,dt + \sigma S_t\,dW_t,
+\end{align}
 $$
-where $r$, $\alpha$ and $\sigma$ are deterministic constants. Here $r$ is the
-**risk-free interest rate**, $\alpha$ is the **drift coefficient** and $\sigma$
-is the **diffusion coefficient**.
+
+where $r$, $\mu$ and $\sigma$ are deterministic constants and $W$ is a
+Brownian motion. Here $r$ is the **risk-free interest rate**, $\mu$ is the
+**drift coefficient** and $\sigma$ is the **diffusion coefficient**
+(the **volatility**).
 
 :::
 
-## Black-Scholes Model Option Pricing
+The model assumes that
 
-In our note on [[derivatives-pricing]] we discuss methods for pricing
-derivatives in which we always assume our underlying assets follow some kind of
-volatility model. Assuming an asset has dynamics given by the BS Model we are
-able to compute the fair market price of derivatives of these assets using one
-of two approaches. The first approach comes from
-[[partial-differential-equations]] where one builds a self-financing
-replicating portfolio which under the no-arbitrage assumption allows us to
-construct the **Black-Scholes PDE (BSPDE)**. The other approach is
-probabilistic in that it involves constructing a **risk-neutral measure** and
-computing the discounted expected payoff under this measure.  
+- the interest rate, drift and volatility are constant,
+- the stock pays no dividends (see [[black-scholes-model-with-dividends]]),
+- trading is continuous and there are no transaction costs,
+- assets are infinitely divisible and short selling is allowed.
 
-To introduce some notation, assume that an option on asset $S$ has payoff at
-maturity time $T$ given by $\Phi(T,S)$
+## Solution and Properties
 
-### Black-Scholes Partial Differential Equation (BSPDE)
+The risk-free asset solves $B_t = B_0e^{rt}$, and the stock follows
+[[geometric-brownian-motion]] with solution
 
-We construct a self-financing (i.e. no money is added or removed) replicating
-portfolio using a stock $S$ and a bond $B$ which has exactly the same payoff as
-the option.
+$$
+S_t = S_0\exp\left( \left( \mu - \frac{\sigma^2}{2} \right)t + \sigma W_t \right).
+$$
 
+Here $\mathcal{N}(m,v)$ denotes the normal distribution with mean $m$ and
+variance $v$ (not to be confused with the function $N(x)$, the standard normal
+cumulative distribution function used in the pricing formulas in
+[[european-options]]). Since $W_t \sim \mathcal{N}(0,t)$, the stock price is
+**log-normally** distributed,
 
+$$
+\log S_t \sim \mathcal{N}\left( \log S_0 + \left( \mu - \frac{\sigma^2}{2} \right)t,\;
+\sigma^2 t \right),
+\qquad
+\mathbb{E}[S_t] = S_0e^{\mu t}.
+$$
 
-The idea is that one can build a self-financing replicating portfolio using
-stock and bond which has exactly the same payoff as the option. Assuming no
-arbitrage, the portfolio and the claim must have the same price.  
+In particular the price stays positive, and $\sigma$ is the standard deviation
+of the log-returns per unit of $\sqrt{t}$.
 
-To be specific, assume the self-financing replicating portfolio $h_{t}$
-consists of $a_{t}$ units of stocks and $b_t$ units of bond at time $t$
-(assuming the bond has initial price $1$ at time $0$) so the portfolio value
-process is
-$$
-V_{t}^h=a_{t}S_{t}+b_{t}e^{rt},
-$$
-where $r$ is the short interest rate. From [[ito-formula]] we have that the
-change in the value of the portfolio is given by
-$$
-dV_{t}=a_{t}dS_{t}+S_{t}da_{t}+d\langle S,a\rangle_{t}+rb_{t}e^{rt}dt+e^{rt}d_{t}
-$$
-Inspecting this we see $S_{t}da_{t}+e^{rt}db_{t}$ denotes the change in the
-value of the portfolio that is due to the change of the position in stock and
-bond and $d\langle S,a\rangle_{t}$ is the cross variation term. By definition,
-a self-financing portfolio satisfies
-$$
-S_{t}da_{t}+d\langle S,a\rangle_{t}+e^{rt}db_{t}=0.
-$$
-Hence, the change in value of the process reduces to
-$$
-\begin{align}
-dV_{t} & =a_{t}dS_{t}+rb_{t}e^{rt}dt \\
- & = a_{t}(\alpha S_{t}dt+\sigma S_{t}dW_{t})+rb_{t}e^{rt}dt\tag{$\star$}
-\end{align}
-$$
-with the assumption that $V_{t}=u(t,S_{t})$ has the Markovian form with
-deterministic time-independent feedback function $u$. Applying [[ito-formula]]
-we have that
-$$
-\begin{align}
-dV_{t} & =\partial_{t}udt+\partial_{x}udS_{t}+ \frac{1}{2}\partial_{x x} ud\langle S,S\rangle_{t} \\
- & = \left( \partial _{t}u+\mu S_{t}\partial_{x}u+ \frac{1}{2}\sigma^2S_{t}^2 \partial_{x x}u \right)dt+\sigma S_{t}\partial_{x}udW_{t} \tag{$\star\star$}
-\end{align}
-$$
-Matching the coefficients of $(\star)$ and $(\star\star)$ we obtain the
-following system
-$$
-\begin{cases}
-\sigma a_{t}S_{t}=\sigma S_{t}\partial_{x}u \\
-\mu A_{t}S_{t}+rb_{t}e^{rt}=\partial_{t}u+\mu S_{t}\partial_{x}u+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u,
-\end{cases}
-$$
-hence the replicating portfolio $h_t$ is satisfies
-$$
-\begin{cases}
-a_{t}=\partial_{x}u(t,S_{t}) \\
-b_{t}=\frac{\partial_{t}u(t,S_{t})+\frac{1}{2}\sigma^2S_{t}^2\partial_{x x}u(t,S_{t})}{\mathrm{re}^{rt}}.
-\end{cases}
-$$
-Our only remaining problem is to find the PDS characterization for $u=u(t,x)$
-to solve for $u$. We recall that the self-financing property requires
-$$
-a_{t}S_{t}+b_{t}e^{rt}=V_{t}=u(t,S_{t})
-$$
-into which we plug in $a_{t}$ and $b_{t}$ computed above to get the
-[[black-scholes-pde-bspde]] as a characterization for $u$
-$$
-\partial_{t}u+rx\partial_{x}u_+\frac{1}{2}\sigma^2x^2\partial_{x x}u-ru=0
-$$
-paired with the natural terminal condition that 
-$$
-u(T,x)=h(x),
-$$
-to match the payoff of the option. As a result, the option price at time $0$ is
-given by $V_{0}=u(0,S_{0})$.
+## Risk-Neutral Dynamics
 
-#### Risk Neutral Pricing
+Under the risk-neutral measure $\mathbb{Q}$ the discounted stock price
+$e^{-rt}S_t$ is a [[martingale-theory|martingale]], so the drift $\mu$ is
+replaced by $r$,
 
-The arbitrage-free price of a financial derivative is not equal to its
-discounted expected payoff since one has to compensate the buyers for the risk.
-However, if we assume the investor is risk-neutral, he has no positive or
-negative preference on taking any risk thus the price of the derivative is the
-expected payoff.
-
-To construct such a risk neutral space we have to make sure that the discounted
-stock price $\{e^{-rt}S_{t}\}$ is a martingale. As a result, the drift term in
-the dynamics of $\{S_{t}\}$ shall be $rS_{t}$ and all other extra drift terms
-shall be absorbed into the diffusion term which leads to a change of measure
-([[girsanov-theorem]]).
-
-We call the real world probability measure $\mathbb{P}$ and the risk-neutral
-measure $\mathbb{Q}$. We can manipulating our expression to read
 $$
-\begin{align}
-dS_{t} & =rS_{t}dt+((\mu-r)S_{t}dt+\sigma S_{t}dW_{t} \\
- & =rS_{t}dt+\sigma S_{t}\left(\frac{\mu-r}{\sigma}dt+dW_{t} \right) \\
- & =rS_{t}dt+\sigma S_{t}dW_{t}^\mathbb{Q},
-\end{align}
+dS_t = rS_t\,dt + \sigma S_t\,dW_t^{\mathbb{Q}},
+\qquad
+S_T = S_0\exp\left( \left( r - \frac{\sigma^2}{2} \right)T
++ \sigma W_T^{\mathbb{Q}} \right).
 $$
-where $dW_{t}^\mathbb{Q}=\frac{\mu-r}{\sigma}dt+dW_{t}$ is a BM under
+
+Here $W^{\mathbb{Q}}_t = W_t + \frac{\mu - r}{\sigma}t$ is a Brownian motion
+under $\mathbb{Q}$. The change of measure, via [[girsanov-theorem]] and the
+[[radon-nikodym-derivative]], is constructed in [[risk-neutral-pricing]].
+Note that the volatility $\sigma$ is the same under $\mathbb{P}$ and
 $\mathbb{Q}$.
 
-[[girsanov-theorem]] enables us to find the connection between $\mathbb{P}$
-and $\mathbb{Q}$. We write $L_{t}=-\frac{\mu-r}{\sigma}W_{t}$ such that
-$\langle W,L\rangle_{t}=-\frac{\mu-r}{\sigma}t,$ then
+## Black-Scholes PDE
+
+Consider a derivative with payoff $h(S_T)$ whose price at time $t$ is
+$V(t,S_t)$. The idea of Black-Scholes is to **delta-hedge**: trade the
+underlying stock to eliminate the randomness in the value of the option.
+
+Hold one option together with $\Delta_t$ shares of stock and $\alpha_t$ units
+of the bond, with value
+
 $$
-W_{t}^\mathbb{Q}=W_{t}-\langle W,L\rangle_{t}
+\Pi_t = V(t,S_t) + \Delta_tS_t + \alpha_tB_t.
 $$
-and so by Girsanov the [[radon-nikodym-derivative]] is given by
+
+Choose the hedge to be **self-financing**, that is the value changes only
+through changes in the asset prices and no money is added or removed, so
+
 $$
-\frac{d\mathbb{Q}}{d\mathbb{P}}=\exp\left\{ L_{T}-\frac{1}{2}\langle L,L\rangle_{T} \right\}=\exp\left\{ - \frac{{\mu-r}}{\sigma}W_{T}- \frac{1}{2}\left( \frac{{\mu-r}}{\sigma} \right)^2T \right\}.
+d\Pi_t = dV + \Delta_t\,dS_t + \alpha_t\,dB_t.
 $$
-It is simple to check that the RN derivative has expectation 1 so its not only
-a local martingale but also a martingale, which satisfies the condition of
-Girsanov's theorem. In this risk neutral world, the price of the option at time
-0 is just the discounted expected payoff
+
+By [[ito-formula]], the option price satisfies
+
 $$
-\exp\{-rT\}\mathbb{E}_{\mathbb{Q}}[h(S_{T})].
+dV = \left( \partial_t V + \mu S_t\,\partial_S V
++ \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V \right)dt
++ \sigma S_t\,\partial_S V\,dW_t.
 $$
-### Key Results
-- [[black-scholes-pde-bspde]]
-- [[european-call-option-price]]
-- [[european-put-option-price]]
+
+Substituting the dynamics of $S$ and $B$,
+
+$$
+d\Pi_t = \left( \partial_t V + \mu S_t(\partial_S V + \Delta_t)
++ \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V + \alpha_trB_t \right)dt
++ \sigma S_t(\partial_S V + \Delta_t)\,dW_t.
+$$
+
+We choose $\Delta_t = -\partial_S V$ so that the coefficient of $dW_t$ is zero.
+The drift of the stock $\mu$ also cancels, leaving
+
+$$
+d\Pi_t = \left( \partial_t V + \frac{1}{2}\sigma^2S_t^2\,\partial_{SS}V
++ \alpha_trB_t \right)dt.
+$$
+
+The portfolio $\Pi_t = V - S_t\,\partial_S V + \alpha_tB_t$ is now
+deterministic over $dt$, so to avoid arbitrage it must grow at the risk-free
+rate, $d\Pi_t = r\Pi_t\,dt$. Equating the two expressions for $d\Pi_t$, the
+$\alpha_trB_t$ terms cancel and we obtain the Black-Scholes PDE.
+
+:::{.definition data-title="Black-Scholes Equation"}
+
+Consider a derivative on a stock paying no dividends with maturity $T$ and
+payoff $h(S_T)$. Its price $V(t,S)$ satisfies
+
+$$
+\begin{cases}
+\partial_t V + \dfrac{1}{2}\sigma^2S^2\,\partial_{SS}V
++ rS\,\partial_S V - rV = 0, \\[1ex]
+V(T,S) = h(S) \quad \text{for all } S,
+\end{cases}
+$$
+
+where $r$ is the risk-free interest rate and $\sigma$ is the volatility of the
+stock.
+
+:::
+
+Note that the drift $\mu$ does not appear: the price of the option does not
+depend on the expected return of the stock. This is the same reason the
+risk-neutral measure replaces $\mu$ by $r$.
+
+**Interpretation.** Rewrite the PDE as
+
+$$
+\partial_t V + \frac{1}{2}\sigma^2S^2\,\partial_{SS}V
+= r\left( V - S\,\partial_S V \right).
+$$
+
+The right-hand side is the return, over an infinitesimal period, on the cash
+position: the option premium minus the amount spent on the hedging shares,
+times the interest rate. The left-hand side is the change in value of the
+delta-hedged option. The first term captures the effect of the shortening
+maturity (theta) and the second the effect of the curvature (gamma), which is
+the risk that remains after the delta is hedged. In terms of the Greeks (see
+[[option-greeks]]),
+
+$$
+\Theta + \frac{1}{2}\sigma^2S^2\,\Gamma + rS\,\Delta - rV = 0.
+$$
+
+The PDE can be reduced to the [[diffusion-equation]] (heat equation) by a
+change of variables, and by the [[feynman-kac-formula]] its solution is the
+risk-neutral expectation $e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}[h(S_T)\mid S_t]$.
+
+## Option Pricing
+
+For an option with payoff $h(S_T)$ at maturity $T$ the model gives two
+equivalent ways to find the fair price, both developed in
+[[option-pricing]]:
+
+- **PDE approach**: build a self-financing portfolio of stock and bond that
+  replicates the payoff. No arbitrage then forces the price to solve the
+  Black-Scholes PDE above.
+- **Risk-neutral approach**: the price at time $0$ is the discounted expected
+  payoff under $\mathbb{Q}$,
+  $$
+  e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[h(S_T)].
+  $$
+
+For European calls and puts these give closed-form prices. See
+[[european-options]]. Their sensitivities are the [[option-greeks]].
+
+## Multi-Asset Model
+
+The model has a vector equivalent. Take $d$ risky assets driven by an
+$m$-dimensional Brownian motion $W = (W^1,\dots,W^m)$,
+
+$$
+dS_t^i = \mu_i S_t^i\,dt + S_t^i\sum_{j=1}^m \sigma_{ij}\,dW_t^j,
+\qquad i = 1,\dots,d,
+$$
+
+with constant drift vector $\mu \in \mathbb{R}^d$ and volatility matrix
+$\sigma \in \mathbb{R}^{d\times m}$. The solution is
+
+$$
+S_t^i = S_0^i\exp\left( \left( \mu_i - \frac{1}{2}\sum_{j}\sigma_{ij}^2 \right)t
++ \sum_{j}\sigma_{ij}W_t^j \right).
+$$
+
+The log-returns are jointly normal with covariance matrix $\Sigma t$, where
+$\Sigma = \sigma\sigma^\top$ has entries $\Sigma_{ik}$ equal to the
+instantaneous covariance of $\log S^i$ and $\log S^k$, so correlation between
+assets enters through $\Sigma$.
+
+Under $\mathbb{Q}$ every asset has drift $r$. A risk-neutral measure exists
+if there is a **market price of risk** vector $\theta \in \mathbb{R}^m$ with
+$\sigma\theta = \mu - r\mathbf{1}$. The market is arbitrage-free if such a
+$\theta$ exists, and complete if in addition $\sigma$ is invertible
+($d = m$). This model prices multi-asset options such as basket and exchange
+options.
+
+## Limitations and Extensions
+
+The assumption of a constant volatility is not consistent with market
+prices. Implied volatility varies with strike and maturity, giving the
+volatility smile or surface (see [[volatility-surfaces]]). Models that relax
+it include
+
+- [[time-dependent-volatility-model]]: $\sigma = \sigma(t)$,
+- [[local-volatility-model]]: $\sigma = \sigma(t,S_t)$, including the
+  [[cev-model]],
+- [[stochastic-volatility-model]]: volatility is random, such as the
+  [[heston-model]],
+- [[black-scholes-model-with-dividends]]: a stock that pays dividends.
+
+## Key Results
+
+- [[european-options]]
+- [[option-greeks]]
+
+## References
+
+1. Black, F. and Scholes, M. (1973). The Pricing of Options and Corporate
+   Liabilities. *Journal of Political Economy*, 81(3), 637-654.
+2. Merton, R. C. (1973). Theory of Rational Option Pricing. *Bell Journal of
+   Economics and Management Science*, 4(1), 141-183.
+3. [Columbia Note](https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf)

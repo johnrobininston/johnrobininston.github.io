@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="John Inston">
+<meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-10-28">
 <meta name="description" content="Financial derivatives, options, futures and swaps.">
 
@@ -359,8 +359,22 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#derivatives" id="toc-derivatives" class="nav-link active" data-scroll-target="#derivatives"><span class="header-section-number">1</span> Derivatives</a></li>
-  <li><a href="#payoff-functions" id="toc-payoff-functions" class="nav-link" data-scroll-target="#payoff-functions"><span class="header-section-number">2</span> Payoff Functions</a></li>
+  <li><a href="#financial-derivatives" id="toc-financial-derivatives" class="nav-link active" data-scroll-target="#financial-derivatives"><span class="header-section-number">1</span> Financial Derivatives</a></li>
+  <li><a href="#types-of-derivatives" id="toc-types-of-derivatives" class="nav-link" data-scroll-target="#types-of-derivatives"><span class="header-section-number">2</span> Types of Derivatives</a>
+  <ul class="collapse">
+  <li><a href="#forwards" id="toc-forwards" class="nav-link" data-scroll-target="#forwards"><span class="header-section-number">2.1</span> Forwards</a></li>
+  <li><a href="#futures" id="toc-futures" class="nav-link" data-scroll-target="#futures"><span class="header-section-number">2.2</span> Futures</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options"><span class="header-section-number">2.3</span> Options</a></li>
+  <li><a href="#swaps" id="toc-swaps" class="nav-link" data-scroll-target="#swaps"><span class="header-section-number">2.4</span> Swaps</a></li>
+  </ul></li>
+  <li><a href="#payoff-functions" id="toc-payoff-functions" class="nav-link" data-scroll-target="#payoff-functions"><span class="header-section-number">3</span> Payoff Functions</a></li>
+  <li><a href="#option-spreads-and-combinations" id="toc-option-spreads-and-combinations" class="nav-link" data-scroll-target="#option-spreads-and-combinations"><span class="header-section-number">4</span> Option Spreads and Combinations</a>
+  <ul class="collapse">
+  <li><a href="#vertical-spreads" id="toc-vertical-spreads" class="nav-link" data-scroll-target="#vertical-spreads"><span class="header-section-number">4.1</span> Vertical Spreads</a></li>
+  <li><a href="#straddles-and-strangles" id="toc-straddles-and-strangles" class="nav-link" data-scroll-target="#straddles-and-strangles"><span class="header-section-number">4.2</span> Straddles and Strangles</a></li>
+  <li><a href="#butterfly-and-condor" id="toc-butterfly-and-condor" class="nav-link" data-scroll-target="#butterfly-and-condor"><span class="header-section-number">4.3</span> Butterfly and Condor</a></li>
+  </ul></li>
+  <li><a href="#pricing" id="toc-pricing" class="nav-link" data-scroll-target="#pricing"><span class="header-section-number">5</span> Pricing</a></li>
   </ul>
 </nav>
     </div>
@@ -385,7 +399,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>John Inston </p>
+             <p>John Robin Inston </p>
           </div>
   </div>
     
@@ -404,28 +418,215 @@ window.Quarto = {
 </header>
 
 
-<section id="derivatives" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="derivatives"><span class="header-section-number">1</span> Derivatives</h2>
-<p>A financial asset is a tradable resource that has value and can be bought, sold, or exchanged.</p>
+<section id="financial-derivatives" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="financial-derivatives"><span class="header-section-number">1</span> Financial Derivatives</h2>
 <div class="definition" data-title="Financial Derivative">
 <p>A <strong>financial derivative</strong> is a financial instrument whose value is derived from some underlying asset, index, or rate.</p>
 </div>
-<p>Think of a derivative as a <strong>contract</strong> between two parties that specifies the terms notinf a financial transation based on the performance of the underlying asset.</p>
-<div class="definition" data-title="Forwards, Futures, Options, and Swaps">
-<p>Below we define some common types of financial derivatives:</p>
-<ol type="1">
-<li><p><strong>Forwards</strong>: A forward contract is a customized agreement between two parties to buy or sell an asset at a specified price on a future date. Forwards are traded over-the-counter (OTC) and are not standardized.</p></li>
-<li><p><strong>Futures</strong>: A futures contract is a standardized agreement to buy or sell an asset at a predetermined price on a specified future date. Futures are traded on organized exchanges and are subject to daily settlement.</p></li>
-<li><p><strong>Options</strong>: An option is a contract that gives the holder the right, but not the obligation, to buy (call option) or sell (put option) an asset at a specified price (strike price) on or before a specified date (expiration date).</p></li>
-<li><p><strong>Swaps</strong>: A swap is a derivative contract in which two parties agree to exchange cash flows or other financial instruments over a specified period. Common types of swaps include interest rate swaps and currency swaps.</p></li>
-</ol>
-</div>
+<p>Think of a derivative as a <strong>contract</strong> between two parties that specifies the terms of a financial transaction based on the performance of the underlying asset. A contract typically specifies</p>
+<ul>
+<li>the <strong>underlying</strong> asset, index or rate,</li>
+<li>the <strong>maturity</strong> <span class="math inline">\(T\)</span>, the date at which the contract is settled,</li>
+<li>the <strong>strike</strong> price <span class="math inline">\(K\)</span>, a price fixed in advance in the contract.</li>
+</ul>
+<p>The party that buys the contract is said to hold a <strong>long</strong> position and the party that sells it holds a <strong>short</strong> position. Because the value of the contract depends on the future price of the underlying, which is uncertain, a derivative is also called a <strong>contingent claim</strong>.</p>
+<p>Derivatives are used for</p>
+<ul>
+<li><strong>hedging</strong>: reducing an existing risk, such as locking in a future price,</li>
+<li><strong>speculation</strong>: taking a view on the price of the underlying,</li>
+<li><strong>leverage</strong>: gaining large exposure to the underlying for a small outlay.</li>
+</ul>
 </section>
-<section id="payoff-functions" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="payoff-functions"><span class="header-section-number">2</span> Payoff Functions</h2>
-<p>We can represent the value of an underlying asset over time using <a href="../topics/stochastic-processes.html">Stochastic Process</a>. For example, let <span class="math inline">\(S_t\)</span> denote the price of one share of Company XYZ stock at time <span class="math inline">\(t\)</span>.</p>
+<section id="types-of-derivatives" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="types-of-derivatives"><span class="header-section-number">2</span> Types of Derivatives</h2>
+<section id="forwards" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="forwards"><span class="header-section-number">2.1</span> Forwards</h3>
+<div class="definition" data-title="Forward Contract">
+<p>A <strong>forward contract</strong> is a customized agreement between two parties to buy or sell an asset at a specified price <span class="math inline">\(K\)</span> on a future date <span class="math inline">\(T\)</span>. Forwards are traded over-the-counter (OTC) and are not standardized.</p>
+</div>
+<p>The holder of a long forward must buy the asset at time <span class="math inline">\(T\)</span> for <span class="math inline">\(K\)</span>, so the payoff is <span class="math inline">\(S_T - K\)</span>. No money changes hands at the start, so <span class="math inline">\(K\)</span> is chosen to make the contract worth zero at time <span class="math inline">\(0\)</span>. For an asset that pays no income and a constant interest rate <span class="math inline">\(r\)</span>, no arbitrage forces <span class="math display">\[
+K = S_0 e^{rT},
+\]</span> since one can replicate the forward by buying the asset today with borrowed money. See <a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a>.</p>
+</section>
+<section id="futures" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="futures"><span class="header-section-number">2.2</span> Futures</h3>
+<div class="definition" data-title="Futures Contract">
+<p>A <strong>futures contract</strong> is a standardized agreement to buy or sell an asset at a predetermined price on a specified future date. Futures are traded on organized exchanges and are subject to daily settlement.</p>
+</div>
+<p>Daily settlement (<strong>marking to market</strong>) means that gains and losses are paid each day through a margin account held with the exchange’s clearinghouse, which removes most counterparty risk. With a constant interest rate the futures price and the forward price of a contract coincide.</p>
+</section>
+<section id="options" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="options"><span class="header-section-number">2.3</span> Options</h3>
+<div class="definition" data-title="Option">
+<p>An <strong>option</strong> is a contract that gives the holder the right, but not the obligation, to buy (<strong>call option</strong>) or sell (<strong>put option</strong>) an asset at a specified price (the strike price <span class="math inline">\(K\)</span>) on or before a specified date (the expiration date <span class="math inline">\(T\)</span>).</p>
+</div>
+<p>The buyer pays the seller an up-front amount called the <strong>premium</strong>. A <strong>European</strong> option can only be exercised at the expiration date, while an <strong>American</strong> option can be exercised at any time before it. See <a href="../topics/option-pricing.html">Option Pricing</a>.</p>
+</section>
+<section id="swaps" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="swaps"><span class="header-section-number">2.4</span> Swaps</h3>
+<div class="definition" data-title="Swap">
+<p>A <strong>swap</strong> is a derivative contract in which two parties agree to exchange cash flows or other financial instruments over a specified period. Common types of swaps include interest rate swaps and currency swaps.</p>
+</div>
+<p>In a <strong>fixed-for-floating interest rate swap</strong>, one party pays a fixed rate <span class="math inline">\(K\)</span> on a notional amount <span class="math inline">\(N\)</span> while the other pays a floating rate (such as SOFR, which has replaced LIBOR) at regular dates. At each date the fixed payer receives <span class="math inline">\(N\,(L - K)\,\Delta\)</span>, where <span class="math inline">\(L\)</span> is the floating rate and <span class="math inline">\(\Delta\)</span> the length of the period. See <a href="../topics/interest-rates.html">Interest Rates</a>.</p>
+</section>
+</section>
+<section id="payoff-functions" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="payoff-functions"><span class="header-section-number">3</span> Payoff Functions</h2>
+<div class="definition" data-title="Payoff">
+<p>The <strong>payoff</strong> of a derivative is the amount the holder receives at maturity.</p>
+</div>
+<p>We model the price of the underlying by a <a href="../topics/stochastic-processes.html">stochastic process</a> <span class="math inline">\((S_t)\)</span>, so the payoff is a random variable. For a payoff that depends only on the final price we write <span class="math inline">\(h(S_T)\)</span>, and for a payoff that depends on the whole path we write <span class="math inline">\(h(S_{[0,T]})\)</span>. The payoffs of the contracts above are</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Contract</th>
+<th>Payoff <span class="math inline">\(h(S_T)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Long forward</td>
+<td><span class="math inline">\(S_T - K\)</span></td>
+</tr>
+<tr class="even">
+<td>Short forward</td>
+<td><span class="math inline">\(K - S_T\)</span></td>
+</tr>
+<tr class="odd">
+<td>Call option</td>
+<td><span class="math inline">\((S_T - K)^+ = \max(S_T - K, 0)\)</span></td>
+</tr>
+<tr class="even">
+<td>Put option</td>
+<td><span class="math inline">\((K - S_T)^+ = \max(K - S_T, 0)\)</span></td>
+</tr>
+</tbody>
+</table>
+<style>
+.pp-carousel { max-width: 540px; margin: 1.5rem auto; position: relative; }
+body.quarto-light .pp-carousel {
+  --pp-line: #1e66f5; --pp-fill: rgba(30, 102, 245, 0.14);
+}
+body.quarto-dark .pp-carousel {
+  --pp-line: #8caaee; --pp-fill: rgba(140, 170, 238, 0.18);
+}
+.pp-carousel svg { display: block; width: 100%; height: auto; }
+.pp-carousel svg text { fill: currentColor; font-family: inherit; }
+.pp-carousel .pp-line {
+  fill: none; stroke: var(--pp-line); stroke-width: 4;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.pp-carousel .pp-area { fill: var(--pp-fill); stroke: none; }
+.pp-carousel .pp-axis { stroke: currentColor; stroke-width: 1.5; opacity: 0.7; }
+.pp-carousel .pp-grid {
+  stroke: currentColor; stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.3;
+}
+.pp-carousel .pp-caption { text-align: center; padding: 0 2.5rem; min-height: 5.5rem; }
+.pp-carousel .pp-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
+.pp-carousel .carousel-indicators {
+  position: static; margin: 0.25rem 0 0; justify-content: center;
+}
+.pp-carousel .carousel-indicators [data-bs-target] {
+  background-color: currentColor; width: 9px; height: 9px;
+  border: 0; border-radius: 50%; margin: 0 5px; opacity: 0.3;
+}
+.pp-carousel .carousel-indicators .active { opacity: 0.9; }
+.pp-carousel .carousel-control-prev,
+.pp-carousel .carousel-control-next {
+  width: 2.5rem; height: 60%; top: 0; color: inherit; opacity: 0.5;
+}
+.pp-carousel .carousel-control-prev:hover,
+.pp-carousel .carousel-control-next:hover { opacity: 1; }
+.pp-carousel .pp-arrow { font-size: 2.5rem; line-height: 1; }
+</style><div class="pp-carousel"><div id="carousel-payoffs" class="carousel slide" data-bs-interval="false"><div class="carousel-inner"><div class="carousel-item active"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 215.0,187.9 370.0,52.1 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,187.9 215.0,187.9 370.0,52.1"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long call</div><div>Buy a call with strike \(K\): \((S_T - K)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 215.0,52.1 370.0,187.9 370.0,52.1 60.0,52.1"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="52.1" x2="370" y2="52.1"></line><polyline class="pp-line" points="60.0,52.1 215.0,52.1 370.0,187.9"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="56.1" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Short call</div><div>Sell a call with strike \(K\): \(-(S_T - K)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 215.0,187.9 370.0,187.9 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,52.1 215.0,187.9 370.0,187.9"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long put</div><div>Buy a put with strike \(K\): \((K - S_T)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 215.0,52.1 370.0,52.1 370.0,52.1 60.0,52.1"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="52.1" x2="370" y2="52.1"></line><polyline class="pp-line" points="60.0,187.9 215.0,52.1 370.0,52.1"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="56.1" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Short put</div><div>Sell a put with strike \(K\): \(-(K - S_T)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 215.0,120.0 370.0,52.1 370.0,120.0 60.0,120.0"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="120.0" x2="370" y2="120.0"></line><polyline class="pp-line" points="60.0,187.9 215.0,120.0 370.0,52.1"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="124.0" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long forward</div><div>Agree to buy at \(K\): \(S_T - K\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 215.0,120.0 370.0,187.9 370.0,120.0 60.0,120.0"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="120.0" x2="370" y2="120.0"></line><polyline class="pp-line" points="60.0,52.1 215.0,120.0 370.0,187.9"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="124.0" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Short forward</div><div>Agree to sell at \(K\): \(K - S_T\).</div></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#carousel-payoffs" data-bs-slide="prev"><span class="pp-arrow" aria-hidden="true">‹</span><span class="visually-hidden">Previous</span></button><button class="carousel-control-next" type="button" data-bs-target="#carousel-payoffs" data-bs-slide="next"><span class="pp-arrow" aria-hidden="true">›</span><span class="visually-hidden">Next</span></button><div class="carousel-indicators"><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="1" aria-label="Slide 2"></button><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="2" aria-label="Slide 3"></button><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="3" aria-label="Slide 4"></button><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="4" aria-label="Slide 5"></button><button type="button" data-bs-target="#carousel-payoffs" data-bs-slide-to="5" aria-label="Slide 6"></button></div></div></div>
+<p>Payoffs that depend on the path of the underlying are called <strong>path-dependent</strong>. Examples of these <strong>exotic options</strong> are</p>
+<ul>
+<li><strong>Asian options</strong>, which depend on the average price, <span class="math inline">\(h = \left(\frac{1}{T}\int_0^T S_t\,dt - K\right)^+\)</span>,</li>
+<li><strong>barrier options</strong>, which depend on whether the price crosses a barrier. See <a href="../topics/barrier-options.html">Barrier Options</a>,</li>
+<li><strong>lookback options</strong>, which depend on the maximum or minimum price.</li>
+</ul>
+</section>
+<section id="option-spreads-and-combinations" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="option-spreads-and-combinations"><span class="header-section-number">4</span> Option Spreads and Combinations</h2>
+<p>Options can be combined to build payoffs that no single option provides. A <strong>spread</strong> combines options of the same type (all calls or all puts) with different strikes or maturities, and a <strong>combination</strong> mixes calls and puts. The diagrams show the payoff at maturity. The profit is the payoff minus the net premium paid to set up the position.</p>
+<style>
+.pp-carousel { max-width: 540px; margin: 1.5rem auto; position: relative; }
+body.quarto-light .pp-carousel {
+  --pp-line: #1e66f5; --pp-fill: rgba(30, 102, 245, 0.14);
+}
+body.quarto-dark .pp-carousel {
+  --pp-line: #8caaee; --pp-fill: rgba(140, 170, 238, 0.18);
+}
+.pp-carousel svg { display: block; width: 100%; height: auto; }
+.pp-carousel svg text { fill: currentColor; font-family: inherit; }
+.pp-carousel .pp-line {
+  fill: none; stroke: var(--pp-line); stroke-width: 4;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+.pp-carousel .pp-area { fill: var(--pp-fill); stroke: none; }
+.pp-carousel .pp-axis { stroke: currentColor; stroke-width: 1.5; opacity: 0.7; }
+.pp-carousel .pp-grid {
+  stroke: currentColor; stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.3;
+}
+.pp-carousel .pp-caption { text-align: center; padding: 0 2.5rem; min-height: 5.5rem; }
+.pp-carousel .pp-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
+.pp-carousel .carousel-indicators {
+  position: static; margin: 0.25rem 0 0; justify-content: center;
+}
+.pp-carousel .carousel-indicators [data-bs-target] {
+  background-color: currentColor; width: 9px; height: 9px;
+  border: 0; border-radius: 50%; margin: 0 5px; opacity: 0.3;
+}
+.pp-carousel .carousel-indicators .active { opacity: 0.9; }
+.pp-carousel .carousel-control-prev,
+.pp-carousel .carousel-control-next {
+  width: 2.5rem; height: 60%; top: 0; color: inherit; opacity: 0.5;
+}
+.pp-carousel .carousel-control-prev:hover,
+.pp-carousel .carousel-control-next:hover { opacity: 1; }
+.pp-carousel .pp-arrow { font-size: 2.5rem; line-height: 1; }
+</style><div class="pp-carousel"><div id="carousel-spreads" class="carousel slide" data-bs-interval="false"><div class="carousel-inner"><div class="carousel-item active"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 184.0,187.9 246.0,52.1 370.0,52.1 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,187.9 184.0,187.9 246.0,52.1 370.0,52.1"></polyline><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Bull call spread</div><div>Long a call at \(K_1\), short a call at \(K_2 &gt; K_1\): \((S_T - K_1)^+ - (S_T - K_2)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 184.0,52.1 246.0,187.9 370.0,187.9 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,52.1 184.0,52.1 246.0,187.9 370.0,187.9"></polyline><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Bear put spread</div><div>Long a put at \(K_2\), short a put at \(K_1 &lt; K_2\): \((K_2 - S_T)^+ - (K_1 - S_T)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 184.0,187.9 246.0,52.1 370.0,52.1 370.0,52.1 60.0,52.1"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="52.1" x2="370" y2="52.1"></line><polyline class="pp-line" points="60.0,187.9 184.0,187.9 246.0,52.1 370.0,52.1"></polyline><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="52" y="56.1" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Bull put spread</div><div>Long a put at \(K_1\), short a put at \(K_2 &gt; K_1\): \((K_1 - S_T)^+ - (K_2 - S_T)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 184.0,52.1 246.0,187.9 370.0,187.9 370.0,52.1 60.0,52.1"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="52.1" x2="370" y2="52.1"></line><polyline class="pp-line" points="60.0,52.1 184.0,52.1 246.0,187.9 370.0,187.9"></polyline><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="52" y="56.1" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Bear call spread</div><div>Short a call at \(K_1\), long a call at \(K_2 &gt; K_1\): \(-(S_T - K_1)^+ + (S_T - K_2)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 215.0,187.9 370.0,52.1 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,52.1 215.0,187.9 370.0,52.1"></polyline><text x="215.0" y="236" text-anchor="middle" font-size="14">K</text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long straddle</div><div>Long a call and a put at \(K\): \(|S_T - K|\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><polygon class="pp-area" points="60.0,52.1 184.0,187.9 246.0,187.9 370.0,52.1 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,52.1 184.0,187.9 246.0,187.9 370.0,52.1"></polyline><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long strangle</div><div>Long a put at \(K_1\) and a call at \(K_2 &gt; K_1\): \((K_1 - S_T)^+ + (S_T - K_2)^+\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="153.0" y1="25" x2="153.0" y2="215"></line><line class="pp-grid" x1="215.0" y1="25" x2="215.0" y2="215"></line><line class="pp-grid" x1="277.0" y1="25" x2="277.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 153.0,187.9 215.0,52.1 277.0,187.9 370.0,187.9 370.0,187.9 60.0,187.9"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="187.9" x2="370" y2="187.9"></line><polyline class="pp-line" points="60.0,187.9 153.0,187.9 215.0,52.1 277.0,187.9 370.0,187.9"></polyline><text x="153.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="215.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="277.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">3</tspan></text><text x="52" y="191.9" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Long butterfly</div><div>Long calls at \(K_1\) and \(K_3\), short two calls at \(K_2 = (K_1 + K_3)/2\).</div></div></div><div class="carousel-item"><svg viewbox="0 0 400 270" role="img" aria-label="Payoff diagram" xmlns="http://www.w3.org/2000/svg"><line class="pp-grid" x1="153.0" y1="25" x2="153.0" y2="215"></line><line class="pp-grid" x1="184.0" y1="25" x2="184.0" y2="215"></line><line class="pp-grid" x1="246.0" y1="25" x2="246.0" y2="215"></line><line class="pp-grid" x1="277.0" y1="25" x2="277.0" y2="215"></line><polygon class="pp-area" points="60.0,187.9 153.0,187.9 184.0,52.1 246.0,52.1 277.0,187.9 370.0,187.9 370.0,52.1 60.0,52.1"></polygon><line class="pp-axis" x1="60" y1="25" x2="60" y2="215"></line><line class="pp-axis" x1="60" y1="52.1" x2="370" y2="52.1"></line><polyline class="pp-line" points="60.0,187.9 153.0,187.9 184.0,52.1 246.0,52.1 277.0,187.9 370.0,187.9"></polyline><text x="153.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">1</tspan></text><text x="184.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">2</tspan></text><text x="246.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">3</tspan></text><text x="277.0" y="236" text-anchor="middle" font-size="14">K<tspan dy="5" font-size="11">4</tspan></text><text x="52" y="56.1" text-anchor="end" font-size="13">0</text><text x="370" y="258" text-anchor="end" font-size="15">S<tspan dy="5" font-size="11">T</tspan></text><text transform="translate(22 120.0) rotate(-90)" text-anchor="middle" font-size="15">Payoff</text></svg><div class="pp-caption"><div class="pp-title">Iron condor</div><div>Long a put at \(K_1\), short a put at \(K_2\), short a call at \(K_3\), long a call at \(K_4\).</div></div></div></div><button class="carousel-control-prev" type="button" data-bs-target="#carousel-spreads" data-bs-slide="prev"><span class="pp-arrow" aria-hidden="true">‹</span><span class="visually-hidden">Previous</span></button><button class="carousel-control-next" type="button" data-bs-target="#carousel-spreads" data-bs-slide="next"><span class="pp-arrow" aria-hidden="true">›</span><span class="visually-hidden">Next</span></button><div class="carousel-indicators"><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="1" aria-label="Slide 2"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="2" aria-label="Slide 3"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="3" aria-label="Slide 4"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="4" aria-label="Slide 5"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="5" aria-label="Slide 6"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="6" aria-label="Slide 7"></button><button type="button" data-bs-target="#carousel-spreads" data-bs-slide-to="7" aria-label="Slide 8"></button></div></div></div>
+<section id="vertical-spreads" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="vertical-spreads"><span class="header-section-number">4.1</span> Vertical Spreads</h3>
+<p>A <strong>vertical spread</strong> holds a long and a short option of the same type and maturity at two strikes <span class="math inline">\(K_1 &lt; K_2\)</span>. The payoff is bounded, so the spread limits both the cost and the possible gain compared with a single option.</p>
+<ul>
+<li>A <strong>bull spread</strong> profits when the underlying rises. It can be built from calls (the <strong>bull call spread</strong>, <span class="math inline">\((S_T - K_1)^+ - (S_T - K_2)^+\)</span>) or from puts (the <strong>bull put spread</strong>).</li>
+<li>A <strong>bear spread</strong> profits when the underlying falls. It can be built from puts (the <strong>bear put spread</strong>) or from calls (the <strong>bear call spread</strong>).</li>
+</ul>
+</section>
+<section id="straddles-and-strangles" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="straddles-and-strangles"><span class="header-section-number">4.2</span> Straddles and Strangles</h3>
+<p>A <strong>straddle</strong> holds a call and a put with the same strike, and a <strong>strangle</strong> holds an out-of-the-money put and call with different strikes. Both gain when the underlying moves far in either direction, so they are bets on large price moves (high volatility) rather than on direction.</p>
+</section>
+<section id="butterfly-and-condor" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="butterfly-and-condor"><span class="header-section-number">4.3</span> Butterfly and Condor</h3>
+<p>A <strong>butterfly</strong> with strikes <span class="math inline">\(K_1 &lt; K_2 &lt; K_3\)</span> and <span class="math inline">\(K_2 = (K_1 + K_3)/2\)</span> has payoff</p>
+<p><span class="math display">\[
+(S_T - K_1)^+ - 2(S_T - K_2)^+ + (S_T - K_3)^+,
+\]</span></p>
+<p>a tent that peaks at <span class="math inline">\(K_2\)</span> with height <span class="math inline">\(K_2 - K_1\)</span>. It profits when the underlying ends close to <span class="math inline">\(K_2\)</span>. The <strong>iron condor</strong> earns a premium and loses a limited amount if the underlying moves outside <span class="math inline">\([K_1, K_4]\)</span>.</p>
+<p>As the spacing between the strikes shrinks, the cost of a butterfly approaches a second difference of call prices in the strike. This is the idea behind the <a href="../topics/breeden-litzenberger-formula.html">Breeden-Litzenberger Formula</a>, and more generally the <a href="../topics/carr-madan-formula.html">Carr-Madan Formula</a> writes any European payoff as a combination of calls and puts across all strikes.</p>
+</section>
+</section>
+<section id="pricing" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="pricing"><span class="header-section-number">5</span> Pricing</h2>
+<p>The payoff tells us what the holder receives, but not what the contract is worth today. The principle of no arbitrage determines the fair price. Under the <a href="../topics/risk-neutral-pricing.html">risk-neutral measure</a> <span class="math inline">\(\mathbb{Q}\)</span> with a constant interest rate <span class="math inline">\(r\)</span>, the price at time <span class="math inline">\(0\)</span> is the discounted expected payoff <span class="math display">\[
+e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[h(S_T)].
+\]</span> This is developed in <a href="../topics/option-pricing.html">Option Pricing</a>.</p>
 
 
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
+<ul>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/european-options.html">European Options</a></li>
+<li><a href="../topics/financial-markets.html">Financial Markets</a></li>
+<li><a href="../topics/option-pricing.html">Option Pricing</a></li>
+<li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
+</ul>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

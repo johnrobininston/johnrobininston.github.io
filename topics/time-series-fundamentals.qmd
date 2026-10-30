@@ -1,0 +1,198 @@
+---
+id: time-series-fundamentals
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-09-25
+number-sections: true
+title: "Time Series Fundamentals"
+title-block-banner: false
+---
+
+## Time Series Analysis
+
+**Time series analysis** is the study of describing, modeling and forecasting
+data recorded sequentially over time. Unlike in the i.i.d. setting, the
+ordering of the observations carries information and successive values are
+typically dependent. The field rests on a small set of core ideas:
+
+1. Reducing a dependent sequence to a **stationary** process (by differencing,
+   decomposition or transformation) so that classical asymptotic theory
+   applies.
+
+2. Characterizing dependence through the **autocovariance and autocorrelation
+   functions** in the time domain, or the **spectral density** in the
+   frequency domain.
+
+3. Building parsimonious generative models (AR, MA, ARMA and their many
+   descendants) whose parameters can be estimated and whose structure gives
+   interpretable, testable predictions.
+
+4. Using the fitted model to **forecast**, filter and quantify uncertainty out
+   of sample.
+
+Classical (Box-Jenkins) time series analysis focuses on the conditional
+*mean* of a process and its linear dependence structure. Quantitative finance
+adds a second axis that is largely absent from the classical treatment:
+modeling the conditional *variance* of financial returns (volatility
+clustering, leverage effects). Means are close to unpredictable, but variances
+are highly persistent and directly priced, for example in options and risk
+management. See [[financial-time-series]].
+
+## Time Series
+
+:::{.definition data-title="Time Series"}
+
+A **time series** is a set of observations $x_t$, each recorded at a specific
+time $t$. The set of observation times is denoted $T_0$.
+
+:::
+
+A **discrete-time** time series is one in which the set $T_0$ of observation
+times is discrete, for example $T_0=\{1,\dots,n\}$ for daily closing prices.
+
+A **continuous-time** time series is one in which observations are recorded
+continuously over some time interval, such as $T_0=[0,1]$.
+
+The examples below show both kinds.
+
+```{r}
+#| echo: false
+#| results: asis
+source("../assets/payoff-plots.R")
+set.seed(1)
+t_d <- 1:50
+rw <- cumsum(rnorm(50))
+t_c <- seq(0, 1, length.out = 500)
+bm <- cumsum(rnorm(500, sd = 1 / sqrt(500)))
+xt <- "x<tspan dy=\"5\" font-size=\"11\">t</tspan>"
+payoff_carousel("carousel-series", list(
+  series_slide("Discrete time",
+    "A random walk observed at \\(t=1,\\dots,50\\).",
+    t_d, rw, points = TRUE, ylab = xt),
+  series_slide("Continuous time",
+    "A continuous path observed on \\(T_0=[0,1]\\).",
+    t_c, bm, ylab = "x(t)")
+))
+```
+
+## Stationary Processes
+
+Stationarity is a relaxation of the assumption that the random variables are
+independent and identically distributed, which is often too strong.
+
+:::{.definition data-title="Strong Stationarity"}
+
+A real-valued stochastic process $\{X(t),~t \geq 0\}$ is **strongly
+stationary** if its finite-dimensional distributions are invariant under
+time shifts, that is
+
+$$
+\mathbb{P}(X(t_{1})\in B_{1}, \dots , X(t_{n})\in B_{n})
+=\mathbb{P}(X(t_{1}+h) \in B_{1}, \dots , X(t_{n}+h)\in B_{n})
+$$
+
+for every $n \in \mathbb{N}$, $t_{1}, \dots, t_{n}\geq 0$,
+$B_{1}, \dots, B_{n}\in \mathcal{B}(\mathbb{R})$ and $h>0$.
+
+:::
+
+This is often challenging to show in practice, so a weaker form of
+stationarity is defined as follows.
+
+:::{.definition data-title="Weak Stationarity"}
+
+A real-valued stochastic process $\{X(t),~t\geq 0\}$ with
+$\mathbb{E}[X(t)^2]<\infty$ is **weakly stationary** (also known as covariance
+stationary or second-order stationary) if
+
+1. $\mu(t)=\mathbb{E}[X(t)]$ is constant on $[0,\infty)$; and
+
+2. $\text{Cov}(X(t_{1}), X(t_{2}))=\text{Cov}(X(t_{1}+h),X(t_{2}+h))$ for every
+   $t_{1}, t_{2}\geq 0$ and $h>0$.
+
+:::
+
+A process $X(t)$ is weakly stationary if its mean is constant and the
+covariance between $t_1$ and $t_2$ depends only on the difference
+$t_{2}-t_{1}$. This defines the **autocovariance function** of $X(t)$,
+
+$$
+\gamma(t_{2}-t_{1})=\text{Cov}(X(t_{1}),X(t_{2})).
+$$
+
+Strong stationarity implies weak stationarity (when second moments are
+finite). The converse is not true in general, since the first and second
+moments do not determine the probability distribution uniquely.
+
+:::{.definition data-title="Stationary Gaussian Process"}
+
+A stochastic process $\{X(t),~t \in \mathbb{R}\}$ is a **stationary Gaussian
+process** if every finite-dimensional distribution of $X(\cdot)$ is Gaussian
+and the process is strongly stationary.
+
+:::
+
+If every finite-dimensional distribution is Gaussian, that is, jointly normal,
+then weak stationarity implies strong stationarity, because the joint
+distribution of a finite number of normal random variables is uniquely
+determined by the mean vector and covariance matrix.
+
+The **autocorrelation function** $\rho(\cdot)$ of a weakly stationary process
+$X(\cdot)$ is
+
+$$
+\rho(t)=\frac{\text{Cov}(X(t),X(0))}{\sqrt{\text{Var}(X(t))\,\text{Var}(X(0))}}
+=\frac{\gamma(t)}{\gamma(0)},
+\qquad t \in \mathbb{R}.
+$$
+
+The three series below illustrate the definition. Only the first is
+stationary. The second has a time-varying mean (a drift) and the third has a
+time-varying variance (heteroscedasticity), so each violates weak
+stationarity.
+
+```{r}
+#| echo: false
+#| results: asis
+source("../assets/payoff-plots.R")
+set.seed(3)
+t <- 1:100
+xt <- "x<tspan dy=\"5\" font-size=\"11\">t</tspan>"
+payoff_carousel("carousel-stationarity", list(
+  series_slide("Stationary",
+    "Gaussian white noise: constant mean and variance, no dependence.",
+    t, rnorm(100), points = TRUE, ylab = xt),
+  series_slide("Drift",
+    "A linear trend plus noise: the mean \\(0.05t\\) depends on \\(t\\).",
+    t, 0.05 * t + rnorm(100), points = TRUE, ylab = xt),
+  series_slide("Heteroscedasticity",
+    "The variance grows with \\(t\\): here \\(\\mathrm{Var}(X_t)=(t/25)^2\\).",
+    t, (t / 25) * rnorm(100), points = TRUE, ylab = xt)
+))
+```
+
+## White Noise
+
+:::{.definition data-title="White Noise"}
+
+A time series $\{Z_t\}$ is **white noise**, denoted $Z_t \sim WN(0,\sigma^2)$,
+if
+
+1. $\mathbb{E}[Z_t] = 0$ for all $t$,
+
+2. $\mathbb{E}[Z_t^2] = \sigma^2 < \infty$ for all $t$, and
+
+3. $\gamma_Z(h) = \text{Cov}(Z_t, Z_{t+h}) = 0$ for all $h \neq 0$.
+
+:::
+
+If in addition the $Z_t$ are independent and identically distributed we write
+$Z_t \sim IID(0,\sigma^2)$, and if they are jointly Gaussian,
+$Z_t \sim GWN(0,\sigma^2)$. White noise is the fundamental "innovation" or
+"shock" process from which [[moving-average-processes|MA]],
+[[autoregressive-processes|AR]] and [[arma-processes|ARMA]] models are built.
+
+Every white noise process is weakly stationary with mean $0$ and constant
+("white") spectral density $f(u) = \sigma^2/2\pi$ across all frequencies. See
+[[spectral-distributions]].

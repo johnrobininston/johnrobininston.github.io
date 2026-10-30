@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
-<meta name="dcterms.date" content="2026-09-25">
+<meta name="dcterms.date" content="2026-10-29">
+<meta name="description" content="Introduction to portfolio management: building and evaluating portfolios of financial assets.">
 
 <title>Portfolio Management – John Robin Inston</title>
 <style>
@@ -83,6 +84,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -324,8 +354,21 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#portfolio-management" id="toc-portfolio-management" class="nav-link active" data-scroll-target="#portfolio-management"><span class="header-section-number">1</span> Portfolio Management</a></li>
+  <li><a href="#risk-and-return" id="toc-risk-and-return" class="nav-link" data-scroll-target="#risk-and-return"><span class="header-section-number">2</span> Risk and Return</a></li>
+  <li><a href="#allocation-and-diversification" id="toc-allocation-and-diversification" class="nav-link" data-scroll-target="#allocation-and-diversification"><span class="header-section-number">3</span> Allocation and Diversification</a></li>
+  <li><a href="#portfolio-optimization" id="toc-portfolio-optimization" class="nav-link" data-scroll-target="#portfolio-optimization"><span class="header-section-number">4</span> Portfolio Optimization</a></li>
+  <li><a href="#asset-pricing-and-factor-models" id="toc-asset-pricing-and-factor-models" class="nav-link" data-scroll-target="#asset-pricing-and-factor-models"><span class="header-section-number">5</span> Asset Pricing and Factor Models</a></li>
+  <li><a href="#performance-evaluation" id="toc-performance-evaluation" class="nav-link" data-scroll-target="#performance-evaluation"><span class="header-section-number">6</span> Performance Evaluation</a></li>
+  <li><a href="#managing-a-portfolio" id="toc-managing-a-portfolio" class="nav-link" data-scroll-target="#managing-a-portfolio"><span class="header-section-number">7</span> Managing a Portfolio</a></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">8</span> Related Topics</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -336,6 +379,11 @@ ul.task-list li input[type="checkbox"] {
 <h1 class="title">Portfolio Management</h1>
 </div>
 
+<div>
+  <div class="description">
+    Introduction to portfolio management: building and evaluating portfolios of financial assets.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -350,7 +398,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 25, 2026</p>
+      <p class="date">October 29, 2026</p>
     </div>
   </div>
   
@@ -362,11 +410,50 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This is the topic page for my study of portfolio management. The material in this section draws heavily from several resources including the textbooks:</p>
+<section id="portfolio-management" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="portfolio-management"><span class="header-section-number">1</span> Portfolio Management</h2>
+<p><strong>Portfolio management</strong> is the problem of choosing how to divide capital among the <a href="../topics/financial-markets.html">financial assets</a> available to an investor, and of monitoring and adjusting that choice over time. A <strong>portfolio</strong> is described by its <strong>weights</strong> <span class="math inline">\(w=(w_1,\dots,w_n)\)</span>, the fractions of wealth held in each asset, with <span class="math inline">\(\sum_i w_i = 1\)</span>. Its return is the weighted average of the asset returns,</p>
+<p><span class="math display">\[
+R_p = \sum_{i=1}^n w_iR_i,
+\]</span></p>
+<p>so its expected return is <span class="math inline">\(\mu_p = w^\top\mu\)</span> and its variance is <span class="math inline">\(\sigma_p^2 = w^\top\Sigma w\)</span>, where <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\Sigma\)</span> are the mean vector and covariance matrix of the asset returns. The covariances, and not only the individual variances, determine the risk of the portfolio. This is what makes diversification possible.</p>
+<p>The sections below introduce the main topics. Each links to its own note.</p>
+</section>
+<section id="risk-and-return" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="risk-and-return"><span class="header-section-number">2</span> Risk and Return</h2>
+<p>Investors are compensated for bearing risk, so higher expected returns come with higher risk. The <a href="../topics/risk-return-tradeoff.html">Risk-Return Tradeoff</a> quantifies this relationship and the measures of risk used to describe it.</p>
+</section>
+<section id="allocation-and-diversification" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="allocation-and-diversification"><span class="header-section-number">3</span> Allocation and Diversification</h2>
+<p>Combining assets whose returns are not perfectly correlated lowers the risk of a portfolio without lowering its expected return by the same amount. <a href="../topics/asset-allocation-and-diversification.html">Asset Allocation and Diversification</a> covers how capital is split across asset classes and securities, and what diversification can and cannot remove.</p>
+</section>
+<section id="portfolio-optimization" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="portfolio-optimization"><span class="header-section-number">4</span> Portfolio Optimization</h2>
+<p><a href="../topics/portfolio-optimization.html">Portfolio Optimization</a> chooses the weights <span class="math inline">\(w\)</span> that give the best trade-off between <span class="math inline">\(\mu_p\)</span> and <span class="math inline">\(\sigma_p^2\)</span>, as in Markowitz mean-variance theory, leading to the efficient frontier. The <a href="../topics/black-litterman-model.html">Black-Litterman Model</a> extends this by combining market equilibrium returns with the views of the investor.</p>
+</section>
+<section id="asset-pricing-and-factor-models" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="asset-pricing-and-factor-models"><span class="header-section-number">5</span> Asset Pricing and Factor Models</h2>
+<p><a href="../topics/capm-and-factor-models.html">CAPM and Factor Models</a> explain the expected return of an asset through its exposure to systematic risk factors, from the single factor of the CAPM (beta) to multi-factor models such as Fama-French and Carhart. They also define alpha, the return not explained by these exposures.</p>
+</section>
+<section id="performance-evaluation" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="performance-evaluation"><span class="header-section-number">6</span> Performance Evaluation</h2>
+<p><a href="../topics/performance-evaluation.html">Performance Evaluation</a> measures the return of a portfolio relative to the risk taken, using ratios such as the Sharpe ratio, the information ratio and Jensen’s alpha.</p>
+</section>
+<section id="managing-a-portfolio" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="managing-a-portfolio"><span class="header-section-number">7</span> Managing a Portfolio</h2>
 <ul>
-<li>[[grinold-kahn-pdf|Active Portfolio Management by Grinold &amp; Kahn]]</li>
-<li>[[multicriteria-portfolio-construction-pdf|Multicriteria Portfolio Construction by Sarmas et. al.]]</li>
 <li></li>
+<li>to outperform it.</li>
+<li>investor assumed by the models above.</li>
+</ul>
+<p>Measuring and limiting the risk of a portfolio (VaR, stress testing) is covered under Risk Management in <a href="../topics/quantitative-finance.html">Quantitative Finance</a>.</p>
+</section>
+<section id="related-topics" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="related-topics"><span class="header-section-number">8</span> Related Topics</h2>
+<ul>
+<li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
+<li><a href="../topics/financial-markets.html">Financial Markets</a></li>
+<li><a href="../topics/interest.html">Interest</a></li>
 </ul>
 
 
@@ -375,9 +462,19 @@ ul.task-list li input[type="checkbox"] {
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/active-vs-passive-management.html">Active vs Passive Management</a></li>
+<li><a href="../topics/asset-allocation-and-diversification.html">Asset Allocation and Diversification</a></li>
+<li><a href="../topics/behavioral-finance.html">Behavioral Finance</a></li>
+<li><a href="../topics/black-litterman-model.html">Black-Litterman Model</a></li>
+<li><a href="../topics/capm-and-factor-models.html">CAPM and Factor Models</a></li>
+<li><a href="../topics/performance-evaluation.html">Performance Evaluation</a></li>
+<li><a href="../topics/portfolio-optimization.html">Portfolio Optimization</a></li>
+<li><a href="../topics/portfolio-rebalancing.html">Portfolio Rebalancing</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
+<li><a href="../topics/risk-return-tradeoff.html">Risk-Return Tradeoff</a></li>
 </ul>
 </div>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <!-- Relocates the backlinks block (emitted as #quarto-backlinks by the

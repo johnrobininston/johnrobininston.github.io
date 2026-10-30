@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
-<meta name="dcterms.date" content="2026-09-25">
+<meta name="dcterms.date" content="2026-10-29">
+<meta name="description" content="The binomial model: constructing the one-period and multi-period model, pricing by replication and risk-neutral expectation, and put-call parity.">
 
 <title>Binomial Model – John Robin Inston</title>
 <style>
@@ -353,8 +354,29 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-binomial-model" id="toc-the-binomial-model" class="nav-link active" data-scroll-target="#the-binomial-model"><span class="header-section-number">1</span> The Binomial Model</a></li>
+  <li><a href="#constructing-the-model" id="toc-constructing-the-model" class="nav-link" data-scroll-target="#constructing-the-model"><span class="header-section-number">2</span> Constructing the Model</a>
+  <ul class="collapse">
+  <li><a href="#one-period" id="toc-one-period" class="nav-link" data-scroll-target="#one-period"><span class="header-section-number">2.1</span> One Period</a></li>
+  <li><a href="#no-arbitrage" id="toc-no-arbitrage" class="nav-link" data-scroll-target="#no-arbitrage"><span class="header-section-number">2.2</span> No Arbitrage</a></li>
+  <li><a href="#pricing-by-replication" id="toc-pricing-by-replication" class="nav-link" data-scroll-target="#pricing-by-replication"><span class="header-section-number">2.3</span> Pricing by Replication</a></li>
+  <li><a href="#risk-neutral-pricing" id="toc-risk-neutral-pricing" class="nav-link" data-scroll-target="#risk-neutral-pricing"><span class="header-section-number">2.4</span> Risk-Neutral Pricing</a></li>
+  <li><a href="#multiple-periods" id="toc-multiple-periods" class="nav-link" data-scroll-target="#multiple-periods"><span class="header-section-number">2.5</span> Multiple Periods</a></li>
+  <li><a href="#choosing-u-and-d" id="toc-choosing-u-and-d" class="nav-link" data-scroll-target="#choosing-u-and-d"><span class="header-section-number">2.6</span> Choosing <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span></a></li>
+  </ul></li>
+  <li><a href="#put-call-parity" id="toc-put-call-parity" class="nav-link" data-scroll-target="#put-call-parity"><span class="header-section-number">3</span> Put-Call Parity</a></li>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">4</span> Example</a></li>
+  <li><a href="#continuous-dividends" id="toc-continuous-dividends" class="nav-link" data-scroll-target="#continuous-dividends"><span class="header-section-number">5</span> Continuous Dividends</a></li>
+  <li><a href="#extensions" id="toc-extensions" class="nav-link" data-scroll-target="#extensions"><span class="header-section-number">6</span> Extensions</a></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">7</span> Related Topics</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">8</span> References</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -365,6 +387,11 @@ window.Quarto = {
 <h1 class="title">Binomial Model</h1>
 </div>
 
+<div>
+  <div class="description">
+    The binomial model: constructing the one-period and multi-period model, pricing by replication and risk-neutral expectation, and put-call parity.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -379,7 +406,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 25, 2026</p>
+      <p class="date">October 29, 2026</p>
     </div>
   </div>
   
@@ -391,17 +418,324 @@ window.Quarto = {
 </header>
 
 
-<p>The binomial model is an [[option|option]] valuation method which uses an iterative procedure, allowing for the specification of nodes, or points in time, during the time span between the valuation date and the option’s expiration date.</p>
-<div class="definition" data-title="One Period Binomial Model">
-<p>Consider a portfolio vector <span class="math inline">\(h(x,y)\)</span> consisting of <span class="math inline">\(x\)</span> bonds with price process <span class="math inline">\(B_t\)</span> and <span class="math inline">\(y\)</span> units of stock with price process <span class="math inline">\(S_t\)</span> over one period <span class="math inline">\(t\in\{0,1\}\)</span>. The price processes are described by <span class="math display">\[
-\begin{align}S_{0}=s&amp;,\quad S_1=\begin{cases}us&amp;\text{w.p. }~p_u\\ds&amp;\text{w.p. }~p_d\end{cases}\\B_0=1&amp;,\quad B_1=(1+R)\end{align}
-\]</span> The value process for the portfolio is given by <span class="math display">\[
-V_t^h=xB_t+yS_{t}\quad(t\in\{0,1\})
+<section id="the-binomial-model" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="the-binomial-model"><span class="header-section-number">1</span> The Binomial Model</h2>
+<p>The <strong>binomial model</strong> is a discrete-time model of a financial market in which the price of a risky asset moves, in each period, to one of only two possible values. Despite its simplicity it contains the main ideas of <a href="../topics/option-pricing.html">Option Pricing</a>: replicating a payoff with a self-financing portfolio, pricing by no arbitrage, and the risk-neutral measure. It is also easy to compute with, handles early exercise (American options) naturally, and converges to the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> as the time step goes to zero.</p>
+<p>This note builds the model, shows how to price a <a href="../topics/derivatives.html">derivative</a> in it, proves <a href="../topics/european-options.html">put-call parity</a>, works through an example and extends the results to a stock paying continuous dividends.</p>
+</section>
+<section id="constructing-the-model" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="constructing-the-model"><span class="header-section-number">2</span> Constructing the Model</h2>
+<section id="one-period" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="one-period"><span class="header-section-number">2.1</span> One Period</h3>
+<p>Consider one period of length <span class="math inline">\(h\)</span>, with times <span class="math inline">\(t\in\{0,h\}\)</span>, and two assets.</p>
+<div class="definition" data-title="One-Period Binomial Model">
+<p>The market consists of</p>
+<ul>
+<li><p>a <strong>risk-free bond</strong> with price <span class="math inline">\(B_0=1\)</span> and <span class="math inline">\(B_h=e^{rh}\)</span>, where <span class="math inline">\(r\)</span> is the continuously compounded risk-free rate (see <a href="../topics/interest.html">Interest</a>), and</p></li>
+<li><p>a <strong>stock</strong> with price <span class="math inline">\(S_0=S\)</span> and</p>
+<p><span class="math display">\[
+S_h =
+\begin{cases}
+uS &amp; \text{with probability } p, \\
+dS &amp; \text{with probability } 1-p,
+\end{cases}
+\qquad 0&lt;d&lt;u,
+\]</span></p>
+<p>where <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> are the <strong>up</strong> and <strong>down factors</strong>.</p></li>
+</ul>
+<p>A portfolio holding <span class="math inline">\(x\)</span> bonds and <span class="math inline">\(y\)</span> shares has value <span class="math inline">\(V_t = xB_t + yS_t\)</span>.</p>
+</div>
+<p>The real-world probability <span class="math inline">\(p\)</span> will play no role in pricing. The model has two possible outcomes and two assets, which is what makes it possible to replicate any payoff.</p>
+</section>
+<section id="no-arbitrage" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="no-arbitrage"><span class="header-section-number">2.2</span> No Arbitrage</h3>
+<div class="theorem" data-title="No Arbitrage in the Binomial Model">
+<p>The one-period model is free of <a href="../topics/risk-neutral-pricing.html">arbitrage</a> if and only if</p>
+<p><span class="math display">\[
+d &lt; e^{rh} &lt; u.
 \]</span></p>
 </div>
-<p>The model is free of [[arbitrage|arbitrage]] if an only if the following condition holds: <span class="math display">\[
-d\leq (1+R)\leq u
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>If <span class="math inline">\(e^{rh}\le d\)</span>, borrow <span class="math inline">\(S\)</span> and buy one share. The cost at time <span class="math inline">\(0\)</span> is zero and the value at time <span class="math inline">\(h\)</span> is <span class="math inline">\(S_h - Se^{rh}\)</span>, which is at least <span class="math inline">\(0\)</span> in both states and strictly positive in the up state, an arbitrage. If <span class="math inline">\(e^{rh}\ge u\)</span>, short one share and lend the proceeds, which is an arbitrage in the other direction.</p>
+<p>Conversely, suppose <span class="math inline">\(d&lt;e^{rh}&lt;u\)</span> and define</p>
+<p><span class="math display">\[
+q = \frac{e^{rh}-d}{u-d} \in (0,1).
 \]</span></p>
+<p>Then <span class="math inline">\(q\,uS + (1-q)\,dS = e^{rh}S\)</span>, so the discounted stock price is a martingale when the up probability is <span class="math inline">\(q\)</span>. For any portfolio with zero initial value, the discounted terminal value <span class="math inline">\(e^{-rh}V_h\)</span> therefore has expectation <span class="math inline">\(0\)</span> under <span class="math inline">\(q\)</span>. Since <span class="math inline">\(q\)</span> and <span class="math inline">\(1-q\)</span> are both positive, <span class="math inline">\(V_h\ge 0\)</span> in both states forces <span class="math inline">\(V_h=0\)</span> in both states, so there is no arbitrage.</p>
+</div>
+<p>We assume this condition from now on.</p>
+</section>
+<section id="pricing-by-replication" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="pricing-by-replication"><span class="header-section-number">2.3</span> Pricing by Replication</h3>
+<p>A derivative pays <span class="math inline">\(V_u\)</span> if the stock moves up and <span class="math inline">\(V_d\)</span> if it moves down. For a call option with strike <span class="math inline">\(K\)</span> these are <span class="math inline">\(V_u=(uS-K)^+\)</span> and <span class="math inline">\(V_d=(dS-K)^+\)</span>.</p>
+<p>To replicate, hold <span class="math inline">\(\Delta\)</span> shares and <span class="math inline">\(B\)</span> units of cash (lent if <span class="math inline">\(B&gt;0\)</span>, borrowed if <span class="math inline">\(B&lt;0\)</span>) so that the portfolio pays exactly the derivative in both states,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Delta\,uS + Be^{rh} &amp;= V_u, \\
+\Delta\,dS + Be^{rh} &amp;= V_d.
+\end{aligned}
+\]</span></p>
+<p>Subtracting the equations and solving gives</p>
+<p><span class="math display">\[
+\Delta = \frac{V_u - V_d}{S(u-d)},
+\qquad
+B = e^{-rh}\,\frac{uV_d - dV_u}{u-d}.
+\]</span></p>
+<p>By the no-arbitrage principle the derivative has the same price as the replicating portfolio,</p>
+<p><span class="math display">\[
+V_0 = \Delta S + B.
+\]</span></p>
+<p>The number <span class="math inline">\(\Delta\)</span> is the <strong>hedge ratio</strong>: it measures how sensitive the derivative is to the stock. A call is replicated by buying shares and borrowing (<span class="math inline">\(\Delta&gt;0\)</span>, <span class="math inline">\(B&lt;0\)</span>), and a put by shorting shares and lending (<span class="math inline">\(\Delta&lt;0\)</span>, <span class="math inline">\(B&gt;0\)</span>). These formulas hold for any payoff <span class="math inline">\((V_u,V_d)\)</span>.</p>
+</section>
+<section id="risk-neutral-pricing" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="risk-neutral-pricing"><span class="header-section-number">2.4</span> Risk-Neutral Pricing</h3>
+<p>Substituting <span class="math inline">\(\Delta\)</span> and <span class="math inline">\(B\)</span> into <span class="math inline">\(V_0=\Delta S+B\)</span> and collecting the <span class="math inline">\(V_u\)</span> and <span class="math inline">\(V_d\)</span> terms gives</p>
+<p><span class="math display">\[
+V_0 = e^{-rh}\left[\,q\,V_u + (1-q)\,V_d\,\right],
+\qquad
+q = \frac{e^{rh}-d}{u-d}.
+\]</span></p>
+<p>The no-arbitrage condition <span class="math inline">\(d&lt;e^{rh}&lt;u\)</span> is exactly the condition <span class="math inline">\(0&lt;q&lt;1\)</span>. The number <span class="math inline">\(q\)</span> is the <strong>risk-neutral probability</strong> of an up move. It is not the real-world probability <span class="math inline">\(p\)</span>. It is the probability under which the stock earns the risk-free rate on average,</p>
+<p><span class="math display">\[
+e^{-rh}\,\mathbb{E}_{\mathbb{Q}}[S_h] = S,
+\]</span></p>
+<p>so the price of the derivative is its discounted expected payoff under the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span>, as in <a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a>. Replication and risk-neutral expectation give the same price because the second is derived from the first.</p>
+</section>
+<section id="multiple-periods" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="multiple-periods"><span class="header-section-number">2.5</span> Multiple Periods</h3>
+<p>Divide <span class="math inline">\([0,T]\)</span> into <span class="math inline">\(n\)</span> periods of length <span class="math inline">\(h=T/n\)</span>. In each period the stock moves up by <span class="math inline">\(u\)</span> or down by <span class="math inline">\(d\)</span>, independently of the past, so after <span class="math inline">\(j\)</span> up moves and <span class="math inline">\(k-j\)</span> down moves at time <span class="math inline">\(kh\)</span> the price is <span class="math inline">\(S u^j d^{k-j}\)</span>. The tree <strong>recombines</strong>: an up move followed by a down move ends at the same price as a down move followed by an up move, so there are only <span class="math inline">\(k+1\)</span> nodes at time <span class="math inline">\(kh\)</span>.</p>
+<p>Prices are found by <strong>backward induction</strong>:</p>
+<ol type="1">
+<li><p>At maturity set the node value equal to the payoff <span class="math inline">\(h(S_T)\)</span>.</p></li>
+<li><p>At each earlier node apply the one-period formulas to the two values that follow it,</p>
+<p><span class="math display">\[
+V = e^{-rh}\left[\,q\,V_{\text{up}} + (1-q)\,V_{\text{down}}\,\right].
+\]</span></p></li>
+<li><p>Repeat until time <span class="math inline">\(0\)</span>.</p></li>
+</ol>
+<p>Since <span class="math inline">\(u\)</span>, <span class="math inline">\(d\)</span> and <span class="math inline">\(r\)</span> do not change, <span class="math inline">\(q\)</span> is the same at every node. The hedge <span class="math inline">\(\Delta\)</span> and the cash position <span class="math inline">\(B\)</span> do change from node to node, so the replicating portfolio is <strong>rebalanced</strong> at each node. The rebalancing is self-financing: the portfolio held coming into a node is worth exactly the cost of the new portfolio.</p>
+<p>Unrolling the recursion gives a closed form.</p>
+<div class="theorem" data-title="Multi-Period Binomial Price">
+<p>A European derivative with payoff <span class="math inline">\(h(S_T)\)</span> has time-<span class="math inline">\(0\)</span> price</p>
+<p><span class="math display">\[
+V_0 = e^{-rT}\sum_{j=0}^{n}\binom{n}{j}\,q^{\,j}(1-q)^{n-j}\,
+h\!\left(S u^{j}d^{\,n-j}\right).
+\]</span></p>
+</div>
+<p>This is the discounted expectation of <span class="math inline">\(h(S_T)\)</span> when the number of up moves is <span class="math inline">\(\text{Binomial}(n,q)\)</span>. At every node the discounted stock price <span class="math inline">\(e^{-rkh}S_{kh}\)</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-martingale (see <a href="../topics/martingale-theory.html">Martingale Theory</a>).</p>
+</section>
+<section id="choosing-u-and-d" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="choosing-u-and-d"><span class="header-section-number">2.6</span> Choosing <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span></h3>
+<p>The factors <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> are model parameters. To match a stock with volatility <span class="math inline">\(\sigma\)</span> the <strong>Cox-Ross-Rubinstein (CRR)</strong> choice is</p>
+<p><span class="math display">\[
+u = e^{\sigma\sqrt{h}},
+\qquad
+d = \frac{1}{u} = e^{-\sigma\sqrt{h}}.
+\]</span></p>
+<p>The no-arbitrage condition <span class="math inline">\(d&lt;e^{rh}&lt;u\)</span> holds for small enough <span class="math inline">\(h\)</span>. As <span class="math inline">\(n\to\infty\)</span> the binomial price of a European option converges to its Black-Scholes price (see <a href="../topics/european-options.html">European Options</a>), because the log-return over <span class="math inline">\([0,T]\)</span> is a sum of <span class="math inline">\(n\)</span> independent steps and tends to a normal distribution by the central limit theorem.</p>
+</section>
+</section>
+<section id="put-call-parity" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="put-call-parity"><span class="header-section-number">3</span> Put-Call Parity</h2>
+<div class="theorem" data-title="Put-Call Parity">
+<p>In the binomial model, a European call and put with the same strike <span class="math inline">\(K\)</span> and maturity <span class="math inline">\(T\)</span> on a stock paying no dividends have prices satisfying</p>
+<p><span class="math display">\[
+C_0 - P_0 = S_0 - Ke^{-rT}.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>The payoffs satisfy, in every state,</p>
+<p><span class="math display">\[
+(S_T-K)^+ - (K-S_T)^+ = S_T - K.
+\]</span></p>
+<p>By the pricing formula above, which is linear in the payoff,</p>
+<p><span class="math display">\[
+C_0 - P_0 = e^{-rT}\,\mathbb{E}_{\mathbb{Q}}\left[(S_T-K)^+ - (K-S_T)^+\right]
+= e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[S_T - K].
+\]</span></p>
+<p>Since <span class="math inline">\(e^{-rt}S_t\)</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-martingale, <span class="math inline">\(\mathbb{E}_{\mathbb{Q}}[S_T]
+= e^{rT}S_0\)</span>, hence</p>
+<p><span class="math display">\[
+C_0 - P_0 = e^{-rT}\left(e^{rT}S_0 - K\right) = S_0 - Ke^{-rT}.
+\qquad\blacksquare
+\]</span></p>
+</div>
+<p>The parity can also be seen from replication in one period. The call and put have values <span class="math inline">\((uS-K)^+\)</span>, <span class="math inline">\((dS-K)^+\)</span> and <span class="math inline">\((K-uS)^+\)</span>, <span class="math inline">\((K-dS)^+\)</span>, and their difference <span class="math inline">\(C-P\)</span> has value <span class="math inline">\(uS-K\)</span> in the up state and <span class="math inline">\(dS-K\)</span> in the down state. Applying the replication formulas with <span class="math inline">\(V_u=uS-K\)</span> and <span class="math inline">\(V_d=dS-K\)</span>,</p>
+<p><span class="math display">\[
+\Delta_C-\Delta_P = \frac{(uS-K)-(dS-K)}{S(u-d)} = 1,
+\qquad
+B_C-B_P = e^{-rh}\,\frac{u(dS-K)-d(uS-K)}{u-d} = -Ke^{-rh},
+\]</span></p>
+<p>so <span class="math inline">\(C-P=S-Ke^{-rh}\)</span>. A long call and short put therefore replicate a long share financed by borrowing <span class="math inline">\(Ke^{-rh}\)</span>, which is a forward contract. Note that the proof uses only the no-arbitrage condition, not the values of <span class="math inline">\(u\)</span> and <span class="math inline">\(d\)</span> or the real-world probability <span class="math inline">\(p\)</span>. The parity holds at every node of the tree, with <span class="math inline">\(S\)</span> and the remaining time to maturity taken at that node.</p>
+</section>
+<section id="example" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="example"><span class="header-section-number">4</span> Example</h2>
+<p>Price a European call and put on a stock with <span class="math inline">\(S_0=100\)</span>, strike <span class="math inline">\(K=100\)</span>, maturity <span class="math inline">\(T=1\)</span> and rate <span class="math inline">\(r=5\%\)</span>, using <span class="math inline">\(n=2\)</span> periods (<span class="math inline">\(h=0.5\)</span>) with <span class="math inline">\(u=1.2\)</span> and <span class="math inline">\(d=0.85\)</span>.</p>
+<p><strong>Parameters.</strong> <span class="math inline">\(e^{rh}=e^{0.025}=1.025315\)</span>, so <span class="math inline">\(d&lt;e^{rh}&lt;u\)</span> and there is no arbitrage. The risk-neutral probability and discount factor are</p>
+<p><span class="math display">\[
+q = \frac{1.025315-0.85}{1.2-0.85} = 0.500900,
+\qquad
+e^{-rh} = 0.975310.
+\]</span></p>
+<p><strong>Stock tree.</strong> <span class="math inline">\(S_u=120\)</span>, <span class="math inline">\(S_d=85\)</span>, <span class="math inline">\(S_{uu}=144\)</span>, <span class="math inline">\(S_{ud}=102\)</span> and <span class="math inline">\(S_{dd}=72.25\)</span>.</p>
+<p><strong>Terminal payoffs.</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Node</th>
+<th style="text-align: right;"><span class="math inline">\(S_T\)</span></th>
+<th style="text-align: right;">Call <span class="math inline">\((S_T-100)^+\)</span></th>
+<th style="text-align: right;">Put <span class="math inline">\((100-S_T)^+\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(uu\)</span></td>
+<td style="text-align: right;">144</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(ud\)</span></td>
+<td style="text-align: right;">102</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(dd\)</span></td>
+<td style="text-align: right;">72.25</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">27.75</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Backward induction.</strong> Applying <span class="math inline">\(V=e^{-rh}[qV_{\text{up}}+(1-q)V_{\text{down}}]\)</span>:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Node</th>
+<th style="text-align: right;"><span class="math inline">\(S\)</span></th>
+<th style="text-align: right;">Call <span class="math inline">\(C\)</span></th>
+<th style="text-align: right;">Put <span class="math inline">\(P\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(u\)</span></td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">22.4690</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(d\)</span></td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">0.9771</td>
+<td style="text-align: right;">13.5081</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">root</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">11.4525</td>
+<td style="text-align: right;">6.5754</td>
+</tr>
+</tbody>
+</table>
+<p>For example, the call at the root is <span class="math inline">\(C_0 = 0.975310\,[\,0.5009(22.4690)+0.4991(0.9771)\,] = 11.4525\)</span>.</p>
+<p><strong>Hedge at the root (call).</strong> With <span class="math inline">\(V_u=22.4690\)</span> and <span class="math inline">\(V_d=0.9771\)</span>,</p>
+<p><span class="math display">\[
+\Delta = \frac{22.4690-0.9771}{100(0.35)} = 0.6141,
+\qquad
+B = 0.975310\cdot\frac{1.2(0.9771)-0.85(22.4690)}{0.35} = -49.9531,
+\]</span></p>
+<p>and indeed <span class="math inline">\(\Delta S+B = 61.41-49.95 = 11.4525\)</span>. To replicate the call, buy <span class="math inline">\(0.6141\)</span> shares and borrow <span class="math inline">\(\$49.95\)</span>.</p>
+<p><strong>Put-call parity check.</strong></p>
+<p><span class="math display">\[
+C_0-P_0 = 11.4525-6.5754 = 4.8771,
+\qquad
+S_0-Ke^{-rT} = 100-100e^{-0.05} = 4.8771. \;\checkmark
+\]</span></p>
+</section>
+<section id="continuous-dividends" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="continuous-dividends"><span class="header-section-number">5</span> Continuous Dividends</h2>
+<p>Suppose the stock pays dividends continuously at a constant yield <span class="math inline">\(\delta\)</span>, which are reinvested in the stock. Then <span class="math inline">\(\Delta\)</span> shares held at time <span class="math inline">\(0\)</span> grow to <span class="math inline">\(\Delta e^{\delta h}\)</span> shares at time <span class="math inline">\(h\)</span>. The model is otherwise the same, and every result above carries over with <span class="math inline">\(r\)</span> replaced by <span class="math inline">\(r-\delta\)</span> in the stock’s drift.</p>
+<p><strong>No arbitrage.</strong> The model is free of arbitrage if and only if</p>
+<p><span class="math display">\[
+d &lt; e^{(r-\delta)h} &lt; u.
+\]</span></p>
+<p>The proof is the same as before, comparing the stock with the bond after reinvesting dividends.</p>
+<p><strong>Replication.</strong> The replicating portfolio must satisfy</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Delta\,uS\,e^{\delta h} + Be^{rh} &amp;= V_u, \\
+\Delta\,dS\,e^{\delta h} + Be^{rh} &amp;= V_d,
+\end{aligned}
+\]</span></p>
+<p>which gives</p>
+<p><span class="math display">\[
+\Delta = e^{-\delta h}\,\frac{V_u - V_d}{S(u-d)},
+\qquad
+B = e^{-rh}\,\frac{uV_d - dV_u}{u-d},
+\qquad
+V_0 = \Delta S + B.
+\]</span></p>
+<p><strong>Risk-neutral pricing.</strong> Substituting gives</p>
+<p><span class="math display">\[
+V_0 = e^{-rh}\left[\,q\,V_u + (1-q)\,V_d\,\right],
+\qquad
+q = \frac{e^{(r-\delta)h}-d}{u-d}.
+\]</span></p>
+<p>The no-arbitrage condition is again <span class="math inline">\(0&lt;q&lt;1\)</span>. Under <span class="math inline">\(q\)</span> the stock has expected growth <span class="math inline">\(e^{(r-\delta)h}\)</span> per period, so the stock with its dividends reinvested earns the risk-free rate, <span class="math inline">\(e^{-rt}e^{\delta t}S_t\)</span> is a <span class="math inline">\(\mathbb{Q}\)</span>-martingale, and <span class="math inline">\(\mathbb{E}_{\mathbb{Q}}[S_T] = e^{(r-\delta)T}S_0\)</span>.</p>
+<p><strong>Multiple periods.</strong> Backward induction uses the new <span class="math inline">\(q\)</span> and the new <span class="math inline">\(\Delta\)</span> at each node, and the closed form is unchanged,</p>
+<p><span class="math display">\[
+V_0 = e^{-rT}\sum_{j=0}^{n}\binom{n}{j}\,q^{\,j}(1-q)^{n-j}\,
+h\!\left(S u^{j}d^{\,n-j}\right).
+\]</span></p>
+<p>For the CRR tree <span class="math inline">\(u=e^{\sigma\sqrt{h}}\)</span>, <span class="math inline">\(d=1/u\)</span>, the condition <span class="math inline">\(d&lt;e^{(r-\delta)h}&lt;u\)</span> again holds for small <span class="math inline">\(h\)</span>.</p>
+<div class="theorem" data-title="Put-Call Parity with Dividends">
+<p>For a stock paying a continuous dividend yield <span class="math inline">\(\delta\)</span>,</p>
+<p><span class="math display">\[
+C_0 - P_0 = S_0e^{-\delta T} - Ke^{-rT}.
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>As before, <span class="math inline">\((S_T-K)^+ - (K-S_T)^+ = S_T-K\)</span>, so by linearity <span class="math inline">\(C_0-P_0 = e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[S_T-K]\)</span>. Using <span class="math inline">\(\mathbb{E}_{\mathbb{Q}}[S_T]=e^{(r-\delta)T}S_0\)</span>,</p>
+<p><span class="math display">\[
+C_0 - P_0 = e^{-rT}\left(e^{(r-\delta)T}S_0 - K\right)
+= S_0e^{-\delta T} - Ke^{-rT}.
+\qquad\blacksquare
+\]</span></p>
+</div>
+<p>In one period the replication formulas with <span class="math inline">\(V_u=uS-K\)</span> and <span class="math inline">\(V_d=dS-K\)</span> give <span class="math inline">\(\Delta_C-\Delta_P=e^{-\delta h}\)</span> and <span class="math inline">\(B_C-B_P=-Ke^{-rh}\)</span>, so a long call and short put replicate a forward contract on the stock with reinvested dividends, financed by borrowing <span class="math inline">\(Ke^{-rh}\)</span>.</p>
+<p>An option on an exchange rate fits this framework, with <span class="math inline">\(S\)</span> the exchange rate in domestic currency per unit of foreign currency and <span class="math inline">\(\delta\)</span> the foreign interest rate, since a unit of foreign currency held in a foreign bank account grows at that rate.</p>
+</section>
+<section id="extensions" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="extensions"><span class="header-section-number">6</span> Extensions</h2>
+<ul>
+<li><p><strong>American options.</strong> The holder may exercise at any node, so backward induction takes the larger of the exercise value and the continuation value,</p>
+<p><span class="math display">\[
+V = \max\left(\text{payoff},\;
+e^{-rh}\left[\,q\,V_{\text{up}} + (1-q)\,V_{\text{down}}\,\right]\right),
+\]</span></p>
+<p>where <span class="math inline">\(V_{\text{up}}\)</span> and <span class="math inline">\(V_{\text{down}}\)</span> are themselves American values. An American call on a stock with no dividends is never exercised early, but an American put can be, as can a call when <span class="math inline">\(\delta&gt;0\)</span> is large. Parity then holds only as an inequality.</p></li>
+<li><p><strong>Other payoffs.</strong> The same tree prices any path-independent payoff, and with extra bookkeeping path-dependent options such as <a href="../topics/barrier-options.html">Barrier Options</a>.</p></li>
+</ul>
+</section>
+<section id="related-topics" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="related-topics"><span class="header-section-number">7</span> Related Topics</h2>
+<ul>
+<li><a href="../topics/option-pricing.html">Option Pricing</a></li>
+<li><a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a></li>
+<li><a href="../topics/european-options.html">European Options</a></li>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="references"><span class="header-section-number">8</span> References</h2>
+<ol type="1">
+<li>Cox, J. C., Ross, S. A. and Rubinstein, M. (1979). Option pricing: a simplified approach. <em>Journal of Financial Economics</em>, 7(3), 229-263.</li>
+<li>McDonald, R. L. <em>Derivatives Markets</em>, 3rd ed.&nbsp;Pearson. Chapters 10 and 11.</li>
+<li>Shreve, S. E. <em>Stochastic Calculus for Finance I: The Binomial Asset Pricing Model</em>. Springer.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -412,6 +746,7 @@ Backlinks
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 </ul>
 </div>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <!-- Relocates the backlinks block (emitted as #quarto-backlinks by the

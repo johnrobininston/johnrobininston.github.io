@@ -1,25 +1,119 @@
 ---
-title: Martingale Theory
-author: John Robin Inston
+id: martingale-theory
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "Martingales, submartingales and supermartingales: definitions, examples and basic properties."
 number-sections: true
+title: Martingale Theory
 title-block-banner: false
 ---
 
-# Martingales
+## Martingales
+
+A **martingale** models a fair game: given everything known so far, the
+expected future value equals the present value. Let
+$(\Omega,\mathcal{F},\mathbb{F},\mathbb{P})$ be a probability space with a
+[[filtrations-and-adapted-processes|filtration]]
+$\mathbb{F}=(\mathcal{F}_t)_{t\in T}$, where the time set $T$ is
+$\{0,1,2,\dots\}$ in discrete time or $[0,\infty)$ in continuous time.
 
 :::{.definition data-title="Martingale"}
 
-A stochastic process $(X_{t})$ defined and adapted on
-$(\Omega,\mathcal{F},\mathbb{F}, \mathbb{P})$ is a **martingale** if:
-1. $\mathbb{E}[|M_{n}|]<\infty$ for $n \geq 1$; and
-2. $\mathbb{E}[M_{n+1}|\mathcal{F}_{n}]=M_{n}$ for all $n \geq 1$.
+A stochastic process $X=(X_t)_{t\in T}$ is a **martingale** with respect to
+$\mathbb{F}$ if
+
+1. $X$ is adapted to $\mathbb{F}$, that is $X_t$ is $\mathcal{F}_t$-measurable
+   for all $t$;
+2. $\mathbb{E}[|X_t|]<\infty$ for all $t$; and
+3. $\mathbb{E}[X_t \mid \mathcal{F}_s] = X_s$ for all $s \le t$.
 
 :::
 
-- A **submartingale** is a martingale such that
-  $\mathbb{E}[M_{n+1}|\mathcal{F}_{n}]\geq M_{n}$ (i.e. the martingale tends to
-  drift upwards in expectation).
-- A **supermartingale** is a martingale such that
-  $\mathbb{E}[M_{n+1}|\mathcal{F}_{n}]\leq M_{n}$ (i.e. the martingale tends to
-  drift downward in expectation).
+In discrete time it is enough to check the one-step condition
+$\mathbb{E}[X_{n+1}\mid\mathcal{F}_n] = X_n$ for all $n$, since the general
+case follows from the tower property. In continuous time one also assumes that
+the paths are right-continuous with left limits and that the filtration
+satisfies the usual conditions.
+
+:::{.definition data-title="Submartingale and Supermartingale"}
+
+An adapted, integrable process $X$ is a
+
+- **submartingale** if $\mathbb{E}[X_t\mid\mathcal{F}_s] \ge X_s$ for all
+  $s\le t$ (the process tends to drift upwards in expectation),
+- **supermartingale** if $\mathbb{E}[X_t\mid\mathcal{F}_s] \le X_s$ for all
+  $s\le t$ (the process tends to drift downwards in expectation).
+
+:::
+
+A process is a martingale if and only if it is both a submartingale and a
+supermartingale. Think of $X_t$ as the wealth of a gambler: a martingale is a
+fair game, a submartingale is a favorable game and a supermartingale is an
+unfavorable game.
+
+## Examples
+
+1. **Random walk.** If $X_1,X_2,\dots$ are independent with
+   $\mathbb{E}[X_i]=0$, then $S_n=X_1+\dots+X_n$ is a martingale. If
+   $\mathbb{E}[X_i]\ge 0$ it is a submartingale.
+2. **Doob martingale.** For an integrable random variable $Y$,
+   $M_n=\mathbb{E}[Y\mid\mathcal{F}_n]$ is a martingale, since by the tower
+   property
+   $\mathbb{E}[M_{n+1}\mid\mathcal{F}_n]=\mathbb{E}[Y\mid\mathcal{F}_n]=M_n$.
+3. **Products.** If $X_1,X_2,\dots$ are independent with
+   $\mathbb{E}[X_i]=1$, then $\prod_{i\le n}X_i$ is a martingale. For
+   example, with $S_n$ as in (1) and $\mathbb{E}[e^{\theta X_1}]<\infty$,
+   $e^{\theta S_n}/\mathbb{E}[e^{\theta X_1}]^n$ is a martingale.
+4. **Brownian motion.** If $W$ is a [[brownian-motion|Brownian motion]], then
+   $W_t$, $W_t^2-t$ and $\exp(\theta W_t-\tfrac12\theta^2t)$ are martingales.
+5. **Discounted prices.** In the [[black-scholes-merton-model]], the
+   discounted stock price $e^{-rt}S_t$ is a martingale under the
+   risk-neutral measure $\mathbb{Q}$. See [[risk-neutral-pricing]].
+
+## Basic Properties
+
+- **Constant expectation.** For a martingale, $\mathbb{E}[X_t]=\mathbb{E}[X_0]$
+  for all $t$. For a submartingale, $t\mapsto\mathbb{E}[X_t]$ is nondecreasing.
+- **Jensen.** If $X$ is a martingale and $\varphi$ is convex with
+  $\varphi(X_t)$ integrable, then $\varphi(X)$ is a submartingale, since by the
+  conditional Jensen inequality
+  $\mathbb{E}[\varphi(X_{t})\mid\mathcal{F}_s] \ge \varphi(\mathbb{E}[X_t\mid\mathcal{F}_s]) = \varphi(X_s)$.
+  In particular $|X|$ and $X^2$ (when $X$ is square integrable) are
+  submartingales.
+- **Martingale differences.** The increments of a martingale satisfy
+  $\mathbb{E}[X_{n+1}-X_n\mid\mathcal{F}_n]=0$. See [[martingale-differences]].
+- **Martingale transforms.** A process $H$ is **predictable** if $H_n$ is
+  $\mathcal{F}_{n-1}$-measurable. For a bounded predictable $H$ the
+  transform
+  $$
+  (H\bullet X)_n = \sum_{k=1}^n H_k\,(X_k-X_{k-1})
+  $$
+  is a martingale whenever $X$ is a martingale, and a submartingale if $X$ is a
+  submartingale and $H\ge 0$. This is because
+  $\mathbb{E}[H_k(X_k-X_{k-1})\mid\mathcal{F}_{k-1}]=H_k\,\mathbb{E}[X_k-X_{k-1}\mid\mathcal{F}_{k-1}]$.
+  It says that **no betting strategy turns a fair game into a favorable one**.
+- **Stopped processes.** If $\tau$ is a [[stopping-times|stopping time]] and
+  $X$ is a martingale, then the stopped process $X_{\tau\wedge n}$ is a
+  martingale. This is the transform with $H_k=\mathbb{1}_{\{k\le\tau\}}$.
+
+## Key Results
+
+The main theorems of martingale theory each have their own note.
+
+- [[doob-decomposition-theorem]]: every adapted integrable process is a
+  martingale plus a predictable process.
+- [[stopping-times]] and the [[optional-stopping-theorem]]: when does
+  $\mathbb{E}[X_\tau]=\mathbb{E}[X_0]$? See also [[walds-identity]].
+- [[doobs-maximal-inequalities]]: bounds on the running maximum of a
+  submartingale, and [[kolmogorovs-maximal-inequality-for-sums]].
+- [[upcrossing-inequality]] and the [[martingale-convergence-theorems]]: when
+  does a martingale converge? See also [[uniform-integrability]].
+- [[martingale-representation-theorem]]: in a Brownian filtration every
+  martingale is a stochastic integral.
+
+Planned notes: local martingales and semimartingales, quadratic variation of
+martingales, exponential martingales and Novikov's condition, Lévy's
+characterization of Brownian motion, Azuma-Hoeffding concentration, and
+applications (gambler's ruin, Pólya's urn, branching processes).

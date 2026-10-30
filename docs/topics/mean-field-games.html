@@ -8,7 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-05-14">
-<meta name="description" content=".">
+<meta name="description" content="Mean field games: the limit of large-population stochastic differential games, the HJB-Fokker-Planck system, existence and uniqueness, mean field control and a linear-quadratic example.">
 
 <title>Mean Field Games – John Robin Inston</title>
 <style>
@@ -360,7 +360,18 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#mfg-general-definition" id="toc-mfg-general-definition" class="nav-link" data-scroll-target="#mfg-general-definition">MFG General Definition</a></li>
+  <li><a href="#the-n-player-game" id="toc-the-n-player-game" class="nav-link" data-scroll-target="#the-n-player-game">The N-Player Game</a></li>
+  <li><a href="#mean-field-game" id="toc-mean-field-game" class="nav-link" data-scroll-target="#mean-field-game">Mean Field Game</a>
+  <ul class="collapse">
+  <li><a href="#fixed-point-formulation" id="toc-fixed-point-formulation" class="nav-link" data-scroll-target="#fixed-point-formulation">Fixed-Point Formulation</a></li>
+  <li><a href="#the-mfg-system" id="toc-the-mfg-system" class="nav-link" data-scroll-target="#the-mfg-system">The MFG System</a></li>
+  </ul></li>
+  <li><a href="#existence-and-uniqueness" id="toc-existence-and-uniqueness" class="nav-link" data-scroll-target="#existence-and-uniqueness">Existence and Uniqueness</a></li>
+  <li><a href="#mean-field-control" id="toc-mean-field-control" class="nav-link" data-scroll-target="#mean-field-control">Mean Field Control</a></li>
+  <li><a href="#example-linear-quadratic-mfg" id="toc-example-linear-quadratic-mfg" class="nav-link" data-scroll-target="#example-linear-quadratic-mfg">Example: Linear-Quadratic MFG</a></li>
+  <li><a href="#applications-in-finance" id="toc-applications-in-finance" class="nav-link" data-scroll-target="#applications-in-finance">Applications in Finance</a></li>
+  <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics">Related Topics</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -375,7 +386,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    .
+    Mean field games: the limit of large-population stochastic differential games, the HJB-Fokker-Planck system, existence and uniqueness, mean field control and a linear-quadratic example.
   </div>
 </div>
 
@@ -399,7 +410,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 14, 2026</p>
+      <p class="date-modified">October 30, 2026</p>
     </div>
   </div>
     
@@ -412,28 +423,140 @@ window.Quarto = {
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Suppose we have a large number of agents who are all competing against each other in a game over time, that is they are selecting strategy processes in an attempt to optimize their objective functionals. The solutions to these games are <a href="../topics/nash-equilibrium.html">Nash equlibria (NE)</a> which are combinations of strategies such that no agent can improve their outcome given no other agent changes their strategy. In stochastic differential games, agent states and strategies are modeled by continuous time stochastic processes with game dynamics decribed by coupled <a href="../topics/stochastic-differential-equations.html">stochastic differential equations (SDEs)</a>, one for each agent. The complexity of these games grows exponentially as the number of agents increases, meaning that determining solutions quickly becomes intractable. However, if we assume that the number of agents is very large, and that agents are sufficiently homogenous, then we can consider the limit as the number of agents goes to infinity. In this limit, the game dynamics are described by a single representative agent interacts with the distribution of the population without impacting the distribution itself. This limiting case is called a <strong>Mean Field Game (MFG)</strong>.</p>
-<p>First introuced by Lasry and Lions in 2006, <strong>Mean Field Game (MFG)</strong> theory stems primarily from mean field models in mathematical physics which analyze the behavior of many idential particals. Another branch of study is Mean Field Control (MFC) theory, which is concerned with the optimal control of a population of agents.</p>
+<p>Consider a large number of agents who compete over time, each choosing a strategy process to optimize an objective functional that depends on the choices of the others. The solutions of such games are <a href="../topics/nash-equilibrium.html">Nash equilibria (NE)</a>: combinations of strategies such that no agent can improve their outcome by changing their own strategy while the others keep theirs. In stochastic differential games, the states and strategies of the agents are continuous-time stochastic processes, with the dynamics given by coupled <a href="../topics/stochastic-differential-equations.html">stochastic differential equations (SDEs)</a>, one for each agent.</p>
+<p>The complexity of these games grows rapidly with the number of agents, so equilibria quickly become intractable. However, if the number of agents is very large and the agents are sufficiently homogeneous and interchangeable, we can study the limit as the number of agents tends to infinity. In this limit the game is described by a single <strong>representative agent</strong> who interacts with the distribution of the population, but whose own actions have no effect on that distribution. This limiting game is called a <strong>Mean Field Game (MFG)</strong>.</p>
+<p>MFG theory was introduced by Lasry and Lions in 2006-2007, and independently by Huang, Malhamé and Caines. It stems from mean field models in statistical physics, which describe the behavior of many identical interacting particles. A closely related theory is <strong>Mean Field Control (MFC)</strong>, which is concerned with the optimal control of a whole population by a single decision maker.</p>
 </section>
-<section id="mfg-general-definition" class="level2">
-<h2 class="anchored" data-anchor-id="mfg-general-definition">MFG General Definition</h2>
-<div class="definition" data-title="Mean Field Game">
-<p>The typical model for Mean Field Games (MFGs) is the following system</p>
+<section id="the-n-player-game" class="level2">
+<h2 class="anchored" data-anchor-id="the-n-player-game">The N-Player Game</h2>
+<p>Take <span class="math inline">\(N\)</span> agents with states <span class="math inline">\(X^1,\dots,X^N\)</span> in <span class="math inline">\(\mathbb{R}^d\)</span>. Agent <span class="math inline">\(i\)</span> controls its own state through a strategy <span class="math inline">\(\alpha^i\)</span>,</p>
+<p><span class="math display">\[
+dX^i_t = \alpha^i_t\,dt + \sqrt{2\nu}\,dW^i_t,
+\qquad X^i_0 \sim m_0,
+\]</span></p>
+<p>where <span class="math inline">\(W^1,\dots,W^N\)</span> are independent Brownian motions and <span class="math inline">\(\nu\ge 0\)</span>. The agents interact only through the <strong>empirical measure</strong> of the population</p>
+<p><span class="math display">\[
+\bar{m}^N_t = \frac{1}{N}\sum_{j=1}^N \delta_{X^j_t},
+\]</span></p>
+<p>and agent <span class="math inline">\(i\)</span> minimizes the cost</p>
+<p><span class="math display">\[
+J^i(\alpha^1,\dots,\alpha^N) = \mathbb{E}\left[
+\int_0^T L\left(X^i_t, \bar{m}^N_t, \alpha^i_t\right)dt
++ G\left(X^i_T, \bar{m}^N_T\right) \right],
+\]</span></p>
+<p>where <span class="math inline">\(L\)</span> is the running cost and <span class="math inline">\(G\)</span> the terminal cost. Since the agents are exchangeable and each has a small influence on <span class="math inline">\(\bar{m}^N\)</span>, as <span class="math inline">\(N\to\infty\)</span> the empirical measure is expected to converge to a deterministic flow of measures <span class="math inline">\(m=(m_t)_{t\in[0,T]}\)</span> (a law of large numbers, or <em>propagation of chaos</em>). This suggests solving, instead of the <span class="math inline">\(N\)</span>-player game, a single control problem in which the flow <span class="math inline">\(m\)</span> is fixed.</p>
+</section>
+<section id="mean-field-game" class="level2">
+<h2 class="anchored" data-anchor-id="mean-field-game">Mean Field Game</h2>
+<section id="fixed-point-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-point-formulation">Fixed-Point Formulation</h3>
+<div class="definition" data-title="Mean Field Game Equilibrium">
+<p>A flow of measures <span class="math inline">\(m=(m_t)_{t\in[0,T]}\)</span> is a <strong>mean field game equilibrium</strong> if it is a fixed point of the following two-step procedure.</p>
+<ol type="1">
+<li><p><strong>Optimal control.</strong> Given <span class="math inline">\(m\)</span>, the representative agent solves the control problem <span class="math display">\[
+\min_{\alpha}\ \mathbb{E}\left[
+\int_0^T L(X_t, m_t, \alpha_t)\,dt + G(X_T, m_T) \right],
+\qquad dX_t = \alpha_t\,dt + \sqrt{2\nu}\,dW_t,
+\quad X_0\sim m_0,
+\]</span> with optimal strategy <span class="math inline">\(\alpha^*\)</span> and optimal state <span class="math inline">\(X^*\)</span>.</p></li>
+<li><p><strong>Consistency.</strong> The law of the optimal state reproduces the flow, <span class="math inline">\(\text{Law}(X^*_t) = m_t\)</span> for all <span class="math inline">\(t\in[0,T]\)</span>.</p></li>
+</ol>
+</div>
+<p>The representative agent treats <span class="math inline">\(m\)</span> as given, which is why the equilibrium is a Nash equilibrium of the limit game: no agent can gain by deviating, since a single agent cannot move the distribution. Under suitable conditions, an MFG equilibrium gives an approximate Nash equilibrium of the <span class="math inline">\(N\)</span>-player game, with an error that vanishes as <span class="math inline">\(N\to\infty\)</span>.</p>
+</section>
+<section id="the-mfg-system" class="level3">
+<h3 class="anchored" data-anchor-id="the-mfg-system">The MFG System</h3>
+<p>Define the Hamiltonian</p>
+<p><span class="math display">\[
+H(x,m,p) = \sup_{a\in\mathbb{R}^d}\left\{ -a\cdot p - L(x,m,a) \right\},
+\]</span></p>
+<p>which is convex in <span class="math inline">\(p\)</span>. Step 1 is a standard stochastic control problem, so its value function <span class="math inline">\(u(t,x)\)</span> solves a <a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a>, and the optimal strategy is the feedback <span class="math inline">\(\alpha^*(t,x) = -D_pH(x,m_t,Du(t,x))\)</span>. In step 2, the law <span class="math inline">\(m_t\)</span> of the optimally controlled state solves the <a href="../topics/fokker-planck-equation.html">Fokker-Planck Equation</a> with this drift. Together they give the MFG system.</p>
+<div class="definition" data-title="Mean Field Game System">
 <p><span class="math display">\[
 \begin{cases}
--\partial_t u - \nu \delta u + H(x, m, Du) = 0
-    \quad \text{in } \mathbb{R}^d\times (0,T) \\
-\partial_t m - \nu \delta m - \text{div}(D_p H(x, m, Du)m) = 0
-    \quad \text{in } \mathbb{R}^d\times (0,T) \\
-m(0) = m_0(x), \quad u(x,T) = G(x, m(T)),
+-\partial_t u - \nu \Delta u + H(x, m, Du) = 0
+    &amp; \text{in } \mathbb{R}^d\times (0,T), \\
+\partial_t m - \nu \Delta m - \text{div}\left(D_p H(x, m, Du)\,m\right) = 0
+    &amp; \text{in } \mathbb{R}^d\times (0,T), \\
+m(0) = m_0, \quad u(T,x) = G(x, m(T)),
 \end{cases}
 \]</span></p>
-<p>where <span class="math inline">\(\nu\)</span> is a nonnegative parameter.</p>
+<p>where <span class="math inline">\(\nu\ge 0\)</span> is the diffusion parameter, <span class="math inline">\(\Delta\)</span> is the Laplacian, <span class="math inline">\(Du\)</span> is the gradient of <span class="math inline">\(u\)</span> in <span class="math inline">\(x\)</span>, <span class="math inline">\(D_pH\)</span> is the gradient of <span class="math inline">\(H\)</span> in its last variable and <span class="math inline">\(\text{div}\)</span> is the divergence.</p>
 </div>
-<p>The first equation is a <a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a> and is understood in backward time. The second equation is a <a href="../topics/fokker-planck-equation.html">Fokker-Planck Equation</a> and is understood in forward time. There are two crucial structural conditions for this system:</p>
+<p>The first equation is the HJB equation for the value function <span class="math inline">\(u\)</span> and is solved <strong>backward</strong> in time from the terminal condition. The second is the Fokker-Planck equation for the population density <span class="math inline">\(m\)</span> and is solved <strong>forward</strong> in time from the initial condition. The two are coupled, which makes the system a forward-backward problem. There are two structural conditions:</p>
 <ol type="1">
-<li><p>Convexity <span class="math inline">\(H=H(x, m, p)\)</span> with respect to the last variable <span class="math inline">\(p\)</span>, which implies that the HJB equation is associated with an optimal control problem. Specifically, this is the value function associated with a representative agent.</p></li>
-<li><p><span class="math inline">\(m_0\)</span> (and therefore <span class="math inline">\(m_t\)</span>) is (the density of) a probability measure, associated with the evolution of a population (continuum) of agents.</p></li>
+<li><p><span class="math inline">\(H=H(x,m,p)\)</span> is convex in the last variable <span class="math inline">\(p\)</span>, which means the HJB equation is associated with an optimal control problem. Specifically, <span class="math inline">\(u\)</span> is the value function of a representative agent.</p></li>
+<li><p><span class="math inline">\(m_0\)</span> (and therefore <span class="math inline">\(m_t\)</span>) is the density of a probability measure, describing the evolution of a population (continuum) of agents.</p></li>
+</ol>
+</section>
+</section>
+<section id="existence-and-uniqueness" class="level2">
+<h2 class="anchored" data-anchor-id="existence-and-uniqueness">Existence and Uniqueness</h2>
+<p>Existence of solutions to the MFG system is proved by a fixed-point argument on the flow <span class="math inline">\(m\)</span> (Lasry and Lions), under regularity and growth conditions on <span class="math inline">\(H\)</span> and <span class="math inline">\(G\)</span>, in particular when <span class="math inline">\(\nu&gt;0\)</span>. Uniqueness is subtler and requires a <strong>monotonicity</strong> condition. Suppose the cost splits as <span class="math inline">\(L(x,m,a) = L_0(x,a) + F(x,m)\)</span> with <span class="math inline">\(L_0\)</span> strictly convex in <span class="math inline">\(a\)</span>, and that <span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are monotone in the sense that</p>
+<p><span class="math display">\[
+\int_{\mathbb{R}^d} \left( F(x,m_1) - F(x,m_2) \right)
+d(m_1 - m_2)(x) \ge 0
+\]</span></p>
+<p>for all probability measures <span class="math inline">\(m_1,m_2\)</span>, and likewise for <span class="math inline">\(G\)</span>. Then the MFG system has at most one solution. Monotonicity means that agents prefer to avoid crowded states, as in congestion models. Without it, several equilibria may coexist, for example when agents are attracted to crowds.</p>
+</section>
+<section id="mean-field-control" class="level2">
+<h2 class="anchored" data-anchor-id="mean-field-control">Mean Field Control</h2>
+<p>In a <strong>mean field control</strong> (MFC) problem a single decision maker chooses the strategy of the whole population, so the control problem accounts for the effect of the strategy on the distribution,</p>
+<p><span class="math display">\[
+\min_{\alpha}\ \mathbb{E}\left[
+\int_0^T L(X_t, \mu_t, \alpha_t)\,dt + G(X_T, \mu_T) \right],
+\qquad \mu_t = \text{Law}(X_t).
+\]</span></p>
+<p>In an MFG, the representative agent takes the flow <span class="math inline">\(m\)</span> as given and then requires consistency (a <strong>fixed point</strong>). In MFC, the distribution is optimized over (an <strong>optimization over flows of measures</strong>, also called McKean-Vlasov control). The two problems have different solutions in general. MFG equilibria describe selfish, decentralized agents, while MFC describes a social optimum, and the gap between them is the cost of non-cooperation.</p>
+</section>
+<section id="example-linear-quadratic-mfg" class="level2">
+<h2 class="anchored" data-anchor-id="example-linear-quadratic-mfg">Example: Linear-Quadratic MFG</h2>
+<p>Take <span class="math inline">\(d=1\)</span>, running cost <span class="math inline">\(L(x,m,a)=\frac12 a^2 + \frac{c}{2}(x-\kappa\bar{m}_t)^2\)</span> with <span class="math inline">\(c&gt;0\)</span>, where <span class="math inline">\(\bar{m}_t=\int x\,dm_t\)</span> is the mean of the population, and no terminal cost, <span class="math inline">\(G=0\)</span>. Agents pay for effort and are penalized for deviating from a multiple <span class="math inline">\(\kappa\)</span> of the average state. Then <span class="math inline">\(H(x,m,p)=\frac12p^2-\frac{c}{2}(x-\kappa\bar{m})^2\)</span> and the HJB equation is</p>
+<p><span class="math display">\[
+-\partial_t u - \nu\,\partial_{xx}u + \tfrac12(\partial_x u)^2
+- \tfrac{c}{2}(x-\kappa\bar{m}_t)^2 = 0,
+\qquad u(T,x)=0.
+\]</span></p>
+<p>Try the quadratic ansatz <span class="math inline">\(u(t,x)=\frac12P_tx^2+q_tx+r_t\)</span>. Matching the coefficients of <span class="math inline">\(x^2\)</span> and <span class="math inline">\(x\)</span> gives</p>
+<p><span class="math display">\[
+P_t' = P_t^2 - c,\quad P_T=0,
+\qquad
+q_t' = P_tq_t + c\kappa\bar{m}_t,\quad q_T=0,
+\]</span></p>
+<p>and the Riccati equation has the explicit solution <span class="math inline">\(P_t=\sqrt{c}\tanh\left(\sqrt{c}\,(T-t)\right)\)</span>. The optimal feedback is linear, <span class="math inline">\(\alpha^*(t,x)=-(P_tx+q_t)\)</span>. Taking expectations in the dynamics of the optimal state, the mean of the population solves</p>
+<p><span class="math display">\[
+\bar{m}_t' = -\left(P_t\bar{m}_t + q_t\right),
+\qquad \bar{m}_0 = \int x\,dm_0.
+\]</span></p>
+<p>This is the consistency condition. The pair <span class="math inline">\((\bar{m},q)\)</span> solves a linear ODE system with <span class="math inline">\(\bar{m}\)</span> specified at time <span class="math inline">\(0\)</span> and <span class="math inline">\(q\)</span> at time <span class="math inline">\(T\)</span>, which is the forward-backward structure of the MFG system in its simplest form. Once it is solved, the equilibrium law <span class="math inline">\(m_t\)</span> is Gaussian whenever <span class="math inline">\(m_0\)</span> is.</p>
+</section>
+<section id="applications-in-finance" class="level2">
+<h2 class="anchored" data-anchor-id="applications-in-finance">Applications in Finance</h2>
+<p>MFG models are used for markets with many interacting participants, for example</p>
+<ul>
+<li>optimal execution and trade crowding, where traders’ price impact depends on the aggregate trading rate of the population,</li>
+<li>systemic risk, where banks borrow and lend to each other and their stability depends on the average of the others,</li>
+<li>herding and the formation of consensus prices in large markets.</li>
+</ul>
+<p>See <a href="../topics/quantitative-finance.html">Quantitative Finance</a>, in particular market impact and optimal execution.</p>
+</section>
+<section id="related-topics" class="level2">
+<h2 class="anchored" data-anchor-id="related-topics">Related Topics</h2>
+<ul>
+<li><a href="../topics/game-theory.html">Game Theory</a></li>
+<li><a href="../topics/nash-equilibrium.html">Nash Equilibrium</a></li>
+<li><a href="../topics/stochastic-control.html">Stochastic Control</a></li>
+<li><a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a></li>
+<li><a href="../topics/fokker-planck-equation.html">Fokker-Planck Equation</a></li>
+<li><a href="../topics/stochastic-differential-equations.html">Stochastic Differential Equations</a></li>
+</ul>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<ol type="1">
+<li>Lasry, J.-M. and Lions, P.-L. (2007). Mean field games. <em>Japanese Journal of Mathematics</em>, 2(1), 229-260.</li>
+<li>Huang, M., Malhamé, R. P. and Caines, P. E. (2006). Large population stochastic dynamic games: closed-loop McKean-Vlasov systems and the Nash certainty equivalence principle. <em>Communications in Information and Systems</em>, 6(3), 221-252.</li>
+<li>Carmona, R. and Delarue, F. (2018). <em>Probabilistic Theory of Mean Field Games with Applications I-II</em>. Springer.</li>
 </ol>
 
 
@@ -444,6 +567,7 @@ Backlinks
 <ul>
 <li><a href="../topics/game-theory.html">Game Theory</a></li>
 <li><a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a></li>
+<li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 <li><a href="../topics/stochastic-games.html">Stochastic Games</a></li>
 </ul>
 </div>

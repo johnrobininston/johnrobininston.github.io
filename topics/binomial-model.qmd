@@ -1,34 +1,449 @@
 ---
-title: Binomial Model
-author: John Robin Inston
-date: 2026-09-25
+id: binomial-model
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-29
+description: "The binomial model: constructing the one-period and multi-period model, pricing by replication and risk-neutral expectation, and put-call parity."
 number-sections: true
+title: "Binomial Model"
 title-block-banner: false
 ---
 
-The binomial model is an [[option|option]] valuation method which uses an
-iterative procedure, allowing for the specification of nodes, or points in
-time, during the time span between the valuation date and the option's
-expiration date.
+## The Binomial Model
 
-:::{.definition data-title="One Period Binomial Model"}
+The **binomial model** is a discrete-time model of a financial market in which
+the price of a risky asset moves, in each period, to one of only two possible
+values. Despite its simplicity it contains the main ideas of
+[[option-pricing]]: replicating a payoff with a self-financing portfolio,
+pricing by no arbitrage, and the risk-neutral measure. It is also easy to
+compute with, handles early exercise (American options) naturally, and
+converges to the [[black-scholes-merton-model]] as the time step goes to zero.
 
-Consider a portfolio vector $h(x,y)$ consisting of $x$ bonds with price process
-$B_t$ and $y$ units of stock with price process $S_t$ over one period
-$t\in\{0,1\}$. The price processes are described by
+This note builds the model, shows how to price a [[derivatives|derivative]] in
+it, proves [[european-options|put-call parity]], works through an example and
+extends the results to a stock paying continuous dividends.
+
+## Constructing the Model
+
+### One Period
+
+Consider one period of length $h$, with times $t\in\{0,h\}$, and two assets.
+
+:::{.definition data-title="One-Period Binomial Model"}
+
+The market consists of
+
+- a **risk-free bond** with price $B_0=1$ and $B_h=e^{rh}$, where $r$ is the
+  continuously compounded risk-free rate (see [[interest]]), and
+- a **stock** with price $S_0=S$ and
+
+  $$
+  S_h =
+  \begin{cases}
+  uS & \text{with probability } p, \\
+  dS & \text{with probability } 1-p,
+  \end{cases}
+  \qquad 0<d<u,
+  $$
+
+  where $u$ and $d$ are the **up** and **down factors**.
+
+A portfolio holding $x$ bonds and $y$ shares has value
+$V_t = xB_t + yS_t$.
+
+:::
+
+The real-world probability $p$ will play no role in pricing. The model has two
+possible outcomes and two assets, which is what makes it possible to replicate
+any payoff.
+
+### No Arbitrage
+
+:::{.theorem data-title="No Arbitrage in the Binomial Model"}
+
+The one-period model is free of [[risk-neutral-pricing|arbitrage]] if and only
+if
+
 $$
-\begin{align}S_{0}=s&,\quad S_1=\begin{cases}us&\text{w.p. }~p_u\\ds&\text{w.p. }~p_d\end{cases}\\B_0=1&,\quad B_1=(1+R)\end{align}
-$$
-The value process for the portfolio is given by
-$$
-V_t^h=xB_t+yS_{t}\quad(t\in\{0,1\})
+d < e^{rh} < u.
 $$
 
 :::
 
-The model is free of [[arbitrage|arbitrage]] if an only if the following
-condition holds:
+:::{.proof}
+If $e^{rh}\le d$, borrow $S$ and buy one share. The cost at time $0$ is zero
+and the value at time $h$ is $S_h - Se^{rh}$, which is at least $0$ in both
+states and strictly positive in the up state, an arbitrage. If $e^{rh}\ge u$,
+short one share and lend the proceeds, which is an arbitrage in the other
+direction.
+
+Conversely, suppose $d<e^{rh}<u$ and define
+
 $$
-d\leq (1+R)\leq u
+q = \frac{e^{rh}-d}{u-d} \in (0,1).
 $$
 
+Then $q\,uS + (1-q)\,dS = e^{rh}S$, so the discounted stock price is a
+martingale when the up probability is $q$. For any portfolio with zero initial
+value, the discounted terminal value $e^{-rh}V_h$ therefore has expectation
+$0$ under $q$. Since $q$ and $1-q$ are both positive, $V_h\ge 0$ in both states
+forces $V_h=0$ in both states, so there is no arbitrage.
+:::
+
+We assume this condition from now on.
+
+### Pricing by Replication
+
+A derivative pays $V_u$ if the stock moves up and $V_d$ if it moves down. For a
+call option with strike $K$ these are $V_u=(uS-K)^+$ and $V_d=(dS-K)^+$.
+
+To replicate, hold $\Delta$ shares and $B$ units of cash (lent if $B>0$,
+borrowed if $B<0$) so that the portfolio pays exactly the derivative in both
+states,
+
+$$
+\begin{aligned}
+\Delta\,uS + Be^{rh} &= V_u, \\
+\Delta\,dS + Be^{rh} &= V_d.
+\end{aligned}
+$$
+
+Subtracting the equations and solving gives
+
+$$
+\Delta = \frac{V_u - V_d}{S(u-d)},
+\qquad
+B = e^{-rh}\,\frac{uV_d - dV_u}{u-d}.
+$$
+
+By the no-arbitrage principle the derivative has the same price as the
+replicating portfolio,
+
+$$
+V_0 = \Delta S + B.
+$$
+
+The number $\Delta$ is the **hedge ratio**: it measures how sensitive the
+derivative is to the stock. A call is replicated by buying shares and
+borrowing ($\Delta>0$, $B<0$), and a put by shorting shares and lending
+($\Delta<0$, $B>0$). These formulas hold for any payoff $(V_u,V_d)$.
+
+### Risk-Neutral Pricing
+
+Substituting $\Delta$ and $B$ into $V_0=\Delta S+B$ and collecting the $V_u$
+and $V_d$ terms gives
+
+$$
+V_0 = e^{-rh}\left[\,q\,V_u + (1-q)\,V_d\,\right],
+\qquad
+q = \frac{e^{rh}-d}{u-d}.
+$$
+
+The no-arbitrage condition $d<e^{rh}<u$ is exactly the condition $0<q<1$. The
+number $q$ is the **risk-neutral probability** of an up move. It is not the
+real-world probability $p$. It is the probability under which the stock earns
+the risk-free rate on average,
+
+$$
+e^{-rh}\,\mathbb{E}_{\mathbb{Q}}[S_h] = S,
+$$
+
+so the price of the derivative is its discounted expected payoff under the
+risk-neutral measure $\mathbb{Q}$, as in [[risk-neutral-pricing]]. Replication
+and risk-neutral expectation give the same price because the second is
+derived from the first.
+
+### Multiple Periods
+
+Divide $[0,T]$ into $n$ periods of length $h=T/n$. In each period the stock
+moves up by $u$ or down by $d$, independently of the past, so after $j$ up
+moves and $k-j$ down moves at time $kh$ the price is $S u^j d^{k-j}$. The tree
+**recombines**: an up move followed by a down move ends at the same price as a
+down move followed by an up move, so there are only $k+1$ nodes at time $kh$.
+
+Prices are found by **backward induction**:
+
+1. At maturity set the node value equal to the payoff $h(S_T)$.
+2. At each earlier node apply the one-period formulas to the two values that
+   follow it,
+
+   $$
+   V = e^{-rh}\left[\,q\,V_{\text{up}} + (1-q)\,V_{\text{down}}\,\right].
+   $$
+
+3. Repeat until time $0$.
+
+Since $u$, $d$ and $r$ do not change, $q$ is the same at every node. The hedge
+$\Delta$ and the cash position $B$ do change from node to node, so the
+replicating portfolio is **rebalanced** at each node. The rebalancing is
+self-financing: the portfolio held coming into a node is worth exactly the
+cost of the new portfolio.
+
+Unrolling the recursion gives a closed form.
+
+:::{.theorem data-title="Multi-Period Binomial Price"}
+
+A European derivative with payoff $h(S_T)$ has time-$0$ price
+
+$$
+V_0 = e^{-rT}\sum_{j=0}^{n}\binom{n}{j}\,q^{\,j}(1-q)^{n-j}\,
+h\!\left(S u^{j}d^{\,n-j}\right).
+$$
+
+:::
+
+This is the discounted expectation of $h(S_T)$ when the number of up moves is
+$\text{Binomial}(n,q)$. At every node the discounted stock price
+$e^{-rkh}S_{kh}$ is a $\mathbb{Q}$-martingale (see [[martingale-theory]]).
+
+### Choosing $u$ and $d$
+
+The factors $u$ and $d$ are model parameters. To match a stock with volatility
+$\sigma$ the **Cox-Ross-Rubinstein (CRR)** choice is
+
+$$
+u = e^{\sigma\sqrt{h}},
+\qquad
+d = \frac{1}{u} = e^{-\sigma\sqrt{h}}.
+$$
+
+The no-arbitrage condition $d<e^{rh}<u$ holds for small enough $h$. As
+$n\to\infty$ the binomial price of a European option converges to its
+Black-Scholes price (see [[european-options]]), because the log-return over
+$[0,T]$ is a sum of $n$ independent steps and tends to a normal distribution
+by the central limit theorem.
+
+## Put-Call Parity
+
+:::{.theorem data-title="Put-Call Parity"}
+
+In the binomial model, a European call and put with the same strike $K$ and
+maturity $T$ on a stock paying no dividends have prices satisfying
+
+$$
+C_0 - P_0 = S_0 - Ke^{-rT}.
+$$
+
+:::
+
+:::{.proof}
+The payoffs satisfy, in every state,
+
+$$
+(S_T-K)^+ - (K-S_T)^+ = S_T - K.
+$$
+
+By the pricing formula above, which is linear in the payoff,
+
+$$
+C_0 - P_0 = e^{-rT}\,\mathbb{E}_{\mathbb{Q}}\left[(S_T-K)^+ - (K-S_T)^+\right]
+= e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[S_T - K].
+$$
+
+Since $e^{-rt}S_t$ is a $\mathbb{Q}$-martingale, $\mathbb{E}_{\mathbb{Q}}[S_T]
+= e^{rT}S_0$, hence
+
+$$
+C_0 - P_0 = e^{-rT}\left(e^{rT}S_0 - K\right) = S_0 - Ke^{-rT}.
+\qquad\blacksquare
+$$
+:::
+
+The parity can also be seen from replication in one period. The call and put
+have values $(uS-K)^+$, $(dS-K)^+$ and $(K-uS)^+$, $(K-dS)^+$, and their
+difference $C-P$ has value $uS-K$ in the up state and $dS-K$ in the down
+state. Applying the replication formulas with $V_u=uS-K$ and $V_d=dS-K$,
+
+$$
+\Delta_C-\Delta_P = \frac{(uS-K)-(dS-K)}{S(u-d)} = 1,
+\qquad
+B_C-B_P = e^{-rh}\,\frac{u(dS-K)-d(uS-K)}{u-d} = -Ke^{-rh},
+$$
+
+so $C-P=S-Ke^{-rh}$. A long call and short put therefore replicate a long
+share financed by borrowing $Ke^{-rh}$, which is a forward contract. Note
+that the proof uses only the no-arbitrage condition, not the values of $u$
+and $d$ or the real-world probability $p$. The parity holds at every node of
+the tree, with $S$ and the remaining time to maturity taken at that node.
+
+## Example
+
+Price a European call and put on a stock with $S_0=100$, strike $K=100$,
+maturity $T=1$ and rate $r=5\%$, using $n=2$ periods ($h=0.5$) with $u=1.2$ and
+$d=0.85$.
+
+**Parameters.** $e^{rh}=e^{0.025}=1.025315$, so $d<e^{rh}<u$ and there is no
+arbitrage. The risk-neutral probability and discount factor are
+
+$$
+q = \frac{1.025315-0.85}{1.2-0.85} = 0.500900,
+\qquad
+e^{-rh} = 0.975310.
+$$
+
+**Stock tree.** $S_u=120$, $S_d=85$, $S_{uu}=144$, $S_{ud}=102$ and
+$S_{dd}=72.25$.
+
+**Terminal payoffs.**
+
+| Node | $S_T$ | Call $(S_T-100)^+$ | Put $(100-S_T)^+$ |
+|:--|--:|--:|--:|
+| $uu$ | 144 | 44 | 0 |
+| $ud$ | 102 | 2 | 0 |
+| $dd$ | 72.25 | 0 | 27.75 |
+
+**Backward induction.** Applying $V=e^{-rh}[qV_{\text{up}}+(1-q)V_{\text{down}}]$:
+
+| Node | $S$ | Call $C$ | Put $P$ |
+|:--|--:|--:|--:|
+| $u$ | 120 | 22.4690 | 0.0000 |
+| $d$ | 85 | 0.9771 | 13.5081 |
+| root | 100 | 11.4525 | 6.5754 |
+
+For example, the call at the root is
+$C_0 = 0.975310\,[\,0.5009(22.4690)+0.4991(0.9771)\,] = 11.4525$.
+
+**Hedge at the root (call).** With $V_u=22.4690$ and $V_d=0.9771$,
+
+$$
+\Delta = \frac{22.4690-0.9771}{100(0.35)} = 0.6141,
+\qquad
+B = 0.975310\cdot\frac{1.2(0.9771)-0.85(22.4690)}{0.35} = -49.9531,
+$$
+
+and indeed $\Delta S+B = 61.41-49.95 = 11.4525$. To replicate the call, buy
+$0.6141$ shares and borrow $\$49.95$.
+
+**Put-call parity check.**
+
+$$
+C_0-P_0 = 11.4525-6.5754 = 4.8771,
+\qquad
+S_0-Ke^{-rT} = 100-100e^{-0.05} = 4.8771. \;\checkmark
+$$
+
+## Continuous Dividends
+
+Suppose the stock pays dividends continuously at a constant yield $\delta$,
+which are reinvested in the stock. Then $\Delta$ shares held at time $0$ grow
+to $\Delta e^{\delta h}$ shares at time $h$. The model is otherwise the same,
+and every result above carries over with $r$ replaced by $r-\delta$ in the
+stock's drift.
+
+**No arbitrage.** The model is free of arbitrage if and only if
+
+$$
+d < e^{(r-\delta)h} < u.
+$$
+
+The proof is the same as before, comparing the stock with the bond after
+reinvesting dividends.
+
+**Replication.** The replicating portfolio must satisfy
+
+$$
+\begin{aligned}
+\Delta\,uS\,e^{\delta h} + Be^{rh} &= V_u, \\
+\Delta\,dS\,e^{\delta h} + Be^{rh} &= V_d,
+\end{aligned}
+$$
+
+which gives
+
+$$
+\Delta = e^{-\delta h}\,\frac{V_u - V_d}{S(u-d)},
+\qquad
+B = e^{-rh}\,\frac{uV_d - dV_u}{u-d},
+\qquad
+V_0 = \Delta S + B.
+$$
+
+**Risk-neutral pricing.** Substituting gives
+
+$$
+V_0 = e^{-rh}\left[\,q\,V_u + (1-q)\,V_d\,\right],
+\qquad
+q = \frac{e^{(r-\delta)h}-d}{u-d}.
+$$
+
+The no-arbitrage condition is again $0<q<1$. Under $q$ the stock has expected
+growth $e^{(r-\delta)h}$ per period, so the stock with its dividends reinvested
+earns the risk-free rate, $e^{-rt}e^{\delta t}S_t$ is a $\mathbb{Q}$-martingale,
+and $\mathbb{E}_{\mathbb{Q}}[S_T] = e^{(r-\delta)T}S_0$.
+
+**Multiple periods.** Backward induction uses the new $q$ and the new
+$\Delta$ at each node, and the closed form is unchanged,
+
+$$
+V_0 = e^{-rT}\sum_{j=0}^{n}\binom{n}{j}\,q^{\,j}(1-q)^{n-j}\,
+h\!\left(S u^{j}d^{\,n-j}\right).
+$$
+
+For the CRR tree $u=e^{\sigma\sqrt{h}}$, $d=1/u$, the condition
+$d<e^{(r-\delta)h}<u$ again holds for small $h$.
+
+:::{.theorem data-title="Put-Call Parity with Dividends"}
+
+For a stock paying a continuous dividend yield $\delta$,
+
+$$
+C_0 - P_0 = S_0e^{-\delta T} - Ke^{-rT}.
+$$
+
+:::
+
+:::{.proof}
+As before, $(S_T-K)^+ - (K-S_T)^+ = S_T-K$, so by linearity
+$C_0-P_0 = e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[S_T-K]$. Using
+$\mathbb{E}_{\mathbb{Q}}[S_T]=e^{(r-\delta)T}S_0$,
+
+$$
+C_0 - P_0 = e^{-rT}\left(e^{(r-\delta)T}S_0 - K\right)
+= S_0e^{-\delta T} - Ke^{-rT}.
+\qquad\blacksquare
+$$
+:::
+
+In one period the replication formulas with $V_u=uS-K$ and $V_d=dS-K$ give
+$\Delta_C-\Delta_P=e^{-\delta h}$ and $B_C-B_P=-Ke^{-rh}$, so a long call and
+short put replicate a forward contract on the stock with reinvested dividends,
+financed by borrowing $Ke^{-rh}$.
+
+An option on an exchange rate fits this framework, with $S$ the exchange rate
+in domestic currency per unit of foreign currency and $\delta$ the foreign
+interest rate, since a unit of foreign currency held in a foreign bank account
+grows at that rate.
+
+## Extensions
+
+- **American options.** The holder may exercise at any node, so backward
+  induction takes the larger of the exercise value and the continuation value,
+
+  $$
+  V = \max\left(\text{payoff},\;
+  e^{-rh}\left[\,q\,V_{\text{up}} + (1-q)\,V_{\text{down}}\,\right]\right),
+  $$
+
+  where $V_{\text{up}}$ and $V_{\text{down}}$ are themselves American values.
+  An American call on a stock with no dividends is never exercised early, but
+  an American put can be, as can a call when $\delta>0$ is large. Parity then
+  holds only as an inequality.
+- **Other payoffs.** The same tree prices any path-independent payoff, and
+  with extra bookkeeping path-dependent options such as
+  [[barrier-options]].
+
+## Related Topics
+
+- [[option-pricing]]
+- [[risk-neutral-pricing]]
+- [[european-options]]
+- [[black-scholes-merton-model]]
+
+## References
+
+1. Cox, J. C., Ross, S. A. and Rubinstein, M. (1979). Option pricing: a
+   simplified approach. *Journal of Financial Economics*, 7(3), 229-263.
+2. McDonald, R. L. *Derivatives Markets*, 3rd ed. Pearson. Chapters 10 and 11.
+3. Shreve, S. E. *Stochastic Calculus for Finance I: The Binomial Asset
+   Pricing Model*. Springer.
