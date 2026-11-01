@@ -273,7 +273,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./projects.html"> 
-<span class="menu-text">Projects</span></a>
+<span class="menu-text">Current Projects</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./teaching.html"> 
@@ -336,12 +336,37 @@ ul.task-list li input[type="checkbox"] {
 </header><main class="content" id="quarto-document-content">
 
 <div id="bio-text">
-<p>I am a PhD candidate in the department of statistics and applied probability at the University of California Santa Barbara. My research interests lie within the intersection of financial mathematics, stochastic games, probability theory and groundwater conservation.</p>
+<p>I am a <strong>graduate student researcher</strong> in the Department of Statistics and Applied Probability at the University of California, Santa Barbara. My research interests lie at the intersection of stochastic control and games, quantitative finance, and environmental resource economics.</p>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const subtitle = document.querySelector(".subtitle");
   if (!subtitle) return;
+  // Split the bio into words so each can animate in on its own
+  const bio = document.getElementById("bio-text");
+  const words = [];
+  if (bio) {
+    const walker = document.createTreeWalker(bio, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (node) {
+      if (!node.textContent.trim()) return;
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(function (part) {
+        if (!part) return;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+        } else {
+          const w = document.createElement("span");
+          w.className = "bio-word";
+          w.textContent = part;
+          frag.appendChild(w);
+          words.push(w);
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
   const text = subtitle.textContent.trim();
   subtitle.textContent = "";
   subtitle.style.visibility = "visible";
@@ -355,22 +380,20 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       // Stop blinking cursor
       subtitle.classList.add("typed-done");
-      // 1. Fade in bio
-      const bio = document.getElementById("bio-text");
-      if (bio) bio.style.opacity = "1";
-      // 2. Draw HR after bio fade completes
+      // 1. Fade in the text panel, then reveal the words one by one
+      if (bio) bio.classList.add("bio-in");
+      words.forEach(function (w, idx) {
+        setTimeout(function () { w.classList.add("bio-word-in"); }, 250 + idx * 28);
+      });
+      // 2. Pop in buttons one by one once the paragraph is mostly revealed
+      const wait = 250 + Math.min(words.length * 28, 1400);
       setTimeout(function () {
-        const hr = document.querySelector("hr.about-sep");
-        if (hr) hr.classList.add("draw-in");
-        // 3. Pop in buttons one by one after HR finishes
-        setTimeout(function () {
-          document.querySelectorAll(".about-link").forEach(function (btn, idx) {
-            setTimeout(function () {
-              btn.classList.add("btn-appear");
-            }, idx * 130);
-          });
-        }, 550);
-      }, 1200);
+        document.querySelectorAll(".about-link").forEach(function (btn, idx) {
+          setTimeout(function () {
+            btn.classList.add("btn-appear");
+          }, idx * 130);
+        });
+      }, wait);
     }
   }
   type();
@@ -387,18 +410,42 @@ document.addEventListener("DOMContentLoaded", function () {
 @keyframes blink {
   50% { opacity: 0; }
 }
+/* Separator bar removed */
+hr.about-sep {
+  display: none;
+}
+/* Readability panel behind the bio text: soft tint, blur and shadow */
 #bio-text {
   opacity: 0;
-  transition: opacity 1.0s ease-in;
+  transition: opacity 0.8s ease-out;
+  padding: 0.9rem 1.2rem;
+  border-radius: 14px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
-hr.about-sep {
-  clip-path: inset(0 100% 0 0);
+#bio-text.bio-in { opacity: 1; }
+body.quarto-light #bio-text {
+  background: rgba(252, 252, 252, 0.65);
+  box-shadow: 0 4px 24px rgba(76, 79, 105, 0.15);
 }
-hr.about-sep.draw-in {
-  animation: draw-hr 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+body.quarto-dark #bio-text {
+  background: rgba(38, 40, 46, 0.6);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
-@keyframes draw-hr {
-  to { clip-path: inset(0 0% 0 0); }
+/* Words rise out of a blur, one after another */
+.bio-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(0.6em);
+  transition: opacity 0.6s ease-out,
+              filter 0.6s ease-out,
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bio-word.bio-word-in {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
 }
 .about-link {
   opacity: 0;
@@ -409,6 +456,9 @@ hr.about-sep.draw-in {
 }
 @keyframes btn-appear {
   to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bio-word { transition: none; }
 }
 </style>
 
@@ -435,6 +485,85 @@ hr.about-sep.draw-in {
 </div>
 </div>
  <!-- /main -->
+<!-- Animated Vanta.js BIRDS background (light / dark). Sits behind all page
+     content; re-colours when the Quarto theme toggle changes body class. -->
+<div id="vanta-bg" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
+<script>
+(function () {
+  var COLORS = {
+    light: { backgroundColor: 0xfcfcfc, color1: 0x8c8fa1, color2: 0x7287fd },
+    dark:  { backgroundColor: 0x26282e, color1: 0x7287fd, color2: 0x8caaee }
+  };
+  // Birds are full-strength on the homepage and fade out toward the centre
+  // everywhere else (see the CSS mask below).
+  var p = location.pathname.replace(/index\.html$/, "");
+  var home = p === "/" || p === "";
+  document.documentElement.classList.toggle("vanta-home", home);
+  var effect = null;
+  var mobile = window.matchMedia("(max-width: 768px)").matches;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mode() {
+    return document.body.classList.contains("quarto-dark") ? "dark" : "light";
+  }
+  function start() {
+    if (!window.VANTA || !window.THREE) return;
+    if (effect) effect.destroy();
+    var c = COLORS[mode()];
+    effect = VANTA.BIRDS({
+      el: "#vanta-bg",
+      mouseControls: !reduced,
+      touchControls: false,
+      gyroControls: false,
+      minHeight: 200,
+      minWidth: 200,
+      scale: 1,
+      scaleMobile: 1,
+      backgroundColor: c.backgroundColor,
+      backgroundAlpha: 0,   // transparent so the edge mask blends cleanly
+      color1: c.color1,
+      color2: c.color2,
+      colorMode: "lerp",
+      birdSize: 1,
+      wingSpan: 22,
+      speedLimit: reduced ? 0 : 4,
+      separation: 40,
+      alignment: 40,
+      cohesion: 40,
+      quantity: mobile ? 2 : 3
+    });
+    if (reduced && effect.renderer) { effect.options.mouseControls = false; }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    start();
+    new MutationObserver(start).observe(document.body, {
+      attributes: true, attributeFilter: ["class"]
+    });
+  });
+})();
+</script>
+<style>
+#vanta-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* Inner pages: animation only at the left/right edges, fading to the solid
+   page colour in the middle. Widen/narrow by changing the percentages. */
+html:not(.vanta-home) #vanta-bg {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 24%,
+                                      transparent 76%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, transparent 24%,
+                              transparent 76%, #000 100%);
+}
+/* Let the canvas show through; the colour comes from Vanta instead. */
+body.quarto-light, body.quarto-dark { background-color: transparent !important; }
+html { background-color: #fcfcfc; }
+html:has(body.quarto-dark) { background-color: #26282e; }
+</style>
 <!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
      quarto-graph filter.lua) out of the page body and into the right margin
      sidebar, placed directly under the "On this page" TOC. Progressive

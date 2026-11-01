@@ -1,0 +1,2342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Robin Inston">
+<meta name="dcterms.date" content="2023-05-30">
+
+<title>Forecasting Atmospheric CO2 with SARIMA Models – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Current Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Forecasting Atmospheric CO2 with SARIMA Models</h1>
+            <p class="subtitle lead">Five year ahead forecasts of carbon dioxide levels above Mauna Loa, Hawaii.</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Time Series</div>
+                <div class="quarto-category">SARIMA</div>
+                <div class="quarto-category">Forecasting</div>
+                <div class="quarto-category">Atmospheric Science</div>
+                <div class="quarto-category">Statistics</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">Past</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>John Robin Inston </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 30, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#information" id="toc-information" class="nav-link active" data-scroll-target="#information"><span class="header-section-number">1</span> Information</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">3</span> Data</a>
+  <ul class="collapse">
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description"><span class="header-section-number">3.1</span> Description</a></li>
+  <li><a href="#exploratory-analysis" id="toc-exploratory-analysis" class="nav-link" data-scroll-target="#exploratory-analysis"><span class="header-section-number">3.2</span> Exploratory Analysis</a></li>
+  <li><a href="#differencing" id="toc-differencing" class="nav-link" data-scroll-target="#differencing"><span class="header-section-number">3.3</span> Differencing</a></li>
+  </ul></li>
+  <li><a href="#model-fitting" id="toc-model-fitting" class="nav-link" data-scroll-target="#model-fitting"><span class="header-section-number">4</span> Model Fitting</a>
+  <ul class="collapse">
+  <li><a href="#parameter-selection" id="toc-parameter-selection" class="nav-link" data-scroll-target="#parameter-selection"><span class="header-section-number">4.1</span> Parameter Selection</a></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">4.2</span> Model Selection</a></li>
+  </ul></li>
+  <li><a href="#diagnostic-checking" id="toc-diagnostic-checking" class="nav-link" data-scroll-target="#diagnostic-checking"><span class="header-section-number">5</span> Diagnostic Checking</a>
+  <ul class="collapse">
+  <li><a href="#model-a" id="toc-model-a" class="nav-link" data-scroll-target="#model-a"><span class="header-section-number">5.1</span> Model (A)</a></li>
+  <li><a href="#model-b" id="toc-model-b" class="nav-link" data-scroll-target="#model-b"><span class="header-section-number">5.2</span> Model (B)</a></li>
+  </ul></li>
+  <li><a href="#forecasting" id="toc-forecasting" class="nav-link" data-scroll-target="#forecasting"><span class="header-section-number">6</span> Forecasting</a></li>
+  <li><a href="#spectral-analysis" id="toc-spectral-analysis" class="nav-link" data-scroll-target="#spectral-analysis"><span class="header-section-number">7</span> Spectral Analysis</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">8</span> Conclusion</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">9</span> Appendix</a>
+  <ul class="collapse">
+  <li><a href="#summary-of-fitted-models" id="toc-summary-of-fitted-models" class="nav-link" data-scroll-target="#summary-of-fitted-models"><span class="header-section-number">9.1</span> Summary of Fitted Models</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">10</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+
+<p><a href="report.pdf" class="btn btn-outline-primary btn-sm"><i class="bi bi-file-earmark-pdf"></i> PDF report</a> <a href="https://github.com/johnrobininston/atmospheric-co2" class="btn btn-outline-primary btn-sm"><i class="bi bi-github"></i> GitHub</a></p>
+<section id="information" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="information"><span class="header-section-number">1</span> Information</h2>
+<p>This page is a rework of a project completed for PSTAT 274 (Time Series Analysis) at the University of California Santa Barbara, taught by Prof.&nbsp;Raya Feldman (Spring 2023). The code behind every figure and table is available in the “Show code” blocks.</p>
+<p><strong>Abstract.</strong> We select and fit a Seasonal Autoregressive Integrated Moving Average (SARIMA) model to produce accurate five year ahead forecasts of atmospheric CO<span class="math inline">\(_2\)</span> levels above Mauna Loa, Hawaii. We investigate the properties of the series, the suitability of SARIMA models, and whether the forecasts capture future observations. The analysis uses exploratory analysis, model selection with the adjusted Akaike Information Criterion (AICc), diagnostic checking, residual analysis and spectral analysis. Our first choice model, a SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span>, produced approximately Gaussian white noise residuals and accurate forecasts whose confidence intervals captured the true observed values.</p>
+</section>
+<section id="introduction" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2</span> Introduction</h2>
+<p>Many geophysical time series contain seasonal variation. A key example is atmospheric carbon dioxide (CO<span class="math inline">\(_2\)</span>) concentration, which has an annual seasonal cycle - largely due to plant photosynthesis and respiration - superimposed on an increasing trend caused primarily by human CO<span class="math inline">\(_2\)</span> production.</p>
+<p>We examine monthly measurements of atmospheric CO<span class="math inline">\(_2\)</span> above Mauna Loa, Hawaii over the 32 years from 1959 to 1990 <span class="citation" data-cites="brockwell1996 shumway2011">(<a href="#ref-brockwell1996" role="doc-biblioref">Brockwell and Davis 1996</a>; <a href="#ref-shumway2011" role="doc-biblioref">Shumway and Stoffer 2011</a>)</span>. The aim is a 5 year ahead forecast from a suitable SARIMA model. The workflow is:</p>
+<ul>
+<li><strong>Exploratory analysis:</strong> decomposition, stationarity transformations, autocorrelations and tests for normality and stationarity.</li>
+<li><strong>Model fitting and selection:</strong> stationarity and invertibility checks, coefficient significance and AICc.</li>
+<li><strong>Residual analysis:</strong> portmanteau tests, white noise tests and spectral analysis.</li>
+</ul>
+<p>We find that the SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span> model is the best candidate, and that its residuals, forecasts and spectral decomposition support its use. All analysis was performed in R.</p>
+</section>
+<section id="data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="data"><span class="header-section-number">3</span> Data</h2>
+<section id="description" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="description"><span class="header-section-number">3.1</span> Description</h3>
+<p>The data are monthly measurements of atmospheric CO<span class="math inline">\(_2\)</span> above Mauna Loa from January 1959 to December 1990, in parts per million (ppm). They were collected by the Scripps Institution of Oceanography, La Jolla, California and are available through the <code>tsdl</code> package <span class="citation" data-cites="hyndman2019">(<a href="#ref-hyndman2019" role="doc-biblioref">Hyndman and Yang 2019</a>)</span>. Missing values in the raw data were filled by linear interpolation. The raw series <span class="math inline">\(x_t,~t=1,\dots,384\)</span> has 384 observations.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsdl)       <span class="co"># source for data</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(zoo)        <span class="co"># rollmean</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># plots and figures</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)      <span class="co"># reshaping data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)  <span class="co"># multiple ggplots</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)   <span class="co"># seasonal plot, Arima</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tseries)    <span class="co"># adf and kpss tests</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)      <span class="co"># tables</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(astsa)      <span class="co"># acf2</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LSTS)       <span class="co"># Ljung-Box plot</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TSA)        <span class="co"># periodogram</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)     <span class="co"># qqplot</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)     <span class="co"># coeftest</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplottimeseries) <span class="co"># time series decomposition</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github("brisneve/ggplottimeseries")</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">8467</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the roots of an AR / MA polynomial against the unit circle</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>plot.roots <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">ar.roots =</span> <span class="cn">NULL</span>, <span class="at">ma.roots =</span> <span class="cn">NULL</span>, <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                       <span class="at">angles =</span> <span class="cn">FALSE</span>, <span class="at">special =</span> <span class="cn">NULL</span>, <span class="at">sqecial =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                       <span class="at">my.pch =</span> <span class="dv">1</span>, <span class="at">first.col =</span> <span class="st">"blue"</span>, <span class="at">second.col =</span> <span class="st">"red"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                       <span class="at">main =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  xylims <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>size, size)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  omegas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, pi <span class="sc">/</span> <span class="dv">500</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  temp <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">complex</span>(<span class="at">real =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(omegas)), <span class="at">imag =</span> omegas))</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">Re</span>(temp), <span class="fu">Im</span>(temp), <span class="at">typ =</span> <span class="st">"l"</span>, <span class="at">xlab =</span> <span class="st">"x"</span>, <span class="at">ylab =</span> <span class="st">"y"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlim =</span> xylims, <span class="at">ylim =</span> xylims, <span class="at">main =</span> main)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>)</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(ar.roots)) {</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(<span class="fu">Re</span>(<span class="dv">1</span> <span class="sc">/</span> ar.roots), <span class="fu">Im</span>(<span class="dv">1</span> <span class="sc">/</span> ar.roots), <span class="at">col =</span> first.col, <span class="at">pch =</span> my.pch)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(<span class="fu">Re</span>(ar.roots), <span class="fu">Im</span>(ar.roots), <span class="at">col =</span> second.col, <span class="at">pch =</span> my.pch)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(ma.roots)) {</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(<span class="fu">Re</span>(<span class="dv">1</span> <span class="sc">/</span> ma.roots), <span class="fu">Im</span>(<span class="dv">1</span> <span class="sc">/</span> ma.roots), <span class="at">pch =</span> <span class="st">"*"</span>, <span class="at">cex =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>           <span class="at">col =</span> first.col)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(<span class="fu">Re</span>(ma.roots), <span class="fu">Im</span>(ma.roots), <span class="at">pch =</span> <span class="st">"*"</span>, <span class="at">cex =</span> <span class="fl">1.5</span>, <span class="at">col =</span> second.col)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (angles) {</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(ar.roots)) {</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="fu">Im</span>(ar.roots[<span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">Re</span>(ar.roots[<span class="dv">1</span>]), <span class="at">lty =</span> <span class="st">"dotted"</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="fu">Im</span>(ar.roots[<span class="dv">2</span>]) <span class="sc">/</span> <span class="fu">Re</span>(ar.roots[<span class="dv">2</span>]), <span class="at">lty =</span> <span class="st">"dotted"</span>)</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(ma.roots)) {</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sapply</span>(<span class="fu">seq_along</span>(ma.roots), <span class="cf">function</span>(j)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="fu">abline</span>(<span class="at">a =</span> <span class="dv">0</span>, <span class="at">b =</span> <span class="fu">Im</span>(ma.roots[j]) <span class="sc">/</span> <span class="fu">Re</span>(ma.roots[j]), <span class="at">lty =</span> <span class="st">"dotted"</span>))</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(special)) <span class="fu">lines</span>(<span class="fu">Re</span>(special), <span class="fu">Im</span>(special), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(sqecial)) <span class="fu">lines</span>(<span class="fu">Re</span>(sqecial), <span class="fu">Im</span>(sqecial), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the monthly CO2 series from the Time Series Data Library</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>tsdl_met <span class="ot">&lt;-</span> <span class="fu">subset</span>(tsdl, <span class="dv">12</span>, <span class="st">"Meteorology"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>rawdata <span class="ot">&lt;-</span> tsdl_met[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="exploratory-analysis" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="exploratory-analysis"><span class="header-section-number">3.2</span> Exploratory Analysis</h3>
+<p>We split the data into disjoint training and testing sets. The testing set contains the last 5 years (60 months) of observed CO<span class="math inline">\(_2\)</span> and is used to assess the forecasts of the final model. The training set contains 324 observations.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">head</span>(rawdata, <span class="at">n =</span> <span class="fu">length</span>(rawdata) <span class="sc">-</span> (<span class="dv">12</span> <span class="sc">*</span> <span class="dv">5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p><a href="#fig-raw" class="quarto-xref">Figure&nbsp;1</a> shows the training data with a 12 month moving average. There is a clear increasing polynomial trend and a seasonal component with a 12 month period, so the raw data are non-stationary. The variance appears constant and there are no sharp changes in behaviour, which suggests a SARIMA model should suit the data.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 12 month moving average</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>maline <span class="ot">&lt;-</span> <span class="fu">rollmean</span>(data, <span class="at">k =</span> <span class="dv">12</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">align =</span> <span class="st">"right"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plotdata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Time"</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"1959/1/1"</span>), <span class="fu">as.Date</span>(<span class="st">"1985/12/1"</span>), <span class="st">"months"</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"data"</span> <span class="ot">=</span> data,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"trend"</span> <span class="ot">=</span> maline</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>plotdata <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">gather</span>(<span class="st">"id"</span>, <span class="st">"value"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(Time, value, <span class="at">col =</span> id, <span class="at">linetype =</span> id)) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>() <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time"</span>, <span class="at">y =</span> <span class="st">"CO2 (ppm)"</span>, <span class="at">color =</span> <span class="st">"Legend"</span>, <span class="at">linetype =</span> <span class="st">"Legend"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-raw" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-raw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-raw-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-raw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Atmospheric carbon dioxide above Mauna Loa, Hawaii.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The decomposition in <a href="#fig-decomp" class="quarto-xref">Figure&nbsp;2</a> separates the seasonal and trend components. There is no evidence of heteroscedastic behaviour in the residuals, so we do not transform the data.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ts_decomp <span class="ot">&lt;-</span> <span class="fu">ggdecompose</span>(<span class="fu">dts2</span>(data, <span class="at">type =</span> <span class="st">"additive"</span>)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Date"</span>) <span class="sc">+</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Atmospheric Concentration of CO2"</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Time Series Decomposition Plots"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>seasplot <span class="ot">&lt;-</span> <span class="fu">ggseasonplot</span>(data, <span class="at">year.labels =</span> <span class="cn">TRUE</span>, <span class="at">year.labels.left =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"CO2 (ppm)"</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Seasonal plot"</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>trendplot <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(maline, <span class="at">ts.color =</span> <span class="st">"red"</span>, <span class="at">main =</span> <span class="st">"Trend plot"</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(ts_decomp, seasplot, trendplot,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">layout_matrix =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-decomp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-decomp-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-decomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Time series decomposition, seasonal plot and trend plot.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The autocorrelation function (ACF) in <a href="#fig-acf-raw" class="quarto-xref">Figure&nbsp;3</a> shows highly significant autocorrelations for all lags up to 40, which decay slowly and show seasonality.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf2</span>(data, <span class="dv">40</span>, <span class="at">main =</span> <span class="st">"ACF and PACF of raw data."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-acf-raw" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acf-raw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-acf-raw-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acf-raw-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: ACF and PACF of the raw data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="differencing" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="differencing"><span class="header-section-number">3.3</span> Differencing</h3>
+<p>We difference first with lag 12 to remove the seasonal component:</p>
+<p><span class="math display">\[
+y_t = x_t - x_{t-12} = (1-B^{12})x_t = \nabla_{12}x_t,
+\]</span></p>
+<p>where <span class="math inline">\(B\)</span> is the back-shift operator, <span class="math inline">\(B^kx_t = x_{t-k}\)</span>. <a href="#fig-diff12" class="quarto-xref">Figure&nbsp;4</a> shows that the seasonal pattern is gone but a linear trend remains, and the ACF decays slowly as is typical of data with a polynomial trend.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data_d <span class="ot">&lt;-</span> <span class="fu">diff</span>(data, <span class="dv">12</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plot_data_d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Time"</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"1960/1/1"</span>), <span class="fu">as.Date</span>(<span class="st">"1985/12/1"</span>), <span class="st">"months"</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yt"</span> <span class="ot">=</span> data_d</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>tsplot_data_d <span class="ot">&lt;-</span> plot_data_d <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">gather</span>(<span class="st">"id"</span>, <span class="st">"value"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(Time, value)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time"</span>, <span class="at">y =</span> <span class="st">"Seasonally Differenced Monthly CO2"</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>acfplot_data_d <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(<span class="fu">acf</span>(data_d, <span class="at">lag =</span> <span class="dv">40</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(tsplot_data_d, acfplot_data_d, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-diff12" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diff12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-diff12-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diff12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Time series and ACF of the seasonally differenced data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We difference again with lag 1 to remove the linear trend:</p>
+<p><span class="math display">\[
+u_t = y_t - y_{t-1} = (1-B)y_t = (1-B)(1-B^{12})x_t = \nabla_1\nabla_{12}x_t.
+\]</span></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_dd <span class="ot">&lt;-</span> <span class="fu">diff</span>(data_d, <span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plot_data_dd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Time"</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">"1960/2/1"</span>), <span class="fu">as.Date</span>(<span class="st">"1985/12/1"</span>), <span class="st">"months"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"yt"</span> <span class="ot">=</span> data_dd</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plot_data_dd <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">gather</span>(<span class="st">"id"</span>, <span class="st">"value"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(Time, value)) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Time"</span>, <span class="at">y =</span> <span class="st">"Transformed Data (ut)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-diff1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diff1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-diff1-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diff1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Time series plot of the differenced and seasonally differenced data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The twice differenced data appear stationary, with no seasonality or trend and a stable variance. Each transformation lowered the variance of the data (<a href="#tbl-var" class="quarto-xref">Table&nbsp;1</a>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>var_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Transformation"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"None"</span>, <span class="st">"Differenced lag 12"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"Differenced lag 12 and lag 1"</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Variance"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">var</span>(data), <span class="fu">var</span>(data_d), <span class="fu">var</span>(data_dd))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(var_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-var" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Variance of the data after each transformation.
+</figcaption>
+<div aria-describedby="tbl-var-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Transformation</th>
+<th style="text-align: right;">Variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">None</td>
+<td style="text-align: right;">86.0367259</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Differenced lag 12</td>
+<td style="text-align: right;">0.3449074</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Differenced lag 12 and lag 1</td>
+<td style="text-align: right;">0.1577327</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The ACF, histogram and Q-Q plot in <a href="#fig-dd-diag" class="quarto-xref">Figure&nbsp;6</a> show no remaining polynomial or seasonal trend, and an empirical distribution that is symmetric and approximately Gaussian.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>acf_data_dd <span class="ot">&lt;-</span> <span class="fu">autoplot</span>(<span class="fu">acf</span>(data_dd, <span class="at">lag =</span> <span class="dv">40</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>hist_data_dd <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="st">"data"</span> <span class="ot">=</span> data_dd), <span class="fu">aes</span>(<span class="at">x =</span> data)) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Histogram"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>qqplot_data_dd <span class="ot">&lt;-</span> <span class="fu">ggqqplot</span>(data_dd, <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Q-Q plot"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(acf_data_dd, hist_data_dd, qqplot_data_dd, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-dd-diag" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dd-diag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-dd-diag-1.png" class="img-fluid figure-img" width="1248">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dd-diag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: ACF, histogram and Q-Q plot of the twice differenced data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, we run two stationarity tests. The Augmented Dickey-Fuller (ADF) test has a unit root (and hence a trend) as its null, so a large p-value indicates a trend. The Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test has trend stationarity as its null, so a small p-value indicates a unit root. Both conclude that the twice differenced data are trend stationary (<a href="#tbl-stat" class="quarto-xref">Table&nbsp;2</a>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>adf_test <span class="ot">&lt;-</span> <span class="fu">adf.test</span>(data_dd)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>kpss_test <span class="ot">&lt;-</span> <span class="fu">kpss.test</span>(data_dd, <span class="at">null =</span> <span class="st">"Trend"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>table_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Test =</span> <span class="fu">c</span>(<span class="st">"ADF Test"</span>, <span class="st">"KPSS Test"</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Null =</span> <span class="fu">c</span>(<span class="st">"Process has a unit root and therefore a trend."</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Process is trend stationary"</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">pValue =</span> <span class="fu">c</span>(<span class="fu">signif</span>(adf_test<span class="sc">$</span>p.value, <span class="dv">2</span>), <span class="fu">signif</span>(kpss_test<span class="sc">$</span>p.value, <span class="dv">2</span>)),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">Conclusion =</span> <span class="fu">c</span>(<span class="st">"Data is trend stationary"</span>, <span class="st">"Data is trend stationary"</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(table_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-stat" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-stat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Trend stationarity test results.
+</figcaption>
+<div aria-describedby="tbl-stat-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 52%">
+<col style="width: 7%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Test</th>
+<th style="text-align: left;">Null</th>
+<th style="text-align: right;">pValue</th>
+<th style="text-align: left;">Conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ADF Test</td>
+<td style="text-align: left;">Process has a unit root and therefore a trend.</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: left;">Data is trend stationary</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">KPSS Test</td>
+<td style="text-align: left;">Process is trend stationary</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: left;">Data is trend stationary</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="model-fitting" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="model-fitting"><span class="header-section-number">4</span> Model Fitting</h2>
+<section id="parameter-selection" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="parameter-selection"><span class="header-section-number">4.1</span> Parameter Selection</h3>
+<p>A SARIMA model has seven parameters: <span class="math inline">\(p, d, q, P, D, Q\)</span> and <span class="math inline">\(s\)</span>. Since we differenced once at lag 1 and once at lag 12, we have <span class="math inline">\(d=1\)</span>, <span class="math inline">\(D=1\)</span> and <span class="math inline">\(s=12\)</span>. To bound the AR parameters <span class="math inline">\(p, P\)</span> and MA parameters <span class="math inline">\(q, Q\)</span> we inspect the ACF and PACF of the differenced data (<a href="#fig-acf-dd" class="quarto-xref">Figure&nbsp;7</a>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">acf2</span>(data_dd, <span class="dv">60</span>, <span class="at">main =</span> <span class="st">"ACF and PACF of transformed data"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-acf-dd" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-acf-dd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-acf-dd-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-acf-dd-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: ACF and PACF of the transformed data.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><strong>Non-seasonal AR (<span class="math inline">\(p\)</span>):</strong> the PACF has significant spikes at lags 1 and 3, so we may need up to <span class="math inline">\(p=3\)</span>. Spikes at lags 9 and 11 are likely interactions with the seasonal terms.</li>
+<li><strong>Non-seasonal MA (<span class="math inline">\(q\)</span>):</strong> the ACF has significant spikes at lags 1 and 3, so we may need up to <span class="math inline">\(q=3\)</span>.</li>
+<li><strong>Seasonal AR (<span class="math inline">\(P\)</span>):</strong> the PACF is significant at lags 12, 24 and 36, so we may need up to <span class="math inline">\(P=3\)</span>.</li>
+<li><strong>Seasonal MA (<span class="math inline">\(Q\)</span>):</strong> the ACF is significant at lag 12 only, so we likely need <span class="math inline">\(Q=1\)</span>.</li>
+</ul>
+</section>
+<section id="model-selection" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">4.2</span> Model Selection</h3>
+<p>We fit, evaluate and compare models using the AICc. Since the AICc penalises large numbers of parameters, we start from the simplest models and add parameters with the aim of minimising the AICc. A full summary of every model considered is given in the <a href="#summary-of-fitted-models">appendix</a>.</p>
+<section id="pure-moving-average-models" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="pure-moving-average-models"><span class="header-section-number">4.2.1</span> Pure Moving Average Models</h4>
+<p>We first fix <span class="math inline">\(p=P=0\)</span> and find the best pure moving average model, with up to <span class="math inline">\(q=3\)</span> and <span class="math inline">\(Q=1\)</span>. The two best models are below.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SARIMA(0,1,3)(0,1,1)12</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># SARIMA(0,1,3)(0,1,1)12 with MA2 = 0</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"ML"</span>, <span class="at">fix =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="tbl-ma" class="quarto-layout-panel anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Best pure moving average models. AICc: 119.57 (left), 117.51 (right).
+</figcaption>
+<div aria-describedby="tbl-ma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ma" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-ma-1" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ma-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span>
+</figcaption>
+<div aria-describedby="tbl-ma-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Est</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: right;">z</th>
+<th style="text-align: right;">p</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ma1</td>
+<td style="text-align: right;">-0.3562</td>
+<td style="text-align: right;">0.0569</td>
+<td style="text-align: right;">-6.2632</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ma2</td>
+<td style="text-align: right;">0.0036</td>
+<td style="text-align: right;">0.0614</td>
+<td style="text-align: right;">0.0581</td>
+<td style="text-align: right;">0.9537</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ma3</td>
+<td style="text-align: right;">-0.1570</td>
+<td style="text-align: right;">0.0550</td>
+<td style="text-align: right;">-2.8542</td>
+<td style="text-align: right;">0.0043</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sma1</td>
+<td style="text-align: right;">-0.8385</td>
+<td style="text-align: right;">0.0360</td>
+<td style="text-align: right;">-23.2909</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ma" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-ma-2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ma-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span> with MA2 = 0
+</figcaption>
+<div aria-describedby="tbl-ma-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">z value</th>
+<th style="text-align: right;">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ma1</td>
+<td style="text-align: right;">-0.3550</td>
+<td style="text-align: right;">0.0531</td>
+<td style="text-align: right;">-6.6804</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ma3</td>
+<td style="text-align: right;">-0.1560</td>
+<td style="text-align: right;">0.0521</td>
+<td style="text-align: right;">-2.9923</td>
+<td style="text-align: right;">0.0028</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sma1</td>
+<td style="text-align: right;">-0.8384</td>
+<td style="text-align: right;">0.0360</td>
+<td style="text-align: right;">-23.2972</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>The MA(2) coefficient of the first model is insignificant, so we fix it to zero and refit. This lowers the AICc from 119.57 to 117.51 and leaves all coefficients significant, making it our top pure MA model.</p>
+</section>
+<section id="autoregressive-terms" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="autoregressive-terms"><span class="header-section-number">4.2.2</span> Autoregressive Terms</h4>
+<p>We next test whether AR terms reduce the AICc by more than their penalty. The two best candidates are below.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SARIMA(1,1,1)(0,1,1)12</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>modelB <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"ML"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># SARIMA(3,1,1)(0,1,1)12 with AR1 = AR2 = 0</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>armodel2 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">method =</span> <span class="st">"ML"</span>, <span class="at">fixed =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="tbl-ar" class="quarto-layout-panel anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Best models with autoregressive terms. AICc: 123.37 (left), 119.96 (right).
+</figcaption>
+<div aria-describedby="tbl-ar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ar" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-ar-1" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ar-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) SARIMA(1,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span>
+</figcaption>
+<div aria-describedby="tbl-ar-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">z value</th>
+<th style="text-align: right;">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ar1</td>
+<td style="text-align: right;">0.3446</td>
+<td style="text-align: right;">0.1514</td>
+<td style="text-align: right;">2.2770</td>
+<td style="text-align: right;">0.0228</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ma1</td>
+<td style="text-align: right;">-0.6753</td>
+<td style="text-align: right;">0.1232</td>
+<td style="text-align: right;">-5.4823</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sma1</td>
+<td style="text-align: right;">-0.8391</td>
+<td style="text-align: right;">0.0356</td>
+<td style="text-align: right;">-23.5934</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="tbl-ar" style="flex-basis: 50.0%;justify-content: center;">
+<div id="tbl-ar-2" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="tbl-ar-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) SARIMA(3,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span> with AR1 = AR2 = 0
+</figcaption>
+<div aria-describedby="tbl-ar-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">z value</th>
+<th style="text-align: right;">Pr(&gt;|z|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ar3</td>
+<td style="text-align: right;">-0.1385</td>
+<td style="text-align: right;">0.0566</td>
+<td style="text-align: right;">-2.4480</td>
+<td style="text-align: right;">0.0144</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ma1</td>
+<td style="text-align: right;">-0.3468</td>
+<td style="text-align: right;">0.0558</td>
+<td style="text-align: right;">-6.2132</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sma1</td>
+<td style="text-align: right;">-1.1964</td>
+<td style="text-align: right;">0.0522</td>
+<td style="text-align: right;">-22.9296</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</figure>
+</div>
+<p>Adding seasonal AR terms typically increased the AICc and rarely gave significant coefficients. The SARIMA(1,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span> model performs reasonably well, with all coefficients significant and an AICc of 123.37. The SARIMA(3,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span> model with AR1 = AR2 = 0 has the second best AICc (119.96) but is not viable, since the absolute value of its seasonal MA coefficient is greater than 1. We therefore take the SARIMA(1,1,1)(0,1,1)<span class="math inline">\(_{12}\)</span> model as our second candidate.</p>
+<p>The two candidates are:</p>
+<p><strong>Model (A)</strong></p>
+<p><span class="math display">\[
+\nabla_1\nabla_{12}X_t=(1-0.354998_{(0.053140)}B-0.155974_{(0.052126)}B^3)
+(1-0.838438_{(0.035989)}B^{12})Z_t,\quad \hat\sigma_Z^2=0.08431
+\]</span></p>
+<p><strong>Model (B)</strong></p>
+<p><span class="math display">\[
+\nabla_1\nabla_{12}(1-0.344624_{(0.151353)}B)X_t=
+(1-0.675336_{(0.123186)}B)(1-0.839105_{(0.035565)}B^{12})Z_t,\quad
+\hat\sigma_Z^2=0.08583
+\]</span></p>
+<p>where <span class="math inline">\(Z_t\)</span> is white noise (WN) with <span class="math inline">\(\mathbb{E}Z_t=0\)</span> and <span class="math inline">\(\operatorname{Var}(Z_t)=\sigma_Z^2\)</span>.</p>
+<p>Model (A) is pure moving average, so it is always stationary. In <a href="#fig-roots" class="quarto-xref">Figure&nbsp;8</a> all MA roots lie outside the unit circle and <span class="math inline">\(|\Theta_1|&lt;1\)</span>, so the model is invertible. Model (B) is invertible since <span class="math inline">\(|\theta_1|&lt;1\)</span> and <span class="math inline">\(|\Theta_1|&lt;1\)</span>, and stationary since <span class="math inline">\(|\phi_1|&lt;1\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># final models</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>finalmodel1 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">method =</span> <span class="st">"ML"</span>, <span class="at">fix =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">0</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>finalmodel2 <span class="ot">&lt;-</span> <span class="fu">Arima</span>(data, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">seasonal =</span> <span class="fu">list</span>(<span class="at">order =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">period =</span> <span class="dv">12</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">method =</span> <span class="st">"ML"</span>, <span class="at">fixed =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.roots</span>(<span class="cn">NULL</span>, <span class="fu">polyroot</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.354998</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="fl">0.155974</span>)),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">main =</span> <span class="st">"Roots of the non-seasonal MA part"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-roots" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-roots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-roots-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Model (A): roots of the non-seasonal MA polynomial.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="diagnostic-checking" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="diagnostic-checking"><span class="header-section-number">5</span> Diagnostic Checking</h2>
+<p>For each candidate we plot the residuals alongside their ACF, PACF, histogram, Q-Q plot and Ljung-Box statistics, then run a set of residual tests. The helper below builds both for a fitted model.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># residual diagnostic plots for a fitted model</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>resid_plots <span class="ot">&lt;-</span> <span class="cf">function</span>(fit) {</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> fit<span class="sc">$</span>residuals</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">grid.arrange</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autoplot</span>(r, <span class="at">ylab =</span> <span class="st">"Residuals"</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autoplot</span>(<span class="fu">acf</span>(r, <span class="at">plot =</span> <span class="cn">FALSE</span>)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"ACF plot"</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="st">"data"</span> <span class="ot">=</span> r), <span class="fu">aes</span>(<span class="at">x =</span> data)) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_histogram</span>(<span class="at">color =</span> <span class="st">"darkblue"</span>, <span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggtitle</span>(<span class="st">"Histogram"</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">autoplot</span>(<span class="fu">pacf</span>(r, <span class="at">plot =</span> <span class="cn">FALSE</span>)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"PACF plot"</span>),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggqqplot</span>(r, <span class="at">color =</span> <span class="st">"darkblue"</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Q-Q plot"</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Box.Ljung.Test</span>(r, <span class="at">lag =</span> <span class="dv">30</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">layout_matrix =</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co"># residual tests for a fitted model</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>resid_tests <span class="ot">&lt;-</span> <span class="cf">function</span>(fit) {</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> fit<span class="sc">$</span>residuals</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  sw <span class="ot">&lt;-</span> <span class="fu">shapiro.test</span>(r)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  bp <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(r, <span class="at">lag =</span> <span class="dv">18</span>, <span class="at">type =</span> <span class="st">"Box-Pierce"</span>, <span class="at">fitdf =</span> <span class="dv">3</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  lb <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(r, <span class="at">lag =</span> <span class="dv">18</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>, <span class="at">fitdf =</span> <span class="dv">3</span>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  lbs <span class="ot">&lt;-</span> <span class="fu">Box.test</span>(r<span class="sc">^</span><span class="dv">2</span>, <span class="at">lag =</span> <span class="dv">18</span>, <span class="at">type =</span> <span class="st">"Ljung-Box"</span>, <span class="at">fitdf =</span> <span class="dv">0</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Test"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Shapiro-Wilk"</span>, <span class="st">"Box-Pierce"</span>, <span class="st">"Ljung-Box"</span>,</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Ljung-Box (squared)"</span>),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"p-value"</span> <span class="ot">=</span> <span class="fu">c</span>(sw<span class="sc">$</span>p.value, bp<span class="sc">$</span>p.value, lb<span class="sc">$</span>p.value, lbs<span class="sc">$</span>p.value),</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Conclusion"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Normal"</span>, <span class="st">"Independence"</span>,</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"No autocorrelation in residuals"</span>,</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"No autocorrelation in squared residuals"</span>)</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="model-a" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="model-a"><span class="header-section-number">5.1</span> Model (A)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resid_plots</span>(finalmodel1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-resid-a" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resid-a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-resid-a-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resid-a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Model (A): residual analysis plots.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The residuals show the characteristics of white noise, with no trend, seasonality or conditional heteroscedasticity. The ACF and PACF show no significant spikes up to lag 25, apart from a borderline spike at lag 9. Bar a lower outlier, the histogram and Q-Q plot are consistent with a Gaussian distribution. The Ljung-Box p-values are not significant at any lag up to 30.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">resid_tests</span>(finalmodel1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-resid-a" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resid-a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: Model (A): residual test results.
+</figcaption>
+<div aria-describedby="tbl-resid-a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 14%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Test</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: left;">Conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Shapiro-Wilk</td>
+<td style="text-align: right;">0.3162723</td>
+<td style="text-align: left;">Normal</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Box-Pierce</td>
+<td style="text-align: right;">0.8187969</td>
+<td style="text-align: left;">Independence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ljung-Box</td>
+<td style="text-align: right;">0.7928839</td>
+<td style="text-align: left;">No autocorrelation in residuals</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ljung-Box (squared)</td>
+<td style="text-align: right;">0.7703434</td>
+<td style="text-align: left;">No autocorrelation in squared residuals</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Model (A) passes all four tests.</p>
+</section>
+<section id="model-b" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="model-b"><span class="header-section-number">5.2</span> Model (B)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">resid_plots</span>(finalmodel2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-resid-b" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resid-b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-resid-b-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resid-b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Model (B): residual analysis plots.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The residual behaviour is similar, with borderline spikes at lags 2 and 9 and a slightly heavier tailed distribution than Model (A). No Ljung-Box p-values are significant, but they are much closer to the rejection region than for Model (A).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">resid_tests</span>(finalmodel2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div id="tbl-resid-b" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resid-b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: Model (B): residual test results.
+</figcaption>
+<div aria-describedby="tbl-resid-b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 28%">
+<col style="width: 14%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Test</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: left;">Conclusion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Shapiro-Wilk</td>
+<td style="text-align: right;">0.5001295</td>
+<td style="text-align: left;">Normal</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Box-Pierce</td>
+<td style="text-align: right;">0.3947198</td>
+<td style="text-align: left;">Independence</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ljung-Box</td>
+<td style="text-align: right;">0.3639211</td>
+<td style="text-align: left;">No autocorrelation in residuals</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ljung-Box (squared)</td>
+<td style="text-align: right;">0.7121532</td>
+<td style="text-align: left;">No autocorrelation in squared residuals</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Model (B) also passes all four tests.</p>
+<p>Both models pass diagnostic checking. Because of the slight edge in the residual analysis of Model (A) and its lower AICc, we select Model (A) as the final model. It is also simpler than our initial speculation from the ACF and PACF, so the AICc procedure kept the model parsimonious.</p>
+</section>
+</section>
+<section id="forecasting" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="forecasting"><span class="header-section-number">6</span> Forecasting</h2>
+<p>Our final model is the SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span> model with the MA2 coefficient fixed at 0:</p>
+<p><span class="math display">\[
+\nabla_1\nabla_{12}X_t=(1-0.354998_{(0.053140)}B-0.155974_{(0.052126)}B^3)
+(1-0.838438_{(0.035989)}B^{12})Z_t,\quad \hat\sigma_Z^2=0.08431
+\]</span></p>
+<p>We produce a 5 year (60 month) ahead forecast with approximate 95% prediction bounds (<a href="#fig-forecast" class="quarto-xref">Figure&nbsp;11</a>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pred.tr <span class="ot">&lt;-</span> <span class="fu">predict</span>(finalmodel1, <span class="at">n.ahead =</span> <span class="dv">60</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>U.tr <span class="ot">&lt;-</span> pred.tr<span class="sc">$</span>pred <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> pred.tr<span class="sc">$</span>se  <span class="co"># upper prediction bound</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>L.tr <span class="ot">&lt;-</span> pred.tr<span class="sc">$</span>pred <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> pred.tr<span class="sc">$</span>se  <span class="co"># lower prediction bound</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>fc_time <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">time</span>(rawdata)[<span class="fu">length</span>(rawdata) <span class="sc">-</span> <span class="dv">59</span>],</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>               <span class="fu">time</span>(rawdata)[<span class="fu">length</span>(rawdata)], <span class="at">by =</span> (<span class="dv">1</span> <span class="sc">/</span> <span class="dv">12</span>))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">time</span>(data)[<span class="dv">1</span>], <span class="fu">time</span>(rawdata)[<span class="fu">length</span>(rawdata)]),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(data), <span class="fu">max</span>(U.tr)), <span class="at">ylab =</span> <span class="st">"CO2 (ppm)"</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(U.tr, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(L.tr, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fc_time, pred.tr<span class="sc">$</span>pred, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Forecast"</span>, <span class="st">"Confidence Bounds"</span>),</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-forecast" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-forecast-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forecast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: 60 month forecast of atmospheric CO2 above Mauna Loa, Hawaii.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-forecast-zoom" class="quarto-xref">Figure&nbsp;12</a> focuses on the period since 1980 and overlays the true observed values from the testing set.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(data,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="fu">time</span>(data)[<span class="fu">length</span>(rawdata) <span class="sc">-</span> <span class="dv">130</span>], <span class="fu">time</span>(rawdata)[<span class="fu">length</span>(rawdata)]),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">330</span>, <span class="fu">max</span>(U.tr)), <span class="at">ylab =</span> <span class="st">"CO2 (ppm)"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(U.tr, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(L.tr, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lty =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(fc_time, pred.tr<span class="sc">$</span>pred, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(fc_time, rawdata[(<span class="fu">length</span>(rawdata) <span class="sc">-</span> <span class="dv">59</span>)<span class="sc">:</span><span class="fu">length</span>(rawdata)], <span class="at">pch =</span> <span class="dv">20</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"Forecast"</span>, <span class="st">"Confidence Bounds"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Observed Values"</span>),</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"blue"</span>, <span class="st">"black"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="cn">NA</span>),</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">20</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-forecast-zoom" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-forecast-zoom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-forecast-zoom-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forecast-zoom-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Forecast with the observed test data overlaid.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The forecast was successful. The observed values lie inside the confidence region throughout the five year window. Between 1988 and 1990 the forecast lags below the observed values, which approach the upper bound before returning close to the forecast by the end of 1990. Despite the large (and somewhat impractical) forecasting window, the forecast was accurate.</p>
+</section>
+<section id="spectral-analysis" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="spectral-analysis"><span class="header-section-number">7</span> Spectral Analysis</h2>
+<p>We first compute periodograms of the undifferenced data and of the residuals of the final model (<a href="#fig-periodogram" class="quarto-xref">Figure&nbsp;13</a>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">periodogram</span>(data)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">periodogram</span>(finalmodel1<span class="sc">$</span>residuals)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-periodogram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-periodogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-periodogram-1.png" class="img-fluid figure-img" width="1152">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-periodogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Periodograms of the data (left) and the final model residuals (right).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The periodogram of the data has a spike near <span class="math inline">\(0.08\approx 1/12\)</span>, matching the 12 month period seen in the seasonal plot. The periodogram of the residuals has no dominant frequency, so no significant seasonality remains.</p>
+<p>Fisher’s test detects hidden periodicities of unspecified frequency in the residuals. Its null hypothesis is Gaussian white noise.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GeneCycle)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fisher.g.test</span>(<span class="fu">as.numeric</span>(finalmodel1<span class="sc">$</span>residuals))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8882769</code></pre>
+</div>
+</div>
+<p>The p-value is above 0.05, so there is insufficient evidence to reject Gaussian white noise. A second test is the Kolmogorov-Smirnov test, which we apply through the cumulative periodogram of the residuals (<a href="#fig-cpgram" class="quarto-xref">Figure&nbsp;14</a>). The cumulative periodogram stays inside the confidence band for all frequencies, so the residuals pass this test too.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpgram</span>(finalmodel1<span class="sc">$</span>residuals, <span class="at">main =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-cpgram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cpgram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-cpgram-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cpgram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Cumulative periodogram of the final model residuals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">8</span> Conclusion</h2>
+<p>We determined and fitted a model that gives accurate forecasts of monthly atmospheric CO<span class="math inline">\(_2\)</span> above Mauna Loa, Hawaii (January 1959 to December 1990). Exploratory analysis revealed a linear trend and a 12 month seasonal pattern, both removed by differencing. We fitted a range of SARIMA models and chose the best by AICc and then by residual analysis. The final model is the SARIMA(0,1,3)(0,1,1)<span class="math inline">\(_{12}\)</span> model with MA2 fixed at 0.</p>
+<p>Its 60 month forecast contained all future observations within the confidence region. Spectral analysis supports the choice, with residuals that are consistent with Gaussian white noise and no remaining seasonality.</p>
+</section>
+<section id="appendix" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="appendix"><span class="header-section-number">9</span> Appendix</h2>
+<section id="summary-of-fitted-models" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="summary-of-fitted-models"><span class="header-section-number">9.1</span> Summary of Fitted Models</h3>
+<p>Standard errors are omitted. Significance codes: <code>***</code> 0.001, <code>**</code> 0.01, <code>*</code> 0.05, <code>.</code> 0.1.</p>
+<style>
+.appendix-table table { font-size: 0.68rem; }
+.appendix-table th, .appendix-table td { padding: 0.25rem 0.4rem; }
+.appendix-table { overflow-x: auto; }
+</style>
+<p><strong>Pure MA models</strong></p>
+<div class="appendix-table">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">ma1</th>
+<th style="text-align: right;">ma2</th>
+<th style="text-align: right;">ma3</th>
+<th style="text-align: right;">sma1</th>
+<th style="text-align: right;">AICc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(0,1,1)(0,1,0)12</td>
+<td style="text-align: right;">-0.344551***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">279.55</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(0,1,0)(0,1,1)12</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.889574***</td>
+<td style="text-align: right;">154.53</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(0,1,2)(0,1,0)12</td>
+<td style="text-align: right;">-0.345986***</td>
+<td style="text-align: right;">-0.046864</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">280.87</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(0,1,1)(0,1,1)12</td>
+<td style="text-align: right;">-0.353020***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.841135***</td>
+<td style="text-align: right;">123.84</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(0,1,3)(0,1,0)12</td>
+<td style="text-align: right;">-0.325178***</td>
+<td style="text-align: right;">0.013010</td>
+<td style="text-align: right;">-0.216530***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">270.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(0,1,2)(0,1,1)12</td>
+<td style="text-align: right;">-0.353873***</td>
+<td style="text-align: right;">-0.046164</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.838575***</td>
+<td style="text-align: right;">125.30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(0,1,3)(0,1,1)12</td>
+<td style="text-align: right;">-0.356176***</td>
+<td style="text-align: right;">0.003566</td>
+<td style="text-align: right;">-0.157014**</td>
+<td style="text-align: right;">-0.838478***</td>
+<td style="text-align: right;">119.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(0,1,3)(0,1,0)12 (MA2=0)</td>
+<td style="text-align: right;">-0.321529***</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-0.213898***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">268.05</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(0,1,3)(0,1,1)12 (MA2=0)</td>
+<td style="text-align: right;">-0.354998***</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-0.155974**</td>
+<td style="text-align: right;">-0.838438***</td>
+<td style="text-align: right;">117.51</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>ARMA models</strong></p>
+<div class="appendix-table">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: right;">ar1</th>
+<th style="text-align: right;">ar2</th>
+<th style="text-align: right;">ar3</th>
+<th style="text-align: right;">ma1</th>
+<th style="text-align: right;">ma2</th>
+<th style="text-align: right;">ma3</th>
+<th style="text-align: right;">sar1</th>
+<th style="text-align: right;">sma1</th>
+<th style="text-align: right;">AICc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(1,1,1)(0,1,1)12</td>
+<td style="text-align: right;">0.344624*</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.675336***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.839105***</td>
+<td style="text-align: right;">123.37</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(0,1,1)(1,1,1)12</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.356868***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.031260</td>
+<td style="text-align: right;">-0.831075***</td>
+<td style="text-align: right;">125.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(1,1,3)(0,1,1)12 (MA2=0)</td>
+<td style="text-align: right;">0.025502</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.376771**</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-0.152454**</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.838529***</td>
+<td style="text-align: right;">119.55</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(3,1,3)(0,1,1)12 (MA2=0)</td>
+<td style="text-align: right;">0.660242</td>
+<td style="text-align: right;">0.234948</td>
+<td style="text-align: right;">-0.269463</td>
+<td style="text-align: right;">-1.007236*</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.193135</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.846110***</td>
+<td style="text-align: right;">123.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SARIMA(3,1,1)(0,1,1)12</td>
+<td style="text-align: right;">0.370575*</td>
+<td style="text-align: right;">0.139399.</td>
+<td style="text-align: right;">-0.103047</td>
+<td style="text-align: right;">-0.722425***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-0.841411***</td>
+<td style="text-align: right;">121.15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SARIMA(3,1,1)(0,1,1)12 (AR1=AR2=0)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-0.138542*</td>
+<td style="text-align: right;">-0.346842***</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;">-1.196394***</td>
+<td style="text-align: right;">119.96</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="references" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="references"><span class="header-section-number">10</span> References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-brockwell1996" class="csl-entry" role="listitem">
+Brockwell, Peter J., and Richard A. Davis. 1996. <em>Introduction to Time Series and Forecasting</em>. Springer.
+</div>
+<div id="ref-hyndman2019" class="csl-entry" role="listitem">
+Hyndman, Rob J., and Yangzhuoran Yang. 2019. <em>Tsdl: Time Series Data Library</em>.
+</div>
+<div id="ref-shumway2011" class="csl-entry" role="listitem">
+Shumway, Robert H., and David S. Stoffer. 2011. <em>Time Series Analysis and Its Applications: With r Examples</em>. 3rd ed. Springer.
+</div>
+</div>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<!-- Animated Vanta.js BIRDS background (light / dark). Sits behind all page
+     content; re-colours when the Quarto theme toggle changes body class. -->
+<div id="vanta-bg" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
+<script>
+(function () {
+  var COLORS = {
+    light: { backgroundColor: 0xfcfcfc, color1: 0x8c8fa1, color2: 0x7287fd },
+    dark:  { backgroundColor: 0x26282e, color1: 0x7287fd, color2: 0x8caaee }
+  };
+  // Birds are full-strength on the homepage and fade out toward the centre
+  // everywhere else (see the CSS mask below).
+  var p = location.pathname.replace(/index\.html$/, "");
+  var home = p === "/" || p === "";
+  document.documentElement.classList.toggle("vanta-home", home);
+  var effect = null;
+  var mobile = window.matchMedia("(max-width: 768px)").matches;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mode() {
+    return document.body.classList.contains("quarto-dark") ? "dark" : "light";
+  }
+  function start() {
+    if (!window.VANTA || !window.THREE) return;
+    if (effect) effect.destroy();
+    var c = COLORS[mode()];
+    effect = VANTA.BIRDS({
+      el: "#vanta-bg",
+      mouseControls: !reduced,
+      touchControls: false,
+      gyroControls: false,
+      minHeight: 200,
+      minWidth: 200,
+      scale: 1,
+      scaleMobile: 1,
+      backgroundColor: c.backgroundColor,
+      backgroundAlpha: 0,   // transparent so the edge mask blends cleanly
+      color1: c.color1,
+      color2: c.color2,
+      colorMode: "lerp",
+      birdSize: 1,
+      wingSpan: 22,
+      speedLimit: reduced ? 0 : 4,
+      separation: 40,
+      alignment: 40,
+      cohesion: 40,
+      quantity: mobile ? 2 : 3
+    });
+    if (reduced && effect.renderer) { effect.options.mouseControls = false; }
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    start();
+    new MutationObserver(start).observe(document.body, {
+      attributes: true, attributeFilter: ["class"]
+    });
+  });
+})();
+</script>
+<style>
+#vanta-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* Inner pages: animation only at the left/right edges, fading to the solid
+   page colour in the middle. Widen/narrow by changing the percentages. */
+html:not(.vanta-home) #vanta-bg {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 24%,
+                                      transparent 76%, #000 100%);
+  mask-image: linear-gradient(to right, #000 0%, transparent 24%,
+                              transparent 76%, #000 100%);
+}
+/* Let the canvas show through; the colour comes from Vanta instead. */
+body.quarto-light, body.quarto-dark { background-color: transparent !important; }
+html { background-color: #fcfcfc; }
+html:has(body.quarto-dark) { background-color: #26282e; }
+</style>
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
