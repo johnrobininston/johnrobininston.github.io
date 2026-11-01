@@ -1,12 +1,15 @@
 ---
-title: "Polymaths and Embracing Mental Diversity"
-description: "Thinking about polymaths and the hidden value of broad interests
-  and knowledge."
+id: index
+aliases: []
+tags: []
 author: "John Robin Inston"
-date: "2026-08-23"
+categories:
+  - Blog
+date: 2026-08-23
+description: "Thinking about polymaths and the hidden value of broad interests and knowledge."
+title: "Polymaths and Embracing Mental Diversity"
+title-block-banner: false
 toc: true
-categories: [Blog]
-title-block-banner: true
 ---
 
 ## Introduction
@@ -32,6 +35,8 @@ sculptor) and Benjamin Franklin (writer, philosopher, politician, scientist).
 Each individual was highly successful in multiple fields spanning both the
 sciences and the arts.
 
+![Polymath Illustration by [Muntadher Saleh](https://muntadhersaleh.com/polymath-illustration/)](https://upload.wikimedia.org/wikipedia/commons/c/cb/Polymath_illustration_by_Muntadher_Saleh.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original){width="50%"}
+
 ## Lacking Focus
 
 The video starts by outlining an all too real experience for people with
@@ -42,7 +47,7 @@ seems increasingly oriented towards hyper-specialization, whether it be
 starting training for atheletic greatness at a young age, selecting your
 chosen career specialization in high school, or playing instruments at
 increasingly younger ages. Wherever you look you seem to see somebody
-younger and more driven achieving your goals sooner than you, and this
+younger and more driven, achieving your goals sooner than you, and this
 game of comparing and constrasting serves only as a constant drain on
 motivation. Why can't I have started training sooner? Why didn't I learn to
 play the piano at 4 years old. I wish I could have earned a Ph.D. at the ripe
@@ -54,3 +59,5 @@ The folly of comparison and it's inevitable path to envy and jealousy
 
 Whilst it is true that society in general seems to reward early specialization,
 that is not the end of the story.
+
+## My Takeaways

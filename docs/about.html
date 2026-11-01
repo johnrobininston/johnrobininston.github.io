@@ -84,76 +84,20 @@ ul.task-list li input[type="checkbox"] {
 <script>
 
   window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-blog-latest .list');
+    const listingTargetEl = window.document.querySelector('#listing-latest-posts .list');
     if (!listingTargetEl) {
       // No listing discovered, do not attach.
       return; 
     }
 
     const options = {
-      valueNames: ['listing-title','listing-date','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-date','listing-description','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-blog-latest'] = new List('listing-blog-latest', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-projects-latest .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-subtitle',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-projects-latest'] = new List('listing-projects-latest', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-teaching-latest .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-subtitle','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-teaching-latest'] = new List('listing-teaching-latest', options);
+    window['quarto-listings']['listing-latest-posts'] = new List('listing-latest-posts', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -389,7 +333,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./projects.html"> 
-<span class="menu-text">Current Projects</span></a>
+<span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./teaching.html"> 
@@ -505,6 +449,26 @@ window.Quarto = {
   box-shadow: 0 5px 18px rgba(0,0,0,0.12);
   transform: translateY(-3px);
 }
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+a.area-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
 .view-all-link {
   display: inline-block;
   margin-top: 0.6rem;
@@ -559,11 +523,13 @@ window.Quarto = {
   font-size: 1rem;
   color: #555;
 }
+body.quarto-dark .tl-date,
 [data-bs-theme="dark"] .tl-date {
-  color: #aaa;
+  color: #b8bcc8;
 }
+body.quarto-dark .tl-body,
 [data-bs-theme="dark"] .tl-body {
-  color: #bbb;
+  color: #dfe2ea;
 }
 </style>
 <div class="quarto-about-trestles">
@@ -573,33 +539,33 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">John Robin Inston</h1>
-<p class="subtitle lead">Ph.D.&nbsp;Candidate in Statistics and Applied Probability at UCSB</p>
+<p class="subtitle lead">PhD Candidate @ UC Santa Barbara | Statistics and Applied Probability</p>
 </div>
 <div class="quarto-title-meta">
   </div>
 </header>
     <div class="about-links">
-  <a href="https://www.youtube.com/@JohnRobinInston" class="about-link" rel="" target="">
-    <i class="bi bi-youtube"></i>
+  <a href="" class="about-link" rel="" target="">
+    <i class="bi bi-youtube text: YouTube href: https://www.youtube.com/@JohnRobinInston"></i>
      <span class="about-link-text"></span>
   </a>
-  <a href="https://medium.com/@johnrobininston" class="about-link" rel="" target="">
-    <i class="bi bi-medium"></i>
+  <a href="" class="about-link" rel="" target="">
+    <i class="bi bi-medium text: Medium href: https://medium.com/@johnrobininston"></i>
      <span class="about-link-text"></span>
   </a>
-  <a href="https://www.linkedin.com/in/johninston/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
+  <a href="" class="about-link" rel="" target="">
+    <i class="bi bi-linkedin text: LinkedIn href: https://www.linkedin.com/in/johninston/"></i>
      <span class="about-link-text"></span>
   </a>
-  <a href="https://github.com/johnrobininston" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
+  <a href="" class="about-link" rel="" target="">
+    <i class="bi bi-github text: GitHub href: https://github.com/johnrobininston"></i>
      <span class="about-link-text"></span>
   </a>
 </div>
   </div>
   <div class="about-contents"><div id="hero-heading">
 <div class="h1">
-Ph.D.&nbsp;Candidate · Researcher · Educator
+PhD Candidate · Researcher · Educator
 </div>
 <p>I am a 5th year doctoral candidate in the <a href="https://www.pstat.ucsb.edu">Statistics and Applied Probability Department</a> at the University of California Santa Barbara (UCSB). I am a member of both the Center for Financial Mathematics and Actuarial Research (CFMAR) and the Simulation and Control in Finance and Insurance (SCiFI) research group.</p>
 <div class="stat-row">
@@ -640,7 +606,7 @@ Ph.D.&nbsp;Candidate · Researcher · Educator
 <section id="topic-vault" class="level2">
 <h2 data-anchor-id="topic-vault">Topic Vault</h2>
 <p>Since returning to academia in 2020 I have been building a personal knowledge management system (a “topic vault”) to help me organize my often chaotic mind and compensate for my natural forgetfulness. I have found that the software Obsidian is perfectly suited to notetaking for mathematicians due to its abundant plugins, LaTeX support and Zettelkasten-friendly features.</p>
-<p>I am currently in the process of making my second brain public and I am experimenting with using this website with a Quarto-based graph visualization tool. You can access my topic vault <a href="brain.qmd">here</a>.</p>
+<p>I am currently in the process of making my second brain public and I am experimenting with using this website with a Quarto-based graph visualization tool. You can access my topic vault <a href="./topics/topics.html">here</a>.</p>
 <div id="quarto-graph-full-1" class="quarto-graph-full"></div>
 </section>
 <section id="education-timeline" class="level2">
@@ -686,74 +652,113 @@ Changed course twice — from Theoretical Physics to Mechanical Engineering and 
 <div class="grid">
 <section id="blog" class="level3 g-col-12 g-col-lg-4">
 <h3 data-anchor-id="blog">Blog</h3>
-<div id="listing-blog-latest" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-1">
-<div class="g-col-1" data-index="0" data-categories="QmxvZw==" data-listing-date-sort="1787468400000" data-listing-file-modified-sort="1790015391000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="287">
-<a href="./posts/polymaths/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Polymaths and Embracing Mental Diversity
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Aug 23, 2026
+<div id="blog-latest">
+<a class="card area-card" href="blog.html">
+<img src="assets/images/blog-thumbnail.svg" class="card-img-top" alt="Blog">
+<div class="card-body"><p class="card-text">Posts on mathematics, statistics, research and student life in STEM.</p></div>
+</a>
 </div>
-</div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<p><a href="blog.html" class="view-all-link">View all posts →</a></p>
 </section>
 <section id="projects" class="level3 g-col-12 g-col-lg-4">
 <h3 data-anchor-id="projects">Projects</h3>
-<div id="listing-projects-latest" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-1">
-<div class="g-col-1" data-index="0" data-categories="R3JvdW5kd2F0ZXIlMkNGaW5hbmNpYWwlMjBNYXJrZXRzJTJDU3RvY2hhc3RpYyUyMEdhbWVzJTJDUmVzZWFyY2glMkNDdXJyZW50" data-listing-date-sort="1770883200000" data-listing-file-modified-sort="1790015391000" data-listing-date-modified-sort="1770883200000" data-listing-reading-time-sort="1" data-listing-word-count-sort="63">
-<a href="./projects/groundwater-markets/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Groundwater Markets
-</h5>
-<div class="card-subtitle listing-subtitle">
-Developing a stochastic game model for groundwater markets in California.
+<div id="projects-latest">
+<a class="card area-card" href="projects.html">
+<img src="assets/images/projects-thumbnail.svg" class="card-img-top" alt="Projects">
+<div class="card-body"><p class="card-text">A collection of my current and past research / academic projects.</p></div>
+</a>
 </div>
-</div>
-</div></a>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<p><a href="projects.html" class="view-all-link">View all projects →</a></p>
 </section>
 <section id="teaching" class="level3 g-col-12 g-col-lg-4">
 <h3 data-anchor-id="teaching">Teaching</h3>
-<div id="listing-teaching-latest" class="quarto-listing quarto-listing-container-grid">
-<div class="list grid quarto-listing-cols-1">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1793298063224" data-listing-reading-time-sort="1" data-listing-word-count-sort="5">
-<a href="./teaching.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="./assets/images/teaching-icon.svg" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Teaching
-</h5>
+<div id="teaching-latest">
+<a class="card area-card" href="teaching.html">
+<img src="assets/images/teaching-thumbnail.svg" class="card-img-top" alt="Teaching">
+<div class="card-body"><p class="card-text">A library of all of the teaching resources I have used in the past including lecture slides, labs and assignments.</p></div>
+</a>
 </div>
-</div></a>
+</section>
+</div>
+</section>
+<section id="latest-posts" class="level2">
+<h2 data-anchor-id="latest-posts">Latest Posts</h2>
+<div id="listing-latest-posts" class="quarto-listing quarto-listing-container-default">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="QmxvZw==" data-listing-date-sort="1787468400000" data-listing-file-modified-sort="1793574795097" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="293">
+<div class="thumbnail"><a href="./posts/polymaths/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/polymaths/index.html" class="no-external">Polymaths and Embracing Mental Diversity</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/polymaths/index.html" class="no-external">
+<p>Thinking about polymaths and the hidden value of broad interests and knowledge.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/polymaths/index.html" class="no-external">
+<div class="listing-date">
+Aug 23, 2026
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="R3JvdW5kd2F0ZXIlMkNIaWRkZW4lMjBNYXJrb3YlMjBNb2RlbCUyQ1ByZWNpcGl0YXRpb24=" data-listing-date-sort="1772956800000" data-listing-file-modified-sort="1790015391000" data-listing-date-modified-sort="1772956800000" data-listing-reading-time-sort="5" data-listing-word-count-sort="802">
+<div class="thumbnail"><a href="./posts/hmm-precipitation/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/hmm-precipitation/assets/transition-probabilities-3s.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/hmm-precipitation/index.html" class="no-external">Precipitation HMM</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/hmm-precipitation/index.html" class="no-external">
+<p>A Hidden Markov Model for annual precipitation in the Central Valley of California.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/hmm-precipitation/index.html" class="no-external">
+<div class="listing-date">
+Mar 8, 2026
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="QmxvZw==" data-listing-date-sort="1769587200000" data-listing-file-modified-sort="1790015391000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="417">
+<div class="thumbnail"><a href="./posts/welcome-post/index.html" class="no-external">
+
+<p class="card-img-top"><img loading='lazy' src="posts/welcome-post/assets/santa_barbara.jpg"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/welcome-post/index.html" class="no-external">First Post</a>
+</h3>
+<div class="delink listing-description"><a href="./posts/welcome-post/index.html" class="no-external">
+<p>First post about my personal blog and plans going forward.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/welcome-post/index.html" class="no-external">
+<div class="listing-date">
+Jan 28, 2026
+</div>
+</a>
+</div>
 </div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
-<p><a href="teaching.html" class="view-all-link">View all courses →</a></p>
 </section>
+<section id="latest-video" class="level2">
+<h2 data-anchor-id="latest-video">Latest Video</h2>
+<div class="video-embed">
+<iframe src="https://www.youtube.com/embed/videoseries?list=UUNK40uu9VKnDYT1pWc449zg" title="Latest video from John Robin Inston" loading="lazy" allowfullscreen="" allow="accelerometer; encrypted-media; picture-in-picture"></iframe>
 </div>
+<p>You can find more on my <a href="https://www.youtube.com/@JohnRobinInston">YouTube channel</a>.</p>
 
 
 
