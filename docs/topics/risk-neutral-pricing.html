@@ -305,7 +305,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../projects.html"> 
-<span class="menu-text">Current Projects</span></a>
+<span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../teaching.html"> 
@@ -476,34 +476,33 @@ Backlinks
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
-<!-- Animated Vanta.js BIRDS background (light / dark). Sits behind all page
+<!-- Animated Vanta.js DOTS background (light / dark). Sits behind all page
      content; re-colours when the Quarto theme toggle changes body class. -->
 <div id="vanta-bg" aria-hidden="true"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.birds.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
 <script>
 (function () {
   var COLORS = {
-    light: { backgroundColor: 0xfcfcfc, color1: 0x8c8fa1, color2: 0x7287fd },
-    dark:  { backgroundColor: 0x26282e, color1: 0x7287fd, color2: 0x8caaee }
+    light: { backgroundColor: 0xfcfcfc, color: 0x7287fd, color2: 0x8c8fa1 },
+    dark:  { backgroundColor: 0x26282e, color: 0x7287fd, color2: 0x8caaee }
   };
-  // Birds are full-strength on the homepage and fade out toward the centre
-  // everywhere else (see the CSS mask below).
+  // The animation runs on the homepage only; other pages keep the plain page
+  // colour.
   var p = location.pathname.replace(/index\.html$/, "");
   var home = p === "/" || p === "";
   document.documentElement.classList.toggle("vanta-home", home);
   var effect = null;
-  var mobile = window.matchMedia("(max-width: 768px)").matches;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function mode() {
     return document.body.classList.contains("quarto-dark") ? "dark" : "light";
   }
   function start() {
-    if (!window.VANTA || !window.THREE) return;
+    if (!home || !window.VANTA || !window.THREE) return;
     if (effect) effect.destroy();
     var c = COLORS[mode()];
-    effect = VANTA.BIRDS({
+    effect = VANTA.DOTS({
       el: "#vanta-bg",
       mouseControls: !reduced,
       touchControls: false,
@@ -513,19 +512,13 @@ Backlinks
       scale: 1,
       scaleMobile: 1,
       backgroundColor: c.backgroundColor,
-      backgroundAlpha: 0,   // transparent so the edge mask blends cleanly
-      color1: c.color1,
+      backgroundAlpha: 0,
+      color: c.color,
       color2: c.color2,
-      colorMode: "lerp",
-      birdSize: 1,
-      wingSpan: 22,
-      speedLimit: reduced ? 0 : 4,
-      separation: 40,
-      alignment: 40,
-      cohesion: 40,
-      quantity: mobile ? 2 : 3
+      size: 3,
+      spacing: 35,
+      showLines: false
     });
-    if (reduced && effect.renderer) { effect.options.mouseControls = false; }
   }
   document.addEventListener("DOMContentLoaded", function () {
     start();
@@ -541,14 +534,6 @@ Backlinks
   inset: 0;
   z-index: -1;
   pointer-events: none;
-}
-/* Inner pages: animation only at the left/right edges, fading to the solid
-   page colour in the middle. Widen/narrow by changing the percentages. */
-html:not(.vanta-home) #vanta-bg {
-  -webkit-mask-image: linear-gradient(to right, #000 0%, transparent 24%,
-                                      transparent 76%, #000 100%);
-  mask-image: linear-gradient(to right, #000 0%, transparent 24%,
-                              transparent 76%, #000 100%);
 }
 /* Let the canvas show through; the colour comes from Vanta instead. */
 body.quarto-light, body.quarto-dark { background-color: transparent !important; }
