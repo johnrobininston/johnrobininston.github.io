@@ -1,52 +1,236 @@
 ---
-title: Linear Regression
-author: John Robin Inston
+id: linear-regression
+aliases: ["slr", "mlr"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "Simple and multiple linear regression: model, OLS estimators, their properties, dummy variables and interactions."
 number-sections: true
+title: "Linear Regression"
 title-block-banner: false
 ---
 
-Linear regression is a statistical model which estimates the linear
-relationship between a scalar response (dependent) variable and one or more
-explanatory (independent) variables. The case of one explanatory variable is
-called **simple linear regression** and for more than one is called **multiple
-linear regression**which is distinct from **multivariate linear regression**
-where multiple correlated dependent variables are predicted.
+## Regression and the Linear Model
 
-In linear regression the relationships are modelled using linear predictor
-functions (known as linear models) whose unknown model parameters are estimated
-from the data. Most commonly the conditional mean of the response given the
-values of the predictors is assume to be an affine function of those values.
-Like all forms of regression analysis, linear regression focusses on the
-conditional probability distribution of the response given the values of the
-predictors, rather than on the joint probability distribution of all of these
-variables, which is in the domain of
-[[multivariate-analysis|multivariate analysis]].
-#### Formulation
+Given observations $(y_i,x_{i1},\dots,x_{ip})$, $i=1,\dots,n$, of a scalar
+**response** (dependent variable) $y$ and **covariates** (explanatory
+variables) $x=(x_1,\dots,x_p)$, [[regression-analysis]] studies the
+**conditional expectation function**
 
-Given a data set $\{y_{i}, x_{i1}, ..., x_{ip}\}_{i=1}^{n}$ of $n$
-**statistical units**, a linear regression model assumes that the relationship
-between the response $y$ and the vector of covariates $x$ is **linear**. The
-relationship is modelled through an error variable $\epsilon$ which adds noise
-to the relationship.  
+$$
+\mu(x)=\mathbb{E}[Y\mid X=x].
+$$
 
-The model takes the form
-$$
-y_i=\beta_0+\beta_{1}x_{i1}+...+\beta_{p}x_{ip}+\epsilon_i=\vec{x}^{T}_{i}\vec\beta+\epsilon_{i},\quad i=1, ..., n
-$$
-Written in matrix form
-$$
-\boldsymbol{y}=\boldsymbol{X\beta}+\boldsymbol{\epsilon}
-$$
-where:
-$$
-\boldsymbol{y}=\begin{bmatrix}y_{1}\\\vdots\\y_{n}\end{bmatrix},\quad \boldsymbol{X}=\begin{bmatrix}1&x_{11}&\cdots&x_{1p}\\1&x_{21}&\cdots&x_{2p}\\\vdots&\vdots&\ddots&\vdots\\1&x_{n1}&\cdots&x_{np}\end{bmatrix},\quad \boldsymbol{\beta}=\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_p\end{bmatrix}, \quad\boldsymbol{\epsilon} = \begin{bmatrix}\epsilon_1\\\vdots\\\epsilon_n\end{bmatrix}.
-$$
-#### Model Assumptions
+This function can have any shape, so it cannot be estimated without further
+assumptions. **Linear regression** assumes that $\mu$ is affine in $x$,
 
-- Weak Exogeneity
-- Linearity
-- Constant Variance
-- Independence of Errors
-- Lack of Perfect Multicollinearity
+$$
+\mu(x)=\beta_0+\beta_1x_1+\dots+\beta_px_p,
+$$
 
+which allows closed-form parameter estimates by **ordinary least squares
+(OLS)**, see [[least-squares-estimation]]. With $p=1$ it is called **simple
+linear regression** (SLR), and with $p>1$ **multiple linear regression**
+(MLR). Both differ from **multivariate linear regression**, where several
+correlated responses are predicted. Regression models the conditional
+distribution of the response given the covariates rather than the joint
+distribution of all variables, which is the subject of multivariate analysis.
+
+## The Model
+
+For each statistical unit $i=1,\dots,n$,
+
+$$
+y_i=\beta_0+\beta_1x_{i1}+\dots+\beta_px_{ip}+\varepsilon_i
+=\mathbf{x}_i^\top\boldsymbol{\beta}+\varepsilon_i,
+$$
+
+where $\beta_0$ is the **intercept**, $\beta_1,\dots,\beta_p$ are the
+**slopes** (the effect on $\mu$ of a unit change in $x_j$, other covariates
+held fixed) and $\varepsilon_i$ is the **error term** that adds noise to the
+relationship. In matrix form
+
+$$
+\mathbf{y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon},
+$$
+
+where
+
+$$
+\mathbf{y}=\begin{bmatrix}y_1\\\vdots\\y_n\end{bmatrix},\quad
+\mathbf{X}=\begin{bmatrix}1&x_{11}&\cdots&x_{1p}\\
+\vdots&\vdots&&\vdots\\1&x_{n1}&\cdots&x_{np}\end{bmatrix},\quad
+\boldsymbol{\beta}=\begin{bmatrix}\beta_0\\\vdots\\\beta_p\end{bmatrix},\quad
+\boldsymbol{\varepsilon}=\begin{bmatrix}\varepsilon_1\\\vdots\\\varepsilon_n
+\end{bmatrix}.
+$$
+
+The standard assumptions are
+
+1. **Linearity** and **weak exogeneity**: $\mathbb{E}[\varepsilon\mid X]=0$,
+2. **Constant variance** (homoscedasticity): $\mathrm{Var}(\varepsilon_i)=\sigma^2$,
+3. **Independence** (or uncorrelatedness) of the errors,
+4. **No perfect multicollinearity**: $\mathbf{X}$ has full column rank.
+
+For exact finite-sample inference one also assumes
+$\boldsymbol{\varepsilon}\sim\mathcal{N}(0,\sigma^2I_n)$, see
+[[normal-distribution]].
+
+## Simple Linear Regression
+
+For $p=1$ the model is $y_i=\beta_0+\beta_1x_i+\varepsilon_i$.
+
+:::{.definition data-title="OLS Estimators"}
+
+The **ordinary least squares** estimators minimise the residual sum of
+squares
+
+$$
+\mathrm{RSS}(\beta_0,\beta_1)=\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2.
+$$
+
+:::
+
+Setting the partial derivatives to zero gives the **normal equations**
+
+$$
+\sum_i(y_i-\beta_0-\beta_1x_i)=0,\qquad
+\sum_ix_i(y_i-\beta_0-\beta_1x_i)=0,
+$$
+
+with solution
+
+$$
+\hat\beta_1=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2}
+=\frac{S_{xy}}{S_{xx}},\qquad
+\hat\beta_0=\bar y-\hat\beta_1\bar x,
+$$
+
+where $\bar x,\bar y$ are the sample means. The fitted line passes through
+$(\bar x,\bar y)$, and the slope is the sample covariance of $x,y$ over the
+sample variance of $x$.
+
+## OLS in General
+
+For general $p$, minimising
+$\mathrm{RSS}(\boldsymbol\beta)=\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2$ and
+setting the gradient $-2\mathbf{X}^\top(\mathbf{y}-\mathbf{X}\boldsymbol\beta)$
+to zero gives the normal equations $\mathbf{X}^\top\mathbf{X}\boldsymbol\beta=
+\mathbf{X}^\top\mathbf{y}$, hence
+
+$$
+\hat{\boldsymbol\beta}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}.
+$$
+
+The matrix $\mathbf{X}^\top\mathbf{X}$ is invertible exactly when there is no
+perfect multicollinearity. Geometrically, the fitted values
+$\hat{\mathbf{y}}=\mathbf{X}\hat{\boldsymbol\beta}=H\mathbf{y}$ with
+$H=\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top$ are the
+orthogonal projection of $\mathbf{y}$ onto the column space of $\mathbf{X}$
+(see [[orthogonality-and-projections]]), and the residuals
+$\hat{\boldsymbol\varepsilon}=\mathbf{y}-\hat{\mathbf{y}}$ are orthogonal to
+every column of $\mathbf{X}$. An unbiased estimator of the error variance is
+
+$$
+\hat\sigma^2=\frac{\mathrm{RSS}}{n-p-1}.
+$$
+
+## Properties of the Estimators
+
+:::{.theorem data-title="Gauss-Markov"}
+
+Under assumptions 1-4, $\hat{\boldsymbol\beta}$ is unbiased,
+$\mathbb{E}[\hat{\boldsymbol\beta}]=\boldsymbol\beta$, with covariance matrix
+
+$$
+\mathrm{Var}(\hat{\boldsymbol\beta})=\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1},
+$$
+
+and it has the smallest covariance among all linear unbiased estimators
+(it is the **BLUE**).
+
+:::
+
+:::{.proof}
+
+Since $\hat{\boldsymbol\beta}=\boldsymbol\beta+(\mathbf{X}^\top\mathbf{X})^{-1}
+\mathbf{X}^\top\boldsymbol\varepsilon$, taking expectations gives unbiasedness
+and taking covariances gives the variance formula. For another linear
+unbiased estimator $\tilde{\boldsymbol\beta}=C\mathbf{y}$ write
+$C=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top+D$. Unbiasedness forces
+$D\mathbf{X}=0$, so
+$\mathrm{Var}(\tilde{\boldsymbol\beta})=\sigma^2CC^\top
+=\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}+\sigma^2DD^\top$, and $DD^\top$ is
+positive semi-definite.
+
+:::
+
+For SLR this gives
+
+$$
+\mathrm{Var}(\hat\beta_1)=\frac{\sigma^2}{S_{xx}},\qquad
+\mathrm{Var}(\hat\beta_0)=\sigma^2\left(\frac1n+\frac{\bar x^2}{S_{xx}}\right).
+$$
+
+If in addition the errors are normal, then $\hat{\boldsymbol\beta}\sim
+\mathcal{N}(\boldsymbol\beta,\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1})$ (it is
+also the maximum likelihood estimator), and
+$(n-p-1)\hat\sigma^2/\sigma^2\sim\chi^2_{n-p-1}$ independently of
+$\hat{\boldsymbol\beta}$. Each standardised coefficient
+$(\hat\beta_j-\beta_j)/\widehat{\mathrm{se}}(\hat\beta_j)$ then follows a
+[[students-t-distribution|Student $t$ distribution]] with $n-p-1$ degrees of
+freedom, giving confidence intervals and tests, and joint hypotheses use the
+[[f-distribution]].
+
+## Multiple Regression: Categorical Predictors and Interactions
+
+In MLR each slope $\beta_j$ is interpreted holding the other covariates
+fixed, which is why correlated covariates make estimates unstable (large
+$\mathrm{Var}(\hat\beta_j)$).
+
+**Dummy variables.** A categorical covariate with $L$ levels is encoded by
+$L-1$ indicator variables $d_\ell=\mathbb{1}\{\text{level}=\ell\}$, with one
+level kept as the baseline. Using all $L$ indicators together with an
+intercept would give perfect multicollinearity. The coefficient on $d_\ell$ is
+the shift in the mean response relative to the baseline level.
+
+**Interaction terms.** To let the effect of one covariate depend on another,
+add their product,
+
+$$
+y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2+\varepsilon,
+$$
+
+so that the slope in $x_1$ is $\beta_1+\beta_3x_2$. Interacting a dummy with a
+continuous covariate gives a separate slope for each category.
+
+:::{.example data-title="Fitting a Regression"}
+
+Simulate $y=1+2x+\varepsilon$ and recover the coefficients with OLS.
+
+```{python}
+import numpy as np
+import statsmodels.api as sm
+
+rng = np.random.default_rng(0)
+x = rng.uniform(0, 10, 200)
+y = 1 + 2 * x + rng.normal(0, 1, 200)
+fit = sm.OLS(y, sm.add_constant(x)).fit()
+print(fit.params)
+```
+
+Residual diagnostics (residuals against fitted values, normal Q-Q plot)
+check the constant variance, linearity and normality assumptions.
+
+:::
+
+Choosing which covariates to include is the subject of [[model-selection]].
+Responses that are binary or counts require the generalisation to the
+[[glm]], for instance [[logistic-regression]] and [[poisson-regression]].
+
+## References
+
+1. Hastie, T., Tibshirani, R. and Friedman, J. (2009). *The Elements of
+   Statistical Learning*, 2nd ed. Springer, Chapter 3.
+2. Wooldridge, J. M. (2019). *Introductory Econometrics: A Modern Approach*,
+   7th ed. Cengage.

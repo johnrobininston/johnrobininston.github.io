@@ -1,6 +1,6 @@
 ---
 id: black-scholes-merton-model
-aliases: []
+aliases: ["black-scholes-model-with-dividends"]
 tags: []
 author: "John Robin Inston"
 date: 2026-09-25
@@ -40,7 +40,7 @@ Brownian motion. Here $r$ is the **risk-free interest rate**, $\mu$ is the
 The model assumes that
 
 - the interest rate, drift and volatility are constant,
-- the stock pays no dividends (see [[black-scholes-model-with-dividends]]),
+- the stock pays no dividends (relaxed in the section on dividends below),
 - trading is continuous and there are no transaction costs,
 - assets are infinitely divisible and short selling is allowed.
 
@@ -178,7 +178,7 @@ $$
 \Theta + \frac{1}{2}\sigma^2S^2\,\Gamma + rS\,\Delta - rV = 0.
 $$
 
-The PDE can be reduced to the [[diffusion-equation]] (heat equation) by a
+The PDE can be reduced to the [[heat-equation|diffusion equation]] (heat equation) by a
 change of variables, and by the [[feynman-kac-formula]] its solution is the
 risk-neutral expectation $e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}[h(S_T)\mid S_t]$.
 
@@ -199,6 +199,37 @@ equivalent ways to find the fair price, both developed in
 
 For European calls and puts these give closed-form prices. See
 [[european-options]]. Their sensitivities are the [[option-greeks]].
+
+## Dividend-Paying Stock
+
+Suppose the stock pays a continuous **dividend yield** $\delta\ge 0$, so that
+over $[t,t+dt]$ the holder receives the cash amount $\delta S_t\,dt$ and the
+stock price drops accordingly. Equivalently, one share held at time $0$
+becomes $e^{\delta t}$ shares at time $t$ if dividends are reinvested.
+
+Dividends reduce the growth of the stock, the opposite of the effect of the
+interest rate. Under $\mathbb{Q}$ it is the dividend-reinvested value
+$e^{-(r-\delta)t}S_t$ that is a martingale, so $r$ is replaced by
+$r-\delta$ in the dynamics,
+
+$$
+dS_t=(r-\delta)S_t\,dt+\sigma S_t\,dW_t^{\mathbb{Q}}.
+$$
+
+For the PDE one must be careful about which occurrences of $r$ change. The
+discounted option value $e^{-rt}V_t$ is still a $\mathbb{Q}$-martingale, so the
+discount term $-rV$ is **unchanged**. The drift term $rS\,\partial_S V$ comes
+from the [[ito-formula]] applied to $V(t,S_t)$ and hence from the dynamics of
+$S$ under $\mathbb{Q}$, so it **does change**.
+
+:::{.definition data-title="Black-Scholes Equation with Dividends"}
+
+$$
+\partial_tV+(r-\delta)S\,\partial_SV+\frac{1}{2}\sigma^2S^2\,\partial_{SS}V
+-rV=0,\qquad V(T,S)=h(S).
+$$
+
+:::
 
 ## Multi-Asset Model
 
@@ -239,10 +270,10 @@ it include
 
 - [[time-dependent-volatility-model]]: $\sigma = \sigma(t)$,
 - [[local-volatility-model]]: $\sigma = \sigma(t,S_t)$, including the
-  [[cev-model]],
+  CEV model,
 - [[stochastic-volatility-model]]: volatility is random, such as the
   [[heston-model]],
-- [[black-scholes-model-with-dividends]]: a stock that pays dividends.
+- a stock that pays dividends (see the next section).
 
 ## Key Results
 
@@ -255,4 +286,3 @@ it include
    Liabilities. *Journal of Political Economy*, 81(3), 637-654.
 2. Merton, R. C. (1973). Theory of Rational Option Pricing. *Bell Journal of
    Economics and Management Science*, 4(1), 141-183.
-3. [Columbia Note](https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf)

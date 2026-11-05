@@ -1,6 +1,6 @@
 ---
 id: law-of-large-numbers
-aliases: []
+aliases: ["laws-of-large-numbers", "weak-laws-of-large-numbers", "strong-law-of-large-numbers"]
 tags: []
 author: "John Robin Inston"
 date: 2026-09-25
@@ -9,56 +9,60 @@ title: "Law of Large Numbers"
 title-block-banner: false
 ---
 
-## What is the Law of Large Numbers?
+## Overview
 
-The weak and strong laws of large numbers a fundamental results in probability
-theory detailing the **convergence in probability and almost surely
-respectively of the sample mean** of random variables defined by
+The weak and strong **laws of large numbers** are fundamental results in
+probability theory. Writing $S_n=X_1+\dots+X_n$, they describe the long-run
+behaviour of the **sample mean**
 $$
-\frac{S_{n}}{n}=\frac{{X_{1}+\dots+X_{n}}}{n}.
+\bar{X}_n=\frac{S_{n}}{n}=\frac{{X_{1}+\dots+X_{n}}}{n}.
 $$
-The proof for both results rely on [[chebyshev-inequality]] and the proof of
-the strong law requires the [[borel-cantelli-lemma]]. There are various
-versions of the laws of large numbers with various strength conditions.  
+The **weak law (WLLN)** states that $\bar{X}_n$ converges
+[[convergence-in-probability|in probability]] to the expected value, and the
+**strong law (SLLN)** that it converges
+[[convergence-almost-surely|almost surely]]. The weak laws are proved with the
+[[chebyshev-inequality]] and the strong law additionally uses the
+[[borel-cantelli-lemma]]. There are many versions with different strength of
+assumptions.
 
-## Weak Law of Large Numbers
+## Weak Laws
 
-The **Weak Law of Large Numbers (WLLN)** is a family of results in probability
-theory that describe the **convergence in probability of the sample average of
-a sequence of random variables to the expected value** (if it exists), as the
-sample size grows.
-
-The most commonly stated result is for sequences of i.i.d. random variables
-with common finite mean and finite variance. This is simple to prove using the
-[[chebyshev-inequality]].
+The simplest result is for i.i.d. random variables with finite variance.
 
 :::{.theorem data-title="Weak Law of Large Numbers"}
 
-Given a collection of i.i.d. samples $X_{1}, \dots, X_{n}$ from a random
-variable with finite mean $\mathbb{E}[X_{i}]=\mu$ and finite variance
-$\operatorname{Var}(X_{i})=\sigma^2<\infty$ the sample mean converges in
-probability and $L_2$ to $\mu$ i.e.
+Let $X_{1}, \dots, X_{n}$ be i.i.d. with finite mean $\mathbb{E}[X_{i}]=\mu$ and
+finite variance $\operatorname{Var}(X_{i})=\sigma^2<\infty$. Then the sample
+mean converges in probability and in $L_2$ to $\mu$,
 $$
 \frac{S_{n}}{n} \stackrel{L_{2}~\&~\mathbb{P}}{\to}\mu\quad (n\to \infty),
 $$
-that is, for any positive number $\epsilon$ we have
+that is, for every $\epsilon>0$,
 $\lim_{ n \to \infty }\mathbb{P}(|\bar{X}_{n}-\mu|<\epsilon)=1$.
 
 :::
 
 :::{.proof}
 
-First, note that $\mathbb{E}\left[ \frac{S_{n}}{n} \right]= \frac{1}{n}\sum_{i=1}^n\mu=\mu$ and that $$\operatorname{Var}\left(  \frac{S_{n}}{n} \right)= \frac{1}{n^2}\operatorname{Var}\left(  \sum_{i=1}^n X_{i} \right)=\frac{1}{n^2}\sum_{i=1}^n\operatorname{Var}(X_{i})= \frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.$$Fixing $\epsilon>0$ we apply [[chebyshev-inequality]] and find that $$\lim_{ n \to \infty } \mathbb{P}\left(  \left| \frac{S_{n}}{n} -\mu\right| \geq \epsilon \right)\leq \lim_{ n \to \infty } \frac{\operatorname{Var}(S_{n})}{\epsilon ^2}=\lim_{ n \to \infty } \frac{\sigma^2}{n\epsilon ^2}=0,$$completing the proof. 
+First, $\mathbb{E}\left[ S_{n}/n \right]= \frac{1}{n}\sum_{i=1}^n\mu=\mu$ and
+$$
+\operatorname{Var}\left(  \frac{S_{n}}{n} \right)= \frac{1}{n^2}\sum_{i=1}^n\operatorname{Var}(X_{i})= \frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.
+$$
+Fixing $\epsilon>0$, the [[chebyshev-inequality]] gives
+$$
+\mathbb{P}\left(  \left| \frac{S_{n}}{n} -\mu\right| \geq \epsilon \right)\leq \frac{\sigma^2}{n\epsilon ^2}\to 0\quad(n\to\infty).
+$$
+Since $\mathbb{E}|S_n/n-\mu|^2=\sigma^2/n\to0$ we also have $L_2$ convergence.
 
 :::
 
-A slightly broader result weakens the assumption to uncorrelated random
-variables with bounded variance.
+The assumptions can be weakened to uncorrelated random variables with bounded
+variance.
 
 :::{.theorem data-title="$L_2$ Weak Law of Large Numbers"}
 
-Given a collection $X_{1}, X_{2}, \dots$ of uncorrelated random variables with
-$\mathbb{E}[X_{i}]=\mu$ and $\text{Var}(X_{i})\leq C<\infty$ then
+Let $X_{1}, X_{2}, \dots$ be uncorrelated random variables with
+$\mathbb{E}[X_{i}]=\mu$ and $\operatorname{Var}(X_{i})\leq C<\infty$. Then
 $$
 \frac{S_{n}}{n} \stackrel{L_{2}~\&~\mathbb{P}}{\to}\mu\quad (n\to \infty).
 $$
@@ -67,60 +71,159 @@ $$
 
 :::{.proof}
 
-Similarly, we simply have that 
+By uncorrelatedness the variances add, so
 $$
-\mathbb{E}\left\lvert   \frac{S_{n}}{n}-\mu  \right\rvert ^2=\text{Var}\left(  \frac{S_{n}}{n} \right)=n^{-2}\text{Var}(S_{n})=n^{-2}\sum_{i=1}^n \text{Var}(X_{i})\leq  n^{-2}\cdot n\cdot C \to 0,
+\mathbb{E}\left\lvert   \frac{S_{n}}{n}-\mu  \right\rvert ^2=\operatorname{Var}\left(  \frac{S_{n}}{n} \right)=n^{-2}\sum_{i=1}^n \operatorname{Var}(X_{i})\leq  n^{-2}\cdot n\cdot C \to 0.
 $$
-completing the proof. 
+Convergence in probability follows from the [[chebyshev-inequality]] (or from
+the fact that $L^2$ convergence implies convergence in probability, see
+[[convergence-in-lp-norm]]).
 
 :::
 
-Next we state the most general version of the weak law of large numbers which
-gives the sufficient and necessary conditions for convergence in norm and
-probability of the sample mean.
+The most general version gives conditions under which the sample mean,
+centred by a suitable truncated mean, converges in probability.
 
 :::{.theorem data-title="General Weak Law of Large Numbers"}
 
-For independent random variables $\{  X_{n} \}$ if:
+Let $\{  X_{n} \}$ be independent random variables such that
+
 1. $\sum_{j=1}^n \mathbb{P}(\lvert  X_{j} \rvert>n)\to 0$ as $n \to \infty$;
    and
 2. $\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to 0$
-   as $n \to \infty$,
-then we define
-$a_{n}:=\sum_{j=1}^n \mathbb{E}[X_{j}\mathbb{1}_{\lvert X_{j} \rvert\leq n}]$
-and $\frac{{S_n-a_n}}{n}\stackrel{\mathbb{P}}{\to}0$ as $n \to \infty$.
+   as $n \to \infty$.
+
+Define $a_{n}:=\sum_{j=1}^n \mathbb{E}[X_{j}\mathbb{1}_{\lvert X_{j} \rvert\leq n}]$.
+Then $\frac{{S_n-a_n}}{n}\stackrel{\mathbb{P}}{\to}0$ as $n \to \infty$.
 
 :::
 
-*Proof:*
+:::{.proof}
 
-There are several versions of the [[weak-laws-of-large-numbers]] that adjust
-the assumptions required (such as [[khinchines-wlln]]). One such version is
-**Feller's WLLN** which drops the often restrictive first moment assumption.
+Truncate: let $T_n=\sum_{j=1}^nX_j\mathbb{1}_{\lvert X_{j} \rvert\leq n}$, so
+$\mathbb{E}T_n=a_n$. Then
+$\mathbb{P}(S_n\neq T_n)\leq\sum_{j=1}^n\mathbb{P}(\lvert X_j\rvert>n)\to0$ by
+condition 1. By independence and condition 2,
+$$
+\operatorname{Var}\left(\frac{T_n}{n}\right)\leq\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to0,
+$$
+so the [[chebyshev-inequality]] gives $\mathbb{P}(|T_n-a_n|>\epsilon n)\to0$ for
+all $\epsilon>0$. Finally
+$$
+\mathbb{P}\left(\frac{|S_n-a_n|}{n}>\epsilon\right)\leq\mathbb{P}(S_n\neq T_n)+\mathbb{P}(|T_n-a_n|>\epsilon n)\to0.
+$$
+
+:::
+
+Two classical versions follow from the general law. **Feller's WLLN** drops
+the often restrictive first moment assumption.
 
 :::{.theorem data-title="Feller's Weak Law of Large Numbers"}
 
-Let $\{  X_{n} \}$ be a sequence of i.i.d. random variables such that
-$\lim_{_{x \to \infty}}x\mathbb{P}(\lvert  X_{1} \rvert>x)=0$. Then
+Let $\{  X_{n} \}$ be i.i.d. with $\lim_{x \to \infty}x\mathbb{P}(\lvert  X_{1} \rvert>x)=0$.
+Then
 $$
 \frac{S_{n}}{n}-\mathbb{E}[X_{1}\mathbb{1}_{\lvert X_{1} \rvert \leq  n}]\stackrel{\mathbb{P}}{\to}0\quad \text{as}\quad n \to \infty.
 $$
 
 :::
 
-*Proof:*
+:::{.proof}
 
-**Khinchine's WLLN** gives a version of the [[weak-laws-of-large-numbers]] for
-i.i.d. sequences under the finite first moment assumption.
+Condition 1 of the general law reads $n\mathbb{P}(|X_1|>n)\to0$, which is the
+assumption. For condition 2 we need $\frac1n\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\to0$. Writing
+$\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\leq\int_0^n2x\,\mathbb{P}(|X_1|>x)\,dx$
+and using that $2x\mathbb{P}(|X_1|>x)\to0$, the Cesàro average
+$\frac1n\int_0^n2x\,\mathbb{P}(|X_1|>x)\,dx\to0$. Finally
+$a_n/n=\mathbb{E}[X_1\mathbb{1}_{|X_1|\leq n}]$.
+
+:::
+
+**Khinchine's WLLN** is the version for i.i.d. sequences with a finite first
+moment.
 
 :::{.theorem data-title="Khinchine's Weak Law of Large Numbers"}
 
-Let $\{  X_{n} \}$ be a sequence of i.i.d. random variables such that
-$\mathbb{E}[\lvert X_{j} \rvert]< \infty$, and $E[X_{j}]=\mu$. Then
+Let $\{  X_{n} \}$ be i.i.d. with $\mathbb{E}[\lvert X_{1} \rvert]< \infty$ and
+$\mathbb{E}[X_{1}]=\mu$. Then
 $$
 \frac{S_{n}}{n}\stackrel{\mathbb{P}}{\to}\mu\quad\text{as}\quad n \to \infty.
 $$
 
 :::
 
-*Proof:*
+:::{.proof}
+
+We check the conditions of the general law. Condition 1 holds since
+$n\mathbb{P}(|X_1|>n)\leq\mathbb{E}[|X_1|\mathbb{1}_{|X_1|>n}]\to0$. For
+condition 2 and any $\epsilon>0$,
+$$
+\frac1n\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\leq\epsilon\,\mathbb{E}|X_1|+\mathbb{E}[|X_1|\mathbb{1}_{|X_1|>\epsilon n}]\to\epsilon\,\mathbb{E}|X_1|,
+$$
+and $\epsilon$ is arbitrary. Finally
+$a_n/n=\mathbb{E}[X_1\mathbb{1}_{|X_1|\leq n}]\to\mu$ by the
+[[dominated-convergence-theorem]].
+
+:::
+
+## Strong Laws
+
+The **Strong Law of Large Numbers (SLLN)** is deeper than the weak law: the
+sample average **converges almost surely** (with probability 1) to the expected
+value. We start with the version requiring **finite second moments**.
+
+:::{.theorem data-title="Strong Law of Large Numbers"}
+
+Let $X_{1}, X_{2},\dots$ be i.i.d. with $\mathbb{E}[X_{i}]=\mu$ and
+$\mathbb{E}[X_{i}^2]<\infty$. Then
+$$
+\bar{X}_{n}\stackrel{a.s.}{\to}\mu\quad (n \to \infty),
+$$
+that is, $\mathbb{P}(\lim_{ n \to \infty }\bar{X}_{n}=\mu)=1$.
+
+:::
+
+:::{.proof}
+
+Replacing $X_i$ by $X_i-\mu$ we may assume $\mu=0$; let
+$\sigma^2=\operatorname{Var}(X_1)$.
+
+*Step 1: squares.* By the [[chebyshev-inequality]],
+$\mathbb{P}(|S_{n^2}|>\epsilon n^2)\leq\sigma^2/(\epsilon^2n^2)$, which is
+summable in $n$. By the [[borel-cantelli-lemma]], $S_{n^2}/n^2\to0$ a.s.
+
+*Step 2: in between.* Let
+$D_n=\max_{n^2\leq k<(n+1)^2}|S_k-S_{n^2}|$. Bounding the maximum by a sum over
+the $2n+1$ indices, each term having second moment at most $2n\sigma^2$,
+$\mathbb{E}D_n^2\leq(2n+1)2n\sigma^2\leq 6n^2\sigma^2$. Hence
+$\mathbb{P}(D_n>\epsilon n^2)\leq6\sigma^2/(\epsilon^2n^2)$ is summable and
+$D_n/n^2\to0$ a.s. by Borel-Cantelli.
+
+For $n^2\leq k<(n+1)^2$ we then have
+$|S_k|/k\leq(|S_{n^2}|+D_n)/n^2\to0$ a.s.
+
+:::
+
+Finally, the general version only needs pairwise independence and a finite
+first moment.
+
+:::{.theorem data-title="General Strong Law of Large Numbers (Etemadi)"}
+
+Let $X_{1}, X_{2}, \dots$ be pairwise independent identically distributed
+random variables with $\mathbb{E}\lvert X_{1} \rvert<\infty$ and
+$\mathbb{E}[X_{1}]=\mu$. Then
+$$
+\frac{S_{n}}{n}= \frac{\sum_{i=1}^nX_{i}}{n} \stackrel{a.s.}{\to}\mu\quad \text{as}\quad n \to \infty.
+$$
+
+:::
+
+The proof combines truncation, the subsequence argument above with
+geometrically growing indices, and the Borel-Cantelli lemma; see Etemadi
+(1981) or Durrett.
+
+## References
+
+- R. Durrett, *Probability: Theory and Examples*, Cambridge University Press.
+- N. Etemadi, "An elementary proof of the strong law of large numbers", *Z.
+  Wahrsch. Verw. Gebiete* 55 (1981), 119-122.

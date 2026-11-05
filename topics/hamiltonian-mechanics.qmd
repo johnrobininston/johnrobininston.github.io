@@ -1,4 +1,7 @@
 ---
+id: hamiltonian-mechanics
+aliases: ["hamiltonian", "hamiltonian-matrix"]
+tags: []
 title: Hamiltonian Mechanics
 author: John Robin Inston
 date: 2026-09-25
@@ -6,18 +9,234 @@ number-sections: true
 title-block-banner: false
 ---
 
-# Hamiltonian Mechanics
+## Hamiltonian Mechanics
 
-A **configuration space** $M$ is the space defined by the coordinates that
-define the configuration of a physical system (e.g. Cartesian space
-$\mathbb{R}^3$, spherical coordinates $S^2 \subseteq \mathbb{R}^3$ etc).  
+**Hamiltonian mechanics** reformulates [[lagrangian-mechanics]] in terms of
+positions $\boldsymbol{q}$ and momenta $\boldsymbol{p}$, replacing the $n$
+second-order Euler-Lagrange equations by $2n$ first-order equations. It is
+equivalent to Newton's laws and to the Lagrangian formulation, and is the
+natural setting for conservation laws and the
+[[hamilton-jacobi-equation]].
 
-Let $(M,\mathcal{L})$ be a mechanical system consisting of a configuration
-space and a [[lagrangian]] which is a function defining the dynamics of the
-system. We select a standard coordinate system on $M$ denoted
-$(\boldsymbol{q}, \dot{\boldsymbol{q}}):=((q_{1}, \dots, q_{n}), (\dot{q}_{1}, \dots, \dot{q}_{n}))$
-from which we define the **momenta** $\boldsymbol{p}$ as
+Let $\mathcal{L}(\boldsymbol{q},\dot{\boldsymbol{q}},t)$ be the
+[[lagrangian-mechanics|Lagrangian]] of a system with generalised coordinates
+$\boldsymbol{q}=(q_1,\dots,q_n)$. The **momenta** are
 $$
-p_{i}(\boldsymbol{ q}, \dot{\boldsymbol{q}},t) := \frac{{\partial \mathcal{L}}}{\partial \dot{\boldsymbol{q}}^i}.
+p_{i}:=\frac{\partial\mathcal{L}}{\partial\dot q_{i}}.
 $$
-For a time instant $t$ the [[legendre-transform]] of $\mathcal{L}$ 
+
+:::{.definition data-title="Hamiltonian"}
+
+Assume the map $\dot{\boldsymbol{q}}\mapsto\boldsymbol{p}$ is invertible. The
+**Hamiltonian** is the Legendre transform of $\mathcal{L}$ in the velocities,
+$$
+H(\boldsymbol{q},\boldsymbol{p},t)=\sum_{i=1}^np_i\dot q_i-\mathcal{L}
+(\boldsymbol{q},\dot{\boldsymbol{q}},t),
+$$
+with $\dot{\boldsymbol{q}}$ expressed as a function of
+$(\boldsymbol{q},\boldsymbol{p},t)$. The space of pairs
+$(\boldsymbol{q},\boldsymbol{p})$ is the **phase space**.
+
+:::
+
+:::{.theorem data-title="Hamilton's Equations"}
+
+The Euler-Lagrange equations are equivalent to
+$$
+\dot q_i=\frac{\partial H}{\partial p_i},\qquad
+\dot p_i=-\frac{\partial H}{\partial q_i},\qquad
+\frac{\partial H}{\partial t}=-\frac{\partial\mathcal{L}}{\partial t}.
+$$
+Moreover, along solutions $\dfrac{dH}{dt}=\dfrac{\partial H}{\partial t}$, so
+$H$ is conserved when the system has no explicit time dependence.
+
+:::
+
+:::{.proof}
+
+Differentiating $H=\sum p_i\dot q_i-\mathcal{L}$ with respect to $q_i$ at fixed
+$p$, the terms involving $\partial\dot q/\partial q_i$ cancel because
+$p_j=\partial\mathcal{L}/\partial\dot q_j$:
+$$
+\frac{\partial H}{\partial q_i}=-\frac{\partial\mathcal{L}}{\partial q_i}
+=-\frac{d}{dt}\frac{\partial\mathcal{L}}{\partial\dot q_i}=-\dot p_i,
+$$
+using the Euler-Lagrange equation. The same cancellation gives
+$\partial H/\partial p_i=\dot q_i$ and $\partial H/\partial t=-\partial
+\mathcal{L}/\partial t$. Finally
+$$
+\frac{dH}{dt}=\sum_i\left(\frac{\partial H}{\partial q_i}\dot q_i
++\frac{\partial H}{\partial p_i}\dot p_i\right)+\frac{\partial H}{\partial t}
+=\frac{\partial H}{\partial t},
+$$
+since the bracket is $-\dot p_i\dot q_i+\dot q_i\dot p_i=0$.
+
+:::
+
+For $\mathcal{L}=K-U$ with kinetic energy quadratic in the velocities, $H=K+U$
+is the total energy.
+
+:::{.example data-title="Pendulum"}
+
+For the pendulum with $\mathcal{L}=\tfrac12ml^2\dot\theta^2+mgl\cos\theta$ we
+have $p=ml^2\dot\theta$ and
+$$
+H=p\dot\theta-\mathcal{L}=\frac{p^2}{2ml^2}-mgl\cos\theta.
+$$
+Hamilton's equations are $\dot\theta=p/(ml^2)$ and $\dot p=-mgl\sin\theta$,
+which combine to $\ddot\theta=-(g/l)\sin\theta$. Since $H$ does not depend on
+$t$, the energy $H$ is conserved and the orbits in phase space are its level
+sets.
+
+:::
+
+## Hamiltonian Matrices
+
+For a system with a quadratic Hamiltonian $H=\tfrac12\boldsymbol{z}^\top S
+\boldsymbol{z}$ in $\boldsymbol{z}=(\boldsymbol{q},\boldsymbol{p})$, with $S$
+symmetric, Hamilton's equations are linear, $\dot{\boldsymbol{z}}=JS
+\boldsymbol{z}$, where
+$$
+J=\begin{bmatrix}0_{n}&I_{n}\\-I_{n}&0_{n}\end{bmatrix}
+$$
+is skew-symmetric and $I_n$ is the $n\times n$ identity. This motivates:
+
+:::{.definition data-title="Hamiltonian Matrix"}
+
+A $2n\times2n$ matrix $A$ is a **Hamiltonian matrix** if $JA$ is symmetric,
+equivalently $JA+A^\top J=0$.
+
+:::
+
+The matrix $A=JS$ is Hamiltonian since $JA=J^2S=-S$ is symmetric.
+
+:::{.proposition data-title="Spectrum of a Hamiltonian Matrix"}
+
+If $A$ is Hamiltonian then $A^\top=JAJ$, so $A$ is similar to $-A^\top$. Hence
+the eigenvalues of $A$ come in pairs $\{\lambda,-\lambda\}$.
+
+:::
+
+:::{.proof}
+
+From $JA+A^\top J=0$ and $J^{-1}=-J$ we get
+$A^\top=-JAJ^{-1}=JAJ$, hence $-A^\top=JAJ^{-1}$, so $A$ is similar to
+$-A^\top$. Similar matrices share eigenvalues, and $A^\top$ has the same
+eigenvalues as $A$, so the spectrum of $A$ equals its negative.
+
+:::
+
+In particular a linear Hamiltonian system cannot be asymptotically stable.
+
+## The Control Hamiltonian
+
+In [[control-theory]] the word **Hamiltonian** refers to a function that
+encodes both the **dynamics** and the **objective** of an
+optimal control problem. It is the instantaneous increment of the
+[[lagrange-multiplier-method|Lagrangian]] of the problem, and the structure is
+the same as in mechanics: the state $\boldsymbol{x}$ plays the role of
+$\boldsymbol{q}$, the costate $\boldsymbol{\lambda}$ the role of
+$\boldsymbol{p}$.
+
+### Control Problem
+
+The system has dynamics given by $n$
+[[ordinary-differential-equations|first-order ODEs]]
+$$
+\dot{\boldsymbol{x}}(t)=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),t),
+\qquad \boldsymbol{x}(t_0)=\boldsymbol{x}_0,
+$$
+where $\boldsymbol{x}(t)\in\mathcal{X}\subseteq\mathbb{R}^n$ is the **state
+vector** and $\boldsymbol{u}(t)\in\mathcal{U}\subseteq\mathbb{R}^r$ is the
+**control vector**, with $\mathcal{X},\mathcal{U}$ the admissible sets. For
+given $\boldsymbol{x}_0$ and control the solution is a **trajectory**. The
+problem is to choose $\boldsymbol{u}$ to minimise the **cost functional**
+$$
+J(\boldsymbol{u})=\int_{t_{0}}^{t_{1}}L(\boldsymbol{x}(t),\boldsymbol{u}(t),t)
+~dt+\phi(\boldsymbol{x}(t_{1})),
+$$
+where $L$ is the **running cost** and $\phi$ the **terminal cost**, subject to
+the dynamics above.
+
+:::{.definition data-title="Control Hamiltonian"}
+
+The **control Hamiltonian** is
+$$
+H(\boldsymbol{x},\boldsymbol{u},\boldsymbol{\lambda},t)
+=L(\boldsymbol{x},\boldsymbol{u},t)
++\boldsymbol{\lambda}^{\top}\boldsymbol{f}(\boldsymbol{x},\boldsymbol{u},t),
+$$
+where $\boldsymbol{\lambda}(t)\in\mathbb{R}^n$ is the **costate** (or
+**adjoint**) vector.
+
+:::
+
+This combines the objective and the state equations as in a static
+[[lagrange-multiplier-method|Lagrangian]], except that the multipliers
+$\boldsymbol{\lambda}(t)$ are functions of time rather than constants.
+
+:::{.intuition data-title="Cost now versus cost later"}
+
+The Hamiltonian combines the **instantaneous cost**, via $L$, and the
+**effect of the control on the future**, via $\boldsymbol{\lambda}^\top
+\boldsymbol{f}$. We want a control that not only keeps the immediate cost low
+but also drives the system in a direction favourable in the long run, as
+measured by the costate.
+
+:::
+
+:::{.theorem data-title="Pontryagin Maximum Principle"}
+
+An optimal pair $(\boldsymbol{x}^*,\boldsymbol{u}^*)$ satisfies, for some
+costate $\boldsymbol{\lambda}(t)$:
+
+- **State equation** (forward in time from $\boldsymbol{x}(t_0)$):
+  $$\dot{\boldsymbol{x}}=\frac{\partial H}{\partial\boldsymbol{\lambda}}
+  =\boldsymbol{f}(\boldsymbol{x},\boldsymbol{u},t).$$
+- **Adjoint equation** (backward in time from the terminal condition):
+  $$\dot{\boldsymbol{\lambda}}=-\frac{\partial H}{\partial\boldsymbol{x}},
+  \qquad\boldsymbol{\lambda}(t_{1})=\frac{\partial\phi}{\partial
+  \boldsymbol{x}}(\boldsymbol{x}(t_{1})).$$
+- **Optimality condition:** the optimal control minimises the Hamiltonian,
+  $$\boldsymbol{u}^*(t)=\arg\min_{\boldsymbol{u}\in\mathcal{U}}
+  H(\boldsymbol{x}^*(t),\boldsymbol{u},\boldsymbol{\lambda}(t),t).$$
+  For an unconstrained interior solution this reduces to
+  $\partial H/\partial\boldsymbol{u}=\boldsymbol{0}$. For maximisation
+  problems $\arg\min$ becomes $\arg\max$.
+
+:::
+
+Since $\boldsymbol{x}$ has a condition at $t_0$ and $\boldsymbol{\lambda}$ at
+$t_1$, this is a **two-point boundary value problem**. The state and adjoint
+equations are exactly Hamilton's equations for $H$.
+
+### Example: Linear-Quadratic Regulator
+
+:::{.example data-title="Scalar LQR"}
+
+Take dynamics $\dot x=ax+bu$ and cost
+$J(u)=\int_0^T\left(\tfrac12qx^2+\tfrac12ru^2\right)dt$ with $q\ge0$, $r>0$
+and no terminal cost.
+
+**Hamiltonian.** With scalar costate $\lambda$,
+$H=\tfrac12qx^2+\tfrac12ru^2+\lambda(ax+bu)$.
+
+**Optimal control.** $\partial H/\partial u=ru+\lambda b=0$, so
+$u^*=-\dfrac{b}{r}\lambda$.
+
+**State and adjoint equations.**
+$$
+\dot x=ax-\frac{b^2}{r}\lambda,\qquad
+\dot\lambda=-\frac{\partial H}{\partial x}=-qx-a\lambda,\quad\lambda(T)=0.
+$$
+In the variable $(x,\lambda)$ this linear system has matrix
+$\begin{bmatrix}a&-b^2/r\\-q&-a\end{bmatrix}$, which is a Hamiltonian matrix.
+
+**Riccati equation.** Posing $\lambda(t)=P(t)x(t)$ and substituting into the
+adjoint equation gives
+$$
+-\dot P=2aP-\frac{b^2}{r}P^2+q,\qquad P(T)=0,
+$$
+and the optimal control takes the feedback form $u^*=-\dfrac{b}{r}P(t)x(t)$.
+
+:::

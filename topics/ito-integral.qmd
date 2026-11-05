@@ -1,58 +1,217 @@
 ---
-title: Itô Integral
-author: John Robin Inston
+id: ito-integral
+aliases: ["stochastic-integrals", "ito-integral-construction"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "Construction and properties of the Ito integral with respect to Brownian motion."
 number-sections: true
+title: "Itô Integral"
 title-block-banner: false
 ---
 
-### The Itô Integral
+## Motivation
 
-Suppose $X_{t}$ is a diffusion process on the filtered probability space
-$(\Omega, F, (\mathcal{F}_{n}), \mathbb{P})$ and that $f_{t}$ is another
-stochastic process that is adapted to the same filtration. Then the general Itô
-integral is defined as
-$$
-Y_{t}=\int_{0}^t f_{s}dX_{s}.
-$$
-We are primarily interested in Itô integrals with respect to
-[[brownian-motion|Brownian motion]] used in [[ksendal]] which have the integral
-form
-$$
-X_{t+s}-X_{t}=\int_{t}^{t+s} \mu(X_{u}, u)du+\int_{t}^{t+s}\sigma(X_{u},u)dB_{u},
-$$
-where our Itô integral is
-$$
-\int_{t}^{t+s}\sigma(X_{u}, u) dB_{u},
-$$
-where $\sigma(X_{t}, t)$ is some function of time and the diffusion $X_{t}$ and
-$B_{t}$ is [[brownian-motion|Brownian motion]].
+The foundation of [[stochastic-calculus]] is integration with respect to
+**diffusions**, a class of continuous-time [[markov-process|Markov processes]]
+with almost surely continuous sample paths (see [[ito-diffusion]]). Several
+constructions exist, notably those of **Itô** and **Stratonovich**. They
+differ in where the integrand is evaluated on each small interval: the Itô
+integral uses the left endpoint, which keeps the integral a martingale and is
+the convention in finance. Brownian paths have infinite variation, so the
+integral cannot be defined pathwise as a Riemann-Stieltjes integral, which is
+why a separate construction is needed.
 
-The construction of the Itô integral is detailed in
-[[ito-integral-construction]] but is omitted from this note for efficiency. For
-clarity we do note the class of functions for which the Itô integral is defined
-$\mathcal{V}=\mathcal{V}(S,T)$ which contains functions (random variables)
-$f(t,\omega):[0, \infty)\times \Omega \to \mathbb{R}$ such that
+Let $B$ be a (one-dimensional) [[brownian-motion|Brownian motion]] on a
+filtered probability space $(\Omega,\mathcal{F},(\mathcal{F}_t),\mathbb{P})$
+(see [[filtrations-and-adapted-processes]]). A diffusion has the form
 
-1. $(t,\omega)\to f(t,\omega)$ is $\mathcal{B}\times \mathcal{F}$-measurable,
-   where $\mathcal{B}$ denotes the [[borel-sigma-algebra]] on $[0,\infty)$,
-2. $f(t,\omega)$ is $\mathcal{F}_{t}$-adapted, and
-3. $\mathbb{E}\left[ \int_{S}^T f(t,\omega)^2~dt \right]<\infty$.
-### Itô Isometry
-
-The most important result for Itô integrals is the Itô isometry which states
-that for all $f \in \mathcal{V}(S,T)$ we have
 $$
-\mathbb{E}\left[ \left(\int_{S}^T f(t,\omega)~dB_{t}\right)^2 \right]=\mathbb{E}\left[ \int_{S}^T f^2(t,\omega)dt \right].
+X_{t+s}-X_t=\int_t^{t+s}\mu(X_u,u)\,du+\int_t^{t+s}\sigma(X_u,u)\,dB_u,
 $$
-### Itô Integral Properties
 
-Let $f,g\in \mathcal{V}(0,T)$ and let $0 \leq S < U < T$, then the following
-hold:
+and the second term is an Itô integral of the process $\sigma(X_u,u)$.
 
-1. $\int_{S}^T fdB_{t}=\int_{S}^U fdB_{t}+\int_{U}^T fdB_{t}$ for almost all
-   $\omega$,
-2. $\int_{S}^T (cf+g)dB_{t}=c \cdot \int_{S}^T fdB_{t}+\int_{S}^T gdB_{t}$
-   where $c$ is constant for almost all $\omega$,
-3. $\mathbb{E}\left[ \int_{S}^T fdB_{t} \right]=0$
-4. $\int_{S}^T fdB_{t}$ is $\mathcal{F}_{T}$-measurable.
+## The Class of Integrands
+
+:::{.definition data-title="The Class $\mathcal{V}(S,T)$"}
+
+$\mathcal{V}=\mathcal{V}(S,T)$ is the class of functions
+$f(t,\omega):[0,\infty)\times\Omega\to\mathbb{R}$ such that
+
+1. $(t,\omega)\mapsto f(t,\omega)$ is $\mathcal{B}\times\mathcal{F}$-measurable,
+   where $\mathcal{B}$ is the Borel $\sigma$-algebra on $[0,\infty)$,
+2. $f(t,\cdot)$ is $\mathcal{F}_t$-adapted, and
+3. $\mathbb{E}\left[\int_S^Tf(t,\omega)^2\,dt\right]<\infty$.
+
+:::
+
+The aim is to define
+
+$$
+\mathcal{I}[f](\omega)=\int_S^Tf(t,\omega)\,dB_t(\omega),\qquad f\in\mathcal{V}.
+$$
+
+We first define it for step functions and then extend by approximation.
+
+## Elementary Functions
+
+:::{.definition data-title="Elementary Function"}
+
+A function $\phi\in\mathcal{V}$ is **elementary** if
+
+$$
+\phi(t,\omega)=\sum_je_j(\omega)\,\mathbb{1}_{[t_j,t_{j+1})}(t).
+$$
+
+:::
+
+Since $\phi\in\mathcal{V}$, each $e_j$ must be $\mathcal{F}_{t_j}$-measurable.
+For such $\phi$ define
+
+$$
+\int_S^T\phi(t,\omega)\,dB_t(\omega)=\sum_{j\ge 0}e_j(\omega)
+\left[B_{t_{j+1}}-B_{t_j}\right](\omega).
+$$
+
+:::{.theorem data-title="Itô Isometry for Elementary Functions"}
+
+If $\phi$ is bounded and elementary, then
+
+$$
+\mathbb{E}\left[\left(\int_S^T\phi\,dB_t\right)^2\right]
+=\mathbb{E}\left[\int_S^T\phi^2\,dt\right].
+$$
+
+:::
+
+:::{.proof}
+
+Write $\Delta B_j=B_{t_{j+1}}-B_{t_j}$. By the independent increments of
+Brownian motion, and since $e_i,e_j$ are measurable with respect to the past,
+
+$$
+\mathbb{E}[e_ie_j\Delta B_i\Delta B_j]=
+\begin{cases}
+0 & i\neq j,\\
+\mathbb{E}[e_j^2]\,(t_{j+1}-t_j) & i=j.
+\end{cases}
+$$
+
+Hence
+
+$$
+\mathbb{E}\left[\left(\int_S^T\phi\,dB\right)^2\right]
+=\sum_{i,j}\mathbb{E}[e_ie_j\Delta B_i\Delta B_j]
+=\sum_j\mathbb{E}[e_j^2](t_{j+1}-t_j)
+=\mathbb{E}\left[\int_S^T\phi^2\,dt\right].
+$$
+
+:::
+
+## Extension to $\mathcal{V}$
+
+The extension takes three steps, each showing that a larger class can be
+approximated in $L^2(\mathbb{P}\times dt)$ by a smaller one.
+
+**Step 1.** Let $g\in\mathcal{V}$ be bounded with $g(\cdot,\omega)$ continuous
+for each $\omega$. Then there are elementary $\phi_n\in\mathcal{V}$ with
+
+$$
+\mathbb{E}\left[\int_S^T(g-\phi_n)^2\,dt\right]\to 0.
+$$
+
+:::{.proof}
+
+Take $\phi_n=\sum_jg(t_j,\omega)\mathbb{1}_{[t_j,t_{j+1})}$ on a partition with
+mesh tending to $0$. It is elementary since $g$ is adapted, and by continuity
+of $g(\cdot,\omega)$ we have $\int_S^T(g-\phi_n)^2dt\to 0$ for each $\omega$.
+The claim follows by bounded convergence.
+
+:::
+
+**Step 2.** Let $h\in\mathcal{V}$ be bounded. Then there are bounded
+$g_n\in\mathcal{V}$, continuous in $t$ for each $\omega$, with
+$\mathbb{E}\left[\int_S^T(h-g_n)^2dt\right]\to 0$.
+
+:::{.proof}
+
+Let $\psi_n$ be a non-negative continuous function supported in $[-1/n,0]$
+with $\int\psi_n=1$, and set
+$g_n(t,\omega)=\int_0^t\psi_n(s-t)h(s,\omega)\,ds$. Then $g_n$ is continuous
+in $t$, bounded, and adapted since it only uses values of $h$ up to time $t$.
+For each $\omega$, $\int_S^T(g_n-h)^2dt\to 0$ because $\psi_n$ is an
+approximate identity, and bounded convergence gives the result.
+
+:::
+
+**Step 3.** Let $f\in\mathcal{V}$. Then there are bounded $h_n\in\mathcal{V}$
+with $\mathbb{E}\left[\int_S^T(f-h_n)^2dt\right]\to 0$.
+
+:::{.proof}
+
+Truncate, $h_n=\max(-n,\min(f,n))$. Then $|f-h_n|\le|f|$, so dominated
+convergence applies since $\mathbb{E}\int f^2<\infty$.
+
+:::
+
+Combining the steps, every $f\in\mathcal{V}$ admits elementary $\phi_n$ with
+$\mathbb{E}\left[\int_S^T(f-\phi_n)^2dt\right]\to 0$.
+
+:::{.definition data-title="Itô Integral"}
+
+For $f\in\mathcal{V}(S,T)$ the **Itô integral** is
+
+$$
+\int_S^Tf\,dB_t=\lim_{n\to\infty}\int_S^T\phi_n\,dB_t\quad\text{in }
+L^2(\mathbb{P}),
+$$
+
+for any sequence of elementary $\phi_n$ with
+$\mathbb{E}\left[\int_S^T(f-\phi_n)^2dt\right]\to 0$.
+
+:::
+
+The limit exists because, by the isometry applied to $\phi_n-\phi_m$, the
+sequence $\int\phi_n\,dB$ is Cauchy in $L^2(\mathbb{P})$, and it does not
+depend on the chosen sequence for the same reason.
+
+## Itô Isometry
+
+The isometry passes to the limit, which gives the main result for Itô
+integrals.
+
+:::{.theorem data-title="Itô Isometry"}
+
+For all $f\in\mathcal{V}(S,T)$,
+
+$$
+\mathbb{E}\left[\left(\int_S^Tf(t,\omega)\,dB_t\right)^2\right]
+=\mathbb{E}\left[\int_S^Tf^2(t,\omega)\,dt\right].
+$$
+
+:::
+
+## Properties
+
+:::{.proposition data-title="Properties of the Itô Integral"}
+
+Let $f,g\in\mathcal{V}(0,T)$ and $0\le S<U<T$. Then
+
+1. $\int_S^TfdB_t=\int_S^UfdB_t+\int_U^TfdB_t$ almost surely,
+2. $\int_S^T(cf+g)\,dB_t=c\int_S^TfdB_t+\int_S^TgdB_t$ almost surely, for
+   constant $c$,
+3. $\mathbb{E}\left[\int_S^TfdB_t\right]=0$,
+4. $\int_S^TfdB_t$ is $\mathcal{F}_T$-measurable.
+
+:::
+
+These hold for elementary functions by direct computation and extend by
+$L^2$-limits. The integral process $t\mapsto\int_0^tf\,dB$ is moreover a
+[[martingale-theory|martingale]], and its differential rules are given by the
+[[ito-formula]].
+
+## References
+
+1. Øksendal, B. (2003). *Stochastic Differential Equations: An Introduction
+   with Applications*, 6th ed. Springer, Chapter 3.

@@ -1,10 +1,13 @@
 ---
+id: model-selection
+aliases: ["model-selection-criteria-aic-bic"]
 title: "Model Selection"
 description: "How to choose between competing regression models, including the bias-variance tradeoff, best subset selection, forward and backward stepwise selection, and information criteria (AIC, BIC, adjusted R²)."
 author: "John Robin Inston"
 date: "2026-05-22"
 date-modified: "2026-05-22"
 toc: true
+number-sections: true
 title-block-banner: false
 page-navigation: true
 execute:
@@ -39,7 +42,7 @@ sns.set_palette('Set2')
 
 ## What Does "Optimal" Model Mean?
 
-There is no single definition of an optimal model — the right criterion depends
+There is no single definition of an optimal model - the right criterion depends
 entirely on the goal.
 
 | Goal | What matters | Implication |
@@ -64,9 +67,9 @@ $$
 + \underbrace{\sigma^2}_{\text{Irreducible error}}.
 $$
 
-- **Bias** is the systematic error from using the wrong model class —
+- **Bias** is the systematic error from using the wrong model class -
   underfitting.
-- **Variance** is sensitivity to the particular training sample — overfitting.
+- **Variance** is sensitivity to the particular training sample - overfitting.
 - $\sigma^2$ is noise inherent in the data; it cannot be reduced by any model.
 
 Adding predictors **reduces bias** (the model fits more patterns) but
@@ -126,16 +129,16 @@ plt.show()
 
 ## The Subset Selection Problem
 
-With $p$ candidate predictors there are $2^p$ possible subsets — including the
+With $p$ candidate predictors there are $2^p$ possible subsets - including the
 intercept-only model and the full model. Four strategies are used in practice:
 
-1. **Best subset** — evaluate all $2^p$ subsets, pick the one minimising an
+1. **Best subset** - evaluate all $2^p$ subsets, pick the one minimising an
    information criterion.
-2. **Forward stepwise** — start from the null model, add one predictor at a
+2. **Forward stepwise** - start from the null model, add one predictor at a
    time.
-3. **Backward stepwise** — start from the full model, drop one predictor at a
+3. **Backward stepwise** - start from the full model, drop one predictor at a
    time.
-4. **Hybrid** — allow both additions and removals at each step.
+4. **Hybrid** - allow both additions and removals at each step.
 
 For $p \leq 20$ or so, best subset selection is feasible. For $p \gtrsim 30$,
 stepwise or regularization is preferred.
@@ -148,7 +151,7 @@ $\mathcal{M}_k$. It then selects among $\mathcal{M}_0, \ldots, \mathcal{M}_p$
 using a criterion such as AIC, BIC, or adjusted $R^2$.
 
 The computational cost grows exponentially: $p = 40$ requires
-$2^{40} \approx 10^{12}$ model fits — completely infeasible. Best subset is the
+$2^{40} \approx 10^{12}$ model fits - completely infeasible. Best subset is the
 gold standard for small $p$ but stepwise or regularization is needed for
 moderate to large $p$.
 
@@ -237,7 +240,7 @@ def backward_stepwise(y, X_candidates, criterion='aic'):
 
 **Hybrid stepwise** alternates between forward and backward passes, allowing
 both additions and removals at each step. It is more flexible but still greedy
-— it is not guaranteed to find the globally optimal subset.
+- it is not guaranteed to find the globally optimal subset.
 
 ::: {.callout-important title="Caution"}
 Stepwise selection inflates Type I error and produces overoptimistic
@@ -266,7 +269,7 @@ size. **Lower is better.**
 
 **AIC** (Akaike, 1974) is derived from information-theoretic arguments and
 estimates out-of-sample prediction error. **BIC** (Schwarz, 1978) is derived
-from Bayesian arguments and penalises complexity more heavily for large $n$ —
+from Bayesian arguments and penalises complexity more heavily for large $n$ -
 for $n \geq 8$, $\ln n > 2$, so BIC penalises each extra parameter harder than
 AIC and tends to favour sparser models.
 
@@ -285,6 +288,33 @@ plt.tight_layout()
 plt.show()
 ```
 
+### Information Criteria for Time Series
+
+Increasing the order of an [[arma-processes|ARMA]],
+[[vector-autoregression-var|VAR]] or [[garch-models|GARCH]] model always
+weakly improves the in-sample log-likelihood, so order selection also needs a
+penalised criterion. For a model with $k$ parameters fitted by
+[[maximum-likelihood-estimation|MLE]] to $n$ observations with maximised
+log-likelihood $\hat\ell$, the criteria are
+
+$$
+\text{AIC}=-2\hat\ell+2k,\qquad \text{BIC}=-2\hat\ell+k\log n,\qquad
+\text{AICc}=\text{AIC}+\frac{2k(k+1)}{n-k-1}.
+$$
+
+The model minimising the criterion is selected. AICc corrects the small-sample
+bias of AIC. BIC is **consistent**: when the true model is finite-dimensional
+it selects the true order with probability tending to $1$ as $n\to\infty$.
+AIC is not consistent but is **efficient**, asymptotically minimising the
+mean-squared prediction error, and tends to prefer larger models.
+
+For $\text{ARMA}(p,q)$ order selection, fit a grid of $(p,q)$ pairs and compare
+AIC/BIC jointly with residual diagnostics such as the [[ljung-box-test]]. The
+same criteria are standard for choosing the lag augmentation in the
+[[unit-root-tests|ADF test]] and the lag order of a VAR. Because AIC and BIC can
+disagree, it is common to report both, preferring BIC when parsimony and
+interpretability matter and AIC when forecast accuracy is the priority.
+
 ### Adjusted $R^2$
 
 Ordinary $R^2 = 1 - \text{RSS}/\text{TSS}$ increases whenever a predictor is
@@ -301,7 +331,7 @@ is equivalent to minimising AIC.
 ## Comparing Models: California Housing
 
 We illustrate how these criteria behave in practice using the California
-housing dataset — a regression problem with 8 predictors and over 20,000
+housing dataset - a regression problem with 8 predictors and over 20,000
 observations.
 
 ```{python}
@@ -338,3 +368,12 @@ print(cmp.to_string(index=False))
 The full model achieves the highest $\bar{R}^2$ and lowest AIC/BIC here because
 all 8 predictors contribute meaningfully. In noisier datasets with more
 candidate predictors, the criteria would clearly select a smaller model.
+
+## References
+
+1. Akaike, H. (1974). A new look at the statistical model identification.
+   *IEEE Transactions on Automatic Control*, 19(6), 716-723.
+2. Schwarz, G. (1978). Estimating the dimension of a model. *Annals of
+   Statistics*, 6(2), 461-464.
+3. James, G., Witten, D., Hastie, T. and Tibshirani, R. (2021). *An
+   Introduction to Statistical Learning*, 2nd ed. Springer, Chapter 6.

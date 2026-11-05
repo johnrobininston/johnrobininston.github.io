@@ -1,46 +1,113 @@
 ---
-title: Control Theory
-author: John Robin Inston
+id: control-theory
+aliases: ["control-theory-fundamentals", "optimal-control", "stochastic-control-theory"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Control Theory"
 title-block-banner: false
 ---
 
-# Control Theory
+## Intuition
 
-**Preliminaries**
-- [[functional]]
-- [[legendre-transform]]
-- [[lipschitz-continuity]]
-- [[gradient]]
-- [[hamiltonian-mechanics]]
-	- [[hamiltonian]]
-- [[calculus-of-variations]]
-**Control Theory**
-- [[deterministic-optimal-control]]
-	- [[lagrange-multiplier-method]]
-	- [[hamilton-jacobi-equation]] (HJE)
-- Stochastic Optimal Control
-- 
+In **control theory** we steer a dynamical system by choosing an input (the
+**control**) over time so as to optimize a payoff. It is an individual
+decision problem: there are no competing players, which distinguishes it from
+[[game-theory]]. When the dynamics contain randomness the payoff is an
+expectation and we are in [[stochastic-control]].
 
-- [[control-theory-fundamentals]]
-- **[[optimal-control]]**
-	- [[lagrange-multiplier-method]]
-- [[calculus-of-variations]]
-	- [[euler-lagrange-equation]]
-- **Deterministic Control**
-	- [[hamilton-jacobi-equation]]
-		- [[gradient]]
-		- [[hamiltonian]]
+The central idea is that we optimize over a *function* (the control path), an
+infinite dimensional problem, which is why the tools come from the
+[[calculus-of-variations]] ([[euler-lagrange-equation]], Hamilton's equations,
+[[hamilton-jacobi-equation]]).
 
+## Problem formulation
 
+:::{.definition data-title="Controlled system"}
 
+Let $A\subset\mathbb{R}^m$ be a compact set of **admissible control values**.
+A **control** is a (measurable) function $\alpha:[0,T]\to A$. Given
+$f:\mathbb{R}^n\times A\to\mathbb{R}^n$ (written
+$f(x,a,t)$ if it depends on time), the **controlled dynamical system** is
+$$
+\begin{cases}
+\dot{x}(s)=f(x(s),\alpha(s)), & s\in[t,T],\\
+x(t)=x,
+\end{cases}
+$$
+started at time $t$ from state $x\in\mathbb{R}^n$. It is **autonomous** when
+$f$ has no explicit time dependence.
 
-- [[hamilton-jacobi-equation]]
-	- [[hamiltonian-mechanics]]
-		- [[hamiltonian]]
-	- Frenchel Conjugate
-	- Hopf-Lax Formula
-- Optimal Control Problem
-	- Lipschitz
-	- 
+:::
+
+The dynamics are Markovian: the change of state from $s$ to $s+h$ depends
+only on the current state $x(s)$ and current control $\alpha(s)$, as in the
+action of a discrete-time Markov decision process (see
+[[markov-chains]]).
+
+:::{.definition data-title="Payoff functional"}
+
+The **payoff** (a [[calculus-of-variations|functional]] of the control) is
+$$
+P_{t,x}[\alpha]=\int_{t}^{T}r(x(s),\alpha(s))\,ds+g(x(T)),
+$$
+where $r$ is the **running payoff** and $g$ the **terminal payoff**.
+
+:::
+
+The **optimal control problem** is to find $\alpha^*$ with
+$P_{t,x}[\alpha^*]\geq P_{t,x}[\alpha]$ for every admissible $\alpha$. In
+practice we require $f$, $r$, $g$ to be regular, e.g.
+[[lipschitz-continuity|Lipschitz continuous]], so that the ODE is well posed.
+
+:::{.example data-title="Staying near the origin"}
+
+An individual starts at the origin of a line and is rewarded for being close
+to it after one minute, while moving at speed at most 1. Then
+$\dot{x}=\alpha$, $x(0)=0$, $A=[-1,1]$, $r=0$, $g(x)=-|x|$, so
+$P[\alpha]=-|x(1)|$ is to be maximized. The optimal strategy is $\alpha\equiv0$.
+
+:::
+
+## Value function and dynamic programming
+
+:::{.definition data-title="Value function"}
+
+The **value function** is the best attainable payoff from state $x$ at time
+$t$:
+$$
+u(x,t)=\sup_{\alpha}P_{t,x}[\alpha],\qquad u(x,T)=g(x).
+$$
+
+:::
+
+The value function obeys the [[dynamic-programming-principle]]: for
+$t\le t+h\le T$,
+$$
+u(x,t)=\sup_{\alpha}\left\{\int_{t}^{t+h}r(x(s),\alpha(s))\,ds
++u(x(t+h),t+h)\right\}.
+$$
+Letting $h\to0$ formally yields the first-order PDE
+$$
+-\partial_{t}u(x,t)=\sup_{a\in A}\left\{f(x,a)\cdot\nabla u(x,t)+r(x,a)\right\},
+$$
+a [[hamilton-jacobi-equation]] with Hamiltonian
+$H(x,p)=\sup_{a}\{f(x,a)\cdot p+r(x,a)\}$ (see [[hamiltonian-mechanics]],
+[[gradient]]). In the stochastic case a second-order term appears, giving the
+[[hjb-equation]].
+
+## Methods
+
+- **Calculus of variations / Pontryagin**: necessary conditions for an
+  optimal path via Hamilton's equations (see [[hamiltonian-mechanics]]) and
+  [[lagrange-multiplier-method]] for the dynamic constraint.
+- **Dynamic programming**: solve the Hamilton-Jacobi(-Bellman) equation for
+  $u$, then choose $\alpha^*(s)$ as a maximizer of the Hamiltonian along the
+  optimal trajectory.
+
+## References
+
+- L. C. Evans, *Partial Differential Equations*, Chapter 10.
+- W. H. Fleming and R. W. Rishel, *Deterministic and Stochastic Optimal
+  Control*.

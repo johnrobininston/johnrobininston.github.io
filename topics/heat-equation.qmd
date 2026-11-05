@@ -1,4 +1,7 @@
 ---
+id: heat-equation
+aliases: ["diffusion-equation"]
+tags: []
 title: Heat Equation
 author: John Robin Inston
 date: 2026-09-25
@@ -6,32 +9,35 @@ number-sections: true
 title-block-banner: false
 ---
 
-# Heat Equation
-The (homogeneous) **heat equation** describes the diffusion of heat in a
-general $n$-dimensional continuous medium. The same equation governs any
-quantity that spreads out from high to low concentration, such as dye in a
-liquid or a pollutant in air. It is the prototypical **parabolic**
-[[partial-differential-equations|PDE]].
+## Definition and Intuition
 
-:::{.definition data-title="Heat Equation"}
+The **heat equation** (or **diffusion equation**) describes how a conserved
+quantity - heat, dye in a liquid, a pollutant in air, probability - spreads
+from regions of high to low density in a continuous medium. It is the
+prototypical **parabolic** [[partial-differential-equations|PDE]].
 
-Denoting the heat of material at location $\boldsymbol{x}$ at time $t$ by
-$u(t,\boldsymbol{x})$ the **heat equation** (**diffusion equation**) gives the
-heat diffusion dynamics as
+:::{.definition data-title="Heat (Diffusion) Equation"}
+
+Let $u(t,\boldsymbol{x})$ be the density (temperature, concentration) at
+location $\boldsymbol{x}\in\mathbb{R}^n$ and time $t$. The **heat equation** is
 $$
-u_{t}-k\Delta u=0,\qquad k>0,
+u_{t}-D\Delta u=0,\qquad D>0,
 $$
-where $\Delta$ denotes the [[laplace-operator]] and $k$ is the *diffusivity*.
-The **non-homogeneous heat equation** is $u_{t}-k\Delta u=f$, where $f$
-represents a heat source.
+where $\Delta$ is the [[laplace-operator]] and $D$ is the **diffusivity**
+(**diffusion coefficient**). The **non-homogeneous** equation is
+$u_{t}-D\Delta u=f$, where $f$ is a source. With a variable diffusivity the
+equation is
+$$
+u_t=\nabla\cdot\bigl(D(\boldsymbol{x})\nabla u\bigr).
+$$
 
 :::
 
-In one dimension this is $u_t=ku_{xx}$, where $u(t,x)$ is the temperature at
-position $x$ and time $t$ in a long, thin, perfectly insulated bar. Scaling
-time by $k$ allows us to take $k=1$ without loss of generality.
+In one dimension $u_t=Du_{xx}$ describes the temperature in a long, thin,
+perfectly insulated bar. Rescaling time by $D$ lets us take $D=1$ without loss
+of generality.
 
-## Intuition
+:::{.intuition data-title="Moving towards the average"}
 
 The Laplacian measures how much $u$ at a point differs from its average over a
 small neighbourhood. In one dimension
@@ -39,37 +45,36 @@ $$
 u_{xx}(x)=\lim_{h\to0}\frac{u(x+h)+u(x-h)-2u(x)}{h^2}
 =\lim_{h\to0}\frac{2}{h^2}\left(\frac{u(x+h)+u(x-h)}{2}-u(x)\right),
 $$
-so $u_t=ku_{xx}$ says that **each point moves towards the average of its
+so $u_t=Du_{xx}$ says that **each point moves towards the average of its
 neighbours**, at a rate proportional to how far it is from that average.
 
 - Where $u$ is a local peak ($u_{xx}<0$) the temperature falls.
 - Where $u$ is a local trough ($u_{xx}>0$) the temperature rises.
-- Where $u$ is linear ($u_{xx}=0$) nothing changes, as heat flowing in from
+- Where $u$ is linear ($u_{xx}=0$) nothing changes: the heat flowing in from
   the hot side exactly matches the heat flowing out to the cold side.
 
-The result is that bumps flatten out and sharp features are smoothed
-immediately, which is why the equation is irreversible. Probabilistically, $u$
-is the density of a cloud of particles each performing independent random walks
-([[brownian-motion]]), and the equation describes how the cloud spreads.
+Bumps flatten and sharp features are smoothed immediately, which is why the
+equation is irreversible. Probabilistically, $u$ is the density of a cloud of
+particles performing independent random walks ([[brownian-motion]]).
 
-# Derivation
-To derive the heat (diffusion) equation consider the diffusion of dye through a
-liquid in a thin pipe, where the dye moves from high concentration to low
-concentration. Let $u(t,x)$ be the concentration (mass per unit length) of the
-dye at position $x$ in the pipe at time $t$. The total mass of dye in the pipe
-from $x_{0}$ to $x_{1}$ at time $t$ is given by
-$$
-M(t)=\int_{x_{0}}^{x_{1}}{u(x,t)}~d{x} \implies \frac{\partial M}{\partial t}=\int_{x_{0}}^{x_{1}}{u_{t}(x,t)}~d{x}.
-$$
+:::
 
-**Conservation of mass.** Dye is neither created nor destroyed, so the mass
-changes only through the flux $J(t,x)$ (mass per unit time, positive to the
-right) through the two ends:
+## Derivation
+
+### From Conservation of Mass
+
+Consider dye in a thin pipe and let $u(t,x)$ be its concentration (mass per
+unit length). The mass in $[x_0,x_1]$ is $M(t)=\int_{x_0}^{x_1}u~dx$, so
+$M'(t)=\int_{x_0}^{x_1}u_t~dx$.
+
+**Conservation of mass.** Dye is neither created nor destroyed, so $M$ changes
+only through the flux $J(t,x)$ (mass per unit time, positive to the right)
+through the ends:
 $$
-\frac{\partial M}{\partial t}=J(t,x_0)-J(t,x_1)=-\int_{x_0}^{x_1}J_x(t,x)~dx.
+M'(t)=J(t,x_0)-J(t,x_1)=-\int_{x_0}^{x_1}J_x(t,x)~dx.
 $$
-Comparing the two expressions for $\partial M/\partial t$, which hold for all
-$x_0<x_1$, gives the **continuity equation**
+Comparing the two expressions, valid for all $x_0<x_1$, gives the
+**continuity equation**
 $$
 u_t+J_x=0.
 $$
@@ -77,30 +82,48 @@ $$
 **Fick's (Fourier's) law.** Material flows from high to low concentration at a
 rate proportional to the steepness of the gradient,
 $$
-J=-ku_x,\qquad k>0.
+J=-Du_x,\qquad D>0.
 $$
-For heat this is Fourier's law, with $u$ the temperature, $J$ the heat flux, and
-$k=\kappa/(\rho c)$ built from the conductivity $\kappa$, the density $\rho$ and
-the specific heat $c$.
+For heat this is Fourier's law, with $u$ the temperature, $J$ the heat flux and
+$D=\kappa/(\rho c)$ built from the conductivity $\kappa$, density $\rho$ and
+specific heat $c$.
 
-Substituting gives $u_t=ku_{xx}$. In $n$ dimensions the same argument on a
-region $\Omega$ uses the divergence theorem:
+Substituting gives $u_t=Du_{xx}$. In $n$ dimensions, on any subregion
+$\Omega'$ the divergence theorem gives
 $$
-\frac{d}{dt}\int_\Omega u~dx=-\int_{\partial\Omega}\vec J\cdot\vec n~dS
-=-\int_\Omega\nabla\cdot\vec J~dx,
+\frac{d}{dt}\int_{\Omega'}u~dx=-\int_{\partial\Omega'}\vec J\cdot\vec n~dS
+=-\int_{\Omega'}\nabla\cdot\vec J~dx,
 $$
-so $u_t+\nabla\cdot\vec J=0$, and with $\vec J=-k\nabla u$ (see
-[[gradient]]) this becomes $u_t=k\nabla\cdot\nabla u=k\Delta u$. If the medium is
-also moving with velocity $\vec V$, then $\vec J=u\vec V-k\nabla u$ and one
-gets the transport-diffusion equation $u_t+\vec V\cdot\nabla u=k\Delta u$ (see
-[[transport-equation]]).
+so $u_t+\nabla\cdot\vec J=0$, and with $\vec J=-D\nabla u$ (see [[gradient]])
+this becomes $u_t=\nabla\cdot(D\nabla u)$.
 
-# Initial and Boundary Conditions
+### From a Random Walk
+
+Consider a particle on the lattice $h\mathbb{Z}$ which, every $\tau$ units of
+time, jumps one step left or right with probability $1/2$. If $p(t,x)$ is the
+probability of being at $x$ at time $t$,
+$$
+p(t+\tau,x)=\tfrac12p(t,x+h)+\tfrac12p(t,x-h).
+$$
+Subtracting $p(t,x)$ and dividing by $\tau$,
+$$
+\frac{p(t+\tau,x)-p(t,x)}{\tau}=\frac{h^2}{2\tau}\cdot
+\frac{p(t,x+h)+p(t,x-h)-2p(t,x)}{h^2}.
+$$
+Letting $h,\tau\to0$ with $h^2/(2\tau)\to D$ fixed gives $p_t=Dp_{xx}$. The
+**diffusive scaling** $h\sim\sqrt\tau$ is what produces a non-trivial limit and
+is the discrete version of the scaling of Brownian motion. In particular $D$
+has units of length$^2$/time, and the equation is also the law of the density
+of a single randomly moving particle.
+
+## Initial and Boundary Conditions
+
 The heat equation is first order in time, so one initial condition
-$u(0,x)=u_0(x)$ is required. On a bar $0<x<L$ we also need one condition at each
-end. The standard ones are:
+$u(0,x)=u_0(x)$ is required. On a bar $0<x<L$ one condition is also needed at
+each end. The standard ones are:
 
-- **Dirichlet:** the temperature is prescribed, $u(t,0)=a$. (End held in a bath.)
+- **Dirichlet:** the temperature is prescribed, $u(t,0)=a$ (end held in a
+  bath).
 - **Neumann:** the flux is prescribed, $u_x(t,0)=g$. With $g=0$ this is a
   perfectly insulated end.
 - **Robin:** $u_x+\alpha u=g$, where the end loses heat to the surroundings at
@@ -113,7 +136,7 @@ the end $x=0$ is placed in icy water ($0$) and the end $x=L$ in boiling water
 ($100$). The problem is
 $$
 \begin{cases}
-u_t=ku_{xx}, & 0<x<L,\ t>0,\\
+u_t=Du_{xx}, & 0<x<L,\ t>0,\\
 u(0,x)=50,\\
 u(t,0)=0,\quad u(t,L)=100.
 \end{cases}
@@ -121,98 +144,135 @@ $$
 
 :::
 
-# Properties
+## Properties
 
 :::{.theorem data-title="Properties of the Heat Equation"}
 
-Let $u$ solve $u_t=ku_{xx}$ on $[0,L]$. Then:
+Let $u$ solve $u_t=Du_{xx}$ on $[0,L]$. Then:
 
-1. **Linearity:** if $u_{1}$ and $u_{2}$ are solutions, then so is
-   $c_{1}u_{1}+c_{2}u_{2}$ for any constants $c_{1}$ and $c_{2}$.
+1. **Linearity:** if $u_{1},u_{2}$ are solutions then so is
+   $c_{1}u_{1}+c_{2}u_{2}$ for any constants $c_1,c_2$.
 2. **Maximum principle:** the maximum and minimum of $u$ over
    $[0,T]\times[0,L]$ are attained at $t=0$ or at $x=0$ or $x=L$.
 3. **Uniqueness:** for given initial and Dirichlet data there is at most one
    solution.
 4. **Smoothing and infinite speed:** for $t>0$ the solution is smooth (indeed
-   analytic in $x$), and a disturbance at one point is felt instantaneously
+   analytic in $x$), and a disturbance at one point is felt instantly
    everywhere.
-5. **Conservation (insulated ends):** if $u_x(t,0)=u_x(t,L)=0$ then
+5. **Conservation:** if $u_x(t,0)=u_x(t,L)=0$ (insulated ends, no flux) then
    $\int_0^Lu~dx$ is constant in time.
+6. **Energy decay:** with Dirichlet or no-flux boundaries,
+   $\frac{d}{dt}\int_0^Lu^2~dx=-2D\int_0^Lu_x^2~dx\le0$.
+7. **Irreversibility:** the equation is not invariant under $t\to-t$, and
+   backward problems are ill-posed.
+8. **Convergence to equilibrium:** with no-flux boundaries $u\to\bar u$, the
+   mean of $u_0$, exponentially fast, at a rate given by the smallest non-zero
+   Neumann eigenvalue.
 
 :::
 
 :::{.proof}
 
-*(3)* If $u_1,u_2$ are two solutions then $w=u_1-u_2$ solves the problem with
-zero data. Let $E(t)=\int_0^Lw^2~dx\ge0$. Then, integrating by parts and using
-$w=0$ at $x=0,L$,
+*(3), (6)* Multiply the equation by $u$ and integrate. Integrating by parts,
 $$
-E'(t)=2\int_0^Lww_t~dx=2k\int_0^Lww_{xx}~dx=-2k\int_0^Lw_x^2~dx\le0.
+\frac12\frac{d}{dt}\int_0^Lu^2~dx=D\int_0^Luu_{xx}~dx
+=D[uu_x]_0^L-D\int_0^Lu_x^2~dx,
 $$
-Since $E(0)=0$ and $E\ge0$ is non-increasing, $E\equiv0$, so $w\equiv0$.
+and the boundary term vanishes for Dirichlet ($u=0$) or no-flux ($u_x=0$)
+data, giving (6). For (3), if $u_1,u_2$ are two solutions with the same data
+then $w=u_1-u_2$ has zero data, so $E(t)=\int_0^Lw^2~dx\ge0$ is
+non-increasing with $E(0)=0$, hence $w\equiv0$.
 
-*(5)* $\frac{d}{dt}\int_0^Lu~dx=k\int_0^Lu_{xx}~dx=k[u_x]_0^L=0$.
+*(5)* $\frac{d}{dt}\int_0^Lu~dx=D\int_0^Lu_{xx}~dx=D[u_x]_0^L=0$.
+
+*(8)* Expand $u=\sum_ka_k(t)\varphi_k$ in the Neumann eigenfunctions of
+$-\partial_{xx}$, with eigenvalues $\mu_k$. Then $a_k'=-D\mu_ka_k$, so
+$a_k(t)=a_k(0)e^{-D\mu_kt}$. The eigenvalue $\mu_0=0$ has constant
+eigenfunction and carries the mean, while all other modes decay at rate at
+least $D\mu_1>0$. Since $\mu_k\sim k^2$, running the equation backwards would
+amplify high frequencies without bound, which gives (7).
 
 :::
 
 > *Note:* The maximum principle matches intuition: heat cannot pile up in the
-> interior of the bar, because every interior point is moving towards the
-> average of its neighbours.
+> interior of the bar, because every interior point moves towards the average
+> of its neighbours. Property 7 is the mathematical expression of the second
+> law of thermodynamics; it is why deblurring, the inverse of diffusion, is
+> ill-posed.
 
-# Solutions
+## Solutions
 
-## Steady State
+### Steady State
+
 A solution with $u_t=0$ satisfies $u_{xx}=0$, so is linear in $x$. For the rod
-problem above the steady state is $u_\infty(x)=100x/L$, which is where the
-temperature settles as $t\to\infty$. Writing $u=u_\infty+v$ then reduces to a
-problem for $v$ with zero boundary data.
+problem above the steady state is $u_\infty(x)=100x/L$, where the temperature
+settles as $t\to\infty$. Writing $u=u_\infty+v$ reduces to a problem for $v$
+with zero boundary data. In higher dimensions the steady state solves the
+[[laplace-equation]] (or the [[poisson-equation]] with a source).
 
-## Separation of Variables
-For $u_t=ku_{xx}$ on $(0,L)$ with $u(t,0)=u(t,L)=0$ look for solutions of the
-form $u=T(t)X(x)$. Substitution gives
+### Separation of Variables
+
+For $u_t=Du_{xx}$ on $(0,L)$ with $u(t,0)=u(t,L)=0$ look for $u=T(t)X(x)$:
 $$
-\frac{T'}{kT}=\frac{X''}{X}=-\lambda,
+\frac{T'}{DT}=\frac{X''}{X}=-\lambda,
 $$
-since the left side depends only on $t$ and the right only on $x$, so both are
-constant. The boundary conditions give $X''+\lambda X=0$, $X(0)=X(L)=0$ which
-has non-trivial solutions only for
+since the left side depends only on $t$ and the right only on $x$. The
+boundary conditions give $X''+\lambda X=0$, $X(0)=X(L)=0$, which has
+non-trivial solutions only for
 $$
-\lambda_n=\left(\frac{n\pi}{L}\right)^2,\qquad X_n(x)=\sin\frac{n\pi x}{L},\qquad n=1,2,\dots
+\lambda_n=\left(\frac{n\pi}{L}\right)^2,\qquad
+X_n(x)=\sin\frac{n\pi x}{L},\qquad n=1,2,\dots
 $$
-and $T_n(t)=e^{-k\lambda_nt}$. By linearity
+with $T_n(t)=e^{-D\lambda_nt}$. By linearity
 $$
-u(t,x)=\sum_{n=1}^\infty b_n\,e^{-k(n\pi/L)^2t}\sin\frac{n\pi x}{L},\qquad
+u(t,x)=\sum_{n=1}^\infty b_n\,e^{-D(n\pi/L)^2t}\sin\frac{n\pi x}{L},\qquad
 b_n=\frac{2}{L}\int_0^Lu_0(x)\sin\frac{n\pi x}{L}~dx,
 $$
 where the $b_n$ are the Fourier sine coefficients of the initial data.
+
+For Neumann (insulated) ends the eigenfunctions are $\cos(n\pi x/L)$ and
+$$
+u(t,x)=\frac{a_0}{2}+\sum_{n=1}^\infty a_ne^{-D(n\pi/L)^2t}\cos\frac{n\pi x}{L},
+\qquad a_n=\frac2L\int_0^Lu_0\cos\frac{n\pi x}{L}~dx.
+$$
+As $t\to\infty$, $u\to a_0/2$, the average of $u_0$.
 
 :::{.example data-title="Single Mode"}
 
 If $u_0(x)=\sin(\pi x/L)$ then only $b_1=1$ is non-zero and
 $$
-u(t,x)=e^{-k\pi^2t/L^2}\sin\frac{\pi x}{L}.
+u(t,x)=e^{-D\pi^2t/L^2}\sin\frac{\pi x}{L}.
 $$
-The profile keeps its shape and simply decays, with time constant
-$L^2/(k\pi^2)$. Higher modes $\sin(n\pi x/L)$ decay $n^2$ times faster, which
-explains the smoothing: rough features are made of high modes which vanish
-first.
+The profile keeps its shape and decays with time constant $L^2/(D\pi^2)$.
+Higher modes $\sin(n\pi x/L)$ decay $n^2$ times faster, which explains the
+smoothing: rough features are made of high modes, which vanish first.
 
 :::
 
-## The Whole Line
+:::{.example data-title="Time to Equilibrate"}
+
+The slowest non-trivial mode decays like $e^{-D\pi^2t/L^2}$, so the
+equilibration time scales as $L^2/(D\pi^2)$. Doubling the length multiplies
+the time by four. This is why diffusion is efficient at cell scales
+(microseconds over micrometres) but hopelessly slow at macroscopic scales
+(years over metres in a typical liquid).
+
+:::
+
+### The Whole Line
 
 :::{.definition data-title="Heat Kernel"}
 
 The **heat kernel** (fundamental solution) on $\mathbb{R}$ is
 $$
-\Phi(t,x)=\frac{1}{\sqrt{4\pi kt}}\,e^{-x^2/4kt},\qquad t>0.
+\Phi(t,x)=\frac{1}{\sqrt{4\pi Dt}}\,e^{-x^2/4Dt},\qquad t>0.
 $$
 
 :::
 
 :::{.theorem data-title="Solution on the Real Line"}
 
-For bounded continuous $u_0$ the problem $u_t=ku_{xx}$, $u(0,x)=u_0(x)$ on
+For bounded continuous $u_0$ the problem $u_t=Du_{xx}$, $u(0,x)=u_0(x)$ on
 $\mathbb{R}$ has the solution
 $$
 u(t,x)=\int_{-\infty}^\infty\Phi(t,x-y)\,u_0(y)~dy=(\Phi(t,\cdot)*u_0)(x).
@@ -224,44 +284,157 @@ $$
 
 *$\Phi$ solves the equation.* Differentiating,
 $$
-\Phi_t=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),\qquad
-k\Phi_{xx}=k\Phi\left(-\frac{1}{2kt}+\frac{x^2}{4k^2t^2}\right)
-=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4kt^2}\right),
+\Phi_t=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4Dt^2}\right),\qquad
+D\Phi_{xx}=D\Phi\left(-\frac{1}{2Dt}+\frac{x^2}{4D^2t^2}\right)
+=\Phi\left(-\frac{1}{2t}+\frac{x^2}{4Dt^2}\right),
 $$
-so $\Phi_t=k\Phi_{xx}$, and the same holds for the translates $\Phi(t,x-y)$ and
-hence, differentiating under the integral, for $u$.
+so $\Phi_t=D\Phi_{xx}$, and the same holds for the translates $\Phi(t,x-y)$
+and hence, differentiating under the integral, for $u$.
 
 *$\Phi$ has unit mass.* By the [[gaussian-integral]],
-$\int_{-\infty}^\infty e^{-(x-y)^2/4kt}~dy=\sqrt{4\pi kt}$, so
-$\int\Phi~dy=1$. The kernel concentrates at $x$ as $t\to0$ (its width is
-$\sim\sqrt{kt}$ and its height grows) so it approximates a delta function, and
-$u(t,x)\to u_0(x)$.
+$\int e^{-(x-y)^2/4Dt}~dy=\sqrt{4\pi Dt}$, so $\int\Phi~dy=1$. As $t\to0$ the
+kernel concentrates at $x$ (width $\sim\sqrt{Dt}$, height growing), so it
+approximates a delta function and $u(t,x)\to u_0(x)$.
 
 :::
 
-> *Note:* $\Phi(t,\cdot)$ is the density of the
-> [[normal-distribution]] $\mathcal{N}(0,2kt)$. The solution is the average of
-> the initial data against a Gaussian whose width $\sqrt{2kt}$ grows like the
-> square root of time. This is the diffusive scaling of
-> [[brownian-motion]]. The tails are positive for every $t>0$, which is the
-> infinite propagation speed.
+> *Note:* $\Phi(t,\cdot)$ is the density of the [[normal-distribution]]
+> $\mathcal{N}(0,2Dt)$. The solution averages the initial data against a
+> Gaussian whose width $\sqrt{2Dt}$ grows like the square root of time, the
+> diffusive scaling of [[brownian-motion]]. The tails are positive for every
+> $t>0$, which is the infinite propagation speed. See also [[convolution]].
 
 :::{.example data-title="Spreading of a Heat Spike"}
 
-Let $u_0=\delta_0$ be an initial unit of heat concentrated at the origin. Then
-$u(t,x)=\Phi(t,x)$: a Gaussian whose peak $1/\sqrt{4\pi kt}$ falls like
-$t^{-1/2}$ while its width grows like $t^{1/2}$, so the total heat stays equal
-to $1$.
+Let $u_0=\delta_0$ be a unit of heat concentrated at the origin. Then
+$u(t,x)=\Phi(t,x)$: a Gaussian whose peak $1/\sqrt{4\pi Dt}$ falls like
+$t^{-1/2}$ while its width grows like $t^{1/2}$, so the total heat remains $1$.
 
 :::
 
-# Related Topics
+### Fourier Transform
+
+On $\mathbb{R}^n$ take the Fourier transform
+$\hat u(t,\xi)=\int e^{-i\xi\cdot x}u(t,x)~dx$, so that $\Delta\to-|\xi|^2$.
+The equation becomes the ODE $\hat u_t=-D|\xi|^2\hat u$, with solution
+$\hat u=e^{-D|\xi|^2t}\hat u_0$. Inverting,
+$$
+u(t,x)=\int_{\mathbb{R}^n}\frac{1}{(4\pi Dt)^{n/2}}
+e^{-|x-y|^2/4Dt}u_0(y)~dy.
+$$
+Each Fourier mode decays at its own rate $D|\xi|^2$, so high-frequency content
+is damped fastest, which makes the smoothing property transparent.
+
+### Similarity Solution
+
+The equation $u_t=Du_{xx}$ is invariant under $x\to\lambda x$,
+$t\to\lambda^2t$, and so admits solutions of the form
+$u(t,x)=t^{-1/2}g(x/\sqrt t)$. Substituting $\xi=x/\sqrt t$ gives
+$Dg''+\tfrac12\xi g'+\tfrac12g=0$, i.e. $(Dg'+\tfrac12\xi g)'=0$, whose
+integrable solution $g(\xi)=Ce^{-\xi^2/4D}$ recovers the heat kernel.
+
+### Numerical Solution
+
+The explicit (forward Euler, central difference) scheme in one dimension is
+$$
+u_i^{m+1}=u_i^m+r\left(u_{i+1}^m-2u_i^m+u_{i-1}^m\right),\qquad
+r=\frac{D\Delta t}{\Delta x^2}.
+$$
+It is stable only if $r\le\frac12$, a severe restriction on the time step. The
+implicit (backward Euler) and Crank-Nicolson schemes are unconditionally
+stable and require solving a tridiagonal system at each step. See
+[[finite-difference-methods]].
+
+## Generalisations
+
+:::{.definition data-title="Advection-Diffusion-Reaction Equation"}
+
+Adding a velocity field $\vec V$ and a reaction term $R(u)$ to the
+conservation law $u_t+\nabla\cdot\vec J=0$ with
+$\vec J=\vec Vu-D\nabla u$ gives
+$$
+u_t+\nabla\cdot(\vec Vu)=\nabla\cdot(D\nabla u)+R(u).
+$$
+
+:::
+
+The terms are the time derivative, **advection** (transport, see
+[[transport-equation]]), **diffusion** and **reaction**. Important cases:
+
+- **Advection-diffusion** ($R=0$): $u_t+\vec V\cdot\nabla u=D\Delta u$ for
+  constant $\vec V$.
+- **Fisher-KPP equation** ($R=ru(1-u)$): logistic growth plus diffusion,
+  producing travelling population fronts of speed $2\sqrt{rD}$.
+- **Non-linear diffusion** ($D=D(u)$): e.g. the porous medium equation
+  $u_t=\Delta(u^m)$, which has finite speed of propagation.
+- **Anisotropic diffusion:** $D(x)$ is a positive definite matrix.
+
+:::{.example data-title="Drift-Diffusion in One Dimension"}
+
+The equation $u_t+vu_x=Du_{xx}$ with constant $v$ is solved from the heat
+kernel by moving to the frame $y=x-vt$: setting $u(t,x)=w(t,x-vt)$ gives
+$w_t=Dw_{yy}$, so
+$$
+u(t,x)=\int_{-\infty}^\infty\frac{1}{\sqrt{4\pi Dt}}
+e^{-(x-vt-y)^2/4Dt}u_0(y)~dy.
+$$
+The cloud translates at speed $v$ while spreading like $\sqrt{2Dt}$.
+
+:::
+
+## Link with Stochastic Processes
+
+Let $X_t$ solve the [[stochastic-differential-equations|SDE]]
+$dX_t=\mu(X_t)~dt+\sigma(X_t)~dW_t$. Its transition density $p(t,x)$ solves
+the **Fokker-Planck (forward Kolmogorov) equation**
+$$
+p_t=-\nabla\cdot(\mu p)+\frac12\sum_{i,j}\partial_{ij}\left((\sigma\sigma^\top)_{ij}p\right).
+$$
+With $\mu=0$ and $\sigma=\sqrt{2D}$ this is the heat equation, so
+$X_t=\sqrt{2D}\,W_t$ has density $\mathcal{N}(0,2Dt)$, the heat kernel. See
+[[fokker-planck-equation]] and [[kolmogorov-equations]]. The reverse direction
+is the **Feynman-Kac formula**, which represents the solution of
+$u_t=D\Delta u+c(x)u$ as an expectation over Brownian paths (see
+[[feynman-kac-formula]]). The [[black-scholes-merton-model|Black-Scholes PDE]]
+becomes a heat equation after a change of variables.
+
+:::{.theorem data-title="Mean Square Displacement"}
+
+Let $u$ solve $u_t=D\Delta u$ on $\mathbb{R}^n$ with $u(0,\cdot)=\delta_0$.
+Then
+$$
+\int_{\mathbb{R}^n}|x|^2u(t,x)~dx=2nDt.
+$$
+
+:::
+
+:::{.proof}
+
+Let $M(t)=\int|x|^2u~dx$. Differentiating under the integral and integrating
+by parts twice (boundary terms vanish by Gaussian decay),
+$$
+M'(t)=D\int|x|^2\Delta u~dx=D\int\Delta(|x|^2)u~dx=2nD\int u~dx=2nD,
+$$
+since $\Delta|x|^2=2n$ and the total mass is $1$. With $M(0)=0$ the claim
+follows.
+
+:::
+
+The linear growth of the mean square displacement in $t$ is the signature of
+ordinary diffusion, and is how $D$ is measured experimentally. The Einstein
+relation $D=k_BT/\gamma$ links $D$ to the temperature $T$, the Boltzmann
+constant $k_B$ and the friction coefficient $\gamma$.
+
+## Related Topics
 
 - [[wave-equation]]
 - [[transport-equation]]
-- [[laplace-equation]] (the steady state of the heat equation in higher dimensions)
-- [[convolution]]
+- [[laplace-equation]] and [[poisson-equation]] (steady states)
+- [[schrodinger-equation]] (diffusion with imaginary diffusivity)
 
 ## References
 
-1. [Stanford Math 220B notes on the heat equation](https://web.stanford.edu/class/math220b/handouts/heateqn.pdf).
+1. L. C. Evans, *Partial Differential Equations*, Section 2.3.
+2. W. A. Strauss, *Partial Differential Equations: An Introduction*,
+   Chapter 2.
+3. J. Crank, *The Mathematics of Diffusion*.

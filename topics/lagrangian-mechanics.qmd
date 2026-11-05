@@ -1,4 +1,7 @@
 ---
+id: lagrangian-mechanics
+aliases: ["lagrangian"]
+tags: []
 title: Lagrangian Mechanics
 author: John Robin Inston
 date: 2026-09-25
@@ -6,75 +9,112 @@ number-sections: true
 title-block-banner: false
 ---
 
-# Lagrangian Mechanics
-
-**Lagrangian mechanics** is a mathematical framework for studying mechanical
-systems similar to [[newtonian-mechanics]] and [[hamiltonian-mechanics]]. The
-foundational idea underpinning Lagrangian mechanics is the simplification of
-problems to a scalar representation of a physical system's position in phase
-space.  
 ## Motivation
-To motivate this idea recall from [[newtonian-mechanics]] that we can describe
-a system of $N$ point masses $m_{1}, \dots, m_{N}$ with 3-dimensional Cartesian
-coordinates $\vec{r}_{i}:=(x_{i},y_{i},z_{i})$ for $i=1, \dots, N$ requiring
-$3N$ coordinates. The velocity of each particle is given by the time derivative
-$\vec{v}_{i}=\dot{\vec{r}}_{i}=d\vec{r}_{i} /dt$. From Newton's second law we
-have
-$$
-F=m \vec{a}=m\ddot{ \vec{r}},
-$$
-thus for an $N$-particle system in 3-dimensions we have $3N$ second order
-[[ordinary-differential-equations]] in the positions of the particles to solve
-for. Lagrangian mechanics avoids forces and instead considers energies in the
-system with the [[lagrangian]] *summarizing the dynamics* of the entire system.
-Since, in the absence of an electromagnetic field, the *non-relativistic*
-Lagrangian equation is given by the difference of kinetic energy $K$ and
-potential energy $U$
-$$
-\mathcal{L}=K-U.
-$$
-We note that kinetic energy is given by
-$$
-K=\frac{1}{2}\sum_{k=1}^{N}m_{k}v^2_{k}
-$$
-where $v_{k}^2=\vec{v}_{k}\cdot \vec{v}_{k}$ and is therefore a function of
-only velocities and not positions. Similarly, potential energy $U$ is only a
-function of position for conservative forces (e.g. Newton's gravity).
 
-### Intuitive Example - Defining the Lagrangian
-To gain intuition for the system let us consider the introductory example of a
-pendulum on a string with no resistance.
-<!-- TODO: image "Pasted image 20250720175254.png" not found in vault -->
-*Figure: Diagram of a swinging pendulum with no friction.*
+**Lagrangian mechanics** is a reformulation of [[classical-mechanics]] that
+describes a mechanical system through a single scalar function of positions and
+velocities, instead of forces. It is equivalent to Newton's laws and to
+[[hamiltonian-mechanics]], but takes the same form in any system of
+coordinates.
 
-The kinetic and potential energy of the system are
+Recall that a system of $N$ point masses $m_{1},\dots,m_{N}$ with Cartesian
+positions $\vec{r}_{i}\in\mathbb{R}^3$ and velocities
+$\vec{v}_{i}=\dot{\vec{r}}_{i}$ obeys Newton's second law
 $$
-\begin{align}
-K & =\frac{1}{2}mv^2=\frac{1}{2}m\dot{s}^2=\frac{1}{2}ml^2\dot{\theta}^2 \\
-U  & = mgy= mgl\cos\theta,
-\end{align}
+\vec F_i=m_i\ddot{\vec{r}}_i,
 $$
-where we have used $\theta=\frac{s}{l}$ to rewrite our derivatives in terms of
-angle $\theta$, thus the Lagrangian $\mathcal{L}$ is
+which is a system of $3N$ second-order
+[[ordinary-differential-equations]]. Lagrangian mechanics avoids forces and
+considers energies. In the absence of an electromagnetic field the
+non-relativistic **Lagrangian** is the difference of kinetic energy $K$ and
+potential energy $U$,
 $$
-\mathcal{L}=\frac{1}{2}ml^2\dot{\theta}^2+mgl\cos \theta.
+\mathcal{L}=K-U,\qquad K=\frac{1}{2}\sum_{k=1}^{N}m_{k}\lVert\vec v_{k}\rVert^2.
 $$
-[[lagrangian]]
-[[euler-lagrange-equation]]
+The kinetic energy depends only on velocities, and for conservative forces
+(e.g. gravity) the potential energy depends only on positions.
 
+## Configuration Space and Action
 
-We are thus able to write the **Euler-Lagrange equation** which is given by
-$$
-\frac{d}{dt} \frac{\partial\mathcal{L}}{\partial \dot{\theta}}= \frac{{\partial L}}{\partial \theta}.
-$$
-We can compute 
-$$
-\begin{align}
-\frac{{\partial \mathcal{L}}}{\partial \theta} & =-mgl\sin \theta =\mathcal{F}\\
-\frac{\partial\mathcal{L}}{\partial \dot{\theta}} & =ml^2\dot{\theta}=\mathcal{P}\implies \frac{d}{dt} \frac{\partial\mathcal{L}}{\partial \dot{\theta}} =ml^2\ddot{\theta},
-\end{align}
-$$
-where $\mathcal{P}$ is *generalized momentum* at the point and $\mathcal{F}$
-the *generalized force*, thus we see that the Euler-Lagrange equation gives the
-familiar Newtonian force is equal to change in momentum.
+Rather than Cartesian coordinates we use **generalised coordinates**
+$\boldsymbol{q}$ and their rates of change $\dot{\boldsymbol{q}}$. For $N$
+particles in $\mathbb{R}^3$ the **configuration space** is a smooth manifold
+$Q\subseteq\mathbb{R}^{3N}$, each point $q\in Q$ specifying the admissible
+positions of all particles at one instant. A **trajectory** is a smooth
+function $q:[t_{0},t_{1}]\to Q$. The **tangent bundle** $TQ$ of $Q$ contains
+the pairs $(q,\dot q)$ of positions and velocities.
 
+:::{.definition data-title="Lagrangian"}
+
+A **Lagrangian** is a smooth function $\mathcal{L}:TQ\times\mathbb{R}\to
+\mathbb{R}$, $(q,\dot q,t)\mapsto\mathcal{L}(q,\dot q,t)$, with units of
+energy.
+
+:::
+
+:::{.definition data-title="Action"}
+
+The **action** of a trajectory $q$ is the integral of the Lagrangian along it,
+$$
+\mathscr{A}[q]=\int_{t_{0}}^{t_{1}}\mathcal{L}(q(t),\dot{q}(t),t)~dt.
+$$
+It is a functional: a map from functions to real numbers (see
+[[calculus-of-variations]]).
+
+:::
+
+The laws of motion follow from **Hamilton's principle of stationary action**:
+among all trajectories between two given configurations, the one actually
+taken is a critical point (often, but not necessarily, a minimum) of the
+action. By the [[calculus-of-variations]] this is equivalent to the
+[[euler-lagrange-equation]].
+
+:::{.theorem data-title="Euler-Lagrange Equations"}
+
+A trajectory $q$ that is a critical point of $\mathscr{A}$ satisfies, for each
+coordinate $q_i$,
+$$
+\frac{d}{dt}\frac{\partial\mathcal{L}}{\partial\dot q_i}
+=\frac{\partial\mathcal{L}}{\partial q_i}.
+$$
+
+:::
+
+The quantity $p_i=\partial\mathcal{L}/\partial\dot q_i$ is the **generalised
+momentum** and $\partial\mathcal{L}/\partial q_i$ the **generalised force**,
+so the equations read "rate of change of momentum equals force", recovering
+Newton's second law. In particular, if $\mathcal{L}$ does not depend on $q_i$
+(a **cyclic** coordinate) then $p_i$ is conserved. The map from $(q,\dot q)$
+to $(q,p)$ leads to [[hamiltonian-mechanics]].
+
+## Example: The Pendulum
+
+:::{.example data-title="Pendulum"}
+
+Consider a frictionless pendulum: a mass $m$ on a rigid massless rod of length
+$l$, with $\theta$ the angle from the downward vertical. The arc length is
+$s=l\theta$, so the kinetic energy is
+$$
+K=\frac{1}{2}m\dot s^2=\frac{1}{2}ml^2\dot\theta^2.
+$$
+Measuring height from the pivot, the bob is at height $-l\cos\theta$, so
+$U=-mgl\cos\theta$ and
+$$
+\mathcal{L}=\frac{1}{2}ml^2\dot\theta^2+mgl\cos\theta.
+$$
+Then
+$$
+\frac{\partial\mathcal{L}}{\partial\theta}=-mgl\sin\theta,\qquad
+\frac{\partial\mathcal{L}}{\partial\dot\theta}=ml^2\dot\theta
+\ \Longrightarrow\ \frac{d}{dt}\frac{\partial\mathcal{L}}{\partial\dot\theta}
+=ml^2\ddot\theta,
+$$
+and the Euler-Lagrange equation gives $ml^2\ddot\theta=-mgl\sin\theta$, i.e.
+$$
+\ddot\theta=-\frac{g}{l}\sin\theta,
+$$
+the familiar pendulum equation, obtained with no mention of the tension in the
+rod. Here $ml^2\dot\theta$ is the angular momentum and $-mgl\sin\theta$ the
+torque.
+
+:::

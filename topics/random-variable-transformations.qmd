@@ -1,183 +1,142 @@
 ---
-title: Random Variable Transformations
-author: John Robin Inston
-date: 2026-08-25
-title-block-banner: false
+id: random-variable-transformations
+aliases: ["transformations-of-random-variables"]
+tags: []
+author: "John Robin Inston"
+date: 2026-09-25
 number-sections: true
+title: "Random Variable Transformations"
+title-block-banner: false
 ---
 
 ## Introduction
 
-Suppose we have some random variable $X$ with a given density function $f_{X}$.
-Further consider a real valued function $g:\mathbb{R} \to \mathbb{R}$ and 
-define the new random variable $Y=g(X)$.  This note is on the methods 
-available for determining the properties of this new random variable, such as
-the expectation, the moments or the distribution.
+Let $X$ be a [[random-variables|random variable]] with density $f_{X}$ (or mass
+function) and let $g:\mathbb{R}\to\mathbb{R}$ be a measurable function. This
+note covers methods for finding the properties of the new random variable
+$Y=g(X)$: its expectation, moments and distribution.
 
-## Fundamental Theorem
+## Fundamental theorem
 
-Computing the expectation of $Y=g(X)$ given the density of $X$ is simple using
-the following result sometimes known as the **fundamental theorem**.
+:::{.theorem data-title="Fundamental theorem"}
 
-:::{.theorem data-title="Fundamental Theorem"}
-
-Given random variable $X$ with density $f_{X}$ and real-valued function 
-$g:\mathbb{R} \to \mathbb{R}$ the expectation of transformed random variable 
-$Y = g(X)$ is given by 
-
+Let $X$ have density $f_{X}$ and let $g:\mathbb{R}\to\mathbb{R}$ be measurable
+with $g(X)$ integrable. Then $Y=g(X)$ has expectation
 $$
-\mathbb{E}[Y] = \int_{\Omega}^{}{g(X)}~d{\mathbb{P}} =
-  \int_{X}^{}{g(X)\cdot f_{X}(x)}~d{x}.
+\mathbb{E}[Y]=\int_{\Omega}g(X)\,d\mathbb{P}=\int_{\mathbb{R}}g(x)f_{X}(x)\,dx.
 $$
 
 :::
 
-*The discrete case clearly becomes a sum on the discrete support of $X$ with 
-mass function $p_{X}(x)$.*
+In the discrete case the integral becomes a sum over the support of $X$ with
+mass function $p_{X}(x)$.
 
-We note that in general $\mathbb{E}[g(X)]\neq g(\mathbb{E}[X])$.  In fact, the 
-only time we can guarantee equality is when $g$ is an **affine function**, 
-that is can be written as a combination of a linear function and a translation.
+In general $\mathbb{E}[g(X)]\neq g(\mathbb{E}[X])$. Equality is guaranteed
+for every distribution only when $g$ is an [[affine-function]], that is, a
+linear function plus a translation (for convex $g$ see
+[[jensen-inequality]]).
 
-Recall from our study of [[real-analysis]], the **inverse image** of real 
-function $g: \mathbb{R} \to \mathbb{R}$ on a set $A$ is
+## Distribution of the transformed variable
 
+Recall that the **inverse image** (preimage) of a set $A\subseteq\mathbb{R}$
+under $g$ is
 $$
-g^{-1}(A) := \{ x \in \mathbb{R}:g^{-1}(x) \in A \}.
+g^{-1}(A):=\{x\in\mathbb{R}:g(x)\in A\},
 $$
+see [[images-and-preimages]]. It satisfies $g^{-1}(\mathbb{R})=\mathbb{R}$,
+$g^{-1}(A^c)=g^{-1}(A)^c$ and
+$g^{-1}(\bigcup_\lambda A_\lambda)=\bigcup_\lambda g^{-1}(A_\lambda)$. As a
+result, $\mu(A)=\mathbb{P}(X\in g^{-1}(A))=\mathbb{P}(g(X)\in A)$ satisfies the
+axioms of probability and is the **distribution** of $Y=g(X)$ (see
+[[random-variables]] and [[probability-spaces]]).
 
-This is the same as saying that $x \in g^{-1}(A)$ if and only if $g(x) \in A$.
-The inverse image has the following properties:
+### Discrete transformations
 
-1. $g^{-1}(\mathbb{R})=\mathbb{R}$;
-2. For any set $A$, $g^{-1}(A^c)=g^{-1}(A)^c$; and
-3. For any collection of sets $\{  A_{\lambda}:\lambda \in \Lambda \}$ we have 
-   $g^{-1}(\cup_{\lambda}A_{\lambda})=\cup_{\lambda}g^{-1}(A)$.
-
-As a result, the mapping $\mu(A)=\mathbb{P}(X \in g^{-1}(A))$ satisfies the 
-axioms of probability and is known as the **distribution** of $X$ (see notes 
-on [[probability-theory]]).
-
-## Discrete Transformations
-
-Assume that the random variable $X$ is discrete with probability mass function 
-$f_{X}(x)$.  To compute the probability mass function $f_{Y}(y)$ of random 
-variable $Y = g(X)$ we simply use
-
+If $X$ is discrete with mass function $f_{X}$, then $Y=g(X)$ has mass
+function
 $$
-f_{Y}(y)=\sum_{x \in g^{-1}(y)}^{}f_{X}(x).
+f_{Y}(y)=\sum_{x\in g^{-1}(\{y\})}f_{X}(x).
 $$
 
 :::{.example}
 
-Let $X\sim\mathcal{P}(\lambda)$ follow a [[poisson-distribution]] with rate 
-parameter $\lambda$ and define the quadratic function 
-$Y = g(X)= X^2+7$.  The support of $X$ is $\mathbb{N}_{0}$ and on this support 
-$g$ is one-to-one and so the mass function $f_{Y}$ is given by
-
+Let $X\sim\mathcal{P}(\lambda)$ follow a [[poisson-distribution]] and define
+$Y=g(X)=X^2+7$. The support of $X$ is $\mathbb{N}_{0}$, on which $g$ is
+one-to-one, so
 $$
-f_{Y}(y)=f_{X}(g^{-1}(y))=f_{X}\left( \sqrt{  y-7 }\right) = 
-  \frac{\lambda^{\sqrt{ y-7 }}e^{-\lambda}}{\left(\sqrt{ y-7 }\right)!},
+f_{Y}(y)=f_{X}\big(\sqrt{y-7}\big)
+=\frac{\lambda^{\sqrt{y-7}}e^{-\lambda}}{\big(\sqrt{y-7}\big)!},
 $$
-
-on the support $y=\{x^2+7:x \in \mathbb{N}\}=7, 8, 11, \dots$.  
+on the support $y\in\{x^2+7:x\in\mathbb{N}_0\}=\{7,8,11,16,\dots\}$.
 
 :::
 
-## Continuous Transformations
+### Continuous transformations
 
-The simplest case of transformations of continuous random variables is when 
-the transformation function $g$ is **one-to-one**, i.e. a function is either 
-strictly increasing or strictly decreasing.  In both cases the inverse 
-function $g^{-1}$ is also either strictly increasing or strictly decreasing 
-respectively.  We can then employ what is known as the **CDF method** where we 
-can compute the CDF of $Y = g(X)$ as
-
+Suppose $g$ is **one-to-one**, that is strictly increasing or strictly
+decreasing (hence $g^{-1}$ is too). The **CDF method** computes, in the
+increasing case,
 $$
-\mathbb{P}(Y \leq y)=\mathbb{P}(g(X)\leq y)
-  = \mathbb{P}(X \leq g^{-1}(y))=F_{X}(g^{-1}(y)).
+\mathbb{P}(Y\leq y)=\mathbb{P}(g(X)\leq y)=\mathbb{P}(X\leq g^{-1}(y))
+=F_{X}(g^{-1}(y)),
 $$
-
-From this we can compute the density using the chain run
-
+and in the decreasing case $1-F_{X}(g^{-1}(y))$ (for continuous $X$).
+Differentiating by the chain rule, and taking the modulus to cover both cases,
 $$
-f_{Y}(y)=f_{X}(g^{-1}(y))\cdot \left| \frac{d}{dy}g^{-1}(y) \right|, 
+f_{Y}(y)=f_{X}(g^{-1}(y))\left|\frac{d}{dy}g^{-1}(y)\right|.
 $$
 
-where we take the modulus to combine both the increasing and decreasing cases.
-
-Special care needs to be taken when the transform $g$ is not one-to-one, for 
-example when $g(x)=x^2$ or $g(x) =|x|$ and the support of $x$ is $\mathbb{R}$.
-
-For example, when $g(x) = x^2$ we have $g^{-1}(x)=\sqrt{ x }$ and so we have 
-that
-
+Special care is needed when $g$ is not one-to-one, for example $g(x)=x^2$ or
+$g(x)=|x|$ on $\mathbb{R}$. For $g(x)=x^2$ and $y>0$,
 $$
-F_{Y}(y)=\mathbb{P}(Y \leq y) = \mathbb{P}(X^2\leq y) 
-  =\mathbb{P}(-\sqrt{y} \leq X \leq \sqrt{ y } ) 
-  = F_{X}(\sqrt{ y })-F_{X}(-\sqrt{ y }).
+F_{Y}(y)=\mathbb{P}(X^2\leq y)=\mathbb{P}(-\sqrt{y}\leq X\leq\sqrt{y})
+=F_{X}(\sqrt{y})-F_{X}(-\sqrt{y}),
 $$
-
-The density is then given as
-
+and differentiating gives
 $$
-\begin{align}
-f_{Y}(y) & = f_{X}(\sqrt{ y }) \frac{d}{dy}\sqrt{ y } - 
-  f_{X}(-\sqrt{ y }) \frac{d}{dy}(-\sqrt{ y })  \\
- & = \frac{1}{2 \sqrt{  y }}
-  \left\{ f_{X}(\sqrt{ y })+f_{X}(\sqrt{ y }) \right\} .
-\end{align}
+f_{Y}(y)=\frac{1}{2\sqrt{y}}\Big\{f_{X}(\sqrt{y})+f_{X}(-\sqrt{y})\Big\}.
 $$
-
-Further, if the density $f_{X}$ is symmetric about the origin then we have
-
-$$
-f_{Y}(y)= \frac{1}{ \sqrt{ y }}f_{X}(\sqrt{ y }).
-$$
+If $f_{X}$ is symmetric about the origin this simplifies to
+$f_{Y}(y)=\frac{1}{\sqrt{y}}f_{X}(\sqrt{y})$.
 
 :::{.example}
 
-Consider a random variable $Z$ following the standard [[normal-distribution]] 
-with density
-
+Let $Z$ follow the standard [[normal-distribution]] with density
+$\phi(z)=\frac{1}{\sqrt{2\pi}}e^{-z^2/2}$. The density is symmetric, so
+$Y=Z^2$ has density
 $$
-\phi(z)= \frac{1}{\sqrt{ 2\pi }}\exp\left( -\frac{z^2}{2} \right).
+f_{Y}(y)=\frac{1}{\sqrt{y}}\phi(\sqrt{y})=\frac{1}{\sqrt{2\pi y}}e^{-y/2},
+\qquad y>0,
 $$
-
-We wish to compute the density of $Y = Z^2$.  First we note that
-
-$$
-\phi'(z)= \frac{1}{\sqrt{ 2\pi }}\exp\left( -\frac{z^2}{2} \right)\cdot -z 
- = -z\phi(z).
-$$
-
-The density is therefore
-
-$$
-f_{Y}(y)=\frac{1}{\sqrt{ 2\pi y }}\exp\left( - \frac{y}{2} \right),
-$$
-
-which is a [[chi-squared-distribution]].
+which is the [[chi-squared-distribution]] with one degree of freedom.
 
 :::
 
-## The Probability Transform
+## The probability integral transform
 
-Let $X$ be a continuous random variable whose distribution function $F_{X}$ is 
-strictly increasing on the support of $X$.  Then $F_{X}$ is invertible.  
-Letting $U=F_{X}(X)$, then for $u \in [0,1]$ 
+:::{.proposition data-title="Probability integral transform"}
 
+Let $X$ be a continuous random variable whose distribution function $F_{X}$
+is strictly increasing on the support of $X$ (so $F_X$ is invertible). Then
+$U=F_{X}(X)$ is uniform on $[0,1]$.
+
+:::
+
+:::{.proof}
+
+For $u\in[0,1]$,
 $$
-\mathbb{P}(U \leq u) = \mathbb{P}(F_{X}(X)\leq u) 
-  = \mathbb{P}(U \leq F_{X}^{-1}(u))=F_{X}(F_{X}^{-1}(u))=u.
+\mathbb{P}(U\leq u)=\mathbb{P}(F_{X}(X)\leq u)=\mathbb{P}(X\leq F_{X}^{-1}(u))
+=F_{X}(F_{X}^{-1}(u))=u.
 $$
 
-In other words, $U$ is a uniform random variable on $[0,1]$.  Most random 
-number generators simulate independent copies of this random variable.  
-Consequently, we can simulate independent random variables having distribution
-function $F_{X}$ by simulating $U$, a uniform random variable on $[0,1]$ 
-and then taking
+:::
 
+So $U$ follows the [[continuous-uniform-distribution]] on $[0,1]$. Most
+random number generators simulate independent copies of $U$. Conversely, we
+can simulate a random variable with distribution function $F_{X}$ by drawing
+$U$ and setting
 $$
-X= F_{X}^{-1}(U).
+X=F_{X}^{-1}(U).
 $$
+This is **inverse transform sampling**.

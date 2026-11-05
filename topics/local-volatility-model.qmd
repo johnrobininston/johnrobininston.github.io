@@ -1,60 +1,98 @@
 ---
-title: Local Volatility Model
-author: John Robin Inston
+id: local-volatility-model
+aliases: ["cev-model"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "Local volatility models, Dupire's PDE and the constant elasticity of variance (CEV) model."
 number-sections: true
+title: "Local Volatility Model"
 title-block-banner: false
 ---
 
 ## Local Volatility Models
 
-In [[financial-mathematics|mathematical finance]] **Local Volatility Models**
-are option pricing models that treat volatility as a function of both asset
-price $S_{t}$ and time $t$. The asset price process $(S_{t})$ is assumed to
-have dynamics given by the [[stochastic-differential-equations|SDE]]
-$$
-dS_{t}=(r_{t}-d_{t})S_{t}dt+\sigma(S_{t}, t)S_{t}dW_{t}.
-$$
-A simple derivation of the [[black-scholes-merton-model|Black-Scholes PDE]] tells us that if
-$V_{t}=u(t,S_{t})$ denotes the value of the replicating portfolio at time $t$,
-then
-$$
-\partial _{t }u+rx\partial _{x}u+ \frac{1}{2}\sigma^2(t,x)x^2\partial_{x x}u-ru=0.
-$$
-We see that BS is quite inefficient in solving option prices since it requires
-the knowledge at all $(t,x)$ just to solve out a single number.
+In [[quantitative-finance|mathematical finance]] **local volatility models**
+are option pricing models that treat volatility as a function of both the
+asset price $S_t$ and time $t$. The asset price process $(S_t)$ has dynamics
+given by the [[stochastic-differential-equations|SDE]]
 
-A special example of the local volatility model is the
-[[constant-elasticity-of-variance-cev-model]] which has dynamics given by
 $$
-S_{t}= \mu S_{t}+\sigma S_{t}^\gamma dW_{t}.
+dS_t=(r_t-d_t)S_t\,dt+\sigma(t,S_t)S_t\,dW_t,
 $$
 
-### Dupire's PDE
-However, in the local volatility model, there is a model dependent result
-called [[dupires-formula]] that efficiently solves out option price. The
-formula is
-$$
-\frac{{\partial C}}{\partial T}(T,K)=-rK\frac{{\partial C}}{\partial K}(T,K)+ \frac{1}{2}\sigma^2(T,K)K^2 \frac{{\partial^2C}}{\partial K^2}(T,K)
-$$
-with natural initial condition
-$$
-C(0,K)=(S_{0}-K)_{+},
-$$
-since when $T=0$ option price is just the immediate payoff.
+where $r_t$ is the interest rate, $d_t$ the dividend yield and $W$ a
+[[brownian-motion|Brownian motion]]. A derivation as for the
+[[black-scholes-merton-model|Black-Scholes PDE]] shows that if
+$V_t=u(t,S_t)$ is the value of the replicating portfolio then
 
-Dupire's PDE provides an explicit formula for implied volatility in the local
-volatility model.
+$$
+\partial_tu+rx\,\partial_xu+\frac{1}{2}\sigma^2(t,x)x^2\,\partial_{xx}u-ru=0.
+$$
 
-### Problems
-The local volatility model is expected to produce implied volatility surface
-$I(T,K)$ not flat in $T$ or in $K$ however it is still not perfect. The model
-suffers from the so-called $(t,T,K)$-problem.
+Solving this PDE is inefficient for pricing a single option, since it requires
+the solution at all $(t,x)$ just to produce one number.
 
-In the setting of local volatility $\sigma=\sigma(t,x)$ so the volatility is
-always the same given that the time and stock price is the same. As a result,
-at time 0 if we calibrate and get the surface $I(0,T,K)$ using options sold at
-time 0 and maturing at time $T$, we expect to see the same surface
-$I(t,T+t, K)$ based on options sold at $t$ and maturing at time $T+t$. However,
-empirical data implies that those two implied volatility surfaces are not the
-same under time translation which is a contradiction to the model.
+## Dupire's PDE
+
+In the local volatility model there is a model-dependent result, [[dupires-formula|Dupire's
+formula]], that gives call prices directly as a function of maturity and
+strike. Let $C(T,K)$ be the price at time $0$ of a call with maturity $T$ and
+strike $K$, and take constant $r$ and no dividends. Then
+
+$$
+\frac{\partial C}{\partial T}(T,K)=-rK\frac{\partial C}{\partial K}(T,K)
++\frac{1}{2}\sigma^2(T,K)K^2\frac{\partial^2C}{\partial K^2}(T,K),
+$$
+
+with the natural initial condition $C(0,K)=(S_0-K)_+$, since at $T=0$ the
+option price is the immediate payoff. The equation can be read backwards to
+recover the local volatility from option prices,
+
+$$
+\sigma^2(T,K)=\frac{\partial_TC+rK\,\partial_KC}{\tfrac{1}{2}K^2\,\partial_{KK}C},
+$$
+
+which also yields the implied volatility surface $I(T,K)$ of the model (see
+[[volatility-surfaces]]).
+
+## The CEV Model
+
+A special case is the **constant elasticity of variance (CEV) model**, with
+dynamics
+
+$$
+dS_t=\mu S_t\,dt+\sigma S_t^{\gamma}\,dW_t,
+$$
+
+where $\sigma>0$ and $\gamma\ge 0$ is the **elasticity** parameter. This is a
+local volatility model with $\sigma(t,x)=\sigma x^{\gamma-1}$, so the
+instantaneous variance of returns is $\sigma^2S_t^{2(\gamma-1)}$, whose
+elasticity with respect to $S_t$ is constant. Special cases are
+
+- $\gamma=1$: [[geometric-brownian-motion]], the Black-Scholes-Merton model,
+- $\gamma=0$: the arithmetic (Bachelier) model $dS_t=\mu S_t\,dt+\sigma\,dW_t$.
+
+For $\gamma<1$ volatility rises when the price falls (the **leverage
+effect**), which produces a downward-sloping implied volatility skew, as is
+observed in equity markets. For $\gamma>1$ the skew is upward-sloping.
+
+## Problems
+
+A local volatility model is designed to produce an implied volatility surface
+$I(T,K)$ that is not flat in $T$ or $K$, but it is still imperfect. It suffers
+from the so-called $(t,T,K)$-problem.
+
+Since $\sigma=\sigma(t,x)$, volatility is always the same given the same time
+and stock price. If we calibrate at time $0$ and obtain the surface $I(0,T,K)$
+from options maturing at $T$, we therefore expect the same surface
+$I(t,T+t,K)$ at a later time $t$ from options maturing at $T+t$. Empirically,
+these two implied volatility surfaces are not the same under time
+translation, which contradicts the model. This motivates
+[[stochastic-volatility-model|stochastic volatility models]].
+
+## References
+
+1. Dupire, B. (1994). Pricing with a smile. *Risk*, 7(1), 18-20.
+2. Cox, J. C. and Ross, S. A. (1976). The valuation of options for alternative
+   stochastic processes. *Journal of Financial Economics*, 3(1-2), 145-166.

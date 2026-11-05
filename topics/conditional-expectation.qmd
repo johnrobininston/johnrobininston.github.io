@@ -1,216 +1,229 @@
 ---
-title: Conditional Expectation
-author: John Robin Inston
+id: conditional-expectation
+aliases: ["conditional-expectation-events", "conditional-expectation-random-variables"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Conditional Expectation"
 title-block-banner: false
 ---
 
-# Conditional Expectation
+Throughout, $(\Omega,\mathcal{F},\mathbb{P})$ is a
+[[probability-spaces|probability space]], $X,Y$ are
+[[random-variables|random variables]] and $\mathbb{E}$ denotes
+[[expectation]]. We build conditional expectation in three steps: given an
+event, given a σ-algebra, and finally as an orthogonal projection, which
+makes precise the idea of the best prediction of $Y$ from partial
+information.
 
-When we first study [Stochastic Processes](Stochastic%20Processes.md) we define
-the conditional expectation of a random variable $X$ as the expectation of $X$
-taken with respect to the conditional probability distribution. In this note we
-provide the precise measure theoretic definition of conditional expectation as
-the **orthogonal projection** between [[hilbert-spaces]].
+## Conditioning on an event
 
-## Conditional Expectation Fundamentals
+Let $F\in\mathcal{F}$ with $\mathbb{P}(F)>0$.
 
-Below we remind ourselves of the definition of conditional expectation with
-respect to events and other random variables. Although introduced before we
-establish the formal concept of a probability space we note that for each of
-the following definitions consider random variables $X,Y$ and events $A$
-defined on a probability space $(\Omega, \mathcal{F}, \mathbb{P})$.
+:::{.definition data-title="Conditional probability and expectation given an event"}
 
-We denote the conditional probability distribution of a random variable $X$
-with respect to event $A$ as
+The **conditional probability given $F$** is, for every $E\in\mathcal{F}$,
 $$
-F_{X|A}(x)=\mathbb{P}(X\leq x | A)=\frac{\mathbb{P}(X\leq x)}{\mathbb{P}(A)}.
+\mathbb{P}_{F}(E)=\mathbb{P}(E\mid F):=\frac{\mathbb{P}(E\cap F)}{\mathbb{P}(F)}.
 $$
-If this distribution is differentiable the corresponding density function is
+It is a probability measure, so $(\Omega,\mathcal{F},\mathbb{P}_{F})$ is a new
+probability space. Random variables are unchanged but have a new
+distribution. For $X$ with $\mathbb{E}|X|<\infty$ the **conditional
+expectation given $F$** is the expectation under $\mathbb{P}_F$:
 $$
-f_{X|A}(x)=\frac{f_{X,A}(x)}{\mathbb{P}(A)}.
-$$
-Additionally, it satisfies
-$$
-F_{X|A}(x)=\int_{-\infty}^{x}{f_{X|A}(u)}~d{u}.
-$$
-
-:::{.definition data-title="Conditional Expectation (w.r.t. events)"}
-
-For random variable $X$ and event $A$ the conditional expectation of $X$ with respect to $A$ is given by $$\mathbb{E}[X|A]=\int_{X}^{}{xf_{X|A}(x)}~d{x}.$$
-
-:::
-
-We denote the conditional probability distribution of $X$ with respect to a
-second random variable $Y$ as
-$$
-F_{X|Y}(x|y) = \mathbb{P}(X \leq x|Y = y).
-$$
-We note that this is a distribution function itself which is dependent on the
-value of $y$. If this distribution is differentiable and $X$, $Y$ have a joint
-distribution $f_{X,Y}(x,y)$ the corresponding density function is
-$$
-f_{X|Y}(x|y) = \frac{f_{X,Y}(x,y)}{f_{Y}(y)}.
-$$
-Additionally, it satisfies
-$$
-F_{X|Y}(x|y)=\int_{-\infty}^{x}{f_{X|Y}(u,y)}~d{u}.
-$$
-
-## Hilbert Spaces
-
-Recall from our study of [[linear-algebra]] that a **vector space**
-$\mathcal{V}$ over **scalar field** $\mathbb{R}$ is **linear** if
-$\forall v_{1}, v_{2}\in \mathcal{V}$ and $\alpha, \beta \in \mathbb{R}$ we
-have that
-$$
-\alpha v_{1}+\beta v_{2}\in \mathcal{V}.
-$$
-Given a linear vector space $\mathcal{V}$, we have a (real) **inner-product
-space** if we can define a real function
-$$
-\langle \cdot, \cdot \rangle:\mathcal{V}\times \mathcal{V} \to \mathbb{R},
-$$
-known as the **inner product** that satisfies the following properties for all
-$v_{1}, v_{2}, v_{3}\in\mathcal{V}$:
-
-1. Symmetry. $\left< v_{1}, v_{2} \right> =\left< v_{2}, v_{1} \right>$  .
-2. Non-negativity. $\left< v_{1}, v_{2} \right>\geq 0$.
-3. Non-degeneracy. $\left< v_{1}, v_{1} \right> = 0 \iff v_{1}=0$.
-4. Linearity.
-   $\left< \alpha_{1}v_{1}, v_{2}+v_{3} \right> = \alpha \left< v_{1}, v_{2} \right>+\alpha \left<  v_{1}, v_{3} \right>$.
-
-Every inner product creates a **Norm** by setting
-$\lVert v \rVert=\sqrt{ \left< v , v \right> }$. Further it can be shown that
-inner products satisfy both the:
-
-1. **Cauchy-Schwartz Inequality**.
-   $\lvert \left< v_{1}, v_{2} \right>  \rvert \leq \lVert v_{1} \rVert \cdot \lVert v_{2} \rVert$.
-2. **Triangle Inequality**.
-   $\lVert v_{1}+v_{2} \rVert \leq  \lVert v_{1} \rVert + \lVert v_{2} \rVert$.
-
-An inner product space $(\mathcal{V}, \lVert \cdot \rVert)$ is **complete** if
-every Cauchy sequence $\{ v_{n} \}\in \mathcal{V}$ converges to an element of
-$\mathcal{V}$ in norm defined by the inner product, i.e.
-$$
-\lVert v_{n}-v_{m} \rVert \stackrel{n,m\to \infty}{\longrightarrow} 0 \iff \lVert v_{n}-v \rVert \stackrel{n \to \infty}\longrightarrow 0\quad\text{where}\quad v \in \mathcal{V}.
-$$
-
-:::{.definition data-title="Hilbert Space"}
-
-A **Hilbert space** is a linear vector space with inner product such that it is
-complete in the norm defined by the inner product.
-
-:::
-
-## Orthogonal Projections
-
-A closed subspace of a Hilbert space is some subset
-$\mathcal{V}_{1}\subset\mathcal{V}$ that is complete in the same norm as
-$\mathcal{V}$. For an arbitrary element $v \in \mathcal{V}$, the **distance**
-from $v$ to any subspace $\mathcal{V}_{1}\subset \mathcal{V}$ is given by
-$$
-d = \inf_{v_{1}\in \mathcal{V}_{1}}\{ \lVert v - v_{1} \rVert  \}.
-$$
-The vector $v_{1}^*$ minimizing this distance $d = \lVert v-v_{1}^* \rVert$ is
-called the **orthogonal projection** of $v$ onto $\mathcal{V}_{1}$. In other
-words we get the next system of equations
-$$
-\forall v_{1}\in \mathcal{V}_{1}:\quad \lVert v-v_{1}^* \rVert \leq  \lVert v-v_{1} \rVert .
-$$
-
-:::{.theorem data-title="Projection Theorem"}
-
-Suppose $\mathcal{V}$ represents a closed linear vector space; and let
-$v \in \mathcal{V}+v_{1}^*\in \mathcal{V}_{1}\subset \mathcal{V}$. Then the
-following statements are equivalent:
-$$
-\lVert  v - v_{1}^* \rVert \leq  \lVert v - v_{1} \rVert;\quad \forall v_{1}\in \mathcal{V}_{1}\quad\quad \iff \quad\quad \left< v-v_{1}^* , v_{1} \right>  = 0;\quad\forall v_{1}\in \mathcal{V}_{1}.
+\mathbb{E}[X\mid F]:=\int_{\Omega}X\,d\mathbb{P}_{F}
+=\frac{1}{\mathbb{P}(F)}\int_{F}X\,d\mathbb{P}
+=\frac{\mathbb{E}[X\mathbb{1}_{F}]}{\mathbb{P}(F)}.
 $$
 
 :::
 
-## Conditional Expectation
-
- We recall our fixed underlying probability space
- $(\Omega, \mathcal{F}, \mathbb{P})$. Suppose we have a random variable of
- interest $Y$ that we know nothing about. Additionally, suppose we know
- something about some other random variable $X$. Our objective is to estimate
- the (unknown) $Y$ from (known) $X$.
-
-Lets look to apply some of the results that we established in the previous
-section. First, let $Y$ be any $\mathcal{F}$-measurable random variable and
-suppose
+If $\mathbb{P}(F)=0$ we may set $\mathbb{P}_F\equiv0$ and extend the notions
+trivially. The **conditional distribution function** of $X$ given $F$ is
 $$
-\sigma(X)=: \mathcal{G}_{X}\subset \mathcal{F}.
+F_{X|F}(x)=\mathbb{P}(X\leq x\mid F)=\frac{\mathbb{P}(\{X\leq x\}\cap F)}{\mathbb{P}(F)},
 $$
+and when it is differentiable its derivative $f_{X|F}$ is the conditional
+density, so that $\mathbb{E}[X\mid F]=\int x f_{X|F}(x)\,dx$.
 
-1. The space $L_{2}(\Omega, \mathcal{F}, \mathbb{P})$ (of all
-   $\mathcal{F}$-measurable random variables with finite second moments) is a
-   Hilbert space complete in the norm
-   $\lVert \cdot \rVert:=\sqrt{ \mathbb{E}[X^2] }$ (with inner product
-   $\left< X,Y \right> = \mathbb{E}[XY]$).
-   
-2. For any sub-$\sigma$-algebra $\mathcal{G}_{X}\subset \mathcal{F}$, the set
-   $$
-   A_{X}=\{ \text{all }\mathcal{G}_{X}\text{ measurable RVs with finite second moment} \}=\{ h(X):\mathbb{E}[h(X)^2]<\infty;~ h\text{ is Borel} \}
-   $$
-   is a closed linear subspace of $L_{2}(\Omega, \mathcal{F}, \mathbb{P})$ with
-   respect to $\lVert \cdot \rVert$.
-   
-3. The **existence theorem** and **projection theorem** above tell us that
-   there exists a (unique a.s.) random variable $Y^*\in A_{X}$ which minimizes
-   the distance between $Y$ and the subspace $A_X$. This $Y^*$ is given by and
-   must satisfy the following equations
-   $$
-   \mathbb{E}[(Y-Y^*)\cdot Z]=0\quad\quad\&\quad\quad \lVert Y-Y^* \rVert \leq  \lVert Y-Z \rVert;\quad \forall Z \in A_{X}.
-   $$
+## Conditioning on a σ-algebra
 
-:::{.theorem data-title="Conditional Expectation"}
+Conditioning on a single event only uses one yes/no piece of information. We
+now condition on a whole σ-algebra of observable events.
 
-The **best prediction** of $Y$ (in terms of $X$) is the conditional expectation $\mathbb{E}[Y|X]$, or equivalently$$\lVert Y-\mathbb{E}[Y|X] \rVert =\min_{Z \in A_{X}}\lVert Y-Z \rVert .$$
+### Countable partitions
+
+Let $\{F_{n};n\geq1\}$ be a countable partition of $\Omega$ (disjoint sets
+with union $\Omega$, each of positive probability) and let $\mathcal{G}$ be
+the σ-algebra generated by it. By countable additivity,
+$$
+\mathbb{P}(E)=\sum_{n}\mathbb{P}(F_{n})\mathbb{P}_{F_{n}}(E),\qquad
+\mathbb{E}[X]=\sum_{n}\mathbb{P}(F_{n})\mathbb{E}[X\mid F_{n}].
+$$
+Define the simple random variable
+$$
+\mathbb{E}[X\mid\mathcal{G}](\omega):=\sum_{n}\mathbb{E}[X\mid F_{n}]\,
+\mathbb{1}_{F_{n}}(\omega),\qquad\omega\in\Omega.
+$$
+It is $\mathcal{G}$-measurable and for every $\Lambda\in\mathcal{G}$ (a union
+of partition elements)
+$$
+\mathbb{E}\big[\mathbb{E}[X\mid\mathcal{G}]\mathbb{1}_{\Lambda}\big]
+=\mathbb{E}[X\mathbb{1}_{\Lambda}],
+$$
+and in particular $\mathbb{E}[\mathbb{E}[X\mid\mathcal{G}]]=\mathbb{E}[X]$.
+This identity is what generalises.
+
+### General definition
+
+:::{.definition data-title="Conditional expectation given a σ-algebra"}
+
+Let $\mathcal{G}\subseteq\mathcal{F}$ be a sub-σ-algebra and $X$ an
+integrable random variable. The **conditional expectation of $X$ given
+$\mathcal{G}$** is the (a.s. unique) $\mathcal{G}$-measurable integrable random
+variable $\mathbb{E}[X\mid\mathcal{G}]$ such that
+$$
+\mathbb{E}\big[X\mathbb{1}_{\Lambda}\big]
+=\mathbb{E}\big[\mathbb{E}[X\mid\mathcal{G}]\mathbb{1}_{\Lambda}\big],
+\qquad\text{for all }\Lambda\in\mathcal{G}.
+$$
+For $E\in\mathcal{F}$ the **conditional probability of $E$ given
+$\mathcal{G}$** is $\mathbb{P}(E\mid\mathcal{G}):=\mathbb{E}[\mathbb{1}_E\mid\mathcal{G}]$,
+the $\mathcal{G}$-measurable random variable with values in $[0,1]$ such that
+$$
+\mathbb{P}(E\cap\Lambda)=\mathbb{E}\big[\mathbb{P}(E\mid\mathcal{G})\mathbb{1}_{\Lambda}\big],
+\qquad\Lambda\in\mathcal{G}.
+$$
 
 :::
-### Conditional Expectation Properties
 
-Assuming that $\mathbb{E}[X^2]<\infty$ and $\mathbb{E}[Y^2]<\infty$, all
-statements below hold almost surely:
+Existence and uniqueness follow from the [[radon-nikodym-derivative]]: the
+signed measure $\Lambda\mapsto\mathbb{E}[X\mathbb{1}_\Lambda]$ is absolutely
+continuous with respect to $\mathbb{P}$ on $\mathcal{G}$, and
+$\mathbb{E}[X\mid\mathcal{G}]$ is its density. Section 4 gives a second
+construction by projection.
+
+### Conditioning on a random variable
+
+For a random variable $Z$ we write
+$\mathbb{E}[X\mid Z]:=\mathbb{E}[X\mid\sigma(Z)]$, where $\sigma(Z)$ is the
+[[generated-sigma-algebra|σ-algebra generated by $Z$]]. By the Doob-Dynkin
+lemma, $\mathbb{E}[X\mid Z]=h(Z)$ for some Borel function $h$.
+
+If $(X,Z)$ has joint density $f_{X,Z}$ and $f_Z(z)>0$, the **conditional
+density** and **conditional distribution function** of $X$ given $Z=z$ are
+$$
+f_{X|Z}(x\mid z)=\frac{f_{X,Z}(x,z)}{f_{Z}(z)},\qquad
+F_{X|Z}(x\mid z)=\int_{-\infty}^{x}f_{X|Z}(u\mid z)\,du,
+$$
+and then $h(z)=\int x f_{X|Z}(x\mid z)\,dx$.
+
+## Conditional expectation as a projection
+
+Conditional expectation is the best prediction of $Y$ given partial
+information, in the mean-square sense. This uses the Hilbert space structure
+of square-integrable random variables.
+
+:::{.definition data-title="Hilbert space"}
+
+An [[inner-product-space|inner product space]] is a real vector space
+$\mathcal{V}$ with a symmetric, bilinear, positive-definite map
+$\langle\cdot,\cdot\rangle:\mathcal{V}\times\mathcal{V}\to\mathbb{R}$; it
+induces the norm $\lVert v\rVert=\sqrt{\langle v,v\rangle}$. A **Hilbert
+space** is an inner product space that is complete in this norm: every
+Cauchy sequence converges to an element of $\mathcal{V}$. See
+[[hilbert-spaces]].
+
+:::
+
+For a closed subspace $\mathcal{V}_1\subseteq\mathcal{V}$ and $v\in\mathcal{V}$,
+the distance from $v$ to $\mathcal{V}_1$ is
+$d=\inf_{v_1\in\mathcal{V}_1}\lVert v-v_1\rVert$, and the minimiser $v_1^*$ is
+the **orthogonal projection** of $v$ onto $\mathcal{V}_1$.
+
+:::{.theorem data-title="Projection theorem"}
+
+If $\mathcal{V}_1$ is a closed subspace of a Hilbert space $\mathcal{V}$, then
+for every $v\in\mathcal{V}$ there is a unique $v_1^*\in\mathcal{V}_1$ with
+$\lVert v-v_1^*\rVert\leq\lVert v-v_1\rVert$ for all $v_1\in\mathcal{V}_1$, and
+this is equivalent to the orthogonality condition
+$$
+\langle v-v_1^*,v_1\rangle=0\qquad\text{for all }v_1\in\mathcal{V}_1.
+$$
+
+:::
+
+Now take $\mathcal{V}=L^2(\Omega,\mathcal{F},\mathbb{P})$, the space of
+random variables with $\mathbb{E}[X^2]<\infty$, with inner product
+$\langle X,Y\rangle=\mathbb{E}[XY]$ (see [[lp-spaces]]). For a
+sub-σ-algebra $\mathcal{G}$, the set of $\mathcal{G}$-measurable square
+integrable random variables is a closed subspace. For $\mathcal{G}=\sigma(X)$
+it equals $A_X=\{h(X):h\text{ Borel},~\mathbb{E}[h(X)^2]<\infty\}$.
+
+:::{.theorem data-title="Conditional expectation is the best prediction"}
+
+For $Y\in L^2$ and $\mathcal{G}\subseteq\mathcal{F}$, the orthogonal
+projection of $Y$ onto the $\mathcal{G}$-measurable subspace is
+$\mathbb{E}[Y\mid\mathcal{G}]$, so
+$$
+\mathbb{E}\big[(Y-\mathbb{E}[Y\mid\mathcal{G}])Z\big]=0,\qquad
+\lVert Y-\mathbb{E}[Y\mid\mathcal{G}]\rVert=\min_{Z\in L^2(\mathcal{G})}\lVert Y-Z\rVert.
+$$
+In particular $\mathbb{E}[Y\mid X]$ is the best mean-square predictor of $Y$
+from $X$.
+
+:::
+
+:::{.proof}
+
+By the projection theorem let $Y^*$ be the projection. Taking $Z=\mathbb{1}_\Lambda$
+with $\Lambda\in\mathcal{G}$ in the orthogonality condition gives
+$\mathbb{E}[Y\mathbb{1}_\Lambda]=\mathbb{E}[Y^*\mathbb{1}_\Lambda]$, and $Y^*$ is
+$\mathcal{G}$-measurable, so $Y^*=\mathbb{E}[Y\mid\mathcal{G}]$ a.s. by the
+uniqueness in the definition.
+
+:::
+
+## Properties
+
+Let $\mathcal{G},\mathcal{G}_1,\mathcal{G}_2$ be sub-σ-algebras of
+$\mathcal{F}$. Assuming the variables below are integrable (or square
+integrable where indicated), the following hold almost surely.
 
 1. **Linearity.**
-   $\mathbb{E}[\alpha X+\beta Y|\mathcal{F}_{1}]=\alpha \mathbb{E}[X|\mathcal{F}_{1}]+\beta \mathbb{E}[Y|\mathcal{F}_{1}]$.
+   $\mathbb{E}[\alpha X+\beta Y\mid\mathcal{G}]=\alpha\mathbb{E}[X\mid\mathcal{G}]+\beta\mathbb{E}[Y\mid\mathcal{G}]$.
+2. **Measurable variables.** If $X$ is $\mathcal{G}$-measurable then
+   $\mathbb{E}[X\mid\mathcal{G}]=X$; in particular constants are unchanged.
+3. **Independence.** If $X$ is independent of $\mathcal{G}$ then
+   $\mathbb{E}[X\mid\mathcal{G}]=\mathbb{E}[X]$.
+4. **Monotonicity.** If $X\leq Y$ then
+   $\mathbb{E}[X\mid\mathcal{G}]\leq\mathbb{E}[Y\mid\mathcal{G}]$.
+5. **Expectation.** $\mathbb{E}[\mathbb{E}[X\mid\mathcal{G}]]=\mathbb{E}[X]$.
+6. **Taking out what is known.** If $X$ is $\mathcal{G}$-measurable and $XY$
+   is integrable then $\mathbb{E}[XY\mid\mathcal{G}]=X\mathbb{E}[Y\mid\mathcal{G}]$.
+7. **Monotone convergence.** If $0\leq X_n\uparrow X$ then
+   $\mathbb{E}[X_n\mid\mathcal{G}]\uparrow\mathbb{E}[X\mid\mathcal{G}]$ (see
+   [[monotone-convergence-theorem]]).
+8. **Dominated convergence.** If $X_n\to X$ a.s. and $\lvert X_n\rvert\leq W$
+   with $\mathbb{E}[W]<\infty$ then
+   $\mathbb{E}[X_n\mid\mathcal{G}]\to\mathbb{E}[X\mid\mathcal{G}]$ (see
+   [[dominated-convergence-theorem]]).
+9. **Tower property.** If $\mathcal{G}_2\subseteq\mathcal{G}_1\subseteq\mathcal{F}$
+   then
+   $$
+   \mathbb{E}\big[\mathbb{E}[X\mid\mathcal{G}_1]\mid\mathcal{G}_2\big]
+   =\mathbb{E}\big[\mathbb{E}[X\mid\mathcal{G}_2]\mid\mathcal{G}_1\big]
+   =\mathbb{E}[X\mid\mathcal{G}_2]
+   $$
+   (the smaller σ-algebra always wins).
+10. **Jensen's inequality.** For convex $g$ with $g(X)$ integrable,
+    $\mathbb{E}[g(X)\mid\mathcal{G}]\geq g(\mathbb{E}[X\mid\mathcal{G}])$ (see
+    [[jensen-inequality]]).
 
-2. If $X \in \mathcal{F}_{1}$ then $\mathbb{E}[X|\mathcal{F}_{1}]=X~a.s.$
-	- *(Special case)* If $X=C~a.s.\implies \mathbb{E}[X|\mathcal{F}_{1}]=C~a.s.$
+## References
 
-3. If $X$ is independent of $\mathcal{F}_{1}$ (i.e.
-   $\forall Z \in \mathcal{F}_{1}$ random variables $X$ and $Z$ are
-   independent), then $\mathbb{E}[X|\mathcal{F}_{1}]=\mathbb{E}[X]~a.s.$.
-
-4. **Monotonicity.** If $X \leq Y$, then
-   $\mathbb{E}[X|\mathcal{F}_{1}]\leq \mathbb{E}[Y|\mathcal{F}_{1}]$.
-
-5. $\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{1}]]=\mathbb{E}[X]$.
-
-6. Assuming $\mathbb{E}[(XY)^2]< \infty$, if $X \in \mathcal{F}_{1}$ then
-   $\mathbb{E}[XY|\mathcal{F}_{1}]=X\mathbb{E}[Y|\mathcal{F}_{1}]$.
-
-7. **Monotone Convergence Theorem.** If $X_{n}\geq 0$ and $X_{n}\uparrow X$
-   with $\mathbb{E}[X_{n}^2]<\infty$, $\mathbb{E}[X^2]< \infty$, then
-   $\mathbb{E}[X_{n}|\mathcal{F}_{1}]\uparrow \mathbb{E}[X|\mathcal{F}_{1}]$
-   a.s..
-
-8. **Dominated Convergence Theorem.** If $X_{n}\to X~a.s.$ and
-   $\lvert X_{n} \rvert \leq Y$ with $\mathbb{E}[Y]<\infty$, then
-   $\mathbb{E}[X_{n}|\mathcal{F}_{1}]\to \mathbb{E}[{X|\mathcal{F}_{1}}]~a.s.$.
-
-9. **Tower Property.** If
-   $\mathcal{F}_{2}\subset \mathcal{F}_{1}\subset \mathcal{F}$ are
-   sub-$\sigma$-algebra then
-   $\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{1}]|\mathcal{F}_{2}]=\mathbb{E}[X|\mathcal{F}_{2}]=\mathbb{E}[\mathbb{E}[X|\mathcal{F}_{2}]|\mathcal{F}_{1}]=\mathbb{E}[X|\mathcal{F}_{2}]$
-   (smallest always wins)
-
-10. **Jensen's Inequality.** For convex function $g$ and
-    $\mathbb{E}[g^2(X)]< \infty$ then
-    $\mathbb{E}[g(X)|\mathcal{F}_{1}]\geq g(\mathbb{E}[X|\mathcal{F}_{1}])$.
-
+- D. Williams, *Probability with Martingales*, Cambridge University Press,
+  1991, Chapter 9.
+- P. Billingsley, *Probability and Measure*, 3rd ed., Wiley, 1995,
+  Section 34.

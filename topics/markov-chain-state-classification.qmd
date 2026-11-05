@@ -1,12 +1,20 @@
 ---
-title: Markov Chain State Classification
-author: John Robin Inston
+id: markov-chain-state-classification
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Markov Chain State Classification"
 title-block-banner: false
 ---
 
-### Communication and Irreducibility
+Throughout, $\{X_{n}\}$ is a homogeneous [[markov-chains|Markov chain]] with
+countable state space $S$, $p_{i,j}(n)=\mathbb{P}(X_{n}=j|X_{0}=i)$, and
+$T_{j}$, $f_{i,j}$, $\mu_{j}$ are the first hitting time, hitting probability
+and mean recurrence time of [[markov-chain-passage-recurrence-times]].
+
+## Communication and Irreducibility
 
 State $i$ *communicates* with state $j$ (or $j$ is *accessible* from $i$),
 denoted $i \to j$ if $p_{i,j}(n)>0$ for some $n\geq 0$ that is, there is
@@ -32,7 +40,7 @@ A set of states $C$ is *closed* if for all $i \in C$, $p_{i,j}=0$ for all
 $j\not\in C$, that is, the chain never leaves $C$ once it has entered. Note that
 clearly the set consisting of one absorbing state is closed.
 
-### Persistence
+## Persistence
 
 A state $j$ is *persistent* if the probability that the process will return to
 $j$ given that it started at $j$ eventually is 1. This is equivalent to writing
@@ -59,7 +67,7 @@ For example we consider a random walk whereby any point in the state space is
 null-persistent since the random walk can always return but may take infinitely
 long to do so.
 
-### Transience
+## Transience
 
 Alternatively, if a state $j$ is not persistent it must be *transient*, that
 is, the probability that the process will return to $j$ given that it started
@@ -80,7 +88,7 @@ $n \to \infty$ for all $i$ since $\sum_{n}p_{{i,j}}(n)<\infty$. Intuitively,
 this is stating that since $j$ is transient, the probability that the chain
 visits $j$ as time $n$ goes to infinity approaches 0.
 
-#### Periodicity & Ergodicity
+## Periodicity & Ergodicity
 
 The *period* of a state $j$ is the greatest common divider of all $n$ for which
 $p_{{i,i}}(n)>0$ i.e.
@@ -96,4 +104,18 @@ $\mu_{i,i}<\infty$ and $d(i)=1$.
 A state $j$ is *absorbing* if $p_{j,j}=1$, that is the probability of leaving
 state $j$ once the process has entered is 0.
 
-<!-- TODO: image "Pasted image 20240621184531.png" not found in vault -->
+## Example: communication classes
+
+Consider the chain with the transition diagram below.
+
+![Example transition probability diagram.](../assets/images/complicated-transition-graph.png){width=50%}
+
+Let $S_{1}=\{5\}$, $S_{2}=\{1,2,3,4\}$ and $S_{3}=\{6,7\}$. The chain is
+reducible since $2\to5$ and $3\to6$ are one-way journeys. State $5$ is
+absorbing since the chain can never leave it. States $1,2,3,4$ are transient
+since the chain eventually leaves them and never returns, and states $6,7$ are
+persistent since the chain always revisits them. So $S_{1}$ is a closed
+persistent (absorbing) class, $S_{2}$ is a transient class and $S_{3}$ is a
+closed persistent class. The long-run behaviour is discussed in
+[[markov-chain-stationary-distributions]] and
+[[markov-chain-equilibrium-convergence]].

@@ -1,16 +1,55 @@
 ---
-title: Markov Chain Statistical Inference
-author: John Robin Inston
+id: markov-chain-statistical-inference
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Markov Chain Statistical Inference"
 title-block-banner: false
 ---
 
-## Markov Chain Statistical Inference
+## Motivation
 
-In this note we summarize the statistical inference of Markov chains.
+Suppose we want a Markov model for daily weather where days are wet $0$ or dry
+$1$, observed as
+$$
+\{0,0,0,1,1,1,1,0,0,1,0,0,1,0,1,1,1,0,0,0,0,1,1,1,0\}.
+$$
+How do we estimate the transition probabilities of a suitable
+[[markov-chains|Markov chain]], how accurate are the estimates, and can we test
+for properties such as stationarity? The sections below answer these questions.
 
-#### Sufficient Statistics
+## Single observation: maximum likelihood
+
+Let $\{x_{0},\dots,x_{T}\}$ be one observed path of a homogeneous chain on
+$\mathcal{X}=\{1,\dots,M\}$, so there are $M\times M$ transition probabilities
+$p_{i,j}$ to estimate. By the finite-dimensional distribution of a Markov chain
+the likelihood of $\boldsymbol{\theta}=(p_{i,j})$ is
+$$
+L(\boldsymbol{\theta})=\mu^{(0)}(x_{0})\,p_{x_{0},x_{1}}\cdots p_{x_{T-1},x_{T}}
+\propto\prod_{t=0}^{T-1}p_{x_{t},x_{t+1}}.
+$$
+Let $n_{i,j}$ be the number of observed one-step transitions from $i$ to $j$.
+Then
+$$
+L(\boldsymbol{\theta})\propto\prod_{i,j}p_{i,j}^{n_{i,j}},\qquad
+l(\boldsymbol{\theta})\propto\sum_{i,j}n_{i,j}\log p_{i,j}.
+$$
+The constraint $\sum_{j}p_{i,j}=1$ lets us eliminate
+$p_{i,1}=1-\sum_{j\ge2}p_{i,j}$, and then
+$$
+\frac{\partial l}{\partial p_{i,j}}\propto\frac{n_{i,j}}{p_{i,j}}-\frac{n_{i,1}}{p_{i,1}}=0
+\quad\Longrightarrow\quad\frac{n_{i,j}}{n_{i,1}}=\frac{\hat{p}_{i,j}}{\hat{p}_{i,1}}
+$$
+for all $j\neq1$, so $\hat{p}_{i,j}\propto n_{i,j}$, that is
+$$
+\hat{p}_{i,j}=\frac{n_{i,j}}{\sum_{k\in\mathcal{X}}n_{i,k}}.
+$$
+
+## Several observations (Anderson and Goodman)
+
+### Sufficient statistics
 
 We consider a discrete time (order 1) Markov chain
 $\{ X_{t} \}_{t \in \mathbb{N}_{0}}$ with countable (orderless) state space
@@ -73,7 +112,7 @@ $$
 For not necessarily stationary transition probabilities, $p_{i,j}(t)$ and
 $n_{i,j}(t)$ form a set of
 [[sufficient-statistics|minimal sufficient statistics]].
-#### Distribution
+### Distribution of the counts
 
 The actual distribution of $n_{i,j}(t)$ is $(\star)$ multiplied by an
 appropriate function of factorials as a constant of proportionality. Let
@@ -90,7 +129,7 @@ distribution of $n_{i,j}(t)$ (conditional on the $n_{i}(0)$) is
 $$
 \prod_{t=1}^T\left\{ \prod_{i=1}^m \left[ \frac{n_{i}(t-1)!}{\prod_{j=1}^m n_{i,j}(t)!}\prod_{j=1}^m p_{i,j}(t)^{n_{i,j}(t)} \right]  \right\} .
 $$
-#### Maximum Likelihood Estimation
+### Maximum likelihood estimation
 
 The stationary transition probabilities $p_{i,j}$ can be estimated by
 maximizing the probability $(\star\star)$ with respect to $p_{i,j}$ subject to
@@ -126,7 +165,7 @@ Formally, these estimates are the same as one would obtain if for each $i$ and
 $t$ one had $n_{i}(t-1)$ observations on a multinomial distribution with
 probabilities $p_{i,j}(t)$ and with resulting numbers $n_{i,j}(t)$.
 
-#### Asymptotic Behavior
+### Asymptotic behavior
 
 To find the asymptotic behavior of the probabilities $p_{i,j}$ we first
 consider the behavior of $n_{i,j}(t)$. We shall assume that
@@ -145,7 +184,21 @@ normally distributed.
 The transition matrix elements $(p_{i,j}^{[t]})_{i,j\in \mathcal{S}}=:P^t$
 denote the probability of state $j$ at time $t$ given initial state $i$. Let
 $n_{k;i,j}(t)$ be the number of sequences including state $k$ at time $0$, $i$
-at time $t-1$ and $j$ at time $t$.  
+at time $t-1$ and $j$ at time $t$.
+
+For $n$ individuals observed over $T$ steps, the limiting result of Anderson
+and Goodman is that
+$$
+\sqrt{n}\,(\hat{p}_{i,j}-p_{i,j})\to\mathcal{N},
+$$
+jointly normal with mean $0$, variances $p_{i,j}(1-p_{i,j})/\phi_{i}$ and
+covariances $-\delta_{i,g}\,p_{i,j}p_{g,h}/\phi_{i}$, where
+$\delta_{i,g}=\mathbf{1}\{i=g\}$ and
+$\phi_{i}=\sum_{k}\sum_{t=1}^{T}\eta_{k}\,p^{[t-1]}_{k,i}$ is the expected
+number of visits to $i$ per unit of initial mass (with $\eta_{k}$ the limiting
+initial proportions above). These give confidence intervals and the basis for
+likelihood-ratio and chi-squared tests of, for example, stationarity of the
+transition probabilities.
 
 ## References
 

@@ -1,14 +1,17 @@
 ---
-title: Stochastic Games
-author: John Robin Inston
+id: stochastic-games
+aliases: ["stochastic-game-theory"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Stochastic Games"
 title-block-banner: false
 ---
 
 ## What are Stochastic Games?
 
-Stochastic games ([[shapley1964|Shapley, 1953]]) are multi-player dynamic games
+Stochastic games (Shapley, 1953) are multi-player dynamic games
 in which a finite set of agents interact repeatedly over time in a shared,
 evolving environment. At each stage, every player observes the current
 **state** of the system, simultaneously chooses an **action**, receives a
@@ -17,11 +20,54 @@ kernel that depends on the joint action profile. Each player aims to optimize
 their cumulative (discounted or average) payoff over the horizon.
 
 Stochastic games unify and generalize two classical frameworks: **Markov
-Decision Processes** (the single-agent special case) and **repeated games**
+Decision Processes** (MDPs) (the single-agent special case) and **repeated games**
 (the special case where the state never changes). The central solution concept
-is the **Markov Perfect Equilibrium (MPE)** — a profile of state-dependent
+is the **Markov Perfect Equilibrium (MPE)** - a profile of state-dependent
 strategies, one per player, such that no player can gain by deviating, given
 the others' strategies.
+
+## Formal model
+
+:::{.definition data-title="Markov decision process (one player)"}
+
+An MDP is a tuple $\Gamma=(S,A,N_{T},\mu_{0},P,r)$ where $S$ is a finite state
+set; $A(s)$ is the finite set of actions available in state $s$; $N_{T}>0$ is
+the number of time steps with time set $\mathcal{T}=\{0,1,\dots,N_{T}\}$;
+$\mu_{0}\in\mathcal{P}(S)$ is the initial state distribution (here
+$\mathcal{P}(X)$ is the set of probability distributions on $X$);
+$P_{n}(s,a)\in\mathcal{P}(S)$ is the law of the next state given action $a$ in
+state $s$ at time $n$; and $r_{n}(s,a)\in\mathbb{R}$ is the payoff of action
+$a$ in state $s$ at time $n$.
+
+:::
+
+A **policy** is a map $\pi:\mathcal{T}\times S\to\mathcal{P}(A)$ giving the
+distribution of actions in each state at each time; it is **pure** when this
+distribution is a Dirac mass. The agent maximizes the cumulative expected
+reward
+$$
+J(\pi)=\mathbb{E}\left[\sum_{n=0}^{N_{T}}r_{n}(s_{n},a_{n})\right],\qquad
+a_{n}\sim\pi_{n}(s_{n}),\ s_{n+1}\sim P_{n}(s_{n},a_{n}),\ s_{0}\sim\mu_{0}.
+$$
+This is the discrete-time setting of [[stochastic-control]].
+
+:::{.definition data-title="Discrete-time N-player stochastic game"}
+
+An $N$-player game is a tuple
+$(\vec{S},\vec{A},N_{T},\vec{\mu}_{0},\vec{P},\vec{r})$ with state sets
+$\vec{S}=(S^{i})_{i\le N}$, action sets $A^{i}(s^{i})$, initial distributions
+$\mu_{0}^{i}$, transition rules $P^{i}_{n}$ giving the next state of player $i$
+as a function of the current joint state and joint action, and payoffs
+$r^{i}_{n}$ for each player $i$. Each player chooses a policy $\pi^{i}$ to
+maximize her own expected cumulative payoff given the policies of the others,
+and the solution concept is a [[nash-equilibrium|Nash equilibrium]] in policies.
+
+:::
+
+In continuous time the agent chooses a square-integrable control process
+$\alpha=(\alpha_{t})_{t\in[0,T]}$ with values in a closed, convex, bounded set
+$A\subseteq\mathbb{R}^{k}$, to minimize an expected cost over $[0,T]$ (or an
+infinite horizon). See [[control-theory]] and [[mean-field-games]].
 
 ## Topics in Stochastic Games
 
@@ -44,17 +90,17 @@ the others' strategies.
 	- Infinite-horizon average (ergodic) payoff
 	- Zero-sum games
 		- Shapley operator and value iteration
-		- Policy / strategy iteration (Hoffman–Karp)
+		- Policy / strategy iteration (Hoffman-Karp)
 		- Linear programming formulation
 	- General-sum N-player games
 		- Nash value iteration and convergence conditions
-		- Homotopy / continuation methods (Herings–Peeters)
+		- Homotopy / continuation methods (Herings-Peeters)
 		- Nonlinear complementarity and mathematical programming formulations
 		- Correlated equilibrium and no-regret learning
 - ***Continuous-Time Stochastic Games***
 	- Differential games (deterministic dynamics)
 	- Stochastic differential games (SDE-driven state)
-	- Zero-sum differential games and the Hamilton–Jacobi–Isaacs equation
+	- Zero-sum differential games and the Hamilton-Jacobi-Isaacs equation
 	- Non-zero-sum differential games and coupled HJB systems
 - ***Special Structural Classes***
 	- Potential games and Markov potential games
@@ -66,18 +112,18 @@ the others' strategies.
 	- Discrete-time mean-field games
 	- Continuous-time mean-field games
 		- HJB + [[fokker-planck-equation]] system
-		- McKean–Vlasov control
+		- McKean-Vlasov control
 		- Linear-quadratic mean-field games
 	- Mean-field games with major and minor players
 	- Numerical methods for mean-field games
 - Multi-Agent Reinforcement Learning
 	- Nash-Q learning
-	- Policy gradient and actor–critic methods
+	- Policy gradient and actor-critic methods
 	- Two-timescale stochastic approximation
 	- No-regret dynamics and convergence to equilibrium
 	- MARL in the mean-field regime
 - Heterogeneous Agent Games
-	- Markov-perfect industry dynamics (Ericson–Pakes framework)
+	- Markov-perfect industry dynamics (Ericson-Pakes framework)
 	- Oblivious equilibrium as a scalable approximation
 	- Computational methods for heterogeneous-state MPE
 - Applications
@@ -85,3 +131,8 @@ the others' strategies.
 	- Finance: optimal stopping, systemic risk, algorithmic trading
 	- Robotics and autonomous multi-agent systems
 	- Evolutionary biology and population games
+
+## References
+
+- L. S. Shapley, "Stochastic games", *PNAS* 39 (1953).
+- A. Neyman and S. Sorin (eds.), *Stochastic Games and Applications*.

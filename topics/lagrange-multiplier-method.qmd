@@ -1,4 +1,7 @@
 ---
+id: lagrange-multiplier-method
+aliases: ["lagrange-multipliers"]
+tags: []
 title: Lagrange Multiplier Method
 author: John Robin Inston
 date: 2026-09-25
@@ -6,125 +9,119 @@ number-sections: true
 title-block-banner: false
 ---
 
-# Lagrange Multiplier Method
+## Intuition
 
-The method of Lagrange multipliers is a strategy for **finding the local maxima
-and minima of a function (like profit or cost) subject to equation constraints
-(like a budget or physical limit)**. The key idea is that at the optimal point,
-the contour lines of the function you're optimizing are tangential to the
-constraint surface (one is a scalar multiple of the other).
+The method of **Lagrange multipliers** finds the local maxima and minima of a
+function (such as profit or cost) subject to equality constraints (such as a
+budget or physical limit). The key idea is that at an optimum the contour
+lines of the objective are tangent to the constraint surface, so the gradient
+of the objective is a scalar multiple of the gradient of the constraint.
 
-The idea is to convert a constrained problem into a form such that the
-**derivative test** of an unconstrained problem can still be applied. The
-relationship between the gradient of the function and the gradients of the
-constraints leads to a reformulation of the original problem, known as the
-**Lagrangian (function)**.
+The method converts a constrained problem into one to which the derivative
+test of an unconstrained problem can be applied, through the **Lagrangian**.
+It is generalised to inequality constraints by the Karush-Kuhn-Tucker
+conditions (see [[optimization]]).
+
+## The Lagrangian
 
 :::{.definition data-title="Lagrangian"}
 
-For general function $f,g$ the **Lagrangian** is defined as
+For an objective $f$ and constraint function $g$ the **Lagrangian** is
 $$
 \mathcal{L}(x,\lambda):= f(x)+\left< \lambda,g(x) \right>,
 $$
-where $\left< \cdot,\cdot \right>$ denotes an [[inner-product|inner product]].
-The value $\lambda$ is known as the **Lagrange multiplier**.
+where $\left< \cdot,\cdot \right>$ is the [[inner-product-space|inner
+product]]. The vector $\lambda$ is the **Lagrange multiplier**.
 
 :::
 
-In order to find the maximum or minimum of a function $f$ subject to the
-equality constraint $g(x)=0$ we find the stationary points of $\mathcal{L}$ as
-a function of $x$ and the Lagrange multiplier $\lambda$
+To optimise $f$ subject to $g(x)=0$ we find the stationary points of
+$\mathcal{L}$ in $(x,\lambda)$,
 $$
-\frac{\partial\mathcal{L}}{\partial x}=0\quad \& \quad \frac{\partial\mathcal{L}}{\partial \lambda} = 0,
+\frac{\partial\mathcal{L}}{\partial x}=0\quad \& \quad
+\frac{\partial\mathcal{L}}{\partial \lambda} = 0,
 $$
 or equivalently
 $$
-\frac{{\partial f(x)}}{\partial x} + \lambda \cdot \frac{{\partial g(x)}}{\partial x}=0\quad \& \quad g(x)=0.
+\frac{\partial f(x)}{\partial x} + \lambda \cdot \frac{\partial g(x)}{\partial x}=0
+\quad \& \quad g(x)=0.
 $$
-The solution corresponding to the original constrained optimization is always a
-saddle point of the Lagrangian function which can be identified amount the
-stationary points from the definiteness of the bordered Hessian matrix.
+The solution of the constrained problem is a saddle point of the Lagrangian,
+which can be identified among the stationary points by the definiteness of the
+bordered Hessian (see [[jacobian-and-hessian]]). The mechanics Lagrangian
+$K-U$ is a different object, see [[lagrangian-mechanics]].
 
-The method of Lagrange multipliers is generalized by the
-[[karush-kuhn-tucker-conditions]], which can also take into account inequality
-constraints of the form $h(\boldsymbol{x})\leq c$.
+## Lagrange Multiplier Theorem
 
 :::{.theorem data-title="Lagrange Multiplier Theorem"}
 
-Let $f:\mathbb{R}^n\to \mathbb{R}$ be the objective function and
-$g:\mathbb{R}^n \to \mathbb{R}^c$ be the constraints function both belonging to
-$C_{1}$ (i.e. having continuous first derivatives). Let
-$\boldsymbol{x}_{\star}$ be an optimal solution to the following optimization
-problem such that, for the matrix of partial derivatives
+Let $f:\mathbb{R}^n\to\mathbb{R}$ and $g:\mathbb{R}^n\to\mathbb{R}^c$ be $C^1$
+(continuous first derivatives). Let $\boldsymbol{x}_{\star}$ maximise
+$f(\boldsymbol{x})$ subject to $g(\boldsymbol{x})=0$, and suppose the matrix
+of partial derivatives
 $$
-\left[ \text{D} g(\boldsymbol{x}_{\star}) \right] _{j,k}= \frac{{\partial g_{j}}}{\partial x_{k}},
+\left[ \mathrm{D} g(\boldsymbol{x}_{\star}) \right] _{j,k}=
+\frac{\partial g_{j}}{\partial x_{k}}
 $$
-with $\text{rank}(\text{D}g(\boldsymbol{x}_{\star}))= c \leq n$ maximize
-$f(\boldsymbol{x})$ subject to $g(\boldsymbol{x})=0$. Then there exists a
-unique **Lagrange multiplier** $\lambda_{\star}\in \mathbb{R}^c$ such that
-$\text{D}f(\boldsymbol{x}_{\star})=\lambda_{\star}^T\text{D}g(x_{\star})$.
+has $\mathrm{rank}(\mathrm{D}g(\boldsymbol{x}_{\star}))= c \leq n$. Then there
+exists a unique **Lagrange multiplier** $\lambda_{\star}\in\mathbb{R}^c$ with
+$$
+\mathrm{D}f(\boldsymbol{x}_{\star})=
+\lambda_{\star}^{\top}\mathrm{D}g(\boldsymbol{x}_{\star}).
+$$
 
 :::
 
-The Lagrange multiplier theorem states that at any local maximum (or minimum)
-of the function evaluated under the equality constraints, if constraint
-qualification applies, then the gradient of the function (at that point) can be
-written as a linear combination of the gradients of the constraints (at that
-point), with the Lagrange multipliers acting as coefficients.
+In words: at a constrained local extremum, if the constraint qualification
+(the rank condition) holds, the gradient of the objective is a linear
+combination of the gradients of the constraints, with the multipliers as
+coefficients. Equivalently, the directional derivative of $f$ is zero in every
+feasible direction: any direction perpendicular to all constraint gradients is
+also perpendicular to $\nabla f$.
 
-This is equivalent to saying that the directional derivative of the function is
-$0$ in every feasible direction (or that any direction perpendicular to all
-gradients of the constraints is also perpendicular to the gradient of the
-function).
-#### Example: Box Volumes:
-Suppose we wish to find the dimensions of the box with largest volume that has
-a total surface area of $64\text{cm}^2$. The dimension of a box is given by
-three side lengths $a,b,c\in \mathbb{R}_{+}$and so the problem can be expressed
-functionally as finding the maximum of $f(a,b,c)=abc$ subject to the constraint
-that $g(a,b,c)=(ab+bc+ac)-32.$.
+## Examples
 
-The system that we need to solve is
+:::{.example data-title="Box Volume"}
+
+Find the box of largest volume with total surface area $64\,\mathrm{cm}^2$.
+With side lengths $a,b,c>0$ we maximise $f(a,b,c)=abc$ subject to
+$g(a,b,c)=ab+bc+ac-32=0$. The system is
 $$
 \begin{cases}
-\Delta f=\lambda\Delta g \implies \begin{pmatrix} f_{a}\\ f_{b} \\ f_{c} \end{pmatrix} = \begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} = \lambda \begin{pmatrix} b+c \\ a+c \\ a+b \end{pmatrix}= \lambda \begin{pmatrix} g_{a} \\ g_{b} \\ g_{c} \end{pmatrix} \tag{1} \\
-g(a,b,c) = (ab+bc+ac)-32 = 0.
+\nabla f=\lambda\nabla g:\quad
+\begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} =
+\lambda \begin{pmatrix} b+c \\ a+c \\ a+b \end{pmatrix}, \\[1ex]
+g(a,b,c) = 0.
 \end{cases}
 $$
-Assuming $\lambda\neq 0$ from $(1.1)$ we have that 
-$$
-\begin{align}
-\begin{pmatrix}a & b & c \end{pmatrix} \cdot \begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} & = abc \cdot\boldsymbol{1} = \lambda\begin{pmatrix}
-a(b+c) \\ b(a+c) \\ c(a+b)
-\end{pmatrix} \\ \\
-\implies ab+ac &  = ba+bc =ca+c b \\ \\
-\implies a & = b  = c.
-\end{align}
-$$
-Subbing into $(1.2)$ we have that $a=b=c=\sqrt{ \frac{32}{3} }$ which is a
-cube, as expected.  
+Multiplying the components of the first equation by $a,b,c$ respectively gives
+$abc=\lambda a(b+c)=\lambda b(a+c)=\lambda c(a+b)$. Since $abc\neq0$ we have
+$\lambda\neq0$, so $ab+ac=ab+bc=ac+bc$, which forces $a=b=c$. The constraint
+then gives $3a^2=32$, so $a=b=c=\sqrt{32/3}$: a cube, as expected.
 
-#### Example: Multiple Lagrange Multipliers
-Now suppose that we wish to find the maximum and minimum of $f(x,y,z)=4y-2z$
-subject to the constraints $g_{1}(x,y,z) = 2x-y-z-2$ and
-$g_{2}(x,y,z) = x^2+y^2-1$. Since we now have 2 constraint functions we will
-have 2 Lagrange multipliers.  
+:::
 
-The system we need to solve is
+:::{.example data-title="Multiple Constraints"}
+
+Find the extrema of $f(x,y,z)=4y-2z$ subject to $g_{1}=2x-y-z-2=0$ and
+$g_{2}=x^2+y^2-1=0$. With two constraints there are two multipliers, and
 $$
-\begin{cases}
-\Delta f = \lambda_{1}\Delta g_{1} + \lambda_{2}\Delta g_{2} \implies \begin{pmatrix} 0 \\ 4 \\ -2 \end{pmatrix} = \lambda_{1} \begin{pmatrix} 2 \\ -1 \\ -1 \end{pmatrix}+\lambda_{2}\begin{pmatrix} 2x \\ 2y \\0 \end{pmatrix} \\ \\
-g_{1}= 0 \implies 2x-y-z-2=0 \\ \\
-g_{2} = 0 \implies x^2 +y^2-1=0.
-\end{cases}\tag{2}
+\begin{pmatrix} 0 \\ 4 \\ -2 \end{pmatrix} =
+\lambda_{1}\begin{pmatrix} 2 \\ -1 \\ -1 \end{pmatrix}
++\lambda_{2}\begin{pmatrix} 2x \\ 2y \\ 0 \end{pmatrix},\quad g_{1}=0,\quad g_{2}=0.
 $$
-Again assuming $\lambda \neq 0$ from $(2.1)$ we have 
+The third component gives $\lambda_{1}=2$. The first two then give
+$x\lambda_{2}=-2$ and $y\lambda_{2}=3$, and $g_{2}=0$ yields
+$\lambda_{2}=\pm\sqrt{13}$. For $\lambda_{2}=+\sqrt{13}$,
 $$
-\lambda_{1} = 2 \implies -2= x\lambda_{2} ~~\& ~~3=\lambda_{2}y, 
+(x,y,z)=\left(-\tfrac{2}{\sqrt{13}},\tfrac{3}{\sqrt{13}},
+-2-\tfrac{7}{\sqrt{13}}\right),
 $$
-which we can plug into $(2.3)$ to obtain $\lambda_{2}=\pm\sqrt{ 13 }$. From
-$(2.1)$ for $\lambda_{2} = +\sqrt{ 13 }$ we have
-$(x, y , z) = \left( -\frac{2}{\sqrt{ 13 }}, \frac{3}{\sqrt{ 13 }},-2- \frac{7}{\sqrt{ 13 }} \right)$
-and, and for $\lambda_{2}=-\sqrt{13}$ we have
-$(x, y, z) = \left( \frac{2}{\sqrt{ 13 }},- \frac{3}{\sqrt{ 13 }}, -2+ \frac{7}{\sqrt{ 13 }} \right)$.
-We can then plug into $f$ to find which is the maximum and the minimum
-respectively.
+and for $\lambda_{2}=-\sqrt{13}$,
+$$
+(x,y,z)=\left(\tfrac{2}{\sqrt{13}},-\tfrac{3}{\sqrt{13}},
+-2+\tfrac{7}{\sqrt{13}}\right).
+$$
+Evaluating $f$ at the two points identifies the maximum and the minimum.
+
+:::

@@ -1,10 +1,15 @@
 ---
-title: Markov Chain Stationary Distributions
-author: John Robin Inston
+id: markov-chain-stationary-distributions
+aliases: []
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Markov Chain Stationary Distributions"
 title-block-banner: false
 ---
+
+Notation as in [[markov-chains]] and [[markov-chain-state-classification]].
 
 Consider the long-term behavior of a Markov chain $\{ X_{n} \}_{n=0}^\infty$
 when $n \to \infty$. It is possible for the chain to converge to a particular
@@ -14,7 +19,28 @@ $n\to \infty$. Intuitively, if a Markov chain runs for a long time it generally
 doesn't converge because it is always jumping around but its distribution can
 settle down.
 
-### Stationary Distributions
+## Limiting distributions
+
+:::{.definition data-title="Limiting Distribution"}
+
+The **limiting distribution** of a homogeneous Markov chain with initial
+distribution $\mu$ and transition matrix $P$ is
+$$
+\lambda:=\lim_{n\to\infty}\mu P^{n},
+$$
+when the limit exists.
+
+:::
+
+This limit is often hard to find analytically. For the chain with transient
+class $S_{2}$ in [[markov-chain-state-classification]], the chain ends up in a
+closed class; two questions follow: what proportion of the time does it end in
+each class, and, within a closed irreducible class such as $S_{3}$, how does the
+state distribution behave in the limit? The second question leads to
+stationary distributions. Convergence is treated in
+[[markov-chain-equilibrium-convergence]].
+
+## Stationary Distributions
 
 A process is strictly stationary if its distribution does not change under
 translations, i.e. over time. More formally we give the following definition.
@@ -30,7 +56,7 @@ that is, the distribution does not change under translations.
 
 This is often a challenging condition to show and so we also define a weak
 stationarity of the mean and covariance being invariant to changes in time. See
-the note on [[stationary-processes|stationary processes]] for more information.
+any text on time series for more information.
 
 :::{.definition data-title="Stationary Distribution"}
 
@@ -45,30 +71,21 @@ $j \in S$.
 
 :::
 
-Denote by $P_{\pi}$ the distribution of a Markov chain with initial
-distribution $\pi$: $\mu^{(0)}=\pi$. Thus $\{X_{n}\}\sim Markov(\pi,P)$ that
-is, for an event $A$,
-$\mathbb{P}_{\pi}(A)=\sum_{i\in S}\mathbb{P}(A|X_{0}=i)\pi_{i}$. With respect
-to $\mathbb{P}_{\pi}$, chain $\{X_{n}\}$ is a strictly stationary process
-$$
-\mathbb{P}_{\pi}(X_{n}=i_{0}, X_{n+1}=i_{1}, \dots, X_{n+k}=i_{k})=\pi_{i_{0}}p_{i_{0}, i_{1}}\dots p_{i_{k-1}i_{k}}=\mathbb{P}_{\pi}(X_{0}=i_{0}, X_{1}=i_{1}, \dots, X_{k}=i_{k}).
-$$
-In particular $\mu_{i}^{(n)}=\mathbb{P}_{\pi}(X_{n}=i)=\pi_{i}$ for all
-$i\in S$ and $n\geq 0$.
+See the theorem below: started from $\pi$, the chain is strictly stationary.
 
 Intuitively, if $\{  X_{n} \} \sim Markov(\pi,P)$ and its initial distribution
 is stationary, then for all $n$, $X_{n}\stackrel{\mathcal{D}}{\sim }\pi$ so
 that $X_{n}\stackrel{\mathcal{D}}{\to}X$ with
 $\mathbb{P}_{\pi}(X_{n}=j)=\pi_{j}\to \pi_{j}=\mathbb{P}(X=j)$.
 
-#### Example: Finding Stationary Distributions
+### Example: Finding Stationary Distributions
 
 Consider a Markov chain describing the meals served by a restaurant with
 transition graph shown below in Figure 1 provided by helpful video on Markov
 chains by
 [Normalized Nerd](https://www.youtube.com/watch?v=i3AkTO9HLXo&t=110s).  
 
-<!-- TODO: image "Pasted image 20240622154411.png" not found in vault -->
+![Example transition diagram for a Markov chain describing meals served at a restaurant.](../assets/images/food_example.png){width=50%}
 
 Taking state 1 to be hamburger, state 2 to be pizza and state 3 to be hotdog,
 the transition matrix $P$ can be written as
@@ -113,7 +130,7 @@ expression
 $$
 \pi P=\pi,
 $$
-see Definition 2 above. Additionally, since $\pi$ is a vector of probabilities
+see the definition above. Additionally, since $\pi$ is a vector of probabilities
 we have that $\pi(1)+\pi(2)+\pi(3)=1$ and solving this system gives the
 stationary distribution
 $$
@@ -121,6 +138,29 @@ $$
 \frac{25}{71} & \frac{15}{71} & \frac{31}{71}
 \end{bmatrix}.
 $$
+
+We can confirm this numerically by iterating $\pi_{n+1}=\pi_{n}P$:
+
+```{python}
+#| fig-align: center
+#| fig-cap: Convergence of the state distribution.
+import numpy as np
+import matplotlib.pyplot as plt
+
+P = np.array([[.2, .6, .2], [.3, 0, .7], [.5, 0, .5]])
+pi = np.array([0, 1, 0])
+pis = [pi]
+for _ in range(50):
+    pi = pi @ P
+    pis.append(pi)
+pis = np.array(pis)
+fig, ax = plt.subplots()
+for k, (c, lab) in enumerate([("red", "Hamburger"), ("green", "Pizza"),
+                              ("blue", "Hotdog")]):
+    ax.plot(pis[:, k], color=c, label=lab)
+ax.legend()
+```
+
 :::{.theorem data-title="MC Strict Stationarity with Stationary Initial Distribution"}
 
 Denote by $\mathbb{P}_{\pi}$ the distribution of a Markov chain with initial
@@ -139,7 +179,7 @@ $$
 for all $i \in S$ and $n \geq 0$.
 
 :::
-#### Invariant Measure
+### Invariant Measure
 
 :::{.definition data-title="Invariant Measure"}
 
@@ -212,3 +252,69 @@ $y_{i}=\sum_{j: j\neq s}p_{i,j}y_{j}$, $i\neq s$.
 
 :::
 
+## Doubly stochastic chains
+
+:::{.definition data-title="Doubly Stochastic Matrix"}
+
+A matrix $P=(p_{i,j})_{i,j\in S}$ is **doubly stochastic** if both its rows and
+columns sum to 1:
+$$
+\sum_{j\in S}p_{i,j}=\sum_{i\in S}p_{i,j}=1.
+$$
+
+:::
+
+:::{.theorem data-title="Uniform Stationary Distribution"}
+
+A finite-state homogeneous Markov chain with doubly stochastic transition
+matrix has a uniform stationary distribution.
+
+:::
+
+:::{.proof}
+
+Let $S$ have $n$ elements and $\pi_{i}=1/n$. Then for every $j$,
+$$
+\sum_{i\in S}\pi_{i}p_{i,j}=\frac{1}{n}\sum_{i\in S}p_{i,j}=\frac{1}{n}=\pi_{j},
+$$
+and $\pi$ is normalized, so $\pi=\pi P$.
+
+:::
+
+## Existence for finite chains
+
+:::{.theorem data-title="Existence of a Stationary Distribution"}
+
+Every irreducible Markov chain with finite state space $S$ has a stationary
+distribution $\pi$.
+
+:::
+
+:::{.proof}
+
+Some state is persistent (otherwise probability mass would escape forever in a
+finite space), and by irreducibility every state is persistent. Fix a state $i$.
+Irreducibility and finiteness give $m\ge1$ with $p^{(m)}_{ii}>0$. With
+$\tau_i^+=\inf\{n\ge1:X_n=i\}$ the first return time, each block of $m$ steps
+has probability at least $p^{(m)}_{ii}$ of ending at $i$, so
+$$
+\mathbb{P}_i(\tau_i^+ > km) \le (1-p^{(m)}_{ii})^k.
+$$
+The tail is geometrically bounded, hence $\mathbb{E}_i[\tau_i^+]<\infty$ and the
+chain is positive persistent. Define
+$$
+\pi_j := \frac{\mathbb{E}_i\left[\sum_{n=0}^{\tau_i^+-1}\mathbf{1}\{X_n=j\}\right]}{\mathbb{E}_i[\tau_i^+]},
+$$
+the expected fraction of time in $j$ during a cycle from $i$ back to $i$. Then
+$\pi_j\ge0$ and $\sum_j\pi_j=1$, since the cycle has $\tau_i^+$ steps in total.
+Since the expected number of visits to $j$ in a cycle equals the expected
+number of transitions into $j$ in the cycle (the cycle starts and ends at $i$),
+the Markov property gives
+$$
+\mathbb{E}_i\left[\sum_{n=0}^{\tau_i^+-1}\mathbf{1}\{X_{n+1}=j\}\right]
+= \sum_{k\in S}\mathbb{E}_i\left[\sum_{n=0}^{\tau_i^+-1}\mathbf{1}\{X_n=k\}\right]p_{kj}.
+$$
+Dividing by $\mathbb{E}_i[\tau_i^+]$ gives $\pi_j=\sum_k\pi_kp_{kj}$, i.e.
+$\pi=\pi P$.
+
+:::

@@ -1,134 +1,174 @@
 ---
-title: Finite-Difference Methods
-author: John Robin Inston
+id: finite-difference-methods
+aliases: ["finite-difference-fd-methods"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "Finite-difference schemes for the Black-Scholes PDE, including American options."
 number-sections: true
+title: "Finite-Difference Methods"
 title-block-banner: false
 ---
 
-## Finite-Difference Methods
+## Setting
 
-The [[black-scholes-merton-model|Black-Scholes PDE]] for euro-call option with
-strike price $K$ and terminal time $T$ with value function $u(x,t)$ as a
-function of asset price $x$ and time $t$ is given by the
-[[partial-differential-equations|PDE]]
+The [[black-scholes-merton-model|Black-Scholes PDE]] for a European call with
+strike $K$ and maturity $T$ has value function $u(t,x)$, a function of time
+$t$ and asset price $x$, solving the [[partial-differential-equations|PDE]]
+
 $$
 \begin{cases}
-\frac{{\partial u}}{\partial t}+rx \frac{{\partial u}}{\partial x}+\frac{1}{2}\sigma^2 x^2 \frac{{\partial^2u}}{\partial x ^2}-ru=0\\
-u(T,x)=(x-K)_{+}.\tag{1}
+\partial_t u + rx\,\partial_x u + \dfrac{1}{2}\sigma^2x^2\,\partial_{xx}u
+- ru = 0, \\[1ex]
+u(T,x) = (x-K)_+ .
 \end{cases}
+\tag{1}
 $$
-Intuitively, this system is describing the changing slope of the surface of
-$u(x,t)$ as we move in $x$ or in $t$. To numerically solve this PDE the
-**finite difference method** discretizes this continuous space of $(t, S)$ into
-a mesh $(\Delta t, \Delta S)$ and approximates the mesh-point to mesh-point
-change of $u$ using tractable Taylor series expansions of functions near the
-point of interest.
 
-<!-- TODO: image "Screenshot 2025-05-14 at 6.28.11 PM.png" not found in vault -->
+Here $r$ is the risk-free rate and $\sigma$ the volatility. The **finite
+difference (FD) method** discretises the continuous domain of $(t,x)$ into a
+mesh with steps $(\Delta t,\Delta x)$ and replaces each derivative by a
+difference quotient obtained from a Taylor expansion around the mesh point.
 
-For example, we can define the partial derivative $\partial u/\partial t$ to be
-the limiting difference
+## Difference Quotients
+
+For example, the time derivative is the limit
+
 $$
-\frac{{\partial u}}{\partial t}=\lim_{ \delta t \to 0 } \frac{{u(x, t+\delta t)-u(x,t)}}{\delta t}\approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t}+O(\Delta t),
+\partial_t u = \lim_{\delta t\to 0}\frac{u(t+\delta t,x)-u(t,x)}{\delta t}
+\approx \frac{u(t+\Delta t,x)-u(t,x)}{\Delta t} + O(\Delta t),
 $$
-where we assume that $\Delta t$ is very small. This is specifically called a
-**forward difference** since the differencing is in the forwards direction. We
-also have the **backward difference** and the **central difference** and we
-define all three methods below.
 
-:::{.definition data-title="Forward \ Backward \ Central Differencing"}
+for small $\Delta t$. This is a **forward difference**. There are three
+first-order approximations.
 
-The following differencing methods are used for approximating partial
-differential equations:
-1. **Forward Differencing:**
+:::{.definition data-title="Forward, Backward and Central Differences"}
+
+1. **Forward difference:**
    $$
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t},
+   \partial_t u \approx \frac{u(t+\Delta t,x)-u(t,x)}{\Delta t},
    $$
-2. **Backward Differencing:**
+2. **Backward difference:**
    $$
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t-\Delta t)-u(x,t)}}{\Delta t},
+   \partial_t u \approx \frac{u(t,x)-u(t-\Delta t,x)}{\Delta t},
    $$
-3. **Central Differencing:**
+3. **Central difference:**
    $$
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t-\Delta t)}}{2\Delta t}.
+   \partial_t u \approx \frac{u(t+\Delta t,x)-u(t-\Delta t,x)}{2\Delta t}.
    $$
 
 :::
 
-*Note: All three definitions hold when computing the partial derivative with
-respect to $x$, it will simply change to considering $x$ values rather than $t$
-values (see below for some examples)*.
+The same formulas hold for $\partial_x u$ with $x$ in place of $t$. The
+forward and backward differences have error $O(\Delta t)$, the central
+difference $O(\Delta t^2)$.
 
-<!-- TODO: image "Screenshot 2025-05-14 at 7.12.03 PM.png" not found in vault -->
+For second derivatives, taking the forward difference of the backward
+difference (or the reverse) gives the same quotient.
 
-For second partial derivatives we can define the **symmetric finite-difference
-approximation** as either the forward difference of backward-difference
-approximations to the first derivative or as the backward-difference of forward
-difference approximations to the first derivative, both of which give the same
-result which is stated in the definition below.
+:::{.definition data-title="Symmetric Second Difference"}
 
-:::{.definition data-title="Symmetric Central-Differencing"}
-
-The symmetric central-differencing approach for second partial derivatives is
-defined as
 $$
-\frac{{\partial ^2u}}{\partial x^2}\approx \frac{{u(x+\Delta x, t)-2u(x,t)+u(x-\Delta x, t)}}{(\Delta x)^2}.
+\partial_{xx}u \approx \frac{u(t,x+\Delta x)-2u(t,x)+u(t,x-\Delta x)}
+{(\Delta x)^2},
 $$
+
+with error $O((\Delta x)^2)$, so accuracy improves faster under mesh
+refinement than for the first-order quotients above.
 
 :::
 
-*Note: The error of these approximations is of the order $(\Delta x)^2$ and so
-the accuracy will increase faster for finer meshes than the previous three
-cases all of which have error order $\Delta x$.*
+## The Mesh
 
-When applying finite differencing we start by defining the discretization of
-the $(x,t)$ space by specifying $x_{min}$, $x_{max}$, $t_{min}$, $t_{max}$,
-$\Delta t$, $\Delta x$. In the Black-Scholes euro-call case introduced above we
-would set $x_{min}=0$ and $t_{min}=0$ as asset price and time cannot be
-negative. We then often introduce the following cleaner notation to specify
-mesh location in terms of indices
+Specify $x_{\min}$, $x_{\max}$, $t_{\min}$, $t_{\max}$, $\Delta x$ and
+$\Delta t$. For the call (1) we take $x_{\min}=0$ and $t_{\min}=0$, since
+price and time are non-negative, and $x_{\max}=N\Delta x$ large, $T=M\Delta t$.
+Write
+
 $$
-u_{\mathscr{x}}^\mathscr{t} = u(x_{min}+\mathscr{x} \cdot\Delta x, t_{min}+\mathscr{t}\cdot\Delta t);~~\mathscr{x}=0,\dots,\mathscr{X};~~\mathscr{t}=0,\dots,\mathscr{T},
-$$
-where $\mathscr{X}$ and $\mathscr{T}$ are the desired number of mesh points in
-$x$ and $t$ respectively. Using this new notation and considering the
-Black-Scholes euro-call option we approximate the partial derivatives in $(1)$
-using **forward differencing** as
-$$
-\frac{{\partial u}}{\partial x}=\frac{{u_{\mathscr{x}+1}^\mathscr{t}-u_{\mathscr{x}}^\mathscr{t}}}{\Delta x};~~ \frac{{\partial^2 u}}{\partial x^2}={u^t}
+u_n^m = u(m\Delta t,\,n\Delta x),\qquad n=0,\dots,N,\quad m=0,\dots,M.
 $$
 
+## Explicit Scheme
 
+Use the forward difference in time $\partial_t u\approx(u_n^{m+1}-u_n^m)/\Delta t$,
+and the central and symmetric differences in space,
 
-
-We can then compute the discrete partial derivatives as
 $$
-\begin{align}
-\frac{\partial}{\partial S}C(m\Delta t, n\Delta S) & = \frac{{C_{n+1}^m -C_{n}^m}}{2\Delta S} \\
-\frac{\partial^2}{\partial S^2}C(m\Delta t, n\Delta S) & =\frac{{\frac{{C_{n+1}^m-C_{n}^m}}{\Delta S}-\frac{{C_{n}^m - C_{n-1}^m}}{\Delta S}}}{\Delta S}=\frac{{C_{n+1}^m-2C_{n}^m + C_{n-1}^m}}{(\Delta S)^2} \\
-\frac{\partial}{\partial t}C(m\Delta t, n\Delta S) & =\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}.
-\end{align}
-$$
-Substituting back into the PDE we obtain
-$$
-\begin{align}
-&\begin{cases}
-\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}+r(n\Delta S) \frac{{C_{n+1}^m-C_{n-1}^m}}{2\Delta S}+\frac{1}{2\sigma^2}(n\Delta s)^2 \frac{{C_{n+1}^m-2C_{n}^m+C_{n-1}^m}}{(\Delta S)^2}-rC_{n}^m=0 \\
-C_{n}^m=(n\Delta S - K)_{+}
-\end{cases}\\
-&\implies C_{n}^{m-1}=P_{n}^+C_{n+1}^m+P_{n}^0C_{n}^m+P_{n}^- C_{n-1}^m
-\end{align},
-$$
-where we have defined
-$$
-P_{n}^\pm = \frac{1}{2}\Delta t(\sigma^2n^2\pm rm) ~~\&~~P_{n}^0=1-\Delta t(\sigma^2n^2+r).
+\partial_x u\approx\frac{u_{n+1}^{m+1}-u_{n-1}^{m+1}}{2\Delta x},\qquad
+\partial_{xx}u\approx\frac{u_{n+1}^{m+1}-2u_n^{m+1}+u_{n-1}^{m+1}}{(\Delta x)^2},
 $$
 
+all evaluated at the *later* time level. Substituting into (1) with
+$x=n\Delta x$ and solving for $u_n^m$ gives the backward recursion
 
+$$
+u_n^{m}=P_n^+u_{n+1}^{m+1}+P_n^0u_n^{m+1}+P_n^-u_{n-1}^{m+1},
+$$
 
+where
 
-1. Explicit Method
-2. Implicit Method
-3. Crank-Nicolson Method
+$$
+P_n^{\pm}=\frac{\Delta t}{2}\left(\sigma^2n^2\pm rn\right),\qquad
+P_n^0=1-\Delta t\left(\sigma^2n^2+r\right).
+$$
 
+The terminal condition is $u_n^M=(n\Delta x-K)_+$, with boundary values
+$u_0^m=0$ and $u_N^m\approx N\Delta x-Ke^{-r(T-m\Delta t)}$. The recursion
+looks like a trinomial tree run backwards in time. It is cheap, but only stable
+if $\Delta t$ is small enough that $P_n^0\ge 0$, roughly
+$\Delta t\le 1/(\sigma^2N^2+r)$.
+
+## Implicit and Crank-Nicolson Schemes
+
+The **implicit scheme** evaluates the spatial differences at the *earlier*
+time level $m$. This gives, for each $m$, a tridiagonal linear system
+
+$$
+A\,u^{m}=u^{m+1},
+$$
+
+for the vector $u^m=(u_n^m)_n$, which is solved backwards in time. It is
+unconditionally stable. The **Crank-Nicolson scheme** averages the explicit
+and implicit spatial differences, which makes it second-order accurate in
+time as well as in space (error $O(\Delta t^2+\Delta x^2)$) and also
+unconditionally stable.
+
+## American Options
+
+The explicit scheme is consistent with early exercise, since it is a
+[[binomial-model|tree-like]] procedure that moves backwards in time. As for
+a tree, we force $V\ge G$ for the value function $V(t,s)$ and immediate
+payoff $G(t,s)=(K-s)_+$ (an American put) by taking the maximum of the two at
+every grid point,
+
+$$
+V_n^{m}\leftarrow \max\{V_n^{m},\,G_n^{m}\}.
+$$
+
+This gives the correct price because each $V_n^m$ is computed from the later
+level $m+1$ and is never changed again. After solving, one exercises early
+exactly where $V(t,s)=G(t,s)$, which gives the exercise boundary.
+
+For the implicit scheme this pointwise maximum is **wrong**. The scheme
+couples $V_{n-1}^m$, $V_n^m$ and $V_{n+1}^m$ in one linear equation, so
+altering one grid point changes its neighbours and eventually every
+$V_i^m$.
+
+Instead one uses **projected SOR (PSOR)**, which solves the linear system
+$AV^m=b$ by successive over-relaxation and projects each iterate onto
+$V\ge G$:
+
+$$
+V_i^{m,(k+1)}=\max\left\{G_i^m,\;(1-w)V_i^{m,(k)}+\frac{w}{A_{ii}}\left(
+b_i-\sum_{j<i}A_{ij}V_j^{m,(k+1)}-\sum_{j>i}A_{ij}V_j^{m,(k)}\right)\right\},
+$$
+
+where $k$ is the iteration index and $w\in(1,2)$ the relaxation parameter. The
+iteration converges to the solution of the system restricted to
+$\{V\ge G\}$. As before, the exercise boundary is where $V=G$.
+
+## References
+
+1. Wilmott, P., Howison, S. and Dewynne, J. (1995). *The Mathematics of
+   Financial Derivatives*. Cambridge University Press.

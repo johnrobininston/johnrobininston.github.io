@@ -1,49 +1,86 @@
 ---
-title: Milstein Scheme
-author: John Robin Inston
+id: milstein-scheme
+aliases: ["milstein-method"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
+description: "The Milstein scheme for simulating SDEs, a strong order 1 improvement on Euler-Maruyama."
 number-sections: true
+title: "Milstein Scheme"
 title-block-banner: false
 ---
 
-## Milstein Scheme
-*References: [[higham-kloeden]] §17.4.*
+## Idea
 
-The **Milstein Scheme** is a methodology for simulating continuous time
-stochastic processes with dynamics given by some SDE, improving upon the
-[[euler-maruyama-method]].  
+The **Milstein scheme** simulates the solution of an SDE (see
+[[sde-simulation]]) and improves on the [[euler-maruyama-method]] by keeping
+one more term of the stochastic Taylor expansion. Consider
 
+$$
+dX_t=f(t,X_t)\,dt+g(t,X_t)\,dW_t,
+$$
 
-improves upon the [[euler-maruyama-method]] approach by considering this Taylor
-expansion, grouping terms based on powers of $\Delta t$ and removing all terms
-with powers $>1$. The general form of the Milstein method is given by
+with Lipschitz coefficients $f,g$ and [[brownian-motion]] $W$, simulated on
+the grid $t_n=n\Delta t$ with $\Delta W_n=W_{t_{n+1}}-W_{t_n}$. Euler-Maruyama
+freezes $g$ at the left endpoint. Applying the [[ito-formula]] to $g$ instead
+shows the next-largest term is $L^1g\int\!\!\int dW\,dW$, where
+$L^1=g\,\partial_x$, and the double integral is explicit,
+
 $$
-\begin{align}
-X_{n+1} = X_{n}+\Delta t f(t_{n}, X_{n}) + \Delta W_{n}g(t_{n},X_{n})+L^1g(t_{n}, X(t_{n}))\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{s}{}~d{W(u)}}~d{W(s)},
-\end{align}
+\int_{t_n}^{t_{n+1}}\int_{t_n}^{s}dW_u\,dW_s
+=\tfrac{1}{2}\left((\Delta W_n)^2-\Delta t\right).
 $$
-where $L_{1}=g \frac{\partial}{\partial x}$ and
-$\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{t}{}~d{W(s)}}~d{W(t)}= \frac{1}{2}((\Delta W_{n})^2 - \Delta t)$.
-Again returning to our simple BSM model example we can write our approximation
-as
+
+## The Scheme
+
+:::{.definition data-title="Milstein Scheme"}
+
 $$
-S_{t+\Delta t}=S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ r+ \frac{1}{2}\left( \sigma^2(\xi^2-1) \right) \right] \right\}.\tag{11}
+X_{n+1}=X_n+f(t_n,X_n)\Delta t+g(t_n,X_n)\Delta W_n
++\frac{1}{2}\,g(t_n,X_n)\,\partial_xg(t_n,X_n)
+\left((\Delta W_n)^2-\Delta t\right).
 $$
-This is again very easy to simulate with a `for` loop:
+
+:::
+
+The extra term is a correction for the fact that the diffusion coefficient
+changes across the step, and it vanishes when $g$ does not depend on $x$
+(additive noise), in which case Milstein coincides with Euler-Maruyama.
+
+## Example: Black-Scholes-Merton Model
+
+For the [[black-scholes-merton-model|BSM model]] under $\mathbb{Q}$,
+$f=rS$ and $g=\sigma S$, so $g\,\partial_xg=\sigma^2S$. Writing
+$\Delta W=\sqrt{\Delta t}\,\xi$ with $\xi\sim\mathcal{N}(0,1)$,
+
+$$
+S_{t+\Delta t}=S_t\left\{1+\sigma\sqrt{\Delta t}\,\xi
++\Delta t\left[r+\tfrac{1}{2}\sigma^2(\xi^2-1)\right]\right\}.
+$$
+
+This is easy to simulate with a loop, where `h` is the step size.
 
 ```
-## Milstein's Algorithm
 S <- S0
-for(i in 2:length(t)){
-	xi <- rnorm(1,0,1)
-	S[i] <- S[i-1]*(1+sigma*h^(1/2)*xi + 
-		h*(r+(1/2)*(sigma^2*(xi^2 - 1))))
+for (i in 2:length(t)) {
+  xi <- rnorm(1, 0, 1)
+  S[i] <- S[i-1] * (1 + sigma * sqrt(h) * xi +
+            h * (r + 0.5 * sigma^2 * (xi^2 - 1)))
 }
 ```
 
-For both the Euler-Maruyama method and the Milstein method it seems natural to
-suggest that the approximation improves as $N \to \infty$ and to test this
-presumption we must consider the two standard approached for measuring the
-error $X_{n}\to X(t_{n})$, leading to the concepts of weak and strong
-convergence. This will also allow us to more concretely quantify the
-improvement over the Euler-Maruyama method that the Milstein method provides.
+## Convergence
+
+To compare the two schemes one measures the error $X_n\to X(t_n)$ in the
+strong sense, $\mathbb{E}|X_n-X(t_n)|$, and in the weak sense,
+$|\mathbb{E}\,\phi(X_n)-\mathbb{E}\,\phi(X(t_n))|$. Under the usual smoothness
+assumptions Milstein has strong order $1$, against order $1/2$ for
+Euler-Maruyama, while both have weak order $1$. The comparison is carried out
+in [[sde-simulation]].
+
+## References
+
+1. Higham, D. J. and Kloeden, P. E. (2021). *An Introduction to the Numerical
+   Simulation of Stochastic Differential Equations*. SIAM, Section 17.4.
+2. Kloeden, P. E. and Platen, E. (1992). *Numerical Solution of Stochastic
+   Differential Equations*. Springer.

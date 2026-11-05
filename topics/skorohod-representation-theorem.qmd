@@ -1,58 +1,96 @@
 ---
-title: Skorohod Representation Theorem
-author: John Robin Inston
+id: skorohod-representation-theorem
+aliases: ["skorohods-representation-theorem"]
+tags: []
+author: "John Robin Inston"
 date: 2026-09-25
 number-sections: true
+title: "Skorohod Representation Theorem"
 title-block-banner: false
 ---
 
-# Skorohod Representation Theorem
+## Statement
 
-**Skorohod's Representation Theorem** is a result showing that a **convergent
-in law** sequence of probability measures whose limit measure is sufficiently
-well-behaved can be represented as the distribution / law of a pointwise
-convergent sequence of random variables defined on a common probability space.
+**Skorohod's Representation Theorem** shows that a sequence converging
+[[convergence-in-law|in law]] can be represented by a sequence with the same
+laws that converges **almost surely** on a common probability space. This lets
+us prove statements about convergence in law using pointwise arguments.
 
 :::{.theorem data-title="Skorohod's Representation Theorem"}
 
 Suppose that $X_{n}\stackrel{\mathcal{D}}{\to}X$ as $n \to \infty$ with
 $F_{n}(x):=\mathbb{P}(X_{n} \leq x)$ and $F(x):=\mathbb{P}(X\leq x)$ for
-$x \in \mathbb{R}$. Then, there exists a probability space
+$x \in \mathbb{R}$. Then there exists a probability space
 $(\Omega', \mathcal{F}',\mathbb{P}')$ and random variables $\{Y_{n}, n\geq 1\}$
-and $Y$ such that
+and $Y$ on it such that
 $$
-Y_{n}\stackrel{\mathcal{D}}{=}X_{n},\quad Y\stackrel{\mathcal{D}}{=X},
+Y_{n}\stackrel{\mathcal{D}}{=}X_{n}\ \text{ for every } n,\qquad Y\stackrel{\mathcal{D}}{=}X,
 $$
-for every $n$ and $Y_{n}\stackrel{a.s.}{\to}Y$ as $n \to \infty$.
+and $Y_{n}\stackrel{a.s.}{\to}Y$ as $n \to \infty$.
 
 :::
 
-### Skorohod's Construction
+## Skorohod's Construction
 
-We take $\Omega'=[0,1]$, $\mathcal{F}'=\mathcal{B}([0,1])$ and $\mathbb{P}'=$
-the Lebesgue measure on $[0,1]$
+Take $\Omega'=(0,1)$, $\mathcal{F}'=\mathcal{B}((0,1))$ and $\mathbb{P}'$ the
+Lebesgue measure, $\mathbb{P}'((a,b])=b-a$. For $\omega \in \Omega'$ define the
+generalised inverses
 $$
-\mathbb{P}'((a,b])=b-a,~\forall a<b\in[0,1].
+Y_n(\omega):= \inf\{  x: \omega \leq F_{n}(x)\},\qquad Y(\omega):= \inf\{  x: \omega \leq F(x) \}.
 $$
-For each $\omega \in \Omega'$ we define
-$Y_n(\omega):= \inf\{  x: \omega \leq F_{n}(x)\}$ and
-$Y(\omega):= \inf\{  x: \omega \leq F(x) \}$.
+By right-continuity of distribution functions,
+$$
+\omega \leq  F_{n}(x) \iff Y_{n}(\omega)\leq  x,\qquad
+\omega \leq  F(x) \iff Y(\omega)\leq  x,
+$$
+hence
+$$
+\mathbb{P}'(Y_{n}\leq  y)  =\mathbb{P}'(\omega \leq  F_{n}(y)) =F_{n}(y),\qquad
+\mathbb{P}'(Y\leq  y)= F(y).
+$$
+So $Y_n$ has the law of $X_n$ and $Y$ the law of $X$.
 
-![Skorohod Construction](skorohod-construction.png)
+:::{.proof}
 
-Note that
+It remains to show $Y_{n}\to Y$ a.s. Note that $Y$ and each $Y_n$ are
+non-decreasing in $\omega$. Recall that $X_n\Rightarrow X$ means
+$F_n(x)\to F(x)$ at every continuity point $x$ of $F$, and these points are
+dense in $\mathbb{R}$. Fix $\omega\in(0,1)$.
+
+*Lower bound.* Let $x<Y(\omega)$ be a continuity point of $F$. Then
+$F(x)<\omega$, so $F_n(x)<\omega$ for all large $n$, which means
+$Y_n(\omega)>x$. Hence $\liminf_n Y_n(\omega)\geq x$, and letting
+$x\uparrow Y(\omega)$ gives $\liminf_n Y_n(\omega)\geq Y(\omega)$.
+
+*Upper bound.* Let $\omega<\omega'<1$ and let $y>Y(\omega')$ be a continuity
+point of $F$. Then $F(y)\geq\omega'>\omega$, so $F_n(y)>\omega$ for all large
+$n$, so $Y_n(\omega)\leq y$. Hence $\limsup_n Y_n(\omega)\leq y$, and letting
+$y\downarrow Y(\omega')$ gives $\limsup_n Y_n(\omega)\leq Y(\omega')$.
+
+If $\omega$ is a continuity point of $Y$, letting $\omega'\downarrow\omega$ gives
+$\limsup_n Y_n(\omega)\leq Y(\omega)$, so $Y_n(\omega)\to Y(\omega)$. As $Y$ is
+monotone it has at most countably many discontinuities, a Lebesgue-null set,
+so $Y_n\to Y$ $\mathbb{P}'$-almost surely.
+
+:::
+
+## Application
+
+:::{.proposition data-title="Bounded Continuous Test Functions"}
+
+If $X_{n}\stackrel{\mathcal{D}}{\to}X$ and $\varphi$ is bounded and continuous,
+then
 $$
-\begin{align}
-\omega \leq  F_{n}(x) &~ \iff Y_{n}(\omega)\leq  x  \\
-\omega \leq  F(x) & ~ \iff Y(\omega)\leq  x,
-\end{align}
+\lim_{n\to \infty}\mathbb{E}[\varphi(X_{n})]=\mathbb{E}[\varphi(X)].
 $$
-hence we have 
-$$
-\begin{align}
-\mathbb{P}'(Y_{n}(\omega)\leq  y)  =\mathbb{P}'(\omega \leq  F_{n}(y)) & =\mathbb{P}'([0,F_{n}(y)])=F_{n}(y) \\
-\mathbb{P}'(Y(\omega)\leq  y)& = F(y).
-\end{align}
-$$
-*Proof of Skorohod Representation Theorem:*
-Given $X_{n}\Rightarrow X$ we show that $Y_{n}\to Y$ a.s..  Recall that  
+
+:::
+
+:::{.proof}
+
+With $Y_n,Y$ as above, $\varphi(Y_n)\to\varphi(Y)$ a.s. by continuity, and
+$|\varphi(Y_n)|\leq\sup|\varphi|<\infty$. By the
+[[dominated-convergence-theorem]],
+$\mathbb{E}\varphi(X_n)=\mathbb{E}\varphi(Y_n)\to\mathbb{E}\varphi(Y)=\mathbb{E}\varphi(X)$.
+
+:::
