@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Construction and properties of the Ito integral with respect to Brownian motion.">
 
 <title>Itô Integral – John Robin Inston</title>
 <style>
@@ -358,7 +359,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-itô-integral" id="toc-the-itô-integral" class="nav-link active" data-scroll-target="#the-itô-integral"><span class="header-section-number">0.1</span> The Itô Integral</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation"><span class="header-section-number">1</span> Motivation</a></li>
+  <li><a href="#the-class-of-integrands" id="toc-the-class-of-integrands" class="nav-link" data-scroll-target="#the-class-of-integrands"><span class="header-section-number">2</span> The Class of Integrands</a></li>
+  <li><a href="#elementary-functions" id="toc-elementary-functions" class="nav-link" data-scroll-target="#elementary-functions"><span class="header-section-number">3</span> Elementary Functions</a></li>
+  <li><a href="#extension-to-mathcalv" id="toc-extension-to-mathcalv" class="nav-link" data-scroll-target="#extension-to-mathcalv"><span class="header-section-number">4</span> Extension to <span class="math inline">\(\mathcal{V}\)</span></a></li>
+  <li><a href="#itô-isometry" id="toc-itô-isometry" class="nav-link" data-scroll-target="#itô-isometry"><span class="header-section-number">5</span> Itô Isometry</a></li>
+  <li><a href="#properties" id="toc-properties" class="nav-link" data-scroll-target="#properties"><span class="header-section-number">6</span> Properties</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -371,6 +378,11 @@ window.Quarto = {
 <h1 class="title">Itô Integral</h1>
 </div>
 
+<div>
+  <div class="description">
+    Construction and properties of the Ito integral with respect to Brownian motion.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -397,30 +409,126 @@ window.Quarto = {
 </header>
 
 
-<section id="the-itô-integral" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="the-itô-integral"><span class="header-section-number">0.1</span> The Itô Integral</h3>
-<p>Suppose <span class="math inline">\(X_{t}\)</span> is a diffusion process on the filtered probability space <span class="math inline">\((\Omega, F, (\mathcal{F}_{n}), \mathbb{P})\)</span> and that <span class="math inline">\(f_{t}\)</span> is another stochastic process that is adapted to the same filtration. Then the general Itô integral is defined as <span class="math display">\[
-Y_{t}=\int_{0}^t f_{s}dX_{s}.
-\]</span> We are primarily interested in Itô integrals with respect to <a href="../topics/brownian-motion.html">Brownian motion</a> used in [[ksendal]] which have the integral form <span class="math display">\[
-X_{t+s}-X_{t}=\int_{t}^{t+s} \mu(X_{u}, u)du+\int_{t}^{t+s}\sigma(X_{u},u)dB_{u},
-\]</span> where our Itô integral is <span class="math display">\[
-\int_{t}^{t+s}\sigma(X_{u}, u) dB_{u},
-\]</span> where <span class="math inline">\(\sigma(X_{t}, t)\)</span> is some function of time and the diffusion <span class="math inline">\(X_{t}\)</span> and <span class="math inline">\(B_{t}\)</span> is <a href="../topics/brownian-motion.html">Brownian motion</a>.</p>
-<p>The construction of the Itô integral is detailed in <a href="../topics/ito-integral-construction.html">Itô Integral Construction</a> but is omitted from this note for efficiency. For clarity we do note the class of functions for which the Itô integral is defined <span class="math inline">\(\mathcal{V}=\mathcal{V}(S,T)\)</span> which contains functions (random variables) <span class="math inline">\(f(t,\omega):[0, \infty)\times \Omega \to \mathbb{R}\)</span> such that</p>
+<section id="motivation" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1</span> Motivation</h2>
+<p>The foundation of <a href="../topics/stochastic-calculus.html">Stochastic Calculus</a> is integration with respect to <strong>diffusions</strong>, a class of continuous-time <a href="../topics/markov-process.html">Markov processes</a> with almost surely continuous sample paths (see <a href="../topics/ito-diffusion.html">Itô Diffusion</a>). Several constructions exist, notably those of <strong>Itô</strong> and <strong>Stratonovich</strong>. They differ in where the integrand is evaluated on each small interval: the Itô integral uses the left endpoint, which keeps the integral a martingale and is the convention in finance. Brownian paths have infinite variation, so the integral cannot be defined pathwise as a Riemann-Stieltjes integral, which is why a separate construction is needed.</p>
+<p>Let <span class="math inline">\(B\)</span> be a (one-dimensional) <a href="../topics/brownian-motion.html">Brownian motion</a> on a filtered probability space <span class="math inline">\((\Omega,\mathcal{F},(\mathcal{F}_t),\mathbb{P})\)</span> (see <a href="../topics/filtrations-and-adapted-processes.html">Filtrations and Adapted Processes</a>). A diffusion has the form</p>
+<p><span class="math display">\[
+X_{t+s}-X_t=\int_t^{t+s}\mu(X_u,u)\,du+\int_t^{t+s}\sigma(X_u,u)\,dB_u,
+\]</span></p>
+<p>and the second term is an Itô integral of the process <span class="math inline">\(\sigma(X_u,u)\)</span>.</p>
+</section>
+<section id="the-class-of-integrands" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-class-of-integrands"><span class="header-section-number">2</span> The Class of Integrands</h2>
+<div class="definition" data-title="The Class $\mathcal{V}(S,T)$">
+<p><span class="math inline">\(\mathcal{V}=\mathcal{V}(S,T)\)</span> is the class of functions <span class="math inline">\(f(t,\omega):[0,\infty)\times\Omega\to\mathbb{R}\)</span> such that</p>
 <ol type="1">
-<li><span class="math inline">\((t,\omega)\to f(t,\omega)\)</span> is <span class="math inline">\(\mathcal{B}\times \mathcal{F}\)</span>-measurable, where <span class="math inline">\(\mathcal{B}\)</span> denotes the [[borel-sigma-algebra]] on <span class="math inline">\([0,\infty)\)</span>,</li>
-<li><span class="math inline">\(f(t,\omega)\)</span> is <span class="math inline">\(\mathcal{F}_{t}\)</span>-adapted, and</li>
-<li><span class="math inline">\(\mathbb{E}\left[ \int_{S}^T f(t,\omega)^2~dt \right]&lt;\infty\)</span>. ### Itô Isometry</li>
+<li><span class="math inline">\((t,\omega)\mapsto f(t,\omega)\)</span> is <span class="math inline">\(\mathcal{B}\times\mathcal{F}\)</span>-measurable, where <span class="math inline">\(\mathcal{B}\)</span> is the Borel <span class="math inline">\(\sigma\)</span>-algebra on <span class="math inline">\([0,\infty)\)</span>,</li>
+<li><span class="math inline">\(f(t,\cdot)\)</span> is <span class="math inline">\(\mathcal{F}_t\)</span>-adapted, and</li>
+<li><span class="math inline">\(\mathbb{E}\left[\int_S^Tf(t,\omega)^2\,dt\right]&lt;\infty\)</span>.</li>
 </ol>
-<p>The most important result for Itô integrals is the Itô isometry which states that for all <span class="math inline">\(f \in \mathcal{V}(S,T)\)</span> we have <span class="math display">\[
-\mathbb{E}\left[ \left(\int_{S}^T f(t,\omega)~dB_{t}\right)^2 \right]=\mathbb{E}\left[ \int_{S}^T f^2(t,\omega)dt \right].
-\]</span> ### Itô Integral Properties</p>
-<p>Let <span class="math inline">\(f,g\in \mathcal{V}(0,T)\)</span> and let <span class="math inline">\(0 \leq S &lt; U &lt; T\)</span>, then the following hold:</p>
+</div>
+<p>The aim is to define</p>
+<p><span class="math display">\[
+\mathcal{I}[f](\omega)=\int_S^Tf(t,\omega)\,dB_t(\omega),\qquad f\in\mathcal{V}.
+\]</span></p>
+<p>We first define it for step functions and then extend by approximation.</p>
+</section>
+<section id="elementary-functions" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="elementary-functions"><span class="header-section-number">3</span> Elementary Functions</h2>
+<div class="definition" data-title="Elementary Function">
+<p>A function <span class="math inline">\(\phi\in\mathcal{V}\)</span> is <strong>elementary</strong> if</p>
+<p><span class="math display">\[
+\phi(t,\omega)=\sum_je_j(\omega)\,\mathbb{1}_{[t_j,t_{j+1})}(t).
+\]</span></p>
+</div>
+<p>Since <span class="math inline">\(\phi\in\mathcal{V}\)</span>, each <span class="math inline">\(e_j\)</span> must be <span class="math inline">\(\mathcal{F}_{t_j}\)</span>-measurable. For such <span class="math inline">\(\phi\)</span> define</p>
+<p><span class="math display">\[
+\int_S^T\phi(t,\omega)\,dB_t(\omega)=\sum_{j\ge 0}e_j(\omega)
+\left[B_{t_{j+1}}-B_{t_j}\right](\omega).
+\]</span></p>
+<div class="theorem" data-title="Itô Isometry for Elementary Functions">
+<p>If <span class="math inline">\(\phi\)</span> is bounded and elementary, then</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\left(\int_S^T\phi\,dB_t\right)^2\right]
+=\mathbb{E}\left[\int_S^T\phi^2\,dt\right].
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Write <span class="math inline">\(\Delta B_j=B_{t_{j+1}}-B_{t_j}\)</span>. By the independent increments of Brownian motion, and since <span class="math inline">\(e_i,e_j\)</span> are measurable with respect to the past,</p>
+<p><span class="math display">\[
+\mathbb{E}[e_ie_j\Delta B_i\Delta B_j]=
+\begin{cases}
+0 &amp; i\neq j,\\
+\mathbb{E}[e_j^2]\,(t_{j+1}-t_j) &amp; i=j.
+\end{cases}
+\]</span></p>
+<p>Hence</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\left(\int_S^T\phi\,dB\right)^2\right]
+=\sum_{i,j}\mathbb{E}[e_ie_j\Delta B_i\Delta B_j]
+=\sum_j\mathbb{E}[e_j^2](t_{j+1}-t_j)
+=\mathbb{E}\left[\int_S^T\phi^2\,dt\right].
+\]</span></p>
+</div>
+</section>
+<section id="extension-to-mathcalv" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="extension-to-mathcalv"><span class="header-section-number">4</span> Extension to <span class="math inline">\(\mathcal{V}\)</span></h2>
+<p>The extension takes three steps, each showing that a larger class can be approximated in <span class="math inline">\(L^2(\mathbb{P}\times dt)\)</span> by a smaller one.</p>
+<p><strong>Step 1.</strong> Let <span class="math inline">\(g\in\mathcal{V}\)</span> be bounded with <span class="math inline">\(g(\cdot,\omega)\)</span> continuous for each <span class="math inline">\(\omega\)</span>. Then there are elementary <span class="math inline">\(\phi_n\in\mathcal{V}\)</span> with</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\int_S^T(g-\phi_n)^2\,dt\right]\to 0.
+\]</span></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Take <span class="math inline">\(\phi_n=\sum_jg(t_j,\omega)\mathbb{1}_{[t_j,t_{j+1})}\)</span> on a partition with mesh tending to <span class="math inline">\(0\)</span>. It is elementary since <span class="math inline">\(g\)</span> is adapted, and by continuity of <span class="math inline">\(g(\cdot,\omega)\)</span> we have <span class="math inline">\(\int_S^T(g-\phi_n)^2dt\to 0\)</span> for each <span class="math inline">\(\omega\)</span>. The claim follows by bounded convergence.</p>
+</div>
+<p><strong>Step 2.</strong> Let <span class="math inline">\(h\in\mathcal{V}\)</span> be bounded. Then there are bounded <span class="math inline">\(g_n\in\mathcal{V}\)</span>, continuous in <span class="math inline">\(t\)</span> for each <span class="math inline">\(\omega\)</span>, with <span class="math inline">\(\mathbb{E}\left[\int_S^T(h-g_n)^2dt\right]\to 0\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Let <span class="math inline">\(\psi_n\)</span> be a non-negative continuous function supported in <span class="math inline">\([-1/n,0]\)</span> with <span class="math inline">\(\int\psi_n=1\)</span>, and set <span class="math inline">\(g_n(t,\omega)=\int_0^t\psi_n(s-t)h(s,\omega)\,ds\)</span>. Then <span class="math inline">\(g_n\)</span> is continuous in <span class="math inline">\(t\)</span>, bounded, and adapted since it only uses values of <span class="math inline">\(h\)</span> up to time <span class="math inline">\(t\)</span>. For each <span class="math inline">\(\omega\)</span>, <span class="math inline">\(\int_S^T(g_n-h)^2dt\to 0\)</span> because <span class="math inline">\(\psi_n\)</span> is an approximate identity, and bounded convergence gives the result.</p>
+</div>
+<p><strong>Step 3.</strong> Let <span class="math inline">\(f\in\mathcal{V}\)</span>. Then there are bounded <span class="math inline">\(h_n\in\mathcal{V}\)</span> with <span class="math inline">\(\mathbb{E}\left[\int_S^T(f-h_n)^2dt\right]\to 0\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Truncate, <span class="math inline">\(h_n=\max(-n,\min(f,n))\)</span>. Then <span class="math inline">\(|f-h_n|\le|f|\)</span>, so dominated convergence applies since <span class="math inline">\(\mathbb{E}\int f^2&lt;\infty\)</span>.</p>
+</div>
+<p>Combining the steps, every <span class="math inline">\(f\in\mathcal{V}\)</span> admits elementary <span class="math inline">\(\phi_n\)</span> with <span class="math inline">\(\mathbb{E}\left[\int_S^T(f-\phi_n)^2dt\right]\to 0\)</span>.</p>
+<div class="definition" data-title="Itô Integral">
+<p>For <span class="math inline">\(f\in\mathcal{V}(S,T)\)</span> the <strong>Itô integral</strong> is</p>
+<p><span class="math display">\[
+\int_S^Tf\,dB_t=\lim_{n\to\infty}\int_S^T\phi_n\,dB_t\quad\text{in }
+L^2(\mathbb{P}),
+\]</span></p>
+<p>for any sequence of elementary <span class="math inline">\(\phi_n\)</span> with <span class="math inline">\(\mathbb{E}\left[\int_S^T(f-\phi_n)^2dt\right]\to 0\)</span>.</p>
+</div>
+<p>The limit exists because, by the isometry applied to <span class="math inline">\(\phi_n-\phi_m\)</span>, the sequence <span class="math inline">\(\int\phi_n\,dB\)</span> is Cauchy in <span class="math inline">\(L^2(\mathbb{P})\)</span>, and it does not depend on the chosen sequence for the same reason.</p>
+</section>
+<section id="itô-isometry" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="itô-isometry"><span class="header-section-number">5</span> Itô Isometry</h2>
+<p>The isometry passes to the limit, which gives the main result for Itô integrals.</p>
+<div class="theorem" data-title="Itô Isometry">
+<p>For all <span class="math inline">\(f\in\mathcal{V}(S,T)\)</span>,</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\left(\int_S^Tf(t,\omega)\,dB_t\right)^2\right]
+=\mathbb{E}\left[\int_S^Tf^2(t,\omega)\,dt\right].
+\]</span></p>
+</div>
+</section>
+<section id="properties" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="properties"><span class="header-section-number">6</span> Properties</h2>
+<div class="proposition" data-title="Properties of the Itô Integral">
+<p>Let <span class="math inline">\(f,g\in\mathcal{V}(0,T)\)</span> and <span class="math inline">\(0\le S&lt;U&lt;T\)</span>. Then</p>
 <ol type="1">
-<li><span class="math inline">\(\int_{S}^T fdB_{t}=\int_{S}^U fdB_{t}+\int_{U}^T fdB_{t}\)</span> for almost all <span class="math inline">\(\omega\)</span>,</li>
-<li><span class="math inline">\(\int_{S}^T (cf+g)dB_{t}=c \cdot \int_{S}^T fdB_{t}+\int_{S}^T gdB_{t}\)</span> where <span class="math inline">\(c\)</span> is constant for almost all <span class="math inline">\(\omega\)</span>,</li>
-<li><span class="math inline">\(\mathbb{E}\left[ \int_{S}^T fdB_{t} \right]=0\)</span></li>
-<li><span class="math inline">\(\int_{S}^T fdB_{t}\)</span> is <span class="math inline">\(\mathcal{F}_{T}\)</span>-measurable.</li>
+<li><span class="math inline">\(\int_S^TfdB_t=\int_S^UfdB_t+\int_U^TfdB_t\)</span> almost surely,</li>
+<li><span class="math inline">\(\int_S^T(cf+g)\,dB_t=c\int_S^TfdB_t+\int_S^TgdB_t\)</span> almost surely, for constant <span class="math inline">\(c\)</span>,</li>
+<li><span class="math inline">\(\mathbb{E}\left[\int_S^TfdB_t\right]=0\)</span>,</li>
+<li><span class="math inline">\(\int_S^TfdB_t\)</span> is <span class="math inline">\(\mathcal{F}_T\)</span>-measurable.</li>
+</ol>
+</div>
+<p>These hold for elementary functions by direct computation and extend by <span class="math inline">\(L^2\)</span>-limits. The integral process <span class="math inline">\(t\mapsto\int_0^tf\,dB\)</span> is moreover a <a href="../topics/martingale-theory.html">martingale</a>, and its differential rules are given by the <a href="../topics/ito-formula.html">Itô Formula</a>.</p>
+</section>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<ol type="1">
+<li>Øksendal, B. (2003). <em>Stochastic Differential Equations: An Introduction with Applications</em>, 6th ed.&nbsp;Springer, Chapter 3.</li>
 </ol>
 
 
@@ -430,9 +538,11 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/brownian-motion.html">Brownian Motion</a></li>
+<li><a href="../topics/ito-formula.html">Itô Formula</a></li>
 <li><a href="../topics/martingale-representation-theorem.html">Martingale Representation Theorem</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
-<li><a href="../topics/stochastic-integrals.html">Stochastic Integrals</a></li>
+<li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a></li>
+<li><a href="../topics/p-variation.html">p-Variation</a></li>
 </ul>
 </div>
 </section>

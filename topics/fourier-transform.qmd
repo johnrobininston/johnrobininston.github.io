@@ -1,0 +1,197 @@
+---
+id: fourier-transform
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-11-06
+number-sections: true
+title: "Fourier Transform"
+title-block-banner: false
+---
+
+## Fourier Transform
+
+The Fourier transform decomposes a function into the frequencies that make it
+up. It turns convolution into multiplication and differentiation into
+multiplication by a polynomial, so it converts many hard problems (linear
+PDEs, sums of independent random variables) into algebra. It is the tool behind
+the PDE approach to the [[heston-model]], the [[heat-equation]] and
+characteristic functions of the [[normal-distribution]]. It is closely related
+to the [[laplace-transform]].
+
+Throughout, we use the convention below. Other texts move the factors of
+$2\pi$ and the sign of the exponent around, so check the convention before
+quoting a formula.
+
+## Definition
+
+:::{.definition data-title="Fourier Transform"}
+
+For $f\in L^1(\mathbb{R})$ the **Fourier transform** of $f$ is
+
+$$
+\hat{f}(\xi):=\int_{-\infty}^\infty f(x)e^{-i\xi x}\,dx,\qquad \xi\in\mathbb{R}.
+$$
+
+:::
+
+The function $\hat{f}$ is bounded and continuous, and $\hat{f}(\xi)\to 0$ as
+$|\xi|\to\infty$ (the Riemann-Lebesgue lemma).
+
+## Properties
+
+Let $f,g\in L^1(\mathbb{R})$, $a\in\mathbb{R}$ and $c\neq 0$. The derivative
+and multiplication rules assume $f$ is sufficiently smooth and decaying.
+
+| Operation                     | Transform                                 |
+|:------------------------------|:------------------------------------------|
+| Linearity: $\alpha f+\beta g$ | $\alpha\hat{f}(\xi)+\beta\hat{g}(\xi)$    |
+| Derivative: $f'(x)$           | $i\xi\hat{f}(\xi)$                        |
+| Multiplication: $xf(x)$       | $i\hat{f}'(\xi)$                          |
+| Translation: $f(x-a)$         | $e^{-ia\xi}\hat{f}(\xi)$                  |
+| Modulation: $e^{iax}f(x)$     | $\hat{f}(\xi-a)$                          |
+| Scaling: $f(cx)$              | $\frac{1}{|c|}\hat{f}(\xi/c)$             |
+| Convolution: $f*g$            | $\hat{f}(\xi)\hat{g}(\xi)$                |
+
+The convolution line refers to [[convolution]]. The derivative rule follows by
+integrating by parts, since the boundary terms vanish.
+
+## Results
+
+:::{.theorem data-title="Fourier Inversion"}
+
+Let $f\in L^1(\mathbb{R})$ with $\hat{f}\in L^1(\mathbb{R})$. Then, for almost
+every $x$,
+
+$$
+f(x)=\frac{1}{2\pi}\int_{-\infty}^\infty\hat{f}(\xi)e^{i\xi x}\,d\xi,
+$$
+
+with equality for every $x$ if $f$ is continuous.
+
+:::
+
+:::{.theorem data-title="Plancherel"}
+
+If $f\in L^1\cap L^2(\mathbb{R})$ then $\hat{f}\in L^2(\mathbb{R})$ and
+
+$$
+\int_{-\infty}^\infty|f(x)|^2\,dx=\frac{1}{2\pi}\int_{-\infty}^\infty
+|\hat{f}(\xi)|^2\,d\xi.
+$$
+
+The transform therefore extends (up to the factor $2\pi$) to a unitary
+operator on $L^2(\mathbb{R})$.
+
+:::
+
+:::{.theorem data-title="Convolution Theorem"}
+
+For $f,g\in L^1(\mathbb{R})$,
+
+$$
+\widehat{f*g}(\xi)=\hat{f}(\xi)\hat{g}(\xi).
+$$
+
+:::
+
+:::{.proof}
+By Fubini's theorem,
+
+$$
+\widehat{f*g}(\xi)=\int\!\!\int f(s)g(x-s)e^{-i\xi x}\,ds\,dx
+=\int f(s)e^{-i\xi s}\left(\int g(x-s)e^{-i\xi(x-s)}\,dx\right)ds
+=\hat{f}(\xi)\hat{g}(\xi).
+$$
+:::
+
+## Examples
+
+:::{.example data-title="Gaussian"}
+
+Let $f(x)=e^{-x^2/2}$. Then $\hat{f}(\xi)=\sqrt{2\pi}\,e^{-\xi^2/2}$, so up to
+a constant the Gaussian is its own Fourier transform.
+
+Since $f'(x)=-xf(x)$, the derivative and multiplication rules give
+
+$$
+i\xi\hat{f}(\xi)=\widehat{f'}(\xi)=-\widehat{xf}(\xi)=-i\hat{f}'(\xi),
+$$
+
+so $\hat{f}'(\xi)=-\xi\hat{f}(\xi)$. This ODE has solution
+$\hat{f}(\xi)=\hat{f}(0)e^{-\xi^2/2}$, and
+$\hat{f}(0)=\int e^{-x^2/2}\,dx=\sqrt{2\pi}$ by the [[gaussian-integral]].
+
+:::
+
+:::{.example data-title="Heat Equation"}
+
+Consider $u_t=u_{xx}$ on $\mathbb{R}$ with $u(x,0)=f(x)$. Transforming in $x$
+gives the ODE $\hat{u}_t=-\xi^2\hat{u}$ in $t$, so
+
+$$
+\hat{u}(\xi,t)=e^{-\xi^2t}\hat{f}(\xi).
+$$
+
+The inverse transform of $e^{-\xi^2t}$ is the Gaussian kernel
+$K_t(x)=\frac{1}{\sqrt{4\pi t}}e^{-x^2/(4t)}$, so by the convolution theorem
+
+$$
+u(x,t)=(K_t*f)(x).
+$$
+
+See the [[heat-equation]].
+
+:::
+
+## Characteristic Functions
+
+For a random variable $X$ with density $p_X$ the **characteristic function**
+is
+
+$$
+\varphi_X(\xi):=\mathbb{E}\left[e^{i\xi X}\right]=\hat{p}_X(-\xi),
+$$
+
+so it is the Fourier transform of the density, up to the sign of the argument.
+It always exists and determines the distribution of $X$ uniquely. Fourier
+inversion recovers the density from $\varphi_X$, and the convolution theorem
+shows that $\varphi_{X+Y}=\varphi_X\varphi_Y$ for independent $X,Y$, since the
+density of $X+Y$ is $p_X*p_Y$. For $X\sim N(\mu,\sigma^2)$ the Gaussian example
+above, after shifting and scaling, gives
+$\varphi_X(\xi)=e^{i\mu\xi-\sigma^2\xi^2/2}$.
+
+See [[characteristic-functions]] for the full treatment, including the
+uniqueness, inversion and continuity theorems.
+
+## Application to Option Pricing
+
+In models such as the [[heston-model]] the density of $\log S_T$ is not
+available in closed form, but its characteristic function is, because the
+dynamics are affine in the variance process $\{Y_{t}\}$. The risk-neutral price
+of a European option is then computed by Fourier inversion of the
+characteristic function, replacing a PDE solve with a one-dimensional numerical
+integral. See [[stochastic-volatility-model]].
+
+> *Note:* The conditions matter. Inversion requires $\hat{f}\in L^1$, and the
+> derivative rule requires $f$ to decay at infinity. The Fourier transform of
+> a call payoff does not exist as is, because the payoff is not integrable, and
+> pricing methods damp it by an exponential factor first.
+
+## Related Topics
+
+- [[characteristic-functions]]
+- [[laplace-transform]]
+- [[convolution]]
+- [[heat-equation]]
+- [[gaussian-integral]]
+- [[normal-distribution]]
+- [[heston-model]]
+- [[stochastic-volatility-model]]
+
+## References
+
+- Folland, *Real Analysis*, Section 8.3.
+- Stein and Shakarchi, *Fourier Analysis: An Introduction*.
+- Carr and Madan (1999), "Option valuation using the fast Fourier transform",
+  *Journal of Computational Finance*.

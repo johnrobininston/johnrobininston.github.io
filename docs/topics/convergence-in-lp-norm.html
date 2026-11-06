@@ -358,8 +358,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#convergence-in-l_p-norm" id="toc-convergence-in-l_p-norm" class="nav-link active" data-scroll-target="#convergence-in-l_p-norm"><span class="header-section-number">0.1</span> Convergence in <span class="math inline">\(L_{p}\)</span> Norm</a></li>
-  <li><a href="#convergence-in-norm-convergence-in-probability" id="toc-convergence-in-norm-convergence-in-probability" class="nav-link" data-scroll-target="#convergence-in-norm-convergence-in-probability"><span class="header-section-number">0.2</span> Convergence in Norm &amp; Convergence in Probability</a></li>
+  <li><a href="#convergence-in-norm" id="toc-convergence-in-norm" class="nav-link active" data-scroll-target="#convergence-in-norm"><span class="header-section-number">1</span> Convergence in Norm</a></li>
+  <li><a href="#convergence-in-lp-norm-r-th-mean" id="toc-convergence-in-lp-norm-r-th-mean" class="nav-link" data-scroll-target="#convergence-in-lp-norm-r-th-mean"><span class="header-section-number">2</span> Convergence in <span class="math inline">\(L^p\)</span> Norm (r-th Mean)</a></li>
+  <li><a href="#relationships" id="toc-relationships" class="nav-link" data-scroll-target="#relationships"><span class="header-section-number">3</span> Relationships</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -398,44 +400,69 @@ window.Quarto = {
 </header>
 
 
-<section id="convergence-in-l_p-norm" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="convergence-in-l_p-norm"><span class="header-section-number">0.1</span> Convergence in <span class="math inline">\(L_{p}\)</span> Norm</h3>
-<p>Recall that a <a href="../topics/normed-space.html#norm">norm</a> is any function <span class="math inline">\(\Vert \cdot\Vert\)</span> from a vector (function) space <span class="math inline">\(V\)</span> to <span class="math inline">\(\mathbb{R}\)</span> satisfying:</p>
+<section id="convergence-in-norm" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="convergence-in-norm"><span class="header-section-number">1</span> Convergence in Norm</h2>
+<p>Recall that a <a href="../topics/normed-space.html">norm</a> is a function <span class="math inline">\(\Vert \cdot\Vert\)</span> from a vector (function) space <span class="math inline">\(V\)</span> to <span class="math inline">\(\mathbb{R}\)</span> satisfying, for all <span class="math inline">\(f,g\in V\)</span> and <span class="math inline">\(a \in \mathbb{R}\)</span>:</p>
 <ol type="1">
-<li><span class="math inline">\(\Vert f\Vert \geq 0\)</span> for every <span class="math inline">\(f\in V\)</span></li>
-<li><span class="math inline">\(\Vert f\Vert=0\)</span> if <span class="math inline">\(f\)</span> is a zero function</li>
-<li><span class="math inline">\(\Vert af\Vert = |a|\Vert f\Vert\)</span> for every <span class="math inline">\(a \in \mathbb{R}\)</span>, <span class="math inline">\(f \in V\)</span></li>
-<li><span class="math inline">\(\Vert f+g \Vert \leq\Vert f\Vert +\Vert g\Vert\)</span> (triangle inequality)</li>
+<li><span class="math inline">\(\Vert f\Vert \geq 0\)</span>, and <span class="math inline">\(\Vert f\Vert=0\)</span> if and only if <span class="math inline">\(f=0\)</span>;</li>
+<li><span class="math inline">\(\Vert af\Vert = |a|\Vert f\Vert\)</span>;</li>
+<li><span class="math inline">\(\Vert f+g \Vert \leq\Vert f\Vert +\Vert g\Vert\)</span> (triangle inequality).</li>
 </ol>
-<p>The <span class="math inline">\(L^p\)</span> norm is a specific norm intimately linked with probability spaces and expectations defined as <span class="math display">\[
-\Vert X\Vert_{p}=[\mathbb{E}|X|^p]^{1/p}=\left(\int _{\Omega}|X|^p \, d\mathbb{P}\right)^{1/p} .
-\]</span> :::{.definition data-title=“Convergence in Lp Norm”}</p>
-<p>A sequence of random variables <span class="math inline">\(\{ X_{n} \}_{n\in\mathbb{N}}\)</span> convergence in <span class="math inline">\(L^p\)</span>-norm to <span class="math inline">\(X\)</span> denoted <span class="math inline">\(X_{n}\stackrel{L^p}{\to}X\)</span> if <span class="math display">\[\lim_{ n \to \infty }\Vert X_{n}-X\Vert_{p}=\lim_{ n \to \infty }(\mathbb{E}|X_{n}-X|^p)^{1/p} = 0.\]</span></p>
-<p>:::</p>
-<p>Random variables can also converge <a href="../topics/convergence-almost-surely.html">almost surely</a>, <a href="../topics/convergence-in-probability.html">in probability</a> and <a href="../topics/convergence-in-law.html">in law</a> and the relationships between all types of convergence can be found in the note: <a href="../topics/convergence-of-random-variables.html">Convergence of Random Variables</a>.</p>
-<!-- TODO: image "Note Jun 3, 2024.jpeg" not found in vault -->
-<p><em>Figure: Random Variable Convergence Relationships.</em></p>
+<div class="definition" data-title="Convergence in Norm">
+<p>A sequence <span class="math inline">\(\{f_n\}_{n\geq 1}\)</span> in a normed space <span class="math inline">\((V, \Vert\cdot\Vert)\)</span> <strong>converges in norm</strong> to <span class="math inline">\(f\)</span>, written <span class="math inline">\(f_n\stackrel{\Vert\cdot\Vert}{\to}f\)</span>, if <span class="math display">\[
+\lim_{n\to\infty}\Vert f_n-f\Vert=0.
+\]</span></p>
+</div>
 </section>
-<section id="convergence-in-norm-convergence-in-probability" class="level3" data-number="0.2">
-<h3 data-number="0.2" class="anchored" data-anchor-id="convergence-in-norm-convergence-in-probability"><span class="header-section-number">0.2</span> Convergence in Norm &amp; Convergence in Probability</h3>
-<p>The key results relating to convergence in norm are detailed below.</p>
-<div class="theorem" data-title="$\stackrel{L^s}{\to}\implies \stackrel{L^r}{\to}$ for $1<r<s<\infty$">
-<p>Consider <span class="math inline">\(1&lt;r&lt;s&lt;\infty\)</span> and assume that <span class="math inline">\(X_{n}\stackrel{L^s}{\to}X\)</span> as <span class="math inline">\(n \to \infty\)</span>. Then we have that <span class="math inline">\(X_{n}\stackrel{L^r}{\to}X\)</span>. <em>In other words, higher orders of r-th mean convergence imply lower orders.</em></p>
+<section id="convergence-in-lp-norm-r-th-mean" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="convergence-in-lp-norm-r-th-mean"><span class="header-section-number">2</span> Convergence in <span class="math inline">\(L^p\)</span> Norm (r-th Mean)</h2>
+<p>The <span class="math inline">\(L^p\)</span> norm is the norm linked to probability spaces and expectations, see <a href="../topics/lp-spaces.html">Lp Spaces</a> and <a href="../topics/lp-norm.html">Lp Norm</a>. For a random variable <span class="math inline">\(X\)</span> on <span class="math inline">\((\Omega,\mathcal{F},\mathbb{P})\)</span> and <span class="math inline">\(p\geq1\)</span>, <span class="math display">\[
+\Vert X\Vert_{p}=[\mathbb{E}|X|^p]^{1/p}=\left(\int _{\Omega}|X|^p \, d\mathbb{P}\right)^{1/p} .
+\]</span></p>
+<div class="definition" data-title="Convergence in $L^p$ Norm">
+<p>A sequence of random variables <span class="math inline">\(\{ X_{n} \}_{n\in\mathbb{N}}\)</span> with <span class="math inline">\(\mathbb{E}|X_n|^p&lt;\infty\)</span> <strong>converges in <span class="math inline">\(L^p\)</span> norm</strong>, or <strong>in <span class="math inline">\(p\)</span>-th mean</strong>, to <span class="math inline">\(X\)</span>, written <span class="math inline">\(X_{n}\stackrel{L^p}{\to}X\)</span>, if <span class="math display">\[
+\lim_{ n \to \infty }\Vert X_{n}-X\Vert_{p}=0,\quad\text{equivalently}\quad\lim_{ n \to \infty } \mathbb{E}|X_{n}-X|^p = 0.
+\]</span></p>
 </div>
-<p><em>Proof (1):</em> This result follows directly from applying <a href="../topics/lyapunovs-inequality.html">Lyapunov's Inequality</a> <span class="math display">\[
-(\mathbb{E}|X|^r)^{1/r}\leq(\mathbb{E}|X|^s)^{1/s};\quad 0&lt;r&lt;s&lt;\infty.
-\]</span> <em>Note: The converse does not hold in general.</em></p>
-<p><em>Proof (2):</em> The result holds by application of <a href="../topics/jensen-inequality.html">Jensen Inequality</a> using the convex function <span class="math inline">\(f(x)=x^{\frac{s}{r}}\)</span>.</p>
-<div class="theorem" data-title="$\stackrel{L^1}{\to}\implies \stackrel{\mathbb{P}}{\to}$">
-
+<p>Convergence in <span class="math inline">\(p\)</span>-th mean is convergence of integrals (expectations) and is exactly convergence in norm on <span class="math inline">\(L^p\)</span>. Random variables can also converge <a href="../topics/convergence-almost-surely.html">almost surely</a>, <a href="../topics/convergence-in-probability.html">in probability</a> and <a href="../topics/convergence-in-law.html">in law</a>; the relationships between all modes are in <a href="../topics/convergence-of-random-variables.html">Convergence of Random Variables</a>.</p>
+</section>
+<section id="relationships" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="relationships"><span class="header-section-number">3</span> Relationships</h2>
+<div class="theorem" data-title="$L^s\implies L^r$ for $1\leq r<s<\infty$">
+<p>If <span class="math inline">\(X_{n}\stackrel{L^s}{\to}X\)</span> and <span class="math inline">\(1\leq r&lt;s&lt;\infty\)</span> then <span class="math inline">\(X_{n}\stackrel{L^r}{\to}X\)</span>. In other words, higher orders of convergence imply lower orders.</p>
 </div>
-<p>If <span class="math inline">\(X_{n}\stackrel{L^1}{\to}X\)</span> then <span class="math inline">\(X_{n}\stackrel{\mathbb{P}}{\to}X\)</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
-<p><em>Proof:</em> This result follows directly from applying <a href="../topics/markov-inequality.html">Markov Inequality</a> since, for every <span class="math inline">\(\epsilon&gt;0\)</span> we have that <span class="math display">\[
-\mathbb{P}(|X_{n}-X|&gt;\epsilon)\leq \frac{1}{\epsilon}\cdot \mathbb{E}|X_{n}-X|.
-\]</span> <em>Note: The converse does not hold in general however with the additional constraint of uniform integrability it does.</em></p>
-<div class="theorem" data-title="Equivalence of convergence in $\mathbb{P}$ and in $L_1$ under uniform integrability">
-<p>For <span class="math inline">\(p&gt;0\)</span> assume that <span class="math inline">\(X_n \in L^p\)</span>, <span class="math inline">\(n \geq 1\)</span> and <span class="math inline">\(X_{n}\stackrel{\mathbb{P}}{\to} X\)</span>. The following three statements are equivalent: 1. <span class="math inline">\(\{ |X_{n}|^p,~n\geq 1 \}\)</span> is <a href="../topics/uniform-integrability.html">uniformly integrable</a>; 2. <span class="math inline">\(X_{n}\stackrel{L^p}{\to}X\)</span> and <span class="math inline">\(X\in L^p\)</span>; and 3. <span class="math inline">\(\lim_{n \to \infty}\mathbb{E}[|X_{n}|^p]=\mathbb{E}[|X|^p]&lt;\infty\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By <a href="../topics/lyapunov-inequality.html">Lyapunov Inequality</a> applied to <span class="math inline">\(|X_n-X|\)</span>, <span class="math display">\[
+(\mathbb{E}|X_n-X|^r)^{1/r}\leq(\mathbb{E}|X_n-X|^s)^{1/s}\to0.
+\]</span> Alternatively, apply <a href="../topics/jensen-inequality.html">Jensen Inequality</a> with the convex function <span class="math inline">\(f(x)=x^{s/r}\)</span> to <span class="math inline">\(|X_n-X|^r\)</span>.</p>
 </div>
+<p>The converse does not hold in general.</p>
+<div class="theorem" data-title="$L^1\implies$ convergence in probability">
+<p>If <span class="math inline">\(X_{n}\stackrel{L^1}{\to}X\)</span> then <span class="math inline">\(X_{n}\stackrel{\mathbb{P}}{\to}X\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By the <a href="../topics/markov-inequality.html">Markov Inequality</a>, for every <span class="math inline">\(\epsilon&gt;0\)</span> <span class="math display">\[
+\mathbb{P}(|X_{n}-X|&gt;\epsilon)\leq \frac{1}{\epsilon}\cdot \mathbb{E}|X_{n}-X|\to0.
+\]</span></p>
+</div>
+<div class="example" data-title="Converse fails">
+<p>On <span class="math inline">\([0,1]\)</span> with Lebesgue measure let <span class="math inline">\(X_n=n\mathbb{1}_{(0,1/n)}\)</span>. Then <span class="math inline">\(X_n\to0\)</span> almost surely and in probability, but <span class="math inline">\(\mathbb{E}|X_n|=1\)</span> for all <span class="math inline">\(n\)</span>, so <span class="math inline">\(X_n\not\to0\)</span> in <span class="math inline">\(L^1\)</span>.</p>
+</div>
+<p>The converse holds under <a href="../topics/uniform-integrability.html">Uniform Integrability</a>.</p>
+<div class="theorem" data-title="Convergence in $\mathbb{P}$ and in $L^p$ under uniform integrability">
+<p>For <span class="math inline">\(p&gt;0\)</span> assume that <span class="math inline">\(X_n \in L^p\)</span>, <span class="math inline">\(n \geq 1\)</span> and <span class="math inline">\(X_{n}\stackrel{\mathbb{P}}{\to} X\)</span>. The following are equivalent:</p>
+<ol type="1">
+<li><span class="math inline">\(\{ |X_{n}|^p,~n\geq 1 \}\)</span> is uniformly integrable;</li>
+<li><span class="math inline">\(X_{n}\stackrel{L^p}{\to}X\)</span> and <span class="math inline">\(X\in L^p\)</span>; and</li>
+<li><span class="math inline">\(\lim_{n \to \infty}\mathbb{E}[|X_{n}|^p]=\mathbb{E}[|X|^p]&lt;\infty\)</span>.</li>
+</ol>
+</div>
+</section>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
+<ul>
+<li>A. Gut, <em>Probability: A Graduate Course</em>, Springer.</li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -444,9 +471,16 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/convergence-almost-surely.html">Convergence Almost Surely</a></li>
+<li><a href="../topics/convergence-in-law.html">Convergence in Law</a></li>
 <li><a href="../topics/convergence-in-probability.html">Convergence in Probability</a></li>
+<li><a href="../topics/convergence-of-functions.html">Convergence of Functions</a></li>
 <li><a href="../topics/convergence-of-random-variables.html">Convergence of Random Variables</a></li>
+<li><a href="../topics/law-of-large-numbers.html">Law of Large Numbers</a></li>
+<li><a href="../topics/lyapunov-inequality.html">Lyapunov Inequality</a></li>
+<li><a href="../topics/martingale-convergence-theorems.html">Martingale Convergence Theorems</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
+<li><a href="../topics/spectral-distributions.html">Spectral Distributions</a></li>
+<li><a href="../topics/p-variation.html">p-Variation</a></li>
 </ul>
 </div>
 </section>

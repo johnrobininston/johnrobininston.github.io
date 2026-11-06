@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Local volatility models, Dupire’s PDE and the constant elasticity of variance (CEV) model.">
 
 <title>Local Volatility Model – John Robin Inston</title>
 <style>
@@ -358,11 +359,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#local-volatility-models" id="toc-local-volatility-models" class="nav-link active" data-scroll-target="#local-volatility-models"><span class="header-section-number">1</span> Local Volatility Models</a>
-  <ul class="collapse">
-  <li><a href="#dupires-pde" id="toc-dupires-pde" class="nav-link" data-scroll-target="#dupires-pde"><span class="header-section-number">1.1</span> Dupire’s PDE</a></li>
-  <li><a href="#problems" id="toc-problems" class="nav-link" data-scroll-target="#problems"><span class="header-section-number">1.2</span> Problems</a></li>
-  </ul></li>
+  <li><a href="#local-volatility-models" id="toc-local-volatility-models" class="nav-link active" data-scroll-target="#local-volatility-models"><span class="header-section-number">1</span> Local Volatility Models</a></li>
+  <li><a href="#dupires-pde" id="toc-dupires-pde" class="nav-link" data-scroll-target="#dupires-pde"><span class="header-section-number">2</span> Dupire’s PDE</a></li>
+  <li><a href="#the-cev-model" id="toc-the-cev-model" class="nav-link" data-scroll-target="#the-cev-model"><span class="header-section-number">3</span> The CEV Model</a></li>
+  <li><a href="#problems" id="toc-problems" class="nav-link" data-scroll-target="#problems"><span class="header-section-number">4</span> Problems</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -375,6 +376,11 @@ window.Quarto = {
 <h1 class="title">Local Volatility Model</h1>
 </div>
 
+<div>
+  <div class="description">
+    Local volatility models, Dupire’s PDE and the constant elasticity of variance (CEV) model.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -403,27 +409,53 @@ window.Quarto = {
 
 <section id="local-volatility-models" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="local-volatility-models"><span class="header-section-number">1</span> Local Volatility Models</h2>
-<p>In [[financial-mathematics|mathematical finance]] <strong>Local Volatility Models</strong> are option pricing models that treat volatility as a function of both asset price <span class="math inline">\(S_{t}\)</span> and time <span class="math inline">\(t\)</span>. The asset price process <span class="math inline">\((S_{t})\)</span> is assumed to have dynamics given by the <a href="../topics/stochastic-differential-equations.html">SDE</a> <span class="math display">\[
-dS_{t}=(r_{t}-d_{t})S_{t}dt+\sigma(S_{t}, t)S_{t}dW_{t}.
-\]</span> A simple derivation of the <a href="../topics/black-scholes-merton-model.html">Black-Scholes PDE</a> tells us that if <span class="math inline">\(V_{t}=u(t,S_{t})\)</span> denotes the value of the replicating portfolio at time <span class="math inline">\(t\)</span>, then <span class="math display">\[
-\partial _{t }u+rx\partial _{x}u+ \frac{1}{2}\sigma^2(t,x)x^2\partial_{x x}u-ru=0.
-\]</span> We see that BS is quite inefficient in solving option prices since it requires the knowledge at all <span class="math inline">\((t,x)\)</span> just to solve out a single number.</p>
-<p>A special example of the local volatility model is the [[constant-elasticity-of-variance-cev-model]] which has dynamics given by <span class="math display">\[
-S_{t}= \mu S_{t}+\sigma S_{t}^\gamma dW_{t}.
+<p>In <a href="../topics/quantitative-finance.html">mathematical finance</a> <strong>local volatility models</strong> are option pricing models that treat volatility as a function of both the asset price <span class="math inline">\(S_t\)</span> and time <span class="math inline">\(t\)</span>. The asset price process <span class="math inline">\((S_t)\)</span> has dynamics given by the <a href="../topics/stochastic-differential-equations.html">SDE</a></p>
+<p><span class="math display">\[
+dS_t=(r_t-\delta_t)S_t\,dt+\sigma(t,S_t)S_t\,dW_t,
 \]</span></p>
-<section id="dupires-pde" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="dupires-pde"><span class="header-section-number">1.1</span> Dupire’s PDE</h3>
-<p>However, in the local volatility model, there is a model dependent result called <a href="../topics/dupires-formula.html">Dupire's Formula</a> that efficiently solves out option price. The formula is <span class="math display">\[
-\frac{{\partial C}}{\partial T}(T,K)=-rK\frac{{\partial C}}{\partial K}(T,K)+ \frac{1}{2}\sigma^2(T,K)K^2 \frac{{\partial^2C}}{\partial K^2}(T,K)
-\]</span> with natural initial condition <span class="math display">\[
-C(0,K)=(S_{0}-K)_{+},
-\]</span> since when <span class="math inline">\(T=0\)</span> option price is just the immediate payoff.</p>
-<p>Dupire’s PDE provides an explicit formula for implied volatility in the local volatility model.</p>
+<p>where <span class="math inline">\(r_t\)</span> is the interest rate, <span class="math inline">\(\delta_t\)</span> the dividend yield and <span class="math inline">\(W\)</span> a <a href="../topics/brownian-motion.html">Brownian motion</a>. A derivation as for the <a href="../topics/black-scholes-merton-model.html">Black-Scholes PDE</a> shows that if <span class="math inline">\(V_t=u(t,S_t)\)</span> is the value of the replicating portfolio then</p>
+<p><span class="math display">\[
+\partial_tu+rx\,\partial_xu+\frac{1}{2}\sigma^2(t,x)x^2\,\partial_{xx}u-ru=0.
+\]</span></p>
+<p>Solving this PDE is inefficient for pricing a single option, since it requires the solution at all <span class="math inline">\((t,x)\)</span> just to produce one number.</p>
 </section>
-<section id="problems" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="problems"><span class="header-section-number">1.2</span> Problems</h3>
-<p>The local volatility model is expected to produce implied volatility surface <span class="math inline">\(I(T,K)\)</span> not flat in <span class="math inline">\(T\)</span> or in <span class="math inline">\(K\)</span> however it is still not perfect. The model suffers from the so-called <span class="math inline">\((t,T,K)\)</span>-problem.</p>
-<p>In the setting of local volatility <span class="math inline">\(\sigma=\sigma(t,x)\)</span> so the volatility is always the same given that the time and stock price is the same. As a result, at time 0 if we calibrate and get the surface <span class="math inline">\(I(0,T,K)\)</span> using options sold at time 0 and maturing at time <span class="math inline">\(T\)</span>, we expect to see the same surface <span class="math inline">\(I(t,T+t, K)\)</span> based on options sold at <span class="math inline">\(t\)</span> and maturing at time <span class="math inline">\(T+t\)</span>. However, empirical data implies that those two implied volatility surfaces are not the same under time translation which is a contradiction to the model.</p>
+<section id="dupires-pde" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="dupires-pde"><span class="header-section-number">2</span> Dupire’s PDE</h2>
+<p>In the local volatility model there is a model-dependent result, <a href="../topics/dupires-formula.html">Dupire’s formula</a>, that gives call prices directly as a function of maturity and strike. Let <span class="math inline">\(C(T,K)\)</span> be the price at time <span class="math inline">\(0\)</span> of a call with maturity <span class="math inline">\(T\)</span> and strike <span class="math inline">\(K\)</span>, and take constant <span class="math inline">\(r\)</span> and no dividends. Then</p>
+<p><span class="math display">\[
+\frac{\partial C}{\partial T}(T,K)=-rK\frac{\partial C}{\partial K}(T,K)
++\frac{1}{2}\sigma^2(T,K)K^2\frac{\partial^2C}{\partial K^2}(T,K),
+\]</span></p>
+<p>with the natural initial condition <span class="math inline">\(C(0,K)=(S_0-K)_+\)</span>, since at <span class="math inline">\(T=0\)</span> the option price is the immediate payoff. The equation can be read backwards to recover the local volatility from option prices,</p>
+<p><span class="math display">\[
+\sigma^2(T,K)=\frac{\partial_TC+rK\,\partial_KC}{\tfrac{1}{2}K^2\,\partial_{KK}C},
+\]</span></p>
+<p>which also yields the implied volatility surface <span class="math inline">\(I(T,K)\)</span> of the model (see <a href="../topics/volatility-surfaces.html">Volatility Surfaces</a>).</p>
+</section>
+<section id="the-cev-model" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-cev-model"><span class="header-section-number">3</span> The CEV Model</h2>
+<p>A special case is the <strong>constant elasticity of variance (CEV) model</strong>, with dynamics</p>
+<p><span class="math display">\[
+dS_t=\mu S_t\,dt+\sigma S_t^{\gamma}\,dW_t,
+\]</span></p>
+<p>where <span class="math inline">\(\sigma&gt;0\)</span> and <span class="math inline">\(\gamma\ge 0\)</span> is the <strong>elasticity</strong> parameter. This is a local volatility model with <span class="math inline">\(\sigma(t,x)=\sigma x^{\gamma-1}\)</span>, so the instantaneous variance of returns is <span class="math inline">\(\sigma^2S_t^{2(\gamma-1)}\)</span>, whose elasticity with respect to <span class="math inline">\(S_t\)</span> is constant. Special cases are</p>
+<ul>
+<li><span class="math inline">\(\gamma=1\)</span>: <a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a>, the Black-Scholes-Merton model,</li>
+<li><span class="math inline">\(\gamma=0\)</span>: the arithmetic (Bachelier) model <span class="math inline">\(dS_t=\mu S_t\,dt+\sigma\,dW_t\)</span>.</li>
+</ul>
+<p>For <span class="math inline">\(\gamma&lt;1\)</span> volatility rises when the price falls (the <strong>leverage effect</strong>), which produces a downward-sloping implied volatility skew, as is observed in equity markets. For <span class="math inline">\(\gamma&gt;1\)</span> the skew is upward-sloping.</p>
+</section>
+<section id="problems" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="problems"><span class="header-section-number">4</span> Problems</h2>
+<p>A local volatility model is designed to produce an implied volatility surface <span class="math inline">\(I(T,K)\)</span> that is not flat in <span class="math inline">\(T\)</span> or <span class="math inline">\(K\)</span>, but it is still imperfect. It suffers from the so-called <span class="math inline">\((t,T,K)\)</span>-problem.</p>
+<p>Since <span class="math inline">\(\sigma=\sigma(t,x)\)</span>, volatility is always the same given the same time and stock price. If we calibrate at time <span class="math inline">\(0\)</span> and obtain the surface <span class="math inline">\(I(0,T,K)\)</span> from options maturing at <span class="math inline">\(T\)</span>, we therefore expect the same surface <span class="math inline">\(I(t,T+t,K)\)</span> at a later time <span class="math inline">\(t\)</span> from options maturing at <span class="math inline">\(T+t\)</span>. Empirically, these two implied volatility surfaces are not the same under time translation, which contradicts the model. This motivates <a href="../topics/stochastic-volatility-model.html">stochastic volatility models</a>.</p>
+</section>
+<section id="references" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="references"><span class="header-section-number">5</span> References</h2>
+<ol type="1">
+<li>Dupire, B. (1994). Pricing with a smile. <em>Risk</em>, 7(1), 18-20.</li>
+<li>Cox, J. C. and Ross, S. A. (1976). The valuation of options for alternative stochastic processes. <em>Journal of Financial Economics</em>, 3(1-2), 145-166.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -438,7 +470,6 @@ Backlinks
 <li><a href="../topics/volatility-models.html">Volatility Models</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

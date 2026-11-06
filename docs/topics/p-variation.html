@@ -9,7 +9,7 @@
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
 
-<title>P-Variation – John Robin Inston</title>
+<title>p-Variation – John Robin Inston</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -358,7 +358,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#p-variation" id="toc-p-variation" class="nav-link active" data-scroll-target="#p-variation"><span class="header-section-number">1</span> <span class="math inline">\(p\)</span>-Variation</a></li>
+  <li><a href="#definition" id="toc-definition" class="nav-link active" data-scroll-target="#definition"><span class="header-section-number">1</span> Definition</a></li>
+  <li><a href="#p-variation-of-brownian-motion" id="toc-p-variation-of-brownian-motion" class="nav-link" data-scroll-target="#p-variation-of-brownian-motion"><span class="header-section-number">2</span> <span class="math inline">\(p\)</span>-Variation of Brownian Motion</a></li>
   </ul>
 </nav>
     </div>
@@ -368,7 +369,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">P-Variation</h1>
+<h1 class="title">p-Variation</h1>
 </div>
 
 
@@ -397,33 +398,44 @@ window.Quarto = {
 </header>
 
 
-<section id="p-variation" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> <span class="math inline">\(p\)</span>-Variation</h1>
-<div class="definition" data-title="$p$ -Variation">
-<p>The <span class="math inline">\(p\)</span> -variation of a real-valued stochastic process <span class="math inline">\((X_{t})\)</span> on <span class="math inline">\([0,T]\)</span> is a process <span class="math inline">\(\left\langle X,X \right\rangle_{t}^{(p)}\)</span> such that for all <span class="math inline">\(t&gt;0\)</span> and sequence of partitions <span class="math display">\[
-\Delta^{(n)}:=\{  0 = t_{0}^{(n)}&lt;t_{1}^{(n)}&lt;\dots&lt;t_{K_{n}}^{(n)}=t \},
-\]</span> of interval <span class="math inline">\([0,t]\)</span> such that <span class="math display">\[
-\delta^{(n)}:=\max_{1\leq i\leq K_{n}}\lvert t_{i}^{(n)}-t_{i-1}^{(n)} \rvert \to 0\quad \text{as}\quad n \to \infty,
-\]</span> the following holds <span class="math display">\[
-S_{n}^\Delta = \sup_{\Delta}\sum_{i=0}^{K_{n}-1} \lvert X_{t_{i}}-X_{t_{i-1}} \rvert ^p \stackrel{\mathcal{L}_{2}~\&amp;~\mathbb{P}}\to \left\langle X,X \right\rangle_{t}^{(p)}.
+<section id="definition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="definition"><span class="header-section-number">1</span> Definition</h2>
+<p>The <strong><span class="math inline">\(p\)</span>-th variation</strong> of a <a href="../topics/stochastic-processes.html">stochastic process</a> measures the accumulated size of its increments raised to the power <span class="math inline">\(p\)</span> along finer and finer partitions of time.</p>
+<div class="definition" data-title="$p$-Variation">
+<p>Let <span class="math inline">\((X_{t})\)</span> be a real-valued continuous-time process and <span class="math inline">\(p&gt;0\)</span>. For <span class="math inline">\(t&gt;0\)</span> consider partitions <span class="math display">\[
+\Delta^{(n)}:=\{  0 = t_{0}^{(n)}&lt;t_{1}^{(n)}&lt;\dots&lt;t_{K_{n}}^{(n)}=t \}
+\]</span> of <span class="math inline">\([0,t]\)</span> with mesh <span class="math display">\[
+\delta^{(n)}:=\max_{1\leq i\leq K_{n}}\lvert t_{i}^{(n)}-t_{i-1}^{(n)} \rvert \to 0\quad \text{as}\quad n \to \infty.
+\]</span> The <strong><span class="math inline">\(p\)</span>-variation</strong> <span class="math inline">\(\left\langle X,X \right\rangle_{t}^{(p)}\)</span> is the process (if it exists, and does not depend on the choice of partitions) such that <span class="math display">\[
+S_{n}^\Delta = \sum_{i=1}^{K_{n}} \lvert X_{t_{i}^{(n)}}-X_{t_{i-1}^{(n)}} \rvert ^p \stackrel{L_{2}~\&amp;~\mathbb{P}}\to \left\langle X,X \right\rangle_{t}^{(p)}.
 \]</span></p>
 </div>
-<p>For <span class="math inline">\(p=1\)</span> we call this the <strong>total variation</strong>. For <span class="math inline">\(p=2\)</span> we call this the <strong>quadratic variation</strong> and often will drop the <span class="math inline">\(p\)</span> notation <span class="math inline">\(\left&lt; X,X \right&gt;_{t}\)</span>. We primarily deal with quadratic variance when we are working in the <span class="math inline">\(\mathcal{L}_{2}\)</span> space and is key to our construction of an integral in this space.</p>
-<p>Importantly, if a process is differentiable on <span class="math inline">\([0,T]\)</span> then its total variation will be finite. To show that BM is not differentiable we take <span class="math inline">\(T=n\cdot\Delta t\)</span> and find that <span class="math display">\[
-\sum_{i}\lvert B_{t_{i}}-B_{t_{i-1}} \rvert \sim n\mathbb{E}\lvert B_{\Delta t} \rvert \sim \frac{T}{\Delta t}\sqrt{ \Delta t }\to \infty\quad \text{as}\quad n \to \infty,~\Delta t \to 0.
-\]</span> ## <span class="math inline">\(p\)</span>-Variation of Brownian Motion</p>
+<p>In particular:</p>
+<ul>
+<li>for <span class="math inline">\(p=1\)</span> it is the <strong>total variation</strong>; and</li>
+<li>for <span class="math inline">\(p=2\)</span> it is the <strong>quadratic variation</strong>, often written <span class="math inline">\(\left&lt; X,X \right&gt;_{t}\)</span>.</li>
+</ul>
+<p>Quadratic variation is the relevant notion in the <span class="math inline">\(L_{2}\)</span> setting and is key to the construction of the <a href="../topics/ito-integral.html">Itô Integral</a> in <a href="../topics/stochastic-calculus.html">Stochastic Calculus</a>. A smooth (differentiable) path has finite total variation and zero quadratic variation, since <span class="math inline">\(\sum_i|\Delta X_i|^2\leq\max_i|\Delta X_i|\sum_i|\Delta X_i|\to0\)</span>.</p>
+</section>
+<section id="p-variation-of-brownian-motion" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="p-variation-of-brownian-motion"><span class="header-section-number">2</span> <span class="math inline">\(p\)</span>-Variation of Brownian Motion</h2>
 <div class="theorem" data-title="Quadratic Variation of BM">
-<p>For BM we have <span class="math inline">\(\left&lt; B,B \right&gt;_{t}=t\)</span>, that is, for partition <span class="math inline">\(\Delta^{(n)}\)</span> of an interval <span class="math inline">\([a,b]\)</span> such that <span class="math inline">\(\delta^{(n)}\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span> then <span class="math inline">\(S_{n}^\Delta \stackrel{\mathcal{L}_{2}~\&amp;~\mathbb{P}}\to b-a\)</span>.</p>
+<p>For <a href="../topics/brownian-motion.html">Brownian Motion</a> <span class="math inline">\(\left&lt; B,B \right&gt;_{t}=t\)</span>. That is, for partitions <span class="math inline">\(\Delta^{(n)}\)</span> of <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(\delta^{(n)}\to 0\)</span>, <span class="math inline">\(S_{n}^\Delta \stackrel{L_{2}~\&amp;~\mathbb{P}}\to b-a\)</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>We wish to show that <span class="math inline">\(\mathbb{E}(S_{n}^\Delta)^2\to(b-a)^2\)</span> as <span class="math inline">\(n \to \infty\)</span>. First note that <span class="math display">\[
-\mathbb{E}S_{n}^\Delta = \mathbb{E}\left[ \sum_{i=0}^{K_{n}-1} \left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \right\rvert^2  \right]=\sum_{i=0}^{K_{n}-1}(t_{i+1}^{(n)}-t_{i}^{(n)})=b-a.
-\]</span> We proceed to compute <span class="math display">\[
-\begin{align}\mathbb{E}\left[(S_{n}^{\Delta})^2\right] &amp; =\mathbb{E}\left[ \left( \sum_{i=0}^{K_{n}-1}\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}^{(n)}} \rvert ^2 \right)^2 \right]  \\ &amp; =\sum_{i=0}^{K_{n}-1}\mathbb{E}\left\lvert B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert ^4+2\sum_{i&lt;j}\mathbb{E}\left[ \left\lvert   B_{t_{i+1}^{(n)}}-B_{t_{i}}^{(n)} \right\rvert^2\cdot \left\lvert  B_{t_{j+1}^{(n)}}-B_{t_{j}}^{(n)}  \right\rvert   \right]  \\ &amp; = \sum_{i}3\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)^2+2\sum_{i&lt;j}\left(t_{i+1}^{(n)}-t_{i}^{(n)}\right)\cdot \left(t_{j+1}^{(n)}-t_{j}^{(n)}\right) \\ &amp; = 2\sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right) ^2+\left( \sum_{i}\left( t_{i+1}^{(n)}-t_{i}^{(n)} \right)  \right) ^2 \\ &amp; \leq 2\delta^{(n)}(b-a)+(b-a)^2 \\  &amp; \to(b-a)^2\quad\text{as}\quad n \to \infty,\end{align}
-\]</span> where we have used <span class="math inline">\(\mathbb{E}X^4=3[(\sigma^2_{X})^2]\)</span> and the stationary independent increments of Brownian motion. We have showed that <span class="math display">\[
-\forall\varepsilon&gt;0,~\exists N:\forall n\geq N,~\mathbb{E}[(S_{n}^{\Delta})^2]\leq (b-a)^2+\varepsilon.
-\]</span> Additionally, we have shown that <span class="math inline">\(\mathbb{E}[(S_{n}^\Delta)^2]-(b-a)^2=\text{Var}(S_{n}^\Delta)\geq 0\)</span> i.e. <span class="math inline">\(\mathbb{E}[(S_{n}^\Delta)^2]\geq (b-a)^2\)</span> hence we obtain equality. Hence we have convergence in <span class="math inline">\(\mathcal{L}_{2}\)</span> which gives convergence in probability.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>Write <span class="math inline">\(\Delta_i=t_{i}^{(n)}-t_{i-1}^{(n)}\)</span> and <span class="math inline">\(\xi_i=B_{t_{i}^{(n)}}-B_{t_{i-1}^{(n)}}\sim\mathcal{N}(0,\Delta_i)\)</span>, which are independent. Then <span class="math inline">\(\mathbb{E}S_n^\Delta=\sum_i\mathbb{E}\xi_i^2=\sum_i\Delta_i=b-a\)</span> and, using <span class="math inline">\(\mathbb{E}\xi_i^4=3\Delta_i^2\)</span>, <span class="math display">\[
+\operatorname{Var}(S_n^\Delta)=\sum_i\operatorname{Var}(\xi_i^2)=\sum_i(3\Delta_i^2-\Delta_i^2)=2\sum_i\Delta_i^2\leq2\delta^{(n)}(b-a)\to0.
+\]</span> Hence <span class="math inline">\(\mathbb{E}|S_n^\Delta-(b-a)|^2=\operatorname{Var}(S_n^\Delta)\to0\)</span>, which is convergence in <span class="math inline">\(L_2\)</span>, and so in probability (see <a href="../topics/convergence-in-lp-norm.html">Convergence in Lp Norm</a>).</p>
 </div>
+<div class="proposition" data-title="Brownian Paths Have Infinite Total Variation">
+<p>Almost surely, Brownian motion has infinite total variation on every interval <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(a&lt;b\)</span>, and hence is not differentiable there.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Pass to a subsequence of partitions along which <span class="math inline">\(S_n^\Delta\to b-a&gt;0\)</span> almost surely. Since Brownian paths are continuous, hence uniformly continuous on <span class="math inline">\([a,b]\)</span>, <span class="math inline">\(\max_i|\xi_i|\to0\)</span>. Then <span class="math display">\[
+S_n^\Delta=\sum_i\xi_i^2\leq\max_i|\xi_i|\sum_i|\xi_i|,
+\]</span> so <span class="math inline">\(\sum_i|\xi_i|\geq S_n^\Delta/\max_i|\xi_i|\to\infty\)</span>.</p>
+</div>
+<p>Heuristically, with <span class="math inline">\(T=n\Delta t\)</span>, <span class="math inline">\(\sum_i|\Delta B_i|\sim n\,\mathbb{E}|B_{\Delta t}|\sim\frac{T}{\Delta t}\sqrt{\Delta t}\to\infty\)</span>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">

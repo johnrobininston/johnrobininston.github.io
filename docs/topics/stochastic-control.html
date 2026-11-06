@@ -360,6 +360,8 @@ window.Quarto = {
   <ul>
   <li><a href="#what-is-stochastic-control" id="toc-what-is-stochastic-control" class="nav-link active" data-scroll-target="#what-is-stochastic-control"><span class="header-section-number">1</span> What is Stochastic Control?</a></li>
   <li><a href="#topics-in-stochastic-control" id="toc-topics-in-stochastic-control" class="nav-link" data-scroll-target="#topics-in-stochastic-control"><span class="header-section-number">2</span> Topics in Stochastic Control</a></li>
+  <li><a href="#markov-decision-processes" id="toc-markov-decision-processes" class="nav-link" data-scroll-target="#markov-decision-processes"><span class="header-section-number">3</span> Markov decision processes</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -400,18 +402,19 @@ window.Quarto = {
 
 <section id="what-is-stochastic-control" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="what-is-stochastic-control"><span class="header-section-number">1</span> What is Stochastic Control?</h2>
-<p>Stochastic control is the study of how a decision-maker (a <strong>controller</strong>) should act over time to optimize a cumulative objective when the system dynamics are driven by randomness. The controller observes the current <strong>state</strong> of the system, selects a <strong>control action</strong>, receives a <strong>reward</strong> (or incurs a cost), and the state evolves according to a stochastic law — a Markov kernel in discrete time, or an SDE in continuous time. The goal is to find a <strong>policy</strong> (a mapping from states and times to actions) that maximizes the expected cumulative reward, or minimizes expected cost, over a finite or infinite horizon.</p>
-<p>Stochastic control is the single-agent special case of <a href="../topics/stochastic-games.html">Stochastic Games</a>, and the dynamic, uncertain generalization of classical optimal control. Its two central theoretical pillars are <strong>dynamic programming</strong> (Bellman’s principle) in discrete time, and the <strong>Hamilton–Jacobi–Bellman (HJB) equation</strong> in continuous time.</p>
+<p>Stochastic control is the study of how a decision-maker (a <strong>controller</strong>) should act over time to optimize a cumulative objective when the system dynamics are driven by randomness. The controller observes the current <strong>state</strong> of the system, selects a <strong>control action</strong>, receives a <strong>reward</strong> (or incurs a cost), and the state evolves according to a stochastic law - a Markov kernel in discrete time, or an SDE in continuous time. The goal is to find a <strong>policy</strong> (a mapping from states and times to actions) that maximizes the expected cumulative reward, or minimizes expected cost, over a finite or infinite horizon.</p>
+<p>Stochastic control is the single-agent special case of <a href="../topics/stochastic-games.html">Stochastic Games</a>, and the dynamic, uncertain generalization of classical <a href="../topics/control-theory.html">optimal control</a>. Its two central theoretical pillars are <strong>dynamic programming</strong> (Bellman’s principle) in discrete time, and the <strong>Hamilton-Jacobi-Bellman (HJB) equation</strong> in continuous time.</p>
 </section>
 <section id="topics-in-stochastic-control" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="topics-in-stochastic-control"><span class="header-section-number">2</span> Topics in Stochastic Control</h2>
+<p>See also <a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a> and <a href="../topics/dynamic-programming-principle.html">Dynamic Programming Principle</a>.</p>
 <ul>
 <li><strong><em>Preliminaries</em></strong>
 <ul>
-<li><a href="../topics/stochastic-processes.html">Stochastic Process</a>
+<li><a href="../topics/stochastic-processes.html">Stochastic Processes</a>
 <ul>
 <li><a href="../topics/markov-chains.html">Markov Chains</a></li>
-<li>[[martingales]]</li>
+<li>Martingales</li>
 <li><a href="../topics/stopping-times.html">Stopping Times</a></li>
 </ul></li>
 <li><a href="../topics/stochastic-differential-equations.html">Stochastic Differential Equations</a>
@@ -419,11 +422,11 @@ window.Quarto = {
 <li>Itô calculus and Itô’s lemma</li>
 <li>Strong vs.&nbsp;weak solutions</li>
 </ul></li>
-<li>[[measure-theoretic-probability]]</li>
+<li>Measure-theoretic probability</li>
 </ul></li>
 <li><strong><em>Markov Decision Processes (Discrete Time)</em></strong>
 <ul>
-<li>[[markov-decision-processes]] - <em>Formal model: state space, action space, transition kernel, reward, horizon.</em></li>
+<li>Markov decision processes - <em>Formal model: state space, action space, transition kernel, reward, horizon.</em></li>
 <li>Policies: deterministic, stochastic, Markov, history-dependent</li>
 <li>Finite-horizon MDPs and backward induction</li>
 <li>Infinite-horizon discounted MDPs
@@ -440,7 +443,7 @@ window.Quarto = {
 <ul>
 <li>Controlled SDEs and their well-posedness</li>
 <li>Dynamic programming principle (Bellman)</li>
-<li>Hamilton–Jacobi–Bellman equation
+<li>Hamilton-Jacobi-Bellman equation
 <ul>
 <li>Verification theorems</li>
 <li>Classical vs.&nbsp;viscosity solutions</li>
@@ -464,7 +467,7 @@ window.Quarto = {
 <li>Policy gradient methods
 <ul>
 <li>REINFORCE</li>
-<li>Actor–critic architectures</li>
+<li>Actor-critic architectures</li>
 <li>Proximal Policy Optimization (PPO)</li>
 </ul></li>
 <li>Exploration vs.&nbsp;exploitation (multi-armed bandits, UCB, Thompson sampling)</li>
@@ -491,7 +494,9 @@ window.Quarto = {
 <li>Energy systems: grid control, storage dispatch</li>
 </ul></li>
 </ul>
-<p>%%Add above here%%</p>
+</section>
+<section id="markov-decision-processes" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="markov-decision-processes"><span class="header-section-number">3</span> Markov decision processes</h2>
 <p>We begin by outlining <strong>Markov Decision Processes (MDP)</strong> for the discrete time case. A MDP is defined by the tuple <span class="math inline">\((S,A,N_{T}, \mu^0,P,r)\)</span> where: 1. <span class="math inline">\(S\)</span> is the state space, 2. <span class="math inline">\(A\)</span> is the action space, 3. <span class="math inline">\(N_{T}&gt;0\)</span> is the total number of time steps, 4. <span class="math inline">\(\mu_{0}\in\mathscr{P}(S)\)</span> is an initial state distribution, 5. <span class="math inline">\(r_{n}(s,a)\)</span> is the immediate reward when using action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span> at time <span class="math inline">\(n\)</span>, and 6. <span class="math inline">\(\mathbb{P}_{n}(s,a)\in\mathscr{P}(S)\)</span> is the probability distribution of the next state when using action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span> at time <span class="math inline">\(n\)</span>.</p>
 <p>Denoting the set of times <span class="math inline">\(\mathcal{T}=\{ 0,1,\dots,N_{T} \}\)</span> a <strong>policy</strong> is a function <span class="math display">\[
 \pi:\mathcal{T}\times S \to\mathscr{P}(A),
@@ -499,7 +504,13 @@ window.Quarto = {
 <p>The <strong>cumulative expected reward</strong> is defined as <span class="math display">\[
 J(\pi)=\mathbb{E}\left[ \sum_{n=0}^{N_{T}}r_{n}(s_{n},a_{n}) \right]
 \]</span> where <span class="math inline">\(a_{n}\sim \pi_{n}(s_{n})\)</span>, <span class="math inline">\(s_{n+1}\sim \mathbb{P}_{n}(s_{n},a_{n})\)</span> for <span class="math inline">\(n \geq 0\)</span>, and <span class="math inline">\(s_{0}\sim \mu_{0}\)</span>.</p>
-<p>T</p>
+</section>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
+<ul>
+<li>M. L. Puterman, <em>Markov Decision Processes</em>.</li>
+<li>W. H. Fleming and H. M. Soner, <em>Controlled Markov Processes and Viscosity Solutions</em>.</li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -507,10 +518,13 @@ J(\pi)=\mathbb{E}\left[ \sum_{n=0}^{N_{T}}r_{n}(s_{n},a_{n}) \right]
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/control-theory.html">Control Theory</a></li>
 <li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
+<li><a href="../topics/game-theory.html">Game Theory</a></li>
+<li><a href="../topics/lipschitz-continuity.html">Lipschitz Continuity</a></li>
+<li><a href="../topics/markov-chains.html">Markov Chains</a></li>
 <li><a href="../topics/mean-field-games.html">Mean Field Games</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
-<li><a href="../topics/stochastic-control-theory.html">Stochastic Control Theory</a></li>
 <li><a href="../topics/stochastic-games.html">Stochastic Games</a></li>
 </ul>
 </div>

@@ -1,6 +1,7 @@
 ---
 id: black-scholes-merton-model
-aliases: ["black-scholes-model-with-dividends"]
+aliases:
+  - black-scholes-model-with-dividends
 tags: []
 author: "John Robin Inston"
 date: 2026-09-25
@@ -261,6 +262,34 @@ $\theta$ exists, and complete if in addition $\sigma$ is invertible
 ($d = m$). This model prices multi-asset options such as basket and exchange
 options.
 
+## Time Dependent Volatility
+
+
+We replace the constant volatility in the [[black-scholes-merton-model]]
+$\sigma$ with a deterministic function in time $\sigma_{t}$ then we can show
+that Black-Scholes still holds if $\sigma^2$ is replaced with
+$\frac{1}{T}\int _{0}^T\sigma^2_{s} \, ds$
+
+To see this consider the stock price dynamics under $\mathbb{Q}$ 
+
+$$
+dS_{t}=rS_{t}dt+\sigma_{t}S_{t}dW_{t}^\mathbb{Q}.
+$$
+
+Applying the log transformation and [[ito-formula]] we obtain
+
+$$
+S_{t}=S_{0}\exp\left\{ \int _{0}^t\left( r- \frac{\sigma^2_{s}}{2} \right) \, ds+\int _{0}^t\sigma_{s} \, dW_{s}^\mathbb{Q}   \right\}.
+$$
+
+As a result, we simply replace $\sigma^2t$ with $\int _{0}^t\sigma_{s}^2 \, ds$
+and replace $\sigma dW_{t}^\mathbb{Q}$ with
+$\int _{0}^t \sigma_{s} \, dW_{s}^\mathbb{Q}$.
+
+The implied volatility surface $I(T,K)$ is not flat in $T$ but still flat in
+$K$. This is a subtle improvement on BS but is still far from ideal for
+practical purposes.
+
 ## Limitations and Extensions
 
 The assumption of a constant volatility is not consistent with market
@@ -268,12 +297,9 @@ prices. Implied volatility varies with strike and maturity, giving the
 volatility smile or surface (see [[volatility-surfaces]]). Models that relax
 it include
 
-- [[time-dependent-volatility-model]]: $\sigma = \sigma(t)$,
-- [[local-volatility-model]]: $\sigma = \sigma(t,S_t)$, including the
-  CEV model,
+- [[local-volatility-model]]: $\sigma = \sigma(t,S_t)$ (with CEV model special case).
 - [[stochastic-volatility-model]]: volatility is random, such as the
-  [[heston-model]],
-- a stock that pays dividends (see the next section).
+  [[heston-model]].
 
 ## Key Results
 

@@ -358,11 +358,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#fundamentals-of-game-theory" id="toc-fundamentals-of-game-theory" class="nav-link active" data-scroll-target="#fundamentals-of-game-theory"><span class="header-section-number">1</span> Fundamentals of Game Theory</a>
-  <ul class="collapse">
-  <li><a href="#informal-game-definition" id="toc-informal-game-definition" class="nav-link" data-scroll-target="#informal-game-definition"><span class="header-section-number">1.1</span> Informal Game Definition</a></li>
-  <li><a href="#formal-game-definition" id="toc-formal-game-definition" class="nav-link" data-scroll-target="#formal-game-definition"><span class="header-section-number">1.2</span> Formal Game Definition</a></li>
-  </ul></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#normal-form-games" id="toc-normal-form-games" class="nav-link" data-scroll-target="#normal-form-games"><span class="header-section-number">2</span> Normal-form games</a></li>
+  <li><a href="#extensive-form-games" id="toc-extensive-form-games" class="nav-link" data-scroll-target="#extensive-form-games"><span class="header-section-number">3</span> Extensive-form games</a></li>
+  <li><a href="#solution-concepts" id="toc-solution-concepts" class="nav-link" data-scroll-target="#solution-concepts"><span class="header-section-number">4</span> Solution concepts</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -401,47 +401,74 @@ window.Quarto = {
 </header>
 
 
-<section id="fundamentals-of-game-theory" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Fundamentals of Game Theory</h1>
-<section id="informal-game-definition" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="informal-game-definition"><span class="header-section-number">1.1</span> Informal Game Definition</h2>
-<p>Informally, a game is a system of interacting decision making agents with conflicting aims. The flexibility of this definition has lead to a wide variety of different games depending on their underlying structure. For example, games can be:</p>
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p>Informally, a <strong>game</strong> is a system of interacting decision making agents with conflicting aims. The flexibility of this definition has led to a wide variety of games, which can be classified as:</p>
 <ul>
-<li>Cooperative or Non-cooperative</li>
-<li>Static vs Dynamic</li>
-<li>Deterministic vs Stochastic</li>
-<li>Simultaneous vs Sequential vs Continuous Time</li>
-<li>Symmetric vs Asymmetric</li>
-<li>Perfect Information vs Imperfect Information</li>
-<li>Zero-Sum vs Non-Zero-Sum</li>
+<li><strong>cooperative</strong> (players can bind themselves to mutually beneficial agreements) or <strong>non-cooperative</strong>;</li>
+<li><strong>static</strong> (one decision) or <strong>dynamic</strong> (decisions over time);</li>
+<li><strong>deterministic</strong> or <strong>stochastic</strong> (see <a href="../topics/stochastic-games.html">Stochastic Games</a>);</li>
+<li><strong>simultaneous</strong>, <strong>sequential</strong> or <strong>continuous time</strong>;</li>
+<li><strong>symmetric</strong> or <strong>asymmetric</strong>;</li>
+<li><strong>perfect</strong> or <strong>imperfect information</strong>;</li>
+<li><strong>zero-sum</strong> (<a href="the strictly competitive case, solved by the minimax">[zero-sum-games]</a>) or <strong>non-zero-sum</strong>.</li>
 </ul>
-<p>The <em>solution</em> to games from a mathematical perspective is to find <strong>equilibriums</strong>, i.e.&nbsp;states that the game will move into if left to run.</p>
+<p>The mathematical <em>solution</em> of a game is an <strong>equilibrium</strong>: a state the game settles into if left to run (see <a href="no profitable unilateral deviation;">[nash-equilibrium]</a>). The single-agent problem underlying everything here is studied in <a href="../topics/decision-theory.html">Decision Theory</a>.</p>
 </section>
-<section id="formal-game-definition" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="formal-game-definition"><span class="header-section-number">1.2</span> Formal Game Definition</h2>
-<p>Denote agents <span class="math inline">\(j\in \{ 1, \dots, J \}:=\mathcal{J}\)</span> gather in <strong>agent space</strong> <span class="math inline">\(\mathcal{J}\)</span>. The fundamental underpinnings of game theory are studied in <a href="../topics/decision-theory.html">Decision Theory</a> which involves the study of single agent decision making under uncertainty.</p>
-<div class="definition" data-title="Decision Space">
-<p>Each agent can select from set of possible <strong>strategy</strong> <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> (also called <strong>actions</strong> or <strong>decisions</strong>) called the <strong>strategy space</strong>.</p>
+<section id="normal-form-games" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="normal-form-games"><span class="header-section-number">2</span> Normal-form games</h2>
+<p>Let <span class="math inline">\(j\in\{1,\dots,J\}=:\mathcal{J}\)</span> index the agents, who form the <strong>agent space</strong> <span class="math inline">\(\mathcal{J}\)</span>.</p>
+<div class="definition" data-title="Strategy space">
+<p>Each agent <span class="math inline">\(j\)</span> selects a <strong>strategy</strong> <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> (also called an <strong>action</strong> or <strong>decision</strong>) from the <strong>strategy space</strong> <span class="math inline">\(\mathcal{S}_{j}\)</span>. The joint strategy space is the Cartesian product <span class="math inline">\(\mathcal{S}:=\mathcal{S}_{1}\times\cdots\times\mathcal{S}_{J}\)</span>, whose elements are <strong>strategy profiles</strong> <span class="math inline">\(s=(s_{j})_{j\in\mathcal{J}}\)</span>.</p>
 </div>
-<p>We denote the agent wide strategy space by the Cartesian product <span class="math inline">\(\mathcal{S}:=\mathcal{S}_{1}\times\cdots\times \mathcal{S}_{J}\)</span>. Typically strategies are driven by <strong>decision rules</strong> which are functions mapping from an observation to an appropriate strategy.</p>
-<div class="definition" data-title="Pure and Mixed Strategy">
-<p>A strategy is said to be <strong>pure</strong> if it is deterministic i.e.&nbsp;there is no randomness to the strategy. Otherwise the strategy is said to be <strong>mixed</strong>.</p>
+<p>Strategies are typically generated by <strong>decision rules</strong>, functions mapping an observation to a strategy.</p>
+<div class="definition" data-title="Pure and mixed strategies">
+<p>A strategy <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> is <strong>pure</strong> (deterministic). The <strong>simplex</strong> <span class="math inline">\(\Delta\mathcal{S}_{j}\)</span> is the set of probability distributions over <span class="math inline">\(\mathcal{S}_{j}\)</span>; a <strong>mixed strategy</strong> is an element <span class="math inline">\(\sigma_{j}\in\Delta\mathcal{S}_{j}\)</span>, and <span class="math inline">\(\sigma_{j}(s_{j})\)</span> is the probability that player <span class="math inline">\(j\)</span> plays <span class="math inline">\(s_{j}\)</span>.</p>
 </div>
-<p>All elements of the strategy spaces <span class="math inline">\(\mathcal{S}_{j}\)</span> are pure. The space of mixed strategies for agent <span class="math inline">\(j\)</span> is the simplex over <span class="math inline">\(\mathcal{S}_{j}\)</span>.</p>
-<div class="definition" data-title="Simplex">
-<p>The <strong>simplex</strong> <span class="math inline">\(\Delta \mathcal{S}_{j}\)</span> of pure decision space <span class="math inline">\(\mathcal{S}_{j}\)</span> is the <strong>set of probability distributions</strong> over <span class="math inline">\(\mathcal{S}_{j}\)</span>. A <strong>mixed strategy</strong> for player <span class="math inline">\(j\)</span> is an element <span class="math inline">\(\sigma_{j}\in\Delta\mathcal{S}_{j}\)</span> so that <span class="math inline">\(\sigma_{j}\)</span> is a probability distribution over <span class="math inline">\(\mathcal{S}_{j}\)</span>. We denote by <span class="math inline">\(\sigma(s_{j})\)</span> the probability that player <span class="math inline">\(j\)</span> employs <span class="math inline">\(s_{j}\)</span>.</p>
+<div class="example" data-title="Pure vs mixed">
+<p>In poker, a pure strategy for strong hands is “with three-of-a-kind or better go all in”. A mixed strategy is “with three-of-a-kind or better go all in 75% of the time”. The game is random in both cases, but only the second strategy is itself random.</p>
 </div>
-<p><strong>Example (Pure vs Mixed Strategy):</strong> Suppose we are playing poker and we construct a strategy on how to handle strong hands. A pure strategy could be “for 3-of-a-kind or stronger go all in”. Although the game itself is random, the strategy is deterministic, if this then that. Alternatively, a mixed strategy could be “for a 3-of-a-kind or stronger go all in 75% of the time”. Now we have introduced a stochastic component to our strategy.</p>
-<div class="definition" data-title="Utility Function">
+<div class="definition" data-title="Utility function and normal-form game">
 <p>Each agent has a <strong>utility function</strong> (also called <strong>payoff</strong> or <strong>profit</strong>) <span class="math display">\[
-U_{j}:\mathcal{S}\to \mathbb{R},
-\]</span> which describes their utility gain (or loss) based on an <strong>strategy profile</strong> <span class="math inline">\(s\in\mathcal{S}\)</span>. We denote the combined agent utility function space by the Cartesian product <span class="math inline">\(\mathcal{U}:=\prod_{j\in \mathcal{J}}U_{j}\)</span>. The game is therefore mathematically represented by the tuple <span class="math inline">\((\mathcal{J},\mathcal{S},\mathcal{U})\)</span>.</p>
+U_{j}:\mathcal{S}\to\mathbb{R},
+\]</span> giving the utility gain (or loss) for a strategy profile <span class="math inline">\(s\in\mathcal{S}\)</span>. With <span class="math inline">\(\mathcal{U}:=(U_{j})_{j\in\mathcal{J}}\)</span>, the game in <strong>normal form</strong> is the tuple <span class="math inline">\((\mathcal{J},\mathcal{S},\mathcal{U})\)</span>.</p>
 </div>
-<p>Given that the game involved only pure strategies each agent <span class="math inline">\(j\)</span> chooses strategy <span class="math inline">\(s_{j}\in\mathcal{S}_{j}\)</span> to <strong>maximize her utility</strong> <span class="math display">\[
-\max_{s_{j}\in \mathcal{S}_{j}}U_{j}(s_{j},s_{{-j}}),
-\]</span> where <span class="math inline">\(s_{-j}\)</span> denotes the strategies of all players except <span class="math inline">\(j\)</span>. For games with mixed strategies an agent chooses mixed strategy <span class="math inline">\(\sigma_{j}\in \Delta \mathcal{S}_{j}\)</span> to <strong>maximize her expected utility</strong> <span class="math display">\[
-\max_{\sigma_{j}\in \Delta\mathcal{S}_{j}}\mathbb{E}[U_{j}(s_{j},s_{-j})].
+<p>With pure strategies each agent <span class="math inline">\(j\)</span> solves <span class="math display">\[
+\max_{s_{j}\in\mathcal{S}_{j}}U_{j}(s_{j},s_{-j}),
+\]</span> where <span class="math inline">\(s_{-j}\)</span> denotes the strategies of all players except <span class="math inline">\(j\)</span>. With mixed strategies she maximizes her <strong>expected utility</strong> <span class="math display">\[
+\max_{\sigma_{j}\in\Delta\mathcal{S}_{j}}\mathbb{E}_{\sigma}[U_{j}(s_{j},s_{-j})].
 \]</span></p>
+<div class="example" data-title="Cournot game">
+<p>The canonical model of quantity competition in oligopoly. Each firm chooses a production quantity <span class="math inline">\(q_{j}\geq0\)</span> at some cost, and the market price depends on total output through an inverse demand function. It is a static non-cooperative game with continuous strategy sets whose equilibria are <a href="../topics/nash-equilibrium.html">Nash equilibria</a> in quantities.</p>
+</div>
+</section>
+<section id="extensive-form-games" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="extensive-form-games"><span class="header-section-number">3</span> Extensive-form games</h2>
+<p>In a <strong>deterministic game tree with complete information</strong> we start from a directed tree <span class="math inline">\(T\)</span> (see <a href="../topics/graph-theory.html">Graph Theory</a>) in which each non-terminal vertex is owned by a player who makes a <strong>move</strong> there.</p>
+<div class="definition" data-title="Game tree">
+<p>A game tree consists of a directed tree <span class="math inline">\(T\)</span>, a <strong>player assignment</strong> mapping each non-terminal vertex <span class="math inline">\(v\)</span> to the player controlling it, and a <strong>payoff vector</strong> (one payoff per player) at each terminal vertex. The out-edges of <span class="math inline">\(v\)</span> are the moves available to its owner, and terminal vertices represent end-of-game conditions.</p>
+</div>
+<p>Here there are <strong>no chance moves</strong> and every player knows exactly who is moving and what has been played. Such games are solved by backward induction from the terminal vertices.</p>
+</section>
+<section id="solution-concepts" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="solution-concepts"><span class="header-section-number">4</span> Solution concepts</h2>
+<p>The main solution concepts are developed in their own notes:</p>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li>theorem;</li>
+<li></li>
+</ul>
+<p>For large populations of agents, see <a href="../topics/mean-field-games.html">Mean Field Games</a>; for dynamics driven by a random state, see <a href="../topics/stochastic-games.html">Stochastic Games</a>.</p>
+</section>
+<section id="references" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="references"><span class="header-section-number">5</span> References</h2>
+<ul>
+<li>T. Basar and G. J. Olsder, <em>Dynamic Noncooperative Game Theory</em>.</li>
+<li>R. Carmona, <em>Lectures on BSDEs, Stochastic Control, and Stochastic Differential Games</em>.</li>
+<li>M. Lauriere and others, “Learning in mean field games and finite-player games” (arXiv:2106.06231).</li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -450,9 +477,9 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/decision-theory.html">Decision Theory</a></li>
+<li><a href="../topics/game-theory.html">Game Theory</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

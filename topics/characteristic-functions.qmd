@@ -1,0 +1,245 @@
+---
+id: characteristic-functions
+aliases: [characteristic-function]
+tags: []
+author: "John Robin Inston"
+date: 2026-11-06
+number-sections: true
+title: "Characteristic Functions"
+title-block-banner: false
+---
+
+## Characteristic Functions
+
+The characteristic function of a [[random-variables|random variable]] is its
+[[fourier-transform]], viewed as a function of frequency. It exists for every
+random variable, determines the distribution uniquely, turns sums of
+independent random variables into products, and is the standard tool for
+proving limit theorems such as the [[central-limit-theorem]]. It plays the role
+of the moment generating function in [[generating-functions]], without needing
+the moments to exist.
+
+## Definition
+
+:::{.definition data-title="Characteristic Function"}
+
+Let $X$ be a real-valued random variable. Its **characteristic function** is
+
+$$
+\varphi_X(t):=\mathbb{E}\left[e^{itX}\right]=\mathbb{E}[\cos(tX)]
++i\,\mathbb{E}[\sin(tX)],\qquad t\in\mathbb{R}.
+$$
+
+For a random vector $X\in\mathbb{R}^d$ the definition is
+$\varphi_X(t):=\mathbb{E}\left[e^{i\langle t,X\rangle}\right]$ for
+$t\in\mathbb{R}^d$.
+
+:::
+
+Since $|e^{itX}|=1$ the [[expectation]] always exists, which is the advantage
+over the moment generating function $\mathbb{E}[e^{tX}]$.
+
+If $X$ has density $p_X$ then
+
+$$
+\varphi_X(t)=\int_{-\infty}^\infty p_X(x)e^{itx}\,dx=\hat{p}_X(-t),
+$$
+
+where $\hat{p}_X$ is the [[fourier-transform]] with the convention
+$\hat{f}(\xi)=\int f(x)e^{-i\xi x}\,dx$. More generally, $\varphi_X$ is the
+Fourier transform of the law of $X$ (up to the sign of the argument), which
+also covers discrete and singular distributions.
+
+## Basic Properties
+
+:::{.proposition data-title="Properties of the Characteristic Function"}
+
+Let $X$ be a random variable with characteristic function $\varphi_X$. Then
+
+1. $\varphi_X(0)=1$ and $|\varphi_X(t)|\leq 1$ for all $t$.
+2. $\varphi_X$ is uniformly continuous.
+3. $\varphi_X(-t)=\overline{\varphi_X(t)}$, so $\varphi_X$ is real if and only
+   if the law of $X$ is symmetric.
+4. For $a,b\in\mathbb{R}$, $\varphi_{aX+b}(t)=e^{itb}\varphi_X(at)$.
+5. If $X,Y$ are independent then $\varphi_{X+Y}(t)=\varphi_X(t)\varphi_Y(t)$.
+
+:::
+
+:::{.proof}
+Parts 1 and 3 are immediate from the definition. For part 2,
+$|\varphi_X(t+h)-\varphi_X(t)|\leq\mathbb{E}|e^{ihX}-1|$, which does not depend
+on $t$ and tends to $0$ as $h\to 0$ by the [[dominated-convergence-theorem]].
+Part 4 is the substitution $e^{it(aX+b)}=e^{itb}e^{i(at)X}$. For part 5,
+independence gives
+
+$$
+\mathbb{E}\left[e^{it(X+Y)}\right]=\mathbb{E}\left[e^{itX}\right]
+\mathbb{E}\left[e^{itY}\right].
+$$
+:::
+
+Part 5 is the convolution theorem in disguise: the density of $X+Y$ is the
+[[convolution]] $p_X*p_Y$, and the Fourier transform maps convolution to
+multiplication.
+
+## Uniqueness and Inversion
+
+:::{.theorem data-title="Uniqueness"}
+
+If $X$ and $Y$ are random variables with $\varphi_X=\varphi_Y$, then $X$ and
+$Y$ have the same distribution.
+
+:::
+
+This is why characteristic functions can be used to identify distributions: to
+show $S\sim\mathcal{N}(\mu,\sigma^2)$ it is enough to show that $\varphi_S$ is
+the characteristic function of that distribution.
+
+:::{.theorem data-title="Inversion Formulas"}
+
+Let $X$ be a random variable with characteristic function $\varphi_X$.
+
+1. If $\varphi_X\in L^1(\mathbb{R})$ then $X$ has a bounded continuous density
+   given by
+
+   $$
+   p_X(x)=\frac{1}{2\pi}\int_{-\infty}^\infty e^{-itx}\varphi_X(t)\,dt.
+   $$
+
+2. (Gil-Pelaez) At every point $x$ where the distribution function of $X$ is
+   continuous,
+
+   $$
+   \mathbb{P}(X\leq x)=\frac{1}{2}-\frac{1}{\pi}\int_{0}^\infty
+   \frac{\operatorname{Im}\left(e^{-itx}\varphi_X(t)\right)}{t}\,dt.
+   $$
+
+:::
+
+Part 1 is the Fourier inversion theorem from [[fourier-transform]]. Part 2
+needs no integrability assumption on $\varphi_X$, and is the version used for
+numerical work.
+
+## Moments
+
+:::{.theorem data-title="Moments from the Characteristic Function"}
+
+If $\mathbb{E}|X|^n<\infty$ then $\varphi_X$ is $n$ times continuously
+differentiable and
+
+$$
+\varphi_X^{(k)}(0)=i^k\,\mathbb{E}\left[X^k\right],\qquad k=0,\dots,n.
+$$
+
+:::
+
+:::{.proof}
+Differentiating under the expectation gives
+$\varphi_X^{(k)}(t)=\mathbb{E}\left[(iX)^ke^{itX}\right]$. This is justified by
+the dominated-convergence theorem, since $|(iX)^ke^{itX}|=|X|^k$ is integrable
+for $k\leq n$. Evaluating at $t=0$ gives the result.
+:::
+
+The converse is false in general: smoothness of $\varphi_X$ at $0$ does not
+give finite moments of every order. In the other direction, a distribution with
+no moments can still have a characteristic function, as the Cauchy
+distribution shows below.
+
+## Continuity Theorem
+
+:::{.theorem data-title="Lévy Continuity Theorem"}
+
+Let $X_n$ be random variables with characteristic functions $\varphi_n$.
+
+1. If $X_n\stackrel{\mathcal{D}}{\to}X$ then $\varphi_n(t)\to\varphi_X(t)$ for
+   every $t$.
+2. If $\varphi_n(t)\to g(t)$ for every $t$ and $g$ is continuous at $0$, then
+   $g$ is the characteristic function of a random variable $X$ and
+   $X_n\stackrel{\mathcal{D}}{\to}X$.
+
+:::
+
+Convergence of characteristic functions is therefore equivalent to
+[[convergence-in-law]]. This is the [[continuity-theorem]] used to prove the
+[[central-limit-theorem]]: for independent identically distributed
+$X_j$ with mean $0$ and variance $1$, property 5 and property 4 give
+
+$$
+\varphi_{n^{-1/2}\sum_{j\leq n}X_j}(t)=\varphi_{X_1}\left(\tfrac{t}{\sqrt{n}}
+\right)^n\to e^{-t^2/2},
+$$
+
+which is the characteristic function of $\mathcal{N}(0,1)$.
+
+## Examples
+
+| Distribution                        | Characteristic function $\varphi_X(t)$ |
+|:------------------------------------|:---------------------------------------|
+| Bernoulli($p$)                      | $1-p+pe^{it}$                          |
+| Poisson($\lambda$)                  | $\exp\left(\lambda(e^{it}-1)\right)$   |
+| Uniform on $[0,1]$                  | $\frac{e^{it}-1}{it}$                  |
+| [[exponential-distribution]]($\lambda$) | $\frac{\lambda}{\lambda-it}$       |
+| [[normal-distribution]] $\mathcal{N}(\mu,\sigma^2)$ | $e^{i\mu t-\sigma^2t^2/2}$ |
+| [[cauchy-distribution]] (standard)  | $e^{-|t|}$                             |
+
+:::{.example data-title="Sums of Independent Normals"}
+
+Let $X\sim\mathcal{N}(\mu_1,\sigma_1^2)$ and $Y\sim\mathcal{N}(\mu_2,
+\sigma_2^2)$ be independent. By property 5,
+
+$$
+\varphi_{X+Y}(t)=e^{i\mu_1t-\sigma_1^2t^2/2}e^{i\mu_2t-\sigma_2^2t^2/2}
+=e^{i(\mu_1+\mu_2)t-(\sigma_1^2+\sigma_2^2)t^2/2},
+$$
+
+so by uniqueness $X+Y\sim\mathcal{N}(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$. This
+avoids computing a convolution integral.
+
+:::
+
+:::{.example data-title="Cauchy Distribution"}
+
+The standard Cauchy distribution has density $p(x)=\frac{1}{\pi(1+x^2)}$ and
+characteristic function $e^{-|t|}$, so $\varphi$ is not differentiable at $0$.
+This matches the fact that the Cauchy distribution has no mean. If
+$X_1,\dots,X_n$ are independent standard Cauchy then
+
+$$
+\varphi_{\bar{X}_n}(t)=\left(e^{-|t|/n}\right)^n=e^{-|t|},
+$$
+
+so the sample mean $\bar{X}_n$ is again standard Cauchy, and the law of large
+numbers fails.
+
+:::
+
+## Application to Option Pricing
+
+In the [[heston-model]] the density of $\log S_T$ is not known in closed form,
+but its characteristic function is, because the dynamics are affine in the
+variance process. The risk-neutral price of a European option is then
+computed from $\varphi_{\log S_T}$ using the inversion formulas above, which
+replaces a PDE solve with a one-dimensional numerical integral. See
+[[stochastic-volatility-model]].
+
+> *Note:* The characteristic function exists for every distribution, but the
+> moment generating function $\mathbb{E}[e^{tX}]$ may be infinite for all
+> $t\neq 0$. The price for this generality is complex values, and the
+> conditions in the inversion theorem.
+
+## Related Topics
+
+- [[fourier-transform]]
+- [[generating-functions]]
+- [[convolution]]
+- [[convergence-in-law]]
+- [[continuity-theorem]]
+- [[central-limit-theorem]]
+- [[normal-distribution]]
+- [[heston-model]]
+
+## References
+
+- Durrett, *Probability: Theory and Examples*, Section 3.3.
+- Billingsley, *Probability and Measure*, Section 26.
+- Williams, *Probability with Martingales*, Chapter 18.

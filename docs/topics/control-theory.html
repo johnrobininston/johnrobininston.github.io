@@ -83,6 +83,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -329,7 +358,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#control-theory" id="toc-control-theory" class="nav-link active" data-scroll-target="#control-theory"><span class="header-section-number">1</span> Control Theory</a></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#problem-formulation" id="toc-problem-formulation" class="nav-link" data-scroll-target="#problem-formulation"><span class="header-section-number">2</span> Problem formulation</a></li>
+  <li><a href="#value-function-and-dynamic-programming" id="toc-value-function-and-dynamic-programming" class="nav-link" data-scroll-target="#value-function-and-dynamic-programming"><span class="header-section-number">3</span> Value function and dynamic programming</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">4</span> Methods</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -368,41 +401,58 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="control-theory" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Control Theory</h1>
-<p><strong>Preliminaries</strong> - [[functional]] - [[legendre-transform]] - <a href="../topics/lipschitz-continuity.html">Lipschitz Continuity</a> - <a href="../topics/gradient.html">Gradient</a> - <a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a> - <a href="../topics/hamiltonian.html">Hamiltonian</a> - <a href="../topics/calculus-of-variations.html">Calculus of Variations</a> <strong>Control Theory</strong> - [[deterministic-optimal-control]] - <a href="../topics/lagrange-multiplier-method.html">Lagrange Multiplier Method</a> - <a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a> (HJE) - Stochastic Optimal Control -</p>
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p>In <strong>control theory</strong> we steer a dynamical system by choosing an input (the <strong>control</strong>) over time so as to optimize a payoff. It is an individual decision problem: there are no competing players, which distinguishes it from <a href="../topics/game-theory.html">Game Theory</a>. When the dynamics contain randomness the payoff is an expectation and we are in <a href="../topics/stochastic-control.html">Stochastic Control</a>.</p>
+<p>The central idea is that we optimize over a <em>function</em> (the control path), an infinite dimensional problem, which is why the tools come from the <a href="../topics/calculus-of-variations.html">Calculus of Variations</a> (<a href="../topics/euler-lagrange-equation.html">Euler-Lagrange Equation</a>, Hamilton’s equations, <a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a>).</p>
+</section>
+<section id="problem-formulation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="problem-formulation"><span class="header-section-number">2</span> Problem formulation</h2>
+<div class="definition" data-title="Controlled system">
+<p>Let <span class="math inline">\(A\subset\mathbb{R}^m\)</span> be a compact set of <strong>admissible control values</strong>. A <strong>control</strong> is a (measurable) function <span class="math inline">\(\alpha:[0,T]\to A\)</span>. Given <span class="math inline">\(f:\mathbb{R}^n\times A\to\mathbb{R}^n\)</span> (written <span class="math inline">\(f(x,a,t)\)</span> if it depends on time), the <strong>controlled dynamical system</strong> is <span class="math display">\[
+\begin{cases}
+\dot{x}(s)=f(x(s),\alpha(s)), &amp; s\in[t,T],\\
+x(t)=x,
+\end{cases}
+\]</span> started at time <span class="math inline">\(t\)</span> from state <span class="math inline">\(x\in\mathbb{R}^n\)</span>. It is <strong>autonomous</strong> when <span class="math inline">\(f\)</span> has no explicit time dependence.</p>
+</div>
+<p>The dynamics are Markovian: the change of state from <span class="math inline">\(s\)</span> to <span class="math inline">\(s+h\)</span> depends only on the current state <span class="math inline">\(x(s)\)</span> and current control <span class="math inline">\(\alpha(s)\)</span>, as in the action of a discrete-time Markov decision process (see <a href="../topics/markov-chains.html">Markov Chains</a>).</p>
+<div class="definition" data-title="Payoff functional">
+<p>The <strong>payoff</strong> (a <a href="../topics/calculus-of-variations.html">functional</a> of the control) is <span class="math display">\[
+P_{t,x}[\alpha]=\int_{t}^{T}r(x(s),\alpha(s))\,ds+g(x(T)),
+\]</span> where <span class="math inline">\(r\)</span> is the <strong>running payoff</strong> and <span class="math inline">\(g\)</span> the <strong>terminal payoff</strong>.</p>
+</div>
+<p>The <strong>optimal control problem</strong> is to find <span class="math inline">\(\alpha^*\)</span> with <span class="math inline">\(P_{t,x}[\alpha^*]\geq P_{t,x}[\alpha]\)</span> for every admissible <span class="math inline">\(\alpha\)</span>. In practice we require <span class="math inline">\(f\)</span>, <span class="math inline">\(r\)</span>, <span class="math inline">\(g\)</span> to be regular, e.g. <a href="../topics/lipschitz-continuity.html">Lipschitz continuous</a>, so that the ODE is well posed.</p>
+<div class="example" data-title="Staying near the origin">
+<p>An individual starts at the origin of a line and is rewarded for being close to it after one minute, while moving at speed at most 1. Then <span class="math inline">\(\dot{x}=\alpha\)</span>, <span class="math inline">\(x(0)=0\)</span>, <span class="math inline">\(A=[-1,1]\)</span>, <span class="math inline">\(r=0\)</span>, <span class="math inline">\(g(x)=-|x|\)</span>, so <span class="math inline">\(P[\alpha]=-|x(1)|\)</span> is to be maximized. The optimal strategy is <span class="math inline">\(\alpha\equiv0\)</span>.</p>
+</div>
+</section>
+<section id="value-function-and-dynamic-programming" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="value-function-and-dynamic-programming"><span class="header-section-number">3</span> Value function and dynamic programming</h2>
+<div class="definition" data-title="Value function">
+<p>The <strong>value function</strong> is the best attainable payoff from state <span class="math inline">\(x\)</span> at time <span class="math inline">\(t\)</span>: <span class="math display">\[
+u(x,t)=\sup_{\alpha}P_{t,x}[\alpha],\qquad u(x,T)=g(x).
+\]</span></p>
+</div>
+<p>The value function obeys the <a href="../topics/dynamic-programming-principle.html">Dynamic Programming Principle</a>: for <span class="math inline">\(t\le t+h\le T\)</span>, <span class="math display">\[
+u(x,t)=\sup_{\alpha}\left\{\int_{t}^{t+h}r(x(s),\alpha(s))\,ds
++u(x(t+h),t+h)\right\}.
+\]</span> Letting <span class="math inline">\(h\to0\)</span> formally yields the first-order PDE <span class="math display">\[
+-\partial_{t}u(x,t)=\sup_{a\in A}\left\{f(x,a)\cdot\nabla u(x,t)+r(x,a)\right\},
+\]</span> a <a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a> with Hamiltonian <span class="math inline">\(H(x,p)=\sup_{a}\{f(x,a)\cdot p+r(x,a)\}\)</span> (see <a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a>, <a href="../topics/gradient.html">Gradient</a>). In the stochastic case a second-order term appears, giving the <a href="../topics/hjb-equation.html">Hamilton-Jacobi-Bellman Equation</a>.</p>
+</section>
+<section id="methods" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="methods"><span class="header-section-number">4</span> Methods</h2>
 <ul>
-<li><a href="../topics/control-theory-fundamentals.html">Control Theory Fundamentals</a></li>
-<li><strong><a href="../topics/optimal-control.html">Optimal Control</a></strong>
+<li><strong>Calculus of variations / Pontryagin</strong>: necessary conditions for an optimal path via Hamilton’s equations (see <a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a>) and <a href="../topics/lagrange-multiplier-method.html">Lagrange Multiplier Method</a> for the dynamic constraint.</li>
+<li><strong>Dynamic programming</strong>: solve the Hamilton-Jacobi(-Bellman) equation for <span class="math inline">\(u\)</span>, then choose <span class="math inline">\(\alpha^*(s)\)</span> as a maximizer of the Hamiltonian along the optimal trajectory.</li>
+</ul>
+</section>
+<section id="references" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="references"><span class="header-section-number">5</span> References</h2>
 <ul>
-<li><a href="../topics/lagrange-multiplier-method.html">Lagrange Multiplier Method</a></li>
-</ul></li>
-<li><a href="../topics/calculus-of-variations.html">Calculus of Variations</a>
-<ul>
-<li><a href="../topics/euler-lagrange-equation.html">Euler-Lagrange Equation</a></li>
-</ul></li>
-<li><strong>Deterministic Control</strong>
-<ul>
-<li><a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a>
-<ul>
-<li><a href="../topics/gradient.html">Gradient</a></li>
-<li><a href="../topics/hamiltonian.html">Hamiltonian</a></li>
-</ul></li>
-</ul></li>
-<li><a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a>
-<ul>
-<li><a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a>
-<ul>
-<li><a href="../topics/hamiltonian.html">Hamiltonian</a></li>
-</ul></li>
-<li>Frenchel Conjugate</li>
-<li>Hopf-Lax Formula</li>
-</ul></li>
-<li>Optimal Control Problem
-<ul>
-<li>Lipschitz</li>
-<li></li>
-</ul></li>
+<li>L. C. Evans, <em>Partial Differential Equations</em>, Chapter 10.</li>
+<li>W. H. Fleming and R. W. Rishel, <em>Deterministic and Stochastic Optimal Control</em>.</li>
 </ul>
 
 
@@ -411,10 +461,11 @@ ul.task-list li input[type="checkbox"] {
 Backlinks
 </div>
 <ul>
-<li><a href="../topics/control-theory-fundamentals.html">Control Theory Fundamentals</a></li>
 <li><a href="../topics/euler-lagrange-equation.html">Euler-Lagrange Equation</a></li>
-<li><a href="../topics/hamiltonian.html">Hamiltonian</a></li>
+<li><a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a></li>
 <li><a href="../topics/lipschitz-continuity.html">Lipschitz Continuity</a></li>
+<li><a href="../topics/stochastic-control.html">Stochastic Control</a></li>
+<li><a href="../topics/stochastic-games.html">Stochastic Games</a></li>
 </ul>
 </div>
 </section>

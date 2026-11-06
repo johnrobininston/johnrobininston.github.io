@@ -358,16 +358,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#change-of-variables-formula" id="toc-change-of-variables-formula" class="nav-link active" data-scroll-target="#change-of-variables-formula"><span class="header-section-number">1</span> Change-of-Variables Formula</a>
-  <ul class="collapse">
-  <li><a href="#statement-deterministic-form" id="toc-statement-deterministic-form" class="nav-link" data-scroll-target="#statement-deterministic-form"><span class="header-section-number">1.1</span> Statement (Deterministic Form)</a></li>
-  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition"><span class="header-section-number">1.2</span> Intuition</a></li>
-  <li><a href="#proof-sketch" id="toc-proof-sketch" class="nav-link" data-scroll-target="#proof-sketch"><span class="header-section-number">1.3</span> Proof (Sketch)</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">1.4</span> Examples</a>
-  <ul class="collapse">
-  <li><a href="#polar-coordinates" id="toc-polar-coordinates" class="nav-link" data-scroll-target="#polar-coordinates"><span class="header-section-number">1.4.1</span> Polar Coordinates</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#statement" id="toc-statement" class="nav-link" data-scroll-target="#statement"><span class="header-section-number">2</span> Statement</a></li>
+  <li><a href="#proof-sketch" id="toc-proof-sketch" class="nav-link" data-scroll-target="#proof-sketch"><span class="header-section-number">3</span> Proof (Sketch)</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">4</span> Examples</a></li>
   </ul>
 </nav>
     </div>
@@ -406,80 +400,76 @@ window.Quarto = {
 </header>
 
 
-<section id="change-of-variables-formula" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Change-of-Variables Formula</h1>
-<p>The <strong>change-of-variables</strong> (or <strong>transformation</strong>) formula is one of the central tools in multivariate calculus and probability theory. It tells us how integrals - and in particular probability densities - transform under smooth, invertible maps.</p>
-<p>It is the multivariate analogue of the familiar one-dimensional substitution rule <span class="math display">\[
-\int_a^b f(x)\,dx = \int_{\phi(a)}^{\phi(b)} f(\phi^{-1}(y))\,\bigl|(\phi^{-1})'(y)\bigr|\,dy.
-\]</span> In higher dimensions, the derivative is replaced by the determinant of the <a href="Jacobian Matrix.md">Jacobian Matrix</a>.</p>
-<p>The change-of-variables formula is the mechanism that makes all such transformations precise: it guarantees that probability mass and integrals are preserved under smooth, invertible maps, with the Jacobian encoding how volume is distorted.</p>
-<section id="statement-deterministic-form" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="statement-deterministic-form"><span class="header-section-number">1.1</span> Statement (Deterministic Form)</h2>
-<p>Let <span class="math inline">\(U, V \subset \mathbb{R}^d\)</span> be open sets and let <span class="math display">\[
-T : U \to V
-\]</span> be a <span class="math inline">\(C^1\)</span> bijection with <span class="math inline">\(C^1\)</span> inverse. Write <span class="math inline">\(y = T(x)\)</span>.</p>
-<p>For any integrable function <span class="math inline">\(f : V \to \mathbb{R}\)</span>, <span class="math display">\[
-\int_V f(y)\,dy =
-\int_U f(T(x))\,\bigl|\det J_{T}(x)\bigr|\,dx,
-\]</span> where <span class="math inline">\(J_{T}(x)\)</span> is the <a href="Jacobian Matrix.md">Jacobian Matrix</a> of <span class="math inline">\(T\)</span> at <span class="math inline">\(x\)</span>. Equivalently, <span class="math display">\[
-\int_U g(x)\,dx = \int_V g(T^{-1}(y))\,\bigl|\det J_{T}^{-1}(y)\bigr|\,dy.
-\]</span> ## Probabilistic Form</p>
-<div class="definition" data-title="Change-of-Variable Formula (Probability)">
-<p>Let <span class="math inline">\(X\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^d\)</span> with density <span class="math inline">\(f_X\)</span>, and let <span class="math display">\[Y = T(X),\]</span>where <span class="math inline">\(T\)</span> satisfies the assumptions above. Then <span class="math inline">\(Y\)</span> has density<span class="math display">\[f_Y(y) = f_X(T^{-1}(y))\,\bigl|\det J_{T}^{-1}(y)\bigr|.\]</span>This ensures that probabilities are preserved:<span class="math display">\[\mathbb{P}(Y \in A) = \mathbb{P}(X \in T^{-1}(A)).\]</span></p>
-</div>
-</section>
-<section id="intuition" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1.2</span> Intuition</h2>
-<p>Locally, a smooth map <span class="math inline">\(T\)</span> behaves like a <strong>linear transformation</strong>: <span class="math display">\[
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p>The <strong>change-of-variables</strong> (or <strong>transformation</strong>) formula is a central tool in multivariate calculus and probability. It states how integrals - and in particular probability densities - transform under smooth, invertible maps.</p>
+<p>It is the multivariate analogue of the one-dimensional substitution rule <span class="math display">\[
+\int_a^b f(x)\,dx = \int_{\phi(a)}^{\phi(b)} f(\phi^{-1}(y))\,
+\bigl|(\phi^{-1})'(y)\bigr|\,dy.
+\]</span> In higher dimensions the derivative is replaced by the determinant of the <a href="../topics/jacobian-and-hessian.html">Jacobian matrix</a>, which encodes how volume is distorted.</p>
+<p>Locally, a smooth map <span class="math inline">\(T\)</span> behaves like a <strong>linear transformation</strong>, <span class="math display">\[
 T(x + h) \approx T(x) + J_{T}(x)h.
-\]</span> A small volume element <span class="math inline">\(dx\)</span> near <span class="math inline">\(x\)</span> is sent to a distorted parallelepiped near <span class="math inline">\(T(x)\)</span> whose volume is <span class="math display">\[
-|\det J_{T}(x)|\,dx.
-\]</span> The Jacobian determinant is precisely the <em>local volume-scaling factor</em>.</p>
+\]</span> A small volume element <span class="math inline">\(dx\)</span> near <span class="math inline">\(x\)</span> is sent to a distorted parallelepiped near <span class="math inline">\(T(x)\)</span> of volume <span class="math inline">\(|\det J_{T}(x)|\,dx\)</span>. The Jacobian determinant is the <em>local volume-scaling factor</em>.</p>
 </section>
-<section id="proof-sketch" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="proof-sketch"><span class="header-section-number">1.3</span> Proof (Sketch)</h2>
+<section id="statement" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="statement"><span class="header-section-number">2</span> Statement</h2>
+<div class="theorem" data-title="Change of Variables (Deterministic Form)">
+<p>Let <span class="math inline">\(U, V \subset \mathbb{R}^d\)</span> be open and let <span class="math inline">\(T : U \to V\)</span> be a <span class="math inline">\(C^1\)</span> bijection with <span class="math inline">\(C^1\)</span> inverse, <span class="math inline">\(y = T(x)\)</span>. Then for any integrable <span class="math inline">\(f : V \to \mathbb{R}\)</span>, <span class="math display">\[
+\int_V f(y)\,dy = \int_U f(T(x))\,\bigl|\det J_{T}(x)\bigr|\,dx,
+\]</span> where <span class="math inline">\(J_{T}(x)\)</span> is the Jacobian matrix of <span class="math inline">\(T\)</span> at <span class="math inline">\(x\)</span>. Equivalently, for integrable <span class="math inline">\(g : U \to \mathbb{R}\)</span>, <span class="math display">\[
+\int_U g(x)\,dx = \int_V g(T^{-1}(y))\,\bigl|\det J_{T^{-1}}(y)\bigr|\,dy.
+\]</span></p>
+</div>
+<div class="theorem" data-title="Change of Variables (Probabilistic Form)">
+<p>Let <span class="math inline">\(X\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^d\)</span> with density <span class="math inline">\(f_X\)</span> and let <span class="math inline">\(Y = T(X)\)</span>, where <span class="math inline">\(T\)</span> satisfies the assumptions above. Then <span class="math inline">\(Y\)</span> has density <span class="math display">\[
+f_Y(y) = f_X(T^{-1}(y))\,\bigl|\det J_{T^{-1}}(y)\bigr|.
+\]</span></p>
+</div>
+<p>This preserves probabilities: <span class="math inline">\(\mathbb{P}(Y \in A) = \mathbb{P}(X \in
+T^{-1}(A))\)</span>. See also <a href="../topics/random-variable-transformations.html">Random Variable Transformations</a>.</p>
+</section>
+<section id="proof-sketch" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="proof-sketch"><span class="header-section-number">3</span> Proof (Sketch)</h2>
 <p>We prove the deterministic version.</p>
 <ol type="1">
-<li><p><strong>Linear case.</strong> If <span class="math inline">\(T(x) = Ax\)</span> with <span class="math inline">\(A \in \mathbb{R}^{d \times d}\)</span> invertible, then for any measurable set <span class="math inline">\(E\)</span>, <span class="math display">\[\text{Vol}(A E) = |\det A|\,\text{Vol}(E).\]</span>Hence, <span class="math display">\[\int_{A U} f(y)\,dy=\int_U f(Ax)\,|\det A|\,dx,\]</span>as required.</p></li>
-<li><p><strong>Local linearization.</strong> For general <span class="math inline">\(C^1\)</span> maps, near each <span class="math inline">\(x\)</span>, <span class="math display">\[T(x+h) = T(x) + DT(x)h + o(\|h\|).\]</span>On a sufficiently fine partition of <span class="math inline">\(U\)</span> into small cells <span class="math inline">\(C_k\)</span>, <span class="math inline">\(T\)</span> is well approximated on each <span class="math inline">\(C_k\)</span> by its linearization at some point <span class="math inline">\(x_k \in C_k\)</span>.</p></li>
-<li><p><strong>Riemann sum argument.</strong> Writing the integral as a limit of Riemann sums, <span class="math display">\[\int_V f(y)\,dy \approx \sum_k f(T(x_k))\,\text{Vol}(T(C_k)) \approx \sum_k f(T(x_k))\,|\det DT(x_k)|\,\text{Vol}(C_k).\]</span>Taking the limit as the mesh goes to zero yields <span class="math display">\[\int_V f(y)\,dy=\int_U f(T(x))\,|\det DT(x)|\,dx,\]</span>as required.</p></li>
+<li><p><strong>Linear case.</strong> If <span class="math inline">\(T(x) = Ax\)</span> with <span class="math inline">\(A \in \mathbb{R}^{d \times d}\)</span> invertible, then for any measurable <span class="math inline">\(E\)</span>, <span class="math inline">\(\mathrm{Vol}(A E) = |\det A|\,\mathrm{Vol}(E)\)</span>. Hence <span class="math display">\[
+\int_{A U} f(y)\,dy=\int_U f(Ax)\,|\det A|\,dx.
+\]</span></p></li>
+<li><p><strong>Local linearisation.</strong> For general <span class="math inline">\(C^1\)</span> maps, near each <span class="math inline">\(x\)</span>, <span class="math inline">\(T(x+h) = T(x) + J_{T}(x)h + o(\lVert h\rVert)\)</span>. On a fine partition of <span class="math inline">\(U\)</span> into small cells <span class="math inline">\(C_k\)</span>, <span class="math inline">\(T\)</span> is well approximated on each <span class="math inline">\(C_k\)</span> by its linearisation at some point <span class="math inline">\(x_k \in C_k\)</span>.</p></li>
+<li><p><strong>Riemann sums.</strong> Writing the integral as a limit of Riemann sums, <span class="math display">\[
+\int_V f(y)\,dy \approx \sum_k f(T(x_k))\,\mathrm{Vol}(T(C_k))
+\approx \sum_k f(T(x_k))\,|\det J_{T}(x_k)|\,\mathrm{Vol}(C_k).
+\]</span> Letting the mesh go to zero gives the formula.</p></li>
 </ol>
 <p>A fully rigorous proof uses measure-theoretic arguments and the inverse function theorem.</p>
 </section>
-<section id="examples" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="examples"><span class="header-section-number">1.4</span> Examples</h2>
-<section id="polar-coordinates" class="level3" data-number="1.4.1">
-<h3 data-number="1.4.1" class="anchored" data-anchor-id="polar-coordinates"><span class="header-section-number">1.4.1</span> Polar Coordinates</h3>
+<section id="examples" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="examples"><span class="header-section-number">4</span> Examples</h2>
+<div class="example" data-title="Polar Coordinates">
 <p>Let <span class="math inline">\(T(r,\theta) = (r\cos\theta, r\sin\theta)\)</span>. Then <span class="math display">\[
 J_{T}(r,\theta) = \begin{pmatrix}
 \cos\theta &amp; -r\sin\theta \\
 \sin\theta &amp; r\cos\theta
-\end{pmatrix}, \qquad \det J_{T}(r,\theta) = r.
-\]</span> Hence, <span class="math display">\[
-\int_{\mathbb{R}^2} f(x,y)\,dx\,dy = \int_0^\infty \int_0^{2\pi} f(r\cos\theta, r\sin\theta)\, r\, d\theta\, dr.
-\]</span> In probability, if <span class="math inline">\((R,\Theta)\)</span> has joint density <span class="math inline">\(g(r,\theta)\)</span>, then <span class="math display">\[
-f_{X,Y}(x,y) = g(r,\theta)\,\frac{1}{r},
-\quad (x,y) = (r\cos\theta, r\sin\theta).
-\]</span> ### Linear Transformation of a Gaussian</p>
-<p>Let <span class="math inline">\(X \sim \mathcal{N}(0, I_d)\)</span> and define <span class="math inline">\(Y = AX\)</span> with <span class="math inline">\(A\)</span> invertible. Since <span class="math inline">\(T(x)=Ax\)</span>, we have <span class="math inline">\(T^{-1}(y)=A^{-1}y\)</span> and <span class="math display">\[
-|\det J_{T}^{-1}(y)| = |\det A^{-1}| = \frac{1}{|\det A|}.
-\]</span> Thus, <span class="math display">\[
+\end{pmatrix}, \qquad \det J_{T}(r,\theta) = r,
+\]</span> so <span class="math display">\[
+\int_{\mathbb{R}^2} f(x,y)\,dx\,dy = \int_0^\infty \int_0^{2\pi}
+f(r\cos\theta, r\sin\theta)\, r\, d\theta\, dr.
+\]</span> In probability, if <span class="math inline">\((R,\Theta)\)</span> has joint density <span class="math inline">\(g(r,\theta)\)</span>, then <span class="math inline">\(f_{X,Y}(x,y) = g(r,\theta)/r\)</span> at <span class="math inline">\((x,y) = (r\cos\theta, r\sin\theta)\)</span>.</p>
+</div>
+<div class="example" data-title="Linear Transformation of a Gaussian">
+<p>Let <span class="math inline">\(X \sim \mathcal{N}(0, I_d)\)</span> and <span class="math inline">\(Y = AX\)</span> with <span class="math inline">\(A\)</span> invertible. Then <span class="math inline">\(T^{-1}(y)=A^{-1}y\)</span> and <span class="math inline">\(|\det J_{T^{-1}}(y)| = 1/|\det A|\)</span>, so <span class="math display">\[
 f_Y(y) = (2\pi)^{-d/2}
-\exp\!\left(-\tfrac12 \|A^{-1}y\|^2\right)
-\frac{1}{|\det A|},
-\]</span> which is exactly the density of <span class="math inline">\(\mathcal{N}(0, AA^\top)\)</span>. ### Ratio of Two Independent Variables</p>
-<p>Let <span class="math inline">\(X,Y\)</span> be independent with joint density <span class="math inline">\(f_{X,Y}(x,y)\)</span>. Define <span class="math display">\[
-U = \frac{X}{Y}, \qquad V = Y.
-\]</span> Then <span class="math inline">\(T(x,y) = (x/y, y)\)</span> and <span class="math display">\[
-T^{-1}(u,v) = (uv, v).
-\]</span> The Jacobian of <span class="math inline">\(T^{-1}\)</span> is <span class="math display">\[
-J_{T}^{-1}(u,v) = \begin{pmatrix}
+\exp\!\left(-\tfrac12 \lVert A^{-1}y\rVert^2\right)\frac{1}{|\det A|},
+\]</span> which is exactly the density of <span class="math inline">\(\mathcal{N}(0, AA^\top)\)</span>.</p>
+</div>
+<div class="example" data-title="Ratio of Two Independent Variables">
+<p>Let <span class="math inline">\(X,Y\)</span> be independent with joint density <span class="math inline">\(f_{X,Y}\)</span>, and define <span class="math inline">\(U = X/Y\)</span>, <span class="math inline">\(V = Y\)</span>. Then <span class="math inline">\(T(x,y) = (x/y, y)\)</span> and <span class="math inline">\(T^{-1}(u,v) = (uv, v)\)</span> with <span class="math display">\[
+J_{T^{-1}}(u,v) = \begin{pmatrix}
 v &amp; u \\
 0 &amp; 1
-\end{pmatrix}, \qquad \det = v.
-\]</span> Hence, <span class="math display">\[
-f_{U,V}(u,v) = f_{X,Y}(uv, v)\,|v|.
-\]</span> Marginalizing over <span class="math inline">\(v\)</span> yields the density of <span class="math inline">\(U = X/Y\)</span>.</p>
+\end{pmatrix}, \qquad \det J_{T^{-1}} = v.
+\]</span> Hence <span class="math inline">\(f_{U,V}(u,v) = f_{X,Y}(uv, v)\,|v|\)</span>, and marginalising over <span class="math inline">\(v\)</span> gives the density of <span class="math inline">\(U = X/Y\)</span>.</p>
+</div>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -488,11 +478,11 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/expectation.html">Expectation</a></li>
+<li><a href="../topics/jacobian-and-hessian.html">Jacobian and Hessian Matrices</a></li>
 <li><a href="../topics/riemann-integral.html">Riemann Integral</a></li>
 </ul>
 </div>
-</section>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

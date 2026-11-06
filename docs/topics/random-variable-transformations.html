@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="John Robin Inston">
-<meta name="dcterms.date" content="2026-08-25">
+<meta name="dcterms.date" content="2026-09-25">
 
 <title>Random Variable Transformations – John Robin Inston</title>
 <style>
@@ -359,10 +359,13 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#fundamental-theorem" id="toc-fundamental-theorem" class="nav-link" data-scroll-target="#fundamental-theorem"><span class="header-section-number">2</span> Fundamental Theorem</a></li>
-  <li><a href="#discrete-transformations" id="toc-discrete-transformations" class="nav-link" data-scroll-target="#discrete-transformations"><span class="header-section-number">3</span> Discrete Transformations</a></li>
-  <li><a href="#continuous-transformations" id="toc-continuous-transformations" class="nav-link" data-scroll-target="#continuous-transformations"><span class="header-section-number">4</span> Continuous Transformations</a></li>
-  <li><a href="#the-probability-transform" id="toc-the-probability-transform" class="nav-link" data-scroll-target="#the-probability-transform"><span class="header-section-number">5</span> The Probability Transform</a></li>
+  <li><a href="#fundamental-theorem" id="toc-fundamental-theorem" class="nav-link" data-scroll-target="#fundamental-theorem"><span class="header-section-number">2</span> Fundamental theorem</a></li>
+  <li><a href="#distribution-of-the-transformed-variable" id="toc-distribution-of-the-transformed-variable" class="nav-link" data-scroll-target="#distribution-of-the-transformed-variable"><span class="header-section-number">3</span> Distribution of the transformed variable</a>
+  <ul class="collapse">
+  <li><a href="#discrete-transformations" id="toc-discrete-transformations" class="nav-link" data-scroll-target="#discrete-transformations"><span class="header-section-number">3.1</span> Discrete transformations</a></li>
+  <li><a href="#continuous-transformations" id="toc-continuous-transformations" class="nav-link" data-scroll-target="#continuous-transformations"><span class="header-section-number">3.2</span> Continuous transformations</a></li>
+  </ul></li>
+  <li><a href="#the-probability-integral-transform" id="toc-the-probability-integral-transform" class="nav-link" data-scroll-target="#the-probability-integral-transform"><span class="header-section-number">4</span> The probability integral transform</a></li>
   </ul>
 </nav>
     </div>
@@ -389,7 +392,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 25, 2026</p>
+      <p class="date">September 25, 2026</p>
     </div>
   </div>
   
@@ -403,109 +406,71 @@ window.Quarto = {
 
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>Suppose we have some random variable <span class="math inline">\(X\)</span> with a given density function <span class="math inline">\(f_{X}\)</span>. Further consider a real valued function <span class="math inline">\(g:\mathbb{R} \to \mathbb{R}\)</span> and define the new random variable <span class="math inline">\(Y=g(X)\)</span>. This note is on the methods available for determining the properties of this new random variable, such as the expectation, the moments or the distribution.</p>
+<p>Let <span class="math inline">\(X\)</span> be a <a href="../topics/random-variables.html">random variable</a> with density <span class="math inline">\(f_{X}\)</span> (or mass function) and let <span class="math inline">\(g:\mathbb{R}\to\mathbb{R}\)</span> be a measurable function. This note covers methods for finding the properties of the new random variable <span class="math inline">\(Y=g(X)\)</span>: its expectation, moments and distribution.</p>
 </section>
 <section id="fundamental-theorem" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="fundamental-theorem"><span class="header-section-number">2</span> Fundamental Theorem</h2>
-<p>Computing the expectation of <span class="math inline">\(Y=g(X)\)</span> given the density of <span class="math inline">\(X\)</span> is simple using the following result sometimes known as the <strong>fundamental theorem</strong>.</p>
-<div class="theorem" data-title="Fundamental Theorem">
-<p>Given random variable <span class="math inline">\(X\)</span> with density <span class="math inline">\(f_{X}\)</span> and real-valued function <span class="math inline">\(g:\mathbb{R} \to \mathbb{R}\)</span> the expectation of transformed random variable <span class="math inline">\(Y = g(X)\)</span> is given by</p>
-<p><span class="math display">\[
-\mathbb{E}[Y] = \int_{\Omega}^{}{g(X)}~d{\mathbb{P}} =
-  \int_{X}^{}{g(X)\cdot f_{X}(x)}~d{x}.
+<h2 data-number="2" class="anchored" data-anchor-id="fundamental-theorem"><span class="header-section-number">2</span> Fundamental theorem</h2>
+<div class="theorem" data-title="Fundamental theorem">
+<p>Let <span class="math inline">\(X\)</span> have density <span class="math inline">\(f_{X}\)</span> and let <span class="math inline">\(g:\mathbb{R}\to\mathbb{R}\)</span> be measurable with <span class="math inline">\(g(X)\)</span> integrable. Then <span class="math inline">\(Y=g(X)\)</span> has expectation <span class="math display">\[
+\mathbb{E}[Y]=\int_{\Omega}g(X)\,d\mathbb{P}=\int_{\mathbb{R}}g(x)f_{X}(x)\,dx.
 \]</span></p>
 </div>
-<p><em>The discrete case clearly becomes a sum on the discrete support of <span class="math inline">\(X\)</span> with mass function <span class="math inline">\(p_{X}(x)\)</span>.</em></p>
-<p>We note that in general <span class="math inline">\(\mathbb{E}[g(X)]\neq g(\mathbb{E}[X])\)</span>. In fact, the only time we can guarantee equality is when <span class="math inline">\(g\)</span> is an <strong>affine function</strong>, that is can be written as a combination of a linear function and a translation.</p>
-<p>Recall from our study of <a href="../topics/real-analysis.html">Real Analysis</a>, the <strong>inverse image</strong> of real function <span class="math inline">\(g: \mathbb{R} \to \mathbb{R}\)</span> on a set <span class="math inline">\(A\)</span> is</p>
-<p><span class="math display">\[
-g^{-1}(A) := \{ x \in \mathbb{R}:g^{-1}(x) \in A \}.
-\]</span></p>
-<p>This is the same as saying that <span class="math inline">\(x \in g^{-1}(A)\)</span> if and only if <span class="math inline">\(g(x) \in A\)</span>. The inverse image has the following properties:</p>
-<ol type="1">
-<li><span class="math inline">\(g^{-1}(\mathbb{R})=\mathbb{R}\)</span>;</li>
-<li>For any set <span class="math inline">\(A\)</span>, <span class="math inline">\(g^{-1}(A^c)=g^{-1}(A)^c\)</span>; and</li>
-<li>For any collection of sets <span class="math inline">\(\{  A_{\lambda}:\lambda \in \Lambda \}\)</span> we have <span class="math inline">\(g^{-1}(\cup_{\lambda}A_{\lambda})=\cup_{\lambda}g^{-1}(A)\)</span>.</li>
-</ol>
-<p>As a result, the mapping <span class="math inline">\(\mu(A)=\mathbb{P}(X \in g^{-1}(A))\)</span> satisfies the axioms of probability and is known as the <strong>distribution</strong> of <span class="math inline">\(X\)</span> (see notes on <a href="../topics/probability-theory.html">Probability Theory</a>).</p>
+<p>In the discrete case the integral becomes a sum over the support of <span class="math inline">\(X\)</span> with mass function <span class="math inline">\(p_{X}(x)\)</span>.</p>
+<p>In general <span class="math inline">\(\mathbb{E}[g(X)]\neq g(\mathbb{E}[X])\)</span>. Equality is guaranteed for every distribution only when <span class="math inline">\(g\)</span> is an <a href="../topics/affine-function.html">Affine Function</a>, that is, a linear function plus a translation (for convex <span class="math inline">\(g\)</span> see <a href="../topics/jensen-inequality.html">Jensen Inequality</a>).</p>
 </section>
-<section id="discrete-transformations" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="discrete-transformations"><span class="header-section-number">3</span> Discrete Transformations</h2>
-<p>Assume that the random variable <span class="math inline">\(X\)</span> is discrete with probability mass function <span class="math inline">\(f_{X}(x)\)</span>. To compute the probability mass function <span class="math inline">\(f_{Y}(y)\)</span> of random variable <span class="math inline">\(Y = g(X)\)</span> we simply use</p>
-<p><span class="math display">\[
-f_{Y}(y)=\sum_{x \in g^{-1}(y)}^{}f_{X}(x).
+<section id="distribution-of-the-transformed-variable" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="distribution-of-the-transformed-variable"><span class="header-section-number">3</span> Distribution of the transformed variable</h2>
+<p>Recall that the <strong>inverse image</strong> (preimage) of a set <span class="math inline">\(A\subseteq\mathbb{R}\)</span> under <span class="math inline">\(g\)</span> is <span class="math display">\[
+g^{-1}(A):=\{x\in\mathbb{R}:g(x)\in A\},
+\]</span> see <a href="../topics/images-and-preimages.html">Images and Preimages of Functions</a>. It satisfies <span class="math inline">\(g^{-1}(\mathbb{R})=\mathbb{R}\)</span>, <span class="math inline">\(g^{-1}(A^c)=g^{-1}(A)^c\)</span> and <span class="math inline">\(g^{-1}(\bigcup_\lambda A_\lambda)=\bigcup_\lambda g^{-1}(A_\lambda)\)</span>. As a result, <span class="math inline">\(\mu(A)=\mathbb{P}(X\in g^{-1}(A))=\mathbb{P}(g(X)\in A)\)</span> satisfies the axioms of probability and is the <strong>distribution</strong> of <span class="math inline">\(Y=g(X)\)</span> (see <a href="../topics/random-variables.html">Random Variables and Distribution Functions</a> and <a href="../topics/probability-spaces.html">Probability Spaces</a>).</p>
+<section id="discrete-transformations" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="discrete-transformations"><span class="header-section-number">3.1</span> Discrete transformations</h3>
+<p>If <span class="math inline">\(X\)</span> is discrete with mass function <span class="math inline">\(f_{X}\)</span>, then <span class="math inline">\(Y=g(X)\)</span> has mass function <span class="math display">\[
+f_{Y}(y)=\sum_{x\in g^{-1}(\{y\})}f_{X}(x).
 \]</span></p>
 <div class="example">
-<p>Let <span class="math inline">\(X\sim\mathcal{P}(\lambda)\)</span> follow a <a href="../topics/poisson-distribution.html">Poisson Distribution</a> with rate parameter <span class="math inline">\(\lambda\)</span> and define the quadratic function <span class="math inline">\(Y = g(X)= X^2+7\)</span>. The support of <span class="math inline">\(X\)</span> is <span class="math inline">\(\mathbb{N}_{0}\)</span> and on this support <span class="math inline">\(g\)</span> is one-to-one and so the mass function <span class="math inline">\(f_{Y}\)</span> is given by</p>
-<p><span class="math display">\[
-f_{Y}(y)=f_{X}(g^{-1}(y))=f_{X}\left( \sqrt{  y-7 }\right) =
-  \frac{\lambda^{\sqrt{ y-7 }}e^{-\lambda}}{\left(\sqrt{ y-7 }\right)!},
-\]</span></p>
-<p>on the support <span class="math inline">\(y=\{x^2+7:x \in \mathbb{N}\}=7, 8, 11, \dots\)</span>.</p>
+<p>Let <span class="math inline">\(X\sim\mathcal{P}(\lambda)\)</span> follow a <a href="../topics/poisson-distribution.html">Poisson Distribution</a> and define <span class="math inline">\(Y=g(X)=X^2+7\)</span>. The support of <span class="math inline">\(X\)</span> is <span class="math inline">\(\mathbb{N}_{0}\)</span>, on which <span class="math inline">\(g\)</span> is one-to-one, so <span class="math display">\[
+f_{Y}(y)=f_{X}\big(\sqrt{y-7}\big)
+=\frac{\lambda^{\sqrt{y-7}}e^{-\lambda}}{\big(\sqrt{y-7}\big)!},
+\]</span> on the support <span class="math inline">\(y\in\{x^2+7:x\in\mathbb{N}_0\}=\{7,8,11,16,\dots\}\)</span>.</p>
 </div>
 </section>
-<section id="continuous-transformations" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="continuous-transformations"><span class="header-section-number">4</span> Continuous Transformations</h2>
-<p>The simplest case of transformations of continuous random variables is when the transformation function <span class="math inline">\(g\)</span> is <strong>one-to-one</strong>, i.e.&nbsp;a function is either strictly increasing or strictly decreasing. In both cases the inverse function <span class="math inline">\(g^{-1}\)</span> is also either strictly increasing or strictly decreasing respectively. We can then employ what is known as the <strong>CDF method</strong> where we can compute the CDF of <span class="math inline">\(Y = g(X)\)</span> as</p>
-<p><span class="math display">\[
-\mathbb{P}(Y \leq y)=\mathbb{P}(g(X)\leq y)
-  = \mathbb{P}(X \leq g^{-1}(y))=F_{X}(g^{-1}(y)).
+<section id="continuous-transformations" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="continuous-transformations"><span class="header-section-number">3.2</span> Continuous transformations</h3>
+<p>Suppose <span class="math inline">\(g\)</span> is <strong>one-to-one</strong>, that is strictly increasing or strictly decreasing (hence <span class="math inline">\(g^{-1}\)</span> is too). The <strong>CDF method</strong> computes, in the increasing case, <span class="math display">\[
+\mathbb{P}(Y\leq y)=\mathbb{P}(g(X)\leq y)=\mathbb{P}(X\leq g^{-1}(y))
+=F_{X}(g^{-1}(y)),
+\]</span> and in the decreasing case <span class="math inline">\(1-F_{X}(g^{-1}(y))\)</span> (for continuous <span class="math inline">\(X\)</span>). Differentiating by the chain rule, and taking the modulus to cover both cases, <span class="math display">\[
+f_{Y}(y)=f_{X}(g^{-1}(y))\left|\frac{d}{dy}g^{-1}(y)\right|.
 \]</span></p>
-<p>From this we can compute the density using the chain run</p>
-<p><span class="math display">\[
-f_{Y}(y)=f_{X}(g^{-1}(y))\cdot \left| \frac{d}{dy}g^{-1}(y) \right|,
-\]</span></p>
-<p>where we take the modulus to combine both the increasing and decreasing cases.</p>
-<p>Special care needs to be taken when the transform <span class="math inline">\(g\)</span> is not one-to-one, for example when <span class="math inline">\(g(x)=x^2\)</span> or <span class="math inline">\(g(x) =|x|\)</span> and the support of <span class="math inline">\(x\)</span> is <span class="math inline">\(\mathbb{R}\)</span>.</p>
-<p>For example, when <span class="math inline">\(g(x) = x^2\)</span> we have <span class="math inline">\(g^{-1}(x)=\sqrt{ x }\)</span> and so we have that</p>
-<p><span class="math display">\[
-F_{Y}(y)=\mathbb{P}(Y \leq y) = \mathbb{P}(X^2\leq y)
-  =\mathbb{P}(-\sqrt{y} \leq X \leq \sqrt{ y } )
-  = F_{X}(\sqrt{ y })-F_{X}(-\sqrt{ y }).
-\]</span></p>
-<p>The density is then given as</p>
-<p><span class="math display">\[
-\begin{align}
-f_{Y}(y) &amp; = f_{X}(\sqrt{ y }) \frac{d}{dy}\sqrt{ y } -
-  f_{X}(-\sqrt{ y }) \frac{d}{dy}(-\sqrt{ y })  \\
-&amp; = \frac{1}{2 \sqrt{  y }}
-  \left\{ f_{X}(\sqrt{ y })+f_{X}(\sqrt{ y }) \right\} .
-\end{align}
-\]</span></p>
-<p>Further, if the density <span class="math inline">\(f_{X}\)</span> is symmetric about the origin then we have</p>
-<p><span class="math display">\[
-f_{Y}(y)= \frac{1}{ \sqrt{ y }}f_{X}(\sqrt{ y }).
-\]</span></p>
+<p>Special care is needed when <span class="math inline">\(g\)</span> is not one-to-one, for example <span class="math inline">\(g(x)=x^2\)</span> or <span class="math inline">\(g(x)=|x|\)</span> on <span class="math inline">\(\mathbb{R}\)</span>. For <span class="math inline">\(g(x)=x^2\)</span> and <span class="math inline">\(y&gt;0\)</span>, <span class="math display">\[
+F_{Y}(y)=\mathbb{P}(X^2\leq y)=\mathbb{P}(-\sqrt{y}\leq X\leq\sqrt{y})
+=F_{X}(\sqrt{y})-F_{X}(-\sqrt{y}),
+\]</span> and differentiating gives <span class="math display">\[
+f_{Y}(y)=\frac{1}{2\sqrt{y}}\Big\{f_{X}(\sqrt{y})+f_{X}(-\sqrt{y})\Big\}.
+\]</span> If <span class="math inline">\(f_{X}\)</span> is symmetric about the origin this simplifies to <span class="math inline">\(f_{Y}(y)=\frac{1}{\sqrt{y}}f_{X}(\sqrt{y})\)</span>.</p>
 <div class="example">
-<p>Consider a random variable <span class="math inline">\(Z\)</span> following the standard <a href="../topics/normal-distribution.html">Normal Distribution</a> with density</p>
-<p><span class="math display">\[
-\phi(z)= \frac{1}{\sqrt{ 2\pi }}\exp\left( -\frac{z^2}{2} \right).
-\]</span></p>
-<p>We wish to compute the density of <span class="math inline">\(Y = Z^2\)</span>. First we note that</p>
-<p><span class="math display">\[
-\phi'(z)= \frac{1}{\sqrt{ 2\pi }}\exp\left( -\frac{z^2}{2} \right)\cdot -z
-= -z\phi(z).
-\]</span></p>
-<p>The density is therefore</p>
-<p><span class="math display">\[
-f_{Y}(y)=\frac{1}{\sqrt{ 2\pi y }}\exp\left( - \frac{y}{2} \right),
-\]</span></p>
-<p>which is a <a href="../topics/chi-squared-distribution.html">Chi-Squared Distribution</a>.</p>
+<p>Let <span class="math inline">\(Z\)</span> follow the standard <a href="../topics/normal-distribution.html">Normal Distribution</a> with density <span class="math inline">\(\phi(z)=\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\)</span>. The density is symmetric, so <span class="math inline">\(Y=Z^2\)</span> has density <span class="math display">\[
+f_{Y}(y)=\frac{1}{\sqrt{y}}\phi(\sqrt{y})=\frac{1}{\sqrt{2\pi y}}e^{-y/2},
+\qquad y&gt;0,
+\]</span> which is the <a href="../topics/chi-squared-distribution.html">Chi-Squared Distribution</a> with one degree of freedom.</p>
 </div>
 </section>
-<section id="the-probability-transform" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="the-probability-transform"><span class="header-section-number">5</span> The Probability Transform</h2>
-<p>Let <span class="math inline">\(X\)</span> be a continuous random variable whose distribution function <span class="math inline">\(F_{X}\)</span> is strictly increasing on the support of <span class="math inline">\(X\)</span>. Then <span class="math inline">\(F_{X}\)</span> is invertible.<br>
-Letting <span class="math inline">\(U=F_{X}(X)\)</span>, then for <span class="math inline">\(u \in [0,1]\)</span></p>
-<p><span class="math display">\[
-\mathbb{P}(U \leq u) = \mathbb{P}(F_{X}(X)\leq u)
-  = \mathbb{P}(U \leq F_{X}^{-1}(u))=F_{X}(F_{X}^{-1}(u))=u.
+</section>
+<section id="the-probability-integral-transform" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="the-probability-integral-transform"><span class="header-section-number">4</span> The probability integral transform</h2>
+<div class="proposition" data-title="Probability integral transform">
+<p>Let <span class="math inline">\(X\)</span> be a continuous random variable whose distribution function <span class="math inline">\(F_{X}\)</span> is strictly increasing on the support of <span class="math inline">\(X\)</span> (so <span class="math inline">\(F_X\)</span> is invertible). Then <span class="math inline">\(U=F_{X}(X)\)</span> is uniform on <span class="math inline">\([0,1]\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>For <span class="math inline">\(u\in[0,1]\)</span>, <span class="math display">\[
+\mathbb{P}(U\leq u)=\mathbb{P}(F_{X}(X)\leq u)=\mathbb{P}(X\leq F_{X}^{-1}(u))
+=F_{X}(F_{X}^{-1}(u))=u.
 \]</span></p>
-<p>In other words, <span class="math inline">\(U\)</span> is a uniform random variable on <span class="math inline">\([0,1]\)</span>. Most random number generators simulate independent copies of this random variable.<br>
-Consequently, we can simulate independent random variables having distribution function <span class="math inline">\(F_{X}\)</span> by simulating <span class="math inline">\(U\)</span>, a uniform random variable on <span class="math inline">\([0,1]\)</span> and then taking</p>
-<p><span class="math display">\[
-X= F_{X}^{-1}(U).
-\]</span></p>
+</div>
+<p>So <span class="math inline">\(U\)</span> follows the <a href="../topics/continuous-uniform-distribution.html">Continuous Uniform Distribution</a> on <span class="math inline">\([0,1]\)</span>. Most random number generators simulate independent copies of <span class="math inline">\(U\)</span>. Conversely, we can simulate a random variable with distribution function <span class="math inline">\(F_{X}\)</span> by drawing <span class="math inline">\(U\)</span> and setting <span class="math display">\[
+X=F_{X}^{-1}(U).
+\]</span> This is <strong>inverse transform sampling</strong>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -513,6 +478,7 @@ X= F_{X}^{-1}(U).
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/change-of-variables-formula.html">Change-of-Variables Formula</a></li>
 <li><a href="../topics/continuous-uniform-distribution.html">Continuous Uniform Distribution</a></li>
 <li><a href="../topics/log-normal-distribution.html">Log-Normal Distribution</a></li>
 <li><a href="../topics/normal-distribution.html">Normal Distribution</a></li>

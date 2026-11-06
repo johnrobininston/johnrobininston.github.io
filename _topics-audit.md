@@ -8,11 +8,11 @@ section at the end, which the script preserves.
 
 ## Summary
 
-- Notes: 434; hubs: 13 (analysis, algebra, calculus, probability-theory, topology, financial-models, optimization, game-theory, theoretical-statistics, statistical-models, survival-analysis, time-series-analysis, pstat100)
-- Sub-indexes (tag `hub`): financial-mathematics, stochastic-calculus, stochastic-processes
-- Not listed in any hub: 135
-- Links to missing notes: 235 targets (206 genuine, 29 malformed, 0 case mismatch)
-- Stubs: 13; thin: 124; with empty sections: 87
+- Notes: 385; hubs: 12 (analysis, algebra, calculus, probability-theory, topology, quantitative-finance, optimization, game-theory, theoretical-statistics, statistical-models, survival-analysis, time-series-analysis)
+- Sub-indexes (tag `hub`): stochastic-calculus, stochastic-processes
+- Not listed in any hub: 83
+- Links to missing notes: 153 targets (153 genuine, 0 malformed, 0 case mismatch)
+- Stubs: 8; thin: 102; with empty sections: 72
 
 ## 1. Notes not listed in a parent topic
 
@@ -21,93 +21,69 @@ linked from most. `None` means no connection to any hub.
 
 ### algebra (1)
 
-- [[affine-function]]
+- [[cholesky-decomposition]]
 
-### analysis (14)
+### analysis (5)
 
-- [[chebychev-inequality]], [[convergence-in-r-th-mean]],
-  [[convergence-of-random-variables]], [[cylinder-sets]], [[inner-product]],
-  [[markov-chain-equilibrium-convergence]], [[measure]], [[measure-theory]],
-  [[multi-level-monte-carlo-mlmc]], [[probability-measure-theory]],
-  [[rationals-are-dense-in-reals]], [[sequences]],
-  [[strong-law-of-large-numbers]], [[tightness]]
+- [[cylinder-sets]], [[measure-theory]], [[rationals-are-dense-in-reals]],
+  [[sequences]], [[tightness]]
 
-### calculus (14)
+### calculus (7)
 
-- [[control-theory]], [[control-theory-fundamentals]], [[diffusion-equation]],
-  [[dynamic-programming-principle]], [[hamiltonian]],
-  [[hamiltonian-mechanics]], [[lagrangian]], [[lagrangian-mechanics]],
-  [[limit-theorems]], [[optimal-control]], [[poisson-equation]],
-  [[random-processes]], [[schrodinger-equation]],
-  [[stochastic-control-theory]]
-
-### financial-models (13)
-
-- [[chapman-kolmogorov-equations]], [[cholesky-decomposition]],
-  [[doobs-submartingale-inequality]], [[gaussian-processes]],
-  [[hoeffdings-inequality]], [[index]],
-  [[markov-chain-excursions-state-visits]], [[markov-property]],
-  [[martingale-differences]], [[mathematics]], [[p-th-variation]],
-  [[transformations-of-random-variables]], [[upcrossing-inequality]]
+- [[control-theory]], [[dynamic-programming-principle]],
+  [[hamiltonian-mechanics]], [[lagrangian-mechanics]], [[limit-theorems]],
+  [[poisson-equation]], [[schrodinger-equation]]
 
 ### game-theory (1)
 
-- [[nash-equilibrium]]
+- [[graph-theory]]
 
-### probability-theory (50)
+### probability-theory (51)
 
-- [[beta-distribution]], [[binomial-distribution]], [[cauchy-distribution]],
+- [[affine-function]], [[beta-distribution]], [[binomial-distribution]],
+  [[cauchy-distribution]], [[chapman-kolmogorov-equations]],
   [[chi-squared-distribution]], [[compound-poisson-distribution]],
   [[continuous-mapping-theorem]], [[continuous-uniform-distribution]],
-  [[convergence-in-norm]], [[dirichlet-distribution]],
-  [[discrete-uniform-distribution]], [[doob-kolmogorov-inequality]],
-  [[ergodic-theorems]], [[exponential-distribution]], [[f-distribution]],
-  [[filtration]], [[first-passage-times]], [[gamma-distribution]],
-  [[geometric-distribution]], [[gumbel-distribution]],
-  [[hellys-selection-theorem]], [[ito-integral-construction]],
-  [[jump-process-fundamentals]],
+  [[convergence-of-random-variables]], [[dirichlet-distribution]],
+  [[discrete-uniform-distribution]], [[ergodic-theorems]],
+  [[exponential-distribution]], [[first-passage-times]],
+  [[gamma-distribution]], [[gaussian-processes]], [[geometric-distribution]],
+  [[gumbel-distribution]], [[hellys-selection-theorem]],
+  [[hoeffdings-inequality]], [[jump-process-fundamentals]],
   [[jump-process-generator-backwards-equations]],
   [[jump-process-stability-regularity]], [[jump-processes]],
   [[laplace-distribution]], [[law-of-iterated-logarithm]],
-  [[laws-of-large-numbers]], [[log-normal-distribution]],
-  [[lyapunov-inequality]], [[lyapunovs-inequality]],
-  [[markov-chain-passage-recurrence-times]], [[markov-process]],
-  [[maxwell-boltzmann-distribution]], [[normal-distribution]],
-  [[pareto-distribution]], [[poisson-distribution]], [[portmanteau-theorem]],
-  [[probabilities-of-inequalities]], [[prohorovs-theorem]],
-  [[random-variables-and-distribution-functions]], [[rayleigh-distribution]],
-  [[skorohods-representation-theorem]], [[stochastic-control]],
-  [[stochastic-games]], [[students-t-distribution]], [[uniform-distribution]],
-  [[walds-identity]], [[weak-laws-of-large-numbers]], [[weibull-distribution]]
+  [[log-normal-distribution]], [[lyapunov-inequality]],
+  [[markov-chain-equilibrium-convergence]],
+  [[markov-chain-excursions-state-visits]],
+  [[markov-chain-passage-recurrence-times]],
+  [[markov-chain-state-classification]],
+  [[markov-chain-stationary-distributions]],
+  [[markov-chain-statistical-inference]], [[markov-chain-time-averages]],
+  [[markov-chain-time-reversibility]], [[markov-process]],
+  [[markov-property]], [[mathematics]], [[maxwell-boltzmann-distribution]],
+  [[normal-distribution]], [[pareto-distribution]], [[poisson-distribution]],
+  [[portmanteau-theorem]], [[probabilities-of-inequalities]],
+  [[probability-measure-theory]], [[prohorovs-theorem]],
+  [[rayleigh-distribution]], [[students-t-distribution]],
+  [[weibull-distribution]]
 
-### theoretical-statistics (3)
+### statistical-models (1)
 
-- [[game-theory-fundamentals]], [[markov-chain-statistical-inference]],
-  [[multinomial-distribution]]
+- [[f-distribution]]
 
-### time-series-analysis (1)
+### theoretical-statistics (1)
 
-- [[markov-chain-stationary-distributions]]
+- [[multinomial-distribution]]
 
-### None (38)
+### None (16)
 
 - [[brents-method]], [[canonical-decomposition-theorem]],
-  [[classical-mechanics]], [[conditional-expectation-events]],
-  [[conditional-expectation-random-variables]], [[convergence-of-moments]],
-  [[deterministic-game-trees-with-complete-information]],
-  [[exploration-probability-spaces]], [[fictitious-play]],
-  [[finite-player-games]], [[game-theory-notes]],
-  [[general-equilibrium-theory]], [[geometry]], [[graph-theory]],
-  [[hamiltonian-matrix]], [[hanner-inequalities]],
-  [[heterogenous-agent-models]], [[kolmogorovs-continuity-theorem]],
-  [[kolmogorovs-maximal-inequality-for-sums]], [[lagrange-multiplier-method]],
-  [[lebesgues-dominated-convergence-theorem]], [[macroeconomics]],
-  [[markov-chain-state-classification]], [[markov-chain-time-averages]],
-  [[markov-chain-time-reversibility]], [[minimax-and-maximin]],
-  [[modulus-function]], [[monotone-class-theorem-function-spaces]],
-  [[pareto-optimal]], [[projections]], [[scheffes-theorem]],
-  [[slutskys-lemma]], [[span-and-bases]], [[stochastic-game-theory]],
-  [[theorem]], [[upcrossings]], [[zero-one-law]], [[zero-sum-games]]
+  [[classical-mechanics]], [[convergence-of-moments]],
+  [[general-equilibrium-theory]], [[geometry]], [[hanner-inequalities]],
+  [[heterogenous-agent-models]], [[macroeconomics]], [[modulus-function]],
+  [[projections]], [[scheffes-theorem]], [[slutskys-lemma]],
+  [[span-and-bases]], [[theorem]], [[zero-one-law]]
 
 ## 2. Links to notes that do not exist
 
@@ -115,112 +91,77 @@ linked from most. `None` means no connection to any hub.
 
 Sorted by number of notes linking to them.
 
-- `borel-sigma-algebra` (8): [[exploration-lebesgue-measure]], [[ito-integral]], [[ito-process]], [[measurable-function]] ...
-- `functional` (8): [[calculus-of-variations]], [[control-theory]], [[control-theory-fundamentals]], [[euler-lagrange-equation]] ...
-- `pstat274-time-series-summary-notes` (8): [[arima-processes]], [[autocovariance-and-autocorrelation-function]], [[autoregressive-processes]], [[durbin-levinson-algorithm]] ...
+- `white-noise` (5): [[arma-processes]], [[autoregressive-processes]], [[ljung-box-test]], [[moving-average-processes]] ...
+- `functional` (4): [[calculus-of-variations]], [[euler-lagrange-equation]], [[functional-analysis]], [[hamilton-jacobi-equation]]
 - `probability-measure` (4): [[dynkins-pi-lambda-theorem]], [[hellys-selection-theorem]], [[pi-system]], [[prohorovs-theorem]]
-- `put-call-parity` (4): [[carr-madan-formula]], [[european-call-option-price]], [[european-put-option-price]], [[financial-mathematics]]
-- `sigma-algebra` (4): [[exploration-lebesgue-measure]], [[generated-sigma-algebra]], [[markov-property]], [[monotone-class-theorem]]
+- `borel-sigma-algebra` (3): [[ito-process]], [[measurable-function]], [[scheffes-theorem]]
 - `characteristic-functions` (3): [[brownian-bridge]], [[central-limit-theorem]], [[probability-measure-theory]]
-- `higham-kloeden` (3): [[milstein-scheme]], [[multi-level-monte-carlo-mlmc]], [[numerical-methods-in-financial-mathematics]]
-- `legendre-transform` (3): [[control-theory]], [[hamiltonian-mechanics]], [[stochastic-control-theory]]
-- `newtonian-mechanics` (3): [[euler-lagrange-equation]], [[hamilton-jacobi-equation]], [[lagrangian-mechanics]]
 - `order` (3): [[completeness]], [[real-numbers]], [[supremum-infimum]]
-- `stochastic-process` (3): [[chapman-kolmogorov-equations]], [[derivatives-pricing]], [[filtrations-and-adapted-processes]]
-- `american-options` (2): [[financial-mathematics]], [[numerical-methods-in-financial-mathematics]]
-- `andersonstatisticalinferencemarkov1957` (2): [[markov-chain-statistical-inference]], [[markov-models]]
+- `sigma-algebra` (3): [[generated-sigma-algebra]], [[markov-property]], [[measurable-function]]
+- `stationary-processes` (3): [[autocovariance-and-autocorrelation-function]], [[moving-average-processes]], [[spectral-distributions]]
 - `antithetic-variates` (2): [[monte-carlo-variance-reduction]], [[numerical-methods-in-financial-mathematics]]
 - `archimedean-property` (2): [[rationals-are-dense-in-reals]], [[real-numbers]]
 - `axiom-of-choice` (2): [[real-analysis]], [[vitalli-non-measurability-theorem]]
 - `banarch-space` (2): [[infinitesimal-generator]], [[lp-spaces]]
 - `banarch-spaces` (2): [[functional-analysis]], [[functional-derivative]]
-- `continuous-time-markov-processes` (2): [[kolmogorov-equations]], [[markov-process]]
 - `distribution-function` (2): [[convergence-in-law]], [[probability-measure-theory]]
+- `financial-mathematics` (2): [[brownian-motion]], [[radon-nikodym-derivative]]
 - `fourier-transform` (2): [[heston-model]], [[stochastic-volatility-model]]
-- `hamilton-equation` (2): [[control-theory-fundamentals]], [[hamilton-jacobi-equation]]
-- `hamilton-jacobi-bellman-equation` (2): [[hamilton-jacobi-equation]], [[optimal-control]]
-- `khinchines-wlln` (2): [[law-of-large-numbers]], [[weak-laws-of-large-numbers]]
-- `ksendal` (2): [[heston-model]], [[ito-integral]]
-- `linear-transformation` (2): [[jacobian-and-hessian]], [[jacobian-matrix]]
-- `martingales` (2): [[optional-stopping-theorem]], [[stochastic-control]]
-- `measure-space` (2): [[measurable-function]], [[triangle-inequality]]
-- `measure-theoretic-probability` (2): [[stochastic-calculus]], [[stochastic-control]]
+- `higham-kloeden` (2): [[multi-level-monte-carlo-mlmc]], [[numerical-methods-in-financial-mathematics]]
+- `limit-order-books` (2): [[financial-markets]], [[quantitative-finance]]
 - `measure-theory-notes` (2): [[caratheodory-extension-theorem]], [[supremum-infimum]]
-- `optimal-stopping-theory` (2): [[financial-mathematics]], [[stopping-times]]
-- `optimization-theory` (2): [[financial-mathematics]], [[index]]
-- `option` (2): [[binomial-model]], [[finance-fundamentals]]
+- `newtonian-mechanics` (2): [[euler-lagrange-equation]], [[hamilton-jacobi-equation]]
 - `poisson-processes` (2): [[birth-death-processes]], [[probability-measure-theory]]
-- `pre-measure` (2): [[caratheodory-extension-theorem]], [[measure-theory]]
 - `probability-generating-functions` (2): [[compound-poisson-distribution]], [[gwb-branching-processes]]
 - `rational-numbers` (2): [[completeness]], [[real-numbers]]
-- `set-theory` (2): [[index]], [[set-theory-fundamentals]]
-- `topological-functions` (2): [[measurable-function]], [[real-analysis]]
+- `stochastic-process` (2): [[chapman-kolmogorov-equations]], [[filtrations-and-adapted-processes]]
+- `time-series` (2): [[autocovariance-and-autocorrelation-function]], [[time-series-decomposition]]
 - `tower-property` (2): [[expectation]], [[jump-process-stability-regularity]]
 - `Bayes' Theorem` (1): [[probability-theory-fundamentals]]
 - `Bayesian Inference` (1): [[probability-theory-fundamentals]]
 - `Bayesian Statistics` (1): [[probability-theory-fundamentals]]
 - `Beta Distribution` (1): [[probability-theory-fundamentals]]
-- `Bijective Function` (1): [[jacobian-and-hessian]]
 - `Binomial Distribution` (1): [[probability-theory-fundamentals]]
 - `Central Limit Theorem` (1): [[probability-theory-fundamentals]]
-- `Chain Rule` (1): [[jacobian-and-hessian]]
 - `Chi-Squared Distribution` (1): [[probability-theory-fundamentals]]
 - `Common Probability Distributions` (1): [[probability-theory-fundamentals]]
 - `Conditional Expectation` (1): [[probability-theory-fundamentals]]
-- `Continuous Functions` (1): [[jacobian-and-hessian]]
 - `De Morgan's Laws` (1): [[probability-theory-fundamentals]]
 - `Exponential Distribution` (1): [[probability-theory-fundamentals]]
 - `Gamma Distribution` (1): [[probability-theory-fundamentals]]
-- `Inverse Function Theorem` (1): [[jacobian-and-hessian]]
-- `Jacobian Matrix` (1): [[jacobian-and-hessian]]
-- `Matrix Rank` (1): [[jacobian-and-hessian]]
 - `Multinomial Distribution` (1): [[probability-theory-fundamentals]]
-- `Neighborhoods` (1): [[jacobian-and-hessian]]
 - `Normal Distribution` (1): [[probability-theory-fundamentals]]
 - `Poisson Distribution` (1): [[probability-theory-fundamentals]]
 - `Random Variables` (1): [[probability-theory-fundamentals]]
 - `Random Variables and Distribution Functions` (1): [[probability-theory-fundamentals]]
 - `Solenoid` (1): [[vector-calculus-identities]]
-- `Taylor Series` (1): [[jacobian-and-hessian]]
 - `Uniform Distribution` (1): [[probability-theory-fundamentals]]
 - `absolute-convergence` (1): [[radius-of-convergence]]
 - `absolute-value-sequence-convergence` (1): [[limit-theorems]]
 - `affine-combination` (1): [[convex-set]]
 - `affine-space` (1): [[convex-set]]
 - `algebraic-limit-theorem` (1): [[limit-theorems]]
+- `american-options` (1): [[numerical-methods-in-financial-mathematics]]
 - `ancillary-statistic` (1): [[pivotal-quantities]]
-- `arbitrage` (1): [[binomial-model]]
 - `artificial-neural-networks-ann` (1): [[hamiltonian-monte-carlo]]
-- `asian-options` (1): [[financial-mathematics]]
-- `backwards-diffusion-equation` (1): [[black-scholes-pde-bspde]]
 - `balanced-set` (1): [[convex-set]]
 - `banach-spaces` (1): [[probability-measure-theory]]
 - `banarch-tarski-theorem` (1): [[vitalli-non-measurability-theorem]]
 - `bell-numbers` (1): [[taylor-series]]
 - `beta-function` (1): [[gamma-function]]
-- `bijective-function` (1): [[jacobian-matrix]]
-- `billingsleystatisticalmethodsmarkov1961` (1): [[markov-chain-statistical-inference]]
 - `binary-operation` (1): [[groups]]
-- `binomial-tree-option-pricing` (1): [[finite-difference-fd-methods]]
 - `binomial-trinomial-trees` (1): [[geometric-brownian-motion]]
 - `black-76-model` (1): [[geometric-brownian-motion]]
 - `black-model` (1): [[geometric-brownian-motion]]
 - `black-scholes-model` (1): [[geometric-brownian-motion]]
-- `black-scholes-pde-option-pde-bspde` (1): [[derivatives-pricing]]
-- `borel-measures` (1): [[measure-theory]]
 - `borels-theorem` (1): [[power-series]]
 - `brouwers-fixed-point-theorem` (1): [[nash-equilibrium]]
 - `brownian-bridge-simulation` (1): [[brownian-bridge]]
 - `cev-model-constant-elasticity-of-variance` (1): [[geometric-brownian-motion]]
 - `cir-model` (1): [[geometric-brownian-motion]]
 - `complex-numbers` (1): [[gamma-function]]
-- `constant-elasticity-of-variance-cev-model` (1): [[local-volatility-model]]
-- `continuous-functions` (1): [[jacobian-matrix]]
 - `convergence-in-measure` (1): [[convergence-of-functions]]
 - `convex-concave-sets` (1): [[analysis]]
-- `delta-hedging` (1): [[black-scholes-pde-bspde]]
-- `derivative` (1): [[finance-fundamentals]]
-- `deterministic-optimal-control` (1): [[control-theory]]
 - `displaced-diffusion` (1): [[geometric-brownian-motion]]
 - `doob-meyer-decomposition-theorem` (1): [[doob-decomposition-theorem]]
 - `durrett-2-5-10` (1): [[brownian-bridge]]
@@ -235,124 +176,77 @@ Sorted by number of notes linking to them.
 - `extreme-point` (1): [[convex-set]]
 - `factorial-function` (1): [[gamma-function]]
 - `fisher-information` (1): [[parametric-point-estimation]]
-- `fixed-income-market` (1): [[financial-mathematics]]
 - `fixed-point-theorems` (1): [[nash-equilibrium]]
-- `fubinis-theorem` (1): [[monotone-class-theorem]]
-- `fundamental-theorem-of-asset-pricing` (1): [[risk-neutral-measure]]
 - `generalized-linear-models` (1): [[exponential-family]]
-- `gibbs-sampler` (1): [[markov-chain-monte-carlo-mcmc-methods]]
 - `glasserman` (1): [[numerical-methods-in-financial-mathematics]]
 - `greeks` (1): [[geometric-brownian-motion]]
+- `hamilton-jacobi-bellman-equation` (1): [[hamilton-jacobi-equation]]
 - `higham-kloeden-exercise-15-2` (1): [[multi-level-monte-carlo-mlmc]]
 - `higham-kloeden-exercise-15-3` (1): [[multi-level-monte-carlo-mlmc]]
 - `household-problem` (1): [[macroeconomics]]
 - `hull-white-model` (1): [[geometric-brownian-motion]]
 - `hyperbolic-partial-differential-equations` (1): [[method-of-characteristics]]
+- `instantaneous-rates` (1): [[cox-ingersoll-ross-cir-model]]
 - `integrating-factor-method` (1): [[calculus]]
-- `inverse-function-theorem` (1): [[jacobian-matrix]]
 - `isometry` (1): [[ito-process]]
 - `jump-diffusion-models-merton-model` (1): [[geometric-brownian-motion]]
 - `kakutanis-fixed-point-theorem` (1): [[nash-equilibrium]]
 - `kaplan-meier` (1): [[coxs-proportional-hazards-model]]
-- `karush-kuhn-tucker-conditions` (1): [[lagrange-multiplier-method]]
-- `kolmogorov-backward-equation` (1): [[infinitesimal-generator]]
 - `kolmogorovs-zero-one-law` (1): [[law-of-iterated-logarithm]]
 - `krusell1998` (1): [[heterogenous-agent-models]]
+- `ksendal` (1): [[heston-model]]
 - `lattice-quantum-chromodynamics` (1): [[hamiltonian-monte-carlo]]
 - `leapfrog-integrator` (1): [[hamiltonian-monte-carlo]]
 - `lebesgue-measure` (1): [[spectral-distributions]]
 - `libor-market-model` (1): [[geometric-brownian-motion]]
+- `libor-rates` (1): [[interest-rates]]
 - `linear-functional` (1): [[functional-derivative]]
 - `local-volatility-models` (1): [[geometric-brownian-motion]]
-- `lookback-options` (1): [[financial-mathematics]]
 - `mappings` (1): [[relations]]
 - `marginalization` (1): [[chapman-kolmogorov-equations]]
-- `markov-chains-1` (1): [[markov-process]]
-- `markov-decision-process` (1): [[markov-models]]
-- `markov-decision-processes` (1): [[stochastic-control]]
-- `matrix-rank` (1): [[jacobian-matrix]]
-- `mcmc-fundamentals` (1): [[markov-chain-monte-carlo-mcmc-methods]]
+- `martingales` (1): [[optional-stopping-theorem]]
 - `mean-reversion` (1): [[cox-ingersoll-ross-cir-model]]
-- `measure Theory` (1): [[probability-spaces]]
+- `measure-space` (1): [[triangle-inequality]]
+- `measure-theoretic-probability` (1): [[stochastic-calculus]]
 - `merton-jump-diffusion-model` (1): [[sde-simulation]]
-- `metric-spaces.qmd` (1): [[sequence-convergence]]
 - `monotone-functions` (1): [[sequences]]
 - `monte-carlo-simulation` (1): [[geometric-brownian-motion]]
-- `multivariate-analysis` (1): [[linear-regression]]
-- `neighborhoods` (1): [[jacobian-matrix]]
 - `norm-spaces` (1): [[km-iteration]]
-- `novikovs-condition` (1): [[risk-neutral-measure]]
+- `novikovs-condition` (1): [[risk-neutral-pricing]]
 - `numerical-underflow-and-overflow` (1): [[hidden-markov-models]]
+- `optimal-stopping-theory` (1): [[stopping-times]]
 - `parabolic-partial-differential-equations` (1): [[method-of-characteristics]]
-- `partially-observable-markov-decision-process` (1): [[markov-models]]
 - `pde-fundamentals` (1): [[calculus]]
-- `polynomial-function` (1): [[transformations-of-random-variables]]
+- `pre-measure` (1): [[caratheodory-extension-theorem]]
 - `probability-density-function` (1): [[likelihood-inference]]
 - `projection-theorem` (1): [[probability-measure-theory]]
-- `pstat10` (1): [[topics]]
-- `pstat274-time-series-analysis` (1): [[time-series-analysis]]
 - `pure-birth-process` (1): [[jump-process-stability-regularity]]
-- `real-functions` (1): [[analysis]]
 - `right-and-left-continuity` (1): [[borel-measure]]
 - `ring` (1): [[caratheodory-extension-theorem]]
 - `sabr-model` (1): [[geometric-brownian-motion]]
 - `sde-monte-carlo-methods` (1): [[option-greeks]]
-- `shapley1964` (1): [[stochastic-games]]
-- `shumway` (1): [[time-series-analysis]]
+- `set-theory` (1): [[set-theory-fundamentals]]
 - `simple-random-walk` (1): [[stopping-times]]
 - `solenoid` (1): [[divergence]]
-- `stochastic-processes.qmd` (1): [[financial-mathematics-introduction]]
 - `stochastic-volatility-models` (1): [[geometric-brownian-motion]]
 - `surrogate-methods` (1): [[numerical-methods-in-financial-mathematics]]
 - `symplectic-integrator` (1): [[hamiltonian-monte-carlo]]
-- `time-series-office-hours` (1): [[time-series-analysis]]
+- `topological-functions` (1): [[real-analysis]]
 - `topological-interior` (1): [[convex-set]]
 - `topological-vector-spaces` (1): [[lp-spaces]]
 - `total-order` (1): [[markov-property]]
-- `transition-rate-matrices` (1): [[infinitesimal-generator]]
 - `trigonometric-functions` (1): [[power-series]]
-- `trinomial-tree` (1): [[finite-difference-fd-methods]]
 - `uniform-convergence` (1): [[convergence-of-functions]]
 - `value-at-risk-var` (1): [[geometric-brownian-motion]]
 - `vector space` (1): [[eigenvectors]]
-- `vitali-non-measurability-theorem` (1): [[measure-theory]]
-- `vitali-non-measurability-theorem.qmd` (1): [[measure-theory]]
-- `volatility-index-vix` (1): [[financial-mathematics]]
+- `volatility-index-vix` (1): [[quantitative-finance]]
 - `wiener-process-brownian-motion` (1): [[walds-identity]]
 - `wilmott-howison-and-dewynne` (1): [[numerical-methods-in-financial-mathematics]]
+- `yield-curve` (1): [[interest-rates]]
 - `yule-process` (1): [[jump-process-stability-regularity]]
 
 ### Malformed links (likely pasted Obsidian paths)
 
-- `adventures-in-stochastic-processes-resnick-pdf`: [[central-limit-theorem]]
-- `bjork-pdf`: [[option-greeks]]
-- `brownian-motion-an-introduction-to-stochastic-processes-schilling-partzsch-pdf`: [[infinitesimal-generator]], [[walds-identity]]
-- `chap15-17-pdf`: [[time-series-best-linear-predictors]]
-- `files-notes-pstat213bc-lecture-notes-raya-pdf`: [[convergence-in-law]], [[convergence-of-moments]], [[doob-kolmogorov-inequality]], [[optional-stopping-theorem]], [[prohorovs-theorem]], [[uniform-integrability]]
-- `grinold-kahn-pdf`: [[portfolio-management]]
-- `introduction-to-time-series-and-forecasting-brockwell-pdf`: [[time-series-analysis]]
-- `knowledge-finance-black-scholes-equation`: [[financial-mathematics]]
-- `knowledge-mathematics-analysis-functional-analysis-metric-spaces`: [[boundary-points]], [[epsilon-ball]], [[point-set-topologies]], [[proposition-closed-sets-convergent-sequences]], [[triangle-inequality]]
-- `knowledge-mathematics-analysis-probability-theory-probability-spaces`: [[markov-property]]
-- `knowledge-mathematics-analysis-probability-theory-stochastic-processes-stochastic-processes`: [[doob-decomposition-theorem]], [[financial-mathematics]], [[mathematics]], [[p-th-variation]]
-- `knowledge-mathematics-analysis-real-analysis`: [[expectation]]
-- `learning-hamiltonian-monte-carlo-in-r-tu-et-al-2020-pdf`: [[hamiltonian-monte-carlo]]
-- `lecture-6-mc-inference-pdf`: [[markov-chain-statistical-inference]]
-- `lecture-notes-waagepetersen-2022-pdf`: [[coxs-proportional-hazards-model]]
-- `limit-theorems-pdf`: [[limit-theorems]]
-- `martingale-convergence-theorem-proof-r-isaac-pdf`: [[martingale-convergence-theorems]]
-- `martingale-convergences-mit-pdf`: [[martingale-convergence-theorems]]
-- `memory-calculus-taylor-series`: [[jacobian-matrix]], [[power-series]]
-- `multicriteria-portfolio-construction-pdf`: [[portfolio-management]]
-- `oksendal-pdf`: [[ito-process]]
-- `probability-theory-and-examples-durrett-pdf`: [[kolmogorovs-continuity-theorem]], [[probability-measure-theory]]
-- `pstat-222-option-notes-pdf`: [[option-greeks]]
-- `pstat223b-revision-notes-haosheng-pdf`: [[vasicek-model]]
-- `sequence-convergence-pdf`: [[limit-theorems]]
-- `stat331-stanford-lecture-notes-pdf`: [[coxs-proportional-hazards-model]]
-- `the-stochastic-behavior-of-commodity-prices-implications-for-valuation-and-hedging-pdf`: [[schwartz-one-factor-model]]
-- `uniform-integrability-pdf`: [[uniform-integrability]]
-- `uniform-integrability-zitkovic-2015-pdf`: [[uniform-integrability]]
 
 ### Case mismatches
 
@@ -363,119 +257,98 @@ Sorted by number of notes linking to them.
 
 Marked `*` if other notes link to them (candidates for step 4).
 
-- [[conditional-expectation-random-variables]], [[finance]]*,
-  [[finance-fundamentals]]*, [[functional-derivative]]*, [[game-theory]]*,
-  [[ho-lee-model]]*, [[lebesgues-dominated-convergence-theorem]],
-  [[limit-theorems]], [[macroeconomics]], [[milstein-method]]*,
-  [[monotone-class-theorem-function-spaces]], [[survival-analysis]]*,
-  [[theorem]]
+- [[financial-time-series]]*, [[functional-derivative]]*, [[ho-lee-model]]*,
+  [[limit-theorems]], [[macroeconomics]], [[prohorovs-theorem]]*,
+  [[survival-analysis]]*, [[theorem]]
 
 ### Thin (under 800 characters, or one section)
 
-- [[abels-theorem]], [[affine-function]], [[algebra]],
-  [[arbitrage-portfolio]], [[barrier-options]], [[bayes-theorem]],
-  [[bayesian-analysis-of-a-stochastic-volatility-model]],
-  [[bayesian-statistics]], [[binomial-model]], [[bond-market-model]],
-  [[boundary-points]], [[breeden-litzenberger-formula]], [[brents-method]],
-  [[canonical-decomposition-theorem]], [[cauchy-schwartz-inequality]],
-  [[cev-model]], [[chebychev-inequality]], [[chebyshev-inequality]],
+- [[abels-theorem]], [[active-vs-passive-management]], [[affine-function]],
+  [[algebra]], [[asset-allocation-and-diversification]], [[barrier-options]],
+  [[bayes-theorem]], [[bayesian-analysis-of-a-stochastic-volatility-model]],
+  [[bayesian-statistics]], [[behavioral-finance]], [[black-litterman-model]],
+  [[bond-market-model]], [[boundary-points]],
+  [[breeden-litzenberger-formula]], [[brents-method]],
+  [[canonical-decomposition-theorem]], [[capm-and-factor-models]],
+  [[cauchy-schwartz-inequality]], [[chebyshev-inequality]],
   [[common-probability-distributions]], [[compound-poisson-distribution]],
-  [[continuity-theorem]], [[control-theory]], [[convergence-in-norm]],
-  [[convergence-in-r-th-mean]], [[convergence-of-moments]],
-  [[convex-function]], [[convex-set]], [[convolution]],
-  [[coxs-proportional-hazards-model]], [[de-morgans-laws]],
+  [[continuity-of-real-functions]], [[continuity-theorem]],
+  [[convergence-of-moments]], [[convex-function]], [[convex-set]],
+  [[convolution]], [[coxs-proportional-hazards-model]], [[de-morgans-laws]],
   [[dealing-with-stochastic-volatility-in-time-series-using-the-r-package-stochvol]],
-  [[decision-theory]], [[dependent-mixture-models]],
-  [[deterministic-game-trees-with-complete-information]],
-  [[doob-kolmogorov-inequality]], [[eda]], [[epsilon-ball]],
-  [[european-call-option-price]], [[european-put-option-price]],
-  [[expectation-maximization-algorithm]], [[exploration-probability-spaces]],
-  [[fatou-lemma]], [[filtration]], [[finite-player-games]],
-  [[gamma-function]], [[gaussian-processes]], [[generated-sigma-algebra]],
-  [[geometric-series]], [[geometry]], [[groups]], [[hamiltonian-matrix]],
-  [[hamiltonian-mechanics]], [[hanner-inequalities]],
+  [[decision-theory]], [[dependent-mixture-models]], [[differentiability]],
+  [[eda]], [[epsilon-ball]], [[expectation-maximization-algorithm]],
+  [[fatou-lemma]], [[game-theory]], [[gamma-function]],
+  [[gaussian-processes]], [[generated-sigma-algebra]], [[geometric-series]],
+  [[geometry]], [[groups]], [[hanner-inequalities]],
   [[heavy-tailed-innovations-in-the-r-package-stochvol]], [[hilbert-spaces]],
   [[hjb-equation]], [[hoeffdings-inequality]], [[implicit-differentiation]],
-  [[importance-sampling]], [[index]], [[jensen-inequality]],
-  [[jump-processes]], [[kolmogorov-equations]],
-  [[kolmogorovs-continuity-theorem]],
+  [[importance-sampling]], [[jensen-inequality]], [[jump-processes]],
+  [[kolmogorov-equations]], [[kolmogorovs-continuity-theorem]],
   [[kolmogorovs-maximal-inequality-for-sums]], [[laplace-operator]],
-  [[laplace-transform]], [[laws-of-large-numbers]],
-  [[least-squares-estimation]], [[leibniz-integral-rule]], [[linear-algebra]],
-  [[lipschitz-continuity]], [[lyapunov-inequality]], [[lyapunovs-inequality]],
-  [[markov-chain-monte-carlo-mcmc-methods]], [[martingale-differences]],
-  [[martingale-representation-theorem]], [[martingale-theory]],
-  [[mathematics]], [[maximum-likelihood-estimation]], [[measure-theory]],
-  [[method-of-characteristics]], [[milstein-scheme]], [[mlr]],
-  [[optimization]], [[options]], [[p-th-variation]],
-  [[parametric-option-pricing]], [[pareto-optimal]], [[pi-system]],
-  [[pivotal-quantities]], [[portfolio-management]], [[portmanteau-theorem]],
-  [[probabilities-of-inequalities]], [[prohorovs-theorem]],
+  [[laplace-transform]], [[least-squares-estimation]],
+  [[leibniz-integral-rule]], [[linear-algebra]], [[lipschitz-continuity]],
+  [[lyapunov-inequality]], [[markov-chain-monte-carlo-mcmc-methods]],
+  [[martingale-differences]], [[mathematics]],
+  [[maximum-likelihood-estimation]], [[method-of-characteristics]],
+  [[optimization]], [[parametric-option-pricing]], [[pareto-optimal]],
+  [[performance-evaluation]], [[pi-system]], [[pivotal-quantities]],
+  [[portfolio-optimization]], [[portfolio-rebalancing]],
+  [[portmanteau-theorem]], [[probabilities-of-inequalities]],
   [[proposition-closed-sets-convergent-sequences]], [[python]],
   [[quasilinear-partial-differential-equations]], [[quotient-rule]],
   [[radius-of-convergence]], [[radon-nikodym-derivative]], [[random-walks]],
-  [[rationals-are-dense-in-reals]], [[scheffes-theorem]],
-  [[schwartz-one-factor-model]], [[slutskys-lemma]], [[space-time-modeling]],
-  [[squeeze-theorem]], [[statistical-models]], [[stochastic-control-theory]],
-  [[stochastic-integrals]], [[stochastic-integration-by-parts]],
-  [[strong-law-of-large-numbers]], [[theoretical-statistics]],
-  [[time-dependent-volatility-model]], [[time-series]], [[topics]],
-  [[triangle-inequality]], [[upcrossing-inequality]], [[upcrossings]],
-  [[volatility-surfaces]], [[white-noise]], [[yield-curve]], [[zero-one-law]]
+  [[rationals-are-dense-in-reals]], [[risk-return-tradeoff]],
+  [[scheffes-theorem]], [[schwartz-one-factor-model]], [[slutskys-lemma]],
+  [[space-time-modeling]], [[squeeze-theorem]], [[statistical-models]],
+  [[stochastic-integration-by-parts]], [[theoretical-statistics]],
+  [[time-dependent-volatility-model]], [[time-series-best-linear-predictors]],
+  [[topics]], [[triangle-inequality]], [[vasicek-model]],
+  [[volatility-surfaces]], [[zero-one-law]]
 
 ### Notes with empty sections
 
+- [[binomial-model]]: Constructing the Model
 - [[birth-death-processes]]: Birth-Death Processes
-- [[black-scholes-model-with-dividends]]: Intuition
 - [[calculus-of-simple-functions]]: Exponentials and Logarithms, Trigonometric Functions, Hyperbolic Functions
 - [[calculus-of-variations]]: Calculus of Variations
 - [[chain-rule]]: Chain Rule
-- [[change-of-variables]]: Examples
-- [[change-of-variables-formula]]: Examples
 - [[classical-mechanics]]: Contents, Elementary Mechanics
 - [[classification]]: Logistic Regression in Practice, Decision Trees, Fitting and visualising the decision tree, Random Forests, Fitting a random forest, Comparing All Three Classifiers
-- [[control-theory-fundamentals]]: Control Theory Fundamentals
 - [[convergence-in-law]]: Prohorov's Theorem
 - [[convergence-of-random-variables]]: Mutual Convergence
 - [[data-science-fundamentals]]: Data Science
 - [[data-structure]]: Data in Python, Pandas DataFrames, Loading Data Files, DataFrame Basics, Data Structure, Tidy Data
 - [[data-visualization]]: Exploratory Data Analysis, Visualization Libraries, More Advanced Visualizations, Multiplotting
 - [[deep-generative-modeling]]: Deep Generative Modeling, Introduction to Deep Generative Modeling, Energy (Score) Based Models, Denoising Score Matching
-- [[diffusion-equation]]: Derivation, Solutions
+- [[derivatives]]: Types of Derivatives
 - [[dynamic-programming-principle]]: Two Approaches to Dynamic Programming, Classic Examples, Common DP Categories
 - [[european-options]]: Pricing European Options
 - [[exponential-family]]: Key Properties, Common Examples
 - [[fictitious-play]]: Convergence Results, Key Concepts
-- [[finite-difference-fd-methods]]: Finite Difference Method Applications
 - [[first-passage-times]]: Examples
 - [[fokker-planck-equation]]: Fokker-Planck Equation
 - [[functional-analysis]]: Functional Analysis
-- [[game-theory-fundamentals]]: Fundamentals of Game Theory
-- [[game-theory-notes]]: Game Theory, Zero-Sum Games
 - [[geometric-brownian-motion]]: Variants of Geometric Brownian Motion, Related Financial Models & Topics
 - [[geometric-series]]: Geometric Series
 - [[glm]]: Identity (Normal), Logit (Bernoulli), References
 - [[gradient]]: Gradient Results
 - [[graph-theory]]: Graph Theory
 - [[hamilton-jacobi-equation]]: Hamilton-Jacobi Equation
-- [[heat-equation]]: Solutions
-- [[hessian-matrix]]: Hessian Matrix, Applications
+- [[heat-equation]]: Derivation, Solutions
 - [[heston-model]]: Heston Model Simulation, Relevant Literature
 - [[hidden-markov-models]]: Hidden Markov Models, Forward-Backward Smoothing
 - [[ito-process]]: Itô Process, Itô Integral, Itô Integral Properties
-- [[jacobian-and-hessian]]: Jacobian Matrix, Applications
-- [[jacobian-matrix]]: Jacobian Matrix
 - [[kolmogorov-equations]]: Kolmogorov Forward Equation
-- [[lagrangian]]: Lagrangian
 - [[laplace-equation]]: Properties of Harmonic Functions, Boundary Value Problems
 - [[lebesgue-integral]]: Constructing the Lebesgue Integral
 - [[leibniz-integral-rule]]: Leibniz Integral Rule
 - [[limsup-liminf]]: Equivalent Ways to Think About Limsup & Liminf, Basic Inequalities and Identities
 - [[logistic-regression]]: References
 - [[markov-chain-passage-recurrence-times]]: Markov Chain Passage Time Probability Examples
-- [[markov-chains]]: Markov Chains, MC Classification, Limiting Distributions
-- [[markov-models]]: Markov Models, Markov Chain Likelihood Inference
+- [[markov-chain-statistical-inference]]: Several observations (Anderson and Goodman)
 - [[matrices]]: Special Matrices, Rank and Invertibility
+- [[mean-field-games]]: Mean Field Game
 - [[optional-stopping-theorem]]: Technical Development
 - [[ordinary-differential-equations]]: Riccati Equations, Higher-Order ODEs
 - [[ornstein-uhlenbeck-process]]: Solution
@@ -489,7 +362,6 @@ Marked `*` if other notes link to them (candidates for step 4).
 - [[probability-theory]]: Topics
 - [[python]]: Python
 - [[python-fundamentals]]: Installing VS Code, Installing Python, Windows
-- [[random-processes]]: Random Processes, Probability Generating Functions
 - [[random-walks]]: Random Walks, 
 - [[real-analysis]]: Preliminary Material, Lebesgue Integrals, Integral Construction
 - [[regularization]]: Cross-Validation, Train-test split, Fitting Ridge, Lasso, and Elastic Net, Choosing $\lambda$ by cross-validation
@@ -498,13 +370,9 @@ Marked `*` if other notes link to them (candidates for step 4).
 - [[schrodinger-equation]]: Stationary States, The Free Particle
 - [[sde-simulation]]: SDE Simulation Error, SDE Simulation Examples
 - [[sequences]]: Sequences
-- [[slr]]: Regression
 - [[span-and-bases]]: Span and Basis
 - [[statistics]]: Introduction to Statistical Inference, Sampling Distributions and the CLT, Point Estimation, Maximum Likelihood Estimation, Confidence Intervals, Hypothesis Testing
-- [[stochastic-game-theory]]: Finite Player Games, Discrete Time
-- [[stochastic-processes]]: Stochastic Process as a Random Function
 - [[taylor-series]]: Taylor Series Examples
-- [[time-series-analysis]]: Topics
 - [[transport-equation]]: Generalizations
 - [[uniform-integrability]]: Uniform Integrability Examples
 - [[vasicek-model]]: Comments
@@ -517,9 +385,8 @@ Marked `*` if other notes link to them (candidates for step 4).
 
 Template: `_templates/wip-note.qmd`. Stubs with inbound links:
 
-- [[game-theory]] (3), [[ho-lee-model]] (3), [[finance-fundamentals]] (2),
-  [[functional-derivative]] (2), [[milstein-method]] (2),
-  [[survival-analysis]] (2), [[finance]] (1)
+- [[financial-time-series]] (2), [[functional-derivative]] (2),
+  [[ho-lee-model]] (2), [[prohorovs-theorem]] (2), [[survival-analysis]] (1)
 
 ## Decisions / notes
 

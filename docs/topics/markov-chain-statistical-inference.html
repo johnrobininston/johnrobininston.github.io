@@ -358,7 +358,14 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#markov-chain-statistical-inference" id="toc-markov-chain-statistical-inference" class="nav-link active" data-scroll-target="#markov-chain-statistical-inference"><span class="header-section-number">1</span> Markov Chain Statistical Inference</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation"><span class="header-section-number">1</span> Motivation</a></li>
+  <li><a href="#single-observation-maximum-likelihood" id="toc-single-observation-maximum-likelihood" class="nav-link" data-scroll-target="#single-observation-maximum-likelihood"><span class="header-section-number">2</span> Single observation: maximum likelihood</a></li>
+  <li><a href="#several-observations-anderson-and-goodman" id="toc-several-observations-anderson-and-goodman" class="nav-link" data-scroll-target="#several-observations-anderson-and-goodman"><span class="header-section-number">3</span> Several observations (Anderson and Goodman)</a>
+  <ul class="collapse">
+  <li><a href="#sufficient-statistics" id="toc-sufficient-statistics" class="nav-link" data-scroll-target="#sufficient-statistics"><span class="header-section-number">3.1</span> Sufficient statistics</a></li>
+  <li><a href="#asymptotic-behavior" id="toc-asymptotic-behavior" class="nav-link" data-scroll-target="#asymptotic-behavior"><span class="header-section-number">3.2</span> Asymptotic behavior</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -397,9 +404,31 @@ window.Quarto = {
 </header>
 
 
-<section id="markov-chain-statistical-inference" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="markov-chain-statistical-inference"><span class="header-section-number">1</span> Markov Chain Statistical Inference</h2>
-<p>In this note we summarize the statistical inference of Markov chains. We use results from several helpful notes and articles: - [[andersonstatisticalinferencemarkov1957]]; - [[billingsleystatisticalmethodsmarkov1961]]; - [[lecture-6-mc-inference-pdf]] - http://bactra.org/notebooks/inference-markov.html #### Sufficient Statistics</p>
+<section id="motivation" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1</span> Motivation</h2>
+<p>Suppose we want a Markov model for daily weather where days are wet <span class="math inline">\(0\)</span> or dry <span class="math inline">\(1\)</span>, observed as <span class="math display">\[
+\{0,0,0,1,1,1,1,0,0,1,0,0,1,0,1,1,1,0,0,0,0,1,1,1,0\}.
+\]</span> How do we estimate the transition probabilities of a suitable <a href="../topics/markov-chains.html">Markov chain</a>, how accurate are the estimates, and can we test for properties such as stationarity? The sections below answer these questions.</p>
+</section>
+<section id="single-observation-maximum-likelihood" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="single-observation-maximum-likelihood"><span class="header-section-number">2</span> Single observation: maximum likelihood</h2>
+<p>Let <span class="math inline">\(\{x_{0},\dots,x_{T}\}\)</span> be one observed path of a homogeneous chain on <span class="math inline">\(\mathcal{X}=\{1,\dots,M\}\)</span>, so there are <span class="math inline">\(M\times M\)</span> transition probabilities <span class="math inline">\(p_{i,j}\)</span> to estimate. By the finite-dimensional distribution of a Markov chain the likelihood of <span class="math inline">\(\boldsymbol{\theta}=(p_{i,j})\)</span> is <span class="math display">\[
+L(\boldsymbol{\theta})=\mu^{(0)}(x_{0})\,p_{x_{0},x_{1}}\cdots p_{x_{T-1},x_{T}}
+\propto\prod_{t=0}^{T-1}p_{x_{t},x_{t+1}}.
+\]</span> Let <span class="math inline">\(n_{i,j}\)</span> be the number of observed one-step transitions from <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span>. Then <span class="math display">\[
+L(\boldsymbol{\theta})\propto\prod_{i,j}p_{i,j}^{n_{i,j}},\qquad
+l(\boldsymbol{\theta})\propto\sum_{i,j}n_{i,j}\log p_{i,j}.
+\]</span> The constraint <span class="math inline">\(\sum_{j}p_{i,j}=1\)</span> lets us eliminate <span class="math inline">\(p_{i,1}=1-\sum_{j\ge2}p_{i,j}\)</span>, and then <span class="math display">\[
+\frac{\partial l}{\partial p_{i,j}}\propto\frac{n_{i,j}}{p_{i,j}}-\frac{n_{i,1}}{p_{i,1}}=0
+\quad\Longrightarrow\quad\frac{n_{i,j}}{n_{i,1}}=\frac{\hat{p}_{i,j}}{\hat{p}_{i,1}}
+\]</span> for all <span class="math inline">\(j\neq1\)</span>, so <span class="math inline">\(\hat{p}_{i,j}\propto n_{i,j}\)</span>, that is <span class="math display">\[
+\hat{p}_{i,j}=\frac{n_{i,j}}{\sum_{k\in\mathcal{X}}n_{i,k}}.
+\]</span></p>
+</section>
+<section id="several-observations-anderson-and-goodman" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="several-observations-anderson-and-goodman"><span class="header-section-number">3</span> Several observations (Anderson and Goodman)</h2>
+<section id="sufficient-statistics" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="sufficient-statistics"><span class="header-section-number">3.1</span> Sufficient statistics</h3>
 <p>We consider a discrete time (order 1) Markov chain <span class="math inline">\(\{ X_{t} \}_{t \in \mathbb{N}_{0}}\)</span> with countable (orderless) state space <span class="math inline">\(\mathcal{S}:=\{ 1, \dots, m \}\)</span> with transition probabilities given by <span class="math display">\[
 p_{i,j}^{(n)}(t)=\mathbb{P}(X_{t}=j|X_{t-n}=i);\qquad p_{i,j}(t)=p_{i,j}^{(1)}(t);\qquad i,j\in \mathcal{S},~t\in \mathbb{N}_{0},
 \]</span> which are summarized in the transition matrix <span class="math inline">\(P_{t}^{(n)}=(p_{i,j}^{(n)}(t))_{i,j \in \mathcal{S}}\)</span>. We say that the the chain is ergodic when all states inter-communicate and the chain is aperiodic. Further, the chain is stationary when <span class="math display">\[
@@ -427,12 +456,12 @@ n_{g,j}(t)=\sum n_{i(0),i(1), \dots, i(T)},
 \]</span> where the products in the first two lines are over all values of the <span class="math inline">\(T+1\)</span> indices, hence the set of numbers <span class="math inline">\(n_{i,j}(t)\)</span> form a set of <a href="../topics/sufficient-statistics.html">sufficient statistics</a>.</p>
 <p>For a Markov chain with stationary transition probabilities we have the stronger result that the set <span class="math inline">\(n_{i,j}=\sum_{t=1}^Tn_{i,j}(t)\)</span> form a set of sufficient statistics since we can write the above result as <span class="math display">\[
 \prod_{t=1}^T\prod_{g,j}p_{g,j}^{n_{g,i}(t)}=\prod_{i,j}p_{i,j}^{n_{i,j}}.\tag{$\star\star$}
-\]</span> For not necessarily stationary transition probabilities, <span class="math inline">\(p_{i,j}(t)\)</span> and <span class="math inline">\(n_{i,j}(t)\)</span> form a set of <a href="../topics/sufficient-statistics.html">minimal sufficient statistics</a>. #### Distribution</p>
+\]</span> For not necessarily stationary transition probabilities, <span class="math inline">\(p_{i,j}(t)\)</span> and <span class="math inline">\(n_{i,j}(t)\)</span> form a set of <a href="../topics/sufficient-statistics.html">minimal sufficient statistics</a>. ### Distribution of the counts</p>
 <p>The actual distribution of <span class="math inline">\(n_{i,j}(t)\)</span> is <span class="math inline">\((\star)\)</span> multiplied by an appropriate function of factorials as a constant of proportionality. Let <span class="math inline">\(n_{i}(t-1)=\sum_{j=1}^mn_{i,j}(t)\)</span>. Then the conditional distribution of <span class="math inline">\(n_{i,j}(t),~j\in\mathcal{S}\)</span> given <span class="math inline">\(n_{i}(t-1)\)</span> (or given <span class="math inline">\(n_{k}(s),~k\in \mathcal{S};~s = 0, \dots, t-1\)</span>) is <span class="math display">\[
 \frac{n_{i}(t-1)!}{\prod_{j=1}^mn_{i,j}(t)!}\prod_{j=1}^mp_{i,j}(t)^{n_{i,j}(t)},
 \]</span> which is the same distribution one would obtain if one had <span class="math inline">\(n_{i}(t-1)\)</span> observations on a <a href="../topics/multinomial-distribution.html">multinomial distribution</a> with probabilities <span class="math inline">\(p_{i,j}(t)\)</span> and with resulting numbers <span class="math inline">\(n_{i,j}(t)\)</span>. The distribution of <span class="math inline">\(n_{i,j}(t)\)</span> (conditional on the <span class="math inline">\(n_{i}(0)\)</span>) is <span class="math display">\[
 \prod_{t=1}^T\left\{ \prod_{i=1}^m \left[ \frac{n_{i}(t-1)!}{\prod_{j=1}^m n_{i,j}(t)!}\prod_{j=1}^m p_{i,j}(t)^{n_{i,j}(t)} \right]  \right\} .
-\]</span> #### Maximum Likelihood Estimation</p>
+\]</span> ### Maximum likelihood estimation</p>
 <p>The stationary transition probabilities <span class="math inline">\(p_{i,j}\)</span> can be estimated by maximizing the probability <span class="math inline">\((\star\star)\)</span> with respect to <span class="math inline">\(p_{i,j}\)</span> subject to the restrictions <span class="math display">\[
 \begin{cases}
 p_{i,j}\geq 0,&amp;\forall i,j\in \mathcal{S};~~\text{and} \\
@@ -446,16 +475,36 @@ p_{i,j}\geq 0,&amp;\forall i,j\in \mathcal{S};~~\text{and} \\
 <p>When the transition probabilities are not necessarily stationary, this general approach can still be applied, and the maximum likelihood estimates for the <span class="math inline">\(p_{i,j}(t)\)</span> are found to be <span class="math display">\[
 \hat{p}_{i,j}(t)=\frac{n_{i,j}(t)}{n_{i}(t-1)}=\frac{n_{i,j}(t)}{\sum_{k=1}^mn_{i,k}(t)}.
 \]</span> The same maximum likelihood estimates for the <span class="math inline">\(p_{i,j}(t)\)</span> are obtained when we consider the conditional distribution of <span class="math inline">\(n_{i,j}(t)\)</span> given <span class="math inline">\(n_{i}(t-1)\)</span> as when the joint distribution of the <span class="math inline">\(n_{i,j}(1), \dots, n_{i,j}(T)\)</span> is used. Formally, these estimates are the same as one would obtain if for each <span class="math inline">\(i\)</span> and <span class="math inline">\(t\)</span> one had <span class="math inline">\(n_{i}(t-1)\)</span> observations on a multinomial distribution with probabilities <span class="math inline">\(p_{i,j}(t)\)</span> and with resulting numbers <span class="math inline">\(n_{i,j}(t)\)</span>.</p>
-<section id="asymptotic-behavior" class="level4" data-number="1.0.1">
-<h4 data-number="1.0.1" class="anchored" data-anchor-id="asymptotic-behavior"><span class="header-section-number">1.0.1</span> Asymptotic Behavior</h4>
+</section>
+<section id="asymptotic-behavior" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="asymptotic-behavior"><span class="header-section-number">3.2</span> Asymptotic behavior</h3>
 <p>To find the asymptotic behavior of the probabilities <span class="math inline">\(p_{i,j}\)</span> we first consider the behavior of <span class="math inline">\(n_{i,j}(t)\)</span>. We shall assume that <span class="math display">\[
 \frac{n_{k}(0)}{\sum n_{j}(0)} \stackrel{\sum  n_{j}(0)\to \infty}{\to} \eta_{k}
 \]</span> where <span class="math inline">\(\eta_{k}&gt;0, ~\sum \eta_{k}=1\)</span>.</p>
 <p>For each <span class="math inline">\(i(0)\)</span>, the set <span class="math inline">\(n_{i(0), i(1), \dots, i(T)}\)</span> are multinomial variables with sample size <span class="math inline">\(n_{i(0)}(0)\)</span> and parameters <span class="math inline">\(p_{i(0),i(1)}p_{i(1)i(2)}\cdots p_{i(T-1)i(T)}\)</span> and hence are asymptotically normally distributed as the sample size increases. The <span class="math inline">\(n_{i,j}(t)\)</span> are linear combinations of these multinomial variables and hence are also asymptotically normally distributed.</p>
 <p>The transition matrix elements <span class="math inline">\((p_{i,j}^{[t]})_{i,j\in \mathcal{S}}=:P^t\)</span> denote the probability of state <span class="math inline">\(j\)</span> at time <span class="math inline">\(t\)</span> given initial state <span class="math inline">\(i\)</span>. Let <span class="math inline">\(n_{k;i,j}(t)\)</span> be the number of sequences including state <span class="math inline">\(k\)</span> at time <span class="math inline">\(0\)</span>, <span class="math inline">\(i\)</span> at time <span class="math inline">\(t-1\)</span> and <span class="math inline">\(j\)</span> at time <span class="math inline">\(t\)</span>.</p>
-
-
+<p>For <span class="math inline">\(n\)</span> individuals observed over <span class="math inline">\(T\)</span> steps, the limiting result of Anderson and Goodman is that <span class="math display">\[
+\sqrt{n}\,(\hat{p}_{i,j}-p_{i,j})\to\mathcal{N},
+\]</span> jointly normal with mean <span class="math inline">\(0\)</span>, variances <span class="math inline">\(p_{i,j}(1-p_{i,j})/\phi_{i}\)</span> and covariances <span class="math inline">\(-\delta_{i,g}\,p_{i,j}p_{g,h}/\phi_{i}\)</span>, where <span class="math inline">\(\delta_{i,g}=\mathbf{1}\{i=g\}\)</span> and <span class="math inline">\(\phi_{i}=\sum_{k}\sum_{t=1}^{T}\eta_{k}\,p^{[t-1]}_{k,i}\)</span> is the expected number of visits to <span class="math inline">\(i\)</span> per unit of initial mass (with <span class="math inline">\(\eta_{k}\)</span> the limiting initial proportions above). These give confidence intervals and the basis for likelihood-ratio and chi-squared tests of, for example, stationarity of the transition probabilities.</p>
 </section>
+</section>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
+<ol type="1">
+<li>Anderson, T. W. and Goodman, L. A. (1957). Statistical inference about Markov chains. <em>Annals of Mathematical Statistics</em>.</li>
+<li>Billingsley, P. (1961). <em>Statistical Methods in Markov Chains</em>. Annals of Mathematical Statistics.</li>
+<li><a href="http://bactra.org/notebooks/inference-markov.html">Shalizi, C. Notebooks: inference for Markov chains</a>.</li>
+</ol>
+
+
+<div id="quarto-backlinks" class="quarto-backlinks">
+<div class="quarto-backlinks__title">
+Backlinks
+</div>
+<ul>
+<li><a href="../topics/markov-chains.html">Markov Chains</a></li>
+</ul>
+</div>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

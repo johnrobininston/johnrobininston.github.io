@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Simple and multiple linear regression: model, OLS estimators, their properties, dummy variables and interactions.">
 
 <title>Linear Regression – John Robin Inston</title>
 <style>
@@ -27,6 +28,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -353,8 +389,20 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#regression-and-the-linear-model" id="toc-regression-and-the-linear-model" class="nav-link active" data-scroll-target="#regression-and-the-linear-model"><span class="header-section-number">1</span> Regression and the Linear Model</a></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="header-section-number">2</span> The Model</a></li>
+  <li><a href="#simple-linear-regression" id="toc-simple-linear-regression" class="nav-link" data-scroll-target="#simple-linear-regression"><span class="header-section-number">3</span> Simple Linear Regression</a></li>
+  <li><a href="#ols-in-general" id="toc-ols-in-general" class="nav-link" data-scroll-target="#ols-in-general"><span class="header-section-number">4</span> OLS in General</a></li>
+  <li><a href="#properties-of-the-estimators" id="toc-properties-of-the-estimators" class="nav-link" data-scroll-target="#properties-of-the-estimators"><span class="header-section-number">5</span> Properties of the Estimators</a></li>
+  <li><a href="#multiple-regression-categorical-predictors-and-interactions" id="toc-multiple-regression-categorical-predictors-and-interactions" class="nav-link" data-scroll-target="#multiple-regression-categorical-predictors-and-interactions"><span class="header-section-number">6</span> Multiple Regression: Categorical Predictors and Interactions</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -365,6 +413,11 @@ window.Quarto = {
 <h1 class="title">Linear Regression</h1>
 </div>
 
+<div>
+  <div class="description">
+    Simple and multiple linear regression: model, OLS estimators, their properties, dummy variables and interactions.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -391,23 +444,137 @@ window.Quarto = {
 </header>
 
 
-<p>Linear regression is a statistical model which estimates the linear relationship between a scalar response (dependent) variable and one or more explanatory (independent) variables. The case of one explanatory variable is called <strong>simple linear regression</strong> and for more than one is called <strong>multiple linear regression</strong>which is distinct from <strong>multivariate linear regression</strong> where multiple correlated dependent variables are predicted.</p>
-<p>In linear regression the relationships are modelled using linear predictor functions (known as linear models) whose unknown model parameters are estimated from the data. Most commonly the conditional mean of the response given the values of the predictors is assume to be an affine function of those values. Like all forms of regression analysis, linear regression focusses on the conditional probability distribution of the response given the values of the predictors, rather than on the joint probability distribution of all of these variables, which is in the domain of [[multivariate-analysis|multivariate analysis]]. #### Formulation</p>
-<p>Given a data set <span class="math inline">\(\{y_{i}, x_{i1}, ..., x_{ip}\}_{i=1}^{n}\)</span> of <span class="math inline">\(n\)</span> <strong>statistical units</strong>, a linear regression model assumes that the relationship between the response <span class="math inline">\(y\)</span> and the vector of covariates <span class="math inline">\(x\)</span> is <strong>linear</strong>. The relationship is modelled through an error variable <span class="math inline">\(\epsilon\)</span> which adds noise to the relationship.</p>
-<p>The model takes the form <span class="math display">\[
-y_i=\beta_0+\beta_{1}x_{i1}+...+\beta_{p}x_{ip}+\epsilon_i=\vec{x}^{T}_{i}\vec\beta+\epsilon_{i},\quad i=1, ..., n
-\]</span> Written in matrix form <span class="math display">\[
-\boldsymbol{y}=\boldsymbol{X\beta}+\boldsymbol{\epsilon}
-\]</span> where: <span class="math display">\[
-\boldsymbol{y}=\begin{bmatrix}y_{1}\\\vdots\\y_{n}\end{bmatrix},\quad \boldsymbol{X}=\begin{bmatrix}1&amp;x_{11}&amp;\cdots&amp;x_{1p}\\1&amp;x_{21}&amp;\cdots&amp;x_{2p}\\\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\1&amp;x_{n1}&amp;\cdots&amp;x_{np}\end{bmatrix},\quad \boldsymbol{\beta}=\begin{bmatrix}\beta_0\\\beta_1\\\vdots\\\beta_p\end{bmatrix}, \quad\boldsymbol{\epsilon} = \begin{bmatrix}\epsilon_1\\\vdots\\\epsilon_n\end{bmatrix}.
-\]</span> #### Model Assumptions</p>
-<ul>
-<li>Weak Exogeneity</li>
-<li>Linearity</li>
-<li>Constant Variance</li>
-<li>Independence of Errors</li>
-<li>Lack of Perfect Multicollinearity</li>
-</ul>
+<section id="regression-and-the-linear-model" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="regression-and-the-linear-model"><span class="header-section-number">1</span> Regression and the Linear Model</h2>
+<p>Given observations <span class="math inline">\((y_i,x_{i1},\dots,x_{ip})\)</span>, <span class="math inline">\(i=1,\dots,n\)</span>, of a scalar <strong>response</strong> (dependent variable) <span class="math inline">\(y\)</span> and <strong>covariates</strong> (explanatory variables) <span class="math inline">\(x=(x_1,\dots,x_p)\)</span>, <a href="../topics/regression-analysis.html">Regression Analysis</a> studies the <strong>conditional expectation function</strong></p>
+<p><span class="math display">\[
+\mu(x)=\mathbb{E}[Y\mid X=x].
+\]</span></p>
+<p>This function can have any shape, so it cannot be estimated without further assumptions. <strong>Linear regression</strong> assumes that <span class="math inline">\(\mu\)</span> is affine in <span class="math inline">\(x\)</span>,</p>
+<p><span class="math display">\[
+\mu(x)=\beta_0+\beta_1x_1+\dots+\beta_px_p,
+\]</span></p>
+<p>which allows closed-form parameter estimates by <strong>ordinary least squares (OLS)</strong>, see <a href="../topics/least-squares-estimation.html">Least Squares Estimation</a>. With <span class="math inline">\(p=1\)</span> it is called <strong>simple linear regression</strong> (SLR), and with <span class="math inline">\(p&gt;1\)</span> <strong>multiple linear regression</strong> (MLR). Both differ from <strong>multivariate linear regression</strong>, where several correlated responses are predicted. Regression models the conditional distribution of the response given the covariates rather than the joint distribution of all variables, which is the subject of multivariate analysis.</p>
+</section>
+<section id="the-model" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-model"><span class="header-section-number">2</span> The Model</h2>
+<p>For each statistical unit <span class="math inline">\(i=1,\dots,n\)</span>,</p>
+<p><span class="math display">\[
+y_i=\beta_0+\beta_1x_{i1}+\dots+\beta_px_{ip}+\varepsilon_i
+=\mathbf{x}_i^\top\boldsymbol{\beta}+\varepsilon_i,
+\]</span></p>
+<p>where <span class="math inline">\(\beta_0\)</span> is the <strong>intercept</strong>, <span class="math inline">\(\beta_1,\dots,\beta_p\)</span> are the <strong>slopes</strong> (the effect on <span class="math inline">\(\mu\)</span> of a unit change in <span class="math inline">\(x_j\)</span>, other covariates held fixed) and <span class="math inline">\(\varepsilon_i\)</span> is the <strong>error term</strong> that adds noise to the relationship. In matrix form</p>
+<p><span class="math display">\[
+\mathbf{y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathbf{y}=\begin{bmatrix}y_1\\\vdots\\y_n\end{bmatrix},\quad
+\mathbf{X}=\begin{bmatrix}1&amp;x_{11}&amp;\cdots&amp;x_{1p}\\
+\vdots&amp;\vdots&amp;&amp;\vdots\\1&amp;x_{n1}&amp;\cdots&amp;x_{np}\end{bmatrix},\quad
+\boldsymbol{\beta}=\begin{bmatrix}\beta_0\\\vdots\\\beta_p\end{bmatrix},\quad
+\boldsymbol{\varepsilon}=\begin{bmatrix}\varepsilon_1\\\vdots\\\varepsilon_n
+\end{bmatrix}.
+\]</span></p>
+<p>The standard assumptions are</p>
+<ol type="1">
+<li><strong>Linearity</strong> and <strong>weak exogeneity</strong>: <span class="math inline">\(\mathbb{E}[\varepsilon\mid X]=0\)</span>,</li>
+<li><strong>Constant variance</strong> (homoscedasticity): <span class="math inline">\(\mathrm{Var}(\varepsilon_i)=\sigma^2\)</span>,</li>
+<li><strong>Independence</strong> (or uncorrelatedness) of the errors,</li>
+<li><strong>No perfect multicollinearity</strong>: <span class="math inline">\(\mathbf{X}\)</span> has full column rank.</li>
+</ol>
+<p>For exact finite-sample inference one also assumes <span class="math inline">\(\boldsymbol{\varepsilon}\sim\mathcal{N}(0,\sigma^2I_n)\)</span>, see <a href="../topics/normal-distribution.html">Normal Distribution</a>.</p>
+</section>
+<section id="simple-linear-regression" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="simple-linear-regression"><span class="header-section-number">3</span> Simple Linear Regression</h2>
+<p>For <span class="math inline">\(p=1\)</span> the model is <span class="math inline">\(y_i=\beta_0+\beta_1x_i+\varepsilon_i\)</span>.</p>
+<div class="definition" data-title="OLS Estimators">
+<p>The <strong>ordinary least squares</strong> estimators minimise the residual sum of squares</p>
+<p><span class="math display">\[
+\mathrm{RSS}(\beta_0,\beta_1)=\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2.
+\]</span></p>
+</div>
+<p>Setting the partial derivatives to zero gives the <strong>normal equations</strong></p>
+<p><span class="math display">\[
+\sum_i(y_i-\beta_0-\beta_1x_i)=0,\qquad
+\sum_ix_i(y_i-\beta_0-\beta_1x_i)=0,
+\]</span></p>
+<p>with solution</p>
+<p><span class="math display">\[
+\hat\beta_1=\frac{\sum_i(x_i-\bar x)(y_i-\bar y)}{\sum_i(x_i-\bar x)^2}
+=\frac{S_{xy}}{S_{xx}},\qquad
+\hat\beta_0=\bar y-\hat\beta_1\bar x,
+\]</span></p>
+<p>where <span class="math inline">\(\bar x,\bar y\)</span> are the sample means. The fitted line passes through <span class="math inline">\((\bar x,\bar y)\)</span>, and the slope is the sample covariance of <span class="math inline">\(x,y\)</span> over the sample variance of <span class="math inline">\(x\)</span>.</p>
+</section>
+<section id="ols-in-general" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="ols-in-general"><span class="header-section-number">4</span> OLS in General</h2>
+<p>For general <span class="math inline">\(p\)</span>, minimising <span class="math inline">\(\mathrm{RSS}(\boldsymbol\beta)=\|\mathbf{y}-\mathbf{X}\boldsymbol\beta\|^2\)</span> and setting the gradient <span class="math inline">\(-2\mathbf{X}^\top(\mathbf{y}-\mathbf{X}\boldsymbol\beta)\)</span> to zero gives the normal equations <span class="math inline">\(\mathbf{X}^\top\mathbf{X}\boldsymbol\beta=
+\mathbf{X}^\top\mathbf{y}\)</span>, hence</p>
+<p><span class="math display">\[
+\hat{\boldsymbol\beta}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}.
+\]</span></p>
+<p>The matrix <span class="math inline">\(\mathbf{X}^\top\mathbf{X}\)</span> is invertible exactly when there is no perfect multicollinearity. Geometrically, the fitted values <span class="math inline">\(\hat{\mathbf{y}}=\mathbf{X}\hat{\boldsymbol\beta}=H\mathbf{y}\)</span> with <span class="math inline">\(H=\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\)</span> are the orthogonal projection of <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span> (see <a href="../topics/orthogonality-and-projections.html">Orthogonality and Projections</a>), and the residuals <span class="math inline">\(\hat{\boldsymbol\varepsilon}=\mathbf{y}-\hat{\mathbf{y}}\)</span> are orthogonal to every column of <span class="math inline">\(\mathbf{X}\)</span>. An unbiased estimator of the error variance is</p>
+<p><span class="math display">\[
+\hat\sigma^2=\frac{\mathrm{RSS}}{n-p-1}.
+\]</span></p>
+</section>
+<section id="properties-of-the-estimators" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="properties-of-the-estimators"><span class="header-section-number">5</span> Properties of the Estimators</h2>
+<div class="theorem" data-title="Gauss-Markov">
+<p>Under assumptions 1-4, <span class="math inline">\(\hat{\boldsymbol\beta}\)</span> is unbiased, <span class="math inline">\(\mathbb{E}[\hat{\boldsymbol\beta}]=\boldsymbol\beta\)</span>, with covariance matrix</p>
+<p><span class="math display">\[
+\mathrm{Var}(\hat{\boldsymbol\beta})=\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1},
+\]</span></p>
+<p>and it has the smallest covariance among all linear unbiased estimators (it is the <strong>BLUE</strong>).</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Since <span class="math inline">\(\hat{\boldsymbol\beta}=\boldsymbol\beta+(\mathbf{X}^\top\mathbf{X})^{-1}
+\mathbf{X}^\top\boldsymbol\varepsilon\)</span>, taking expectations gives unbiasedness and taking covariances gives the variance formula. For another linear unbiased estimator <span class="math inline">\(\tilde{\boldsymbol\beta}=C\mathbf{y}\)</span> write <span class="math inline">\(C=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top+D\)</span>. Unbiasedness forces <span class="math inline">\(D\mathbf{X}=0\)</span>, so <span class="math inline">\(\mathrm{Var}(\tilde{\boldsymbol\beta})=\sigma^2CC^\top
+=\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}+\sigma^2DD^\top\)</span>, and <span class="math inline">\(DD^\top\)</span> is positive semi-definite.</p>
+</div>
+<p>For SLR this gives</p>
+<p><span class="math display">\[
+\mathrm{Var}(\hat\beta_1)=\frac{\sigma^2}{S_{xx}},\qquad
+\mathrm{Var}(\hat\beta_0)=\sigma^2\left(\frac1n+\frac{\bar x^2}{S_{xx}}\right).
+\]</span></p>
+<p>If in addition the errors are normal, then <span class="math inline">\(\hat{\boldsymbol\beta}\sim
+\mathcal{N}(\boldsymbol\beta,\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1})\)</span> (it is also the maximum likelihood estimator), and <span class="math inline">\((n-p-1)\hat\sigma^2/\sigma^2\sim\chi^2_{n-p-1}\)</span> independently of <span class="math inline">\(\hat{\boldsymbol\beta}\)</span>. Each standardised coefficient <span class="math inline">\((\hat\beta_j-\beta_j)/\widehat{\mathrm{se}}(\hat\beta_j)\)</span> then follows a [[students-t-distribution|Student <span class="math inline">\(t\)</span> distribution]] with <span class="math inline">\(n-p-1\)</span> degrees of freedom, giving confidence intervals and tests, and joint hypotheses use the <a href="../topics/f-distribution.html">F-Distribution</a>.</p>
+</section>
+<section id="multiple-regression-categorical-predictors-and-interactions" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="multiple-regression-categorical-predictors-and-interactions"><span class="header-section-number">6</span> Multiple Regression: Categorical Predictors and Interactions</h2>
+<p>In MLR each slope <span class="math inline">\(\beta_j\)</span> is interpreted holding the other covariates fixed, which is why correlated covariates make estimates unstable (large <span class="math inline">\(\mathrm{Var}(\hat\beta_j)\)</span>).</p>
+<p><strong>Dummy variables.</strong> A categorical covariate with <span class="math inline">\(L\)</span> levels is encoded by <span class="math inline">\(L-1\)</span> indicator variables <span class="math inline">\(d_\ell=\mathbb{1}\{\text{level}=\ell\}\)</span>, with one level kept as the baseline. Using all <span class="math inline">\(L\)</span> indicators together with an intercept would give perfect multicollinearity. The coefficient on <span class="math inline">\(d_\ell\)</span> is the shift in the mean response relative to the baseline level.</p>
+<p><strong>Interaction terms.</strong> To let the effect of one covariate depend on another, add their product,</p>
+<p><span class="math display">\[
+y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2+\varepsilon,
+\]</span></p>
+<p>so that the slope in <span class="math inline">\(x_1\)</span> is <span class="math inline">\(\beta_1+\beta_3x_2\)</span>. Interacting a dummy with a continuous covariate gives a separate slope for each category.</p>
+<div class="example" data-title="Fitting a Regression">
+<p>Simulate <span class="math inline">\(y=1+2x+\varepsilon\)</span> and recover the coefficients with OLS.</p>
+<div id="00df2086" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> rng.uniform(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">200</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> rng.normal(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">200</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> sm.OLS(y, sm.add_constant(x)).fit()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fit.params)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1.04711649 1.97469853]</code></pre>
+</div>
+</div>
+<p>Residual diagnostics (residuals against fitted values, normal Q-Q plot) check the constant variance, linearity and normality assumptions.</p>
+</div>
+<p>Choosing which covariates to include is the subject of <a href="../topics/model-selection.html">Model Selection</a>. Responses that are binary or counts require the generalisation to the <a href="../topics/glm.html">Generalized Linear Models</a>, for instance <a href="../topics/logistic-regression.html">Logistic Regression</a> and <a href="../topics/poisson-regression.html">Poisson Regression</a>.</p>
+</section>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<ol type="1">
+<li>Hastie, T., Tibshirani, R. and Friedman, J. (2009). <em>The Elements of Statistical Learning</em>, 2nd ed.&nbsp;Springer, Chapter 3.</li>
+<li>Wooldridge, J. M. (2019). <em>Introductory Econometrics: A Modern Approach</em>, 7th ed.&nbsp;Cengage.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -419,6 +586,7 @@ Backlinks
 <li><a href="../topics/statistical-models.html">Statistical Models</a></li>
 </ul>
 </div>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <!-- Animated Vanta.js DOTS background (light / dark). Sits behind all page

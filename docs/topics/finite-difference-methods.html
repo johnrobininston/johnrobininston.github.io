@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="Finite-difference schemes for the Black-Scholes PDE, including American options.">
 
 <title>Finite-Difference Methods – John Robin Inston</title>
 <style>
@@ -358,7 +359,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#finite-difference-methods" id="toc-finite-difference-methods" class="nav-link active" data-scroll-target="#finite-difference-methods"><span class="header-section-number">1</span> Finite-Difference Methods</a></li>
+  <li><a href="#setting" id="toc-setting" class="nav-link active" data-scroll-target="#setting"><span class="header-section-number">1</span> Setting</a></li>
+  <li><a href="#difference-quotients" id="toc-difference-quotients" class="nav-link" data-scroll-target="#difference-quotients"><span class="header-section-number">2</span> Difference Quotients</a></li>
+  <li><a href="#the-mesh" id="toc-the-mesh" class="nav-link" data-scroll-target="#the-mesh"><span class="header-section-number">3</span> The Mesh</a></li>
+  <li><a href="#explicit-scheme" id="toc-explicit-scheme" class="nav-link" data-scroll-target="#explicit-scheme"><span class="header-section-number">4</span> Explicit Scheme</a></li>
+  <li><a href="#implicit-and-crank-nicolson-schemes" id="toc-implicit-and-crank-nicolson-schemes" class="nav-link" data-scroll-target="#implicit-and-crank-nicolson-schemes"><span class="header-section-number">5</span> Implicit and Crank-Nicolson Schemes</a></li>
+  <li><a href="#american-options" id="toc-american-options" class="nav-link" data-scroll-target="#american-options"><span class="header-section-number">6</span> American Options</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -371,6 +378,11 @@ window.Quarto = {
 <h1 class="title">Finite-Difference Methods</h1>
 </div>
 
+<div>
+  <div class="description">
+    Finite-difference schemes for the Black-Scholes PDE, including American options.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -397,62 +409,102 @@ window.Quarto = {
 </header>
 
 
-<section id="finite-difference-methods" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="finite-difference-methods"><span class="header-section-number">1</span> Finite-Difference Methods</h2>
-<p>The <a href="../topics/black-scholes-merton-model.html">Black-Scholes PDE</a> for euro-call option with strike price <span class="math inline">\(K\)</span> and terminal time <span class="math inline">\(T\)</span> with value function <span class="math inline">\(u(x,t)\)</span> as a function of asset price <span class="math inline">\(x\)</span> and time <span class="math inline">\(t\)</span> is given by the <a href="../topics/partial-differential-equations.html">PDE</a> <span class="math display">\[
+<section id="setting" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="setting"><span class="header-section-number">1</span> Setting</h2>
+<p>The <a href="../topics/black-scholes-merton-model.html">Black-Scholes PDE</a> for a European call with strike <span class="math inline">\(K\)</span> and maturity <span class="math inline">\(T\)</span> has value function <span class="math inline">\(u(t,x)\)</span>, a function of time <span class="math inline">\(t\)</span> and asset price <span class="math inline">\(x\)</span>, solving the <a href="../topics/partial-differential-equations.html">PDE</a></p>
+<p><span class="math display">\[
 \begin{cases}
-\frac{{\partial u}}{\partial t}+rx \frac{{\partial u}}{\partial x}+\frac{1}{2}\sigma^2 x^2 \frac{{\partial^2u}}{\partial x ^2}-ru=0\\
-u(T,x)=(x-K)_{+}.\tag{1}
+\partial_t u + rx\,\partial_x u + \dfrac{1}{2}\sigma^2x^2\,\partial_{xx}u
+- ru = 0, \\[1ex]
+u(T,x) = (x-K)_+ .
 \end{cases}
-\]</span> Intuitively, this system is describing the changing slope of the surface of <span class="math inline">\(u(x,t)\)</span> as we move in <span class="math inline">\(x\)</span> or in <span class="math inline">\(t\)</span>. To numerically solve this PDE the <strong>finite difference method</strong> discretizes this continuous space of <span class="math inline">\((t, S)\)</span> into a mesh <span class="math inline">\((\Delta t, \Delta S)\)</span> and approximates the mesh-point to mesh-point change of <span class="math inline">\(u\)</span> using tractable Taylor series expansions of functions near the point of interest.</p>
-<!-- TODO: image "Screenshot 2025-05-14 at 6.28.11 PM.png" not found in vault -->
-<p>For example, we can define the partial derivative <span class="math inline">\(\partial u/\partial t\)</span> to be the limiting difference <span class="math display">\[
-\frac{{\partial u}}{\partial t}=\lim_{ \delta t \to 0 } \frac{{u(x, t+\delta t)-u(x,t)}}{\delta t}\approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t}+O(\Delta t),
-\]</span> where we assume that <span class="math inline">\(\Delta t\)</span> is very small. This is specifically called a <strong>forward difference</strong> since the differencing is in the forwards direction. We also have the <strong>backward difference</strong> and the <strong>central difference</strong> and we define all three methods below.</p>
-<div class="definition" data-title="Forward  Backward  Central Differencing">
-<p>The following differencing methods are used for approximating partial differential equations: 1. <strong>Forward Differencing:</strong> <span class="math display">\[
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t)}}{\Delta t},
-   \]</span> 2. <strong>Backward Differencing:</strong> <span class="math display">\[
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t-\Delta t)-u(x,t)}}{\Delta t},
-   \]</span> 3. <strong>Central Differencing:</strong> <span class="math display">\[
-   \frac{{\partial u}}{\partial t} \approx \frac{{u(x, t+\Delta t)-u(x,t-\Delta t)}}{2\Delta t}.
-   \]</span></p>
-</div>
-<p><em>Note: All three definitions hold when computing the partial derivative with respect to <span class="math inline">\(x\)</span>, it will simply change to considering <span class="math inline">\(x\)</span> values rather than <span class="math inline">\(t\)</span> values (see below for some examples)</em>.</p>
-<!-- TODO: image "Screenshot 2025-05-14 at 7.12.03 PM.png" not found in vault -->
-<p>For second partial derivatives we can define the <strong>symmetric finite-difference approximation</strong> as either the forward difference of backward-difference approximations to the first derivative or as the backward-difference of forward difference approximations to the first derivative, both of which give the same result which is stated in the definition below.</p>
-<div class="definition" data-title="Symmetric Central-Differencing">
-<p>The symmetric central-differencing approach for second partial derivatives is defined as <span class="math display">\[
-\frac{{\partial ^2u}}{\partial x^2}\approx \frac{{u(x+\Delta x, t)-2u(x,t)+u(x-\Delta x, t)}}{(\Delta x)^2}.
+\tag{1}
 \]</span></p>
-</div>
-<p><em>Note: The error of these approximations is of the order <span class="math inline">\((\Delta x)^2\)</span> and so the accuracy will increase faster for finer meshes than the previous three cases all of which have error order <span class="math inline">\(\Delta x\)</span>.</em></p>
-<p>When applying finite differencing we start by defining the discretization of the <span class="math inline">\((x,t)\)</span> space by specifying <span class="math inline">\(x_{min}\)</span>, <span class="math inline">\(x_{max}\)</span>, <span class="math inline">\(t_{min}\)</span>, <span class="math inline">\(t_{max}\)</span>, <span class="math inline">\(\Delta t\)</span>, <span class="math inline">\(\Delta x\)</span>. In the Black-Scholes euro-call case introduced above we would set <span class="math inline">\(x_{min}=0\)</span> and <span class="math inline">\(t_{min}=0\)</span> as asset price and time cannot be negative. We then often introduce the following cleaner notation to specify mesh location in terms of indices <span class="math display">\[
-u_{\mathscr{x}}^\mathscr{t} = u(x_{min}+\mathscr{x} \cdot\Delta x, t_{min}+\mathscr{t}\cdot\Delta t);~~\mathscr{x}=0,\dots,\mathscr{X};~~\mathscr{t}=0,\dots,\mathscr{T},
-\]</span> where <span class="math inline">\(\mathscr{X}\)</span> and <span class="math inline">\(\mathscr{T}\)</span> are the desired number of mesh points in <span class="math inline">\(x\)</span> and <span class="math inline">\(t\)</span> respectively. Using this new notation and considering the Black-Scholes euro-call option we approximate the partial derivatives in <span class="math inline">\((1)\)</span> using <strong>forward differencing</strong> as <span class="math display">\[
-\frac{{\partial u}}{\partial x}=\frac{{u_{\mathscr{x}+1}^\mathscr{t}-u_{\mathscr{x}}^\mathscr{t}}}{\Delta x};~~ \frac{{\partial^2 u}}{\partial x^2}={u^t}
+<p>Here <span class="math inline">\(r\)</span> is the risk-free rate and <span class="math inline">\(\sigma\)</span> the volatility. The <strong>finite difference (FD) method</strong> discretises the continuous domain of <span class="math inline">\((t,x)\)</span> into a mesh with steps <span class="math inline">\((\Delta t,\Delta x)\)</span> and replaces each derivative by a difference quotient obtained from a Taylor expansion around the mesh point.</p>
+</section>
+<section id="difference-quotients" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="difference-quotients"><span class="header-section-number">2</span> Difference Quotients</h2>
+<p>For example, the time derivative is the limit</p>
+<p><span class="math display">\[
+\partial_t u = \lim_{\delta t\to 0}\frac{u(t+\delta t,x)-u(t,x)}{\delta t}
+\approx \frac{u(t+\Delta t,x)-u(t,x)}{\Delta t} + O(\Delta t),
 \]</span></p>
-<p>We can then compute the discrete partial derivatives as <span class="math display">\[
-\begin{align}
-\frac{\partial}{\partial S}C(m\Delta t, n\Delta S) &amp; = \frac{{C_{n+1}^m -C_{n}^m}}{2\Delta S} \\
-\frac{\partial^2}{\partial S^2}C(m\Delta t, n\Delta S) &amp; =\frac{{\frac{{C_{n+1}^m-C_{n}^m}}{\Delta S}-\frac{{C_{n}^m - C_{n-1}^m}}{\Delta S}}}{\Delta S}=\frac{{C_{n+1}^m-2C_{n}^m + C_{n-1}^m}}{(\Delta S)^2} \\
-\frac{\partial}{\partial t}C(m\Delta t, n\Delta S) &amp; =\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}.
-\end{align}
-\]</span> Substituting back into the PDE we obtain <span class="math display">\[
-\begin{align}
-&amp;\begin{cases}
-\frac{{C_{n}^m-C_{n}^{m-1}}}{\Delta t}+r(n\Delta S) \frac{{C_{n+1}^m-C_{n-1}^m}}{2\Delta S}+\frac{1}{2\sigma^2}(n\Delta s)^2 \frac{{C_{n+1}^m-2C_{n}^m+C_{n-1}^m}}{(\Delta S)^2}-rC_{n}^m=0 \\
-C_{n}^m=(n\Delta S - K)_{+}
-\end{cases}\\
-&amp;\implies C_{n}^{m-1}=P_{n}^+C_{n+1}^m+P_{n}^0C_{n}^m+P_{n}^- C_{n-1}^m
-\end{align},
-\]</span> where we have defined <span class="math display">\[
-P_{n}^\pm = \frac{1}{2}\Delta t(\sigma^2n^2\pm rm) ~~\&amp;~~P_{n}^0=1-\Delta t(\sigma^2n^2+r).
-\]</span></p>
+<p>for small <span class="math inline">\(\Delta t\)</span>. This is a <strong>forward difference</strong>. There are three first-order approximations.</p>
+<div class="definition" data-title="Forward, Backward and Central Differences">
 <ol type="1">
-<li>Explicit Method</li>
-<li>Implicit Method</li>
-<li>Crank-Nicolson Method</li>
+<li><strong>Forward difference:</strong> <span class="math display">\[
+\partial_t u \approx \frac{u(t+\Delta t,x)-u(t,x)}{\Delta t},
+\]</span></li>
+<li><strong>Backward difference:</strong> <span class="math display">\[
+\partial_t u \approx \frac{u(t,x)-u(t-\Delta t,x)}{\Delta t},
+\]</span></li>
+<li><strong>Central difference:</strong> <span class="math display">\[
+\partial_t u \approx \frac{u(t+\Delta t,x)-u(t-\Delta t,x)}{2\Delta t}.
+\]</span></li>
+</ol>
+</div>
+<p>The same formulas hold for <span class="math inline">\(\partial_x u\)</span> with <span class="math inline">\(x\)</span> in place of <span class="math inline">\(t\)</span>. The forward and backward differences have error <span class="math inline">\(O(\Delta t)\)</span>, the central difference <span class="math inline">\(O(\Delta t^2)\)</span>.</p>
+<p>For second derivatives, taking the forward difference of the backward difference (or the reverse) gives the same quotient.</p>
+<div class="definition" data-title="Symmetric Second Difference">
+<p><span class="math display">\[
+\partial_{xx}u \approx \frac{u(t,x+\Delta x)-2u(t,x)+u(t,x-\Delta x)}
+{(\Delta x)^2},
+\]</span></p>
+<p>with error <span class="math inline">\(O((\Delta x)^2)\)</span>, so accuracy improves faster under mesh refinement than for the first-order quotients above.</p>
+</div>
+</section>
+<section id="the-mesh" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-mesh"><span class="header-section-number">3</span> The Mesh</h2>
+<p>Specify <span class="math inline">\(x_{\min}\)</span>, <span class="math inline">\(x_{\max}\)</span>, <span class="math inline">\(t_{\min}\)</span>, <span class="math inline">\(t_{\max}\)</span>, <span class="math inline">\(\Delta x\)</span> and <span class="math inline">\(\Delta t\)</span>. For the call (1) we take <span class="math inline">\(x_{\min}=0\)</span> and <span class="math inline">\(t_{\min}=0\)</span>, since price and time are non-negative, and <span class="math inline">\(x_{\max}=N\Delta x\)</span> large, <span class="math inline">\(T=M\Delta t\)</span>. Write</p>
+<p><span class="math display">\[
+u_n^m = u(m\Delta t,\,n\Delta x),\qquad n=0,\dots,N,\quad m=0,\dots,M.
+\]</span></p>
+</section>
+<section id="explicit-scheme" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="explicit-scheme"><span class="header-section-number">4</span> Explicit Scheme</h2>
+<p>Use the forward difference in time <span class="math inline">\(\partial_t u\approx(u_n^{m+1}-u_n^m)/\Delta t\)</span>, and the central and symmetric differences in space,</p>
+<p><span class="math display">\[
+\partial_x u\approx\frac{u_{n+1}^{m+1}-u_{n-1}^{m+1}}{2\Delta x},\qquad
+\partial_{xx}u\approx\frac{u_{n+1}^{m+1}-2u_n^{m+1}+u_{n-1}^{m+1}}{(\Delta x)^2},
+\]</span></p>
+<p>all evaluated at the <em>later</em> time level. Substituting into (1) with <span class="math inline">\(x=n\Delta x\)</span> and solving for <span class="math inline">\(u_n^m\)</span> gives the backward recursion</p>
+<p><span class="math display">\[
+u_n^{m}=P_n^+u_{n+1}^{m+1}+P_n^0u_n^{m+1}+P_n^-u_{n-1}^{m+1},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+P_n^{\pm}=\frac{\Delta t}{2}\left(\sigma^2n^2\pm rn\right),\qquad
+P_n^0=1-\Delta t\left(\sigma^2n^2+r\right).
+\]</span></p>
+<p>The terminal condition is <span class="math inline">\(u_n^M=(n\Delta x-K)_+\)</span>, with boundary values <span class="math inline">\(u_0^m=0\)</span> and <span class="math inline">\(u_N^m\approx N\Delta x-Ke^{-r(T-m\Delta t)}\)</span>. The recursion looks like a trinomial tree run backwards in time. It is cheap, but only stable if <span class="math inline">\(\Delta t\)</span> is small enough that <span class="math inline">\(P_n^0\ge 0\)</span>, roughly <span class="math inline">\(\Delta t\le 1/(\sigma^2N^2+r)\)</span>.</p>
+</section>
+<section id="implicit-and-crank-nicolson-schemes" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="implicit-and-crank-nicolson-schemes"><span class="header-section-number">5</span> Implicit and Crank-Nicolson Schemes</h2>
+<p>The <strong>implicit scheme</strong> evaluates the spatial differences at the <em>earlier</em> time level <span class="math inline">\(m\)</span>. This gives, for each <span class="math inline">\(m\)</span>, a tridiagonal linear system</p>
+<p><span class="math display">\[
+A\,u^{m}=u^{m+1},
+\]</span></p>
+<p>for the vector <span class="math inline">\(u^m=(u_n^m)_n\)</span>, which is solved backwards in time. It is unconditionally stable. The <strong>Crank-Nicolson scheme</strong> averages the explicit and implicit spatial differences, which makes it second-order accurate in time as well as in space (error <span class="math inline">\(O(\Delta t^2+\Delta x^2)\)</span>) and also unconditionally stable.</p>
+</section>
+<section id="american-options" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="american-options"><span class="header-section-number">6</span> American Options</h2>
+<p>The explicit scheme is consistent with early exercise, since it is a <a href="../topics/binomial-model.html">tree-like</a> procedure that moves backwards in time. As for a tree, we force <span class="math inline">\(V\ge G\)</span> for the value function <span class="math inline">\(V(t,s)\)</span> and immediate payoff <span class="math inline">\(G(t,s)=(K-s)_+\)</span> (an American put) by taking the maximum of the two at every grid point,</p>
+<p><span class="math display">\[
+V_n^{m}\leftarrow \max\{V_n^{m},\,G_n^{m}\}.
+\]</span></p>
+<p>This gives the correct price because each <span class="math inline">\(V_n^m\)</span> is computed from the later level <span class="math inline">\(m+1\)</span> and is never changed again. After solving, one exercises early exactly where <span class="math inline">\(V(t,s)=G(t,s)\)</span>, which gives the exercise boundary.</p>
+<p>For the implicit scheme this pointwise maximum is <strong>wrong</strong>. The scheme couples <span class="math inline">\(V_{n-1}^m\)</span>, <span class="math inline">\(V_n^m\)</span> and <span class="math inline">\(V_{n+1}^m\)</span> in one linear equation, so altering one grid point changes its neighbours and eventually every <span class="math inline">\(V_i^m\)</span>.</p>
+<p>Instead one uses <strong>projected SOR (PSOR)</strong>, which solves the linear system <span class="math inline">\(AV^m=b\)</span> by successive over-relaxation and projects each iterate onto <span class="math inline">\(V\ge G\)</span>:</p>
+<p><span class="math display">\[
+V_i^{m,(k+1)}=\max\left\{G_i^m,\;(1-w)V_i^{m,(k)}+\frac{w}{A_{ii}}\left(
+b_i-\sum_{j&lt;i}A_{ij}V_j^{m,(k+1)}-\sum_{j&gt;i}A_{ij}V_j^{m,(k)}\right)\right\},
+\]</span></p>
+<p>where <span class="math inline">\(k\)</span> is the iteration index and <span class="math inline">\(w\in(1,2)\)</span> the relaxation parameter. The iteration converges to the solution of the system restricted to <span class="math inline">\(\{V\ge G\}\)</span>. As before, the exercise boundary is where <span class="math inline">\(V=G\)</span>.</p>
+</section>
+<section id="references" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<ol type="1">
+<li>Wilmott, P., Howison, S. and Dewynne, J. (1995). <em>The Mathematics of Financial Derivatives</em>. Cambridge University Press.</li>
 </ol>
 
 
@@ -462,9 +514,12 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
-<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
 <li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
+<li><a href="../topics/heat-equation.html">Heat Equation</a></li>
+<li><a href="../topics/heston-model.html">Heston Model</a></li>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Numerical Methods in Financial Mathematics</a></li>
 <li><a href="../topics/poisson-equation.html">Poisson Equation</a></li>
+<li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 </ul>
 </div>
 </section>

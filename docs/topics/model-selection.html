@@ -394,20 +394,22 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-does-optimal-model-mean" id="toc-what-does-optimal-model-mean" class="nav-link active" data-scroll-target="#what-does-optimal-model-mean">What Does “Optimal” Model Mean?</a></li>
-  <li><a href="#the-bias-variance-tradeoff" id="toc-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#the-bias-variance-tradeoff">The Bias-Variance Tradeoff</a></li>
-  <li><a href="#the-subset-selection-problem" id="toc-the-subset-selection-problem" class="nav-link" data-scroll-target="#the-subset-selection-problem">The Subset Selection Problem</a>
+  <li><a href="#what-does-optimal-model-mean" id="toc-what-does-optimal-model-mean" class="nav-link active" data-scroll-target="#what-does-optimal-model-mean"><span class="header-section-number">1</span> What Does “Optimal” Model Mean?</a></li>
+  <li><a href="#the-bias-variance-tradeoff" id="toc-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#the-bias-variance-tradeoff"><span class="header-section-number">2</span> The Bias-Variance Tradeoff</a></li>
+  <li><a href="#the-subset-selection-problem" id="toc-the-subset-selection-problem" class="nav-link" data-scroll-target="#the-subset-selection-problem"><span class="header-section-number">3</span> The Subset Selection Problem</a>
   <ul class="collapse">
-  <li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link" data-scroll-target="#best-subset-selection">Best Subset Selection</a></li>
-  <li><a href="#forward-stepwise-selection" id="toc-forward-stepwise-selection" class="nav-link" data-scroll-target="#forward-stepwise-selection">Forward Stepwise Selection</a></li>
-  <li><a href="#backward-stepwise-selection" id="toc-backward-stepwise-selection" class="nav-link" data-scroll-target="#backward-stepwise-selection">Backward Stepwise Selection</a></li>
-  <li><a href="#comparing-the-approaches" id="toc-comparing-the-approaches" class="nav-link" data-scroll-target="#comparing-the-approaches">Comparing the Approaches</a></li>
+  <li><a href="#best-subset-selection" id="toc-best-subset-selection" class="nav-link" data-scroll-target="#best-subset-selection"><span class="header-section-number">3.1</span> Best Subset Selection</a></li>
+  <li><a href="#forward-stepwise-selection" id="toc-forward-stepwise-selection" class="nav-link" data-scroll-target="#forward-stepwise-selection"><span class="header-section-number">3.2</span> Forward Stepwise Selection</a></li>
+  <li><a href="#backward-stepwise-selection" id="toc-backward-stepwise-selection" class="nav-link" data-scroll-target="#backward-stepwise-selection"><span class="header-section-number">3.3</span> Backward Stepwise Selection</a></li>
+  <li><a href="#comparing-the-approaches" id="toc-comparing-the-approaches" class="nav-link" data-scroll-target="#comparing-the-approaches"><span class="header-section-number">3.4</span> Comparing the Approaches</a></li>
   </ul></li>
-  <li><a href="#information-criteria" id="toc-information-criteria" class="nav-link" data-scroll-target="#information-criteria">Information Criteria</a>
+  <li><a href="#information-criteria" id="toc-information-criteria" class="nav-link" data-scroll-target="#information-criteria"><span class="header-section-number">4</span> Information Criteria</a>
   <ul class="collapse">
-  <li><a href="#adjusted-r2" id="toc-adjusted-r2" class="nav-link" data-scroll-target="#adjusted-r2">Adjusted <span class="math inline">\(R^2\)</span></a></li>
+  <li><a href="#information-criteria-for-time-series" id="toc-information-criteria-for-time-series" class="nav-link" data-scroll-target="#information-criteria-for-time-series"><span class="header-section-number">4.1</span> Information Criteria for Time Series</a></li>
+  <li><a href="#adjusted-r2" id="toc-adjusted-r2" class="nav-link" data-scroll-target="#adjusted-r2"><span class="header-section-number">4.2</span> Adjusted <span class="math inline">\(R^2\)</span></a></li>
   </ul></li>
-  <li><a href="#comparing-models-california-housing" id="toc-comparing-models-california-housing" class="nav-link" data-scroll-target="#comparing-models-california-housing">Comparing Models: California Housing</a></li>
+  <li><a href="#comparing-models-california-housing" id="toc-comparing-models-california-housing" class="nav-link" data-scroll-target="#comparing-models-california-housing"><span class="header-section-number">5</span> Comparing Models: California Housing</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -475,7 +477,7 @@ window.Quarto = {
 </ul>
 </div>
 </div>
-<div id="fd4d26fe" class="cell" data-execution_count="1">
+<div id="6b4fc7f5" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Libraries and Styling</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -492,9 +494,9 @@ window.Quarto = {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>sns.set_palette(<span class="st">'Set2'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<section id="what-does-optimal-model-mean" class="level2">
-<h2 class="anchored" data-anchor-id="what-does-optimal-model-mean">What Does “Optimal” Model Mean?</h2>
-<p>There is no single definition of an optimal model — the right criterion depends entirely on the goal.</p>
+<section id="what-does-optimal-model-mean" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="what-does-optimal-model-mean"><span class="header-section-number">1</span> What Does “Optimal” Model Mean?</h2>
+<p>There is no single definition of an optimal model - the right criterion depends entirely on the goal.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -533,8 +535,8 @@ window.Quarto = {
 </table>
 <p>The criterion used to select a model should match the criterion that matters for the problem at hand.</p>
 </section>
-<section id="the-bias-variance-tradeoff" class="level2">
-<h2 class="anchored" data-anchor-id="the-bias-variance-tradeoff">The Bias-Variance Tradeoff</h2>
+<section id="the-bias-variance-tradeoff" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-bias-variance-tradeoff"><span class="header-section-number">2</span> The Bias-Variance Tradeoff</h2>
 <p>For any estimator <span class="math inline">\(\hat{f}\)</span> of <span class="math inline">\(f\)</span>, the expected test error at a point <span class="math inline">\(x_0\)</span> decomposes as:</p>
 <p><span class="math display">\[
 \mathbb{E}\!\left[(Y - \hat{f}(x_0))^2\right]
@@ -543,51 +545,51 @@ window.Quarto = {
 + \underbrace{\sigma^2}_{\text{Irreducible error}}.
 \]</span></p>
 <ul>
-<li><strong>Bias</strong> is the systematic error from using the wrong model class — underfitting.</li>
-<li><strong>Variance</strong> is sensitivity to the particular training sample — overfitting.</li>
+<li><strong>Bias</strong> is the systematic error from using the wrong model class - underfitting.</li>
+<li><strong>Variance</strong> is sensitivity to the particular training sample - overfitting.</li>
 <li><span class="math inline">\(\sigma^2\)</span> is noise inherent in the data; it cannot be reduced by any model.</li>
 </ul>
 <p>Adding predictors <strong>reduces bias</strong> (the model fits more patterns) but <strong>inflates variance</strong> (the model memorises the training data). The bias-variance tradeoff is managed by choosing model complexity wisely.</p>
-<div id="dd06197b" class="cell" data-execution_count="2">
+<div id="fd0ff516" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="model-selection_files/figure-html/cell-3-output-1.png" width="950" height="471" class="figure-img"></p>
+<p><img src="model-selection_files/figure-html/cell-3-output-1.png" width="951" height="470" class="figure-img"></p>
 <figcaption>The bias-variance tradeoff. As model complexity grows, bias falls but variance rises. The optimal complexity minimises total test error.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div id="fcd0eaed" class="cell" data-execution_count="3">
+<div id="e120aba5" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="model-selection_files/figure-html/cell-4-output-1.png" width="1333" height="445" class="figure-img"></p>
+<p><img src="model-selection_files/figure-html/cell-4-output-1.png" width="1335" height="445" class="figure-img"></p>
 <figcaption>Underfitting (degree 1): the model misses real structure. Overfitting (degree 12): the model chases noise. A degree-3 polynomial captures the true pattern well.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="the-subset-selection-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-subset-selection-problem">The Subset Selection Problem</h2>
-<p>With <span class="math inline">\(p\)</span> candidate predictors there are <span class="math inline">\(2^p\)</span> possible subsets — including the intercept-only model and the full model. Four strategies are used in practice:</p>
+<section id="the-subset-selection-problem" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-subset-selection-problem"><span class="header-section-number">3</span> The Subset Selection Problem</h2>
+<p>With <span class="math inline">\(p\)</span> candidate predictors there are <span class="math inline">\(2^p\)</span> possible subsets - including the intercept-only model and the full model. Four strategies are used in practice:</p>
 <ol type="1">
-<li><strong>Best subset</strong> — evaluate all <span class="math inline">\(2^p\)</span> subsets, pick the one minimising an information criterion.</li>
-<li><strong>Forward stepwise</strong> — start from the null model, add one predictor at a time.</li>
-<li><strong>Backward stepwise</strong> — start from the full model, drop one predictor at a time.</li>
-<li><strong>Hybrid</strong> — allow both additions and removals at each step.</li>
+<li><strong>Best subset</strong> - evaluate all <span class="math inline">\(2^p\)</span> subsets, pick the one minimising an information criterion.</li>
+<li><strong>Forward stepwise</strong> - start from the null model, add one predictor at a time.</li>
+<li><strong>Backward stepwise</strong> - start from the full model, drop one predictor at a time.</li>
+<li><strong>Hybrid</strong> - allow both additions and removals at each step.</li>
 </ol>
 <p>For <span class="math inline">\(p \leq 20\)</span> or so, best subset selection is feasible. For <span class="math inline">\(p \gtrsim 30\)</span>, stepwise or regularization is preferred.</p>
-<section id="best-subset-selection" class="level3">
-<h3 class="anchored" data-anchor-id="best-subset-selection">Best Subset Selection</h3>
+<section id="best-subset-selection" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="best-subset-selection"><span class="header-section-number">3.1</span> Best Subset Selection</h3>
 <p>For each <span class="math inline">\(k = 0, 1, \ldots, p\)</span>, best subset selection fits all <span class="math inline">\(\binom{p}{k}\)</span> models with exactly <span class="math inline">\(k\)</span> predictors and saves the best (lowest RSS) as <span class="math inline">\(\mathcal{M}_k\)</span>. It then selects among <span class="math inline">\(\mathcal{M}_0, \ldots, \mathcal{M}_p\)</span> using a criterion such as AIC, BIC, or adjusted <span class="math inline">\(R^2\)</span>.</p>
-<p>The computational cost grows exponentially: <span class="math inline">\(p = 40\)</span> requires <span class="math inline">\(2^{40} \approx 10^{12}\)</span> model fits — completely infeasible. Best subset is the gold standard for small <span class="math inline">\(p\)</span> but stepwise or regularization is needed for moderate to large <span class="math inline">\(p\)</span>.</p>
+<p>The computational cost grows exponentially: <span class="math inline">\(p = 40\)</span> requires <span class="math inline">\(2^{40} \approx 10^{12}\)</span> model fits - completely infeasible. Best subset is the gold standard for small <span class="math inline">\(p\)</span> but stepwise or regularization is needed for moderate to large <span class="math inline">\(p\)</span>.</p>
 </section>
-<section id="forward-stepwise-selection" class="level3">
-<h3 class="anchored" data-anchor-id="forward-stepwise-selection">Forward Stepwise Selection</h3>
+<section id="forward-stepwise-selection" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="forward-stepwise-selection"><span class="header-section-number">3.2</span> Forward Stepwise Selection</h3>
 <p>The forward stepwise algorithm starts with the null model (intercept only) and at each step adds the predictor that most improves a chosen criterion. It stops when no further addition improves the criterion.</p>
-<div id="c5a51ec9" class="cell" data-execution_count="4">
+<div id="1d314c6c" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_stepwise(y, X_candidates, criterion<span class="op">=</span><span class="st">'aic'</span>):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Greedy forward stepwise selection.</span></span>
@@ -619,10 +621,10 @@ window.Quarto = {
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> selected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="backward-stepwise-selection" class="level3">
-<h3 class="anchored" data-anchor-id="backward-stepwise-selection">Backward Stepwise Selection</h3>
+<section id="backward-stepwise-selection" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="backward-stepwise-selection"><span class="header-section-number">3.3</span> Backward Stepwise Selection</h3>
 <p>The backward stepwise algorithm starts with the full model (all <span class="math inline">\(p\)</span> predictors) and at each step drops the predictor whose removal most improves the criterion. It stops when no removal helps.</p>
-<div id="0894d7da" class="cell" data-execution_count="5">
+<div id="70db62e6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> backward_stepwise(y, X_candidates, criterion<span class="op">=</span><span class="st">'aic'</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Greedy backward stepwise selection.</span></span>
@@ -652,8 +654,8 @@ window.Quarto = {
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> selected</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="comparing-the-approaches" class="level3">
-<h3 class="anchored" data-anchor-id="comparing-the-approaches">Comparing the Approaches</h3>
+<section id="comparing-the-approaches" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="comparing-the-approaches"><span class="header-section-number">3.4</span> Comparing the Approaches</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -685,7 +687,7 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p><strong>Hybrid stepwise</strong> alternates between forward and backward passes, allowing both additions and removals at each step. It is more flexible but still greedy — it is not guaranteed to find the globally optimal subset.</p>
+<p><strong>Hybrid stepwise</strong> alternates between forward and backward passes, allowing both additions and removals at each step. It is more flexible but still greedy - it is not guaranteed to find the globally optimal subset.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="Caution">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -701,8 +703,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="information-criteria" class="level2">
-<h2 class="anchored" data-anchor-id="information-criteria">Information Criteria</h2>
+<section id="information-criteria" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="information-criteria"><span class="header-section-number">4</span> Information Criteria</h2>
 <p>RSS always decreases as predictors are added, so using it alone always selects the full model. Information criteria add a <strong>penalty for model complexity</strong> to discourage overfitting.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="AIC and BIC">
 <div class="callout-header d-flex align-content-center">
@@ -722,8 +724,8 @@ window.Quarto = {
 <p>where <span class="math inline">\(\ell(\hat{\boldsymbol{\beta}})\)</span> is the maximised log-likelihood, <span class="math inline">\(k\)</span> is the number of free parameters (including <span class="math inline">\(\sigma^2\)</span>), and <span class="math inline">\(n\)</span> is the sample size. <strong>Lower is better.</strong></p>
 </div>
 </div>
-<p><strong>AIC</strong> (Akaike, 1974) is derived from information-theoretic arguments and estimates out-of-sample prediction error. <strong>BIC</strong> (Schwarz, 1978) is derived from Bayesian arguments and penalises complexity more heavily for large <span class="math inline">\(n\)</span> — for <span class="math inline">\(n \geq 8\)</span>, <span class="math inline">\(\ln n &gt; 2\)</span>, so BIC penalises each extra parameter harder than AIC and tends to favour sparser models.</p>
-<div id="7a656b09" class="cell" data-execution_count="6">
+<p><strong>AIC</strong> (Akaike, 1974) is derived from information-theoretic arguments and estimates out-of-sample prediction error. <strong>BIC</strong> (Schwarz, 1978) is derived from Bayesian arguments and penalises complexity more heavily for large <span class="math inline">\(n\)</span> - for <span class="math inline">\(n \geq 8\)</span>, <span class="math inline">\(\ln n &gt; 2\)</span>, so BIC penalises each extra parameter harder than AIC and tends to favour sparser models.</p>
+<div id="2e772f9d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n_vals <span class="op">=</span> np.arange(<span class="dv">8</span>, <span class="dv">1001</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">4</span>))</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ax.plot(n_vals, <span class="dv">2</span> <span class="op">*</span> np.ones_like(n_vals),  lw<span class="op">=</span><span class="fl">2.5</span>, color<span class="op">=</span><span class="st">'steelblue'</span>,</span>
@@ -738,14 +740,24 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="model-selection_files/figure-html/cell-7-output-1.png" width="854" height="372" class="figure-img"></p>
+<p><img src="model-selection_files/figure-html/cell-7-output-1.png" width="855" height="374" class="figure-img"></p>
 <figcaption>AIC vs BIC penalty per parameter as a function of sample size. BIC penalises more heavily and grows without bound as n increases.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<section id="adjusted-r2" class="level3">
-<h3 class="anchored" data-anchor-id="adjusted-r2">Adjusted <span class="math inline">\(R^2\)</span></h3>
+<section id="information-criteria-for-time-series" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="information-criteria-for-time-series"><span class="header-section-number">4.1</span> Information Criteria for Time Series</h3>
+<p>Increasing the order of an <a href="../topics/arma-processes.html">ARMA</a>, <a href="../topics/vector-autoregression-var.html">VAR</a> or <a href="../topics/garch-models.html">GARCH</a> model always weakly improves the in-sample log-likelihood, so order selection also needs a penalised criterion. For a model with <span class="math inline">\(k\)</span> parameters fitted by <a href="../topics/maximum-likelihood-estimation.html">MLE</a> to <span class="math inline">\(n\)</span> observations with maximised log-likelihood <span class="math inline">\(\hat\ell\)</span>, the criteria are</p>
+<p><span class="math display">\[
+\text{AIC}=-2\hat\ell+2k,\qquad \text{BIC}=-2\hat\ell+k\log n,\qquad
+\text{AICc}=\text{AIC}+\frac{2k(k+1)}{n-k-1}.
+\]</span></p>
+<p>The model minimising the criterion is selected. AICc corrects the small-sample bias of AIC. BIC is <strong>consistent</strong>: when the true model is finite-dimensional it selects the true order with probability tending to <span class="math inline">\(1\)</span> as <span class="math inline">\(n\to\infty\)</span>. AIC is not consistent but is <strong>efficient</strong>, asymptotically minimising the mean-squared prediction error, and tends to prefer larger models.</p>
+<p>For <span class="math inline">\(\text{ARMA}(p,q)\)</span> order selection, fit a grid of <span class="math inline">\((p,q)\)</span> pairs and compare AIC/BIC jointly with residual diagnostics such as the <a href="../topics/ljung-box-test.html">Ljung-Box Test</a>. The same criteria are standard for choosing the lag augmentation in the <a href="../topics/unit-root-tests.html">ADF test</a> and the lag order of a VAR. Because AIC and BIC can disagree, it is common to report both, preferring BIC when parsimony and interpretability matter and AIC when forecast accuracy is the priority.</p>
+</section>
+<section id="adjusted-r2" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="adjusted-r2"><span class="header-section-number">4.2</span> Adjusted <span class="math inline">\(R^2\)</span></h3>
 <p>Ordinary <span class="math inline">\(R^2 = 1 - \text{RSS}/\text{TSS}\)</span> increases whenever a predictor is added, even if irrelevant. <strong>Adjusted <span class="math inline">\(R^2\)</span></strong> corrects for this:</p>
 <p><span class="math display">\[
 \bar{R}^2 = 1 - \frac{\text{RSS}/(n - p - 1)}{\text{TSS}/(n-1)}.
@@ -753,10 +765,10 @@ window.Quarto = {
 <p>Adding a predictor increases <span class="math inline">\(\bar{R}^2\)</span> <strong>only if</strong> it reduces the residual variance more than expected by chance. Asymptotically, maximising <span class="math inline">\(\bar{R}^2\)</span> is equivalent to minimising AIC.</p>
 </section>
 </section>
-<section id="comparing-models-california-housing" class="level2">
-<h2 class="anchored" data-anchor-id="comparing-models-california-housing">Comparing Models: California Housing</h2>
-<p>We illustrate how these criteria behave in practice using the California housing dataset — a regression problem with 8 predictors and over 20,000 observations.</p>
-<div id="f0e85c79" class="cell" data-execution_count="7">
+<section id="comparing-models-california-housing" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="comparing-models-california-housing"><span class="header-section-number">5</span> Comparing Models: California Housing</h2>
+<p>We illustrate how these criteria behave in practice using the California housing dataset - a regression problem with 8 predictors and over 20,000 observations.</p>
+<div id="9228f8a9" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>housing <span class="op">=</span> fetch_california_housing(as_frame<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> housing.frame.copy()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [c.lower() <span class="cf">for</span> c <span class="kw">in</span> df.columns]</span>
@@ -785,15 +797,23 @@ window.Quarto = {
 <span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="bu">cmp</span> <span class="op">=</span> pd.DataFrame(rows)</span>
 <span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">cmp</span>.to_string(index<span class="op">=</span><span class="va">False</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>              Model  k     R²  Adj. R²     AIC     BIC
-     Intercept only  2 0.0000   0.0000 64485.9 64493.9
-           + MedInc  3 0.4734   0.4734 51249.3 51265.2
-+ MedInc + HouseAge  4 0.5091   0.5091 49803.4 49827.2
-     + 4 predictors  6 0.5375   0.5374 48578.7 48618.4
-Full (8 predictors) 10 0.6062   0.6061 45265.5 45337.0</code></pre>
+<pre><code>              Model  k      R²  Adj. R²     AIC     BIC
+     Intercept only  2 -0.0000  -0.0000 64485.9 64493.9
+           + MedInc  3  0.4734   0.4734 51249.3 51265.2
++ MedInc + HouseAge  4  0.5091   0.5091 49803.4 49827.2
+     + 4 predictors  6  0.5375   0.5374 48578.7 48618.4
+Full (8 predictors) 10  0.6062   0.6061 45265.5 45337.0</code></pre>
 </div>
 </div>
 <p>The full model achieves the highest <span class="math inline">\(\bar{R}^2\)</span> and lowest AIC/BIC here because all 8 predictors contribute meaningfully. In noisier datasets with more candidate predictors, the criteria would clearly select a smaller model.</p>
+</section>
+<section id="references" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="references"><span class="header-section-number">6</span> References</h2>
+<ol type="1">
+<li>Akaike, H. (1974). A new look at the statistical model identification. <em>IEEE Transactions on Automatic Control</em>, 19(6), 716-723.</li>
+<li>Schwarz, G. (1978). Estimating the dimension of a model. <em>Annals of Statistics</em>, 6(2), 461-464.</li>
+<li>James, G., Witten, D., Hastie, T. and Tibshirani, R. (2021). <em>An Introduction to Statistical Learning</em>, 2nd ed.&nbsp;Springer, Chapter 6.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -801,7 +821,14 @@ Full (8 predictors) 10 0.6062   0.6061 45265.5 45337.0</code></pre>
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/arma-processes.html">ARMA Processes</a></li>
+<li><a href="../topics/linear-regression.html">Linear Regression</a></li>
+<li><a href="../topics/ljung-box-test.html">Ljung-Box Test</a></li>
+<li><a href="../topics/maximum-likelihood-estimation.html">Maximum Likelihood Estimation</a></li>
 <li><a href="../topics/theoretical-statistics.html">Theoretical Statistics</a></li>
+<li><a href="../topics/time-series-analysis.html">Time Series Analysis</a></li>
+<li><a href="../topics/unit-root-tests.html">Unit Root Tests</a></li>
+<li><a href="../topics/vector-autoregression-var.html">Vector Autoregression (VAR)</a></li>
 </ul>
 </div>
 </section>

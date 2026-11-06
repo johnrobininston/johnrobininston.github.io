@@ -358,7 +358,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lagrange-multiplier-method" id="toc-lagrange-multiplier-method" class="nav-link active" data-scroll-target="#lagrange-multiplier-method"><span class="header-section-number">1</span> Lagrange Multiplier Method</a></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link active" data-scroll-target="#intuition"><span class="header-section-number">1</span> Intuition</a></li>
+  <li><a href="#the-lagrangian" id="toc-the-lagrangian" class="nav-link" data-scroll-target="#the-lagrangian"><span class="header-section-number">2</span> The Lagrangian</a></li>
+  <li><a href="#lagrange-multiplier-theorem" id="toc-lagrange-multiplier-theorem" class="nav-link" data-scroll-target="#lagrange-multiplier-theorem"><span class="header-section-number">3</span> Lagrange Multiplier Theorem</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples"><span class="header-section-number">4</span> Examples</a></li>
   </ul>
 </nav>
     </div>
@@ -397,54 +400,64 @@ window.Quarto = {
 </header>
 
 
-<section id="lagrange-multiplier-method" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Lagrange Multiplier Method</h1>
-<p>The method of Lagrange multipliers is a strategy for <strong>finding the local maxima and minima of a function (like profit or cost) subject to equation constraints (like a budget or physical limit)</strong>. The key idea is that at the optimal point, the contour lines of the function you’re optimizing are tangential to the constraint surface (one is a scalar multiple of the other).</p>
-<p>The idea is to convert a constrained problem into a form such that the <strong>derivative test</strong> of an unconstrained problem can still be applied. The relationship between the gradient of the function and the gradients of the constraints leads to a reformulation of the original problem, known as the <strong>Lagrangian (function)</strong>.</p>
+<section id="intuition" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="intuition"><span class="header-section-number">1</span> Intuition</h2>
+<p>The method of <strong>Lagrange multipliers</strong> finds the local maxima and minima of a function (such as profit or cost) subject to equality constraints (such as a budget or physical limit). The key idea is that at an optimum the contour lines of the objective are tangent to the constraint surface, so the gradient of the objective is a scalar multiple of the gradient of the constraint.</p>
+<p>The method converts a constrained problem into one to which the derivative test of an unconstrained problem can be applied, through the <strong>Lagrangian</strong>. It is generalised to inequality constraints by the Karush-Kuhn-Tucker conditions (see <a href="../topics/optimization.html">Optimization</a>).</p>
+</section>
+<section id="the-lagrangian" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-lagrangian"><span class="header-section-number">2</span> The Lagrangian</h2>
 <div class="definition" data-title="Lagrangian">
-<p>For general function <span class="math inline">\(f,g\)</span> the <strong>Lagrangian</strong> is defined as <span class="math display">\[
+<p>For an objective <span class="math inline">\(f\)</span> and constraint function <span class="math inline">\(g\)</span> the <strong>Lagrangian</strong> is <span class="math display">\[
 \mathcal{L}(x,\lambda):= f(x)+\left&lt; \lambda,g(x) \right&gt;,
-\]</span> where <span class="math inline">\(\left&lt; \cdot,\cdot \right&gt;\)</span> denotes an <a href="../topics/inner-product.html">inner product</a>. The value <span class="math inline">\(\lambda\)</span> is known as the <strong>Lagrange multiplier</strong>.</p>
+\]</span> where <span class="math inline">\(\left&lt; \cdot,\cdot \right&gt;\)</span> is the <a href="../topics/inner-product-space.html">inner product</a>. The vector <span class="math inline">\(\lambda\)</span> is the <strong>Lagrange multiplier</strong>.</p>
 </div>
-<p>In order to find the maximum or minimum of a function <span class="math inline">\(f\)</span> subject to the equality constraint <span class="math inline">\(g(x)=0\)</span> we find the stationary points of <span class="math inline">\(\mathcal{L}\)</span> as a function of <span class="math inline">\(x\)</span> and the Lagrange multiplier <span class="math inline">\(\lambda\)</span> <span class="math display">\[
-\frac{\partial\mathcal{L}}{\partial x}=0\quad \&amp; \quad \frac{\partial\mathcal{L}}{\partial \lambda} = 0,
+<p>To optimise <span class="math inline">\(f\)</span> subject to <span class="math inline">\(g(x)=0\)</span> we find the stationary points of <span class="math inline">\(\mathcal{L}\)</span> in <span class="math inline">\((x,\lambda)\)</span>, <span class="math display">\[
+\frac{\partial\mathcal{L}}{\partial x}=0\quad \&amp; \quad
+\frac{\partial\mathcal{L}}{\partial \lambda} = 0,
 \]</span> or equivalently <span class="math display">\[
-\frac{{\partial f(x)}}{\partial x} + \lambda \cdot \frac{{\partial g(x)}}{\partial x}=0\quad \&amp; \quad g(x)=0.
-\]</span> The solution corresponding to the original constrained optimization is always a saddle point of the Lagrangian function which can be identified amount the stationary points from the definiteness of the bordered Hessian matrix.</p>
-<p>The method of Lagrange multipliers is generalized by the [[karush-kuhn-tucker-conditions]], which can also take into account inequality constraints of the form <span class="math inline">\(h(\boldsymbol{x})\leq c\)</span>.</p>
+\frac{\partial f(x)}{\partial x} + \lambda \cdot \frac{\partial g(x)}{\partial x}=0
+\quad \&amp; \quad g(x)=0.
+\]</span> The solution of the constrained problem is a saddle point of the Lagrangian, which can be identified among the stationary points by the definiteness of the bordered Hessian (see <a href="../topics/jacobian-and-hessian.html">Jacobian and Hessian Matrices</a>). The mechanics Lagrangian <span class="math inline">\(K-U\)</span> is a different object, see <a href="../topics/lagrangian-mechanics.html">Lagrangian Mechanics</a>.</p>
+</section>
+<section id="lagrange-multiplier-theorem" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lagrange-multiplier-theorem"><span class="header-section-number">3</span> Lagrange Multiplier Theorem</h2>
 <div class="theorem" data-title="Lagrange Multiplier Theorem">
-<p>Let <span class="math inline">\(f:\mathbb{R}^n\to \mathbb{R}\)</span> be the objective function and <span class="math inline">\(g:\mathbb{R}^n \to \mathbb{R}^c\)</span> be the constraints function both belonging to <span class="math inline">\(C_{1}\)</span> (i.e.&nbsp;having continuous first derivatives). Let <span class="math inline">\(\boldsymbol{x}_{\star}\)</span> be an optimal solution to the following optimization problem such that, for the matrix of partial derivatives <span class="math display">\[
-\left[ \text{D} g(\boldsymbol{x}_{\star}) \right] _{j,k}= \frac{{\partial g_{j}}}{\partial x_{k}},
-\]</span> with <span class="math inline">\(\text{rank}(\text{D}g(\boldsymbol{x}_{\star}))= c \leq n\)</span> maximize <span class="math inline">\(f(\boldsymbol{x})\)</span> subject to <span class="math inline">\(g(\boldsymbol{x})=0\)</span>. Then there exists a unique <strong>Lagrange multiplier</strong> <span class="math inline">\(\lambda_{\star}\in \mathbb{R}^c\)</span> such that <span class="math inline">\(\text{D}f(\boldsymbol{x}_{\star})=\lambda_{\star}^T\text{D}g(x_{\star})\)</span>.</p>
+<p>Let <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}\)</span> and <span class="math inline">\(g:\mathbb{R}^n\to\mathbb{R}^c\)</span> be <span class="math inline">\(C^1\)</span> (continuous first derivatives). Let <span class="math inline">\(\boldsymbol{x}_{\star}\)</span> maximise <span class="math inline">\(f(\boldsymbol{x})\)</span> subject to <span class="math inline">\(g(\boldsymbol{x})=0\)</span>, and suppose the matrix of partial derivatives <span class="math display">\[
+\left[ \mathrm{D} g(\boldsymbol{x}_{\star}) \right] _{j,k}=
+\frac{\partial g_{j}}{\partial x_{k}}
+\]</span> has <span class="math inline">\(\mathrm{rank}(\mathrm{D}g(\boldsymbol{x}_{\star}))= c \leq n\)</span>. Then there exists a unique <strong>Lagrange multiplier</strong> <span class="math inline">\(\lambda_{\star}\in\mathbb{R}^c\)</span> with <span class="math display">\[
+\mathrm{D}f(\boldsymbol{x}_{\star})=
+\lambda_{\star}^{\top}\mathrm{D}g(\boldsymbol{x}_{\star}).
+\]</span></p>
 </div>
-<p>The Lagrange multiplier theorem states that at any local maximum (or minimum) of the function evaluated under the equality constraints, if constraint qualification applies, then the gradient of the function (at that point) can be written as a linear combination of the gradients of the constraints (at that point), with the Lagrange multipliers acting as coefficients.</p>
-<p>This is equivalent to saying that the directional derivative of the function is <span class="math inline">\(0\)</span> in every feasible direction (or that any direction perpendicular to all gradients of the constraints is also perpendicular to the gradient of the function). #### Example: Box Volumes: Suppose we wish to find the dimensions of the box with largest volume that has a total surface area of <span class="math inline">\(64\text{cm}^2\)</span>. The dimension of a box is given by three side lengths <span class="math inline">\(a,b,c\in \mathbb{R}_{+}\)</span>and so the problem can be expressed functionally as finding the maximum of <span class="math inline">\(f(a,b,c)=abc\)</span> subject to the constraint that <span class="math inline">\(g(a,b,c)=(ab+bc+ac)-32.\)</span>.</p>
-<p>The system that we need to solve is <span class="math display">\[
+<p>In words: at a constrained local extremum, if the constraint qualification (the rank condition) holds, the gradient of the objective is a linear combination of the gradients of the constraints, with the multipliers as coefficients. Equivalently, the directional derivative of <span class="math inline">\(f\)</span> is zero in every feasible direction: any direction perpendicular to all constraint gradients is also perpendicular to <span class="math inline">\(\nabla f\)</span>.</p>
+</section>
+<section id="examples" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="examples"><span class="header-section-number">4</span> Examples</h2>
+<div class="example" data-title="Box Volume">
+<p>Find the box of largest volume with total surface area <span class="math inline">\(64\,\mathrm{cm}^2\)</span>. With side lengths <span class="math inline">\(a,b,c&gt;0\)</span> we maximise <span class="math inline">\(f(a,b,c)=abc\)</span> subject to <span class="math inline">\(g(a,b,c)=ab+bc+ac-32=0\)</span>. The system is <span class="math display">\[
 \begin{cases}
-\Delta f=\lambda\Delta g \implies \begin{pmatrix} f_{a}\\ f_{b} \\ f_{c} \end{pmatrix} = \begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} = \lambda \begin{pmatrix} b+c \\ a+c \\ a+b \end{pmatrix}= \lambda \begin{pmatrix} g_{a} \\ g_{b} \\ g_{c} \end{pmatrix} \tag{1} \\
-g(a,b,c) = (ab+bc+ac)-32 = 0.
+\nabla f=\lambda\nabla g:\quad
+\begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} =
+\lambda \begin{pmatrix} b+c \\ a+c \\ a+b \end{pmatrix}, \\[1ex]
+g(a,b,c) = 0.
 \end{cases}
-\]</span> Assuming <span class="math inline">\(\lambda\neq 0\)</span> from <span class="math inline">\((1.1)\)</span> we have that <span class="math display">\[
-\begin{align}
-\begin{pmatrix}a &amp; b &amp; c \end{pmatrix} \cdot \begin{pmatrix} bc \\ ac \\ ab \end{pmatrix} &amp; = abc \cdot\boldsymbol{1} = \lambda\begin{pmatrix}
-a(b+c) \\ b(a+c) \\ c(a+b)
-\end{pmatrix} \\ \\
-\implies ab+ac &amp;  = ba+bc =ca+c b \\ \\
-\implies a &amp; = b  = c.
-\end{align}
-\]</span> Subbing into <span class="math inline">\((1.2)\)</span> we have that <span class="math inline">\(a=b=c=\sqrt{ \frac{32}{3} }\)</span> which is a cube, as expected.</p>
-<section id="example-multiple-lagrange-multipliers" class="level4" data-number="1.0.0.1">
-<h4 data-number="1.0.0.1" class="anchored" data-anchor-id="example-multiple-lagrange-multipliers"><span class="header-section-number">1.0.0.1</span> Example: Multiple Lagrange Multipliers</h4>
-<p>Now suppose that we wish to find the maximum and minimum of <span class="math inline">\(f(x,y,z)=4y-2z\)</span> subject to the constraints <span class="math inline">\(g_{1}(x,y,z) = 2x-y-z-2\)</span> and <span class="math inline">\(g_{2}(x,y,z) = x^2+y^2-1\)</span>. Since we now have 2 constraint functions we will have 2 Lagrange multipliers.</p>
-<p>The system we need to solve is <span class="math display">\[
-\begin{cases}
-\Delta f = \lambda_{1}\Delta g_{1} + \lambda_{2}\Delta g_{2} \implies \begin{pmatrix} 0 \\ 4 \\ -2 \end{pmatrix} = \lambda_{1} \begin{pmatrix} 2 \\ -1 \\ -1 \end{pmatrix}+\lambda_{2}\begin{pmatrix} 2x \\ 2y \\0 \end{pmatrix} \\ \\
-g_{1}= 0 \implies 2x-y-z-2=0 \\ \\
-g_{2} = 0 \implies x^2 +y^2-1=0.
-\end{cases}\tag{2}
-\]</span> Again assuming <span class="math inline">\(\lambda \neq 0\)</span> from <span class="math inline">\((2.1)\)</span> we have <span class="math display">\[
-\lambda_{1} = 2 \implies -2= x\lambda_{2} ~~\&amp; ~~3=\lambda_{2}y,
-\]</span> which we can plug into <span class="math inline">\((2.3)\)</span> to obtain <span class="math inline">\(\lambda_{2}=\pm\sqrt{ 13 }\)</span>. From <span class="math inline">\((2.1)\)</span> for <span class="math inline">\(\lambda_{2} = +\sqrt{ 13 }\)</span> we have <span class="math inline">\((x, y , z) = \left( -\frac{2}{\sqrt{ 13 }}, \frac{3}{\sqrt{ 13 }},-2- \frac{7}{\sqrt{ 13 }} \right)\)</span> and, and for <span class="math inline">\(\lambda_{2}=-\sqrt{13}\)</span> we have <span class="math inline">\((x, y, z) = \left( \frac{2}{\sqrt{ 13 }},- \frac{3}{\sqrt{ 13 }}, -2+ \frac{7}{\sqrt{ 13 }} \right)\)</span>. We can then plug into <span class="math inline">\(f\)</span> to find which is the maximum and the minimum respectively.</p>
+\]</span> Multiplying the components of the first equation by <span class="math inline">\(a,b,c\)</span> respectively gives <span class="math inline">\(abc=\lambda a(b+c)=\lambda b(a+c)=\lambda c(a+b)\)</span>. Since <span class="math inline">\(abc\neq0\)</span> we have <span class="math inline">\(\lambda\neq0\)</span>, so <span class="math inline">\(ab+ac=ab+bc=ac+bc\)</span>, which forces <span class="math inline">\(a=b=c\)</span>. The constraint then gives <span class="math inline">\(3a^2=32\)</span>, so <span class="math inline">\(a=b=c=\sqrt{32/3}\)</span>: a cube, as expected.</p>
+</div>
+<div class="example" data-title="Multiple Constraints">
+<p>Find the extrema of <span class="math inline">\(f(x,y,z)=4y-2z\)</span> subject to <span class="math inline">\(g_{1}=2x-y-z-2=0\)</span> and <span class="math inline">\(g_{2}=x^2+y^2-1=0\)</span>. With two constraints there are two multipliers, and <span class="math display">\[
+\begin{pmatrix} 0 \\ 4 \\ -2 \end{pmatrix} =
+\lambda_{1}\begin{pmatrix} 2 \\ -1 \\ -1 \end{pmatrix}
++\lambda_{2}\begin{pmatrix} 2x \\ 2y \\ 0 \end{pmatrix},\quad g_{1}=0,\quad g_{2}=0.
+\]</span> The third component gives <span class="math inline">\(\lambda_{1}=2\)</span>. The first two then give <span class="math inline">\(x\lambda_{2}=-2\)</span> and <span class="math inline">\(y\lambda_{2}=3\)</span>, and <span class="math inline">\(g_{2}=0\)</span> yields <span class="math inline">\(\lambda_{2}=\pm\sqrt{13}\)</span>. For <span class="math inline">\(\lambda_{2}=+\sqrt{13}\)</span>, <span class="math display">\[
+(x,y,z)=\left(-\tfrac{2}{\sqrt{13}},\tfrac{3}{\sqrt{13}},
+-2-\tfrac{7}{\sqrt{13}}\right),
+\]</span> and for <span class="math inline">\(\lambda_{2}=-\sqrt{13}\)</span>, <span class="math display">\[
+(x,y,z)=\left(\tfrac{2}{\sqrt{13}},-\tfrac{3}{\sqrt{13}},
+-2+\tfrac{7}{\sqrt{13}}\right).
+\]</span> Evaluating <span class="math inline">\(f\)</span> at the two points identifies the maximum and the minimum.</p>
+</div>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -452,11 +465,11 @@ g_{2} = 0 \implies x^2 +y^2-1=0.
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
 <li><a href="../topics/control-theory.html">Control Theory</a></li>
-<li><a href="../topics/hamiltonian.html">Hamiltonian</a></li>
+<li><a href="../topics/hamiltonian-mechanics.html">Hamiltonian Mechanics</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

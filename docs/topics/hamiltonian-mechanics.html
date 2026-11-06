@@ -359,6 +359,12 @@ window.Quarto = {
    
   <ul>
   <li><a href="#hamiltonian-mechanics" id="toc-hamiltonian-mechanics" class="nav-link active" data-scroll-target="#hamiltonian-mechanics"><span class="header-section-number">1</span> Hamiltonian Mechanics</a></li>
+  <li><a href="#hamiltonian-matrices" id="toc-hamiltonian-matrices" class="nav-link" data-scroll-target="#hamiltonian-matrices"><span class="header-section-number">2</span> Hamiltonian Matrices</a></li>
+  <li><a href="#the-control-hamiltonian" id="toc-the-control-hamiltonian" class="nav-link" data-scroll-target="#the-control-hamiltonian"><span class="header-section-number">3</span> The Control Hamiltonian</a>
+  <ul class="collapse">
+  <li><a href="#control-problem" id="toc-control-problem" class="nav-link" data-scroll-target="#control-problem"><span class="header-section-number">3.1</span> Control Problem</a></li>
+  <li><a href="#example-linear-quadratic-regulator" id="toc-example-linear-quadratic-regulator" class="nav-link" data-scroll-target="#example-linear-quadratic-regulator"><span class="header-section-number">3.2</span> Example: Linear-Quadratic Regulator</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -397,12 +403,114 @@ window.Quarto = {
 </header>
 
 
-<section id="hamiltonian-mechanics" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Hamiltonian Mechanics</h1>
-<p>A <strong>configuration space</strong> <span class="math inline">\(M\)</span> is the space defined by the coordinates that define the configuration of a physical system (e.g.&nbsp;Cartesian space <span class="math inline">\(\mathbb{R}^3\)</span>, spherical coordinates <span class="math inline">\(S^2 \subseteq \mathbb{R}^3\)</span> etc).</p>
-<p>Let <span class="math inline">\((M,\mathcal{L})\)</span> be a mechanical system consisting of a configuration space and a <a href="../topics/lagrangian.html">Lagrangian</a> which is a function defining the dynamics of the system. We select a standard coordinate system on <span class="math inline">\(M\)</span> denoted <span class="math inline">\((\boldsymbol{q}, \dot{\boldsymbol{q}}):=((q_{1}, \dots, q_{n}), (\dot{q}_{1}, \dots, \dot{q}_{n}))\)</span> from which we define the <strong>momenta</strong> <span class="math inline">\(\boldsymbol{p}\)</span> as <span class="math display">\[
-p_{i}(\boldsymbol{ q}, \dot{\boldsymbol{q}},t) := \frac{{\partial \mathcal{L}}}{\partial \dot{\boldsymbol{q}}^i}.
-\]</span> For a time instant <span class="math inline">\(t\)</span> the [[legendre-transform]] of <span class="math inline">\(\mathcal{L}\)</span></p>
+<section id="hamiltonian-mechanics" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="hamiltonian-mechanics"><span class="header-section-number">1</span> Hamiltonian Mechanics</h2>
+<p><strong>Hamiltonian mechanics</strong> reformulates <a href="../topics/lagrangian-mechanics.html">Lagrangian Mechanics</a> in terms of positions <span class="math inline">\(\boldsymbol{q}\)</span> and momenta <span class="math inline">\(\boldsymbol{p}\)</span>, replacing the <span class="math inline">\(n\)</span> second-order Euler-Lagrange equations by <span class="math inline">\(2n\)</span> first-order equations. It is equivalent to Newton’s laws and to the Lagrangian formulation, and is the natural setting for conservation laws and the <a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a>.</p>
+<p>Let <span class="math inline">\(\mathcal{L}(\boldsymbol{q},\dot{\boldsymbol{q}},t)\)</span> be the <a href="../topics/lagrangian-mechanics.html">Lagrangian</a> of a system with generalised coordinates <span class="math inline">\(\boldsymbol{q}=(q_1,\dots,q_n)\)</span>. The <strong>momenta</strong> are <span class="math display">\[
+p_{i}:=\frac{\partial\mathcal{L}}{\partial\dot q_{i}}.
+\]</span></p>
+<div class="definition" data-title="Hamiltonian">
+<p>Assume the map <span class="math inline">\(\dot{\boldsymbol{q}}\mapsto\boldsymbol{p}\)</span> is invertible. The <strong>Hamiltonian</strong> is the Legendre transform of <span class="math inline">\(\mathcal{L}\)</span> in the velocities, <span class="math display">\[
+H(\boldsymbol{q},\boldsymbol{p},t)=\sum_{i=1}^np_i\dot q_i-\mathcal{L}
+(\boldsymbol{q},\dot{\boldsymbol{q}},t),
+\]</span> with <span class="math inline">\(\dot{\boldsymbol{q}}\)</span> expressed as a function of <span class="math inline">\((\boldsymbol{q},\boldsymbol{p},t)\)</span>. The space of pairs <span class="math inline">\((\boldsymbol{q},\boldsymbol{p})\)</span> is the <strong>phase space</strong>.</p>
+</div>
+<div class="theorem" data-title="Hamilton's Equations">
+<p>The Euler-Lagrange equations are equivalent to <span class="math display">\[
+\dot q_i=\frac{\partial H}{\partial p_i},\qquad
+\dot p_i=-\frac{\partial H}{\partial q_i},\qquad
+\frac{\partial H}{\partial t}=-\frac{\partial\mathcal{L}}{\partial t}.
+\]</span> Moreover, along solutions <span class="math inline">\(\dfrac{dH}{dt}=\dfrac{\partial H}{\partial t}\)</span>, so <span class="math inline">\(H\)</span> is conserved when the system has no explicit time dependence.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Differentiating <span class="math inline">\(H=\sum p_i\dot q_i-\mathcal{L}\)</span> with respect to <span class="math inline">\(q_i\)</span> at fixed <span class="math inline">\(p\)</span>, the terms involving <span class="math inline">\(\partial\dot q/\partial q_i\)</span> cancel because <span class="math inline">\(p_j=\partial\mathcal{L}/\partial\dot q_j\)</span>: <span class="math display">\[
+\frac{\partial H}{\partial q_i}=-\frac{\partial\mathcal{L}}{\partial q_i}
+=-\frac{d}{dt}\frac{\partial\mathcal{L}}{\partial\dot q_i}=-\dot p_i,
+\]</span> using the Euler-Lagrange equation. The same cancellation gives <span class="math inline">\(\partial H/\partial p_i=\dot q_i\)</span> and <span class="math inline">\(\partial H/\partial t=-\partial
+\mathcal{L}/\partial t\)</span>. Finally <span class="math display">\[
+\frac{dH}{dt}=\sum_i\left(\frac{\partial H}{\partial q_i}\dot q_i
++\frac{\partial H}{\partial p_i}\dot p_i\right)+\frac{\partial H}{\partial t}
+=\frac{\partial H}{\partial t},
+\]</span> since the bracket is <span class="math inline">\(-\dot p_i\dot q_i+\dot q_i\dot p_i=0\)</span>.</p>
+</div>
+<p>For <span class="math inline">\(\mathcal{L}=K-U\)</span> with kinetic energy quadratic in the velocities, <span class="math inline">\(H=K+U\)</span> is the total energy.</p>
+<div class="example" data-title="Pendulum">
+<p>For the pendulum with <span class="math inline">\(\mathcal{L}=\tfrac12ml^2\dot\theta^2+mgl\cos\theta\)</span> we have <span class="math inline">\(p=ml^2\dot\theta\)</span> and <span class="math display">\[
+H=p\dot\theta-\mathcal{L}=\frac{p^2}{2ml^2}-mgl\cos\theta.
+\]</span> Hamilton’s equations are <span class="math inline">\(\dot\theta=p/(ml^2)\)</span> and <span class="math inline">\(\dot p=-mgl\sin\theta\)</span>, which combine to <span class="math inline">\(\ddot\theta=-(g/l)\sin\theta\)</span>. Since <span class="math inline">\(H\)</span> does not depend on <span class="math inline">\(t\)</span>, the energy <span class="math inline">\(H\)</span> is conserved and the orbits in phase space are its level sets.</p>
+</div>
+</section>
+<section id="hamiltonian-matrices" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="hamiltonian-matrices"><span class="header-section-number">2</span> Hamiltonian Matrices</h2>
+<p>For a system with a quadratic Hamiltonian <span class="math inline">\(H=\tfrac12\boldsymbol{z}^\top S
+\boldsymbol{z}\)</span> in <span class="math inline">\(\boldsymbol{z}=(\boldsymbol{q},\boldsymbol{p})\)</span>, with <span class="math inline">\(S\)</span> symmetric, Hamilton’s equations are linear, <span class="math inline">\(\dot{\boldsymbol{z}}=JS
+\boldsymbol{z}\)</span>, where <span class="math display">\[
+J=\begin{bmatrix}0_{n}&amp;I_{n}\\-I_{n}&amp;0_{n}\end{bmatrix}
+\]</span> is skew-symmetric and <span class="math inline">\(I_n\)</span> is the <span class="math inline">\(n\times n\)</span> identity. This motivates:</p>
+<div class="definition" data-title="Hamiltonian Matrix">
+<p>A <span class="math inline">\(2n\times2n\)</span> matrix <span class="math inline">\(A\)</span> is a <strong>Hamiltonian matrix</strong> if <span class="math inline">\(JA\)</span> is symmetric, equivalently <span class="math inline">\(JA+A^\top J=0\)</span>.</p>
+</div>
+<p>The matrix <span class="math inline">\(A=JS\)</span> is Hamiltonian since <span class="math inline">\(JA=J^2S=-S\)</span> is symmetric.</p>
+<div class="proposition" data-title="Spectrum of a Hamiltonian Matrix">
+<p>If <span class="math inline">\(A\)</span> is Hamiltonian then <span class="math inline">\(A^\top=JAJ\)</span>, so <span class="math inline">\(A\)</span> is similar to <span class="math inline">\(-A^\top\)</span>. Hence the eigenvalues of <span class="math inline">\(A\)</span> come in pairs <span class="math inline">\(\{\lambda,-\lambda\}\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>From <span class="math inline">\(JA+A^\top J=0\)</span> and <span class="math inline">\(J^{-1}=-J\)</span> we get <span class="math inline">\(A^\top=-JAJ^{-1}=JAJ\)</span>, hence <span class="math inline">\(-A^\top=JAJ^{-1}\)</span>, so <span class="math inline">\(A\)</span> is similar to <span class="math inline">\(-A^\top\)</span>. Similar matrices share eigenvalues, and <span class="math inline">\(A^\top\)</span> has the same eigenvalues as <span class="math inline">\(A\)</span>, so the spectrum of <span class="math inline">\(A\)</span> equals its negative.</p>
+</div>
+<p>In particular a linear Hamiltonian system cannot be asymptotically stable.</p>
+</section>
+<section id="the-control-hamiltonian" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-control-hamiltonian"><span class="header-section-number">3</span> The Control Hamiltonian</h2>
+<p>In <a href="../topics/control-theory.html">Control Theory</a> the word <strong>Hamiltonian</strong> refers to a function that encodes both the <strong>dynamics</strong> and the <strong>objective</strong> of an optimal control problem. It is the instantaneous increment of the <a href="../topics/lagrange-multiplier-method.html">Lagrangian</a> of the problem, and the structure is the same as in mechanics: the state <span class="math inline">\(\boldsymbol{x}\)</span> plays the role of <span class="math inline">\(\boldsymbol{q}\)</span>, the costate <span class="math inline">\(\boldsymbol{\lambda}\)</span> the role of <span class="math inline">\(\boldsymbol{p}\)</span>.</p>
+<section id="control-problem" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="control-problem"><span class="header-section-number">3.1</span> Control Problem</h3>
+<p>The system has dynamics given by <span class="math inline">\(n\)</span> <a href="../topics/ordinary-differential-equations.html">first-order ODEs</a> <span class="math display">\[
+\dot{\boldsymbol{x}}(t)=\boldsymbol{f}(\boldsymbol{x}(t),\boldsymbol{u}(t),t),
+\qquad \boldsymbol{x}(t_0)=\boldsymbol{x}_0,
+\]</span> where <span class="math inline">\(\boldsymbol{x}(t)\in\mathcal{X}\subseteq\mathbb{R}^n\)</span> is the <strong>state vector</strong> and <span class="math inline">\(\boldsymbol{u}(t)\in\mathcal{U}\subseteq\mathbb{R}^r\)</span> is the <strong>control vector</strong>, with <span class="math inline">\(\mathcal{X},\mathcal{U}\)</span> the admissible sets. For given <span class="math inline">\(\boldsymbol{x}_0\)</span> and control the solution is a <strong>trajectory</strong>. The problem is to choose <span class="math inline">\(\boldsymbol{u}\)</span> to minimise the <strong>cost functional</strong> <span class="math display">\[
+J(\boldsymbol{u})=\int_{t_{0}}^{t_{1}}L(\boldsymbol{x}(t),\boldsymbol{u}(t),t)
+~dt+\phi(\boldsymbol{x}(t_{1})),
+\]</span> where <span class="math inline">\(L\)</span> is the <strong>running cost</strong> and <span class="math inline">\(\phi\)</span> the <strong>terminal cost</strong>, subject to the dynamics above.</p>
+<div class="definition" data-title="Control Hamiltonian">
+<p>The <strong>control Hamiltonian</strong> is <span class="math display">\[
+H(\boldsymbol{x},\boldsymbol{u},\boldsymbol{\lambda},t)
+=L(\boldsymbol{x},\boldsymbol{u},t)
++\boldsymbol{\lambda}^{\top}\boldsymbol{f}(\boldsymbol{x},\boldsymbol{u},t),
+\]</span> where <span class="math inline">\(\boldsymbol{\lambda}(t)\in\mathbb{R}^n\)</span> is the <strong>costate</strong> (or <strong>adjoint</strong>) vector.</p>
+</div>
+<p>This combines the objective and the state equations as in a static <a href="../topics/lagrange-multiplier-method.html">Lagrangian</a>, except that the multipliers <span class="math inline">\(\boldsymbol{\lambda}(t)\)</span> are functions of time rather than constants.</p>
+<div class="intuition" data-title="Cost now versus cost later">
+<p>The Hamiltonian combines the <strong>instantaneous cost</strong>, via <span class="math inline">\(L\)</span>, and the <strong>effect of the control on the future</strong>, via <span class="math inline">\(\boldsymbol{\lambda}^\top
+\boldsymbol{f}\)</span>. We want a control that not only keeps the immediate cost low but also drives the system in a direction favourable in the long run, as measured by the costate.</p>
+</div>
+<div class="theorem" data-title="Pontryagin Maximum Principle">
+<p>An optimal pair <span class="math inline">\((\boldsymbol{x}^*,\boldsymbol{u}^*)\)</span> satisfies, for some costate <span class="math inline">\(\boldsymbol{\lambda}(t)\)</span>:</p>
+<ul>
+<li><strong>State equation</strong> (forward in time from <span class="math inline">\(\boldsymbol{x}(t_0)\)</span>): <span class="math display">\[\dot{\boldsymbol{x}}=\frac{\partial H}{\partial\boldsymbol{\lambda}}
+=\boldsymbol{f}(\boldsymbol{x},\boldsymbol{u},t).\]</span></li>
+<li><strong>Adjoint equation</strong> (backward in time from the terminal condition): <span class="math display">\[\dot{\boldsymbol{\lambda}}=-\frac{\partial H}{\partial\boldsymbol{x}},
+\qquad\boldsymbol{\lambda}(t_{1})=\frac{\partial\phi}{\partial
+\boldsymbol{x}}(\boldsymbol{x}(t_{1})).\]</span></li>
+<li><strong>Optimality condition:</strong> the optimal control minimises the Hamiltonian, <span class="math display">\[\boldsymbol{u}^*(t)=\arg\min_{\boldsymbol{u}\in\mathcal{U}}
+H(\boldsymbol{x}^*(t),\boldsymbol{u},\boldsymbol{\lambda}(t),t).\]</span> For an unconstrained interior solution this reduces to <span class="math inline">\(\partial H/\partial\boldsymbol{u}=\boldsymbol{0}\)</span>. For maximisation problems <span class="math inline">\(\arg\min\)</span> becomes <span class="math inline">\(\arg\max\)</span>.</li>
+</ul>
+</div>
+<p>Since <span class="math inline">\(\boldsymbol{x}\)</span> has a condition at <span class="math inline">\(t_0\)</span> and <span class="math inline">\(\boldsymbol{\lambda}\)</span> at <span class="math inline">\(t_1\)</span>, this is a <strong>two-point boundary value problem</strong>. The state and adjoint equations are exactly Hamilton’s equations for <span class="math inline">\(H\)</span>.</p>
+</section>
+<section id="example-linear-quadratic-regulator" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="example-linear-quadratic-regulator"><span class="header-section-number">3.2</span> Example: Linear-Quadratic Regulator</h3>
+<div class="example" data-title="Scalar LQR">
+<p>Take dynamics <span class="math inline">\(\dot x=ax+bu\)</span> and cost <span class="math inline">\(J(u)=\int_0^T\left(\tfrac12qx^2+\tfrac12ru^2\right)dt\)</span> with <span class="math inline">\(q\ge0\)</span>, <span class="math inline">\(r&gt;0\)</span> and no terminal cost.</p>
+<p><strong>Hamiltonian.</strong> With scalar costate <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(H=\tfrac12qx^2+\tfrac12ru^2+\lambda(ax+bu)\)</span>.</p>
+<p><strong>Optimal control.</strong> <span class="math inline">\(\partial H/\partial u=ru+\lambda b=0\)</span>, so <span class="math inline">\(u^*=-\dfrac{b}{r}\lambda\)</span>.</p>
+<p><strong>State and adjoint equations.</strong> <span class="math display">\[
+\dot x=ax-\frac{b^2}{r}\lambda,\qquad
+\dot\lambda=-\frac{\partial H}{\partial x}=-qx-a\lambda,\quad\lambda(T)=0.
+\]</span> In the variable <span class="math inline">\((x,\lambda)\)</span> this linear system has matrix <span class="math inline">\(\begin{bmatrix}a&amp;-b^2/r\\-q&amp;-a\end{bmatrix}\)</span>, which is a Hamiltonian matrix.</p>
+<p><strong>Riccati equation.</strong> Posing <span class="math inline">\(\lambda(t)=P(t)x(t)\)</span> and substituting into the adjoint equation gives <span class="math display">\[
+-\dot P=2aP-\frac{b^2}{r}P^2+q,\qquad P(T)=0,
+\]</span> and the optimal control takes the feedback form <span class="math inline">\(u^*=-\dfrac{b}{r}P(t)x(t)\)</span>.</p>
+</div>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -414,9 +522,9 @@ Backlinks
 <li><a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a></li>
 <li><a href="../topics/hamiltonian-monte-carlo.html">Hamiltonian Monte-Carlo</a></li>
 <li><a href="../topics/lagrangian-mechanics.html">Lagrangian Mechanics</a></li>
-<li><a href="../topics/stochastic-control-theory.html">Stochastic Control Theory</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

@@ -358,18 +358,18 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#jacobian-matrix" id="toc-jacobian-matrix" class="nav-link active" data-scroll-target="#jacobian-matrix">Jacobian Matrix</a>
+  <li><a href="#jacobian-matrix" id="toc-jacobian-matrix" class="nav-link active" data-scroll-target="#jacobian-matrix"><span class="header-section-number">1</span> Jacobian Matrix</a>
   <ul class="collapse">
-  <li><a href="#definition" id="toc-definition" class="nav-link" data-scroll-target="#definition">Definition</a></li>
-  <li><a href="#jacobian-and-best-linear-approximations" id="toc-jacobian-and-best-linear-approximations" class="nav-link" data-scroll-target="#jacobian-and-best-linear-approximations">Jacobian and Best Linear Approximations</a></li>
-  <li><a href="#jacobian-chain-rule" id="toc-jacobian-chain-rule" class="nav-link" data-scroll-target="#jacobian-chain-rule">Jacobian Chain Rule</a></li>
-  <li><a href="#jacobian-inverse" id="toc-jacobian-inverse" class="nav-link" data-scroll-target="#jacobian-inverse">Jacobian Inverse</a></li>
-  <li><a href="#critical-points" id="toc-critical-points" class="nav-link" data-scroll-target="#critical-points">Critical Points</a></li>
+  <li><a href="#best-linear-approximation" id="toc-best-linear-approximation" class="nav-link" data-scroll-target="#best-linear-approximation"><span class="header-section-number">1.1</span> Best Linear Approximation</a></li>
+  <li><a href="#chain-rule" id="toc-chain-rule" class="nav-link" data-scroll-target="#chain-rule"><span class="header-section-number">1.2</span> Chain Rule</a></li>
+  <li><a href="#inverse" id="toc-inverse" class="nav-link" data-scroll-target="#inverse"><span class="header-section-number">1.3</span> Inverse</a></li>
+  <li><a href="#critical-points" id="toc-critical-points" class="nav-link" data-scroll-target="#critical-points"><span class="header-section-number">1.4</span> Critical Points</a></li>
   </ul></li>
-  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix">Hessian Matrix</a>
+  <li><a href="#hessian-matrix" id="toc-hessian-matrix" class="nav-link" data-scroll-target="#hessian-matrix"><span class="header-section-number">2</span> Hessian Matrix</a>
   <ul class="collapse">
-  <li><a href="#optimization" id="toc-optimization" class="nav-link" data-scroll-target="#optimization">Optimization</a></li>
+  <li><a href="#applications-to-optimisation" id="toc-applications-to-optimisation" class="nav-link" data-scroll-target="#applications-to-optimisation"><span class="header-section-number">2.1</span> Applications to Optimisation</a></li>
   </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">3</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -408,105 +408,109 @@ window.Quarto = {
 </header>
 
 
-<section id="jacobian-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="jacobian-matrix">Jacobian Matrix</h2>
-<section id="definition" class="level3">
-<h3 class="anchored" data-anchor-id="definition">Definition</h3>
-<p>In <strong>vector calculus</strong> the <strong>Jacobian matrix</strong> of a vector function <span class="math inline">\(f:\mathbb{R}^n\to \mathbb{R}^m\)</span> is the matrix of all the first-order partial derivatives. If this matrix is square, that is <span class="math inline">\(n=m\)</span>, then the matrix determinant is called the <strong>Jacobian determinant</strong>. Intuitively, the Jacobian matrix is the natural generalization of the derivative of functions to vector valued functions.</p>
+<section id="jacobian-matrix" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="jacobian-matrix"><span class="header-section-number">1</span> Jacobian Matrix</h2>
+<p>In <a href="../topics/vector-calculus.html">Vector Calculus</a> the <strong>Jacobian matrix</strong> of a vector function <span class="math inline">\(\boldsymbol{f}:\mathbb{R}^n\to\mathbb{R}^m\)</span> collects all of its first-order partial derivatives. It is the natural generalisation of the derivative to vector-valued functions. If the matrix is square (<span class="math inline">\(n=m\)</span>) its determinant is the <strong>Jacobian determinant</strong>.</p>
 <div class="definition" data-title="Jacobian Matrix">
-<p>Let <span class="math inline">\(\boldsymbol{f}:\mathbb{R}^n\to \mathbb{R}^m\)</span> be a vector function such that all first-order partial derivatives exist on <span class="math inline">\(\mathbb{R}^n\)</span>. Then the <strong>Jacobian matrix</strong> of <span class="math inline">\(\boldsymbol{f}\)</span> denoted <span class="math inline">\(J_{\boldsymbol{f}}\)</span> is the <span class="math inline">\(m \times n\)</span> matrix whose <span class="math inline">\((i,j)\)</span>-th entry is <span class="math inline">\(\frac{{\partial f_{i}}}{\partial x_{j}}\)</span></p>
+<p>Let <span class="math inline">\(\boldsymbol{f}:\mathbb{R}^n\to\mathbb{R}^m\)</span> be a vector function whose first-order partial derivatives all exist. The <strong>Jacobian matrix</strong> <span class="math inline">\(J_{\boldsymbol{f}}\)</span> is the <span class="math inline">\(m\times n\)</span> matrix with <span class="math inline">\((i,j)\)</span>-th entry <span class="math inline">\(\frac{\partial f_{i}}{\partial x_{j}}\)</span>:</p>
 <p><span class="math display">\[
 J_{\boldsymbol{f}}=\begin{bmatrix}
-\frac{{\partial \boldsymbol{f}}}{\partial x_{1}} &amp; \cdots &amp;
-\frac{{\partial \boldsymbol{f}}}{\partial x_{n}}
+\frac{\partial \boldsymbol{f}}{\partial x_{1}} &amp; \cdots &amp;
+\frac{\partial \boldsymbol{f}}{\partial x_{n}}
 \end{bmatrix}=\begin{bmatrix}
-\nabla ^Tf_{1} \\
-\vdots  \\
-\nabla^T{f}_{m}
+\nabla^{\top}f_{1} \\
+\vdots \\
+\nabla^{\top}f_{m}
 \end{bmatrix}=\begin{bmatrix}
-\frac{{\partial f_{1}}}{\partial x_{1}} &amp; \cdots &amp;
-\frac{{\partial f_{1}}}{\partial x_{n}}  \\
-\vdots &amp; \ddots &amp; \vdots  \\
-\frac{{\partial f_{m}}}{\partial x_{1}}  &amp; \cdots  &amp;
-\frac{{\partial f_{m}}}{\partial x_{n}}
+\frac{\partial f_{1}}{\partial x_{1}} &amp; \cdots &amp;
+\frac{\partial f_{1}}{\partial x_{n}} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial f_{m}}{\partial x_{1}} &amp; \cdots &amp;
+\frac{\partial f_{m}}{\partial x_{n}}
 \end{bmatrix},
 \]</span></p>
-<p>where <span class="math inline">\(\nabla^Tf_{i}\)</span> is the transpose (row vector) of the <strong>gradient</strong> (see <a href="../topics/vector-calculus-identities.html">Divergence</a>) of the <span class="math inline">\(i\)</span>-th component.</p>
+<p>where <span class="math inline">\(\nabla^{\top}f_{i}\)</span> is the row vector given by the transpose of the <a href="../topics/gradient.html">Gradient</a> of the <span class="math inline">\(i\)</span>-th component (see <a href="../topics/vector-calculus-identities.html">Divergence</a>).</p>
 </div>
 <div class="example">
-<p>Consider the function <span class="math inline">\(f(x,y)=(2x^2+3xy, 4y^2x+2x)\)</span>. We can compute the Jacobian as</p>
-<p><span class="math display">\[
+<p>Let <span class="math inline">\(f(x,y)=(2x^2+3xy,\ 4y^2x+2x)\)</span>. Then <span class="math display">\[
 J_{f}=\begin{bmatrix}
 4x+3y &amp; 3x \\
 4y^2+2 &amp; 8xy
-\end{bmatrix}.
-\]</span></p>
-<p>Further, the Jacobian determinant is given by</p>
-<p><span class="math display">\[
-\det(J_{f})=8xy(4x+3y)-3x(4y^2+2)=32x^2y+24xy^2-12xy^2-6x=32x^2y+12xy^2-6x.
-\]</span></p>
-<p>The Jacobian is giving the change of the <em>new</em> <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates with respect to the <em>old</em> <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates.</p>
+\end{bmatrix},
+\]</span> and the Jacobian determinant is <span class="math display">\[
+\det(J_{f})=8xy(4x+3y)-3x(4y^2+2)=32x^2y+12xy^2-6x.
+\]</span> The Jacobian describes the change in the <em>new</em> coordinates with respect to the <em>old</em> coordinates.</p>
 </div>
-</section>
-<section id="jacobian-and-best-linear-approximations" class="level3">
-<h3 class="anchored" data-anchor-id="jacobian-and-best-linear-approximations">Jacobian and Best Linear Approximations</h3>
-<p>If the function <span class="math inline">\(\boldsymbol{f}\)</span> is differentiable at a point <span class="math inline">\(\boldsymbol{x}^*\in \mathbb{R}^n\)</span> then its differential is represented by <span class="math inline">\(J_{\boldsymbol{f}}(\boldsymbol{x}^*)\)</span>. In this case, the [[linear-transformation]] represented by <span class="math inline">\(J_{\boldsymbol{f}}(\boldsymbol{x})\)</span> is the <strong>best linear approximation</strong> of <span class="math inline">\(\boldsymbol{f}\)</span> near the point <span class="math inline">\(\boldsymbol{x}^*\)</span> in the sense that</p>
+<section id="best-linear-approximation" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="best-linear-approximation"><span class="header-section-number">1.1</span> Best Linear Approximation</h3>
+<p>If <span class="math inline">\(\boldsymbol{f}\)</span> is differentiable at <span class="math inline">\(\boldsymbol{x}^*\in\mathbb{R}^n\)</span> then its differential is represented by <span class="math inline">\(J_{\boldsymbol{f}}(\boldsymbol{x}^*)\)</span>, and the linear map <span class="math inline">\(\boldsymbol{h}\mapsto J_{\boldsymbol{f}}(\boldsymbol{x}^*)
+\boldsymbol{h}\)</span> is the <strong>best linear approximation</strong> of <span class="math inline">\(\boldsymbol{f}\)</span> near <span class="math inline">\(\boldsymbol{x}^*\)</span>:</p>
 <p><span class="math display">\[
 \boldsymbol{f}(\boldsymbol{x})-\boldsymbol{f}(\boldsymbol{x}^*)=
-J_{\boldsymbol{f}}(\boldsymbol{x}^*)(\boldsymbol{x}-
-\boldsymbol{x^*})+o(\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert );
-\quad \boldsymbol{x}\to \boldsymbol{x}^*,
-\]</span> where <span class="math inline">\(o(\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert)\)</span> denotes some quantity that is of inferior order to <span class="math inline">\(\lVert \boldsymbol{x}-\boldsymbol{x}^* \rVert\)</span> and thus approaches zero much faster.</p>
-<p>This approximation specializes to the approximation of a scalar function of a single variable by <a href="../topics/taylor-series.html">Taylor Series</a> of degree one, namely <span class="math display">\[
-f(x)-f(x^*) = f'(x^*)(x-x^*)+o(x-x^*);\quad x \to x^*.
-\]</span> Thus our statement that a Jacobian may be regarded as a kind of <em>first-order derivative</em> of a vector function.</p>
+J_{\boldsymbol{f}}(\boldsymbol{x}^*)(\boldsymbol{x}-\boldsymbol{x}^*)
++o(\lVert\boldsymbol{x}-\boldsymbol{x}^*\rVert),\qquad
+\boldsymbol{x}\to\boldsymbol{x}^*,
+\]</span></p>
+<p>where <span class="math inline">\(o(\lVert\boldsymbol{x}-\boldsymbol{x}^*\rVert)\)</span> is a remainder that vanishes faster than <span class="math inline">\(\lVert\boldsymbol{x}-\boldsymbol{x}^*\rVert\)</span>. For <span class="math inline">\(n=m=1\)</span> this is the degree-one <a href="../topics/taylor-series.html">Taylor Series</a> approximation <span class="math inline">\(f(x)-f(x^*)=f'(x^*)(x-x^*)+o(x-x^*)\)</span>, so the Jacobian is the first-order derivative of a vector function.</p>
 </section>
-<section id="jacobian-chain-rule" class="level3">
-<h3 class="anchored" data-anchor-id="jacobian-chain-rule">Jacobian Chain Rule</h3>
+<section id="chain-rule" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="chain-rule"><span class="header-section-number">1.2</span> Chain Rule</h3>
 <div class="theorem" data-title="Jacobian Chain Rule">
-<p>Composable functions <span class="math inline">\(f:\mathbb{R}^n\to \mathbb{R}^m\)</span> and <span class="math inline">\(g:\mathbb{R}^m\to \mathbb{R}^k\)</span> satisfy the <a href="../topics/chain-rule.html">Chain Rule</a> in that for <span class="math inline">\(x \in \mathbb{R}^n\)</span> we have <span class="math display">\[
-J_{g\circ f}(x)=J_{g}(f(x))J_{f(x)}.
+<p>For composable differentiable functions <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}^m\)</span> and <span class="math inline">\(g:\mathbb{R}^m\to\mathbb{R}^k\)</span>, and <span class="math inline">\(x\in\mathbb{R}^n\)</span>, <span class="math display">\[
+J_{g\circ f}(x)=J_{g}(f(x))\,J_{f}(x).
 \]</span></p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span></p>
+<p><span class="proof-title"><em>Proof</em>. </span>By the best linear approximation of <span class="math inline">\(f\)</span> at <span class="math inline">\(x\)</span> and of <span class="math inline">\(g\)</span> at <span class="math inline">\(f(x)\)</span>, with <span class="math inline">\(h\to0\)</span>, <span class="math display">\[
+g(f(x+h))=g\bigl(f(x)+J_{f}(x)h+o(\lVert h\rVert)\bigr)
+=g(f(x))+J_{g}(f(x))J_{f}(x)h+o(\lVert h\rVert).
+\]</span> The matrix multiplying <span class="math inline">\(h\)</span> is the Jacobian of <span class="math inline">\(g\circ f\)</span> at <span class="math inline">\(x\)</span>. This is the matrix form of the <a href="../topics/chain-rule.html">Chain Rule</a>.</p>
 </div>
 </section>
-<section id="jacobian-inverse" class="level3">
-<h3 class="anchored" data-anchor-id="jacobian-inverse">Jacobian Inverse</h3>
-<p>From the [[Inverse Function Theorem]], the matrix inverse of the Jacobian of an [[Bijective Function|invertible function]] <span class="math inline">\(f:\mathbb{R}^n\to \mathbb{R}^n\)</span> is the Jacobian of the inverse. That is, the Jacobian matrix of the inverse function at some point <span class="math inline">\(x \in \mathbb{R}^n\)</span> is given by</p>
-<p><span class="math display">\[
-J_{f^{-1}}(x)=J_{f}^{-1}(f^{-1}(x)),
-\]</span></p>
-<p>and the Jacobian determinant is</p>
-<p><span class="math display">\[
-\det(J_{f^{-1}}(x))= \frac{1}{\det(J_{f}(f^{-1}(x)))}.
-\]</span></p>
-<p>If the Jacobian is [[Continuous Functions|continuous]] and nonsingular at the point <span class="math inline">\(x \in\mathbb{R}^n\)</span> then <span class="math inline">\(f\)</span> is invertible when restricted to some [[Neighborhoods|neighborhood]] of <span class="math inline">\(x\)</span>. In other words, if the Jacobian determinant is non-zero at a point, then the function is <strong>locally invertible</strong> near this point.</p>
+<section id="inverse" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="inverse"><span class="header-section-number">1.3</span> Inverse</h3>
+<p>By the inverse function theorem, if <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}^n\)</span> has a continuous Jacobian that is non-singular at <span class="math inline">\(x\)</span>, then <span class="math inline">\(f\)</span> is invertible on a neighbourhood of <span class="math inline">\(x\)</span>, i.e.&nbsp;it is <strong>locally invertible</strong>. The Jacobian of the inverse is the matrix inverse of the Jacobian, <span class="math display">\[
+J_{f^{-1}}(y)=J_{f}(f^{-1}(y))^{-1},\qquad
+\det J_{f^{-1}}(y)=\frac{1}{\det J_{f}(f^{-1}(y))}.
+\]</span> This follows from the chain rule applied to <span class="math inline">\(f\circ f^{-1}=\mathrm{id}\)</span>. These formulas drive the <a href="../topics/change-of-variables-formula.html">Change-of-Variables Formula</a>.</p>
 </section>
-<section id="critical-points" class="level3">
-<h3 class="anchored" data-anchor-id="critical-points">Critical Points</h3>
-<p>If <span class="math inline">\(f : \mathbb{R}^n → \mathbb{R}^m\)</span> is a differentiable function, a <strong>critical point</strong> of <span class="math inline">\(f\)</span> is a point where the [[Matrix Rank|rank]] of the Jacobian matrix is not maximal. This means that the rank at the critical point is lower than the rank at some neighbor point. In other words, let <span class="math inline">\(k\)</span> be the maximal dimension of the open balls contained in the image of <span class="math inline">\(f\)</span>; then a point is critical if all minors of rank <span class="math inline">\(k\)</span> of <span class="math inline">\(f\)</span> are zero.</p>
+<section id="critical-points" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="critical-points"><span class="header-section-number">1.4</span> Critical Points</h3>
+<p>For a differentiable <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}^m\)</span>, a <strong>critical point</strong> is a point where the rank of <span class="math inline">\(J_{f}\)</span> is not maximal, i.e.&nbsp;is smaller than <span class="math inline">\(\min(n,m)\)</span>. For <span class="math inline">\(m=1\)</span> these are the points where <span class="math inline">\(\nabla f=0\)</span>; for <span class="math inline">\(n=m\)</span> they are the points where <span class="math inline">\(\det J_{f}=0\)</span>.</p>
 </section>
 </section>
-<section id="hessian-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="hessian-matrix">Hessian Matrix</h2>
-<p>The Jacobian of the <a href="../topics/vector-calculus-identities.html">gradient</a> of a scalar function of several variables is known as the <strong>Hessian Matrix</strong> which is intuitively the <em>second derivative</em> of the function in question.</p>
-<p>The <strong>Hessian matrix</strong> is a square matrix of second-order partial derivatives of a scalar-valued function, or scalar-field (see <a href="../topics/linear-algebra.html">Linear Algebra</a>).. The Hessian describes the <strong>local curvature of a multivariate function</strong>. The Hessian is typically denoted <span class="math inline">\(H\)</span> but has historically also been denoted by <span class="math inline">\(\nabla \nabla\)</span> or <span class="math inline">\(\nabla ^2\)</span> or <span class="math inline">\(\nabla \otimes \nabla\)</span> or <span class="math inline">\(D^2\)</span>.</p>
-<blockquote class="blockquote">
-<p>[!definition] Hessian Matrix Consider the scalar function <span class="math inline">\(f:\mathbb{R}^n\to \mathbb{R}\)</span>. If all second-order partial derivatives of <span class="math inline">\(f\)</span> exist, then the <strong>Hessian matrix</strong> <span class="math inline">\(H\)</span> of <span class="math inline">\(f\)</span> is a square <span class="math inline">\(n \times n\)</span> matrix defined as <span class="math display">\[H_{f}=(H_{f})_{i,j}:=\left(\frac{{\partial^2f}}{\partial x_{i}\partial x_{j}}\right)_{i,j}.\]</span></p>
-</blockquote>
-<p>Further, if the second partial derivatives are all continuous, the Hessian matrix is a <strong>symmetric matrix</strong> by the symmetry of second derivatives. The determinant of the Hessian matrix is called the <strong>Hessian determinant</strong>.</p>
-<p>The Hessian matrix of a function <span class="math inline">\(F\)</span> is the transpose of the [<a href="#jacobian-matrix">Jacobian Matrix</a>] of the <a href="../topics/gradient.html">Gradient</a> of the function <span class="math inline">\(f\)</span>. That is <span class="math display">\[
-H(f(x))=J(\nabla f(x))^\top.
-\]</span> ## Applications</p>
-<section id="optimization" class="level3">
-<h3 class="anchored" data-anchor-id="optimization">Optimization</h3>
-<p><em>References: <a href="https://en.wikipedia.org/wiki/Hessian_matrix">Wikipedia</a>.</em></p>
-<p>Hessian matrices are used in large-scale optimization problems with Newton-type methods because they are the coefficient of the quadratic term of a local <a href="../topics/taylor-series.html">Taylor expansion</a> of a function. That is <span class="math display">\[
-y = f(\boldsymbol{x}+ \Delta \boldsymbol{ x})\approx f(\boldsymbol{x})+\nabla f(\boldsymbol{x})^\top \Delta \boldsymbol{x}+ \frac{1}{2}\Delta \boldsymbol{x}^\top H(\boldsymbol{x})\Delta \boldsymbol{x},
-\]</span> where <span class="math inline">\(\nabla f\)</span> is the <a href="../topics/gradient.html">Gradient</a>.</p>
-<p>Computing and storing the full Hessian takes <span class="math inline">\(\mathcal{O}(n^2)\)</span> memory, which is infeasible for high-dimensional functions such as the loss functions of Neural Networks, Conditional random fields and other statistical models with large numbers of parameters.</p>
+<section id="hessian-matrix" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="hessian-matrix"><span class="header-section-number">2</span> Hessian Matrix</h2>
+<p>The <strong>Hessian matrix</strong> is the second-order analogue of the Jacobian, for a scalar field. It describes the <strong>local curvature</strong> of a multivariate function. It is usually denoted <span class="math inline">\(H\)</span> (historically also <span class="math inline">\(\nabla\nabla\)</span>, <span class="math inline">\(\nabla^2\)</span>, <span class="math inline">\(\nabla\otimes\nabla\)</span> or <span class="math inline">\(D^2\)</span>).</p>
+<div class="definition" data-title="Hessian Matrix">
+<p>Let <span class="math inline">\(f:\mathbb{R}^n\to\mathbb{R}\)</span> have all second-order partial derivatives. The <strong>Hessian matrix</strong> of <span class="math inline">\(f\)</span> is the <span class="math inline">\(n\times n\)</span> matrix <span class="math display">\[
+(H_{f})_{i,j}:=\frac{\partial^2 f}{\partial x_{i}\partial x_{j}}.
+\]</span> Its determinant is the <strong>Hessian determinant</strong>.</p>
+</div>
+<p>If the second partial derivatives are continuous, then <span class="math inline">\(H_{f}\)</span> is a <strong>symmetric matrix</strong> by the symmetry of mixed partial derivatives. The Hessian is the Jacobian of the gradient, transposed: <span class="math display">\[
+H_{f}(x)=J_{\nabla f}(x)^{\top}.
+\]</span> (The two coincide when <span class="math inline">\(H_f\)</span> is symmetric.)</p>
+<div class="example">
+<p>For <span class="math inline">\(f(x,y)=x^2y+y^3\)</span>, <span class="math display">\[
+\nabla f=\begin{pmatrix}2xy\\ x^2+3y^2\end{pmatrix},\qquad
+H_{f}=\begin{bmatrix}2y &amp; 2x\\ 2x &amp; 6y\end{bmatrix},
+\]</span> which is symmetric, as expected.</p>
+</div>
+<section id="applications-to-optimisation" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="applications-to-optimisation"><span class="header-section-number">2.1</span> Applications to Optimisation</h3>
+<p>The Hessian is the coefficient of the quadratic term in the second-order <a href="../topics/taylor-series.html">Taylor expansion</a> <span class="math display">\[
+f(\boldsymbol{x}+\Delta\boldsymbol{x})\approx f(\boldsymbol{x})
++\nabla f(\boldsymbol{x})^{\top}\Delta\boldsymbol{x}
++\tfrac{1}{2}\Delta\boldsymbol{x}^{\top}H_{f}(\boldsymbol{x})\Delta\boldsymbol{x}.
+\]</span> At a critical point (<span class="math inline">\(\nabla f=0\)</span>) the sign of the quadratic form decides the type of the point: a minimum if <span class="math inline">\(H_f\)</span> is positive definite, a maximum if it is negative definite and a saddle if it is indefinite (see <a href="../topics/matrices.html#quadratic-forms-and-positive-definiteness">positive definite matrices</a>). Newton-type methods in <a href="../topics/optimization.html">Optimization</a> use this expansion to choose their steps.</p>
+<p>Computing and storing the full Hessian takes <span class="math inline">\(\mathcal{O}(n^2)\)</span> memory, which is infeasible for high-dimensional problems such as the loss functions of neural networks or statistical models with many parameters.</p>
+</section>
+</section>
+<section id="references" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="references"><span class="header-section-number">3</span> References</h2>
+<ol type="1">
+<li><a href="https://en.wikipedia.org/wiki/Hessian_matrix">Wikipedia: Hessian matrix</a>.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -515,10 +519,13 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
+<li><a href="../topics/change-of-variables-formula.html">Change-of-Variables Formula</a></li>
+<li><a href="../topics/gaussian-integral.html">Gaussian Integral</a></li>
 <li><a href="../topics/gradient.html">Gradient</a></li>
+<li><a href="../topics/infinitesimal-generator.html">Infinitesimal Generator</a></li>
+<li><a href="../topics/lagrange-multiplier-method.html">Lagrange Multiplier Method</a></li>
 </ul>
 </div>
-</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

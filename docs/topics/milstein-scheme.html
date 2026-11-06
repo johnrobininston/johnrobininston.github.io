@@ -8,6 +8,7 @@
 
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
+<meta name="description" content="The Milstein scheme for simulating SDEs, a strong order 1 improvement on Euler-Maruyama.">
 
 <title>Milstein Scheme – John Robin Inston</title>
 <style>
@@ -358,7 +359,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#milstein-scheme" id="toc-milstein-scheme" class="nav-link active" data-scroll-target="#milstein-scheme"><span class="header-section-number">1</span> Milstein Scheme</a></li>
+  <li><a href="#idea" id="toc-idea" class="nav-link active" data-scroll-target="#idea"><span class="header-section-number">1</span> Idea</a></li>
+  <li><a href="#the-scheme" id="toc-the-scheme" class="nav-link" data-scroll-target="#the-scheme"><span class="header-section-number">2</span> The Scheme</a></li>
+  <li><a href="#example-black-scholes-merton-model" id="toc-example-black-scholes-merton-model" class="nav-link" data-scroll-target="#example-black-scholes-merton-model"><span class="header-section-number">3</span> Example: Black-Scholes-Merton Model</a></li>
+  <li><a href="#convergence" id="toc-convergence" class="nav-link" data-scroll-target="#convergence"><span class="header-section-number">4</span> Convergence</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">5</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -371,6 +376,11 @@ window.Quarto = {
 <h1 class="title">Milstein Scheme</h1>
 </div>
 
+<div>
+  <div class="description">
+    The Milstein scheme for simulating SDEs, a strong order 1 improvement on Euler-Maruyama.
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -397,25 +407,54 @@ window.Quarto = {
 </header>
 
 
-<section id="milstein-scheme" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="milstein-scheme"><span class="header-section-number">1</span> Milstein Scheme</h2>
-<p><em>References: [[higham-kloeden]] §17.4.</em></p>
-<p>The <strong>Milstein Scheme</strong> is a methodology for simulating continuous time stochastic processes with dynamics given by some SDE, improving upon the <a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a>.</p>
-<p>improves upon the <a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a> approach by considering this Taylor expansion, grouping terms based on powers of <span class="math inline">\(\Delta t\)</span> and removing all terms with powers <span class="math inline">\(&gt;1\)</span>. The general form of the Milstein method is given by <span class="math display">\[
-\begin{align}
-X_{n+1} = X_{n}+\Delta t f(t_{n}, X_{n}) + \Delta W_{n}g(t_{n},X_{n})+L^1g(t_{n}, X(t_{n}))\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{s}{}~d{W(u)}}~d{W(s)},
-\end{align}
-\]</span> where <span class="math inline">\(L_{1}=g \frac{\partial}{\partial x}\)</span> and <span class="math inline">\(\int_{t_{n}}^{t_{n+1}}{\int_{t_{n}}^{t}{}~d{W(s)}}~d{W(t)}= \frac{1}{2}((\Delta W_{n})^2 - \Delta t)\)</span>. Again returning to our simple BSM model example we can write our approximation as <span class="math display">\[
-S_{t+\Delta t}=S_{t}\left\{ 1+\sigma(\Delta t)^{\frac{1}{2}}\xi+\Delta t \left[ r+ \frac{1}{2}\left( \sigma^2(\xi^2-1) \right) \right] \right\}.\tag{11}
-\]</span> This is again very easy to simulate with a <code>for</code> loop:</p>
-<pre><code>## Milstein's Algorithm
-S &lt;- S0
-for(i in 2:length(t)){
-    xi &lt;- rnorm(1,0,1)
-    S[i] &lt;- S[i-1]*(1+sigma*h^(1/2)*xi + 
-        h*(r+(1/2)*(sigma^2*(xi^2 - 1))))
+<section id="idea" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="idea"><span class="header-section-number">1</span> Idea</h2>
+<p>The <strong>Milstein scheme</strong> simulates the solution of an SDE (see <a href="../topics/sde-simulation.html">SDE Simulation</a>) and improves on the <a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a> by keeping one more term of the stochastic Taylor expansion. Consider</p>
+<p><span class="math display">\[
+dX_t=f(t,X_t)\,dt+g(t,X_t)\,dW_t,
+\]</span></p>
+<p>with Lipschitz coefficients <span class="math inline">\(f,g\)</span> and <a href="../topics/brownian-motion.html">Brownian Motion</a> <span class="math inline">\(W\)</span>, simulated on the grid <span class="math inline">\(t_n=n\Delta t\)</span> with <span class="math inline">\(\Delta W_n=W_{t_{n+1}}-W_{t_n}\)</span>. Euler-Maruyama freezes <span class="math inline">\(g\)</span> at the left endpoint. Applying the <a href="../topics/ito-formula.html">Itô Formula</a> to <span class="math inline">\(g\)</span> instead shows the next-largest term is <span class="math inline">\(L^1g\int\!\!\int dW\,dW\)</span>, where <span class="math inline">\(L^1=g\,\partial_x\)</span>, and the double integral is explicit,</p>
+<p><span class="math display">\[
+\int_{t_n}^{t_{n+1}}\int_{t_n}^{s}dW_u\,dW_s
+=\tfrac{1}{2}\left((\Delta W_n)^2-\Delta t\right).
+\]</span></p>
+</section>
+<section id="the-scheme" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-scheme"><span class="header-section-number">2</span> The Scheme</h2>
+<div class="definition" data-title="Milstein Scheme">
+<p><span class="math display">\[
+X_{n+1}=X_n+f(t_n,X_n)\Delta t+g(t_n,X_n)\Delta W_n
++\frac{1}{2}\,g(t_n,X_n)\,\partial_xg(t_n,X_n)
+\left((\Delta W_n)^2-\Delta t\right).
+\]</span></p>
+</div>
+<p>The extra term is a correction for the fact that the diffusion coefficient changes across the step, and it vanishes when <span class="math inline">\(g\)</span> does not depend on <span class="math inline">\(x\)</span> (additive noise), in which case Milstein coincides with Euler-Maruyama.</p>
+</section>
+<section id="example-black-scholes-merton-model" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="example-black-scholes-merton-model"><span class="header-section-number">3</span> Example: Black-Scholes-Merton Model</h2>
+<p>For the <a href="../topics/black-scholes-merton-model.html">BSM model</a> under <span class="math inline">\(\mathbb{Q}\)</span>, <span class="math inline">\(f=rS\)</span> and <span class="math inline">\(g=\sigma S\)</span>, so <span class="math inline">\(g\,\partial_xg=\sigma^2S\)</span>. Writing <span class="math inline">\(\Delta W=\sqrt{\Delta t}\,\xi\)</span> with <span class="math inline">\(\xi\sim\mathcal{N}(0,1)\)</span>,</p>
+<p><span class="math display">\[
+S_{t+\Delta t}=S_t\left\{1+\sigma\sqrt{\Delta t}\,\xi
++\Delta t\left[r+\tfrac{1}{2}\sigma^2(\xi^2-1)\right]\right\}.
+\]</span></p>
+<p>This is easy to simulate with a loop, where <code>h</code> is the step size.</p>
+<pre><code>S &lt;- S0
+for (i in 2:length(t)) {
+  xi &lt;- rnorm(1, 0, 1)
+  S[i] &lt;- S[i-1] * (1 + sigma * sqrt(h) * xi +
+            h * (r + 0.5 * sigma^2 * (xi^2 - 1)))
 }</code></pre>
-<p>For both the Euler-Maruyama method and the Milstein method it seems natural to suggest that the approximation improves as <span class="math inline">\(N \to \infty\)</span> and to test this presumption we must consider the two standard approached for measuring the error <span class="math inline">\(X_{n}\to X(t_{n})\)</span>, leading to the concepts of weak and strong convergence. This will also allow us to more concretely quantify the improvement over the Euler-Maruyama method that the Milstein method provides.</p>
+</section>
+<section id="convergence" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="convergence"><span class="header-section-number">4</span> Convergence</h2>
+<p>To compare the two schemes one measures the error <span class="math inline">\(X_n\to X(t_n)\)</span> in the strong sense, <span class="math inline">\(\mathbb{E}|X_n-X(t_n)|\)</span>, and in the weak sense, <span class="math inline">\(|\mathbb{E}\,\phi(X_n)-\mathbb{E}\,\phi(X(t_n))|\)</span>. Under the usual smoothness assumptions Milstein has strong order <span class="math inline">\(1\)</span>, against order <span class="math inline">\(1/2\)</span> for Euler-Maruyama, while both have weak order <span class="math inline">\(1\)</span>. The comparison is carried out in <a href="../topics/sde-simulation.html">SDE Simulation</a>.</p>
+</section>
+<section id="references" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="references"><span class="header-section-number">5</span> References</h2>
+<ol type="1">
+<li>Higham, D. J. and Kloeden, P. E. (2021). <em>An Introduction to the Numerical Simulation of Stochastic Differential Equations</em>. SIAM, Section 17.4.</li>
+<li>Kloeden, P. E. and Platen, E. (1992). <em>Numerical Solution of Stochastic Differential Equations</em>. Springer.</li>
+</ol>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -423,6 +462,7 @@ for(i in 2:length(t)){
 Backlinks
 </div>
 <ul>
+<li><a href="../topics/numerical-methods-in-financial-mathematics.html">Numerical Methods in Financial Mathematics</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 </ul>
 </div>

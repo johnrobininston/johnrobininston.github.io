@@ -373,7 +373,11 @@ window.Quarto = {
   <li><a href="#for-sequences" id="toc-for-sequences" class="nav-link" data-scroll-target="#for-sequences"><span class="header-section-number">5.1</span> For sequences</a></li>
   <li><a href="#for-sets" id="toc-for-sets" class="nav-link" data-scroll-target="#for-sets"><span class="header-section-number">5.2</span> For sets</a></li>
   </ul></li>
-  <li><a href="#limsup-liminf-and-measure" id="toc-limsup-liminf-and-measure" class="nav-link" data-scroll-target="#limsup-liminf-and-measure"><span class="header-section-number">6</span> Limsup &amp; Liminf and Measure</a></li>
+  <li><a href="#limsup-liminf-and-measure" id="toc-limsup-liminf-and-measure" class="nav-link" data-scroll-target="#limsup-liminf-and-measure"><span class="header-section-number">6</span> Limsup &amp; Liminf and Measure</a>
+  <ul class="collapse">
+  <li><a href="#inequalities" id="toc-inequalities" class="nav-link" data-scroll-target="#inequalities"><span class="header-section-number">6.1</span> Inequalities</a></li>
+  <li><a href="#borel-cantelli-lemmas" id="toc-borel-cantelli-lemmas" class="nav-link" data-scroll-target="#borel-cantelli-lemmas"><span class="header-section-number">6.2</span> Borel-Cantelli Lemmas</a></li>
+  </ul></li>
   <li><a href="#related-topics" id="toc-related-topics" class="nav-link" data-scroll-target="#related-topics"><span class="header-section-number">7</span> Related Topics</a></li>
   </ul>
 </nav>
@@ -588,14 +592,68 @@ window.Quarto = {
 </section>
 <section id="limsup-liminf-and-measure" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="limsup-liminf-and-measure"><span class="header-section-number">6</span> Limsup &amp; Liminf and Measure</h2>
-<p>For the relationship between <span class="math inline">\(\mu(\limsup A_n)\)</span>, <span class="math inline">\(\mu(\liminf A_n)\)</span> and the limsup/liminf of <span class="math inline">\(\mu(A_n)\)</span>, and the Borel-Cantelli lemmas, see <a href="../topics/limsup-liminf-and-measure.html">Limsup, Liminf and Measure</a>.</p>
+<p>For events <span class="math inline">\(A_n\)</span> in a probability space, <span class="math inline">\(\mathbb{P}(\limsup A_n)\)</span> is the probability that <span class="math inline">\(A_n\)</span> occurs infinitely often. We now relate the limsup/liminf of the measures <span class="math inline">\(\mu(A_n)\)</span> to the measure of the limsup/liminf of the sets <span class="math inline">\(A_n\)</span>, using continuity from above and below of measures, see <a href="../topics/measure-spaces.html">Measure Spaces</a>.</p>
+<section id="inequalities" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="inequalities"><span class="header-section-number">6.1</span> Inequalities</h3>
+<div class="theorem" data-title="Measure of Limsup &amp; Liminf">
+<p>Let <span class="math inline">\((X,\mathcal{M},\mu)\)</span> be a measure space and <span class="math inline">\(A_n\in\mathcal{M}\)</span>.</p>
+<ol type="1">
+<li><span class="math inline">\(\mu(\liminf A_n)\leq\liminf\mu(A_n)\)</span>.</li>
+<li>If <span class="math inline">\(\mu\left(\bigcup_{m\geq N}A_m\right)&lt;\infty\)</span> for some <span class="math inline">\(N\)</span> (e.g.&nbsp;<span class="math inline">\(\mu\)</span> is finite or a probability measure), then <span class="math inline">\(\limsup\mu(A_n)\leq\mu(\limsup A_n)\)</span>.</li>
+</ol>
+<p>In particular for a probability measure <span class="math display">\[
+\mathbb{P}\left(\liminf_{n\to\infty}A_n\right)\leq\liminf_{n\to\infty}\mathbb{P}(A_n)\leq\limsup_{n\to\infty}\mathbb{P}(A_n)\leq\mathbb{P}\left(\limsup_{n\to\infty}A_n\right).
+\]</span></p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span></p>
+<ol type="1">
+<li><p>Let <span class="math inline">\(C_n=\bigcap_{m\geq n}A_m\)</span>, so <span class="math inline">\(C_n\uparrow\liminf A_n\)</span>. By continuity from below and since <span class="math inline">\(C_n\subseteq A_n\)</span>, <span class="math display">\[
+\mu(\liminf A_n)=\lim_{n\to\infty}\mu(C_n)\leq\liminf_{n\to\infty}\mu(A_n).
+\]</span></p></li>
+<li><p>Let <span class="math inline">\(B_n=\bigcup_{m\geq n}A_m\)</span>, so <span class="math inline">\(B_n\downarrow\limsup A_n\)</span> and <span class="math inline">\(\mu(B_N)&lt;\infty\)</span>. For <span class="math inline">\(m\geq n\)</span> we have <span class="math inline">\(A_m\subseteq B_n\)</span>, so <span class="math inline">\(\mu(B_n)\geq\sup_{m\geq n}\mu(A_m)\)</span>. By continuity from above, <span class="math display">\[
+\mu(\limsup A_n)=\lim_{n\to\infty}\mu(B_n)\geq\lim_{n\to\infty}\sup_{m\geq n}\mu(A_m)=\limsup_{n\to\infty}\mu(A_n).
+\]</span></p></li>
+</ol>
+<p>The middle inequality in the probabilistic statement is <span class="math inline">\(\liminf\leq\limsup\)</span> for the sequence <span class="math inline">\(\mathbb{P}(A_n)\)</span>.</p>
+</div>
+<p>Part (1) is the set version of <a href="../topics/fatou-lemma.html">Fatou Lemma</a> and part (2) is a reverse version.</p>
+<div class="theorem" data-title="Lower Bound for Infinitely Often">
+<p>If <span class="math inline">\(\mu\)</span> is finite and <span class="math inline">\(\mu(A_n)\geq c&gt;0\)</span> for all <span class="math inline">\(n\)</span>, then <span class="math inline">\(\mu(\limsup A_n)\geq c\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By part (2), <span class="math inline">\(\mu(\limsup A_n)\geq\limsup\mu(A_n)\geq c\)</span>.</p>
+</div>
+</section>
+<section id="borel-cantelli-lemmas" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="borel-cantelli-lemmas"><span class="header-section-number">6.2</span> Borel-Cantelli Lemmas</h3>
+<div class="theorem" data-title="First Borel-Cantelli Lemma">
+<p>If <span class="math inline">\(\sum_{n}\mu(A_n)&lt;\infty\)</span> then <span class="math inline">\(\mu(\limsup A_n)=0\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>For every <span class="math inline">\(n\)</span>, <span class="math inline">\(\limsup A_n\subseteq\bigcup_{m\geq n}A_m\)</span>, so by monotonicity and countable subadditivity <span class="math display">\[
+\mu(\limsup A_n)\leq\sum_{m\geq n}\mu(A_m)\to0\quad(n\to\infty),
+\]</span> as the tails of a convergent series tend to zero.</p>
+</div>
+<div class="theorem" data-title="Second Borel-Cantelli Lemma">
+<p>If <span class="math inline">\(A_n\)</span> are independent events with <span class="math inline">\(\sum_n\mathbb{P}(A_n)=\infty\)</span>, then <span class="math inline">\(\mathbb{P}(\limsup A_n)=1\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>By <a href="../topics/set-theory-fundamentals.html#algebra-of-sets">De Morgan’s laws</a>, <span class="math inline">\((\limsup A_n)^c=\bigcup_n\bigcap_{m\geq n}A_m^c\)</span>. Since the <span class="math inline">\(A_m^c\)</span> are independent and <span class="math inline">\(1-p\leq e^{-p}\)</span>, for any <span class="math inline">\(N\geq n\)</span> <span class="math display">\[
+\mathbb{P}\left(\bigcap_{m=n}^NA_m^c\right)=\prod_{m=n}^N(1-\mathbb{P}(A_m))\leq\exp\left(-\sum_{m=n}^N\mathbb{P}(A_m)\right)\to0\quad(N\to\infty).
+\]</span> By continuity from above, <span class="math inline">\(\mathbb{P}\left(\bigcap_{m\geq n}A_m^c\right)=0\)</span> for every <span class="math inline">\(n\)</span>, so by countable subadditivity <span class="math inline">\(\mathbb{P}((\limsup A_n)^c)=0\)</span>.</p>
+</div>
+<p>See also <a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a>.</p>
+</section>
 </section>
 <section id="related-topics" class="level2" data-number="7">
 <h2 data-number="7" class="anchored" data-anchor-id="related-topics"><span class="header-section-number">7</span> Related Topics</h2>
 <ul>
 <li><a href="../topics/supremum-infimum.html">Supremum &amp; Infimum</a></li>
 <li><a href="../topics/set-theory-fundamentals.html">Set Theory Fundamentals</a></li>
-<li><a href="../topics/limsup-liminf-and-measure.html">Limsup, Liminf and Measure</a></li>
+<li><a href="../topics/measure-spaces.html">Measure Spaces</a></li>
+<li><a href="../topics/fatou-lemma.html">Fatou Lemma</a></li>
+<li><a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a></li>
 </ul>
 
 
@@ -607,7 +665,7 @@ Backlinks
 <li><a href="../topics/analysis.html">Analysis</a></li>
 <li><a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a></li>
 <li><a href="../topics/cylinder-sets.html">Cylinder Sets</a></li>
-<li><a href="../topics/limsup-liminf-and-measure.html">Limsup, Liminf and Measure</a></li>
+<li><a href="../topics/measure-theory.html">Measure Theory</a></li>
 <li><a href="../topics/sequence-convergence.html">Sequence Convergence</a></li>
 <li><a href="../topics/supremum-infimum.html">Supremum &amp; Infimum</a></li>
 <li><a href="../topics/tightness.html">Tightness</a></li>

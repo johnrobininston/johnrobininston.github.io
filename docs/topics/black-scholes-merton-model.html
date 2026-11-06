@@ -364,10 +364,12 @@ window.Quarto = {
   <li><a href="#risk-neutral-dynamics" id="toc-risk-neutral-dynamics" class="nav-link" data-scroll-target="#risk-neutral-dynamics"><span class="header-section-number">3</span> Risk-Neutral Dynamics</a></li>
   <li><a href="#black-scholes-pde" id="toc-black-scholes-pde" class="nav-link" data-scroll-target="#black-scholes-pde"><span class="header-section-number">4</span> Black-Scholes PDE</a></li>
   <li><a href="#option-pricing" id="toc-option-pricing" class="nav-link" data-scroll-target="#option-pricing"><span class="header-section-number">5</span> Option Pricing</a></li>
-  <li><a href="#multi-asset-model" id="toc-multi-asset-model" class="nav-link" data-scroll-target="#multi-asset-model"><span class="header-section-number">6</span> Multi-Asset Model</a></li>
-  <li><a href="#limitations-and-extensions" id="toc-limitations-and-extensions" class="nav-link" data-scroll-target="#limitations-and-extensions"><span class="header-section-number">7</span> Limitations and Extensions</a></li>
-  <li><a href="#key-results" id="toc-key-results" class="nav-link" data-scroll-target="#key-results"><span class="header-section-number">8</span> Key Results</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
+  <li><a href="#dividend-paying-stock" id="toc-dividend-paying-stock" class="nav-link" data-scroll-target="#dividend-paying-stock"><span class="header-section-number">6</span> Dividend-Paying Stock</a></li>
+  <li><a href="#multi-asset-model" id="toc-multi-asset-model" class="nav-link" data-scroll-target="#multi-asset-model"><span class="header-section-number">7</span> Multi-Asset Model</a></li>
+  <li><a href="#time-dependent-volatility" id="toc-time-dependent-volatility" class="nav-link" data-scroll-target="#time-dependent-volatility"><span class="header-section-number">8</span> Time Dependent Volatility</a></li>
+  <li><a href="#limitations-and-extensions" id="toc-limitations-and-extensions" class="nav-link" data-scroll-target="#limitations-and-extensions"><span class="header-section-number">9</span> Limitations and Extensions</a></li>
+  <li><a href="#key-results" id="toc-key-results" class="nav-link" data-scroll-target="#key-results"><span class="header-section-number">10</span> Key Results</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">11</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -427,7 +429,7 @@ dS_t &amp; = \mu S_t\,dt + \sigma S_t\,dW_t,
 <p>The model assumes that</p>
 <ul>
 <li>the interest rate, drift and volatility are constant,</li>
-<li>the stock pays no dividends (see <a href="a stock that pays dividends.">[black-scholes-model-with-dividends]</a>),</li>
+<li>the stock pays no dividends (relaxed in the section on dividends below),</li>
 <li>trading is continuous and there are no transaction costs,</li>
 <li>assets are infinitely divisible and short selling is allowed.</li>
 </ul>
@@ -508,7 +510,7 @@ V(T,S) = h(S) \quad \text{for all } S,
 <p><span class="math display">\[
 \Theta + \frac{1}{2}\sigma^2S^2\,\Gamma + rS\,\Delta - rV = 0.
 \]</span></p>
-<p>The PDE can be reduced to the <a href="../topics/diffusion-equation.html">Diffusion Equation</a> (heat equation) by a change of variables, and by the <a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a> its solution is the risk-neutral expectation <span class="math inline">\(e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}[h(S_T)\mid S_t]\)</span>.</p>
+<p>The PDE can be reduced to the <a href="../topics/heat-equation.html">diffusion equation</a> (heat equation) by a change of variables, and by the <a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a> its solution is the risk-neutral expectation <span class="math inline">\(e^{-r(T-t)}\mathbb{E}_{\mathbb{Q}}[h(S_T)\mid S_t]\)</span>.</p>
 </section>
 <section id="option-pricing" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="option-pricing"><span class="header-section-number">5</span> Option Pricing</h2>
@@ -521,8 +523,23 @@ e^{-rT}\,\mathbb{E}_{\mathbb{Q}}[h(S_T)].
 </ul>
 <p>For European calls and puts these give closed-form prices. See <a href="../topics/european-options.html">European Options</a>. Their sensitivities are the <a href="../topics/option-greeks.html">Option Greeks</a>.</p>
 </section>
-<section id="multi-asset-model" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="multi-asset-model"><span class="header-section-number">6</span> Multi-Asset Model</h2>
+<section id="dividend-paying-stock" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="dividend-paying-stock"><span class="header-section-number">6</span> Dividend-Paying Stock</h2>
+<p>Suppose the stock pays a continuous <strong>dividend yield</strong> <span class="math inline">\(\delta\ge 0\)</span>, so that over <span class="math inline">\([t,t+dt]\)</span> the holder receives the cash amount <span class="math inline">\(\delta S_t\,dt\)</span> and the stock price drops accordingly. Equivalently, one share held at time <span class="math inline">\(0\)</span> becomes <span class="math inline">\(e^{\delta t}\)</span> shares at time <span class="math inline">\(t\)</span> if dividends are reinvested.</p>
+<p>Dividends reduce the growth of the stock, the opposite of the effect of the interest rate. Under <span class="math inline">\(\mathbb{Q}\)</span> it is the dividend-reinvested value <span class="math inline">\(e^{-(r-\delta)t}S_t\)</span> that is a martingale, so <span class="math inline">\(r\)</span> is replaced by <span class="math inline">\(r-\delta\)</span> in the dynamics,</p>
+<p><span class="math display">\[
+dS_t=(r-\delta)S_t\,dt+\sigma S_t\,dW_t^{\mathbb{Q}}.
+\]</span></p>
+<p>For the PDE one must be careful about which occurrences of <span class="math inline">\(r\)</span> change. The discounted option value <span class="math inline">\(e^{-rt}V_t\)</span> is still a <span class="math inline">\(\mathbb{Q}\)</span>-martingale, so the discount term <span class="math inline">\(-rV\)</span> is <strong>unchanged</strong>. The drift term <span class="math inline">\(rS\,\partial_S V\)</span> comes from the <a href="../topics/ito-formula.html">Itô Formula</a> applied to <span class="math inline">\(V(t,S_t)\)</span> and hence from the dynamics of <span class="math inline">\(S\)</span> under <span class="math inline">\(\mathbb{Q}\)</span>, so it <strong>does change</strong>.</p>
+<div class="definition" data-title="Black-Scholes Equation with Dividends">
+<p><span class="math display">\[
+\partial_tV+(r-\delta)S\,\partial_SV+\frac{1}{2}\sigma^2S^2\,\partial_{SS}V
+-rV=0,\qquad V(T,S)=h(S).
+\]</span></p>
+</div>
+</section>
+<section id="multi-asset-model" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="multi-asset-model"><span class="header-section-number">7</span> Multi-Asset Model</h2>
 <p>The model has a vector equivalent. Take <span class="math inline">\(d\)</span> risky assets driven by an <span class="math inline">\(m\)</span>-dimensional Brownian motion <span class="math inline">\(W = (W^1,\dots,W^m)\)</span>,</p>
 <p><span class="math display">\[
 dS_t^i = \mu_i S_t^i\,dt + S_t^i\sum_{j=1}^m \sigma_{ij}\,dW_t^j,
@@ -536,29 +553,40 @@ S_t^i = S_0^i\exp\left( \left( \mu_i - \frac{1}{2}\sum_{j}\sigma_{ij}^2 \right)t
 <p>The log-returns are jointly normal with covariance matrix <span class="math inline">\(\Sigma t\)</span>, where <span class="math inline">\(\Sigma = \sigma\sigma^\top\)</span> has entries <span class="math inline">\(\Sigma_{ik}\)</span> equal to the instantaneous covariance of <span class="math inline">\(\log S^i\)</span> and <span class="math inline">\(\log S^k\)</span>, so correlation between assets enters through <span class="math inline">\(\Sigma\)</span>.</p>
 <p>Under <span class="math inline">\(\mathbb{Q}\)</span> every asset has drift <span class="math inline">\(r\)</span>. A risk-neutral measure exists if there is a <strong>market price of risk</strong> vector <span class="math inline">\(\theta \in \mathbb{R}^m\)</span> with <span class="math inline">\(\sigma\theta = \mu - r\mathbf{1}\)</span>. The market is arbitrage-free if such a <span class="math inline">\(\theta\)</span> exists, and complete if in addition <span class="math inline">\(\sigma\)</span> is invertible (<span class="math inline">\(d = m\)</span>). This model prices multi-asset options such as basket and exchange options.</p>
 </section>
-<section id="limitations-and-extensions" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="limitations-and-extensions"><span class="header-section-number">7</span> Limitations and Extensions</h2>
+<section id="time-dependent-volatility" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="time-dependent-volatility"><span class="header-section-number">8</span> Time Dependent Volatility</h2>
+<p>We replace the constant volatility in the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> <span class="math inline">\(\sigma\)</span> with a deterministic function in time <span class="math inline">\(\sigma_{t}\)</span> then we can show that Black-Scholes still holds if <span class="math inline">\(\sigma^2\)</span> is replaced with <span class="math inline">\(\frac{1}{T}\int _{0}^T\sigma^2_{s} \, ds\)</span></p>
+<p>To see this consider the stock price dynamics under <span class="math inline">\(\mathbb{Q}\)</span></p>
+<p><span class="math display">\[
+dS_{t}=rS_{t}dt+\sigma_{t}S_{t}dW_{t}^\mathbb{Q}.
+\]</span></p>
+<p>Applying the log transformation and <a href="../topics/ito-formula.html">Itô Formula</a> we obtain</p>
+<p><span class="math display">\[
+S_{t}=S_{0}\exp\left\{ \int _{0}^t\left( r- \frac{\sigma^2_{s}}{2} \right) \, ds+\int _{0}^t\sigma_{s} \, dW_{s}^\mathbb{Q}   \right\}.
+\]</span></p>
+<p>As a result, we simply replace <span class="math inline">\(\sigma^2t\)</span> with <span class="math inline">\(\int _{0}^t\sigma_{s}^2 \, ds\)</span> and replace <span class="math inline">\(\sigma dW_{t}^\mathbb{Q}\)</span> with <span class="math inline">\(\int _{0}^t \sigma_{s} \, dW_{s}^\mathbb{Q}\)</span>.</p>
+<p>The implied volatility surface <span class="math inline">\(I(T,K)\)</span> is not flat in <span class="math inline">\(T\)</span> but still flat in <span class="math inline">\(K\)</span>. This is a subtle improvement on BS but is still far from ideal for practical purposes.</p>
+</section>
+<section id="limitations-and-extensions" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="limitations-and-extensions"><span class="header-section-number">9</span> Limitations and Extensions</h2>
 <p>The assumption of a constant volatility is not consistent with market prices. Implied volatility varies with strike and maturity, giving the volatility smile or surface (see <a href="../topics/volatility-surfaces.html">Volatility Surfaces</a>). Models that relax it include</p>
 <ul>
-<li></li>
-<li><a href="../topics/cev-model.html">CEV Model</a>,</li>
-<li><a href="../topics/heston-model.html">Heston Model</a>,</li>
-<li></li>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a>: <span class="math inline">\(\sigma = \sigma(t,S_t)\)</span> (with CEV model special case).</li>
+<li>Stochastic Volatility Models: volatility is random, such as the <a href="../topics/heston-model.html">Heston Model</a>.</li>
 </ul>
 </section>
-<section id="key-results" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="key-results"><span class="header-section-number">8</span> Key Results</h2>
+<section id="key-results" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="key-results"><span class="header-section-number">10</span> Key Results</h2>
 <ul>
 <li><a href="../topics/european-options.html">European Options</a></li>
 <li><a href="../topics/option-greeks.html">Option Greeks</a></li>
 </ul>
 </section>
-<section id="references" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="references"><span class="header-section-number">9</span> References</h2>
+<section id="references" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="references"><span class="header-section-number">11</span> References</h2>
 <ol type="1">
 <li>Black, F. and Scholes, M. (1973). The Pricing of Options and Corporate Liabilities. <em>Journal of Political Economy</em>, 81(3), 637-654.</li>
 <li>Merton, R. C. (1973). Theory of Rational Option Pricing. <em>Bell Journal of Economics and Management Science</em>, 4(1), 141-183.</li>
-<li><a href="https://www.columbia.edu/~mh2078/FoundationsFE/BlackScholes.pdf">Columbia Note</a></li>
 </ol>
 
 
@@ -568,20 +596,19 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/binomial-model.html">Binomial Model</a></li>
-<li><a href="../topics/black-scholes-model-with-dividends.html">Black Scholes Model with Dividends</a></li>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
-<li><a href="../topics/diffusion-equation.html">Diffusion Equation</a></li>
 <li><a href="../topics/dupires-formula.html">Dupire's Formula</a></li>
 <li><a href="../topics/euler-maruyama-method.html">Euler-Maruyama Method</a></li>
 <li><a href="../topics/european-options.html">European Options</a></li>
 <li><a href="../topics/feynman-kac-formula.html">Feynman-Kac Formula</a></li>
 <li><a href="../topics/financial-markets.html">Financial Markets</a></li>
-<li><a href="../topics/finite-difference-fd-methods.html">Finite-Difference (FD) Methods</a></li>
 <li><a href="../topics/finite-difference-methods.html">Finite-Difference Methods</a></li>
+<li><a href="../topics/heat-equation.html">Heat Equation</a></li>
 <li><a href="../topics/ito-formula.html">Itô Formula</a></li>
 <li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
 <li><a href="../topics/martingale-representation-theorem.html">Martingale Representation Theorem</a></li>
 <li><a href="../topics/martingale-theory.html">Martingale Theory</a></li>
+<li><a href="../topics/milstein-scheme.html">Milstein Scheme</a></li>
 <li><a href="../topics/option-greeks.html">Option Greeks</a></li>
 <li><a href="../topics/option-pricing.html">Option Pricing</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>

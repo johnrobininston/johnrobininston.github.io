@@ -9,7 +9,7 @@
 <meta name="author" content="John Robin Inston">
 <meta name="dcterms.date" content="2026-09-25">
 
-<title>Stochastic Volatility Model – John Robin Inston</title>
+<title>Stochastic Volatility Models – John Robin Inston</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -358,10 +358,14 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#structure" id="toc-structure" class="nav-link active" data-scroll-target="#structure"><span class="header-section-number">0.1</span> Structure</a></li>
-  <li><a href="#incompleteness" id="toc-incompleteness" class="nav-link" data-scroll-target="#incompleteness"><span class="header-section-number">0.2</span> Incompleteness</a></li>
-  <li><a href="#total-risk-premium" id="toc-total-risk-premium" class="nav-link" data-scroll-target="#total-risk-premium"><span class="header-section-number">0.3</span> Total Risk Premium</a></li>
-  <li><a href="#option-pricing" id="toc-option-pricing" class="nav-link" data-scroll-target="#option-pricing"><span class="header-section-number">0.4</span> Option Pricing</a></li>
+  <li><a href="#stochastic-volatility-models" id="toc-stochastic-volatility-models" class="nav-link active" data-scroll-target="#stochastic-volatility-models"><span class="header-section-number">1</span> Stochastic Volatility Models</a></li>
+  <li><a href="#incompleteness" id="toc-incompleteness" class="nav-link" data-scroll-target="#incompleteness"><span class="header-section-number">2</span> Incompleteness</a></li>
+  <li><a href="#total-risk-premium" id="toc-total-risk-premium" class="nav-link" data-scroll-target="#total-risk-premium"><span class="header-section-number">3</span> Total Risk Premium</a></li>
+  <li><a href="#option-pricing" id="toc-option-pricing" class="nav-link" data-scroll-target="#option-pricing"><span class="header-section-number">4</span> Option Pricing</a>
+  <ul class="collapse">
+  <li><a href="#exponential-ornstein-uhlenbeck-model" id="toc-exponential-ornstein-uhlenbeck-model" class="nav-link" data-scroll-target="#exponential-ornstein-uhlenbeck-model"><span class="header-section-number">4.1</span> Exponential Ornstein-Uhlenbeck Model</a></li>
+  <li><a href="#heston-model" id="toc-heston-model" class="nav-link" data-scroll-target="#heston-model"><span class="header-section-number">4.2</span> Heston Model</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -371,7 +375,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Stochastic Volatility Model</h1>
+<h1 class="title">Stochastic Volatility Models</h1>
 </div>
 
 
@@ -400,74 +404,104 @@ window.Quarto = {
 </header>
 
 
-<section id="structure" class="level3" data-number="0.1">
-<h3 data-number="0.1" class="anchored" data-anchor-id="structure"><span class="header-section-number">0.1</span> Structure</h3>
-<p>We introduce the general framework of the stochastic volatility model where <span class="math inline">\(\sigma_{t}=f(Y_{t})\)</span> is the volatility process and <span class="math inline">\(\{Y_{t}\}\)</span> has dynamics given by <span class="math display">\[
+<section id="stochastic-volatility-models" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="stochastic-volatility-models"><span class="header-section-number">1</span> Stochastic Volatility Models</h2>
+<p>We introduce the general framework of the stochastic volatility model where <span class="math inline">\(\sigma_{t}=f(Y_{t})\)</span> is the volatility process and <span class="math inline">\(\{Y_{t}\}\)</span> has dynamics given by</p>
+<p><span class="math display">\[
 dY_{t}=\alpha(Y_{t})dt+\beta(Y_{t})dW_{t}^1,
-\]</span> the stock price <span class="math inline">\(\{S_{t}\}\)</span> has dynamics given by <span class="math display">\[
+\]</span></p>
+<p>the stock price <span class="math inline">\(\{S_{t}\}\)</span> has dynamics given by</p>
+<p><span class="math display">\[
 dS_{t}=\mu(Y_{t})S_{t}dt+\sigma_{t}S_{t}dW_{t}^0,
-\]</span> and Brownian Motions <span class="math inline">\(W^0, W^1\)</span> have a given correlation coefficient <span class="math inline">\(\rho\)</span>. Equivalently <span class="math display">\[
+\]</span></p>
+<p>and <a href="../topics/brownian-motion.html">Brownian motions</a> (BM) <span class="math inline">\(W^0, W^1\)</span> have a given correlation coefficient <span class="math inline">\(\rho\)</span>. Equivalently</p>
+<p><span class="math display">\[
 W^1=\rho W^0+\sqrt{ 1-\rho^2 }W^\perp,
-\]</span> for independent BM <span class="math inline">\(W^0, W^\perp\)</span>.</p>
-<p>Under risk-neutral pricing, we wish to find <span class="math inline">\(\mathbb{Q}\)</span> under which <span class="math inline">\(\{e^{-rt}S_{t}\}\)</span> is a martingale. A similar application of <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a> tells us <span class="math display">\[
+\]</span></p>
+<p>for independent BM <span class="math inline">\(W^0, W^\perp\)</span>.</p>
+<p>Under <a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a> we wish to find <span class="math inline">\(\mathbb{Q}\)</span> under which <span class="math inline">\(\{e^{-rt}S_{t}\}\)</span> is a <a href="../topics/martingale-theory.html">martingale</a>. An application of <a href="../topics/girsanov-theorem.html">Girsanov Theorem</a> tells us</p>
+<p><span class="math display">\[
 \begin{align}
 dS_{t} &amp; =rS_{t}dt+(\mu(Y_{t})-r)S_{t}dt+f(Y_{t})S_{t}dW_{t}^0  \\
 &amp; = r S_{t}dt+f(Y_{t})S_{t}dW_{t}^{0,\mathbb{Q}},
 \end{align}
-\]</span> so <span class="math inline">\(\mathbb{Q}\)</span> is chosen such that <span class="math display">\[
+\]</span></p>
+<p>so <span class="math inline">\(\mathbb{Q}\)</span> is chosen such that</p>
+<p><span class="math display">\[
 W_{t}^{0,\mathbb{Q}}=W_{t}^0+\int _{0}^t \frac{{\mu(Y_{s})-r}}{f(Y_{s})} \, ds
-\]</span> is a BM under <span class="math inline">\(\mathbb{Q}\)</span>. Different from BS model, in stochastic volatility model we also have the dynamics for <span class="math inline">\(\{Y_{t}\}\)</span> which we shall care about under the change of measure. Luckily <span class="math display">\[
-W_{t}^{\perp,\mathbb{Q}}=W_{t}^\perp+ \int _{0}^t\gamma_{s} \, ds
-\]</span> as a BM under <span class="math inline">\(\mathbb{Q}\)</span> does not change the drift term in the stock price dynamics. As a result, different <span class="math inline">\(\{\gamma_{t}\}\)</span> can be chosen to do the change of measure and they result in <span class="math inline">\(W^{0,\mathbb{Q}}\)</span> and <span class="math inline">\(W^{\perp,\mathbb{Q}}\)</span> being independent BM under <span class="math inline">\(\mathbb{Q}\)</span>. Thus it is necessary to denote the risk neutral measure as <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span> as it is induced by the choice of <span class="math inline">\(\{\gamma_{t}\}\)</span>.</p>
-<p>The <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a> is then <span class="math display">\[
-\frac{{d\mathbb{Q}^{(\gamma)}}}{d\mathbb{P}}=\exp\left( -\int _{0}^T \frac{{\mu(Y_{s})-r}}{f(Y_{s})} \, dW_{s}^0 - \frac{1}{2}\int _{0}^T \left(\frac{{\mu(Y_{s})-r}}{f(Y_{s})}\right)^2 \, ds - \int _{0}^T\gamma_{s} \, dW_{s}^\perp - \frac{1}{2 }\int _{0}^T \gamma_{s}^2 \, ds    \right),
-\]</span> from Girsanov’s theorem and it remains as an issue whether the condition of Girsanov holds. Here we assume that its always legitimate by force e.g.&nbsp;the <strong>stochastic Sharpe ratio</strong> <span class="math inline">\(\frac{{\mu(Y_{t})-r}}{f(Y_{t})}\)</span> is always almost surely bounded bounded (which is not necessarily true in practice).</p>
+\]</span></p>
+<p>is a BM under <span class="math inline">\(\mathbb{Q}\)</span>. Different from the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>, in the stochastic volatility model we also have the dynamics for <span class="math inline">\(\{Y_{t}\}\)</span> which we shall care about under the change of measure. Luckily, defining</p>
+<p><span class="math display">\[
+W_{t}^{\perp,\mathbb{Q}}=W_{t}^\perp+ \int _{0}^t\gamma_{s} \, ds,
+\]</span></p>
+<p>which is a BM under <span class="math inline">\(\mathbb{Q}\)</span>, does not change the drift term in the stock price dynamics. As a result, different <span class="math inline">\(\{\gamma_{t}\}\)</span> can be chosen to do the change of measure and they result in <span class="math inline">\(W^{0,\mathbb{Q}}\)</span> and <span class="math inline">\(W^{\perp,\mathbb{Q}}\)</span> being independent BM under <span class="math inline">\(\mathbb{Q}\)</span>. Thus it is necessary to denote the risk neutral measure as <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span> as it is induced by the choice of <span class="math inline">\(\{\gamma_{t}\}\)</span>.</p>
+<p>The <a href="../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a> is then</p>
+<p><span class="math display">\[
+\frac{{d\mathbb{Q}^{(\gamma)}}}{d\mathbb{P}}=\exp\left( -\int _{0}^T \frac{{\mu(Y_{s})-r}}{f(Y_{s})} \, dW_{s}^0 - \frac{1}{2}\int _{0}^T \left(\frac{{\mu(Y_{s})-r}}{f(Y_{s})}\right)^2 \, ds - \int _{0}^T\gamma_{s} \, dW_{s}^\perp - \frac{1}{2}\int _{0}^T \gamma_{s}^2 \, ds    \right),
+\]</span></p>
+<p>from Girsanov’s theorem and it remains as an issue whether Novikov’s condition holds. Here we assume that it’s always legitimate, e.g.&nbsp;the <strong>stochastic Sharpe ratio</strong> <span class="math inline">\(\frac{{\mu(Y_{t})-r}}{f(Y_{t})}\)</span> is always almost surely bounded (which is not necessarily true in practice).</p>
 </section>
-<section id="incompleteness" class="level3" data-number="0.2">
-<h3 data-number="0.2" class="anchored" data-anchor-id="incompleteness"><span class="header-section-number">0.2</span> Incompleteness</h3>
-<p>In the BS model the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> always exists and is unique, implying that the market is complete, however in the Stochastic Volatility Model, the risk-neutral measure is not unique (since any choice of <span class="math inline">\(\{\gamma_{t}\}\)</span> results in a risk-neutral measure) and so the market is incomplete. Intuitively, this is due to the fact that there is only one stock in the market but there are two independent BM (two sources of randomness) leading to the failure of exact replication. This is equivalent to the second fundamental theorem of asset pricing which states that the market is complete iff the number of independent stocks equal the number of independent sources of randomness.</p>
+<section id="incompleteness" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="incompleteness"><span class="header-section-number">2</span> Incompleteness</h2>
+<p>In the <a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a> the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> always exists and is unique, implying that the market is complete, however in the stochastic volatility model, the risk-neutral measure is not unique (since any choice of <span class="math inline">\(\{\gamma_{t}\}\)</span> results in a risk-neutral measure) and so the market is incomplete. Intuitively, this is due to the fact that there is only one stock in the market but there are two independent BM (two sources of randomness) leading to the failure of exact replication. This is equivalent to the second fundamental theorem of asset pricing which states that the market is complete iff the number of independent stocks equals the number of independent sources of randomness.</p>
 </section>
-<section id="total-risk-premium" class="level3" data-number="0.3">
-<h3 data-number="0.3" class="anchored" data-anchor-id="total-risk-premium"><span class="header-section-number">0.3</span> Total Risk Premium</h3>
-<p>Under the risk-neutral measure <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span>, the dynamics of <span class="math inline">\(\{S_{t}\}\)</span> now becomes <span class="math display">\[
+<section id="total-risk-premium" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="total-risk-premium"><span class="header-section-number">3</span> Total Risk Premium</h2>
+<p>Under the risk-neutral measure <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span>, the dynamics of <span class="math inline">\(\{S_{t}\}\)</span> now becomes</p>
+<p><span class="math display">\[
 dS_{t}=rS_{t}dt+f(Y_{t})S_{t}dW_{t}^{0, \mathbb{Q}^{(\gamma)}},
-\]</span> and the dynamics if <span class="math inline">\(\{Y_{t}\}\)</span> now becomes <span class="math display">\[
+\]</span></p>
+<p>and the dynamics of <span class="math inline">\(\{Y_{t}\}\)</span> now becomes</p>
+<p><span class="math display">\[
 \begin{align}
 dY_{t} &amp; =\alpha(Y_{t})dt+\rho \beta(Y_{t})dW_{t}^{0,\mathbb{Q}^{(\gamma)}}-\rho \beta(Y_{t}) \frac{{\mu(Y_{t})-r}}{f(Y_{t})}dt+\sqrt{ 1-\rho^2 }\beta(Y_{t})dW_{t}^{\perp,\mathbb{Q}^{(\gamma)}}-\sqrt{ 1-\rho^2 }\beta(Y_{t})\gamma_{t}dt \\
 &amp; = \left[  \alpha(Y_{t})-\rho \beta(Y_{t}) \frac{{\mu(Y_{t})-r}}{f(Y_{t})}-\sqrt{ {1-\rho^2} }\beta(Y_{t})\gamma_{t} \right]dt+\beta(Y_{t})dW_{t}^{1,\mathbb{Q}^{(\gamma)}},
 \end{align}
-\]</span> where <span class="math display">\[
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
 W_{t}^{1,\mathbb{Q}^{(\gamma)}}=\rho W_{t}^{0,\mathbb{Q}^{(\gamma)}}+\sqrt{ {1-\rho^2} }W_{t}^{\perp,\mathbb{Q}^{(\gamma)}}.
-\]</span> We define the <strong>total risk premium</strong> as <span class="math display">\[
+\]</span></p>
+<p>We define the <strong>total risk premium</strong> as</p>
+<p><span class="math display">\[
 \Lambda_{t}=\frac{\rho {\mu(Y_{t})-r}}{f(Y_{t})}+\sqrt{ 1-\rho^2 }\gamma_{t}.
-\]</span> The dynamics of <span class="math inline">\(\{Y_{t}\}\)</span> under the risk-neutral measure is <span class="math display">\[
+\]</span></p>
+<p>The dynamics of <span class="math inline">\(\{Y_{t}\}\)</span> under the risk-neutral measure is</p>
+<p><span class="math display">\[
 dY_{t}=(\alpha(Y_{t})-\beta(Y_{t})\Lambda_{t})dt+\beta(Y_{t})dW_{t}^{1,\mathbb{Q}^{(\gamma)}},
-\]</span> the change of measure is finished for now and it’s time to price the option under the stochastic volatility model.</p>
-<p><em>Remark: <span class="math inline">\(\{\gamma_{t}\}\)</span> is called the volatility risk premium or market price or volatility risk and it parameterizes the space of all risk-neutral measures. The total risk premium is just an average of the stochastic Sharpe ratio and the volatility risk premium.</em></p>
+\]</span></p>
+<p>the change of measure is finished for now and it’s time to price the option under the stochastic volatility model.</p>
+<p><em>Remark: <span class="math inline">\(\{\gamma_{t}\}\)</span> is called the volatility risk premium or market price of volatility risk and it parameterizes the space of all risk-neutral measures. The total risk premium is just a weighted combination of the stochastic Sharpe ratio and the volatility risk premium, with weights <span class="math inline">\(\rho\)</span> and <span class="math inline">\(\sqrt{ 1-\rho^2 }\)</span>.</em></p>
 </section>
-<section id="option-pricing" class="level3" data-number="0.4">
-<h3 data-number="0.4" class="anchored" data-anchor-id="option-pricing"><span class="header-section-number">0.4</span> Option Pricing</h3>
-<p>A fixed <span class="math inline">\(\{\gamma_{t}\}\)</span> induces the risk-neutral measure <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span> and if the payoff function is <span class="math inline">\(h(S_{[0,T]})\)</span> then the arbitrage-free value of the option at time <span class="math inline">\(t\)</span> is given by <span class="math display">\[
-e^{r(T-t)}\mathbb{E}_{{\mathbb{Q}^{(\gamma)}}}[h(S_{[0,T]})|\mathcal{F}_t]
-\]</span> under the logic of risk-neutral pricing. Obviously the selection of <span class="math inline">\(\{\gamma_{t}\}\)</span> is not unique so this leads to a family of arbitrage-free prices of the option, not a single value.</p>
-<section id="exponential-ornstein-uhlenbeck-model" class="level4" data-number="0.4.1">
-<h4 data-number="0.4.1" class="anchored" data-anchor-id="exponential-ornstein-uhlenbeck-model"><span class="header-section-number">0.4.1</span> Exponential Ornstein-Uhlenbeck Model</h4>
-<p>Differing out choice of <span class="math inline">\(f,\alpha, \beta,\Lambda\)</span> leads to different stochastic volatility models. Empirically, volatility is observed to have mean-reverting pattern so it is natural to set up <a href="../topics/ornstein-uhlenbeck-process.html">Ornstein-Uhlenbeck</a> dynamics for <span class="math inline">\(\{Y_{t}\}\)</span> together with <span class="math inline">\(\Lambda=0\)</span>, <span class="math inline">\(f(y)=e^y\)</span>. This is the <strong>Exponential Ornstein-Uhlenbeck Model</strong> and under this specific risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> induced by <span class="math inline">\(\Lambda\)</span> we have <span class="math display">\[
+<section id="option-pricing" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="option-pricing"><span class="header-section-number">4</span> Option Pricing</h2>
+<p>A fixed <span class="math inline">\(\{\gamma_{t}\}\)</span> induces the risk-neutral measure <span class="math inline">\(\mathbb{Q}^{(\gamma)}\)</span> and if the payoff function is <span class="math inline">\(h(S_{[0,T]})\)</span> then the arbitrage-free value of the option at time <span class="math inline">\(t\)</span> is given by</p>
+<p><span class="math display">\[
+e^{-r(T-t)}\mathbb{E}_{{\mathbb{Q}^{(\gamma)}}}[h(S_{[0,T]})|\mathcal{F}_t]
+\]</span></p>
+<p>under the logic of risk-neutral pricing. Obviously the selection of <span class="math inline">\(\{\gamma_{t}\}\)</span> is not unique so this leads to a family of arbitrage-free prices of the option, not a single value.</p>
+<section id="exponential-ornstein-uhlenbeck-model" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="exponential-ornstein-uhlenbeck-model"><span class="header-section-number">4.1</span> Exponential Ornstein-Uhlenbeck Model</h3>
+<p>Different choices of <span class="math inline">\(f,\alpha, \beta,\Lambda\)</span> lead to different stochastic volatility models. Empirically, volatility is observed to have mean-reverting pattern so it is natural to set up <a href="../topics/ornstein-uhlenbeck-process.html">Ornstein-Uhlenbeck</a> dynamics for <span class="math inline">\(\{Y_{t}\}\)</span> together with <span class="math inline">\(\Lambda=0\)</span>, <span class="math inline">\(f(y)=e^y\)</span>. This is the <strong>Exponential Ornstein-Uhlenbeck Model</strong> and under this specific risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> induced by <span class="math inline">\(\Lambda\)</span> we have</p>
+<p><span class="math display">\[
 \begin{align}
 dS_{t} &amp; =rS_{t}dt+e^{Y_{t}}S_{t}dW_{t}^{0,\mathbb{Q}} \\
-dY_{t} &amp; = \alpha(m-Y_{t})dt+\beta W_{t}^{1,\mathbb{Q}}
+dY_{t} &amp; = \alpha(m-Y_{t})dt+\beta dW_{t}^{1,\mathbb{Q}}
 \end{align}
-\]</span> where <span class="math inline">\(W^{0,\mathbb{Q}}\)</span>, <span class="math inline">\(W^{1,\mathbb{Q}}\)</span> have correlation coefficient <span class="math inline">\(\rho\)</span>.</p>
+\]</span></p>
+<p>where <span class="math inline">\(W^{0,\mathbb{Q}}\)</span>, <span class="math inline">\(W^{1,\mathbb{Q}}\)</span> have correlation coefficient <span class="math inline">\(\rho\)</span>.</p>
 </section>
-<section id="heston-model" class="level4" data-number="0.4.2">
-<h4 data-number="0.4.2" class="anchored" data-anchor-id="heston-model"><span class="header-section-number">0.4.2</span> <a href="../topics/heston-model.html">Heston Model</a></h4>
-<p>Alternatively, we could use <a href="../topics/cox-ingersoll-ross-cir-model.html">Cox-Ingersoll-Ross (CIR) Model</a> as the dynamics of <span class="math inline">\(\{Y_{t}\}\)</span> together with <span class="math inline">\(\Lambda=0\)</span>, <span class="math inline">\(f(y)=\sqrt{ {y} }\)</span>. This is the <strong>Heston Model</strong> and under this specific risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> we have <span class="math display">\[
+<section id="heston-model" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="heston-model"><span class="header-section-number">4.2</span> <a href="../topics/heston-model.html">Heston Model</a></h3>
+<p>Alternatively, we could use <a href="../topics/cox-ingersoll-ross-cir-model.html">Cox-Ingersoll-Ross (CIR) Model</a> as the dynamics of <span class="math inline">\(\{Y_{t}\}\)</span> together with <span class="math inline">\(\Lambda=0\)</span>, <span class="math inline">\(f(y)=\sqrt{y}\)</span>. This is the <strong>Heston Model</strong> and under this specific risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span> we have</p>
+<p><span class="math display">\[
 \begin{align}
 dS_{t} &amp; = rS_{t} dt+\sqrt{ Y_{t} }S_{t}dW_{t}^{0,\mathbb{Q}} \\
-dY_{t} &amp; = \alpha(m-Y_{t})dt+\beta \sqrt{ Y_{t} }W_{t}^{1,\mathbb{Q}},
+dY_{t} &amp; = \alpha(m-Y_{t})dt+\beta \sqrt{ Y_{t} }dW_{t}^{1,\mathbb{Q}},
 \end{align}
-\]</span> where <span class="math inline">\(W^{0,\mathbb{Q}}\)</span>, <span class="math inline">\(W^{1,\mathbb{Q}}\)</span> have correlation coefficient <span class="math inline">\(\rho\)</span>.</p>
-<p>The Heston model is popular since under the PDE approach, after log transform, one gets a PDE with constant coefficient, solvable through [[fourier-transform]].</p>
+\]</span></p>
+<p>where <span class="math inline">\(W^{0,\mathbb{Q}}\)</span>, <span class="math inline">\(W^{1,\mathbb{Q}}\)</span> have correlation coefficient <span class="math inline">\(\rho\)</span>.</p>
+<p>The Heston model is popular since under the PDE approach, after log transform, one gets a PDE with coefficients that are affine in <span class="math inline">\(Y\)</span>, solvable through <a href="../topics/fourier-transform.html">Fourier Transform</a>.</p>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -476,9 +510,10 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/arch-models.html">ARCH Models</a></li>
-<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/fourier-transform.html">Fourier Transform</a></li>
 <li><a href="../topics/garch-models.html">GARCH Models</a></li>
 <li><a href="../topics/har-rv-model.html">HAR-RV Model</a></li>
+<li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 <li><a href="../topics/realized-volatility.html">Realized Volatility</a></li>
 <li><a href="../topics/regime-switching-models.html">Regime-Switching Models</a></li>

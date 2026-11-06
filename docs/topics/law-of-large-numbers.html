@@ -358,8 +358,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-is-the-law-of-large-numbers" id="toc-what-is-the-law-of-large-numbers" class="nav-link active" data-scroll-target="#what-is-the-law-of-large-numbers"><span class="header-section-number">1</span> What is the Law of Large Numbers?</a></li>
-  <li><a href="#weak-law-of-large-numbers" id="toc-weak-law-of-large-numbers" class="nav-link" data-scroll-target="#weak-law-of-large-numbers"><span class="header-section-number">2</span> Weak Law of Large Numbers</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#weak-laws" id="toc-weak-laws" class="nav-link" data-scroll-target="#weak-laws"><span class="header-section-number">2</span> Weak Laws</a></li>
+  <li><a href="#strong-laws" id="toc-strong-laws" class="nav-link" data-scroll-target="#strong-laws"><span class="header-section-number">3</span> Strong Laws</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4</span> References</a></li>
   </ul>
 </nav>
     </div>
@@ -398,54 +400,103 @@ window.Quarto = {
 </header>
 
 
-<section id="what-is-the-law-of-large-numbers" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="what-is-the-law-of-large-numbers"><span class="header-section-number">1</span> What is the Law of Large Numbers?</h2>
-<p>The weak and strong laws of large numbers a fundamental results in probability theory detailing the <strong>convergence in probability and almost surely respectively of the sample mean</strong> of random variables defined by <span class="math display">\[
-\frac{S_{n}}{n}=\frac{{X_{1}+\dots+X_{n}}}{n}.
-\]</span> The proof for both results rely on <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> and the proof of the strong law requires the <a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a>. There are various versions of the laws of large numbers with various strength conditions.</p>
+<section id="overview" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
+<p>The weak and strong <strong>laws of large numbers</strong> are fundamental results in probability theory. Writing <span class="math inline">\(S_n=X_1+\dots+X_n\)</span>, they describe the long-run behaviour of the <strong>sample mean</strong> <span class="math display">\[
+\bar{X}_n=\frac{S_{n}}{n}=\frac{{X_{1}+\dots+X_{n}}}{n}.
+\]</span> The <strong>weak law (WLLN)</strong> states that <span class="math inline">\(\bar{X}_n\)</span> converges <a href="../topics/convergence-in-probability.html">in probability</a> to the expected value, and the <strong>strong law (SLLN)</strong> that it converges <a href="../topics/convergence-almost-surely.html">almost surely</a>. The weak laws are proved with the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> and the strong law additionally uses the <a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a>. There are many versions with different strength of assumptions.</p>
 </section>
-<section id="weak-law-of-large-numbers" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="weak-law-of-large-numbers"><span class="header-section-number">2</span> Weak Law of Large Numbers</h2>
-<p>The <strong>Weak Law of Large Numbers (WLLN)</strong> is a family of results in probability theory that describe the <strong>convergence in probability of the sample average of a sequence of random variables to the expected value</strong> (if it exists), as the sample size grows.</p>
-<p>The most commonly stated result is for sequences of i.i.d. random variables with common finite mean and finite variance. This is simple to prove using the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a>.</p>
+<section id="weak-laws" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="weak-laws"><span class="header-section-number">2</span> Weak Laws</h2>
+<p>The simplest result is for i.i.d. random variables with finite variance.</p>
 <div class="theorem" data-title="Weak Law of Large Numbers">
-<p>Given a collection of i.i.d. samples <span class="math inline">\(X_{1}, \dots, X_{n}\)</span> from a random variable with finite mean <span class="math inline">\(\mathbb{E}[X_{i}]=\mu\)</span> and finite variance <span class="math inline">\(\operatorname{Var}(X_{i})=\sigma^2&lt;\infty\)</span> the sample mean converges in probability and <span class="math inline">\(L_2\)</span> to <span class="math inline">\(\mu\)</span> i.e. <span class="math display">\[
+<p>Let <span class="math inline">\(X_{1}, \dots, X_{n}\)</span> be i.i.d. with finite mean <span class="math inline">\(\mathbb{E}[X_{i}]=\mu\)</span> and finite variance <span class="math inline">\(\operatorname{Var}(X_{i})=\sigma^2&lt;\infty\)</span>. Then the sample mean converges in probability and in <span class="math inline">\(L_2\)</span> to <span class="math inline">\(\mu\)</span>, <span class="math display">\[
 \frac{S_{n}}{n} \stackrel{L_{2}~\&amp;~\mathbb{P}}{\to}\mu\quad (n\to \infty),
-\]</span> that is, for any positive number <span class="math inline">\(\epsilon\)</span> we have <span class="math inline">\(\lim_{ n \to \infty }\mathbb{P}(|\bar{X}_{n}-\mu|&lt;\epsilon)=1\)</span>.</p>
+\]</span> that is, for every <span class="math inline">\(\epsilon&gt;0\)</span>, <span class="math inline">\(\lim_{ n \to \infty }\mathbb{P}(|\bar{X}_{n}-\mu|&lt;\epsilon)=1\)</span>.</p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>First, note that <span class="math inline">\(\mathbb{E}\left[ \frac{S_{n}}{n} \right]= \frac{1}{n}\sum_{i=1}^n\mu=\mu\)</span> and that <span class="math display">\[\operatorname{Var}\left(  \frac{S_{n}}{n} \right)= \frac{1}{n^2}\operatorname{Var}\left(  \sum_{i=1}^n X_{i} \right)=\frac{1}{n^2}\sum_{i=1}^n\operatorname{Var}(X_{i})= \frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.\]</span>Fixing <span class="math inline">\(\epsilon&gt;0\)</span> we apply <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> and find that <span class="math display">\[\lim_{ n \to \infty } \mathbb{P}\left(  \left| \frac{S_{n}}{n} -\mu\right| \geq \epsilon \right)\leq \lim_{ n \to \infty } \frac{\operatorname{Var}(S_{n})}{\epsilon ^2}=\lim_{ n \to \infty } \frac{\sigma^2}{n\epsilon ^2}=0,\]</span>completing the proof.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>First, <span class="math inline">\(\mathbb{E}\left[ S_{n}/n \right]= \frac{1}{n}\sum_{i=1}^n\mu=\mu\)</span> and <span class="math display">\[
+\operatorname{Var}\left(  \frac{S_{n}}{n} \right)= \frac{1}{n^2}\sum_{i=1}^n\operatorname{Var}(X_{i})= \frac{n\sigma^2}{n^2}=\frac{\sigma^2}{n}.
+\]</span> Fixing <span class="math inline">\(\epsilon&gt;0\)</span>, the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> gives <span class="math display">\[
+\mathbb{P}\left(  \left| \frac{S_{n}}{n} -\mu\right| \geq \epsilon \right)\leq \frac{\sigma^2}{n\epsilon ^2}\to 0\quad(n\to\infty).
+\]</span> Since <span class="math inline">\(\mathbb{E}|S_n/n-\mu|^2=\sigma^2/n\to0\)</span> we also have <span class="math inline">\(L_2\)</span> convergence.</p>
 </div>
-<p>A slightly broader result weakens the assumption to uncorrelated random variables with bounded variance.</p>
+<p>The assumptions can be weakened to uncorrelated random variables with bounded variance.</p>
 <div class="theorem" data-title="$L_2$ Weak Law of Large Numbers">
-<p>Given a collection <span class="math inline">\(X_{1}, X_{2}, \dots\)</span> of uncorrelated random variables with <span class="math inline">\(\mathbb{E}[X_{i}]=\mu\)</span> and <span class="math inline">\(\text{Var}(X_{i})\leq C&lt;\infty\)</span> then <span class="math display">\[
+<p>Let <span class="math inline">\(X_{1}, X_{2}, \dots\)</span> be uncorrelated random variables with <span class="math inline">\(\mathbb{E}[X_{i}]=\mu\)</span> and <span class="math inline">\(\operatorname{Var}(X_{i})\leq C&lt;\infty\)</span>. Then <span class="math display">\[
 \frac{S_{n}}{n} \stackrel{L_{2}~\&amp;~\mathbb{P}}{\to}\mu\quad (n\to \infty).
 \]</span></p>
 </div>
 <div class="proof">
-<p><span class="proof-title"><em>Proof</em>. </span>Similarly, we simply have that <span class="math display">\[
-\mathbb{E}\left\lvert   \frac{S_{n}}{n}-\mu  \right\rvert ^2=\text{Var}\left(  \frac{S_{n}}{n} \right)=n^{-2}\text{Var}(S_{n})=n^{-2}\sum_{i=1}^n \text{Var}(X_{i})\leq  n^{-2}\cdot n\cdot C \to 0,
-\]</span> completing the proof.</p>
+<p><span class="proof-title"><em>Proof</em>. </span>By uncorrelatedness the variances add, so <span class="math display">\[
+\mathbb{E}\left\lvert   \frac{S_{n}}{n}-\mu  \right\rvert ^2=\operatorname{Var}\left(  \frac{S_{n}}{n} \right)=n^{-2}\sum_{i=1}^n \operatorname{Var}(X_{i})\leq  n^{-2}\cdot n\cdot C \to 0.
+\]</span> Convergence in probability follows from the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> (or from the fact that <span class="math inline">\(L^2\)</span> convergence implies convergence in probability, see <a href="../topics/convergence-in-lp-norm.html">Convergence in Lp Norm</a>).</p>
 </div>
-<p>Next we state the most general version of the weak law of large numbers which gives the sufficient and necessary conditions for convergence in norm and probability of the sample mean.</p>
+<p>The most general version gives conditions under which the sample mean, centred by a suitable truncated mean, converges in probability.</p>
 <div class="theorem" data-title="General Weak Law of Large Numbers">
-<p>For independent random variables <span class="math inline">\(\{  X_{n} \}\)</span> if: 1. <span class="math inline">\(\sum_{j=1}^n \mathbb{P}(\lvert  X_{j} \rvert&gt;n)\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>; and 2. <span class="math inline">\(\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>, then we define <span class="math inline">\(a_{n}:=\sum_{j=1}^n \mathbb{E}[X_{j}\mathbb{1}_{\lvert X_{j} \rvert\leq n}]\)</span> and <span class="math inline">\(\frac{{S_n-a_n}}{n}\stackrel{\mathbb{P}}{\to}0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
+<p>Let <span class="math inline">\(\{  X_{n} \}\)</span> be independent random variables such that</p>
+<ol type="1">
+<li><span class="math inline">\(\sum_{j=1}^n \mathbb{P}(\lvert  X_{j} \rvert&gt;n)\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>; and</li>
+<li><span class="math inline">\(\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</li>
+</ol>
+<p>Define <span class="math inline">\(a_{n}:=\sum_{j=1}^n \mathbb{E}[X_{j}\mathbb{1}_{\lvert X_{j} \rvert\leq n}]\)</span>. Then <span class="math inline">\(\frac{{S_n-a_n}}{n}\stackrel{\mathbb{P}}{\to}0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
 </div>
-<p><em>Proof:</em></p>
-<p>There are several versions of the <a href="../topics/weak-laws-of-large-numbers.html">Weak Laws of Large Numbers</a> that adjust the assumptions required (such as [[khinchines-wlln]]). One such version is <strong>Feller’s WLLN</strong> which drops the often restrictive first moment assumption.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Truncate: let <span class="math inline">\(T_n=\sum_{j=1}^nX_j\mathbb{1}_{\lvert X_{j} \rvert\leq n}\)</span>, so <span class="math inline">\(\mathbb{E}T_n=a_n\)</span>. Then <span class="math inline">\(\mathbb{P}(S_n\neq T_n)\leq\sum_{j=1}^n\mathbb{P}(\lvert X_j\rvert&gt;n)\to0\)</span> by condition 1. By independence and condition 2, <span class="math display">\[
+\operatorname{Var}\left(\frac{T_n}{n}\right)\leq\frac{1}{n^2}\sum_{j=1}^n\mathbb{E}[X_{j}^2 \mathbb{1}_{\lvert X_{j} \rvert \leq n}]\to0,
+\]</span> so the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a> gives <span class="math inline">\(\mathbb{P}(|T_n-a_n|&gt;\epsilon n)\to0\)</span> for all <span class="math inline">\(\epsilon&gt;0\)</span>. Finally <span class="math display">\[
+\mathbb{P}\left(\frac{|S_n-a_n|}{n}&gt;\epsilon\right)\leq\mathbb{P}(S_n\neq T_n)+\mathbb{P}(|T_n-a_n|&gt;\epsilon n)\to0.
+\]</span></p>
+</div>
+<p>Two classical versions follow from the general law. <strong>Feller’s WLLN</strong> drops the often restrictive first moment assumption.</p>
 <div class="theorem" data-title="Feller's Weak Law of Large Numbers">
-<p>Let <span class="math inline">\(\{  X_{n} \}\)</span> be a sequence of i.i.d. random variables such that <span class="math inline">\(\lim_{_{x \to \infty}}x\mathbb{P}(\lvert  X_{1} \rvert&gt;x)=0\)</span>. Then <span class="math display">\[
+<p>Let <span class="math inline">\(\{  X_{n} \}\)</span> be i.i.d. with <span class="math inline">\(\lim_{x \to \infty}x\mathbb{P}(\lvert  X_{1} \rvert&gt;x)=0\)</span>. Then <span class="math display">\[
 \frac{S_{n}}{n}-\mathbb{E}[X_{1}\mathbb{1}_{\lvert X_{1} \rvert \leq  n}]\stackrel{\mathbb{P}}{\to}0\quad \text{as}\quad n \to \infty.
 \]</span></p>
 </div>
-<p><em>Proof:</em></p>
-<p><strong>Khinchine’s WLLN</strong> gives a version of the <a href="../topics/weak-laws-of-large-numbers.html">Weak Laws of Large Numbers</a> for i.i.d. sequences under the finite first moment assumption.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Condition 1 of the general law reads <span class="math inline">\(n\mathbb{P}(|X_1|&gt;n)\to0\)</span>, which is the assumption. For condition 2 we need <span class="math inline">\(\frac1n\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\to0\)</span>. Writing <span class="math inline">\(\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\leq\int_0^n2x\,\mathbb{P}(|X_1|&gt;x)\,dx\)</span> and using that <span class="math inline">\(2x\mathbb{P}(|X_1|&gt;x)\to0\)</span>, the Cesàro average <span class="math inline">\(\frac1n\int_0^n2x\,\mathbb{P}(|X_1|&gt;x)\,dx\to0\)</span>. Finally <span class="math inline">\(a_n/n=\mathbb{E}[X_1\mathbb{1}_{|X_1|\leq n}]\)</span>.</p>
+</div>
+<p><strong>Khinchine’s WLLN</strong> is the version for i.i.d. sequences with a finite first moment.</p>
 <div class="theorem" data-title="Khinchine's Weak Law of Large Numbers">
-<p>Let <span class="math inline">\(\{  X_{n} \}\)</span> be a sequence of i.i.d. random variables such that <span class="math inline">\(\mathbb{E}[\lvert X_{j} \rvert]&lt; \infty\)</span>, and <span class="math inline">\(E[X_{j}]=\mu\)</span>. Then <span class="math display">\[
+<p>Let <span class="math inline">\(\{  X_{n} \}\)</span> be i.i.d. with <span class="math inline">\(\mathbb{E}[\lvert X_{1} \rvert]&lt; \infty\)</span> and <span class="math inline">\(\mathbb{E}[X_{1}]=\mu\)</span>. Then <span class="math display">\[
 \frac{S_{n}}{n}\stackrel{\mathbb{P}}{\to}\mu\quad\text{as}\quad n \to \infty.
 \]</span></p>
 </div>
-<p><em>Proof:</em></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We check the conditions of the general law. Condition 1 holds since <span class="math inline">\(n\mathbb{P}(|X_1|&gt;n)\leq\mathbb{E}[|X_1|\mathbb{1}_{|X_1|&gt;n}]\to0\)</span>. For condition 2 and any <span class="math inline">\(\epsilon&gt;0\)</span>, <span class="math display">\[
+\frac1n\mathbb{E}[X_1^2\mathbb{1}_{|X_1|\leq n}]\leq\epsilon\,\mathbb{E}|X_1|+\mathbb{E}[|X_1|\mathbb{1}_{|X_1|&gt;\epsilon n}]\to\epsilon\,\mathbb{E}|X_1|,
+\]</span> and <span class="math inline">\(\epsilon\)</span> is arbitrary. Finally <span class="math inline">\(a_n/n=\mathbb{E}[X_1\mathbb{1}_{|X_1|\leq n}]\to\mu\)</span> by the <a href="../topics/dominated-convergence-theorem.html">Dominated Convergence Theorem</a>.</p>
+</div>
+</section>
+<section id="strong-laws" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="strong-laws"><span class="header-section-number">3</span> Strong Laws</h2>
+<p>The <strong>Strong Law of Large Numbers (SLLN)</strong> is deeper than the weak law: the sample average <strong>converges almost surely</strong> (with probability 1) to the expected value. We start with the version requiring <strong>finite second moments</strong>.</p>
+<div class="theorem" data-title="Strong Law of Large Numbers">
+<p>Let <span class="math inline">\(X_{1}, X_{2},\dots\)</span> be i.i.d. with <span class="math inline">\(\mathbb{E}[X_{i}]=\mu\)</span> and <span class="math inline">\(\mathbb{E}[X_{i}^2]&lt;\infty\)</span>. Then <span class="math display">\[
+\bar{X}_{n}\stackrel{a.s.}{\to}\mu\quad (n \to \infty),
+\]</span> that is, <span class="math inline">\(\mathbb{P}(\lim_{ n \to \infty }\bar{X}_{n}=\mu)=1\)</span>.</p>
+</div>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Replacing <span class="math inline">\(X_i\)</span> by <span class="math inline">\(X_i-\mu\)</span> we may assume <span class="math inline">\(\mu=0\)</span>; let <span class="math inline">\(\sigma^2=\operatorname{Var}(X_1)\)</span>.</p>
+<p><em>Step 1: squares.</em> By the <a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a>, <span class="math inline">\(\mathbb{P}(|S_{n^2}|&gt;\epsilon n^2)\leq\sigma^2/(\epsilon^2n^2)\)</span>, which is summable in <span class="math inline">\(n\)</span>. By the <a href="../topics/borel-cantelli-lemma.html">Borel-Cantelli Lemma</a>, <span class="math inline">\(S_{n^2}/n^2\to0\)</span> a.s.</p>
+<p><em>Step 2: in between.</em> Let <span class="math inline">\(D_n=\max_{n^2\leq k&lt;(n+1)^2}|S_k-S_{n^2}|\)</span>. Bounding the maximum by a sum over the <span class="math inline">\(2n+1\)</span> indices, each term having second moment at most <span class="math inline">\(2n\sigma^2\)</span>, <span class="math inline">\(\mathbb{E}D_n^2\leq(2n+1)2n\sigma^2\leq 6n^2\sigma^2\)</span>. Hence <span class="math inline">\(\mathbb{P}(D_n&gt;\epsilon n^2)\leq6\sigma^2/(\epsilon^2n^2)\)</span> is summable and <span class="math inline">\(D_n/n^2\to0\)</span> a.s. by Borel-Cantelli.</p>
+<p>For <span class="math inline">\(n^2\leq k&lt;(n+1)^2\)</span> we then have <span class="math inline">\(|S_k|/k\leq(|S_{n^2}|+D_n)/n^2\to0\)</span> a.s.</p>
+</div>
+<p>Finally, the general version only needs pairwise independence and a finite first moment.</p>
+<div class="theorem" data-title="General Strong Law of Large Numbers (Etemadi)">
+<p>Let <span class="math inline">\(X_{1}, X_{2}, \dots\)</span> be pairwise independent identically distributed random variables with <span class="math inline">\(\mathbb{E}\lvert X_{1} \rvert&lt;\infty\)</span> and <span class="math inline">\(\mathbb{E}[X_{1}]=\mu\)</span>. Then <span class="math display">\[
+\frac{S_{n}}{n}= \frac{\sum_{i=1}^nX_{i}}{n} \stackrel{a.s.}{\to}\mu\quad \text{as}\quad n \to \infty.
+\]</span></p>
+</div>
+<p>The proof combines truncation, the subsequence argument above with geometrically growing indices, and the Borel-Cantelli lemma; see Etemadi (1981) or Durrett.</p>
+</section>
+<section id="references" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="references"><span class="header-section-number">4</span> References</h2>
+<ul>
+<li>R. Durrett, <em>Probability: Theory and Examples</em>, Cambridge University Press.</li>
+<li>N. Etemadi, “An elementary proof of the strong law of large numbers”, <em>Z. Wahrsch. Verw. Gebiete</em> 55 (1981), 119-122.</li>
+</ul>
 
 
 <div id="quarto-backlinks" class="quarto-backlinks">
@@ -454,6 +505,8 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/chebyshev-inequality.html">Chebyshev Inequality</a></li>
+<li><a href="../topics/law-of-iterated-logarithm.html">Law of Iterated Logarithm</a></li>
+<li><a href="../topics/probability-measure-theory.html">Probability Measure Theory</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
 <li><a href="../topics/statistical-inference.html">Statistical Inference</a></li>
 </ul>
