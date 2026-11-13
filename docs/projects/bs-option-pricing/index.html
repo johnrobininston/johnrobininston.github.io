@@ -624,7 +624,7 @@ C = Se^{-q\tau}N(d_+) - Ke^{-r\tau}N(d_-), \qquad
 P = Ke^{-r\tau}N(-d_-) - Se^{-q\tau}N(-d_+).
 \]</span></p>
 <p>This is the dividend adjustment used in <a href="https://www.spglobal.com/spdji/en/documents/index-policies/methodology-sp-options-indices-policies-practices.pdf">S&amp;P’s option index methodology</a>. Setting <span class="math inline">\(q=0\)</span> recovers the derivation above. At expiry the price is the payoff; at zero volatility it is the discounted deterministic payoff. Inputs may be scalars or broadcast-compatible arrays. Spot and strike must be positive; time and volatility must be nonnegative and all inputs finite.</p>
-<div id="817eae05" class="cell" data-execution_count="1">
+<div id="fda86523" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -678,7 +678,7 @@ P = Ke^{-r\tau}N(-d_-) - Se^{-q\tau}N(-d_+).
 <section id="validation" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="validation"><span class="header-section-number">5.1</span> Validation</h3>
 <p>We check the implementation against two properties. First, put-call parity <span class="math inline">\(C - P = S - Ke^{-r\tau}\)</span> holds up to rounding error. Second, the closed form matches a Monte Carlo estimate of the risk-neutral expectation (1), using <span class="math inline">\(10^6\)</span> simulated terminal prices.</p>
-<div id="b911ca25" class="cell" data-execution_count="2">
+<div id="740340f2" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>S, K, tau, r, sigma <span class="op">=</span> <span class="fl">100.0</span>, <span class="fl">105.0</span>, <span class="fl">0.5</span>, <span class="fl">0.04</span>, <span class="fl">0.2</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>call <span class="op">=</span> bs_price(S, K, tau, r, sigma, <span class="st">"call"</span>)</span>
@@ -737,7 +737,7 @@ Figure&nbsp;1: Monte Carlo pricing.
 <section id="comparison-with-market-data" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="comparison-with-market-data"><span class="header-section-number">5.3</span> Comparison with Market Data</h3>
 <p>The model has one unknown parameter, the volatility <span class="math inline">\(\sigma\)</span>. The market quotes option prices rather than <span class="math inline">\(\sigma\)</span>, so we invert the formula numerically to obtain the <strong>implied volatility</strong> <span class="math inline">\(\sigma_{\text{imp}}\)</span> that reproduces an observed price. Since the call price is strictly increasing in <span class="math inline">\(\sigma\)</span> (the vega of <a href="../../topics/option-greeks.html">Option Greeks</a> is positive), a root finder applies.</p>
-<div id="842143cc" class="cell" data-execution_count="3">
+<div id="f05eab12" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> brentq</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -778,7 +778,7 @@ Figure&nbsp;1: Monte Carlo pricing.
 <li><code>source</code>, <code>rate_source</code>, <code>dividend_source</code>, <code>history_source</code>: provenance for quotes and each estimated input, including the historical window.</li>
 </ul>
 <p>For example, estimate <code>sigma_hist</code> as the sample standard deviation of one year of daily log returns multiplied by <span class="math inline">\(\sqrt{252}\)</span>. Use a rate and dividend estimate appropriate to the maturity. These choices are estimates, not measured constants. Keep the original snapshot alongside the derived CSV and plot. The following optional block requires that snapshot; no market results are claimed until it has been supplied and inspected.</p>
-<div id="bd5d7e1d" class="cell" data-execution_count="4">
+<div id="18566884" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
