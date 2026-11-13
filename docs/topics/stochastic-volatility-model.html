@@ -510,10 +510,13 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/arch-models.html">ARCH Models</a></li>
+<li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/characteristic-functions.html">Characteristic Functions</a></li>
 <li><a href="../topics/fourier-transform.html">Fourier Transform</a></li>
 <li><a href="../topics/garch-models.html">GARCH Models</a></li>
 <li><a href="../topics/har-rv-model.html">HAR-RV Model</a></li>
 <li><a href="../topics/local-volatility-model.html">Local Volatility Model</a></li>
+<li><a href="../projects/bs-option-pricing/index.html">Pricing European Options with the Black-Scholes Model</a></li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 <li><a href="../topics/realized-volatility.html">Realized Volatility</a></li>
 <li><a href="../topics/regime-switching-models.html">Regime-Switching Models</a></li>
@@ -596,6 +599,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -607,6 +628,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

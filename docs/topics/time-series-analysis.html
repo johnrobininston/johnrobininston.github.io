@@ -456,7 +456,7 @@ window.Quarto = {
 <li><a href="../topics/time-dependent-volatility-model.html">Time-Dependent Volatility Model</a> · <a href="../topics/local-volatility-model.html">Local Volatility Model</a> — deterministic volatility extensions of Black-Scholes.</li>
 <li><a href="../topics/arch-models.html">ARCH Models</a> — conditional heteroskedasticity, volatility clustering.</li>
 <li><a href="../topics/garch-models.html">GARCH Models</a> — GARCH(p,q) and extensions (IGARCH, EGARCH/GJR, GARCH-M, multivariate GARCH).</li>
-<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Model</a> — volatility as its own latent diffusion, correlated with returns (leverage).</li>
+<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Models</a> — volatility as its own latent diffusion, correlated with returns (leverage).</li>
 <li><a href="../topics/dealing-with-stochastic-volatility-in-time-series-using-the-r-package-stochvol.html">Dealing with Stochastic Volatility in Time Series Using the R package stochvol</a> · <a href="../topics/heavy-tailed-innovations-in-the-r-package-stochvol.html">Heavy-Tailed Innovations in the R Package stochvol</a> · <a href="../topics/bayesian-analysis-of-a-stochastic-volatility-model.html">Bayesian Analysis of a Stochastic Volatility Model</a> — Bayesian/MCMC estimation of SV models (paper notes).</li>
 <li><a href="../topics/realized-volatility.html">Realized Volatility</a> — nonparametric, high-frequency-based volatility measurement; jumps and bipower variation.</li>
 <li><a href="../topics/har-rv-model.html">HAR-RV Model</a> — heterogeneous-horizon linear forecasting of realized volatility, mimicking long memory.</li>
@@ -575,6 +575,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -586,6 +604,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

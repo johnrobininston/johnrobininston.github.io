@@ -340,12 +340,20 @@ ul.task-list li input[type="checkbox"] {
 <section id="backlog" class="level2">
 <h2 class="anchored" data-anchor-id="backlog">Backlog</h2>
 <ul>
+<li><p>[06] Add a dated SPX market snapshot and empirical comparison. | status: todo | owner: me Supply aligned quotes, spot, settlement timestamps, rates, dividend yield and provenance using the schema in projects/bs-option-pricing/index.qmd. Save comparison results and inspect quote uncertainty before concluding.</p></li>
 <li><p>[01] Add university projects to website. | status: in progress | owner: claude</p></li>
 <li><p>[02] Populate and maintain the topic knowledge graph. | status: in progress | owner: claude Work through the <code>_topics-audit.md</code> backlog on branch <code>topics-graph</code>: create missing linked notes, fill stubs and thin notes, add orphans to hubs, fix malformed links. Re-run <code>_tools/topics_audit.py</code> after each batch. Do not render or commit <code>docs/</code>.</p></li>
+<li><p>[03] Weekly quantitative finance deep-dive posts. | status: in progress | owner: claude One post per week in <code>posts/qf-weekly-YYYY-MM-DD/index.qmd</code> (template: <code>_templates/weekly-post.qmd</code>), category “Quant Finance Weekly”. Single deep-dive on one recent paper or development, linking to <code>topics/</code> notes. Drafts only: do not publish, render or commit <code>docs/</code> without confirmation. First draft: arXiv 2611.07120 (rough squared VIX model).</p></li>
 </ul>
 </section>
 <section id="done" class="level2">
 <h2 class="anchored" data-anchor-id="done">Done</h2>
+<ul>
+<li><p>[08] Match the pricing plot to the website dark theme. | status: done | owner: codex Applied Catppuccin Frappe background, text, blue and peach accents. Regenerated and visually checked the image; pricing results unchanged.</p></li>
+<li><p>[07] Visualize Monte Carlo option pricing and add gallery image. | status: done | owner: codex Added a reproducible 100,000-path plot, convergence intervals and pricing explanation; configured the image and Current category for the gallery. Verified payoff moments and reference price; five regression tests pass. Source image inspected; site not rendered or published.</p></li>
+<li><p>[05] Apply Black-Scholes project review fixes. | status: done | owner: codex Added dividend-aware prices, boundary validation, guarded IV inversion, timestamped snapshot analysis and conditional empirical conclusions. Five regression tests and all enabled Python examples pass locally.</p></li>
+<li><p>[04] Review the Black-Scholes option pricing project. | status: done | owner: codex Checked derivations and ran local Python cells and boundary probes. Follow-ups: include dividends for SPX; preserve empirical results; handle invalid quotes and boundary inputs; use precise settlement timestamps.</p></li>
+</ul>
 
 
 </section>
@@ -422,6 +430,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -433,6 +459,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

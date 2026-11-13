@@ -1,0 +1,260 @@
+---
+id: bellman-equation
+aliases: [dynamic programming equation, DPE]
+tags: []
+author: "John Robin Inston"
+date: 2026-11-06
+number-sections: true
+title: "Bellman Equation"
+title-block-banner: false
+---
+
+## Bellman Equation
+
+A **Bellman equation** is a technique in [[dynamic-programming-principle|dynamic programming]] which 
+breaks an optimization problem into a sequence of simpler subproblems, as 
+[[dynamic-programming-principle|Bellman's principle of optimality]] prescribes.  It is a necessary condition
+for optimality.  The **value** of a decision problem at a certain point in 
+time is written in terms of the **payoff** from some initial choices and the 
+**value** of the remaining decision problem that results from those 
+initial choices.  
+
+The term **Bellman equation** usually refers to the **dynamic programming 
+equation (DPE)** associated with discrete-time optimization problems.  In 
+continuous-time optimization problems, the analogous equation is a 
+[[partial-differential-equations|partial differential equation]] called the 
+[[hjb-equation]].
+
+## Dynamic Decision Problems
+
+Let $x_t$ be the state at time $t$.  For a decision that begins at time $0$,
+we take as given the initial state $x_0$.  At any time $t$, the set of 
+possible actions depends on the current state; expressed as
+$a_t\in\Gamma(x_t)$, where a particular action $a_t$ represents particular values for one or more control variables, and $\Gamma(x_t)$ is the set of 
+actions available to be taken at state $x_t$.  We assume that the state
+changes from $x$ to a new state $T(x,a)$ when action $a$ is taken, and that 
+the current payoff from taking action $a$ in state $x$ is $F(x,a)$. 
+Finally, we assume impatience, represented by a discount factor $0<\beta<1$.
+
+Under these assumptions, an infinite-horizon decision problem takes the form
+
+$$
+V(x_0) = \max_{\{a_t\}_{t=0}^\infty} \sum_{t=0}^\infty \beta^t F(x_t,a_t),
+$$
+
+subject to the constraints 
+
+$$
+a_t\in\Gamma(x_t), \quad x_{t+1}=T(x_t, a_t), \quad \forall t = 0, 1, 2,\ldots .
+$$
+
+
+Notice that we have defined notation $V(x_{0})$ to denote the optimal value
+that can be obtained by maximizing this objective function subject to the
+assumed constraints. This function is the **value function**. It is a function
+of the initial state variable $x_0$, since the best value obtainable depends
+on the initial situation.
+
+## Bellman's Optimality Principle
+
+:::{.intuition data-title="Principle of optimality"}
+
+If you are following a best plan and you find yourself at some later time in
+some state, then the rest of your plan must be a best plan *from that state*.
+Otherwise you could swap in a better continuation and improve the whole plan,
+a contradiction.
+
+:::
+
+Bellman's own statement of the principle is:
+
+> An optimal policy has the property that whatever the initial state and
+> initial decision are, the remaining decisions must constitute an optimal
+> policy with regard to the state resulting from the first decision.
+
+The same idea is discussed for general optimisation problems in
+[[dynamic-programming-principle]]. Here it takes a precise form. A
+**policy** is a rule $a_t=\pi(x_t)$ choosing an action in $\Gamma(x_t)$ at
+each state. Separate the objective of Section 2 into the first-period
+payoff and the remaining periods:
+
+$$
+\sum_{t=0}^\infty \beta^t F(x_t,a_t)
+= F(x_0,a_0) + \beta\sum_{t=0}^\infty \beta^{t} F(x_{t+1},a_{t+1}).
+$$
+
+The second term is $\beta$ times the same problem started from the state
+$x_1=T(x_0,a_0)$. Since the choice of $a_0$ only affects the tail through
+$x_1$, the tail should be solved optimally, and its best value is
+$V(x_1)$. This is the content of the Bellman equation.
+
+## The Bellman Equation
+
+:::{.theorem data-title="Bellman equation"}
+
+Under the assumptions of Section 2 (and $F$ bounded so that the sums are
+finite), the value function satisfies, for every state $x$,
+
+$$
+V(x) = \max_{a\in\Gamma(x)}\Big\{F(x,a) + \beta\, V\big(T(x,a)\big)\Big\}.
+$$
+
+:::
+
+:::{.proof}
+
+Fix $x_0=x$. For any feasible sequence $\{a_t\}$ with first action $a_0=a$,
+the decomposition above gives total payoff
+$F(x,a)+\beta\sum_{t\geq 0}\beta^t F(x_{t+1},a_{t+1})$. The tail is a feasible
+sequence for the problem started at $T(x,a)$, so it earns at most
+$V(T(x,a))$. Hence $V(x)\leq \max_a\{F(x,a)+\beta V(T(x,a))\}$. Conversely,
+for any $a$, follow $a$ with an optimal (or $\varepsilon$-optimal) tail from
+$T(x,a)$; this is feasible and earns $F(x,a)+\beta V(T(x,a))$ (up to
+$\beta\varepsilon$), so $V(x)\geq \max_a\{\cdots\}$. $\square$
+
+:::
+
+The equation is a *functional equation*: the unknown is the function $V$,
+which appears on both sides. The terms are:
+
+- $F(x,a)$ is the **current payoff**;
+- $\beta V(T(x,a))$ is the **discounted continuation value**, the best
+  payoff obtainable from the state the action leads to.
+
+A maximiser $a^*(x)$ of the right-hand side defines the **policy function**
+$\pi^*(x)$. Following $\pi^*$ from $x_0$ gives an optimal sequence, so
+solving the Bellman equation solves the original problem. This is why it is
+a necessary condition for optimality. It is also sufficient under mild
+conditions: a bounded solution $V$ of the Bellman equation is the value
+function (this follows from the contraction argument in
+Section 5), and any policy attaining the maximum is optimal.
+
+The infinite sum has been replaced by a one-step problem, at the price of
+having to find $V$. For a finite horizon $N$ the equation becomes the
+recursion $V_n(x)=\max_a\{F(x,a)+\beta V_{n-1}(T(x,a))\}$ with $V_0=0$,
+which can be solved directly by working backwards.
+
+## Stochastic Setting
+
+Suppose now that the transition is random: the state moves to $x_{t+1}$
+according to a conditional law depending on $(x_t,a_t)$, written
+$x_{t+1}\sim Q(\cdot\mid x_t,a_t)$. The problem is then to maximise the
+expected discounted payoff,
+
+$$
+V(x_0)=\max_{\{a_t\}}\ \mathbb{E}\Big[\sum_{t=0}^\infty\beta^t F(x_t,a_t)\Big],
+$$
+
+where the actions $a_t$ may depend on the history up to time $t$ but not on
+the future. The same argument as above, with the
+[[conditional-expectation]] taken over the next state, gives
+
+$$
+V(x) = \max_{a\in\Gamma(x)}\Big\{F(x,a) + \beta\,
+\mathbb{E}\big[V(x')\,\big|\,x,a\big]\Big\},\qquad x'\sim Q(\cdot\mid x,a).
+$$
+
+This uses the [[markov-property]]: the law of the next state depends on the
+past only through the current state and action, so the current state $x$
+is all that is needed to describe the remaining problem.
+
+In continuous time, letting the step length shrink to zero turns this
+recursion into a [[partial-differential-equations|PDE]] for $V$, the
+[[hjb-equation]]; see [[stochastic-control]] for the general theory.
+
+## Solution methods
+
+For the infinite-horizon problem, define the **Bellman operator** acting on
+bounded functions $W$ by
+
+$$
+(\mathcal{B}W)(x)=\max_{a\in\Gamma(x)}\big\{F(x,a)+\beta\,W(T(x,a))\big\}.
+$$
+
+The Bellman equation says $V=\mathcal{B}V$: $V$ is a fixed point of
+$\mathcal{B}$.
+
+:::{.proposition data-title="Contraction"}
+
+If $F$ is bounded, then $\mathcal{B}$ is a contraction of modulus $\beta$
+on the space of bounded functions with the supremum norm:
+$\|\mathcal{B}W_1-\mathcal{B}W_2\|_\infty\leq\beta\|W_1-W_2\|_\infty$.
+
+:::
+
+By the Banach fixed-point theorem on the [[metric-spaces|complete metric
+space]] of bounded functions, $\mathcal{B}$ then has a unique fixed point,
+which is $V$, and iterating $\mathcal{B}$ from any starting point converges
+to it geometrically at rate $\beta$. This gives the main methods:
+
+- **Value iteration.** Start from any bounded $W_0$ (e.g. $W_0=0$) and set
+  $W_{k+1}=\mathcal{B}W_k$. Then $W_k\to V$, and $\|W_k-V\|_\infty\leq
+  \beta^k\|W_0-V\|_\infty$.
+- **Policy iteration.** Given a policy $\pi$, compute its value $V_\pi$
+  (which solves a linear equation, with no maximisation), then improve the
+  policy by choosing $\pi'(x)\in\arg\max_a\{F(x,a)+\beta V_\pi(T(x,a))\}$.
+  Repeating gives monotonically better policies, and for finite state and
+  action sets it terminates at an optimal policy in finitely many steps.
+- **Guess and verify.** Where the structure is simple, guess the form of
+  $V$ with unknown coefficients and check that the Bellman equation holds.
+- **Backward induction.** For finite horizons, solve the recursion of
+  Section 4 starting from the terminal period.
+
+:::{.example data-title="Cake eating"}
+
+An agent has a cake of size $k$ and chooses how much $c\in(0,k]$ to eat
+each period, leaving $k-c$. Take $F(k,c)=\ln c$, $T(k,c)=k-c$. The Bellman
+equation is $V(k)=\max_c\{\ln c+\beta V(k-c)\}$. Guess $V(k)=A+B\ln k$. The
+first-order condition $1/c=\beta B/(k-c)$ gives $c=k/(1+\beta B)$, and
+substituting back, matching the coefficients of $\ln k$ gives $B=1+\beta B$,
+so $B=1/(1-\beta)$. The optimal policy is therefore $c^*=(1-\beta)k$: eat a
+fixed fraction of what remains.
+
+:::
+
+When the state space is large, tabulating $V$ becomes infeasible (the
+*curse of dimensionality*), and $V$ is approximated, for instance by
+[[neural-networks]] in reinforcement learning.
+
+## Example: Markov Decision Process
+
+A **Markov decision process (MDP)** is the stochastic problem above with
+finitely many states and actions. It consists of a state set $S$, action
+sets $\Gamma(s)$, transition probabilities $p(s'\mid s,a)$ (a controlled
+[[markov-chains|Markov chain]]), a reward $F(s,a)$ and a discount factor
+$\beta$. The Bellman equation reads
+
+$$
+V(s)=\max_{a\in\Gamma(s)}\Big\{F(s,a)+\beta\sum_{s'\in S}p(s'\mid s,a)V(s')\Big\}.
+$$
+
+:::{.example data-title="Two-state MDP"}
+
+Let $S=\{A,B\}$ and $\beta=1/2$. In state $A$ there are two actions:
+
+- *safe*: reward $1$, next state $A$;
+- *risky*: reward $2$, next state $A$ or $B$ with probability $1/2$ each.
+
+In state $B$ there is one action, with reward $0$ and next state $A$. The
+Bellman equations are
+
+$$
+V(B)=\tfrac12 V(A),\qquad
+V(A)=\max\Big\{1+\tfrac12V(A),\ 2+\tfrac14V(A)+\tfrac14V(B)\Big\}.
+$$
+
+Substituting $V(B)$, the risky branch is $2+\tfrac38V(A)$. Try the risky
+action: $V(A)=2+\tfrac38V(A)$ gives $V(A)=16/5$ and $V(B)=8/5$. Check: the
+safe branch then gives $1+\tfrac12\cdot\tfrac{16}{5}=\tfrac{13}{5}<\tfrac{16}{5}$,
+so the risky action attains the maximum and is optimal in $A$. The optimal
+policy is "risky in $A$", with values $V(A)=16/5$, $V(B)=8/5$. Since the
+Bellman equation has a unique bounded solution, this is the value function.
+
+:::
+
+## References
+
+1. [Wikipedia: Bellman equation](https://en.wikipedia.org/wiki/Bellman_equation)
+2. Bellman, R. (1957). *Dynamic Programming*. Princeton University Press.
+3. Stokey, N., Lucas, R. and Prescott, E. (1989). *Recursive Methods in
+   Economic Dynamics*. Harvard University Press.

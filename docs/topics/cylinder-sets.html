@@ -404,7 +404,7 @@ window.Quarto = {
 
 <section id="cylinder-sets" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="cylinder-sets"><span class="header-section-number">1</span> Cylinder Sets</h2>
-<p>Cylinder sets are the basic building blocks of <a href="../topics/product-sigma-algebra.html">product σ-algebras</a> on infinite products such as <span class="math inline">\(\mathbb{R}^T\)</span>, the space of all functions <span class="math inline">\(T\to\mathbb{R}\)</span>. A cylinder set restricts only <em>finitely many</em> coordinates and leaves the rest free. They are how one builds a measure on a space of paths from finite-dimensional information, as in <a href="../topics/stochastic-processes.html">Stochastic Process</a>.</p>
+<p>Cylinder sets are the basic building blocks of <a href="../topics/product-sigma-algebra.html">product σ-algebras</a> on infinite products such as <span class="math inline">\(\mathbb{R}^T\)</span>, the space of all functions <span class="math inline">\(T\to\mathbb{R}\)</span>. A cylinder set restricts only <em>finitely many</em> coordinates and leaves the rest free. They are how one builds a measure on a space of paths from finite-dimensional information, as in <a href="../topics/stochastic-processes.html">Stochastic Processes</a>.</p>
 </section>
 <section id="definition" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="definition"><span class="header-section-number">2</span> Definition</h2>
@@ -460,7 +460,7 @@ C_S(B):=\pi_S^{-1}(B)=\{x\in X:(x_{t_1},\dots,x_{t_n})\in B\}.
 <h2 data-number="6" class="anchored" data-anchor-id="related-topics"><span class="header-section-number">6</span> Related Topics</h2>
 <ul>
 <li><a href="../topics/product-sigma-algebra.html">Product σ-Algebra</a></li>
-<li><a href="../topics/stochastic-processes.html">Stochastic Process</a></li>
+<li><a href="../topics/stochastic-processes.html">Stochastic Processes</a></li>
 <li><a href="../topics/caratheodory-extension-theorem.html">Carathéodory Extension Theorem</a></li>
 <li><a href="../topics/dynkins-pi-lambda-theorem.html">Dynkin's π-λ Theorem</a></li>
 <li><a href="../topics/set-functions.html">Set Functions</a></li>
@@ -540,6 +540,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -551,6 +569,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

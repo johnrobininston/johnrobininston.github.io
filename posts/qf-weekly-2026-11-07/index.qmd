@@ -1,0 +1,191 @@
+---
+title: "Quant Finance Weekly: Rough Memory in the VIX"
+description: "A new model adds fractional memory to VIX dynamics and improves VIX option pricing."
+author: "John Robin Inston"
+date: "2026-11-07"
+toc: true
+categories: [Quant Finance Weekly]
+draft: true
+---
+
+## Summary
+
+Yang, Su and Horvath (2026) propose the **rough instantaneous squared VIX
+(RISVIX) model**. It gives the VIX a fractional memory, keeps a
+semi-closed-form option pricing formula, and improves out-of-sample VIX
+option pricing over a Markovian benchmark.
+
+## Background
+
+The **VIX** is the market's 30-day implied volatility for the S&P 500. Its
+square is, up to discounting and model-free corrections, the risk-neutral
+expected average of the instantaneous variance $V$ over the next $\tau$
+years. The paper writes this as
+
+$$
+\mathrm{VIX}_{t,\tau}^2 = \frac{1}{\tau}\,
+\mathbb{E}^{\mathbb{Q}}_t\!\left[\int_t^{t+\tau} V_s\,ds\right],
+$$
+
+with $\tau_0 = 30$ days for the VIX itself.
+
+In classical models such as the [[heston-model|Heston model]], $V$ is Markov
+and mean-reverting, so the VIX term structure is an affine function of the
+current state. This gives fast pricing through the
+[[fourier-transform|Fourier transform]], but the memory of the process decays
+exponentially, as in the [[ornstein-uhlenbeck-process|OU process]].
+
+Empirical work on realised volatility ([[realized-volatility]]) finds
+instead that volatility is **rough**: its paths are less smooth than Brownian
+motion, and its autocorrelation decays like a power law. Rough models use a
+fractional kernel, so the state depends on the whole past path.
+
+## The idea
+
+**Dynamics.** Let $H \in (0, 1/2)$ be the Hurst index, $\alpha = H + 1/2
+\in (1/2, 1)$ and define the fractional kernel
+
+$$
+K(t) = \frac{t^{\alpha-1}}{\Gamma(\alpha)}, \qquad t > 0.
+$$
+
+Under the risk-neutral measure $\mathbb{Q}$ the instantaneous squared VIX
+(ISVIX) $V$ and its stochastic mean-reversion level $\theta$ solve
+
+$$
+\begin{aligned}
+V_t &= V_0 + \int_0^t K(t-s)\Big\{\kappa(\theta_s - V_s)\,ds
++ \sigma_V\sqrt{V_s}\,dB_{1,s} + dJ^y_s\Big\}, \\
+\theta_t &= \theta_0 + \sigma_\theta\int_0^t \sqrt{\theta_s}\,dB_{2,s},
+\end{aligned}
+$$
+
+where $B_1, B_2$ are independent Brownian motions, $\kappa > 0$ is the
+mean-reversion speed and $\sigma_V, \sigma_\theta \ge 0$ are volatilities. The
+jump term $J^y_t = \sum_{n=1}^{N^y_t} Y_n - \lambda^y\mu_y t$ is a compensated
+compound Poisson process: $N^y$ is Poisson with intensity $\lambda^y$ and the
+jump sizes $Y_n$ are i.i.d. exponential with mean $\mu_y$. Setting $\alpha = 1$
+gives $K \equiv 1$ and recovers a Markovian jump-diffusion benchmark.
+
+**Term structure.** The **Mittag-Leffler function**
+
+$$
+E_{a,b}(z) = \sum_{n=0}^\infty \frac{z^n}{\Gamma(an+b)}
+$$
+
+generalises the exponential, since $E_{1,1}(z) = e^z$. With
+
+$$
+w(\tau) = E_{\alpha,2}(-\kappa\tau^\alpha), \qquad
+a_\tau(s) = \frac{E_{\alpha,1}(-\kappa s^\alpha)
+- E_{\alpha,1}(-\kappa(s+\tau)^\alpha)}{\kappa\tau},
+$$
+
+the paper shows that
+
+$$
+\mathrm{VIX}_{t,\tau}^2 = w(\tau)V_0 + [1-w(\tau)]\theta_t
++ \int_0^t a_\tau(t-s)\Big\{\kappa(\theta_s - V_0)\,ds
++ \sigma_V\sqrt{V_s}\,dB_{1,s} + dJ^y_s\Big\}.
+$$
+
+At time zero this reduces to $\mathrm{VIX}_{0,\tau}^2 = w(\tau)V_0 +
+[1-w(\tau)]\theta_0$, a weighted average of the current level $V_0$ and the
+long-run level $\theta_0$, where the weight $w$ decreases from 1 to 0 as the
+horizon $\tau$ grows. The memory enters through the power-law-like decay of
+the Mittag-Leffler functions and through the history integral.
+
+**Option pricing.** Let $R_\kappa$ be the resolvent of $\kappa K$, that is
+the solution of $R_\kappa + \kappa K * R_\kappa = \kappa K$, which is
+explicitly
+
+$$
+R_\kappa(t) = \kappa t^{\alpha-1}E_{\alpha,\alpha}(-\kappa t^\alpha).
+$$
+
+For an option expiring at $T$, the transform of the squared VIX is
+affine in the initial states,
+
+$$
+f(u;0,T) = \mathbb{E}^{\mathbb{Q}}_0\Big[e^{u\,\mathrm{VIX}_{T,\tau_0}^2}\Big]
+= \exp\{\phi(T) + \chi_1(T)V_0 + \psi_2(T)\theta_0\},
+$$
+
+where the coefficients solve the Riccati-Volterra system
+
+$$
+\begin{aligned}
+\psi_1(s) &= u\,a_{\tau_0}(s) + \frac{\sigma_V^2}{2\kappa}
+\int_0^s R_\kappa(s-v)\psi_1(v)^2\,dv, \\
+\psi_2(s) &= u[1-w(\tau_0)] + \int_0^s\Big[\kappa\psi_1(v)
++ \tfrac{\sigma_\theta^2}{2}\psi_2(v)^2\Big]dv, \\
+\chi_1(s) &= u\,w(\tau_0) + \int_0^s\Big[-\kappa\psi_1(v)
++ \tfrac{\sigma_V^2}{2}\psi_1(v)^2\Big]dv, \\
+\phi(s) &= \lambda^y\int_0^s\Big[\varrho(\psi_1(v)) - 1 - \mu_y\psi_1(v)\Big]dv,
+\end{aligned}
+$$
+
+with $a_{\tau_0}(s) = \frac{1}{\kappa\tau_0}\int_s^{s+\tau_0}R_\kappa(v)\,dv$
+and jump transform $\varrho(z) = (1-\mu_y z)^{-1}$. Only $\psi_1$ needs a
+Volterra equation to be solved numerically; the rest are integrals.
+
+The VIX call payoff is $(\sqrt{x} - K)^+$ in the squared VIX $x$, whose
+Laplace transform is $\sqrt{\pi}\,\mathrm{erfc}(K\sqrt{z})/(2z^{3/2})$. Fourier
+inversion along the line $\mathrm{Re}(z) = \eta$ then gives the call price
+with constant rate $r$,
+
+$$
+c(0,T;K) = \frac{e^{-rT}}{2\sqrt{\pi}}\int_0^\infty
+\mathrm{Re}\left[\frac{\mathrm{erfc}\big(K\sqrt{\eta+i\xi}\big)}
+{(\eta+i\xi)^{3/2}}\,f(\eta+i\xi;0,T)\right]d\xi,
+$$
+
+where $\eta > 0$ is a damping parameter inside the region where $f$ is finite.
+This is the "semi-closed form": a one-dimensional integral of the transform.
+
+**Calibration** is done in two steps.
+
+1. Fit the common parameters $(\alpha,\kappa)$ and the date-specific states
+   $(V_{t_0}, \theta_{t_0})$ by least squares to the VIX term-structure
+   indices $\mathrm{VIX}_{t_0,\tau_j}$, $j = 1,\dots,J$, across all dates.
+2. With these fixed, fit the distributional parameters $(\sigma_V,
+   \sigma_\theta, \lambda^y, \mu_y)$ by least squares to the mid-quotes of
+   VIX call options, using the price formula above.
+
+The term structure therefore pins down the dynamics (memory and mean
+reversion), and the option quotes only have to pin down the shape of the
+distribution.
+
+## Results
+
+The authors use daily VIX term-structure indices and VIX option quotes from
+January 2018 to June 2025. Against a Markovian benchmark they report:
+
+- a better fit of the VIX term structure, with the largest gains in
+  high-volatility periods and in the slope and curvature of the term
+  structure;
+- out-of-sample option pricing errors reduced by 13.06% (MSE) and 6.33%
+  (MAE);
+- the largest gains at short maturities and in high-VIX states;
+- improvements over other recent benchmarks "to varying degrees".
+
+## Takeaways
+
+- Rough memory helps most when it is most needed: short maturities and
+  stressed markets, where the exponential-memory models struggle.
+- The Fourier structure survives, so the model is practical to calibrate.
+- The MAE gain is about half the MSE gain, which suggests the improvement
+  is concentrated in the larger pricing errors.
+- Open points to check: how robust the gains are outside the 2018-2025
+  sample, and the cost of solving the Volterra equation for $\psi_1$ across a
+  full option surface.
+
+*Draft note: the equations above are taken from the model and appendix
+sections of the paper. I did not read its empirical section, so the numbers in
+"Results" come from the abstract only.*
+
+## Reference
+
+Yang, T., Su, W. and Horvath, B. (2026). *A Rough Instantaneous Squared VIX
+Model for Term Structure and Option Pricing*.
+[arXiv:2611.07120](https://arxiv.org/abs/2611.07120).

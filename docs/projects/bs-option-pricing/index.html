@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="John Inston">
+<meta name="dcterms.date" content="2026-11-07">
+
+<title>Pricing European Options with the Black-Scholes Model – John Robin Inston</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../assets/images/favicon-new.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-ee11b70de0d49a4e904b960b2d2484f3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-6bb6a8b93194b333879a3de7868b373d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.js"></script>
+<link href="../../site_libs/quarto-contrib/quarto-graph-0.1.0/graph.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">John Robin Inston</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../teaching.html"> 
+<span class="menu-text">Teaching</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../topics/topics.html"> 
+<span class="menu-text">Topics</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.youtube.com/@JohnRobinInston"> <i class="bi bi-youtube" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/johnrobininston"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/johnrobininston/?skipRedirect=true"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://mastodon.social/@johnrobininston"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#the-black-scholes-merton-model" id="toc-the-black-scholes-merton-model" class="nav-link" data-scroll-target="#the-black-scholes-merton-model"><span class="header-section-number">2</span> The Black-Scholes-Merton Model</a></li>
+  <li><a href="#the-black-scholes-pde" id="toc-the-black-scholes-pde" class="nav-link" data-scroll-target="#the-black-scholes-pde"><span class="header-section-number">3</span> The Black-Scholes PDE</a></li>
+  <li><a href="#pricing-european-options" id="toc-pricing-european-options" class="nav-link" data-scroll-target="#pricing-european-options"><span class="header-section-number">4</span> Pricing European Options</a>
+  <ul class="collapse">
+  <li><a href="#solution-of-the-black-scholes-pde" id="toc-solution-of-the-black-scholes-pde" class="nav-link" data-scroll-target="#solution-of-the-black-scholes-pde"><span class="header-section-number">4.1</span> Solution of the Black-Scholes PDE</a></li>
+  <li><a href="#risk-neutral-pricing" id="toc-risk-neutral-pricing" class="nav-link" data-scroll-target="#risk-neutral-pricing"><span class="header-section-number">4.2</span> Risk-Neutral Pricing</a></li>
+  </ul></li>
+  <li><a href="#implementation-in-python" id="toc-implementation-in-python" class="nav-link" data-scroll-target="#implementation-in-python"><span class="header-section-number">5</span> Implementation in Python</a>
+  <ul class="collapse">
+  <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation"><span class="header-section-number">5.1</span> Validation</a></li>
+  <li><a href="#visualizing-monte-carlo-pricing" id="toc-visualizing-monte-carlo-pricing" class="nav-link" data-scroll-target="#visualizing-monte-carlo-pricing"><span class="header-section-number">5.2</span> Visualizing Monte Carlo Pricing</a></li>
+  <li><a href="#comparison-with-market-data" id="toc-comparison-with-market-data" class="nav-link" data-scroll-target="#comparison-with-market-data"><span class="header-section-number">5.3</span> Comparison with Market Data</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pricing European Options with the Black-Scholes Model</h1>
+<p class="subtitle lead">From simulated stock paths to risk-neutral option prices.</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">Quantitative Finance</div>
+    <div class="quarto-category">Current</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>John Inston </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 7, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>In this (mini) project we shall be exploring one of the most famous models in financial mathematics. In the early 1970s, the economists Fischer Black, Myron Scholes and Robert Merton developed the Black-Scholes-Merton model <span class="citation" data-cites="black1973 merton1973">(<a href="#ref-black1973" role="doc-biblioref">Black and Scholes 1973</a>; <a href="#ref-merton1973" role="doc-biblioref">Merton 1973</a>)</span> which allowed them to derive a closed form solution for the pricing of European options. We will first introduce the model and derive the Black-Scholes Partial Differential Equation (PDE). We will then derive the closed form solution for the prices of European call and put options, once by using the Black-Scholes PDE and once by using risk-neutral pricing. Finally, we implement the Black-Scholes formula in Python, validate it numerically, and provide a reproducible workflow for comparing European options with a saved market snapshot. No market snapshot is included here, so the empirical comparison remains an exercise.</p>
+</section>
+<section id="the-black-scholes-merton-model" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-black-scholes-merton-model"><span class="header-section-number">2</span> The Black-Scholes-Merton Model</h2>
+<p>The Black-Scholes-Merton model assumes that a market consists of two assets:</p>
+<ol type="1">
+<li><p>A risk-free asset (zero-coupon bond) with price <span class="math inline">\(B_t\)</span> at time <span class="math inline">\(t\)</span> which grows at a constant risk-free interest rate <span class="math inline">\(r\)</span>.</p></li>
+<li><p>A risky asset (stock) with price <span class="math inline">\(S_t\)</span> at time <span class="math inline">\(t\)</span> which follows a geometric Brownian motion with constant drift <span class="math inline">\(\mu\)</span> and volatility <span class="math inline">\(\sigma\)</span>.</p></li>
+</ol>
+<p>The dynamics are summarized as</p>
+<p><span class="math display">\[
+\begin{cases}
+  dB_t &amp; = r B_t dt, \\
+  dS_t &amp; = \mu S_t dt + \sigma S_t dW_t,
+\end{cases}
+\]</span></p>
+<p>where <span class="math inline">\(W_t\)</span> is a standard Brownian motion, <span class="math inline">\(\mu\)</span> is the drift coefficient and <span class="math inline">\(\sigma\)</span> is the diffusion coefficient. The stock price is therefore a <a href="../../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a>, with solution</p>
+<p><span class="math display">\[
+S_t = S_0\exp\left( \left( \mu - \frac{\sigma^2}{2} \right)t + \sigma W_t \right),
+\]</span></p>
+<p>so <span class="math inline">\(S_t\)</span> is <a href="../../topics/log-normal-distribution.html">log-normally</a> distributed. The model and its assumptions (constant coefficients, continuous frictionless trading, no dividends) are discussed in more detail in <a href="../../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>. Throughout we price a <strong>European option</strong> (see <a href="../../topics/european-options.html">European Options</a>) with maturity <span class="math inline">\(T\)</span> and payoff <span class="math inline">\(h(S_T)\)</span>, where</p>
+<p><span class="math display">\[
+h_{\text{call}}(S_T) = (S_T - K)^+, \qquad h_{\text{put}}(S_T) = (K - S_T)^+,
+\]</span></p>
+<p>and <span class="math inline">\(K\)</span> is the strike price.</p>
+</section>
+<section id="the-black-scholes-pde" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-black-scholes-pde"><span class="header-section-number">3</span> The Black-Scholes PDE</h2>
+<p>Let <span class="math inline">\(V(t,S_t)\)</span> be the price at time <span class="math inline">\(t\)</span> of a derivative with payoff <span class="math inline">\(h(S_T)\)</span>. The idea is to <strong>delta-hedge</strong>: hold the option together with <span class="math inline">\(\Delta_t\)</span> shares of stock and <span class="math inline">\(\alpha_t\)</span> units of the bond so that the randomness cancels. The portfolio</p>
+<p><span class="math display">\[
+\Pi_t = V(t,S_t) + \Delta_t S_t + \alpha_t B_t
+\]</span></p>
+<p>is chosen to be <strong>self-financing</strong>, so that its value changes only through changes in asset prices (see <a href="../../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a>),</p>
+<p><span class="math display">\[
+d\Pi_t = dV + \Delta_t\,dS_t + \alpha_t\,dB_t.
+\]</span></p>
+<p>By <a href="../../topics/ito-formula.html">Itô’s formula</a>,</p>
+<p><span class="math display">\[
+dV = \left( \partial_t V + \mu S_t\,\partial_S V
++ \frac{1}{2}\sigma^2 S_t^2\,\partial_{SS} V \right)dt
++ \sigma S_t\,\partial_S V\,dW_t.
+\]</span></p>
+<p>Substituting this and the dynamics of <span class="math inline">\(S\)</span> and <span class="math inline">\(B\)</span> gives</p>
+<p><span class="math display">\[
+d\Pi_t = \left( \partial_t V + \mu S_t(\partial_S V + \Delta_t)
++ \frac{1}{2}\sigma^2 S_t^2\,\partial_{SS} V + r\alpha_t B_t \right)dt
++ \sigma S_t(\partial_S V + \Delta_t)\,dW_t.
+\]</span></p>
+<p>Choosing <span class="math inline">\(\Delta_t = -\partial_S V\)</span> removes the <span class="math inline">\(dW_t\)</span> term, and also the drift <span class="math inline">\(\mu\)</span> of the stock. The portfolio <span class="math inline">\(\Pi_t = V - S_t\partial_S V +
+\alpha_t B_t\)</span> is then riskless over <span class="math inline">\(dt\)</span>, so to avoid arbitrage it must grow at the risk-free rate, <span class="math inline">\(d\Pi_t = r\Pi_t\,dt\)</span>. Equating the two expressions for <span class="math inline">\(d\Pi_t\)</span>, the <span class="math inline">\(r\alpha_t B_t\)</span> terms cancel and we obtain the <strong>Black-Scholes PDE</strong></p>
+<p><span class="math display">\[
+\begin{cases}
+\partial_t V + \dfrac{1}{2}\sigma^2 S^2\,\partial_{SS} V
++ rS\,\partial_S V - rV = 0, \\[1ex]
+V(T,S) = h(S).
+\end{cases}
+\]</span></p>
+<p>The drift <span class="math inline">\(\mu\)</span> does not appear: the option price does not depend on the expected return of the stock. In terms of the Greeks (<a href="../../topics/option-greeks.html">Option Greeks</a>) the PDE reads <span class="math inline">\(\Theta + \frac{1}{2}\sigma^2 S^2\Gamma + rS\Delta - rV = 0\)</span>.</p>
+</section>
+<section id="pricing-european-options" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="pricing-european-options"><span class="header-section-number">4</span> Pricing European Options</h2>
+<section id="solution-of-the-black-scholes-pde" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="solution-of-the-black-scholes-pde"><span class="header-section-number">4.1</span> Solution of the Black-Scholes PDE</h3>
+<p>We reduce the PDE to the <a href="../../topics/heat-equation.html">heat equation</a>. Let <span class="math inline">\(\tau = T-t\)</span> be the time to maturity and change variables to</p>
+<p><span class="math display">\[
+x = \log S + \left( r - \frac{\sigma^2}{2} \right)\tau, \qquad
+V(t,S) = e^{-r\tau}u(\tau,x).
+\]</span></p>
+<p>Computing the derivatives,</p>
+<p><span class="math display">\[
+\partial_t V = e^{-r\tau}\left( ru - \partial_\tau u
+- \left( r - \tfrac{\sigma^2}{2} \right)\partial_x u \right), \quad
+\partial_S V = \frac{e^{-r\tau}}{S}\partial_x u, \quad
+\partial_{SS} V = \frac{e^{-r\tau}}{S^2}\left( \partial_{xx}u - \partial_x u \right),
+\]</span></p>
+<p>and substituting into the PDE, all terms in <span class="math inline">\(u\)</span> and <span class="math inline">\(\partial_x u\)</span> cancel, leaving</p>
+<p><span class="math display">\[
+\partial_\tau u = \frac{\sigma^2}{2}\,\partial_{xx} u, \qquad u(0,x) = h(e^x).
+\]</span></p>
+<p>This is the heat equation with diffusivity <span class="math inline">\(\sigma^2/2\)</span> and initial condition <span class="math inline">\(h(e^x)\)</span>. Its solution on the whole line is the convolution of the initial condition with the Gaussian heat kernel (see <a href="../../topics/heat-equation.html">Heat Equation</a>),</p>
+<p><span class="math display">\[
+u(\tau,x) = \int_{-\infty}^\infty \frac{1}{\sqrt{2\pi\sigma^2\tau}}
+\exp\left( -\frac{(x-y)^2}{2\sigma^2\tau} \right) h(e^y)\,dy
+= \mathbb{E}\left[ h\left( e^{x + \sigma\sqrt{\tau}Z} \right) \right],
+\qquad Z \sim \mathcal{N}(0,1).
+\]</span></p>
+<p>Returning to the original variables, <span class="math inline">\(e^x = S e^{(r-\sigma^2/2)\tau}\)</span> so</p>
+<p><span class="math display">\[
+V(t,S) = e^{-r\tau}\,\mathbb{E}\left[ h\left( S\exp\left( \left( r -
+\tfrac{\sigma^2}{2} \right)\tau + \sigma\sqrt{\tau}Z \right) \right) \right].
+\tag{1}
+\]</span></p>
+<p>For a call, <span class="math inline">\(h(S_T) = (S_T - K)^+\)</span> and <span class="math inline">\(S_T = S e^{(r-\sigma^2/2)\tau +
+\sigma\sqrt{\tau}Z}\)</span> exceeds <span class="math inline">\(K\)</span> exactly when <span class="math inline">\(Z &gt; -d_-\)</span>, where</p>
+<p><span class="math display">\[
+d_{\pm} = \frac{1}{\sigma\sqrt{\tau}}
+\left( \log\frac{S}{K} + \left( r \pm \frac{\sigma^2}{2} \right)\tau \right).
+\]</span></p>
+<p>Splitting the expectation into the two terms of the payoff, using that <span class="math inline">\(\mathbb{P}(Z &gt; -d_-) = N(d_-)\)</span> with <span class="math inline">\(N\)</span> the standard <a href="../../topics/normal-distribution.html">normal</a> cumulative distribution function, and the Gaussian identity <span class="math inline">\(\mathbb{E}[e^{\sigma\sqrt{\tau}Z}\mathbf{1}_{\{Z&gt;-d_-\}}] =
+e^{\sigma^2\tau/2}N(d_-+\sigma\sqrt{\tau})\)</span>, we get</p>
+<p><span class="math display">\[
+\mathbb{E}\left[ S_T\mathbf{1}_{\{S_T&gt;K\}} \right] = Se^{r\tau}N(d_+),
+\qquad
+\mathbb{E}\left[ K\mathbf{1}_{\{S_T&gt;K\}} \right] = KN(d_-),
+\]</span></p>
+<p>and therefore by (1)</p>
+<div class="theorem" data-title="Black-Scholes Formulas">
+<p><span class="math display">\[
+\begin{aligned}
+C(S,t) &amp;= S\,N(d_+) - Ke^{-r\tau}N(d_-), \\
+P(S,t) &amp;= Ke^{-r\tau}N(-d_-) - S\,N(-d_+).
+\end{aligned}
+\]</span></p>
+</div>
+<p>The put price follows in the same way, or from put-call parity <span class="math inline">\(C - P = S - Ke^{-r\tau}\)</span> (see <a href="../../topics/european-options.html">European Options</a>). The sensitivities of these prices with respect to <span class="math inline">\(S\)</span>, <span class="math inline">\(\sigma\)</span>, <span class="math inline">\(r\)</span> and <span class="math inline">\(t\)</span> are the Greeks, discussed in <a href="../../topics/option-greeks.html">Option Greeks</a>.</p>
+</section>
+<section id="risk-neutral-pricing" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="risk-neutral-pricing"><span class="header-section-number">4.2</span> Risk-Neutral Pricing</h3>
+<p>The second derivation avoids the PDE. By the fundamental theorem of asset pricing (<a href="../../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a>), the price of a derivative is the discounted expected payoff under the risk-neutral measure <span class="math inline">\(\mathbb{Q}\)</span>,</p>
+<p><span class="math display">\[
+V(t) = e^{-r(T-t)}\,\mathbb{E}_{\mathbb{Q}}\left[ h(S_T) \mid \mathcal{F}_t \right].
+\]</span></p>
+<p>To find <span class="math inline">\(\mathbb{Q}\)</span> we use <a href="../../topics/girsanov-theorem.html">Girsanov’s theorem</a>: define the <a href="../../topics/radon-nikodym-derivative.html">Radon-Nikodym Derivative</a></p>
+<p><span class="math display">\[
+\frac{d\mathbb{Q}}{d\mathbb{P}}\Big|_{\mathcal{F}_t}
+= \exp\left( -\theta W_t - \frac{1}{2}\theta^2 t \right),
+\qquad \theta = \frac{\mu - r}{\sigma},
+\]</span></p>
+<p>so that <span class="math inline">\(W_t^{\mathbb{Q}} = W_t + \theta t\)</span> is a Brownian motion under <span class="math inline">\(\mathbb{Q}\)</span>. The stock dynamics become</p>
+<p><span class="math display">\[
+dS_t = rS_t\,dt + \sigma S_t\,dW_t^{\mathbb{Q}}, \qquad
+S_T = S_t\exp\left( \left( r - \frac{\sigma^2}{2} \right)(T-t)
++ \sigma\left( W_T^{\mathbb{Q}} - W_t^{\mathbb{Q}} \right) \right),
+\]</span></p>
+<p>and the discounted price <span class="math inline">\(e^{-rt}S_t\)</span> is a <a href="../../topics/martingale-theory.html">martingale</a> under <span class="math inline">\(\mathbb{Q}\)</span>. Since <span class="math inline">\(W_T^{\mathbb{Q}} - W_t^{\mathbb{Q}} \sim
+\mathcal{N}(0, T-t)\)</span> is independent of <span class="math inline">\(\mathcal{F}_t\)</span>, this is exactly the random variable in (1), so the risk-neutral price coincides with the solution of the PDE and we recover the Black-Scholes formulas. The connection between the two approaches is the <a href="../../topics/feynman-kac-formula.html">Feynman-Kac Formula</a>, which states that the solution of the PDE is the risk-neutral expectation.</p>
+<p>Note that <span class="math inline">\(\mu\)</span> has disappeared: under <span class="math inline">\(\mathbb{Q}\)</span> the stock has drift <span class="math inline">\(r\)</span>, and discounted tradable asset prices are martingales. The volatility <span class="math inline">\(\sigma\)</span> is the same under <span class="math inline">\(\mathbb{P}\)</span> and <span class="math inline">\(\mathbb{Q}\)</span>, so it is the only model parameter that must be estimated.</p>
+</section>
+</section>
+<section id="implementation-in-python" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="implementation-in-python"><span class="header-section-number">5</span> Implementation in Python</h2>
+<p>We take time to maturity <span class="math inline">\(\tau\)</span> in years. For index options we extend the no-dividend model to a constant continuous dividend yield <span class="math inline">\(q\)</span>. Then</p>
+<p><span class="math display">\[
+d_+ = \frac{\log(S/K)+(r-q+\sigma^2/2)\tau}{\sigma\sqrt{\tau}},
+\qquad d_- = d_+ - \sigma\sqrt{\tau},
+\]</span></p>
+<p><span class="math display">\[
+C = Se^{-q\tau}N(d_+) - Ke^{-r\tau}N(d_-), \qquad
+P = Ke^{-r\tau}N(-d_-) - Se^{-q\tau}N(-d_+).
+\]</span></p>
+<p>This is the dividend adjustment used in <a href="https://www.spglobal.com/spdji/en/documents/index-policies/methodology-sp-options-indices-policies-practices.pdf">S&amp;P’s option index methodology</a>. Setting <span class="math inline">\(q=0\)</span> recovers the derivation above. At expiry the price is the payoff; at zero volatility it is the discounted deterministic payoff. Inputs may be scalars or broadcast-compatible arrays. Spot and strike must be positive; time and volatility must be nonnegative and all inputs finite.</p>
+<div id="c6c65429" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> checked_inputs(S, K, tau, r, sigma, q):</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    values <span class="op">=</span> np.broadcast_arrays(<span class="op">*</span>[</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        np.asarray(v, dtype<span class="op">=</span><span class="bu">float</span>) <span class="cf">for</span> v <span class="kw">in</span> (S, K, tau, r, sigma, q)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    ])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">any</span>(np.<span class="bu">any</span>(<span class="op">~</span>np.isfinite(v)) <span class="cf">for</span> v <span class="kw">in</span> values):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"all inputs must be finite"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    S, K, tau, r, sigma, q <span class="op">=</span> values</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">any</span>(S <span class="op">&lt;=</span> <span class="dv">0</span>) <span class="kw">or</span> np.<span class="bu">any</span>(K <span class="op">&lt;=</span> <span class="dv">0</span>):</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"spot and strike must be positive"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">any</span>(tau <span class="op">&lt;</span> <span class="dv">0</span>) <span class="kw">or</span> np.<span class="bu">any</span>(sigma <span class="op">&lt;</span> <span class="dv">0</span>):</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"time and volatility must be nonnegative"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> values</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> d_plus_minus(S, K, tau, r, sigma, q<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return d_+ and d_- for strictly positive time and volatility."""</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    S, K, tau, r, sigma, q <span class="op">=</span> checked_inputs(S, K, tau, r, sigma, q)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">any</span>(tau <span class="op">==</span> <span class="dv">0</span>) <span class="kw">or</span> np.<span class="bu">any</span>(sigma <span class="op">==</span> <span class="dv">0</span>):</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"d values require positive time and volatility"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    scale <span class="op">=</span> sigma <span class="op">*</span> np.sqrt(tau)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    d_plus <span class="op">=</span> (np.log(S) <span class="op">-</span> np.log(K) <span class="op">+</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>              (r <span class="op">-</span> q <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> sigma<span class="op">**</span><span class="dv">2</span>) <span class="op">*</span> tau) <span class="op">/</span> scale</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d_plus, d_plus <span class="op">-</span> scale</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> bs_price(S, K, tau, r, sigma, kind<span class="op">=</span><span class="st">"call"</span>, q<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""European option price with continuous dividend yield q."""</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> kind <span class="kw">not</span> <span class="kw">in</span> (<span class="st">"call"</span>, <span class="st">"put"</span>):</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"kind must be 'call' or 'put'"</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    S, K, tau, r, sigma, q <span class="op">=</span> checked_inputs(S, K, tau, r, sigma, q)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    spot_pv <span class="op">=</span> S <span class="op">*</span> np.exp(<span class="op">-</span>q <span class="op">*</span> tau)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    strike_pv <span class="op">=</span> K <span class="op">*</span> np.exp(<span class="op">-</span>r <span class="op">*</span> tau)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    sign <span class="op">=</span> <span class="dv">1</span> <span class="cf">if</span> kind <span class="op">==</span> <span class="st">"call"</span> <span class="cf">else</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> np.array(np.maximum(sign <span class="op">*</span> (spot_pv <span class="op">-</span> strike_pv), <span class="dv">0</span>))</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    regular <span class="op">=</span> (tau <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (sigma <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">any</span>(regular):</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>        dp, dm <span class="op">=</span> d_plus_minus(<span class="op">*</span>[</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>            v[regular] <span class="cf">for</span> v <span class="kw">in</span> (S, K, tau, r, sigma, q)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>        ])</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> result.copy()</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>        result[regular] <span class="op">=</span> sign <span class="op">*</span> (</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>            spot_pv[regular] <span class="op">*</span> norm.cdf(sign <span class="op">*</span> dp)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>            <span class="op">-</span> strike_pv[regular] <span class="op">*</span> norm.cdf(sign <span class="op">*</span> dm)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result.item() <span class="cf">if</span> result.ndim <span class="op">==</span> <span class="dv">0</span> <span class="cf">else</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="validation" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="validation"><span class="header-section-number">5.1</span> Validation</h3>
+<p>We check the implementation against two properties. First, put-call parity <span class="math inline">\(C - P = S - Ke^{-r\tau}\)</span> holds up to rounding error. Second, the closed form matches a Monte Carlo estimate of the risk-neutral expectation (1), using <span class="math inline">\(10^6\)</span> simulated terminal prices.</p>
+<div id="128cd315" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>S, K, tau, r, sigma <span class="op">=</span> <span class="fl">100.0</span>, <span class="fl">105.0</span>, <span class="fl">0.5</span>, <span class="fl">0.04</span>, <span class="fl">0.2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>call <span class="op">=</span> bs_price(S, K, tau, r, sigma, <span class="st">"call"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>put <span class="op">=</span> bs_price(S, K, tau, r, sigma, <span class="st">"put"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"call = </span><span class="sc">{</span>call<span class="sc">:.4f}</span><span class="ss">, put = </span><span class="sc">{</span>put<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"parity error = </span><span class="sc">{</span>call <span class="op">-</span> put <span class="op">-</span> (S <span class="op">-</span> K <span class="op">*</span> np.exp(<span class="op">-</span>r <span class="op">*</span> tau))<span class="sc">:.2e}</span><span class="ss">"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> rng.standard_normal(<span class="dv">1_000_000</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>S_T <span class="op">=</span> S <span class="op">*</span> np.exp((r <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> sigma<span class="op">**</span><span class="dv">2</span>) <span class="op">*</span> tau <span class="op">+</span> sigma <span class="op">*</span> np.sqrt(tau) <span class="op">*</span> Z)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>disc <span class="op">=</span> np.exp(<span class="op">-</span>r <span class="op">*</span> tau)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, payoff, exact <span class="kw">in</span> [</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"call"</span>, np.maximum(S_T <span class="op">-</span> K, <span class="dv">0</span>), call),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"put"</span>, np.maximum(K <span class="op">-</span> S_T, <span class="dv">0</span>), put),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>]:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    est <span class="op">=</span> disc <span class="op">*</span> payoff.mean()</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    se <span class="op">=</span> disc <span class="op">*</span> payoff.std() <span class="op">/</span> np.sqrt(<span class="bu">len</span>(Z))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: Monte Carlo = </span><span class="sc">{</span>est<span class="sc">:.4f}</span><span class="ss"> (se </span><span class="sc">{</span>se<span class="sc">:.4f}</span><span class="ss">), exact = </span><span class="sc">{</span>exact<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>call = 4.3770, put = 7.2979
+parity error = -1.42e-14
+call: Monte Carlo = 4.3608 (se 0.0080), exact = 4.3770
+put: Monte Carlo = 7.2877 (se 0.0086), exact = 7.2979</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-monte-carlo-pricing" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="visualizing-monte-carlo-pricing"><span class="header-section-number">5.2</span> Visualizing Monte Carlo Pricing</h3>
+<p>Each simulated stock path is a possible realization of the same risk-neutral geometric Brownian motion. We use drift <span class="math inline">\(r\)</span>, rather than the stock’s historical expected return <span class="math inline">\(\mu\)</span>, because pricing requires the risk-neutral expectation. For this illustration, <span class="math inline">\(q=0\)</span>.</p>
+<p>At each time step we simulate the exact transition</p>
+<p><span class="math display">\[
+S_{t+\Delta t} = S_t\exp\left[
+\left(r-\frac{\sigma^2}{2}\right)\Delta t
++\sigma\sqrt{\Delta t}\,Z\right], \qquad Z\sim N(0,1),
+\]</span></p>
+<p>using independent normal draws across paths and time steps. This avoids time-discretization bias in the terminal stock distribution. The call price estimate from <span class="math inline">\(N\)</span> paths is</p>
+<p><span class="math display">\[
+\widehat C_N = \frac{1}{N}\sum_{i=1}^N
+e^{-rT}(S_T^{(i)}-K)^+.
+\]</span></p>
+<div id="fig-monte-carlo-pricing" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-monte-carlo-pricing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="pricing-simulation.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-monte-carlo-pricing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Monte Carlo pricing.
+</figcaption>
+</figure>
+</div>
+<p>The left panel shows 32 of 100,000 simulated paths. Paths finishing below the strike contribute zero; paths finishing above it contribute their discounted payoff. The right panel averages payoffs over progressively more paths. Its horizontal axis is logarithmic. The shaded band is the approximate pointwise 95% confidence interval <span class="math inline">\(\widehat C_N\pm1.96s_N/\sqrt{N}\)</span>, where <span class="math inline">\(s_N\)</span> is the sample standard deviation of discounted payoffs. It describes sampling uncertainty at each sample size, rather than a simultaneous guarantee for the entire curve.</p>
+<p>With seed 7 and the parameters shown, the Monte Carlo price is <strong>4.372</strong>, the Black-Scholes price is <strong>4.377</strong>, and the standard error is <strong>0.025</strong>. Increasing the number of paths reduces typical sampling error at rate <span class="math inline">\(N^{-1/2}\)</span>; the estimate need not approach the exact price monotonically. This is a simulation check under the model’s assumptions, not evidence of agreement with market prices.</p>
+<p>The <a href="pricing_visualization.py">figure source</a> saves the same image used by this page and its gallery card. Regenerate it from the repository root:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv/bin/python</span> projects/bs-option-pricing/pricing_visualization.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="comparison-with-market-data" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="comparison-with-market-data"><span class="header-section-number">5.3</span> Comparison with Market Data</h3>
+<p>The model has one unknown parameter, the volatility <span class="math inline">\(\sigma\)</span>. The market quotes option prices rather than <span class="math inline">\(\sigma\)</span>, so we invert the formula numerically to obtain the <strong>implied volatility</strong> <span class="math inline">\(\sigma_{\text{imp}}\)</span> that reproduces an observed price. Since the call price is strictly increasing in <span class="math inline">\(\sigma\)</span> (the vega of <a href="../../topics/option-greeks.html">Option Greeks</a> is positive), a root finder applies.</p>
+<div id="6dc99621" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> brentq</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> implied_vol(price, S, K, tau, r, kind<span class="op">=</span><span class="st">"call"</span>, q<span class="op">=</span><span class="fl">0.0</span>):</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Scalar IV; reject invalid prices and flag an exhausted bracket."""</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    lower <span class="op">=</span> <span class="bu">float</span>(bs_price(S, K, tau, r, <span class="fl">0.0</span>, kind, q<span class="op">=</span>q))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> np.isfinite(price):</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"price must be finite"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tau <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"IV is undefined at expiry"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    upper <span class="op">=</span> S <span class="op">*</span> np.exp(<span class="op">-</span>q <span class="op">*</span> tau) <span class="cf">if</span> kind <span class="op">==</span> <span class="st">"call"</span> <span class="cf">else</span> (</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        K <span class="op">*</span> np.exp(<span class="op">-</span>r <span class="op">*</span> tau)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> price <span class="op">&lt;</span> lower <span class="kw">or</span> price <span class="op">&gt;=</span> upper:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"price outside finite-IV bounds"</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> price <span class="op">==</span> lower:</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">0.0</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    f <span class="op">=</span> <span class="kw">lambda</span> sigma: bs_price(S, K, tau, r, sigma, kind, q<span class="op">=</span>q) <span class="op">-</span> price</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    hi <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> f(hi) <span class="op">&lt;</span> <span class="dv">0</span> <span class="kw">and</span> hi <span class="op">&lt;</span> <span class="fl">64.0</span>:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        hi <span class="op">*=</span> <span class="dv">2</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> f(hi) <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"IV exceeds numerical search limit"</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> brentq(f, <span class="fl">0.0</span>, hi)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(implied_vol(call, S, K, tau, r))  <span class="co"># recovers sigma = 0.2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.2000000000000077</code></pre>
+</div>
+</div>
+<p>For a market comparison, use a saved, dated snapshot rather than fetching changing data during the site build. An SPX snapshot must include dividends and distinguish AM-settled SPX from PM-settled SPXW contracts; see <a href="https://www.cboe.com/tradable-products/sp-500/spx-options/spx-specifications/">Cboe’s specifications</a>. Use the actual settlement date and time from the contract specification, including any holiday adjustment. Do not infer it from an expiry date alone.</p>
+<p>Save <code>market-snapshot.csv</code> with one row per contract and these columns:</p>
+<ul>
+<li><code>contract</code>, <code>kind</code>, <code>strike</code>, <code>bid</code>, <code>ask</code>.</li>
+<li><code>quote_time</code>, <code>valuation_time</code>, <code>settlement_time</code>: ISO 8601 timestamps with explicit UTC offsets. Quote and spot observations should be aligned.</li>
+<li><code>spot</code>, <code>r</code>, <code>q</code>, <code>sigma_hist</code>: spot at the valuation time, continuously compounded annual rate, estimated continuous dividend yield over the option’s life, and annualized historical volatility.</li>
+<li><code>source</code>, <code>rate_source</code>, <code>dividend_source</code>, <code>history_source</code>: provenance for quotes and each estimated input, including the historical window.</li>
+</ul>
+<p>For example, estimate <code>sigma_hist</code> as the sample standard deviation of one year of daily log returns multiplied by <span class="math inline">\(\sqrt{252}\)</span>. Use a rate and dividend estimate appropriate to the maturity. These choices are estimates, not measured constants. Keep the original snapshot alongside the derived CSV and plot. The following optional block requires that snapshot; no market results are claimed until it has been supplied and inspected.</p>
+<div id="2c3688c2" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compare_snapshot(snapshot):</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Analyze each quote independently, retaining reasons for rejection."""</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> []</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> row <span class="kw">in</span> snapshot.to_dict(<span class="st">"records"</span>):</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="bu">dict</span>(row, mid<span class="op">=</span>np.nan, bs_hist<span class="op">=</span>np.nan, iv<span class="op">=</span>np.nan,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                      tau<span class="op">=</span>np.nan, status<span class="op">=</span><span class="st">"ok"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            times <span class="op">=</span> [pd.Timestamp(row[key]) <span class="cf">for</span> key <span class="kw">in</span> (</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">"quote_time"</span>, <span class="st">"valuation_time"</span>, <span class="st">"settlement_time"</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>            )]</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">any</span>(pd.isna(t) <span class="kw">or</span> t.tzinfo <span class="kw">is</span> <span class="va">None</span> <span class="cf">for</span> t <span class="kw">in</span> times):</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"timestamps require explicit UTC offsets"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            quote_time, valuation_time, settlement_time <span class="op">=</span> times</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>            <span class="co"># This exercise accepts at most one minute of misalignment.</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">abs</span>((quote_time <span class="op">-</span> valuation_time).total_seconds()) <span class="op">&gt;</span> <span class="dv">60</span>:</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"quote and spot times are not aligned"</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            tau <span class="op">=</span> (settlement_time <span class="op">-</span> valuation_time).total_seconds()</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            tau <span class="op">/=</span> <span class="dv">365</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span>  <span class="co"># ACT/365F, including fractional days</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> tau <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"contract has expired"</span>)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>            bid, ask <span class="op">=</span> <span class="bu">float</span>(row[<span class="st">"bid"</span>]), <span class="bu">float</span>(row[<span class="st">"ask"</span>])</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="kw">not</span> (np.isfinite(bid) <span class="kw">and</span> np.isfinite(ask)):</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"bid and ask must be finite"</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> bid <span class="op">&lt;=</span> <span class="dv">0</span> <span class="kw">or</span> ask <span class="op">&lt;</span> bid:</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"nonpositive bid or crossed market"</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>            S, K, r, q, sigma <span class="op">=</span> [<span class="bu">float</span>(row[key]) <span class="cf">for</span> key <span class="kw">in</span> (</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>                <span class="st">"spot"</span>, <span class="st">"strike"</span>, <span class="st">"r"</span>, <span class="st">"q"</span>, <span class="st">"sigma_hist"</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>            )]</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>            mid <span class="op">=</span> (bid <span class="op">+</span> ask) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            hist <span class="op">=</span> bs_price(S, K, tau, r, sigma, row[<span class="st">"kind"</span>], q<span class="op">=</span>q)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>            iv <span class="op">=</span> implied_vol(mid, S, K, tau, r, row[<span class="st">"kind"</span>], q<span class="op">=</span>q)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>            result.update(mid<span class="op">=</span>mid, tau<span class="op">=</span>tau, bs_hist<span class="op">=</span>hist, iv<span class="op">=</span>iv)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> (<span class="pp">ValueError</span>, <span class="pp">TypeError</span>, <span class="pp">KeyError</span>, <span class="pp">OverflowError</span>) <span class="im">as</span> exc:</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>            result[<span class="st">"status"</span>] <span class="op">=</span> <span class="bu">str</span>(exc)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        rows.append(result)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(rows)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>snapshot <span class="op">=</span> pd.read_csv(<span class="st">"market-snapshot.csv"</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> compare_snapshot(snapshot)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>results.to_csv(<span class="st">"market-comparison.csv"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.to_string(index<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>valid <span class="op">=</span> results.loc[results[<span class="st">"status"</span>] <span class="op">==</span> <span class="st">"ok"</span>]</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> valid.empty:</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compare strikes only within the same expiry and option type.</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> label, group <span class="kw">in</span> valid.groupby([<span class="st">"settlement_time"</span>, <span class="st">"kind"</span>]):</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>        group <span class="op">=</span> group.sort_values(<span class="st">"strike"</span>)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>        ax.plot(group[<span class="st">"strike"</span>], group[<span class="st">"iv"</span>], <span class="st">"o-"</span>, label<span class="op">=</span><span class="bu">str</span>(label))</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Strike"</span>, ylabel<span class="op">=</span><span class="st">"Implied volatility"</span>)</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    ax.legend()</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    fig.tight_layout()</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    fig.savefig(<span class="st">"market-iv.png"</span>, dpi<span class="op">=</span><span class="dv">150</span>)</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Repricing each contract with its own implied volatility is a calibration identity, not independent validation. A difference between historical- volatility prices and market quotes can reflect estimation error, bid-ask spreads or mismatched inputs. Evidence against a single volatility requires comparing implied volatilities across strikes at the same maturity, with consistent rates, dividends and observation times, and checking whether variation exceeds quote uncertainty. A smile or skew would motivate the models in <a href="../../topics/volatility-surfaces.html">Volatility Surfaces</a>, <a href="../../topics/local-volatility-model.html">Local Volatility Model</a> and <a href="../../topics/stochastic-volatility-model.html">stochastic volatility models</a>, including <a href="../../topics/heston-model.html">Heston Model</a>. No such pattern has been established by this project yet.</p>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">6</span> Conclusion</h2>
+<p>We derived the Black-Scholes PDE by delta-hedging, solved it by reduction to the heat equation and, independently, by risk-neutral pricing, and obtained the closed-form prices of European calls and puts. The two approaches agree because of the Feynman-Kac formula. The implementation reproduces put-call parity and a Monte Carlo estimate. The optional snapshot workflow includes dividends, precise settlement times and quote validation; an empirical conclusion awaits a saved dataset and its results. For the general theory see <a href="../../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a>, <a href="../../topics/european-options.html">European Options</a> and <a href="../../topics/option-pricing.html">Option Pricing</a>.</p>
+</section>
+<section id="references" class="level2" data-number="7">
+
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">7 References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-black1973" class="csl-entry" role="listitem">
+Black, Fischer, and Myron Scholes. 1973. <span>“The Pricing of Options and Corporate Liabilities.”</span> <em>Journal of Political Economy</em> 81 (3): 637–54.
+</div>
+<div id="ref-merton1973" class="csl-entry" role="listitem">
+Merton, Robert C. 1973. <span>“Theory of Rational Option Pricing.”</span> <em>Bell Journal of Economics and Management Science</em> 4 (1): 141–83.
+</div>
+</div></section></div></main> <!-- /main -->
+<!-- Animated Vanta.js DOTS background (light / dark). Sits behind all page
+     content; re-colours when the Quarto theme toggle changes body class. -->
+<div id="vanta-bg" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
+<script>
+(function () {
+  var COLORS = {
+    light: { backgroundColor: 0xfcfcfc, color: 0x7287fd, color2: 0x8c8fa1 },
+    dark:  { backgroundColor: 0x26282e, color: 0x7287fd, color2: 0x8caaee }
+  };
+  // The animation runs on the homepage only; other pages keep the plain page
+  // colour.
+  var p = location.pathname.replace(/index\.html$/, "");
+  var home = p === "/" || p === "";
+  document.documentElement.classList.toggle("vanta-home", home);
+  var effect = null;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mode() {
+    return document.body.classList.contains("quarto-dark") ? "dark" : "light";
+  }
+  function start() {
+    if (!home || !window.VANTA || !window.THREE) return;
+    if (effect) effect.destroy();
+    var c = COLORS[mode()];
+    effect = VANTA.DOTS({
+      el: "#vanta-bg",
+      mouseControls: !reduced,
+      touchControls: false,
+      gyroControls: false,
+      minHeight: 200,
+      minWidth: 200,
+      scale: 1,
+      scaleMobile: 1,
+      backgroundColor: c.backgroundColor,
+      backgroundAlpha: 0,
+      color: c.color,
+      color2: c.color2,
+      size: 3,
+      spacing: 35,
+      showLines: false
+    });
+  }
+  document.addEventListener("DOMContentLoaded", function () {
+    start();
+    new MutationObserver(start).observe(document.body, {
+      attributes: true, attributeFilter: ["class"]
+    });
+  });
+})();
+</script>
+<style>
+#vanta-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+/* Let the canvas show through; the colour comes from Vanta instead. */
+body.quarto-light, body.quarto-dark { background-color: transparent !important; }
+html { background-color: #fcfcfc; }
+html:has(body.quarto-dark) { background-color: #26282e; }
+</style>
+<!-- Relocates the backlinks block (emitted as #quarto-backlinks by the
+     quarto-graph filter.lua) out of the page body and into the right margin
+     sidebar, placed directly under the "On this page" TOC. Progressive
+     enhancement: if this never runs, the block stays at the foot of the page. -->
+<script>
+(function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
+  function place() {
+    var backlinks = document.getElementById("quarto-backlinks");
+    var sidebar = document.getElementById("quarto-margin-sidebar");
+    if (!backlinks || !sidebar) return;
+    var toc = document.getElementById("TOC");
+    if (toc && toc.parentElement === sidebar) {
+      toc.insertAdjacentElement("afterend", backlinks); // under "On this page"
+    } else {
+      sidebar.appendChild(backlinks);
+    }
+    backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", place);
+  } else {
+    place();
+  }
+})();
+</script>
+<!-- LaTeX in box titles. The "Theorem 1 (title)." heading of definition /
+     theorem / example boxes is drawn by CSS from data-title, which cannot
+     hold math. For titles containing $...$ this inserts a real heading
+     element (styled in styles.css as .env-head) and has MathJax typeset it.
+     Titles without math are untouched. -->
+<script>
+(function () {
+  var NAMES = { definition: "Definition", theorem: "Theorem", example: "Example", intuition: "Intuition" };
+  function build() {
+    var made = [];
+    Object.keys(NAMES).forEach(function (type) {
+      document.querySelectorAll("." + type + "[data-title]").forEach(function (box) {
+        var title = box.getAttribute("data-title");
+        if (title.indexOf("$") === -1 || box.classList.contains("has-math-title")) return;
+        box.classList.add("has-math-title");
+        var head = document.createElement("div");
+        head.className = "env-head";
+        var label = document.createElement("span");
+        label.className = "env-label";
+        var t = document.createElement("span");
+        t.className = "env-title";
+        // MathJax here only recognises \( \), not single $ delimiters
+        t.textContent = title.replace(/\$([^$]+)\$/g, "\\($1\\)");
+        head.append(label, t, document.createTextNode(")."));
+        box.insertBefore(head, box.firstChild);
+        made.push(t);
+      });
+    });
+    if (made.length && window.MathJax && MathJax.startup) {
+      MathJax.startup.promise.then(function () { return MathJax.typesetPromise(made); });
+    }
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", build);
+  } else {
+    build();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/johnrobininston\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, John Inston.</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

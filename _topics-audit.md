@@ -8,10 +8,10 @@ section at the end, which the script preserves.
 
 ## Summary
 
-- Notes: 385; hubs: 12 (analysis, algebra, calculus, probability-theory, topology, quantitative-finance, optimization, game-theory, theoretical-statistics, statistical-models, survival-analysis, time-series-analysis)
+- Notes: 388; hubs: 12 (analysis, algebra, calculus, probability-theory, topology, quantitative-finance, optimization, game-theory, theoretical-statistics, statistical-models, survival-analysis, time-series-analysis)
 - Sub-indexes (tag `hub`): stochastic-calculus, stochastic-processes
 - Not listed in any hub: 83
-- Links to missing notes: 153 targets (153 genuine, 0 malformed, 0 case mismatch)
+- Links to missing notes: 149 targets (149 genuine, 0 malformed, 0 case mismatch)
 - Stubs: 8; thin: 102; with empty sections: 72
 
 ## 1. Notes not listed in a parent topic
@@ -23,10 +23,10 @@ linked from most. `None` means no connection to any hub.
 
 - [[cholesky-decomposition]]
 
-### analysis (5)
+### analysis (4)
 
-- [[cylinder-sets]], [[measure-theory]], [[rationals-are-dense-in-reals]],
-  [[sequences]], [[tightness]]
+- [[cylinder-sets]], [[rationals-are-dense-in-reals]], [[sequences]],
+  [[tightness]]
 
 ### calculus (7)
 
@@ -38,43 +38,44 @@ linked from most. `None` means no connection to any hub.
 
 - [[graph-theory]]
 
-### probability-theory (51)
+### probability-theory (41)
 
-- [[affine-function]], [[beta-distribution]], [[binomial-distribution]],
-  [[cauchy-distribution]], [[chapman-kolmogorov-equations]],
-  [[chi-squared-distribution]], [[compound-poisson-distribution]],
-  [[continuous-mapping-theorem]], [[continuous-uniform-distribution]],
-  [[convergence-of-random-variables]], [[dirichlet-distribution]],
-  [[discrete-uniform-distribution]], [[ergodic-theorems]],
-  [[exponential-distribution]], [[first-passage-times]],
+- [[affine-function]], [[binomial-distribution]], [[cauchy-distribution]],
+  [[chapman-kolmogorov-equations]], [[chi-squared-distribution]],
+  [[compound-poisson-distribution]], [[continuous-mapping-theorem]],
+  [[continuous-uniform-distribution]], [[convergence-of-random-variables]],
+  [[dirichlet-distribution]], [[discrete-uniform-distribution]],
+  [[ergodic-theorems]], [[exponential-distribution]], [[first-passage-times]],
   [[gamma-distribution]], [[gaussian-processes]], [[geometric-distribution]],
   [[gumbel-distribution]], [[hellys-selection-theorem]],
-  [[hoeffdings-inequality]], [[jump-process-fundamentals]],
-  [[jump-process-generator-backwards-equations]],
-  [[jump-process-stability-regularity]], [[jump-processes]],
-  [[laplace-distribution]], [[law-of-iterated-logarithm]],
+  [[hoeffdings-inequality]], [[jump-process-stability-regularity]],
+  [[jump-processes]], [[laplace-distribution]], [[law-of-iterated-logarithm]],
   [[log-normal-distribution]], [[lyapunov-inequality]],
-  [[markov-chain-equilibrium-convergence]],
   [[markov-chain-excursions-state-visits]],
-  [[markov-chain-passage-recurrence-times]],
-  [[markov-chain-state-classification]],
-  [[markov-chain-stationary-distributions]],
-  [[markov-chain-statistical-inference]], [[markov-chain-time-averages]],
-  [[markov-chain-time-reversibility]], [[markov-process]],
+  [[markov-chain-passage-recurrence-times]], [[markov-process]],
   [[markov-property]], [[mathematics]], [[maxwell-boltzmann-distribution]],
   [[normal-distribution]], [[pareto-distribution]], [[poisson-distribution]],
   [[portmanteau-theorem]], [[probabilities-of-inequalities]],
   [[probability-measure-theory]], [[prohorovs-theorem]],
-  [[rayleigh-distribution]], [[students-t-distribution]],
-  [[weibull-distribution]]
+  [[rayleigh-distribution]], [[weibull-distribution]]
 
-### statistical-models (1)
+### quantitative-finance (1)
 
-- [[f-distribution]]
+- [[bellman-equation]]
 
-### theoretical-statistics (1)
+### statistical-models (10)
 
-- [[multinomial-distribution]]
+- [[f-distribution]], [[jump-process-fundamentals]],
+  [[jump-process-generator-backwards-equations]],
+  [[markov-chain-equilibrium-convergence]],
+  [[markov-chain-state-classification]],
+  [[markov-chain-stationary-distributions]],
+  [[markov-chain-statistical-inference]], [[markov-chain-time-averages]],
+  [[markov-chain-time-reversibility]], [[students-t-distribution]]
+
+### theoretical-statistics (2)
+
+- [[beta-distribution]], [[multinomial-distribution]]
 
 ### None (16)
 
@@ -95,7 +96,6 @@ Sorted by number of notes linking to them.
 - `functional` (4): [[calculus-of-variations]], [[euler-lagrange-equation]], [[functional-analysis]], [[hamilton-jacobi-equation]]
 - `probability-measure` (4): [[dynkins-pi-lambda-theorem]], [[hellys-selection-theorem]], [[pi-system]], [[prohorovs-theorem]]
 - `borel-sigma-algebra` (3): [[ito-process]], [[measurable-function]], [[scheffes-theorem]]
-- `characteristic-functions` (3): [[brownian-bridge]], [[central-limit-theorem]], [[probability-measure-theory]]
 - `order` (3): [[completeness]], [[real-numbers]], [[supremum-infimum]]
 - `sigma-algebra` (3): [[generated-sigma-algebra]], [[markov-property]], [[measurable-function]]
 - `stationary-processes` (3): [[autocovariance-and-autocorrelation-function]], [[moving-average-processes]], [[spectral-distributions]]
@@ -106,7 +106,6 @@ Sorted by number of notes linking to them.
 - `banarch-spaces` (2): [[functional-analysis]], [[functional-derivative]]
 - `distribution-function` (2): [[convergence-in-law]], [[probability-measure-theory]]
 - `financial-mathematics` (2): [[brownian-motion]], [[radon-nikodym-derivative]]
-- `fourier-transform` (2): [[heston-model]], [[stochastic-volatility-model]]
 - `higham-kloeden` (2): [[multi-level-monte-carlo-mlmc]], [[numerical-methods-in-financial-mathematics]]
 - `limit-order-books` (2): [[financial-markets]], [[quantitative-finance]]
 - `measure-theory-notes` (2): [[caratheodory-extension-theorem]], [[supremum-infimum]]
@@ -124,7 +123,6 @@ Sorted by number of notes linking to them.
 - `Binomial Distribution` (1): [[probability-theory-fundamentals]]
 - `Central Limit Theorem` (1): [[probability-theory-fundamentals]]
 - `Chi-Squared Distribution` (1): [[probability-theory-fundamentals]]
-- `Common Probability Distributions` (1): [[probability-theory-fundamentals]]
 - `Conditional Expectation` (1): [[probability-theory-fundamentals]]
 - `De Morgan's Laws` (1): [[probability-theory-fundamentals]]
 - `Exponential Distribution` (1): [[probability-theory-fundamentals]]
@@ -135,7 +133,6 @@ Sorted by number of notes linking to them.
 - `Random Variables` (1): [[probability-theory-fundamentals]]
 - `Random Variables and Distribution Functions` (1): [[probability-theory-fundamentals]]
 - `Solenoid` (1): [[vector-calculus-identities]]
-- `Uniform Distribution` (1): [[probability-theory-fundamentals]]
 - `absolute-convergence` (1): [[radius-of-convergence]]
 - `absolute-value-sequence-convergence` (1): [[limit-theorems]]
 - `affine-combination` (1): [[convex-set]]

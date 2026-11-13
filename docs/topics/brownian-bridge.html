@@ -411,7 +411,7 @@ window.Quarto = {
 X_{t}=a(1-t)+bt+(1-t)\int_{0}^t \frac{1}{1-s}dB_{s}.
 \]</span> First note that from standard results and the <a href="../topics/ito-formula.html">Itô Formula</a> we have that <span class="math display">\[
 G:=\int_{0}^t \frac{1}{1-s}sB_{s} \sim\mathcal{N}\left( 0, \frac{1}{1-t} \right),
-\]</span> and so the [[characteristic-functions|characteristic function]] of <span class="math inline">\((1-t)G\)</span> is given by <span class="math display">\[
+\]</span> and so the <a href="../topics/characteristic-functions.html">characteristic function</a> of <span class="math inline">\((1-t)G\)</span> is given by <span class="math display">\[
 \phi(p)=\phi_{G}(p(1-t))=e^{\frac{1}{2(1-t)}p^2(1-t)^2}=e^{\frac{1}{2}p^2(1-t)}\to 1~~\text{as}~~t \to 1.
 \]</span> Hence <span class="math inline">\((1-t)G\stackrel{\mathcal{L}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span> and since the limit is a constant <span class="math inline">\((1-t)G\stackrel{\mathbb{P}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span>. Finally, we notice that this stochastic integral is the sum of countably many independent random variables, hence from [[durrett-2-5-10]] we have <span class="math inline">\((1-t)G\stackrel{\text{a.s.}}{\to} 0\)</span> as <span class="math inline">\(t \to 1\)</span> and <span class="math inline">\(Y_{t}\stackrel{\text{a.s.}}{\to}b\)</span>.</p>
 </section>
@@ -552,6 +552,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -563,6 +581,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

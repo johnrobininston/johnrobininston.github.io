@@ -501,18 +501,22 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/analysis.html">Analysis</a></li>
+<li><a href="../topics/bellman-equation.html">Bellman Equation</a></li>
 <li><a href="../topics/boundary-points.html">Boundary Points</a></li>
 <li><a href="../topics/cauchy-sequence.html">Cauchy Sequence</a></li>
 <li><a href="../topics/compactness.html">Compactness</a></li>
 <li><a href="../topics/completeness.html">Completeness</a></li>
+<li><a href="../topics/epsilon-ball.html">Epsilon Ball</a></li>
 <li><a href="../topics/functional-analysis.html">Functional Analysis</a></li>
 <li><a href="../topics/linear-algebra.html">Linear Algebra</a></li>
 <li><a href="../topics/mathematics.html">Mathematics</a></li>
 <li><a href="../topics/normed-space.html">Normed Space</a></li>
+<li><a href="../topics/point-set-topologies.html">Point Set Topologies</a></li>
 <li><a href="../topics/proposition-closed-sets-convergent-sequences.html">Proposition - Closed Sets &amp; Convergent Sequences</a></li>
 <li><a href="../topics/real-functions.html">Real Functions</a></li>
 <li><a href="../topics/sequence-convergence.html">Sequence Convergence</a></li>
 <li><a href="../topics/topology.html">Topology</a></li>
+<li><a href="../topics/triangle-inequality.html">Triangle Inequality</a></li>
 </ul>
 </div>
 </section>
@@ -588,6 +592,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -599,6 +621,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

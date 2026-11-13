@@ -418,10 +418,8 @@ Backlinks
 <li><a href="../topics/convergence-almost-surely.html">Convergence Almost Surely</a></li>
 <li><a href="../topics/convergence-in-probability.html">Convergence in Probability</a></li>
 <li><a href="../topics/law-of-large-numbers.html">Law of Large Numbers</a></li>
-<li><a href="../topics/laws-of-large-numbers.html">Laws of Large Numbers</a></li>
 <li><a href="../topics/limsup-liminf.html">Limit Supremum &amp; Limit Infimum</a></li>
 <li><a href="../topics/limits-of-stochastic-processes.html">Limits of Stochastic Processes</a></li>
-<li><a href="../topics/limsup-liminf-and-measure.html">Limsup, Liminf and Measure</a></li>
 <li><a href="../topics/probability-measure-theory.html">Probability Measure Theory</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
 <li><a href="../topics/set-theory-fundamentals.html">Set Theory Fundamentals</a></li>
@@ -499,6 +497,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -510,6 +526,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

@@ -766,7 +766,7 @@ F(\delta A)=0\implies F_{n}(A)\to F(A).
 <section id="strong-law-of-large-numbers" class="level3" data-number="1.3.4">
 <h3 data-number="1.3.4" class="anchored" data-anchor-id="strong-law-of-large-numbers"><span class="header-section-number">1.3.4</span> 3.4 Strong Law of Large Numbers</h3>
 <p><a href="../topics/law-of-large-numbers.html">Law of Large Numbers</a> ### 3.5 Characteristic Functions</p>
-<p>[[characteristic-functions]]</p>
+<p><a href="../topics/characteristic-functions.html">Characteristic Functions</a></p>
 </section>
 </section>
 <section id="limit-theorems" class="level2" data-number="1.4">
@@ -916,6 +916,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -927,6 +945,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

@@ -425,7 +425,7 @@ dB_{t}=rB_{t}dt,
 2\kappa \theta&gt; \eta^2,
 \]</span> then the process <span class="math inline">\((V_{t})\)</span> is strictly positive.</p>
 <p>The construction of this model was motivated to match observed market behavior, specifically high peak and fat tails and the non-constant volatility. The volatility process is positive and mean reverting and the correlation <span class="math inline">\(\rho\)</span> is a way of controlling the relationship between stock price and volatility.</p>
-<p>The Heston model is popular since under the PDE approach, after log transform, one gets a PDE with constant coefficient, solvable through [[fourier-transform]] or <a href="../topics/finite-difference-methods.html">Finite-Difference Methods</a> since no closed form solution is availale. In application this model requires calibration (i.e. empirical estimation of the noted parameters) and simulation.</p>
+<p>The Heston model is popular since under the PDE approach, after log transform, one gets a PDE with constant coefficient, solvable through <a href="../topics/fourier-transform.html">Fourier Transform</a> or <a href="../topics/finite-difference-methods.html">Finite-Difference Methods</a> since no closed form solution is availale. In application this model requires calibration (i.e. empirical estimation of the noted parameters) and simulation.</p>
 </section>
 <section id="heston-model-pricing-pde" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="heston-model-pricing-pde"><span class="header-section-number">2</span> Heston Model Pricing PDE</h2>
@@ -467,11 +467,15 @@ Backlinks
 </div>
 <ul>
 <li><a href="../topics/black-scholes-merton-model.html">Black-Scholes-Merton Model</a></li>
+<li><a href="../topics/characteristic-functions.html">Characteristic Functions</a></li>
 <li><a href="../topics/cox-ingersoll-ross-cir-model.html">Cox-Ingersoll-Ross (CIR) Model</a></li>
+<li><a href="../topics/fourier-transform.html">Fourier Transform</a></li>
 <li><a href="../topics/geometric-brownian-motion.html">Geometric Brownian Motion</a></li>
+<li><a href="../projects/bs-option-pricing/index.html">Pricing European Options with the Black-Scholes Model</a></li>
+<li>Quant Finance Weekly: Rough Memory in the VIX</li>
 <li><a href="../topics/quantitative-finance.html">Quantitative Finance</a></li>
 <li><a href="../topics/sde-simulation.html">SDE Simulation</a></li>
-<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Model</a></li>
+<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Models</a></li>
 </ul>
 </div>
 </section>
@@ -547,6 +551,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -558,6 +580,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

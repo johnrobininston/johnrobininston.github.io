@@ -429,9 +429,9 @@ Backlinks
 <ul>
 <li><a href="../topics/calculus.html">Calculus &amp; Differential Equations</a></li>
 <li><a href="../topics/control-theory.html">Control Theory</a></li>
-<li><a href="../topics/control-theory-fundamentals.html">Control Theory Fundamentals</a></li>
 <li><a href="../topics/euler-lagrange-equation.html">Euler-Lagrange Equation</a></li>
 <li><a href="../topics/hamilton-jacobi-equation.html">Hamilton-Jacobi Equation</a></li>
+<li><a href="../topics/lagrangian-mechanics.html">Lagrangian Mechanics</a></li>
 </ul>
 </div>
 </section>
@@ -508,6 +508,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -519,6 +537,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

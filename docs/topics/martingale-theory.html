@@ -476,16 +476,19 @@ Backlinks
 <li><a href="../topics/filtrations-and-adapted-processes.html">Filtrations and Adapted Processes</a></li>
 <li><a href="../topics/heston-model.html">Heston Model</a></li>
 <li><a href="../topics/hoeffdings-inequality.html">Hoeffding's Inequality</a></li>
+<li><a href="../topics/ito-integral.html">Itô Integral</a></li>
 <li><a href="../topics/ito-process.html">Itô Process</a></li>
 <li><a href="../topics/martingale-convergence-theorems.html">Martingale Convergence Theorems</a></li>
 <li><a href="../topics/martingale-differences.html">Martingale Differences</a></li>
 <li><a href="../topics/martingale-representation-theorem.html">Martingale Representation Theorem</a></li>
 <li><a href="../topics/option-pricing.html">Option Pricing</a></li>
 <li><a href="../topics/optional-stopping-theorem.html">Optional Stopping Theorem</a></li>
+<li><a href="../projects/bs-option-pricing/index.html">Pricing European Options with the Black-Scholes Model</a></li>
 <li><a href="../topics/probability-measure-theory.html">Probability Measure Theory</a></li>
 <li><a href="../topics/probability-theory.html">Probability Theory</a></li>
 <li><a href="../topics/risk-neutral-pricing.html">Risk-Neutral Pricing</a></li>
 <li><a href="../topics/stochastic-calculus.html">Stochastic Calculus</a></li>
+<li><a href="../topics/stochastic-volatility-model.html">Stochastic Volatility Models</a></li>
 <li><a href="../topics/stopping-times.html">Stopping Times</a></li>
 <li><a href="../topics/upcrossing-inequality.html">Upcrossing Inequality</a></li>
 </ul>
@@ -563,6 +566,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -574,6 +595,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);

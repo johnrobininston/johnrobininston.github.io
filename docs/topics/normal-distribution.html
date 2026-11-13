@@ -624,21 +624,25 @@ Backlinks
 <ul>
 <li><a href="../topics/binomial-distribution.html">Binomial Distribution</a></li>
 <li><a href="../topics/cauchy-distribution.html">Cauchy Distribution</a></li>
+<li><a href="../topics/characteristic-functions.html">Characteristic Functions</a></li>
 <li><a href="../topics/chi-squared-distribution.html">Chi-Squared Distribution</a></li>
 <li><a href="../topics/exponential-family.html">Exponential Family</a></li>
+<li><a href="../topics/fourier-transform.html">Fourier Transform</a></li>
 <li><a href="../topics/gaussian-integral.html">Gaussian Integral</a></li>
 <li><a href="../topics/heat-equation.html">Heat Equation</a></li>
 <li><a href="../topics/laplace-distribution.html">Laplace Distribution</a></li>
+<li><a href="../topics/linear-regression.html">Linear Regression</a></li>
 <li><a href="../topics/log-normal-distribution.html">Log-Normal Distribution</a></li>
 <li><a href="../topics/maxwell-boltzmann-distribution.html">Maxwell-Boltzmann Distribution</a></li>
 <li><a href="../topics/poisson-distribution.html">Poisson Distribution</a></li>
+<li><a href="../projects/bs-option-pricing/index.html">Pricing European Options with the Black-Scholes Model</a></li>
 <li><a href="../topics/common-probability-distributions.html">Probability Distributions</a></li>
 <li><a href="../topics/probability-theory-fundamentals.html">Probability Theory Fundamentals</a></li>
 <li><a href="../topics/random-variable-transformations.html">Random Variable Transformations</a></li>
+<li><a href="../topics/random-variables.html">Random Variables and Distribution Functions</a></li>
 <li><a href="../topics/rayleigh-distribution.html">Rayleigh Distribution</a></li>
 <li><a href="../topics/schrodinger-equation.html">Schrodinger Equation</a></li>
 <li><a href="../topics/students-t-distribution.html">Student's t-Distribution</a></li>
-<li><a href="../topics/transformations-of-random-variables.html">Transformations of Random Variables</a></li>
 </ul>
 </div>
 </section>
@@ -714,6 +718,24 @@ html:has(body.quarto-dark) { background-color: #26282e; }
      enhancement: if this never runs, the block stays at the foot of the page. -->
 <script>
 (function () {
+  var MAX_VISIBLE = 8; // longer lists collapse into a dropdown
+
+  function collapse(backlinks) {
+    var list = backlinks.querySelector("ul");
+    var title = backlinks.querySelector(".quarto-backlinks__title");
+    if (!list || !title) return;
+    var n = list.children.length;
+    if (n <= MAX_VISIBLE) return;
+    var details = document.createElement("details");
+    details.className = "quarto-backlinks__details";
+    var summary = document.createElement("summary");
+    summary.className = "quarto-backlinks__title";
+    summary.textContent = "Backlinks (" + n + ")";
+    details.appendChild(summary);
+    details.appendChild(list);
+    title.replaceWith(details);
+  }
+
   function place() {
     var backlinks = document.getElementById("quarto-backlinks");
     var sidebar = document.getElementById("quarto-margin-sidebar");
@@ -725,6 +747,7 @@ html:has(body.quarto-dark) { background-color: #26282e; }
       sidebar.appendChild(backlinks);
     }
     backlinks.classList.add("quarto-backlinks--sidebar");
+    collapse(backlinks);
   }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", place);
