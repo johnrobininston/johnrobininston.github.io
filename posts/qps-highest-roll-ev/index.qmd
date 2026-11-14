@@ -1,0 +1,150 @@
+---
+id: index
+aliases: []
+tags: []
+author: "John Robin Inston"
+categories:
+  - "Interview Preparation"
+date: 2026-11-13
+draft: false
+title: "Interview Prep: Highest Roll EV"
+title-block-banner: false
+toc: true
+---
+
+## Problem 
+
+What is the expected value of the highest roll of a $6$-sided die if we roll it until we get a $4$?
+
+## Analytical Solution
+
+Define the [[stochastic-processes|stochastic process]] $\{X_t\}_{t\geq 1}$
+with independent [[discrete-uniform-distribution|discrete uniform]] rolls
+$X_t\sim\mathcal{U}(\{1,\ldots,6\})$. Further define the running maximum
+
+$$
+S_t = \max\{X_1,\ldots,X_t\},
+$$
+
+and the [[stopping-times|stopping time]]
+$\tau = \min\{t\geq 1: X_t = 4\}$. We include the final roll of $4$, so
+$S_\tau\in\{4,5,6\}$. We wish to compute $\mathbb{E}[S_\tau]$.
+
+By the [[law-of-total-expectation]],
+
+$$
+\begin{align*}
+\mathbb{E}[S_\tau]
+&= \mathbb{E}\left[\mathbb{E}[S_\tau\mid\tau]\right] \\
+&= \sum_{t=1}^{\infty}
+\underbrace{\mathbb{E}[S_t\mid\tau=t]}_{(1)}
+\underbrace{\mathbb{P}(\tau=t)}_{(2)}.
+\end{align*}
+$$
+
+For (2), $\tau$ follows a [[geometric-distribution|geometric distribution]]
+(number of trials to get one success) with success probability $p=1/6$:
+
+$$
+\mathbb{P}(\tau=t) = \left(\frac{5}{6}\right)^{t-1}\frac{1}{6}.
+$$
+
+For (1), the tail-sum formula gives
+
+$$
+\mathbb{E}[S_t\mid\tau=t]
+= \sum_{s=0}^{5}\mathbb{P}(S_t>s\mid\tau=t).
+$$
+
+For $s\in\{0,1,2,3\}$, each probability is $1$ because the final roll is
+$4$. For $s\in\{4,5\}$, we use [[order-statistics]]. Conditional on
+$\tau=t$, the first $t-1$ rolls are independent and uniform on
+$\{1,2,3,5,6\}$, while $X_t=4$. Conditioning only on $X_t=4$ would not
+exclude earlier rolls of $4$. Hence
+
+$$
+\begin{align*}
+\mathbb{P}(S_t\leq s\mid\tau=t)
+&= \prod_{i=1}^{t-1}\mathbb{P}(X_i\leq s\mid X_i\neq 4) \\
+&= \left(\frac{s-1}{5}\right)^{t-1}.
+\end{align*}
+$$
+
+Taking complements and returning to (1),
+
+$$
+\begin{align*}
+\mathbb{E}[S_t\mid\tau=t]
+&= 4 + \left[1-\left(\frac{3}{5}\right)^{t-1}\right]
+       + \left[1-\left(\frac{4}{5}\right)^{t-1}\right] \\
+&= 6-\left(\frac{3}{5}\right)^{t-1}
+    -\left(\frac{4}{5}\right)^{t-1}.
+\end{align*}
+$$
+
+For example, when $t=1$ this is $4$, as expected. Substituting into the
+original sum and evaluating the geometric series,
+
+$$
+\begin{align*}
+\mathbb{E}[S_\tau]
+&= \frac{1}{6}\sum_{t=1}^{\infty}
+\left[
+6\left(\frac{5}{6}\right)^{t-1}
+-\left(\frac{1}{2}\right)^{t-1}
+-\left(\frac{2}{3}\right)^{t-1}
+\right] \\
+&= \frac{1}{6}\left[
+\frac{6}{1-5/6}-\frac{1}{1-1/2}-\frac{1}{1-2/3}
+\right] \\
+&= \boxed{\frac{31}{6}\approx 5.167}.
+\end{align*}
+$$
+
+A shorter check uses the same tail-sum formula directly at the stopping
+time. The maximum exceeds $4$ precisely when a $5$ or $6$ appears before
+the first $4$. Among $\{4,5,6\}$, each is equally likely to appear first,
+so this probability is $2/3$. Similarly, the maximum exceeds $5$ when
+a $6$ appears before the first $4$, with probability $1/2$. Therefore
+
+$$
+\mathbb{E}[S_\tau]
+= 4+\mathbb{P}(S_\tau>4)+\mathbb{P}(S_\tau>5)
+= 4+\frac{2}{3}+\frac{1}{2}
+= \frac{31}{6}.
+$$
+
+## Numerical Check
+
+```{python}
+# Packages
+import numpy as np
+
+# Set random seed
+rng = np.random.default_rng(seed=342)
+
+
+# Single experiment iteration
+def roll_until_4():
+    test = False
+    x = []
+    s = []
+    while test is False:
+        roll = rng.integers(low=1, high=7)
+        x.append(roll)
+        s.append(np.max(np.array(x)))
+        if roll == 4:
+            test = True
+    return np.array(x), np.array(s)
+
+
+# Empirical mean
+s_vals = []
+for _ in range(10000):
+    x, s = roll_until_4()
+    s_vals.append(s[-1])
+
+# Print the average
+print("The expected value is: ", np.mean(s_vals, axis=0))
+```
+

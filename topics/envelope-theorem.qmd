@@ -1,0 +1,168 @@
+---
+id: envelope-theorem
+aliases: []
+tags: []
+author: "John Robin Inston"
+date: 2026-10-13
+number-sections: true
+title: "Envelope Theorem"
+title-block-banner: false
+---
+
+## Overview
+
+The **envelope theorem** is a major result about the differentiability of the
+value function of a parameterized optimization problem. As we change the
+parameters of the objective, the envelope theorem shows that changes in the
+optimizer do not contribute (to first order) to the change in the optimal
+value. The term _envelope_ comes from describing the graph of the value
+function as the _upper envelope_ of the graphs of the parameterized family of
+functions that are being optimized.
+
+## Statement of the Envelope Theorem
+
+Let $f(x, \alpha)$ and $g_j(x, \alpha)$, $j=1,2,\ldots ,m$, be real-valued
+continuously differentiable functions on $\mathbb{R}^{n+l}$, where
+$x\in\mathbb{R}^n$ are choice variables and $\alpha \in \mathbb{R}^l$ are
+parameters. For a given $\alpha$, consider the problem of selecting $x$ so
+that
+
+$$
+\max_x f(x, \alpha )\quad \text{s.t.}\quad g_j(x,\alpha )\ge 0,\quad
+j=1,2,\ldots ,m, ~ x \ge 0.
+$$
+
+The [[lagrange-multiplier-method|Lagrangian]] of this problem is
+
+$$
+\mathcal{L}(x, \lambda , \alpha ) = f(x, \alpha )
++ \sum_{j=1}^m \lambda_j g_j(x, \alpha ),
+$$
+
+where $\lambda \in  \mathbb{R}^m$ are the Lagrange multipliers. Let
+$x^*(\alpha )$ be the optimal solution that maximizes $f$ subject to the
+constraints, and let $\lambda^*(\alpha )$ be the corresponding multipliers.
+Evaluating the Lagrangian at the optimum gives
+
+$$
+\mathcal{L}^*(\alpha ) = \mathcal{L}(x^*(\alpha ), \lambda^*(\alpha ), \alpha )
+= f(x^*(\alpha ), \alpha ) + \sum_{j=1}^m \lambda_j^*(\alpha )
+g_j(x^*(\alpha ), \alpha ).
+$$
+
+Define the **value function**
+
+$$
+V(\alpha ) = f(x^*(\alpha ), \alpha ).
+$$
+
+We assume throughout that the optimum is interior ($x^*(\alpha) > 0$), so the
+constraint $x \ge 0$ is slack. Otherwise, absorb it into the $g_j$.
+
+Then we obtain the following theorem.
+
+:::{.theorem data-title="Envelope Theorem"}
+
+Assume that $x^*$, $\lambda^*$ and $V$ are continuously differentiable in
+$\alpha$. Then the derivative of the value function with respect to the
+parameters $\alpha$ is given by
+
+$$
+\frac{\partial V(\alpha )}{\partial \alpha_i}
+= \frac{\partial \mathcal{L}}{\partial \alpha_i}
+(x^*(\alpha ), \lambda^*(\alpha ), \alpha ), \quad i=1,2,\ldots ,l,
+$$
+
+where
+$\partial\mathcal{L} / \partial \alpha_i = \partial f / \partial \alpha_i
++ \sum_{j=1}^m \lambda_j \, \partial g_j / \partial \alpha_i$.
+
+:::
+
+:::{.intuition data-title="Why the optimizer drops out"}
+
+When a parameter $\alpha_i$ changes, the value $V(\alpha) = f(x^*(\alpha),
+\alpha)$ changes in two ways: directly, because $f$ depends on $\alpha_i$,
+and indirectly, because the optimizer $x^*(\alpha)$ moves. By the
+[[chain-rule]], in the unconstrained case,
+
+$$
+\frac{\partial V}{\partial \alpha_i}
+= \underbrace{\frac{\partial f}{\partial \alpha_i}}_{\text{direct}}
++ \underbrace{\frac{\partial f}{\partial x}
+\cdot \frac{\partial x^*}{\partial \alpha_i}}_{\text{indirect}}.
+$$
+
+At an optimum the first-order condition $\partial f / \partial x = 0$ holds,
+so the indirect term vanishes: the optimizer already sits at the top of the
+hill, and a small step along it gains nothing to first order. With
+constraints, the first-order conditions of the Lagrangian and complementary
+slackness ($\lambda_j^* g_j = 0$) play the same role and cancel the indirect
+terms. Only the direct effect of $\alpha$ remains, so we can differentiate
+the Lagrangian with respect to $\alpha$ while holding $x^*$ and $\lambda^*$
+fixed.
+
+The graphical picture explains the name. For each fixed $x$, the map
+$\alpha \mapsto f(x,\alpha)$ is a curve, and $V(\alpha)=\max_x f(x,\alpha)$ is
+their upper envelope. At $\alpha_0$ the envelope touches the curve for
+$x=x^*(\alpha_0)$ and never goes below it, so the two curves are tangent
+there and share the same slope.
+
+:::
+
+## Example: utility maximization
+
+A consumer with income $m$ buys two goods at prices $p_1,p_2>0$ and chooses
+quantities $x_1,x_2$ to
+
+$$
+\max_{x_1,x_2}\; x_1 x_2 \quad \text{s.t.}\quad m - p_1 x_1 - p_2 x_2 \ge 0.
+$$
+
+Here the parameters are $\alpha = (p_1,p_2,m)$ and the Lagrangian is
+$\mathcal{L} = x_1x_2 + \lambda (m - p_1x_1 - p_2x_2)$. The first-order
+conditions are $x_2 = \lambda p_1$ and $x_1 = \lambda p_2$, and the budget
+binds, so
+
+$$
+x_1^* = \frac{m}{2p_1}, \qquad x_2^* = \frac{m}{2p_2}, \qquad
+\lambda^* = \frac{m}{2p_1p_2}, \qquad
+V(p_1,p_2,m) = \frac{m^2}{4p_1p_2}.
+$$
+
+The optimum is interior, so the theorem applies. Differentiating the
+Lagrangian with respect to the parameters at the optimum gives
+
+$$
+\frac{\partial \mathcal{L}}{\partial m} = \lambda^* = \frac{m}{2p_1p_2},
+\qquad
+\frac{\partial \mathcal{L}}{\partial p_1} = -\lambda^* x_1^*
+= -\frac{m^2}{4p_1^2p_2}.
+$$
+
+Both agree with differentiating $V$ directly, which gives
+$\partial V/\partial m = m/(2p_1p_2)$ and
+$\partial V/\partial p_1 = -m^2/(4p_1^2p_2)$. We never needed to compute how
+$x_1^*$ and $x_2^*$ respond to the parameters.
+
+## Applications
+
+- **Shadow prices.** Taking $\alpha$ to be the right-hand side of a
+  constraint gives $\partial V/\partial \alpha = \lambda^*$, so the Lagrange
+  multiplier is the marginal value of relaxing the constraint. In the example,
+  $\lambda^*$ is the marginal utility of income.
+- **Roy's identity.** Dividing the two derivatives in the example gives
+  $-\dfrac{\partial V/\partial p_i}{\partial V/\partial m} = x_i^*$, which
+  recovers demand from the value function (the indirect utility) without
+  solving for the optimizer.
+- **Hotelling's lemma.** For a firm with profit
+  $\pi(p,w)=\max_x \, p\,F(x)-w\cdot x$, the theorem gives
+  $\partial \pi/\partial p = F(x^*)$, so optimal output is the derivative of
+  maximal profit with respect to the output price.
+- **Sensitivity analysis.** In any [[optimization]] problem the sensitivity of
+  the optimal value to the data (for example expected returns or risk
+  aversion in [[portfolio-optimization]]) is a direct partial derivative, with
+  no re-solving needed.
+- **Dynamic programming.** Differentiating the Bellman equation uses the
+  theorem (as the Benveniste-Scheinkman condition) to obtain Euler equations,
+  a standard tool in [[macroeconomics]].
