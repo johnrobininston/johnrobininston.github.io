@@ -1,0 +1,457 @@
+---
+id: index
+aliases: []
+tags: []
+author: "John Robin Inston"
+bibliography: references.bib
+categories:
+  - "Mean-Field Games"
+  - "Numerical Methods"
+  - Python
+  - Current
+code-fold: true
+date: 2026-11-20
+draft: true
+number-sections: true
+subtitle: "Numerical solutions of simple mean-field games."
+title: "Numerical Mean-Field Games"
+title-block-banner: false
+toc: true
+---
+
+```{python}
+#| label: setup
+
+# Packages
+import numpy as np
+import plotly.express as px
+
+# Themes
+import plotly.io as pio
+pio.templates.default = "plotly_dark"
+
+```
+
+## Introduction
+
+A [[mean-field-games|mean-field game (MFG)]] is a game theory model that approximates the equilibrium behavior of a large number of interacting strategic agents.  The fundamental idea is that, assuming that agents are sufficiently numerous and homogeneous, as the number of agents tends to infinity, the effect of any single agent on the others becomes negligible.  In this limit, the system can be simplified to considering a single representative agent interacting with the aggregate distribution of the population.  This leads to a coupled system of partial differential equations (PDEs) that describe the evolution of the agents' states and their optimal strategies.
+
+In this project we aim to build our intuitive understanding of mean-field games by considering simple MFG examples, solving them analytically and validating the solutions numerically in Python.  
+
+## Background
+
+Mean-field game theory grew out of two independent lines of work in the
+mid-2000s. Lasry and Lions developed a PDE formulation inspired by mean-field
+models in statistical mechanics. Huang, Malhamé, and Caines studied how
+strategies derived from a large-population limit can approximate a
+[[nash-equilibrium|Nash equilibrium]] in a finite game.
+[Lasry and Lions (2007)](https://doi.org/10.1007/s11537-007-0657-8) and
+[Huang, Malhamé, and Caines (2006)](https://doi.org/10.4310/CIS.2006.v6.n3.a5).
+
+If $X_t^i$ denotes the state of player $i$ at time $t$, the empirical
+distribution of an $N$-player population is
+
+$$
+m_t^N = \frac{1}{N}\sum_{i=1}^N \delta_{X_t^i},
+$$
+
+where $\delta_x$ is a unit point mass at $x$. Each player's state contributes
+only $1/N$ of the total mass. In the mean-field limit, a representative player
+takes the distribution $m_t$ as given when choosing a strategy. The
+distribution records how states are spread across the population. For
+example, a crowding cost depends on how many players are near a particular
+location, information that the average position alone cannot capture.
+
+### Equilibrium as a fixed point
+
+In the finite-horizon diffusion model used here, two equations connect
+individual decisions to the population distribution.
+
+1. **Solve backward for the best response.** Given a candidate density
+   $m(t,x)$, the [[hjb-equation|Hamilton-Jacobi-Bellman equation]] gives the
+   minimum expected remaining cost $u(t,x)$ and the associated optimal
+   feedback. It runs backward from the terminal cost at time $T$.
+
+2. **Evolve the population forward.** Apply that feedback as the drift in the
+   [[fokker-planck-equation|Fokker-Planck equation]]. Starting from the initial
+   density $m_0$, this equation gives the density produced when all players
+   use the feedback, accounting for both their chosen motion and diffusion.
+
+An equilibrium occurs when the density produced by the forward equation
+matches the density used in the backward equation at every time. In the
+example below, players are drawn toward $x=0$, but a high density near zero
+raises the cost of moving there. The numerical solver starts with a density
+guess, solves the two equations in turn, and updates the guess by blending it
+with the density from the forward solve. The discrepancy between those two
+densities measures how close the iteration is to equilibrium.
+
+## Problem Formulation
+
+Consider a population of $j=1, \ldots , N$ agents with states $X_t^j\in\[-\pi, \pi\]$ evolving according to the stochastic differential equation
+
+$$
+dX^{j, N}_t=\alpha^{j, N}_t\,dt+\sqrt{2\nu}\,dW_t^j,
+$$
+
+where:
+
+- $\alpha^{j, N}_t$ is the control (drift) chosen by agent $j$ at time $t$,
+- $\nu$ is the diffusion coefficient, and 
+- $W_t^j$ are independent standard Brownian motion representing idiosyncratic noise.
+
+Each agent wishes to move toward a preferred location (here, $x=0$) while avoiding crowded areas.  The cost functional for agent $j$ is given by
+
+$$
+\boxed{J(\alpha;m) = \mathbb E\left[\int_0^T\left(\underbrace{\frac12\alpha_t^2}_{\text{control cost}}+\underbrace{V(X_t)}_{\text{location cost}}+\underbrace{\kappa m_t(X_t)}_{congestion \cos t}\right)dt+\underbrace{G(X_T)}_{\text{terminal cost}}\right].}
+$$
+
+Here we have made several choices about the cost design:
+
+1. The location cost $V(x)=0.3(1-\cos x)$ makes locations far from zero costly.
+2. The congestion cost $\kappa m_t(x)$ penalizes crowding with $\kappa$ controlling the strength of competition.
+3. The control cost $\frac12\alpha_t^2$ penalizes aggressive control.
+4. The terminal cost $G(x)=0.8(1-\cos x)$ encourages agents to finish near zero.
+
+```{python}
+#| echo: false
+
+fig = px.line(x=["a","b","c"], y=[1,3,2], title="sample figure")
+print(fig)
+fig.show()
+```
+
+
+
+The resulting MFG system is
+\[
+\boxed{
+\begin{aligned}
+-\partial_tu-\nu\partial_{xx}u
++\frac12(\partial_xu)^2
+&=V(x)+\kappa m(t,x),
+\\[4pt]
+\partial_tm-\nu\partial_{xx}m
+-\partial_x(m\partial_xu)
+&=0,\\[4pt]
+u(T,x)&=G(x),\\
+m(0,x)&=m_0(x).
+\end{aligned}
+}
+\]
+
+The optimal control is
+\[
+\boxed{\alpha^*(t,x)=-\partial_xu(t,x).}
+\]
+
+## Results
+
+```{python}
+#| eval: false
+
+"""A small, fully reproducible, one-dimensional mean field game.
+
+Agents control their velocity on the periodic domain [-pi, pi). Their cost is
+
+    E[ integral_0^T {0.5*a_t**2 + V(X_t) + kappa*m_t(X_t)} dt
+       + G(X_T) ],
+
+with dynamics dX_t = a_t dt + sqrt(2*nu) dW_t.
+
+For an assumed density m(t,x), dynamic programming and the optimal feedback
+a*(t,x) = -d_x u(t,x) give the HJB and Fokker--Planck system
+
+    -u_t - nu*u_xx + 0.5*(u_x)**2 = V(x) + kappa*m(t,x),
+     m_t - nu*m_xx - (m*u_x)_x = 0,
+     u(T,x) = G(x),            m(0,x) = m0(x).
+
+The first PDE runs BACKWARD, the second runs FORWARD, and their consistency
+is enforced by a damped Picard (fixed-point) iteration.
+
+Implementation notes:
+  * Cole--Hopf: z=exp(-u/(2*nu)) linearizes the HJB for this particular model.
+  * Explicit centered diffusion and upwind advection use periodic boundaries.
+  * We check positivity, mass preservation, and the conservative CFL bound.
+  * NumPy and Matplotlib are the only dependencies.
+
+Example:
+    python classical_mfg.py --congestion 1.2 --output mfg_results.png
+"""
+
+from __future__ import annotations
+
+import argparse
+from dataclasses import dataclass, replace
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")  # Also works on servers without a graphical desktop.
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+@dataclass(frozen=True)
+class Parameters:
+    nx: int = 128
+    nt: int = 500
+    horizon: float = 1.0
+    nu: float = 0.22
+    congestion: float = 1.2
+    relaxation: float = 0.45
+    tolerance: float = 2e-6
+    max_iterations: int = 100
+
+    @property
+    def dx(self) -> float:
+        return 2 * np.pi / self.nx
+
+    @property
+    def dt(self) -> float:
+        return self.horizon / self.nt
+
+    @property
+    def x(self) -> np.ndarray:
+        return np.linspace(-np.pi, np.pi, self.nx, endpoint=False)
+
+    @property
+    def t(self) -> np.ndarray:
+        return np.linspace(0, self.horizon, self.nt + 1)
+
+
+@dataclass
+class Solution:
+    m: np.ndarray
+    u: np.ndarray
+    control: np.ndarray
+    residual_history: list[float]
+    final_residual: float
+    max_mass_error: float
+
+
+def laplacian(arr: np.ndarray, dx: float) -> np.ndarray:
+    """Periodic second derivative on the last array axis."""
+    return (np.roll(arr, -1, axis=-1) - 2 * arr
+            + np.roll(arr, 1, axis=-1)) / dx**2
+
+
+def gradient(arr: np.ndarray, dx: float) -> np.ndarray:
+    """Periodic centered first derivative on the last array axis."""
+    return (np.roll(arr, -1, axis=-1)
+            - np.roll(arr, 1, axis=-1)) / (2 * dx)
+
+
+def initial_density(params: Parameters) -> np.ndarray:
+    """An asymmetric mixture of two wrapped Gaussian bumps."""
+    x = params.x
+
+    def wrapped_gaussian(center: float, width: float) -> np.ndarray:
+        distance = (x - center + np.pi) % (2 * np.pi) - np.pi
+        return np.exp(-0.5 * (distance / width) ** 2)
+
+    m0 = (0.65 * wrapped_gaussian(-1.25, 0.36)
+          + 0.35 * wrapped_gaussian(1.45, 0.31))
+    return m0 / (m0.sum() * params.dx)
+
+
+def running_potential(x: np.ndarray) -> np.ndarray:
+    """Agents prefer the location x=0."""
+    return 0.30 * (1 - np.cos(x))
+
+
+def terminal_cost(x: np.ndarray) -> np.ndarray:
+    """At time T, being far from the preferred location is expensive."""
+    return 0.80 * (1 - np.cos(x))
+
+
+def solve_hjb(guessed_m: np.ndarray, params: Parameters) -> tuple[np.ndarray, np.ndarray]:
+    """Solve the HJB backward using an explicit Cole--Hopf heat step.
+
+    z=exp(-u/(2*nu)) solves z_t + nu*z_xx = (F/(2*nu))*z,
+    with terminal value exp(-G/(2*nu)).
+    """
+    nx, nt = params.nx, params.nt
+    dx, dt, nu = params.dx, params.dt, params.nu
+    interaction_cost = running_potential(params.x)[None, :] + params.congestion * guessed_m
+
+    # Positivity of the backward Cole--Hopf explicit step: the source is nonnegative.
+    hjb_cfl = dt * (2 * nu / dx**2 + interaction_cost.max() / (2 * nu))
+    if hjb_cfl > 1:
+        raise ValueError(f"HJB stability bound violated ({hjb_cfl:.3f} > 1): increase --nt")
+
+    u = np.empty((nt + 1, nx), dtype=float)
+    z = np.exp(-terminal_cost(params.x) / (2 * nu))
+    u[nt] = terminal_cost(params.x)
+
+    for n in range(nt - 1, -1, -1):
+        z = z + dt * (nu * laplacian(z, dx)
+                       - (interaction_cost[n + 1] / (2 * nu)) * z)
+        if not np.all(np.isfinite(z)) or np.min(z) <= 0:
+            raise FloatingPointError("Cole--Hopf solution lost positivity")
+        u[n] = -2 * nu * np.log(z)
+
+    # In this quadratic control problem, the pointwise minimizer is a* = -u_x.
+    return u, -gradient(u, dx)
+
+
+def solve_fokker_planck(control: np.ndarray, params: Parameters) -> np.ndarray:
+    """Forward mass-conservative diffusion + upwind transport.
+
+    The Fokker--Planck flux is J = a*m - nu*m_x. We discretize advection
+    using upwind fluxes at cell faces, with centered conservative diffusion.
+    """
+    dx, dt, nu = params.dx, params.dt, params.nu
+    m = np.empty((params.nt + 1, params.nx), dtype=float)
+    m[0] = initial_density(params)
+
+    for n in range(params.nt):
+        at_faces = 0.5 * (control[n] + np.roll(control[n], -1))
+        safe_cfl_bound = dt * (2 * nu / dx**2 + 2 * np.max(np.abs(at_faces)) / dx)
+        if safe_cfl_bound > 1:
+            raise ValueError(
+                f"Fokker--Planck stability bound violated at t-index {n} "
+                f"({safe_cfl_bound:.3f} > 1): increase --nt"
+            )
+
+        # Face j+1/2: take density from the upstream cell.
+        flux = (np.maximum(at_faces, 0) * m[n]
+                + np.minimum(at_faces, 0) * np.roll(m[n], -1))
+        flux_divergence = (flux - np.roll(flux, 1)) / dx
+        next_m = m[n] + dt * (nu * laplacian(m[n], dx) - flux_divergence)
+
+        if np.min(next_m) < -1e-12 or not np.all(np.isfinite(next_m)):
+            raise FloatingPointError("Fokker--Planck step produced invalid density")
+        m[n + 1] = next_m
+
+    return m
+
+
+def fixed_point_residual(m_new: np.ndarray, m_guess: np.ndarray, dx: float) -> float:
+    """Largest-in-time L1 distance between the two density flows."""
+    return float(np.max(np.sum(np.abs(m_new - m_guess), axis=1) * dx))
+
+
+def solve_mfg(params: Parameters, verbose: bool = True) -> Solution:
+    """Iterate guessed density -> HJB -> optimal control -> FP -> new density."""
+    if params.nx < 16 or params.nt < 1 or params.nu <= 0:
+        raise ValueError("Require nx >= 16, nt >= 1 and positive diffusion")
+    if params.congestion < 0:
+        raise ValueError("This demo assumes nonnegative congestion cost")
+    if not 0 < params.relaxation <= 1:
+        raise ValueError("Require 0 < relaxation <= 1")
+
+    guess = np.repeat(initial_density(params)[None, :], params.nt + 1, axis=0)
+    errors: list[float] = []
+
+    for iteration in range(1, params.max_iterations + 1):
+        u, control = solve_hjb(guess, params)
+        candidate = solve_fokker_planck(control, params)
+        err = fixed_point_residual(candidate, guess, params.dx)
+        errors.append(err)
+        if verbose and (iteration == 1 or iteration % 10 == 0 or err < params.tolerance):
+            print(f"  iteration {iteration:3d}: max_t ||new m - guess||_L1 = {err:.3e}")
+
+        if err < params.tolerance:
+            guess = candidate
+            break
+        guess = (1 - params.relaxation) * guess + params.relaxation * candidate
+    else:
+        raise RuntimeError(
+            f"No fixed-point convergence after {params.max_iterations} steps; "
+            "try reducing --congestion or --relaxation, or increasing --max-iterations"
+        )
+
+    # Recalculate from the final consistent guess, to report a genuine residual.
+    u, control = solve_hjb(guess, params)
+    generated = solve_fokker_planck(control, params)
+    final_err = fixed_point_residual(generated, guess, params.dx)
+    max_mass_error = float(np.max(np.abs(generated.sum(axis=1) * params.dx - 1)))
+    return Solution(generated, u, control, errors, final_err, max_mass_error)
+
+
+def plot_results(solution: Solution, baseline: Solution,
+                 params: Parameters, output: Path) -> None:
+    """Show the equilibrium density, feedback, and fixed-point convergence."""
+    plt.rcParams.update({"font.size": 10, "axes.spines.top": False,
+                         "axes.spines.right": False})
+    fig, axes = plt.subplots(2, 2, figsize=(12.5, 8.5), constrained_layout=True)
+
+    ax = axes[0, 0]
+    ax.plot(params.x, solution.m[0], "--", color="0.3", lw=2, label="Initial density")
+    ax.plot(params.x, solution.m[-1], color="#0d7587", lw=2.5,
+            label=f"Final MFG density (congestion={params.congestion:g})")
+    ax.plot(params.x, baseline.m[-1], color="#d3743c", lw=2,
+            label="Final density without congestion")
+    ax.set(xlabel="Position x", ylabel="Probability density", title="Congestion changes where agents end up")
+    ax.legend(fontsize=8)
+
+    extent = (params.x[0], params.x[-1] + params.dx, 0, params.horizon)
+    ax = axes[0, 1]
+    density_plot = ax.imshow(solution.m, origin="lower", aspect="auto", extent=extent,
+                             cmap="viridis")
+    ax.set(xlabel="Position x", ylabel="Time t", title="Forward distribution evolution: m(t, x)")
+    fig.colorbar(density_plot, ax=ax, label="Density")
+
+    ax = axes[1, 0]
+    vmax = max(1e-8, float(np.max(np.abs(solution.control))))
+    control_plot = ax.imshow(solution.control, origin="lower", aspect="auto", extent=extent,
+                             cmap="RdBu_r", vmin=-vmax, vmax=vmax)
+    ax.set(xlabel="Position x", ylabel="Time t", title="Optimal feedback: a*(t, x) = -u_x(t, x)")
+    fig.colorbar(control_plot, ax=ax, label="Control / drift")
+
+    ax = axes[1, 1]
+    ax.semilogy(range(1, len(solution.residual_history) + 1),
+                solution.residual_history, "o-", markersize=3, color="#0d7587")
+    ax.axhline(params.tolerance, ls="--", color="0.5", label="Tolerance")
+    ax.set(xlabel="Fixed-point iteration", ylabel="max_t L1(m_new, m_guess)",
+           title="Convergence to MFG consistency")
+    ax.legend(fontsize=9)
+    ax.grid(alpha=0.25)
+
+    fig.suptitle("A one-dimensional mean field game: HJB backward + Fokker–Planck forward",
+                 fontsize=14, weight="bold")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output, dpi=180)
+    plt.close(fig)
+
+
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--congestion", type=float, default=1.2,
+                        help="Cost per unit of local population density (default: 1.2)")
+    parser.add_argument("--nu", type=float, default=0.22, help="Diffusion constant")
+    parser.add_argument("--nx", type=int, default=128, help="Number of periodic space cells")
+    parser.add_argument("--nt", type=int, default=500, help="Number of time steps")
+    parser.add_argument("--relaxation", type=float, default=0.45,
+                        help="Damping in the fixed-point update")
+    parser.add_argument("--tolerance", type=float, default=2e-6)
+    parser.add_argument("--max-iterations", type=int, default=100)
+    parser.add_argument("--output", type=Path, default=Path("mfg_results.png"))
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_arguments()
+    params = Parameters(nx=args.nx, nt=args.nt, nu=args.nu,
+                        congestion=args.congestion, relaxation=args.relaxation,
+                        tolerance=args.tolerance, max_iterations=args.max_iterations)
+
+    print("Solving mean field game with congestion...")
+    result = solve_mfg(params)
+    print("Solving single-agent baseline (congestion = 0)...")
+    baseline = solve_mfg(replace(params, congestion=0), verbose=False)
+
+    plot_results(result, baseline, params, args.output)
+    print(f"Final MFG consistency residual: {result.final_residual:.3e}")
+    print(f"Maximum probability-mass error: {result.max_mass_error:.3e}")
+    print(f"Lowest computed density: {result.m.min():.3e}")
+    print(f"Plot saved to: {args.output.resolve()}")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Conclusion
+
+

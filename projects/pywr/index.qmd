@@ -1,0 +1,67 @@
+---
+id: index
+aliases: []
+tags: []
+author: "John Robin Inston"
+categories:
+  - Groundwater
+  - "Water Resources"
+  - Research
+  - Current
+date: 2026-11-15
+draft: true
+subtitle: "A pywr model of the California Central Valley, linked to groundwater markets."
+title: "Stochastic Water Resource Model in Pywr"
+title-block-banner: true
+toc: true
+---
+
+## Introduction
+
+## `pywr` Package
+
+`pywr` is a network flow model.  Each timestep it builds a **linear program (LP)** over the network and solves it.  The LP is solved fresh every day, and the only memory between days is **storage** volume.  Each model is constructed from the following components:
+
+- Nodes are the places water can be. In the toy model:
+  - Input (river) is a source. Its max_flow is the day's inflow.
+  - Storage (reservoir) holds water. It has a max volume and an initial volume.
+  - Output (urban, ag, spill) is a sink where water leaves the system, such as a demand.
+  - Link is a pass-through node. I imported it but didn't use it.
+- Edges (a.connect(b)) are the allowed flow paths. Each edge is an LP decision variable: how much water moves along it today.
+- Parameters make values change over time. DataFrameParameter reads the inflow time series, so river.max_flow is a different number each day.
+- Recorders capture results, such as storage or flow at a node. They don't affect the simulation.
+
+### Linear Program
+
+A **linear program** (LP) chooses a vector of non-negative decision variables
+$x$ to minimise a linear cost subject to linear constraints:
+
+$$
+\min_{x \ge 0} \; c^\top x
+\quad \text{subject to} \quad
+A x \le b .
+$$
+
+Here $c$ holds the cost of each variable, and each row of $A x \le b$ is a
+constraint, such as a capacity limit or a mass balance.
+
+Pywr turns the water network into an LP at every timestep:
+
+- the variables $x$ are water flows. The default `glpk` solver uses one
+  variable per **route** (a path from a source to a sink, with storage nodes
+  acting as both), and the `glpk-edge` solver uses one per edge;
+- the costs $c$ come from the node costs, where a negative cost rewards a
+  flow (a priority) and a positive cost penalises it (such as spill);
+- the constraints are mass balance at each node, the `max_flow` limits, and
+  the water available in each storage node.
+
+The LP is solved with the **simplex method**. Its feasible region is a convex
+polytope, and an optimum, if one exists, lies at a vertex. Simplex starts at
+a vertex and moves along edges of the polytope to neighbouring vertices that
+lower the cost, stopping when no neighbour improves it. Pywr calls the GLPK
+library for this by default (`lpsolve` is also available).
+
+Storage is the only link between timesteps. After each solve, pywr updates
+every storage volume from the flows, and the next LP starts from those
+volumes. The allocation is therefore optimal day by day (or month by month),
+but it does not look ahead.
